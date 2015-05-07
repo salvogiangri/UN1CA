@@ -3,14 +3,14 @@
 #====================================================
 #          FILE: img2sdat.py
 #       AUTHORS: xpirt - luxi78 - howellzhu
-#          DATE: 2015-01-29 15:27:14 CST
+#          DATE: 2015-05-07 14:46:28 CST
 #====================================================
 import sys, blockimgdiff, sparse_img, os
 
 def main(sysimg, outdir):
     tgt = sparse_img.SparseImage(sysimg)
     bif = blockimgdiff.BlockImageDiff(tgt, None)
-    bif.Compute('system', outdir)
+    bif.Compute(outdir)
     return
 
 if __name__ == '__main__':
