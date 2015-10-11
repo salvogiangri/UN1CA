@@ -3,8 +3,9 @@
 #====================================================
 #          FILE: img2sdat.py
 #       AUTHORS: xpirt - luxi78 - howellzhu
-#          DATE: 2015-05-07 14:46:28 CST
+#          DATE: 2015-10-11 14:37:22 CST
 #====================================================
+
 import sys, blockimgdiff, sparse_img, os
 
 def main(sysimg, outdir):
@@ -19,7 +20,10 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         print ("\nimg2sdat - usage is: \n\n      img2sdat [system.img] [outdir]\n\n")
         print ("Visit xda thread for more information.\n")
-        os.system("pause")
+        try:
+            input = raw_input
+        except NameError: pass
+        input ("Press ENTER to exit...\n")
         sys.exit(1)
     if len(sys.argv) >= 2:
         sysimg = sys.argv[1]
@@ -28,6 +32,9 @@ if __name__ == '__main__':
     if len(sys.argv) >= 4:
         print ("\nimg2sdat - usage is: \n\n      img2sdat [system.img] [outdir]" % sys.argv[0])
         print ("Visit xda thread for more information.\n")
-        os.system("pause")
+        try:
+            input = raw_input
+        except NameError: pass
+        input ("Press ENTER to exit...\n")
         sys.exit(1)
     main(sysimg, outdir)
