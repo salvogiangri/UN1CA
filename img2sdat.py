@@ -9,7 +9,7 @@
 import sys, os, errno, tempfile
 import common, blockimgdiff, sparse_img
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 if sys.hexversion < 0x02070000:
     print >> sys.stderr, "Python 2.7 or newer is required."
