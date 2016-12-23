@@ -261,7 +261,7 @@ class HeapItem(object):
 # original image.
 
 class BlockImageDiff(object):
-  def __init__(self, tgt, src=None, threads=None, version=4,
+  def __init__(self, tgt, src=None, version=4, threads=None,
                disable_imgdiff=False):
     if threads is None:
       threads = multiprocessing.cpu_count() // 2

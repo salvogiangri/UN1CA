@@ -3,7 +3,7 @@
 #====================================================
 #          FILE: img2sdat.py
 #       AUTHORS: xpirt - luxi78 - howellzhu
-#          DATE: 2016-11-23 16:20:11 CST
+#          DATE: 2016-12-23 17:46:55 CST
 #====================================================
 
 import sys, os, errno, tempfile
@@ -26,7 +26,7 @@ try:
 except IndexError:
     print('Usage: img2sdat.py <system_img>\n')
     print('    <system_img>: input system image\n')
-    print("Visit xda thread for more information.\n")
+    print('Visit xda thread for more information.\n')
     try:
        input = raw_input
     except NameError: pass
@@ -34,11 +34,35 @@ except IndexError:
     sys.exit()
 
 def main(argv):
+    version = 4
+    item = True
+    while item:
+        print('''        1. Android Lollipop 5.0
+        2. Android Lollipop 5.1
+        3. Android Marshmallow 6.0
+        4. Android Nougat 7.0
+        ''')
+        item = raw_input('Choose system version: ')
+        if item == '1':
+            version = 1
+            break
+        elif item == '2':
+            version = 2
+            break
+        elif item == '3':
+            version = 3
+            break
+        elif item == '4':
+            version = 4
+            break
+        else:
+            return
+
     # Get sparse image
-    input_image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
+    image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
     
     # Generate output files
-    b = blockimgdiff.BlockImageDiff(input_image, None)
+    b = blockimgdiff.BlockImageDiff(image, None, version)
     b.Compute('system')
     
     print('Done! Output files: %s' % os.path.dirname(__file__))
