@@ -34,37 +34,40 @@ except IndexError:
     sys.exit()
 
 def main(argv):
-    version = 4
-    item = True
-    while item:
-        print('''        1. Android Lollipop 5.0
-        2. Android Lollipop 5.1
-        3. Android Marshmallow 6.0
-        4. Android Nougat 7.0
-        ''')
-        item = raw_input('Choose system version: ')
-        if item == '1':
-            version = 1
-            break
-        elif item == '2':
-            version = 2
-            break
-        elif item == '3':
-            version = 3
-            break
-        elif item == '4':
-            version = 4
-            break
-        else:
-            return
+    if len(sys.argv) < 3:
+        version = 4
+        item = True
+        while item:
+            print('''            1. Android Lollipop 5.0
+            2. Android Lollipop 5.1
+            3. Android Marshmallow 6.0
+            4. Android Nougat 7.0
+            ''')
+            item = raw_input('Choose system version: ')
+            if item == '1':
+                version = 1
+                break
+            elif item == '2':
+                version = 2
+                break
+            elif item == '3':
+                version = 3
+                break
+            elif item == '4':
+                version = 4
+                break
+            else:
+                return
+    else:
+        version = int(sys.argv[2])
 
     # Get sparse image
     image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
-    
+
     # Generate output files
     b = blockimgdiff.BlockImageDiff(image, None, version)
     b.Compute('system')
-    
+
     print('Done! Output files: %s' % os.path.dirname(__file__))
     return
 
