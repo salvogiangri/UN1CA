@@ -12,16 +12,17 @@ It currently supports Windows x86/x64, Linux x86/x64 & arm/arm64 architectures.
 
 ## Usage
 ```
-img2sdat.py <system_img>
+img2sdat.py <system_img> [version]
 ```
 - `<system_img>` = input system image
+- `[version]` = transfer list version number (1-4, more info on xda thread)
 
 
 
 ## Example
 This is a simple example on a Linux system: 
 ```
-~$ ./img2sdat.py system.img
+~$ ./img2sdat.py system.img 4
 ```
 
 
