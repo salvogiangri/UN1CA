@@ -3,13 +3,13 @@
 #====================================================
 #          FILE: img2sdat.py
 #       AUTHORS: xpirt - luxi78 - howellzhu
-#          DATE: 2016-12-23 17:46:55 CST
+#          DATE: 2016-12-23 16:47:24 CST
 #====================================================
 
 import sys, os, errno, tempfile
 import common, blockimgdiff, sparse_img
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 if sys.hexversion < 0x02070000:
     print >> sys.stderr, "Python 2.7 or newer is required."
