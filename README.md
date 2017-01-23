@@ -12,18 +12,20 @@ It currently supports Windows x86/x64, Linux x86/x64 & arm/arm64 architectures.
 
 ## Usage
 ```
-img2sdat.py <system_img> [version]
+img2sdat.py <system_img> [outdir] [version]
 ```
 - `<system_img>` = input system image
-- `[version]` = transfer list version number (1-4, more info on xda thread)
+- `[outdir]` = output directory (current directory by default)
+- `[version]` = transfer list version number (1 - 5.0, 2 - 5.1, 3 - 6.0, 4 - 7.0, will be asked by default, more info on xda thread)
 
 
 
 ## Example
-This is a simple example on a Linux system: 
+This is a simple example on a Linux system:
 ```
-~$ ./img2sdat.py system.img 4
+~$ ./img2sdat.py system.img tmp 4
 ```
+It will create files `system.new.dat`, `system.patch.dat`, `system.transfer.list` in directory `tmp`.
 
 
 

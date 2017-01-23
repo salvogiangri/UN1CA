@@ -24,8 +24,10 @@ else:
 try:
     INPUT_IMAGE = str(sys.argv[1])
 except IndexError:
-    print('Usage: img2sdat.py <system_img>\n')
+    print('Usage: img2sdat.py <system_img> [outdir] [version]\n')
     print('    <system_img>: input system image\n')
+    print('    [outdir]: output directory (current directory by default)\n')
+    print('    [version]: transfer list version number (1 - 5.0, 2 - 5.1, 3 - 6.0, 4 - 7.0, will be asked by default, more info on xda thread)\n')
     print('Visit xda thread for more information.\n')
     try:
        input = raw_input
@@ -35,6 +37,11 @@ except IndexError:
 
 def main(argv):
     if len(sys.argv) < 3:
+        outdir = './system'
+    else:
+        outdir = sys.argv[2] + '/system'
+
+    if len(sys.argv) < 4:
         version = 4
         item = True
         while item:
@@ -59,16 +66,16 @@ def main(argv):
             else:
                 return
     else:
-        version = int(sys.argv[2])
+        version = int(sys.argv[3])
 
     # Get sparse image
     image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
 
     # Generate output files
     b = blockimgdiff.BlockImageDiff(image, None, version)
-    b.Compute('system')
+    b.Compute(outdir)
 
-    print('Done! Output files: %s' % os.path.dirname(__file__))
+    print('Done! Output files: %s' % os.path.dirname(outdir))
     return
 
 if __name__ == '__main__':
