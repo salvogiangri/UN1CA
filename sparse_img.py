@@ -144,6 +144,12 @@ class SparseImage(object):
     f.seek(16, os.SEEK_SET)
     f.write(struct.pack("<2I", self.total_blocks, self.total_chunks))
 
+  def RangeSha1(self, ranges):
+    h = sha1()
+    for data in self._GetRangeData(ranges):
+      h.update(data)
+    return h.hexdigest()
+
   def ReadRangeSet(self, ranges):
     return [d for d in self._GetRangeData(ranges)]
 
@@ -155,10 +161,11 @@ class SparseImage(object):
     ranges = self.care_map
     if not include_clobbered_blocks:
       ranges = ranges.subtract(self.clobbered_blocks)
-    h = sha1()
-    for d in self._GetRangeData(ranges):
-      h.update(d)
-    return h.hexdigest()
+    return self.RangeSha1(ranges)
+
+  def WriteRangeDataToFd(self, ranges, fd):
+    for data in self._GetRangeData(ranges):
+      fd.write(data)
 
   def _GetRangeData(self, ranges):
     """Generator that produces all the image data in 'ranges'.  The

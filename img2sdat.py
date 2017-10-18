@@ -3,13 +3,15 @@
 #====================================================
 #          FILE: img2sdat.py
 #       AUTHORS: xpirt - luxi78 - howellzhu
-#          DATE: 2016-12-23 16:47:24 CST
+#          DATE: 2017-10-18 16:19:51 CEST
 #====================================================
+
+from __future__ import print_function
 
 import sys, os, errno, tempfile
 import common, blockimgdiff, sparse_img
 
-__version__ = '1.2'
+__version__ = '1.5'
 
 if sys.hexversion < 0x02070000:
     print >> sys.stderr, "Python 2.7 or newer is required."
@@ -27,7 +29,7 @@ except IndexError:
     print('Usage: img2sdat.py <system_img> [outdir] [version]\n')
     print('    <system_img>: input system image\n')
     print('    [outdir]: output directory (current directory by default)\n')
-    print('    [version]: transfer list version number (1 - 5.0, 2 - 5.1, 3 - 6.0, 4 - 7.0, will be asked by default, more info on xda thread)\n')
+    print('    [version]: transfer list version number, will be asked by default - more info on xda thread)\n')
     print('Visit xda thread for more information.\n')
     try:
        input = raw_input
@@ -36,6 +38,8 @@ except IndexError:
     sys.exit()
 
 def main(argv):
+    global input
+
     if len(sys.argv) < 3:
         outdir = './system'
     else:
@@ -48,9 +52,12 @@ def main(argv):
             print('''            1. Android Lollipop 5.0
             2. Android Lollipop 5.1
             3. Android Marshmallow 6.0
-            4. Android Nougat 7.0
+            4. Android Nougat 7.0/7.1/8.0
             ''')
-            item = raw_input('Choose system version: ')
+            try:
+                input = raw_input
+            except NameError: pass
+            item = input('Choose system version: ')
             if item == '1':
                 version = 1
                 break
