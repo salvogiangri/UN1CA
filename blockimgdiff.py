@@ -350,7 +350,7 @@ class BlockImageDiff(object):
 
       zero_blocks_limit = 1024
       total = 0
-      while to_zero:
+      while to_zero.size() > 0:
         zero_blocks = to_zero.first(zero_blocks_limit)
         out.append("zero %s\n" % (zero_blocks.to_string_raw(),))
         total += zero_blocks.size()
@@ -402,7 +402,7 @@ class BlockImageDiff(object):
       free_size = 0
 
       if self.version == 1:
-        src_str = xf.src_ranges.to_string_raw() if xf.src_ranges else ""
+        src_str = xf.src_ranges.to_string_raw() if xf.src_ranges.size() > 0 else ""
       elif self.version >= 2:
 
         #   <# blocks> <src ranges>
@@ -441,7 +441,7 @@ class BlockImageDiff(object):
               stashes.pop(sh)
           heapq.heappush(free_stash_ids, sid)
 
-        if unstashed_src_ranges:
+        if unstashed_src_ranges.size() > 0:
           src_str.insert(1, unstashed_src_ranges.to_string_raw())
           if xf.use_stash:
             mapped_unstashed = xf.src_ranges.map_within(unstashed_src_ranges)
@@ -567,7 +567,7 @@ class BlockImageDiff(object):
           self.src, self.touched_src_ranges)
 
     # Zero out extended blocks as a workaround for bug 20881595.
-    if self.tgt.extended:
+    if self.tgt.extended.size() > 0:
       assert (WriteTransfersZero(out, self.tgt.extended) ==
               self.tgt.extended.size())
       total += self.tgt.extended.size()
@@ -583,11 +583,11 @@ class BlockImageDiff(object):
     new_dontcare = all_tgt_minus_extended.subtract(self.tgt.care_map)
 
     erase_first = new_dontcare.subtract(self.touched_src_ranges)
-    if erase_first:
+    if erase_first.size() > 0:
       out.insert(0, "erase %s\n" % (erase_first.to_string_raw(),))
 
     erase_last = new_dontcare.subtract(erase_first)
-    if erase_last:
+    if erase_last.size() > 0:
       out.append("erase %s\n" % (erase_last.to_string_raw(),))
 
     out.insert(0, "%d\n" % (self.version,))   # format version number
@@ -600,7 +600,7 @@ class BlockImageDiff(object):
 
     with open(prefix + ".transfer.list", "wb") as f:
       for i in out:
-        f.write(i)
+        f.write(i.encode("UTF-8"))
 
     if self.version >= 2:
       self._max_stashed_size = max_stashed_blocks * self.tgt.blocksize

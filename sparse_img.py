@@ -14,6 +14,7 @@
 
 import bisect
 import os
+import sys
 import struct
 from hashlib import sha1
 
@@ -226,7 +227,10 @@ class SparseImage(object):
 
     zero_blocks = []
     nonzero_blocks = []
-    reference = '\0' * self.blocksize
+    if sys.version_info[:2] >= (3, 0):
+        reference = bytes('\0' * self.blocksize, encoding="UTF-8")
+    else:
+        reference = '\0' * self.blocksize
 
     # Workaround for bug 23227672. For squashfs, we don't have a system.map. So
     # the whole system image will be treated as a single file. But for some
