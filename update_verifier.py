@@ -61,7 +61,7 @@ class SignedFile(object):
             signature_size = self.signature_start - FOOTER_SIZE
             signature_raw = zipfile.read(signature_size)
         # pyasn1 can't decode PKCS#7, so cert (tuple[0]) contains everything
-        cert, = der_decoder(signature_raw)
+        cert = der_decoder(signature_raw)[0]
         # since pyasn1 doesn't decode properly, we have to read this in a
         # stupid way. The data we need is the very last field of each entry
         signature = cert[-1][-1][-1]['field-4'].asOctets()
