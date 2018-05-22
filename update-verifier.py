@@ -37,15 +37,13 @@ class SignedFile:
     def check_eocd(self):
         if self.footer is None:
             self.check_footer()
-        i = 4
         with open(self.file, 'rb') as zip:
             zip.seek(-self.eocd_size, os.SEEK_END)
             self.eocd = bytearray(zip.read(self.eocd_size))
             assert self.eocd[0:4] == bytearray([80, 75, 5, 6]), (
                 "EOCD has wrong magic")
-            while i < self.eocd_size-3:
-                zip.seek(i-self.eocd_size, os.SEEK_END)
-                i += 1
+            for i in range(0, self.eocd_size-1):
+                zip.seek(-i, os.SEEK_END)
                 assert bytearray(zip.read(4)) != bytearray([80, 75, 5, 6]), (
                     "Multiple EOCD magics - possible exploit")
 
