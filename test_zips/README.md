@@ -12,7 +12,7 @@ All are signed with `key` unless otherwise specified
 
 ## signature-inside-footer.zip
  - Signature location appears to be within footer
- - `footer[0:1] = 0x15 0x06` -> `0x01 0x10`
+ - `footer[0:1] = 0x15 0x06` -> `0x01 0x00`
  - This error can not be reached under any conditions since signature must be
    both less than `FOOTER_SIZE` and larger than `comment_size`
 
