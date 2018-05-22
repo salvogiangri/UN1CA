@@ -3,5 +3,5 @@
 
 ```
 pip3 install -r requirements.txt
-python3 update-verifier.py /path/to/zip lineageos_pubkey
+python3 update_verifier.py /path/to/zip lineageos_pubkey
 ```
