@@ -7,6 +7,7 @@ import rsa
 FOOTER_SIZE = 6
 EOCD_HEADER_SIZE = 22
 
+
 class SignedFile(object):
     def __init__(self, filepath):
         self.eocd = None
@@ -47,8 +48,8 @@ class SignedFile(object):
                 "EOCD has wrong magic")
             for i in range(0, self.eocd_size-1):
                 zipfile.seek(-i, os.SEEK_END)
-                assert bytearray(zipfile.read(4)) != bytearray([80, 75, 5, 6]), (
-                    "Multiple EOCD magics - possible exploit")
+                assert bytearray(zipfile.read(4)) != bytearray(
+                    [80, 75, 5, 6]), ("Multiple EOCD magics; possible exploit")
 
     def verify(self, pubkey):
         self.check_eocd()
@@ -72,9 +73,11 @@ class SignedFile(object):
         except rsa.pkcs1.VerificationError:
             return False
 
+
 def print_help():
     print("{} zip_to_verify public_key".format(sys.argv[0]))
     print("    public_key must be in PKCS#1 format")
+
 
 def main():
     if len(sys.argv) != 3:
