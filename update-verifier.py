@@ -67,10 +67,10 @@ class SignedFile:
         signature = cert[-1][-1][-1]['field-4'].asOctets()
         with open(pubkey) as file:
             keydata = rsa.PublicKey.load_pkcs1(file.read())
-            try:
-                return rsa.verify(message, signature, keydata)
-            except rsa.pkcs1.VerificationError:
-                return False
+        try:
+            return rsa.verify(message, signature, keydata)
+        except rsa.pkcs1.VerificationError:
+            return False
 
 def print_help():
     print("{} zip_to_verify public_key".format(sys.argv[0]))
