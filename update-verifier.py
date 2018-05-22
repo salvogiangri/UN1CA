@@ -75,7 +75,7 @@ def print_help():
     print("{} zip_to_verify public_key".format(sys.argv[0]))
     print("    public_key must be in PKCS#1 format")
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) != 3:
         print_help()
         sys.exit(2)
@@ -88,3 +88,6 @@ if __name__ == '__main__':
     else:
         print("File verified successfully", file=sys.stderr)
         sys.exit(0)
+
+if __name__ == '__main__':
+    main()
