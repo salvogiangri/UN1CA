@@ -24,7 +24,7 @@ class SignedFile:
             self.get_footer()
         comment_size = self.footer[4] + (self.footer[5] << 8)
         self.signature_start = self.footer[0] + (self.footer[1] << 8)
-        self.eocd_size = comment_size + EOCD_HEADER_SIZE;
+        self.eocd_size = comment_size + EOCD_HEADER_SIZE
         assert self.footer[2] == 255 and self.footer[3] == 255, (
             "Footer has wrong magic")
         assert self.signature_start <= comment_size, (
@@ -32,7 +32,7 @@ class SignedFile:
         assert self.signature_start > FOOTER_SIZE, (
             "Signature inside footer or outside file")
         assert self.length >= self.eocd_size, "EOCD larger than length"
-        self.signed_len = self.length - self.eocd_size + EOCD_HEADER_SIZE - 2;
+        self.signed_len = self.length - self.eocd_size + EOCD_HEADER_SIZE - 2
 
     def check_eocd(self):
         if self.footer is None:
@@ -55,7 +55,7 @@ class SignedFile:
             message = zip.read(self.signed_len)
             # Read the signature
             zip.seek(-self.signature_start, os.SEEK_END)
-            signature_size = self.signature_start - FOOTER_SIZE;
+            signature_size = self.signature_start - FOOTER_SIZE
             signature_raw = zip.read(signature_size)
         # pyasn1 can't decode PKCS#7, so cert contains everything and rest is
         # empty
