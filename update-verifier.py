@@ -28,9 +28,9 @@ class SignedFile:
         assert self.footer[2] == 255 and self.footer[3] == 255, (
             "Footer has wrong magic")
         assert self.signature_start <= comment_size, (
-            "Signature size larger than comment")
+            "Signature start larger than comment")
         assert self.signature_start > FOOTER_SIZE, (
-            "Signature larger than footer")
+            "Signature inside footer or outside file")
         assert self.length >= self.eocd_size, "EOCD larger than length"
         self.signed_len = self.length - self.eocd_size + EOCD_HEADER_SIZE - 2;
 
