@@ -14,7 +14,7 @@ import common, blockimgdiff, sparse_img
 def main(INPUT_IMAGE, OUTDIR='.', VERSION=None, PREFIX='system'):
     global input
 
-    __version__ = '1.6'
+    __version__ = '2.0'
 
     if sys.hexversion < 0x02070000:
         print >> sys.stderr, "Python 2.7 or newer is required."
