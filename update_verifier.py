@@ -1,4 +1,5 @@
 from __future__ import print_function
+import argparse
 import os
 import sys
 
@@ -106,24 +107,19 @@ class SignedFile(object):
             return False
 
 
-def print_help():
-    print("{} zip_to_verify public_key".format(sys.argv[0]))
-    print("    public_key must be in PKCS#1 format")
-
-
 def main():
-    if len(sys.argv) != 3:
-        print_help()
-        sys.exit(2)
-    zipfile = sys.argv[1]
-    pubkey = sys.argv[2]
-    signed_file = SignedFile(zipfile)
-    if not signed_file.verify(pubkey):
-        print("Failed verification", file=sys.stderr)
+    parser = argparse.ArgumentParser(description='Verifies whole file signed '
+        'Android update files')
+    parser.add_argument('public_key')
+    parser.add_argument('zipfile')
+    args = parser.parse_args()
+
+    signed_file = SignedFile(args.zipfile)
+    if not signed_file.verify(args.public_key):
+        print("failed verification", file=sys.stderr)
         sys.exit(1)
     else:
-        print("File verified successfully", file=sys.stderr)
-        sys.exit(0)
+        print("verified successfully", file=sys.stderr)
 
 if __name__ == '__main__':
     main()
