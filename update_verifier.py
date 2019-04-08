@@ -1,10 +1,14 @@
 from __future__ import print_function
+
+from asn1crypto.cms import ContentInfo
+from asn1crypto.algos import DigestAlgorithmId
+from oscrypto.asymmetric import rsa_pkcs1v15_verify, load_public_key
+from oscrypto.errors import SignatureError
+
 import argparse
 import os
 import sys
-
-from pyasn1.codec.der.decoder import decode as der_decoder
-import rsa
+import traceback
 
 FOOTER_SIZE = 6
 EOCD_HEADER_SIZE = 22
@@ -94,32 +98,33 @@ class SignedFile(object):
             zipfile.seek(-self.signature_start, os.SEEK_END)
             signature_size = self.signature_start - FOOTER_SIZE
             signature_raw = zipfile.read(signature_size)
-        # pyasn1 can't decode PKCS#7, so cert (tuple[0]) contains everything
-        cert = der_decoder(signature_raw)[0]
-        # since pyasn1 doesn't decode properly, we have to read this in a
-        # stupid way. The data we need is the very last field of each entry
-        signature = cert[-1][-1][-1]['field-4'].asOctets()
-        with open(pubkey) as zipfile:
-            keydata = rsa.PublicKey.load_pkcs1(zipfile.read())
-        try:
-            return rsa.verify(message, signature, keydata)
-        except rsa.pkcs1.VerificationError:
-            return False
+        sig = ContentInfo.load(signature_raw)['content']['signer_infos'][0]
+        sig_contents = sig['signature'].contents
+        sig_type = DigestAlgorithmId.map(sig['digest_algorithm']['algorithm'].dotted)
+        with open(pubkey, 'rb') as keyfile:
+            keydata = load_public_key(keyfile.read())
+        return rsa_pkcs1v15_verify(keydata, sig_contents, message, sig_type)
 
 
 def main():
     parser = argparse.ArgumentParser(description='Verifies whole file signed '
-        'Android update files')
+                                                 'Android update files')
     parser.add_argument('public_key')
     parser.add_argument('zipfile')
     args = parser.parse_args()
 
     signed_file = SignedFile(args.zipfile)
-    if not signed_file.verify(args.public_key):
+    try:
+        signed_file.verify(args.public_key)
+        print("verified successfully", file=sys.stderr)
+    except (SignatureError,
+            ValueError,
+            TypeError,
+            OSError) as e:
+        traceback.print_exc()
         print("failed verification", file=sys.stderr)
         sys.exit(1)
-    else:
-        print("verified successfully", file=sys.stderr)
+
 
 if __name__ == '__main__':
     main()
