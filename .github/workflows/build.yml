@@ -16,6 +16,11 @@ jobs:
 
       - name: Set up build environment
         run: |
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
+            ccache clang cmake golang libgtest-dev \
+            libprotobuf-dev libunwind-dev libusb-1.0-0-dev lld protobuf-compiler \
+            ninja-build
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
