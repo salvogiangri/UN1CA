@@ -46,7 +46,7 @@ BUILD_ANDROID_TOOLS()
     cd "$SRC_DIR/external/android-tools"
     mkdir -p build && cd build
     cmake ..
-    make
+    make -j$(nproc) --quiet
     find vendor -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../../out/bin \;
     cd ..
     cp --preserve=all vendor/avb/avbtool.py ../../out/bin/avbtool
@@ -55,6 +55,7 @@ BUILD_ANDROID_TOOLS()
     cp --preserve=all vendor/mkbootimg/unpack_bootimg.py ../../out/bin/unpack_bootimg
     mkdir -p ../../out/bin/gki && cp --preserve=all vendor/mkbootimg/gki/generate_gki_certificate.py ../../out/bin/gki/generate_gki_certificate.py
 
+    echo ""
     cd "$PDR"
 }
 
@@ -66,10 +67,11 @@ BUILD_APKTOOL()
     echo -e "- Building apktool...\n"
 
     cd "$SRC_DIR/external/apktool"
-    ./gradlew build shadowJar
+    ./gradlew build shadowJar -q
     cp --preserve=all scripts/linux/apktool ../../out/bin
     cp --preserve=all brut.apktool/apktool-cli/build/libs/apktool-cli-all.jar ../../out/bin/apktool.jar
 
+    echo ""
     cd "$PDR"
 }
 
@@ -94,9 +96,10 @@ BUILD_EROFS_UTILS()
         -DCMAKE_CXX_FLAGS="" \
         -DENABLE_FULL_LTO="ON" \
         -DMAX_BLOCK_SIZE="4096"
-    make -C "./out" -j$(nproc)
+    make -C "./out" -j$(nproc) --quiet
     find out/erofs-tools -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
 
+    echo ""
     cd "$PDR"
 }
 
@@ -108,10 +111,11 @@ BUILD_SAMFIRM()
     echo -e "- Building samfirm.js...\n"
 
     cd "$SRC_DIR/external/samfirm.js"
-    npm install
-    npm run build
+    npm install --silent
+    npm run --silent build
     cp --preserve=all dist/index.js ../../out/bin/samfirm
 
+    echo ""
     cd "$PDR"
 }
 
@@ -123,12 +127,13 @@ BUILD_SMALI()
     echo -e "- Building baksmali/smali...\n"
 
     cd "$SRC_DIR/external/smali"
-    ./gradlew build
+    ./gradlew build -q
     cp --preserve=all scripts/baksmali ../../out/bin
     cp --preserve=all scripts/smali ../../out/bin
     cp --preserve=all baksmali/build/libs/*-dev-fat.jar ../../out/bin/baksmali.jar
     cp --preserve=all smali/build/libs/*-dev-fat.jar ../../out/bin/smali.jar
 
+    echo ""
     cd "$PDR"
 }
 # ]
