@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #BUILD android-tools
 cd android-tools
 mkdir build && cd build
@@ -15,8 +17,8 @@ cp --preserve=all scripts/linux/apktool ../../out/bin
 cp --preserve=all brut.apktool/apktool-cli/build/libs/apktool-cli-all.jar ../../out/bin/apktool.jar
 cd ..
 
-#BUILD erofs-tools
-cd erofs-tools
+#BUILD erofs-utils
+cd erofs-utils
 cmake -S "./build/cmake" -B "./out" \
 	-DCMAKE_SYSTEM_NAME="Linux" \
 	-DCMAKE_SYSTEM_PROCESSOR="x86_64" \
@@ -31,7 +33,7 @@ cmake -S "./build/cmake" -B "./out" \
 	-DENABLE_FULL_LTO="ON" \
 	-DMAX_BLOCK_SIZE="4096"
 make -C "./out" -j$(nproc)
-find out/erofs-tools -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
+find out/erofs-utils -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
 cd ..
 
 #BUILD samfirm.js
@@ -39,6 +41,7 @@ cd samfirm.js
 npm install
 npm run build
 cp --preserve=all dist/index.js ../../out/bin/samfirm
+cd ..
 
 #BUILD smali
 cd smali
