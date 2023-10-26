@@ -19,9 +19,9 @@
 set -e
 
 # [
-SRC_DIR=$(git rev-parse --show-toplevel)
-OUT_DIR=$SRC_DIR/out
-TOOLS_DIR=$OUT_DIR/bin
+SRC_DIR="$(git rev-parse --show-toplevel)"
+OUT_DIR="$SRC_DIR/out"
+TOOLS_DIR="$OUT_DIR/tools/bin"
 
 CHECK_TOOLS()
 {
@@ -39,21 +39,21 @@ CHECK_TOOLS()
 BUILD_ANDROID_TOOLS()
 {
     local PDR
-    PDR=$(pwd)
+    PDR="$(pwd)"
 
     echo -e "- Building android-tools...\n"
 
     cd "$SRC_DIR/external/android-tools"
-    mkdir -p build && cd build
+    mkdir -p "build" && cd "build"
     cmake ..
     make -j$(nproc) --quiet
-    find vendor -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../../out/bin \;
+    find "vendor" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
     cd ..
-    cp --preserve=all vendor/avb/avbtool.py ../../out/bin/avbtool
-    cp --preserve=all vendor/mkbootimg/mkbootimg.py ../../out/bin/mkbootimg
-    cp --preserve=all vendor/mkbootimg/repack_bootimg.py ../../out/bin/repack_bootimg
-    cp --preserve=all vendor/mkbootimg/unpack_bootimg.py ../../out/bin/unpack_bootimg
-    mkdir -p ../../out/bin/gki && cp --preserve=all vendor/mkbootimg/gki/generate_gki_certificate.py ../../out/bin/gki/generate_gki_certificate.py
+    cp --preserve=all "vendor/avb/avbtool.py" "$TOOLS_DIR/avbtool"
+    cp --preserve=all "vendor/mkbootimg/mkbootimg.py" "$TOOLS_DIR/mkbootimg"
+    cp --preserve=all "vendor/mkbootimg/repack_bootimg.py" "$TOOLS_DIR/repack_bootimg"
+    cp --preserve=all "vendor/mkbootimg/unpack_bootimg.py" "$TOOLS_DIR/unpack_bootimg"
+    mkdir -p "$TOOLS_DIR/gki" && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
 
     echo ""
     cd "$PDR"
@@ -62,14 +62,14 @@ BUILD_ANDROID_TOOLS()
 BUILD_APKTOOL()
 {
     local PDR
-    PDR=$(pwd)
+    PDR="$(pwd)"
 
     echo -e "- Building apktool...\n"
 
     cd "$SRC_DIR/external/apktool"
     ./gradlew build shadowJar -q
-    cp --preserve=all scripts/linux/apktool ../../out/bin
-    cp --preserve=all brut.apktool/apktool-cli/build/libs/apktool-cli-all.jar ../../out/bin/apktool.jar
+    cp --preserve=all "scripts/linux/apktool" "$TOOLS_DIR"
+    cp --preserve=all "brut.apktool/apktool-cli/build/libs/apktool-cli-all.jar" "$TOOLS_DIR/apktool.jar"
 
     echo ""
     cd "$PDR"
@@ -78,7 +78,7 @@ BUILD_APKTOOL()
 BUILD_EROFS_UTILS()
 {
     local PDR
-    PDR=$(pwd)
+    PDR="$(pwd)"
 
     echo -e "- Building erofs-utils...\n"
 
@@ -97,7 +97,7 @@ BUILD_EROFS_UTILS()
         -DENABLE_FULL_LTO="ON" \
         -DMAX_BLOCK_SIZE="4096"
     make -C "./out" -j$(nproc) --quiet
-    find out/erofs-tools -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
+    find "out/erofs-tools" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
 
     echo ""
     cd "$PDR"
@@ -106,14 +106,14 @@ BUILD_EROFS_UTILS()
 BUILD_SAMFIRM()
 {
     local PDR
-    PDR=$(pwd)
+    PDR="$(pwd)"
 
     echo -e "- Building samfirm.js...\n"
 
     cd "$SRC_DIR/external/samfirm.js"
     npm install --silent
     npm run --silent build
-    cp --preserve=all dist/index.js ../../out/bin/samfirm
+    cp --preserve=all "dist/index.js" "$TOOLS_DIR/samfirm"
 
     echo ""
     cd "$PDR"
@@ -122,23 +122,23 @@ BUILD_SAMFIRM()
 BUILD_SMALI()
 {
     local PDR
-    PDR=$(pwd)
+    PDR="$(pwd)"
 
     echo -e "- Building baksmali/smali...\n"
 
     cd "$SRC_DIR/external/smali"
     ./gradlew build -q
-    cp --preserve=all scripts/baksmali ../../out/bin
-    cp --preserve=all scripts/smali ../../out/bin
-    cp --preserve=all baksmali/build/libs/*-dev-fat.jar ../../out/bin/baksmali.jar
-    cp --preserve=all smali/build/libs/*-dev-fat.jar ../../out/bin/smali.jar
+    cp --preserve=all "scripts/baksmali" "$TOOLS_DIR"
+    cp --preserve=all "scripts/smali" "$TOOLS_DIR"
+    cp --preserve=all "baksmali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/baksmali.jar"
+    cp --preserve=all "smali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/smali.jar"
 
     echo ""
     cd "$PDR"
 }
 # ]
 
-mkdir -p "$TOOLS_DIR"
+mkdir -p ""$TOOLS_DIR""
 
 ANDROID_TOOLS=true
 APKTOOL=true
