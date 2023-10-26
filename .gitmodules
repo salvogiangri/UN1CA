@@ -1,0 +1,3 @@
+[submodule "external/erofs-utils"]
+	path = external/erofs-utils
+	url = https://github.com/sekaiacg/erofs-utils.git
