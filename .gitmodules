@@ -7,6 +7,9 @@
 [submodule "external/erofs-utils"]
 	path = external/erofs-utils
 	url = https://github.com/sekaiacg/erofs-utils.git
+[submodule "external/samfirm.js"]
+	path = external/samfirm.js
+	url = https://github.com/DavidArsene/samfirm.js.git
 [submodule "external/smali"]
 	path = external/smali
 	url = https://github.com/google/smali.git
