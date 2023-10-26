@@ -33,7 +33,7 @@ cmake -S "./build/cmake" -B "./out" \
 	-DENABLE_FULL_LTO="ON" \
 	-DMAX_BLOCK_SIZE="4096"
 make -C "./out" -j$(nproc)
-find out/erofs-utils -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
+find out/erofs-tools -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../out/bin \;
 cd ..
 
 #BUILD samfirm.js
