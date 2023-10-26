@@ -138,7 +138,7 @@ BUILD_SMALI()
 }
 # ]
 
-mkdir -p ""$TOOLS_DIR""
+mkdir -p "$TOOLS_DIR"
 
 ANDROID_TOOLS=true
 APKTOOL=true

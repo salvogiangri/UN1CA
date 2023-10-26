@@ -38,4 +38,4 @@ jobs:
 
       - name: Build dependencies
         run: |
-          ./scripts/build_tools.sh
+          ./scripts/build_dependencies.sh
