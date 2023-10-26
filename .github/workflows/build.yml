@@ -38,6 +38,4 @@ jobs:
 
       - name: Build dependencies
         run: |
-          mkdir -p out/bin
-          cd external
-          ./build.sh
+          ./scripts/build_tools.sh
