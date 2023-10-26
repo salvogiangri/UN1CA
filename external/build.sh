@@ -2,13 +2,21 @@
 
 set -e
 
+mkdir -p ../out/bin
+
 #BUILD android-tools
 cd android-tools
-mkdir build && cd build
+mkdir -p build && cd build
 cmake ..
 make
 find vendor -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} ../../../out/bin \;
-cd ../..
+cd ..
+cp --preserve=all vendor/avb/avbtool.py ../../out/bin/avbtool
+cp --preserve=all vendor/mkbootimg/mkbootimg.py ../../out/bin/mkbootimg
+cp --preserve=all vendor/mkbootimg/repack_bootimg.py ../../out/bin/repack_bootimg
+cp --preserve=all vendor/mkbootimg/unpack_bootimg.py ../../out/bin/unpack_bootimg
+mkdir -p ../../out/bin/gki && cp --preserve=all vendor/mkbootimg/gki/generate_gki_certificate.py ../../out/bin/gki/generate_gki_certificate.py
+cd ..
 
 #BUILD apktool
 cd apktool
