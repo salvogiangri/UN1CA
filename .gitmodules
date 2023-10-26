@@ -1,3 +1,6 @@
+[submodule "external/android-tools"]
+	path = external/android-tools
+	url = https://github.com/nmeum/android-tools.git
 [submodule "external/erofs-utils"]
 	path = external/erofs-utils
 	url = https://github.com/sekaiacg/erofs-utils.git
