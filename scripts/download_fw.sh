@@ -37,7 +37,9 @@ DOWNLOAD_FIRMWARE()
     PDR="$(pwd)"
 
     cd "$FW_DIR"
-    samfirm -m "$MODEL" -r "$REGION" 2>&1 > /dev/null && touch "$FW_DIR/${MODEL}_${REGION}/.downloaded"
+    samfirm -m "$MODEL" -r "$REGION" 2>&1 > /dev/null \
+        && touch "$FW_DIR/${MODEL}_${REGION}/.downloaded" \
+        || exit 1
     [ -f "$FW_DIR/${MODEL}_${REGION}/.downloaded" ] && {
         echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
         echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
