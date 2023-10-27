@@ -21,7 +21,7 @@ set -e
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
-FW_DIR="$OUT_DIR/fw"
+FW_DIR="$OUT_DIR/odin"
 TOOLS_DIR="$OUT_DIR/tools/bin"
 
 PATH="$TOOLS_DIR:$PATH"
@@ -39,9 +39,9 @@ DOWNLOAD_FIRMWARE()
     cd "$FW_DIR"
     samfirm -m "$MODEL" -r "$REGION" 2>&1 > /dev/null && touch "$FW_DIR/${MODEL}_${REGION}/.downloaded"
     [ -f "$FW_DIR/${MODEL}_${REGION}/.downloaded" ] && {
-        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {}  \; | cut -d "_" -f 2)/"
-        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {}  \; | cut -d "_" -f 3)/"
-        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "CP*" -exec basename {}  \; | cut -d "_" -f 2)"
+        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
+        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
+        echo -n "$(find "$FW_DIR/${MODEL}_${REGION}" -name "CP*" -exec basename {} \; | cut -d "_" -f 2)"
     } >> "$FW_DIR/${MODEL}_${REGION}/.downloaded"
 
     echo ""
