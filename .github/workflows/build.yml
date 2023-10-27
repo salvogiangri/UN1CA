@@ -17,7 +17,7 @@ jobs:
       - name: Set up build environment
         run: |
           sudo apt update
-          DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             ccache clang cmake golang libgtest-dev \
             libprotobuf-dev libunwind-dev libusb-1.0-0-dev lld protobuf-compiler \
             ninja-build
