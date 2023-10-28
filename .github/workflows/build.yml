@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        target: [a52sxq]
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -39,3 +43,7 @@ jobs:
       - name: Build dependencies
         run: |
           ./scripts/build_dependencies.sh
+
+      - name: Build ROM
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
