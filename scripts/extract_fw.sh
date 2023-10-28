@@ -73,16 +73,35 @@ EXTRACT_OS_PARTITIONS()
             lpdump "super.img" > "lpdump" && rm "super.img"
         fi
 
+        [ -d "tmp_out" ] && sudo umount "tmp_out"
         mkdir -p "tmp_out"
         for img in *.img
         do
             local PARTITION="${img%.img}"
-            sudo mount "$img" "tmp_out" &>/dev/null || continue
+            local TYPE="$(file -b "$img")"
+
+            case "$TYPE" in
+                "EROFS"*)
+                    fuse.erofs "$img" "tmp_out"
+                    ;;
+                "F2FS"* | *"rev 1.0 ext"*)
+                    sudo mount "$img" "tmp_out"
+                    ;;
+                *)
+                    echo "Ignoring $img"
+                    continue
+                    ;;
+            esac
+
+            [ -d "$PARTITION" ] && rm -rf "$PARTITION"
             mkdir -p "$PARTITION"
             sudo cp -a --preserve=all tmp_out/* "$PARTITION"
             for i in $(sudo find "$PARTITION"); do
                 sudo chown -h "$(whoami)":"$(whoami)" "$i"
             done
+
+            [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
+            [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
             for i in $(sudo find "tmp_out"); do
                 {
                     echo -n "$i "
@@ -104,6 +123,7 @@ EXTRACT_OS_PARTITIONS()
             sed -i 's/\./\\./g' "file_context-$PARTITION" \
                 && sed -i 's/\+/\\+/g' "file_context-$PARTITION" \
                 && sed -i 's/\[/\\[/g' "file_context-$PARTITION"
+
             sudo umount "tmp_out"
             rm "$img"
         done
