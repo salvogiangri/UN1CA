@@ -34,6 +34,7 @@ EXTRACT_KERNEL_BINARIES()
 
     local FILES="boot.img.lz4 dtbo.img.lz4 init_boot.img.lz4 vendor_boot.img.lz4"
 
+    echo "- Extracting kernel binaries..."
     cd "$FW_DIR/${MODEL}_${REGION}"
     for file in $FILES
     do
@@ -42,23 +43,74 @@ EXTRACT_KERNEL_BINARIES()
         tar xf "$AP_TAR" "$file" && lz4 -d --rm "$file" "${file%.lz4}"
     done
 
-    echo ""
     cd "$PDR"
 }
 
-EXTRACT_OS_BINARIES()
+EXTRACT_OS_PARTITIONS()
 {
     local PDR
     PDR="$(pwd)"
 
+    local SHOULD_EXTRACT=false
+    local SHOULD_EXTRACT_SUPER=false
+
+    echo "- Extracting OS partitions..."
     cd "$FW_DIR/${MODEL}_${REGION}"
-    if [ ! -f "super.img" ]; then
-        tar xf "$AP_TAR" "super.img.lz4"
-        lz4 -d --rm "super.img.lz4" "super.img.sparse"
-        simg2img "super.img.sparse" "super.img" && rm "super.img.sparse"
+
+    local COMMON_FOLDERS="odm product system vendor"
+    for folder in $COMMON_FOLDERS
+    do
+        [ ! -d "$folder" ] && SHOULD_EXTRACT=true
+        [ ! -f "$folder.img" ] && SHOULD_EXTRACT_SUPER=true
+    done
+
+    if $SHOULD_EXTRACT; then
+        if [ ! -f "lpdump" ] || $SHOULD_EXTRACT_SUPER; then
+            tar xf "$AP_TAR" "super.img.lz4"
+            lz4 -d --rm "super.img.lz4" "super.img.sparse"
+            simg2img "super.img.sparse" "super.img" && rm "super.img.sparse"
+            lpunpack "super.img"
+            lpdump "super.img" > "lpdump" && rm "super.img"
+        fi
+
+        mkdir -p "tmp_out"
+        for img in *.img
+        do
+            local PARTITION="${img%.img}"
+            sudo mount "$img" "tmp_out" &> /dev/null || continue
+            mkdir -p "$PARTITION"
+            sudo cp -a --preserve=all tmp_out/* "$PARTITION"
+            for i in $(sudo find "$PARTITION"); do
+                sudo chown -h "$(whoami)":"$(whoami)" "$i"
+            done
+            for i in $(sudo find "tmp_out"); do
+                {
+                    echo -n "$i "
+                    sudo getfattr -n security.selinux --only-values -h "$i"
+                    echo ""
+                } >> "file_context-$PARTITION"
+                echo "$(sudo stat -c "%n %u %g %a capabilities=0x0" "$i")" >> "fs_config-$PARTITION"
+            done
+            if [ "$PARTITION" = "system" ]; then
+                sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
+                    && sed -i "s/tmp_out\//\//g" "file_context-$PARTITION"
+                sed -i "s/tmp_out / /g" "fs_config-$PARTITION" \
+                    && sed -i "s/tmp_out\///g" "fs_config-$PARTITION"
+            else
+                sed -i "s/tmp_out/\/$PARTITION/g" "file_context-$PARTITION"
+                sed -i "s/tmp_out / /g" "fs_config-$PARTITION" \
+                    && sed -i "s/tmp_out/$PARTITION/g" "fs_config-$PARTITION"
+            fi
+            sed -i 's/\./\\./g' "file_context-$PARTITION" \
+                && sed -i 's/\+/\\+/g' "file_context-$PARTITION" \
+                && sed -i 's/\[/\\[/g' "file_context-$PARTITION"
+            sudo umount "tmp_out"
+            rm "$img"
+        done
+
+        rm -r "tmp_out"
     fi
 
-    echo ""
     cd "$PDR"
 }
 # ]
@@ -80,7 +132,7 @@ do
 
         mkdir -p "$FW_DIR/${MODEL}_${REGION}"
         EXTRACT_KERNEL_BINARIES
-        EXTRACT_OS_BINARIES
+        EXTRACT_OS_PARTITIONS
     else
         echo -e "- $MODEL firmware with $REGION CSC is not downloaded. Skipping...\n"
     fi
