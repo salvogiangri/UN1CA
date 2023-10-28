@@ -26,8 +26,9 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 
 PATH="$TOOLS_DIR:$PATH"
 
-GET_LATEST_FIRMWARE() {
-    curl --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
+GET_LATEST_FIRMWARE()
+{
+    curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
         | grep latest | sed 's/^[^>]*>//' | sed 's/<.*//'
 }
 
@@ -51,7 +52,7 @@ DOWNLOAD_FIRMWARE()
 }
 # ]
 
-source "$SRC_DIR/config.sh"
+source "$OUT_DIR/config.sh"
 [ "${#FIRMWARES[@]}" -ge "1" ] || exit 1
 
 mkdir -p "$ODIN_DIR"

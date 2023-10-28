@@ -115,7 +115,7 @@ EXTRACT_OS_PARTITIONS()
 }
 # ]
 
-source "$SRC_DIR/config.sh"
+source "$OUT_DIR/config.sh"
 [ "${#FIRMWARES[@]}" -ge "1" ] || exit 1
 
 mkdir -p "$FW_DIR"

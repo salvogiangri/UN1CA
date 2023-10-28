@@ -1,1 +1,0 @@
-FIRMWARES=( "SM-A528B/INS" )
