@@ -77,7 +77,7 @@ EXTRACT_OS_PARTITIONS()
         for img in *.img
         do
             local PARTITION="${img%.img}"
-            sudo mount "$img" "tmp_out" &> /dev/null || continue
+            sudo mount "$img" "tmp_out" &>/dev/null || continue
             mkdir -p "$PARTITION"
             sudo cp -a --preserve=all tmp_out/* "$PARTITION"
             for i in $(sudo find "$PARTITION"); do
@@ -113,6 +113,24 @@ EXTRACT_OS_PARTITIONS()
 
     cd "$PDR"
 }
+
+EXTRACT_AVB_BINARIES()
+{
+    local PDR
+    PDR="$(pwd)"
+
+    echo "- Extracting AVB binaries..."
+    cd "$FW_DIR/${MODEL}_${REGION}"
+    if [ ! -f "vbmeta.img" ] && tar tf "$AP_TAR" "vbmeta.img.lz4" &>/dev/null; then
+        tar xf "$AP_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4"
+    fi
+    if [ ! -f "vbmeta_patched.img" ]; then
+        cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
+        printf "$(printf '\\x%02X' 3)" | dd of="vbmeta_patched.img" bs=1 seek=123 count=1 conv=notrunc &> /dev/null
+    fi
+
+    cd "$PDR"
+}
 # ]
 
 source "$OUT_DIR/config.sh"
@@ -133,6 +151,7 @@ do
         mkdir -p "$FW_DIR/${MODEL}_${REGION}"
         EXTRACT_KERNEL_BINARIES
         EXTRACT_OS_PARTITIONS
+        EXTRACT_AVB_BINARIES
     else
         echo -e "- $MODEL firmware with $REGION CSC is not downloaded. Skipping...\n"
     fi
