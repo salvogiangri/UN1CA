@@ -27,9 +27,11 @@ run_cmd()
 
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"
-    elif [[ "$CMDS" != *"$CMD"* ]]; then
+        return 1
+    elif [[ ! "$CMDS" =~ '\<'"$CMD"'\>' ]]; then
         echo "\"$CMD\" is not valid."
         echo -e "Available cmds:\n$CMDS"
+        return 1
     else
         shift
         bash "$SRC_DIR/scripts/$CMD.sh" "$@"
@@ -41,11 +43,15 @@ TARGETS="$(ls "$SRC_DIR/target")"
 
 if [ -z "$1" ]; then
     echo -e "Available devices:\n$TARGETS"
-elif [[ "$TARGETS" != *"$1"* ]]; then
+    return 1
+elif [[ ! "$TARGETS" =~ '\<'"$1"'\>' ]]; then
     echo "\"$1\" is not valid target."
     echo -e "Available devices:\n$TARGETS"
+    return 1
 else
     mkdir -p "$OUT_DIR"
     run_cmd build_dependencies
     bash "$SRC_DIR/unica/config.sh" "$1"
 fi
+
+return 0
