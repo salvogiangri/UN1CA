@@ -31,7 +31,8 @@ run_cmd()
         echo "\"$CMD\" is not valid."
         echo -e "Available cmds:\n$CMDS"
     else
-        bash "$SRC_DIR/scripts/$CMD.sh"
+        shift
+        bash "$SRC_DIR/scripts/$CMD.sh" "$@"
     fi
 }
 # ]
