@@ -31,8 +31,10 @@ source "$OUT_DIR/config.sh"
 
 if [ -z "$1" ]; then
     echo "Usage: unsign_bin <image>"
+    exit 1
 elif [ ! -f "$1" ]; then
     echo "File not found: $1"
+    exit 1
 else
     if avbtool info_image --image "$1" &>/dev/null; then
         echo "Removing AVB footer"
