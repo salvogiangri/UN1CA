@@ -19,7 +19,6 @@
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
 
 run_cmd()
 {
@@ -47,5 +46,5 @@ elif [[ "$TARGETS" != *"$1"* ]]; then
 else
     mkdir -p "$OUT_DIR"
     run_cmd build_dependencies
-    cp --preserve=all "$SRC_DIR/target/$1/config.sh" "$OUT_DIR/config.sh"
+    bash "$SRC_DIR/unica/config.sh" "$1"
 fi
