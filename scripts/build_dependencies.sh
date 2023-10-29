@@ -54,6 +54,8 @@ BUILD_ANDROID_TOOLS()
     cp --preserve=all "vendor/mkbootimg/repack_bootimg.py" "$TOOLS_DIR/repack_bootimg"
     cp --preserve=all "vendor/mkbootimg/unpack_bootimg.py" "$TOOLS_DIR/unpack_bootimg"
     mkdir -p "$TOOLS_DIR/gki" && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
+    cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
+    cp --preserve=all "../f2fs_utils/mkf2fsuserimg.sh" "$TOOLS_DIR/mkf2fsuserimg"
 
     echo ""
     cd "$PDR"
@@ -150,8 +152,9 @@ ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
     "ext2simg" "fastboot" "gki/generate_gki_certificate.py" "img2simg"
     "lpadd" "lpdump" "lpflash" "lpmake"
-    "lpunpack" "make_f2fs" "mke2fs.android" "mkbootimg"
-    "repack_bootimg" "simg2img" "unpack_bootimg"
+    "lpunpack" "make_f2fs" "mkbootimg" "mke2fs.android"
+    "mkf2fsuserimg" "mkuserimg_mke2fs" "repack_bootimg" "simg2img"
+    "unpack_bootimg"
 )
 CHECK_TOOLS "${ANDROID_TOOLS_EXEC[@]}" && ANDROID_TOOLS=false
 APKTOOL_EXEC=(
