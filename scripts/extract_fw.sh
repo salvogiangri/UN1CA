@@ -151,6 +151,18 @@ EXTRACT_AVB_BINARIES()
 
     cd "$PDR"
 }
+
+EXTRACT_ALL()
+{
+    AP_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*")
+
+    mkdir -p "$FW_DIR/${MODEL}_${REGION}"
+    EXTRACT_KERNEL_BINARIES
+    EXTRACT_OS_PARTITIONS
+    EXTRACT_AVB_BINARIES
+
+    cp --preserve=all "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" "$FW_DIR/${MODEL}_${REGION}/.extracted"
+}
 # ]
 
 source "$OUT_DIR/config.sh"
@@ -164,16 +176,21 @@ do
     REGION=$(echo -n "$i" | cut -d "/" -f 2)
 
     if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
-        echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
-
-        AP_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*")
-
-        mkdir -p "$FW_DIR/${MODEL}_${REGION}"
-        EXTRACT_KERNEL_BINARIES
-        EXTRACT_OS_PARTITIONS
-        EXTRACT_AVB_BINARIES
+        if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
+            if [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
+                echo -e "- Updating $MODEL firmware with $REGION CSC...\n"
+                EXTRACT_ALL
+            else
+                echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
+                continue
+            fi
+        else
+            echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
+            EXTRACT_ALL
+        fi
     else
         echo -e "- $MODEL firmware with $REGION CSC is not downloaded. Skipping...\n"
+        continue
     fi
 done
 
