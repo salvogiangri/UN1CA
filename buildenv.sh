@@ -20,6 +20,9 @@
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
 
+s='\<'
+e='\>'
+
 run_cmd()
 {
     local CMD=$1
@@ -28,7 +31,7 @@ run_cmd()
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"
         return 1
-    elif [[ ! "$CMDS" =~ '\<'"$CMD"'\>' ]]; then
+    elif [[ ! "$CMDS" =~ $s$CMD$e ]]; then
         echo "\"$CMD\" is not valid."
         echo -e "Available cmds:\n$CMDS"
         return 1
@@ -44,7 +47,7 @@ TARGETS="$(ls "$SRC_DIR/target")"
 if [ -z "$1" ]; then
     echo -e "Available devices:\n$TARGETS"
     return 1
-elif [[ ! "$TARGETS" =~ '\<'"$1"'\>' ]]; then
+elif [[ ! "$TARGETS" =~ $s$1$e ]]; then
     echo "\"$1\" is not valid target."
     echo -e "Available devices:\n$TARGETS"
     return 1
