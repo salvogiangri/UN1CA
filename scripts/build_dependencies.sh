@@ -54,7 +54,8 @@ BUILD_ANDROID_TOOLS()
     cp --preserve=all "vendor/mkbootimg/repack_bootimg.py" "$TOOLS_DIR/repack_bootimg"
     cp --preserve=all "vendor/mkbootimg/unpack_bootimg.py" "$TOOLS_DIR/unpack_bootimg"
     mkdir -p "$TOOLS_DIR/gki" && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
-    cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
+    cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs.py" \
+        && ln -s "$TOOLS_DIR/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
     cp --preserve=all "../f2fs_utils/mkf2fsuserimg.sh" "$TOOLS_DIR/mkf2fsuserimg"
     ln -s "$(which sload.f2fs)" "$TOOLS_DIR/sload_f2fs"
 
