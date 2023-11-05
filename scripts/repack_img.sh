@@ -31,16 +31,23 @@ if [ "$#" -lt 4 ]; then
     exit 1
 fi
 
+SPARSE=false
+F2FS=false
+EROFS=false
 case "$1" in
     *"sparse")
         SPARSE=true
         ;&
+    "f2fs"*)
+        F2FS=true
+        ;;
     "erofs"*)
         EROFS=true
         ;;
     *)
         echo "\"$1\" is not valid fs."
         echo "Available FS:"
+        echo "f2fs(+sparse)"
         echo "erofs(+sparse)"
         exit 1
         ;;
@@ -60,10 +67,21 @@ if [ ! -f "$4" ]; then
 fi
 
 PARTITION=$(basename "$2")
-[[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
-if $EROFS; then
-    mkfs.erofs -zlz4hc,9 -T1640995200 \
+if $F2FS; then
+    [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
+    IMG_SIZE=$(du -sb "$2" | cut -f 1)
+    #IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+
+    $SPARSE && SPARSE_FLAG="-S"
+    mkf2fsuserimg "$2/../$PARTITION.img" ${IMG_SIZE%.*} \
+        $SPARSE_FLAG -C "$4" -f "$2" \
+        -s "$3" -t "$MOUNT_POINT" -T 1640995200 \
+        -L "$PARTITION" --prjquota --compression
+elif $EROFS; then
+    [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
+
+    mkfs.erofs -zlz4hc,9 -T 1640995200 \
         --mount-point="$MOUNT_POINT" --file-contexts="$3" --fs-config="$4" \
         "$2/../$PARTITION.img.raw" "$2"
     if $SPARSE; then
