@@ -56,6 +56,7 @@ BUILD_ANDROID_TOOLS()
     mkdir -p "$TOOLS_DIR/gki" && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
     cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
     cp --preserve=all "../f2fs_utils/mkf2fsuserimg.sh" "$TOOLS_DIR/mkf2fsuserimg"
+    ln -s "$(which sload.f2fs)" "$TOOLS_DIR/sload_f2fs"
 
     echo ""
     cd "$PDR"
@@ -154,7 +155,7 @@ ANDROID_TOOLS_EXEC=(
     "lpadd" "lpdump" "lpflash" "lpmake"
     "lpunpack" "make_f2fs" "mkbootimg" "mke2fs.android"
     "mkf2fsuserimg" "mkuserimg_mke2fs" "repack_bootimg" "simg2img"
-    "unpack_bootimg"
+    "sload_f2fs" "unpack_bootimg"
 )
 CHECK_TOOLS "${ANDROID_TOOLS_EXEC[@]}" && ANDROID_TOOLS=false
 APKTOOL_EXEC=(
