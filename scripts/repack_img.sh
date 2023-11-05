@@ -32,12 +32,16 @@ if [ "$#" -lt 4 ]; then
 fi
 
 SPARSE=false
+EXT4=false
 F2FS=false
 EROFS=false
 case "$1" in
     *"sparse")
         SPARSE=true
         ;&
+    "ext4"*)
+        EXT4=true
+        ;;
     "f2fs"*)
         F2FS=true
         ;;
@@ -47,6 +51,7 @@ case "$1" in
     *)
         echo "\"$1\" is not valid fs."
         echo "Available FS:"
+        echo "ext4(+sparse)"
         echo "f2fs(+sparse)"
         echo "erofs(+sparse)"
         exit 1
@@ -68,7 +73,16 @@ fi
 
 PARTITION=$(basename "$2")
 
-if $F2FS; then
+if $EXT4; then
+    [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
+    IMG_SIZE=$(du -sb "$2" | cut -f 1)
+    #IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+
+    $SPARSE && SPARSE_FLAG="-s"
+    mkuserimg_mke2fs $SPARSE_FLAG -T 1640995200 -C "$4" \
+        -L "$PARTITION" "$2" "$2/../$PARTITION.img" \
+        ext4 "$MOUNT_POINT" ${IMG_SIZE%.*} "$3"
+elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
     #IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
