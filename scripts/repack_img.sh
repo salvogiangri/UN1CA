@@ -107,7 +107,7 @@ elif $F2FS; then
 elif $EROFS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
-    mkfs.erofs -zlz4hc,9 -T 1640995200 \
+    mkfs.erofs -zlz4hc,9 -b 4096 -T 1640995200 \
         --mount-point="$MOUNT_POINT" --file-contexts="$3" --fs-config="$4" \
         "$2/../$PARTITION.img.raw" "$2"
     if $SPARSE; then
