@@ -76,11 +76,23 @@ PARTITION=$(basename "$2")
 if $EXT4; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
-    #IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+    IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+
+    if ! grep -q "lost\+found" "$3"; then
+        [[ $PARTITION == "system" ]] && echo "/lost\+found u:object_r:rootfs:s0" >> "$3"
+        [[ $PARTITION == "odm" ]] && echo "/odm/lost\+found u:object_r:vendor_file:s0" >> "$3"
+        [[ $PARTITION == "product" ]] && echo "/product/lost\+found u:object_r:system_file:s0" >> "$3"
+        [[ $PARTITION == "vendor" ]] && echo "/vendor/lost\+found u:object_r:vendor_file:s0" >> "$3"
+    fi
+
+    if ! grep -q "lost+found" "$4"; then
+        [[ $PARTITION == "system" ]] \
+            && echo "lost+found 0 0 700 capabilities=0x0" >> "$4" || echo "$PARTITION/lost+found 0 0 700 capabilities=0x0" >> "$4"
+    fi
 
     $SPARSE && SPARSE_FLAG="-s"
-    mkuserimg_mke2fs $SPARSE_FLAG -T 1640995200 -C "$4" \
-        -L "$PARTITION" "$2" "$2/../$PARTITION.img" \
+    mkuserimg_mke2fs $SPARSE_FLAG -T 1230735600 -C "$4" \
+        -L "$MOUNT_POINT" -I 512 "$2" "$2/../$PARTITION.img" \
         ext4 "$MOUNT_POINT" ${IMG_SIZE%.*} "$3"
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
