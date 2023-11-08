@@ -53,9 +53,11 @@ BUILD_ANDROID_TOOLS()
     cp --preserve=all "vendor/mkbootimg/mkbootimg.py" "$TOOLS_DIR/mkbootimg"
     cp --preserve=all "vendor/mkbootimg/repack_bootimg.py" "$TOOLS_DIR/repack_bootimg"
     cp --preserve=all "vendor/mkbootimg/unpack_bootimg.py" "$TOOLS_DIR/unpack_bootimg"
-    mkdir -p "$TOOLS_DIR/gki" && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
+    mkdir -p "$TOOLS_DIR/gki" \
+        && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
     cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs.py" \
         && ln -s "$TOOLS_DIR/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
+    cp --preserve=all "../ext4_utils/mke2fs.conf" "$TOOLS_DIR/mke2fs.conf"
     cp --preserve=all "../f2fs_utils/mkf2fsuserimg.sh" "$TOOLS_DIR/mkf2fsuserimg"
     ln -s "$(which sload.f2fs)" "$TOOLS_DIR/sload_f2fs"
 
@@ -155,8 +157,8 @@ ANDROID_TOOLS_EXEC=(
     "ext2simg" "fastboot" "gki/generate_gki_certificate.py" "img2simg"
     "lpadd" "lpdump" "lpflash" "lpmake"
     "lpunpack" "make_f2fs" "mkbootimg" "mke2fs.android"
-    "mkf2fsuserimg" "mkuserimg_mke2fs" "repack_bootimg" "simg2img"
-    "sload_f2fs" "unpack_bootimg"
+    "mke2fs.conf" "mkf2fsuserimg" "mkuserimg_mke2fs" "repack_bootimg"
+    "simg2img" "sload_f2fs" "unpack_bootimg"
 )
 CHECK_TOOLS "${ANDROID_TOOLS_EXEC[@]}" && ANDROID_TOOLS=false
 APKTOOL_EXEC=(
