@@ -91,7 +91,7 @@ if $EXT4; then
     fi
 
     $SPARSE && SPARSE_FLAG="-s"
-    mkuserimg_mke2fs $SPARSE_FLAG -T 1230735600 -C "$4" \
+    mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
         -L "$MOUNT_POINT" -I 512 "$2" "$2/../$PARTITION.img" \
         ext4 "$MOUNT_POINT" ${IMG_SIZE%.*} "$3"
 elif $F2FS; then
