@@ -41,15 +41,15 @@ GEN_CONFIG_FILE()
 # ]
 
 # Current API level
-API_LEVEL=33
+API_LEVEL=34
 
 # Base ROM firmware
-# Qualcomm: Galaxy S21 FE
-# Exynos: Galaxy S23 FE
+# Qualcomm: Galaxy S23
 if [[ "$SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-    BASE_FIRMWARE="SM-G990B/EUX"
-elif [[ "$SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
-    BASE_FIRMWARE="SM-S711B/EUX"
+    BASE_FIRMWARE="SM-S911B/EUX"
+else
+    echo "\"$SINGLE_SYSTEM_IMAGE\" is not a valid system image."
+    exit 1
 fi
 
 GEN_CONFIG_FILE
