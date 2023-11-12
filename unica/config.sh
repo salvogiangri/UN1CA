@@ -46,7 +46,7 @@ API_LEVEL=34
 # Base ROM firmware
 # Qualcomm: Galaxy S23
 if [[ "$SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-    BASE_FIRMWARE="SM-S911B/EUX"
+    BASE_FIRMWARE="SM-S911B/BTE"
 else
     echo "\"$SINGLE_SYSTEM_IMAGE\" is not a valid system image."
     exit 1
