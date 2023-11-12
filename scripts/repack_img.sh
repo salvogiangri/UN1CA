@@ -75,8 +75,15 @@ PARTITION=$(basename "$2")
 
 if $EXT4; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
+
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
-    IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+    IMG_SIZE=$(echo "$IMG_SIZE * 1.01" | bc -l)
+    IMG_SIZE=${IMG_SIZE%.*}
+
+    INODES=$(find "$2" -print | wc -l)
+    SPARE_INODES=$(echo "$INODES * 6 / 100" | bc -l)
+    SPARE_INODES=${SPARE_INODES%.*}
+    [ $SPARE_INODES -lt 12 ] && SPARE_INODES=12
 
     if ! grep -q "lost\+found" "$3"; then
         [[ $PARTITION == "system" ]] && echo "/lost\+found u:object_r:rootfs:s0" >> "$3"
@@ -92,8 +99,8 @@ if $EXT4; then
 
     $SPARSE && SPARSE_FLAG="-s"
     mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
-        -L "$MOUNT_POINT" -I 512 "$2" "$2/../$PARTITION.img" \
-        ext4 "$MOUNT_POINT" ${IMG_SIZE%.*} "$3"
+        -L "$MOUNT_POINT" -i $(echo "$INODES + $SPARE_INODES" | bc -l) -I 256 \
+        "$2" "$2/../$PARTITION.img" ext4 "$MOUNT_POINT" $IMG_SIZE "$3"
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
