@@ -23,8 +23,9 @@ jobs:
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             ccache clang cmake f2fs-tools golang \
-            libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev lld \
-            protobuf-compiler ninja-build
+            libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev linux-modules-extra-$(uname -r) \
+            lld protobuf-compiler ninja-build
+          sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
