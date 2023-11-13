@@ -110,6 +110,20 @@ BUILD_EROFS_UTILS()
     cd "$PDR"
 }
 
+BUILD_IMG2SDAT()
+{
+    local PDR
+    PDR="$(pwd)"
+
+    echo -e "- Building img2sdat...\n"
+
+    cd "$SRC_DIR/external/img2sdat"
+    find "." -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
+
+    echo ""
+    cd "$PDR"
+}
+
 BUILD_SAMFIRM()
 {
     local PDR
@@ -150,6 +164,7 @@ mkdir -p "$TOOLS_DIR"
 ANDROID_TOOLS=true
 APKTOOL=true
 EROFS_UTILS=true
+IMG2SDAT=true
 SAMFIRM=true
 SMALI=true
 
@@ -170,6 +185,10 @@ EROFS_UTILS_EXEC=(
     "dump.erofs" "extract.erofs" "fsck.erofs" "fuse.erofs" "mkfs.erofs"
 )
 CHECK_TOOLS "${EROFS_UTILS_EXEC[@]}" && EROFS_UTILS=false
+IMG2SDAT_EXEC=(
+    "blockimgdiff.py" "common.py" "images.py" "img2sdat" "rangelib.py" "sparse_img.py"
+)
+CHECK_TOOLS "${IMG2SDAT_EXEC[@]}" && IMG2SDAT=false
 SAMFIRM_EXEC=(
     "samfirm"
 )
@@ -182,6 +201,7 @@ CHECK_TOOLS "${SMALI_EXEC[@]}" && SMALI=false
 $ANDROID_TOOLS && BUILD_ANDROID_TOOLS
 $APKTOOL && BUILD_APKTOOL
 $EROFS_UTILS && BUILD_EROFS_UTILS
+$IMG2SDAT && BUILD_IMG2SDAT
 $SAMFIRM && BUILD_SAMFIRM
 $SMALI && BUILD_SMALI
 

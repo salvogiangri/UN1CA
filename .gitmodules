@@ -10,6 +10,10 @@
 	path = external/erofs-utils
 	url = https://github.com/sekaiacg/erofs-utils.git
 	ignore = dirty
+[submodule "external/img2sdat"]
+	path = external/img2sdat
+	url = https://github.com/BlackMesa123/img2sdat.git
+	ignore = dirty
 [submodule "external/samfirm.js"]
 	path = external/samfirm.js
 	url = https://github.com/DavidArsene/samfirm.js.git
