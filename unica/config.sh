@@ -32,11 +32,14 @@ GEN_CONFIG_FILE()
     echo "API_LEVEL=$API_LEVEL" >> "$OUT_DIR/config.sh"
     echo -n "FIRMWARES=( " >> "$OUT_DIR/config.sh"
     [ -n "$BASE_FIRMWARE" ] && echo -n "\"$BASE_FIRMWARE\" " >> "$OUT_DIR/config.sh"
-    for i in "${DEVICE_FIRMWARES[@]}"
+    for i in "${TARGET_FIRMWARES[@]}"
     do
         echo -n "\"$i\" " >> "$OUT_DIR/config.sh"
     done
     echo ")" >> "$OUT_DIR/config.sh"
+    echo "TARGET_CODENAME=$TARGET_CODENAME" >> "$OUT_DIR/config.sh"
+    echo "SOURCE_HAS_SYSTEM_EXT=$SOURCE_HAS_SYSTEM_EXT" >> "$OUT_DIR/config.sh"
+    echo "TARGET_HAS_SYSTEM_EXT=$TARGET_HAS_SYSTEM_EXT" >> "$OUT_DIR/config.sh"
 }
 # ]
 
@@ -45,10 +48,11 @@ API_LEVEL=34
 
 # Base ROM firmware
 # Qualcomm: Galaxy S23
-if [[ "$SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
     BASE_FIRMWARE="SM-S911B/BTE"
+    SOURCE_HAS_SYSTEM_EXT=true
 else
-    echo "\"$SINGLE_SYSTEM_IMAGE\" is not a valid system image."
+    echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."
     exit 1
 fi
 
