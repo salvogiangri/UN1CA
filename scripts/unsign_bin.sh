@@ -40,11 +40,11 @@ else
         echo "Removing AVB footer"
         avbtool erase_footer --image "$1"
     fi
-    if grep -q "SignerVer02" "$1"; then
+    if tail "$1" | grep -q "SignerVer02"; then
         echo "Removing Samsung v2 signature"
         truncate -s -512 "$1"
     fi
-    if grep -q "SignerVer03" "$1"; then
+    if tail "$1" | grep -q "SignerVer03"; then
         echo "Removing Samsung v3 signature"
         truncate -s -784 "$1"
     fi
