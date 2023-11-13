@@ -81,10 +81,7 @@ EXTRACT_OS_PARTITIONS()
             local TYPE="$(file -b "$img")"
 
             case "$TYPE" in
-                "EROFS"*)
-                    fuse.erofs "$img" "tmp_out"
-                    ;;
-                "F2FS"* | *"rev 1.0 ext"*)
+                "EROFS"* | "F2FS"* | *"rev 1.0 ext"*)
                     sudo mount "$img" "tmp_out"
                     ;;
                 *)
@@ -141,8 +138,8 @@ EXTRACT_AVB_BINARIES()
 
     echo "- Extracting AVB binaries..."
     cd "$FW_DIR/${MODEL}_${REGION}"
-    if [ ! -f "vbmeta.img" ] && tar tf "$AP_TAR" "vbmeta.img.lz4" &>/dev/null; then
-        tar xf "$AP_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4"
+    if [ ! -f "vbmeta.img" ] && tar tf "$BL_TAR" "vbmeta.img.lz4" &>/dev/null; then
+        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4"
     fi
     if [ ! -f "vbmeta_patched.img" ]; then
         cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
@@ -154,6 +151,7 @@ EXTRACT_AVB_BINARIES()
 
 EXTRACT_ALL()
 {
+    BL_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "BL*")
     AP_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*")
 
     mkdir -p "$FW_DIR/${MODEL}_${REGION}"
