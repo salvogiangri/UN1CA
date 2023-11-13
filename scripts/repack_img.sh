@@ -31,14 +31,11 @@ if [ "$#" -lt 4 ]; then
     exit 1
 fi
 
-SPARSE=false
+[[ $1 == *"sparse" ]] && SPARSE=true || SPARSE=false
 EXT4=false
 F2FS=false
 EROFS=false
 case "$1" in
-    *"sparse")
-        SPARSE=true
-        ;&
     "ext4"*)
         EXT4=true
         ;;
@@ -104,13 +101,13 @@ if $EXT4; then
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
-    #IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+    IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
 
-    $SPARSE && SPARSE_FLAG="-S"
+    #$SPARSE && SPARSE_FLAG="-S"
     mkf2fsuserimg "$2/../$PARTITION.img" ${IMG_SIZE%.*} \
         $SPARSE_FLAG -C "$4" -f "$2" \
         -s "$3" -t "$MOUNT_POINT" -T 1640995200 \
-        -L "$PARTITION" --prjquota --compression
+        -L "$MOUNT_POINT" --prjquota --compression
 elif $EROFS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
