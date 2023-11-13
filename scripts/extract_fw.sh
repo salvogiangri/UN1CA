@@ -161,10 +161,9 @@ EXTRACT_ALL()
 
     cp --preserve=all "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" "$FW_DIR/${MODEL}_${REGION}/.extracted"
 }
-# ]
 
 source "$OUT_DIR/config.sh"
-[ "${#FIRMWARES[@]}" -ge "1" ] || exit 1
+# ]
 
 mkdir -p "$FW_DIR"
 

@@ -50,10 +50,9 @@ DOWNLOAD_FIRMWARE()
     echo ""
     cd "$PDR"
 }
-# ]
 
 source "$OUT_DIR/config.sh"
-[ "${#FIRMWARES[@]}" -ge "1" ] || exit 1
+# ]
 
 mkdir -p "$ODIN_DIR"
 
