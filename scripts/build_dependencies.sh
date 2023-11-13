@@ -56,10 +56,10 @@ BUILD_ANDROID_TOOLS()
     mkdir -p "$TOOLS_DIR/gki" \
         && cp --preserve=all "vendor/mkbootimg/gki/generate_gki_certificate.py" "$TOOLS_DIR/gki/generate_gki_certificate.py"
     cp --preserve=all "../ext4_utils/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs.py" \
-        && ln -s "$TOOLS_DIR/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
+        && ln -sf "$TOOLS_DIR/mkuserimg_mke2fs.py" "$TOOLS_DIR/mkuserimg_mke2fs"
     cp --preserve=all "../ext4_utils/mke2fs.conf" "$TOOLS_DIR/mke2fs.conf"
     cp --preserve=all "../f2fs_utils/mkf2fsuserimg.sh" "$TOOLS_DIR/mkf2fsuserimg"
-    ln -s "$(which sload.f2fs)" "$TOOLS_DIR/sload_f2fs"
+    ln -sf "$(which sload.f2fs)" "$TOOLS_DIR/sload_f2fs"
 
     echo ""
     cd "$PDR"
