@@ -26,9 +26,6 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 PATH="$TOOLS_DIR:$PATH"
 # ]
 
-[ -f "$OUT_DIR/config.sh" ] || exit 1
-source "$OUT_DIR/config.sh"
-
 if [ -z "$1" ]; then
     echo "Usage: unsign_bin <image>"
     exit 1
