@@ -26,7 +26,7 @@ e='\>'
 run_cmd()
 {
     local CMD=$1
-    local CMDS="$(ls "$SRC_DIR/scripts" | sed "s/.sh//")"
+    local CMDS="$(ls --ignore "internal" "$SRC_DIR/scripts" | sed "s/.sh//")"
 
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"
