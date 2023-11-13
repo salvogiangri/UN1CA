@@ -27,7 +27,7 @@ PATH="$TOOLS_DIR:$PATH"
 # ]
 
 if [ "$#" -lt 4 ]; then
-    echo "Usage: repack_img <fs> <dir> <file_context> <fs_config>"
+    echo "Usage: build_fs_image <fs> <dir> <file_context> <fs_config>"
     exit 1
 fi
 
