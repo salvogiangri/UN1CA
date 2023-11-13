@@ -70,6 +70,8 @@ fi
 
 PARTITION=$(basename "$2")
 
+echo -e "- Building $PARTITION.img as $1...\n"
+
 if $EXT4; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
 
@@ -97,17 +99,23 @@ if $EXT4; then
     $SPARSE && SPARSE_FLAG="-s"
     mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
         -L "$MOUNT_POINT" -i $(echo "$INODES + $SPARE_INODES" | bc -l) -I 256 \
-        "$2" "$2/../$PARTITION.img" ext4 "$MOUNT_POINT" $IMG_SIZE "$3"
+        "$2" "$2/../$PARTITION.img" ext4 "$MOUNT_POINT" $IMG_SIZE "$3" 2>&1 > /dev/null
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
     IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
 
+    # (https://github.com/nmeum/android-tools/issues/127)
     #$SPARSE && SPARSE_FLAG="-S"
-    mkf2fsuserimg "$2/../$PARTITION.img" ${IMG_SIZE%.*} \
+    mkf2fsuserimg "$2/../$PARTITION.img.raw" ${IMG_SIZE%.*} \
         $SPARSE_FLAG -C "$4" -f "$2" \
         -s "$3" -t "$MOUNT_POINT" -T 1640995200 \
         -L "$MOUNT_POINT" --prjquota --compression
+    if $SPARSE; then
+        img2simg "$2/../$PARTITION.img.raw" "$2/../$PARTITION.img" && rm "$2/../$PARTITION.img.raw"
+    else
+        mv "$2/../$PARTITION.img.raw" "$2/../$PARTITION.img"
+    fi
 elif $EROFS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
@@ -121,4 +129,5 @@ elif $EROFS; then
     fi
 fi
 
+echo ""
 exit 0
