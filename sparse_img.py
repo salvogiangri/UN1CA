@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#
 # Copyright (C) 2014 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
+import argparse
 import bisect
+import logging
 import os
-import sys
 import struct
+import threading
 from hashlib import sha1
 
 import rangelib
+
+logger = logging.getLogger(__name__)
 
 
 class SparseImage(object):
@@ -33,7 +41,7 @@ class SparseImage(object):
   """
 
   def __init__(self, simg_fn, file_map_fn=None, clobbered_blocks=None,
-               mode="rb", build_map=True):
+               mode="rb", build_map=True, allow_shared_blocks=False):
     self.simg_f = f = open(simg_fn, mode)
 
     header_bin = f.read(28)
@@ -60,8 +68,9 @@ class SparseImage(object):
       raise ValueError("Chunk header size was expected to be 12, but is %u." %
                        (chunk_hdr_sz,))
 
-    print("Total of %u %u-byte output blocks in %u input chunks."
-          % (total_blks, blk_sz, total_chunks))
+    logger.info(
+        "Total of %u %u-byte output blocks in %u input chunks.", total_blks,
+        blk_sz, total_chunks)
 
     if not build_map:
       return
@@ -71,7 +80,7 @@ class SparseImage(object):
     self.offset_map = offset_map = []
     self.clobbered_blocks = rangelib.RangeSet(data=clobbered_blocks)
 
-    for i in range(total_chunks):
+    for _ in range(total_chunks):
       header_bin = f.read(12)
       header = struct.unpack("<2H2I", header_bin)
       chunk_type = header[0]
@@ -102,8 +111,8 @@ class SparseImage(object):
         if data_sz != 0:
           raise ValueError("Don't care chunk input size is non-zero (%u)" %
                            (data_sz))
-        else:
-          pos += chunk_sz
+
+        pos += chunk_sz
 
       elif chunk_type == 0xCAC4:
         raise ValueError("CRC32 chunks are not supported")
@@ -111,6 +120,8 @@ class SparseImage(object):
       else:
         raise ValueError("Unknown chunk type 0x%04X not supported" %
                          (chunk_type,))
+
+    self.generator_lock = threading.Lock()
 
     self.care_map = rangelib.RangeSet(care_data)
     self.offset_index = [i[0] for i in offset_map]
@@ -127,7 +138,8 @@ class SparseImage(object):
     self.extended = extended
 
     if file_map_fn:
-      self.LoadFileBlockMap(file_map_fn, self.clobbered_blocks)
+      self.LoadFileBlockMap(file_map_fn, self.clobbered_blocks,
+                            allow_shared_blocks)
     else:
       self.file_map = {"__DATA": self.care_map}
 
@@ -145,8 +157,19 @@ class SparseImage(object):
     f.seek(16, os.SEEK_SET)
     f.write(struct.pack("<2I", self.total_blocks, self.total_chunks))
 
+  def RangeSha1(self, ranges):
+    h = sha1()
+    for data in self._GetRangeData(ranges):
+      h.update(data)
+    return h.hexdigest()
+
   def ReadRangeSet(self, ranges):
     return [d for d in self._GetRangeData(ranges)]
+
+  def ReadBlocks(self, start=0, num_blocks=None):
+    if num_blocks is None:
+      num_blocks = self.total_blocks
+    return self._GetRangeData([(start, start + num_blocks)])
 
   def TotalSha1(self, include_clobbered_blocks=False):
     """Return the SHA-1 hash of all data in the 'care' regions.
@@ -156,10 +179,11 @@ class SparseImage(object):
     ranges = self.care_map
     if not include_clobbered_blocks:
       ranges = ranges.subtract(self.clobbered_blocks)
-    h = sha1()
-    for d in self._GetRangeData(ranges):
-      h.update(d)
-    return h.hexdigest()
+    return self.RangeSha1(ranges)
+
+  def WriteRangeDataToFd(self, ranges, fd):
+    for data in self._GetRangeData(ranges):
+      fd.write(data)
 
   def _GetRangeData(self, ranges):
     """Generator that produces all the image data in 'ranges'.  The
@@ -167,47 +191,80 @@ class SparseImage(object):
     particular is not necessarily equal to the number of ranges in
     'ranges'.
 
-    This generator is stateful -- it depends on the open file object
-    contained in this SparseImage, so you should not try to run two
+    Use a lock to protect the generator so that we will not run two
     instances of this generator on the same object simultaneously."""
 
     f = self.simg_f
-    for s, e in ranges:
-      to_read = e-s
-      idx = bisect.bisect_right(self.offset_index, s) - 1
-      chunk_start, chunk_len, filepos, fill_data = self.offset_map[idx]
-
-      # for the first chunk we may be starting partway through it.
-      remain = chunk_len - (s - chunk_start)
-      this_read = min(remain, to_read)
-      if filepos is not None:
-        p = filepos + ((s - chunk_start) * self.blocksize)
-        f.seek(p, os.SEEK_SET)
-        yield f.read(this_read * self.blocksize)
-      else:
-        yield fill_data * (this_read * (self.blocksize >> 2))
-      to_read -= this_read
-
-      while to_read > 0:
-        # continue with following chunks if this range spans multiple chunks.
-        idx += 1
+    with self.generator_lock:
+      for s, e in ranges:
+        to_read = e-s
+        idx = bisect.bisect_right(self.offset_index, s) - 1
         chunk_start, chunk_len, filepos, fill_data = self.offset_map[idx]
-        this_read = min(chunk_len, to_read)
+
+        # for the first chunk we may be starting partway through it.
+        remain = chunk_len - (s - chunk_start)
+        this_read = min(remain, to_read)
         if filepos is not None:
-          f.seek(filepos, os.SEEK_SET)
+          p = filepos + ((s - chunk_start) * self.blocksize)
+          f.seek(p, os.SEEK_SET)
           yield f.read(this_read * self.blocksize)
         else:
           yield fill_data * (this_read * (self.blocksize >> 2))
         to_read -= this_read
 
-  def LoadFileBlockMap(self, fn, clobbered_blocks):
+        while to_read > 0:
+          # continue with following chunks if this range spans multiple chunks.
+          idx += 1
+          chunk_start, chunk_len, filepos, fill_data = self.offset_map[idx]
+          this_read = min(chunk_len, to_read)
+          if filepos is not None:
+            f.seek(filepos, os.SEEK_SET)
+            yield f.read(this_read * self.blocksize)
+          else:
+            yield fill_data * (this_read * (self.blocksize >> 2))
+          to_read -= this_read
+
+  def LoadFileBlockMap(self, fn, clobbered_blocks, allow_shared_blocks):
+    """Loads the given block map file.
+
+    Args:
+      fn: The filename of the block map file.
+      clobbered_blocks: A RangeSet instance for the clobbered blocks.
+      allow_shared_blocks: Whether having shared blocks is allowed.
+    """
     remaining = self.care_map
     self.file_map = out = {}
 
     with open(fn) as f:
       for line in f:
-        fn, ranges = line.split(None, 1)
-        ranges = rangelib.RangeSet.parse(ranges)
+        fn, ranges_text = line.rstrip().split(None, 1)
+        raw_ranges = rangelib.RangeSet.parse(ranges_text)
+
+        # Note: e2fsdroid records holes in the extent tree as "0" blocks.
+        # This causes confusion because clobbered_blocks always includes
+        # the superblock (physical block #0). Since the 0 blocks here do
+        # not represent actual physical blocks, remove them from the set.
+        ranges = raw_ranges.subtract(rangelib.RangeSet("0"))
+        # b/150334561 we need to perserve the monotonic property of the raw
+        # range. Otherwise, the validation script will read the blocks with
+        # wrong order when pulling files from the image.
+        ranges.monotonic = raw_ranges.monotonic
+        ranges.extra['text_str'] = ranges_text
+
+        if allow_shared_blocks:
+          # Find the shared blocks that have been claimed by others. If so, tag
+          # the entry so that we can skip applying imgdiff on this file.
+          shared_blocks = ranges.subtract(remaining)
+          if shared_blocks:
+            non_shared = ranges.subtract(shared_blocks)
+            if not non_shared:
+              continue
+
+            # Put the non-shared RangeSet as the value in the block map, which
+            # has a copy of the original RangeSet.
+            non_shared.extra['uses_shared_blocks'] = ranges
+            ranges = non_shared
+
         out[fn] = ranges
         assert ranges.size() == ranges.intersect(remaining).size()
 
@@ -227,10 +284,7 @@ class SparseImage(object):
 
     zero_blocks = []
     nonzero_blocks = []
-    if sys.version_info[:2] >= (3, 0):
-        reference = bytes('\0' * self.blocksize, encoding="UTF-8")
-    else:
-        reference = '\0' * self.blocksize
+    reference = '\0' * self.blocksize
 
     # Workaround for bug 23227672. For squashfs, we don't have a system.map. So
     # the whole system image will be treated as a single file. But for some
@@ -287,3 +341,21 @@ class SparseImage(object):
     """Throw away the file map and treat the entire image as
     undifferentiated data."""
     self.file_map = {"__DATA": self.care_map}
+
+
+def GetImagePartitionSize(img):
+  try:
+    simg = SparseImage(img, build_map=False)
+    return simg.blocksize * simg.total_blocks
+  except ValueError:
+    return os.path.getsize(img)
+
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('image')
+  parser.add_argument('--get_partition_size', action='store_true',
+                      help='Return partition size of the image')
+  args = parser.parse_args()
+  if args.get_partition_size:
+    print(GetImagePartitionSize(args.image))
