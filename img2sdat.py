@@ -34,22 +34,14 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=None, PREFIX='system'):
     if not VERSION:
         VERSION = 4
         while True:
-            print('''            1. Android Lollipop 5.0
-            2. Android Lollipop 5.1
-            3. Android Marshmallow 6.0
+            print('''            3. Android Marshmallow 6.0
             4. Android Nougat 7.0/7.1/8.0/8.1
             ''')
             try:
                 input = raw_input
             except NameError: pass
             item = input('Choose system version: ')
-            if item == '1':
-                VERSION = 1
-                break
-            elif item == '2':
-                VERSION = 2
-                break
-            elif item == '3':
+            if item == '3':
                 VERSION = 3
                 break
             elif item == '4':
@@ -57,6 +49,8 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=None, PREFIX='system'):
                 break
             else:
                 return
+
+    common.OPTIONS.cache_size = 4 * 4096
 
     # Get sparse image
     image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
