@@ -105,7 +105,7 @@ EXTRACT_OS_PARTITIONS()
             for i in $(sudo find "tmp_out"); do
                 {
                     echo -n "$i "
-                    sudo getfattr -n security.selinux --only-values -h "$i"
+                    sudo getfattr -n security.selinux --only-values -h "$i" | sed 's/.$//'
                     echo ""
                 } >> "file_context-$PARTITION"
                 echo "$(sudo stat -c "%n %u %g %a capabilities=0x0" "$i")" >> "fs_config-$PARTITION"
