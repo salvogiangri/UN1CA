@@ -52,6 +52,12 @@ DOWNLOAD_FIRMWARE()
 }
 
 source "$OUT_DIR/config.sh"
+
+FIRMWARES=( "$SOURCE_FIRMWARE" )
+for i in "${TARGET_FIRMWARES[@]}"
+do
+    FIRMWARES+=( "$i" )
+done
 # ]
 
 mkdir -p "$ODIN_DIR"

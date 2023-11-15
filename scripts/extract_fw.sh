@@ -163,6 +163,12 @@ EXTRACT_ALL()
 }
 
 source "$OUT_DIR/config.sh"
+
+FIRMWARES=( "$SOURCE_FIRMWARE" )
+for i in "${TARGET_FIRMWARES[@]}"
+do
+    FIRMWARES+=( "$i" )
+done
 # ]
 
 mkdir -p "$FW_DIR"
