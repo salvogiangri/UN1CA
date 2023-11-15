@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC2012
+
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
@@ -26,7 +28,8 @@ e='\>'
 run_cmd()
 {
     local CMD=$1
-    local CMDS="$(ls --ignore "internal" "$SRC_DIR/scripts" | sed "s/.sh//")"
+    local CMDS
+    CMDS="$(ls --ignore "internal" "$SRC_DIR/scripts" | sed "s/.sh//")"
 
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"

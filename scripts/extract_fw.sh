@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1091,SC2005
+
 set -e
 
 # [
@@ -78,7 +80,8 @@ EXTRACT_OS_PARTITIONS()
         for img in *.img
         do
             local PARTITION="${img%.img}"
-            local TYPE="$(file -b "$img")"
+            local TYPE
+            TYPE="$(file -b "$img")"
 
             case "$TYPE" in
                 "EROFS"* | "F2FS"* | *"rev 1.0 ext"*)
@@ -143,7 +146,7 @@ EXTRACT_AVB_BINARIES()
     fi
     if [ ! -f "vbmeta_patched.img" ]; then
         cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
-        printf "$(printf '\\x%02X' 3)" | dd of="vbmeta_patched.img" bs=1 seek=123 count=1 conv=notrunc &> /dev/null
+        printf "\x03" | dd of="vbmeta_patched.img" bs=1 seek=123 count=1 conv=notrunc &> /dev/null
     fi
 
     cd "$PDR"
@@ -160,6 +163,8 @@ EXTRACT_ALL()
     EXTRACT_AVB_BINARIES
 
     cp --preserve=all "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" "$FW_DIR/${MODEL}_${REGION}/.extracted"
+
+    echo ""
 }
 
 source "$OUT_DIR/config.sh"

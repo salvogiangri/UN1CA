@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC2069,SC2164
+
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"

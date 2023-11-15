@@ -36,6 +36,8 @@ CHECK_TOOLS()
     $EXISTS
 }
 
+JOBS="$(nproc)"
+
 BUILD_ANDROID_TOOLS()
 {
     local PDR
@@ -46,7 +48,7 @@ BUILD_ANDROID_TOOLS()
     cd "$SRC_DIR/external/android-tools"
     mkdir -p "build" && cd "build"
     cmake ..
-    make -j$(nproc) --quiet
+    make -j"$JOBS" --quiet
     find "vendor" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
     cd ..
     cp --preserve=all "vendor/avb/avbtool.py" "$TOOLS_DIR/avbtool"
@@ -103,7 +105,7 @@ BUILD_EROFS_UTILS()
         -DCMAKE_CXX_FLAGS="" \
         -DENABLE_FULL_LTO="ON" \
         -DMAX_BLOCK_SIZE="4096"
-    make -C "./out" -j$(nproc) --quiet
+    make -C "./out" -j"$JOBS" --quiet
     find "out/erofs-tools" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
 
     echo ""
