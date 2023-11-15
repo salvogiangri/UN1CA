@@ -80,13 +80,14 @@ if $EXT4; then
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
     IMG_SIZE=$(echo "$IMG_SIZE * 1.01" | bc -l)
     IMG_SIZE=${IMG_SIZE%.*}
+    [[ "$IMG_SIZE" -lt 2097152 ]] && IMG_SIZE=2097152
 
     INODES=$(find "$2" -print | wc -l)
     SPARE_INODES=$(echo "$INODES * 6 / 100" | bc -l)
     SPARE_INODES=${SPARE_INODES%.*}
-    [ "$SPARE_INODES" -lt 12 ] && SPARE_INODES=12
+    [[ "$SPARE_INODES" -lt 12 ]] && SPARE_INODES=12
 
-    if ! grep -q "lost\+found" "$3"; then
+    if ! grep -q "lost\\\+found" "$3"; then
         [[ $PARTITION == "system" ]] && echo "/lost\+found u:object_r:rootfs:s0" >> "$3"
         [[ $PARTITION == "odm" ]] && echo "/odm/lost\+found u:object_r:vendor_file:s0" >> "$3"
         [[ $PARTITION == "product" ]] && echo "/product/lost\+found u:object_r:system_file:s0" >> "$3"
