@@ -24,6 +24,11 @@ SRC_DIR="$(git rev-parse --show-toplevel)"
 
 bash "$SRC_DIR/scripts/download_fw.sh"
 bash "$SRC_DIR/scripts/extract_fw.sh"
+
+echo -e "- Creating work dir...\n"
 bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
+
+echo -e "- Applying debloat list..."
+bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
 exit 0

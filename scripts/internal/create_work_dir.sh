@@ -77,7 +77,6 @@ REGION=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 2)
 
 mkdir -p "$WORK_DIR"
 
-echo -e "- Creating work dir...\n"
 CREATE_WORK_DIR
 
 exit 0
