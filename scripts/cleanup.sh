@@ -23,12 +23,14 @@ SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
 ODIN_DIR="$OUT_DIR/odin"
 FW_DIR="$OUT_DIR/fw"
+WORK_DIR="$OUT_DIR/work_dir"
 TOOLS_DIR="$OUT_DIR/tools/bin"
 # ]
 
 ALL=false
 ODIN=false
 FW=false
+WORK=false
 TOOLS=false
 
 if [ -z "$1" ]; then
@@ -45,6 +47,9 @@ else
         *"fw"*)
             FW=true
             ;;
+        *"work_dir"*)
+            WORK=true
+            ;;
         *"tools"*)
             TOOLS=true
             ;;
@@ -54,6 +59,7 @@ else
             echo "all"
             echo "odin"
             echo "fw"
+            echo "work_dir"
             echo "tools"
             exit 1
             ;;
@@ -74,6 +80,11 @@ fi
 if $FW; then
     echo "- Cleaning extracted firmwares dir..."
     rm -rf "$FW_DIR"
+fi
+
+if $WORK; then
+    echo "- Cleaning ROM work dir..."
+    rm -rf "$WORK_DIR"
 fi
 
 if $TOOLS; then
