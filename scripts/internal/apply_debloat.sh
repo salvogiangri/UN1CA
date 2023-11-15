@@ -46,10 +46,10 @@ source "$SRC_DIR/unica/debloat.sh"
 # ]
 
 for f in $ODM_DEBLOAT; do
-    DO_DEBLOAT "system" "$f"
+    DO_DEBLOAT "odm" "$f"
 done
 for f in $PRODUCT_DEBLOAT; do
-    DO_DEBLOAT "system" "$f"
+    DO_DEBLOAT "product" "$f"
 done
 for f in $SYSTEM_DEBLOAT; do
     DO_DEBLOAT "system" "$f"
