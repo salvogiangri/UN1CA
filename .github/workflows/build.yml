@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        target: [a52sxq]
+        target: [a52sxq, m52xq]
 
     steps:
       - name: Checkout repo
