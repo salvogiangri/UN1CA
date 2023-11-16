@@ -43,6 +43,7 @@ DO_DEBLOAT()
 
 source "$OUT_DIR/config.sh"
 source "$SRC_DIR/unica/debloat.sh"
+source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
 # ]
 
 for f in $ODM_DEBLOAT; do
@@ -58,6 +59,9 @@ for f in $SYSTEM_EXT_DEBLOAT; do
     $TARGET_HAS_SYSTEM_EXT \
         && DO_DEBLOAT "system_ext" "$f" \
         || DO_DEBLOAT "system" "system/system_ext/$f"
+done
+for f in $VENDOR_DEBLOAT; do
+    DO_DEBLOAT "vendor" "$f"
 done
 
 echo ""
