@@ -7,7 +7,7 @@
 #====================================================
 
 import os, tempfile
-import common, blockimgdiff, sparse_img
+import common, blockimgdiff, images, sparse_img
 
 def main(INPUT_IMAGE, OUTDIR='.', VERSION=4):
     __version__ = '2.0'
@@ -21,8 +21,11 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=4):
 
     common.OPTIONS.cache_size = 4 * 4096
 
-    # Get sparse image
-    image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
+    # Get image
+    if IsSparseImage(INPUT_IMAGE):
+        image = sparse_img.SparseImage(INPUT_IMAGE, tempfile.mkstemp()[1], '0')
+    else:
+        image = images.FileImage(INPUT_IMAGE)
 
     # Generate output files
     b = blockimgdiff.BlockImageDiff(image, None, VERSION)
@@ -30,6 +33,14 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=4):
 
     print('Done! Output files: %s' % os.path.dirname(OUTDIR))
     return
+
+def IsSparseImage(INPUT_IMAGE):
+    if not os.path.exists(INPUT_IMAGE):
+        return False
+    with open(INPUT_IMAGE, 'rb') as fp:
+        # Magic for android sparse image format
+        # https://source.android.com/devices/bootloader/images
+        return fp.read(4) == b'\x3A\xFF\x26\xED'
 
 if __name__ == '__main__':
     import argparse
