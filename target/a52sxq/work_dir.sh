@@ -40,8 +40,8 @@ CREATE_WORK_DIR()
 
 source "$OUT_DIR/config.sh"
 
-MODEL=$(echo -n "${TARGET_FIRMWARES[0]}" | cut -d "/" -f 1)
-REGION=$(echo -n "${TARGET_FIRMWARES[0]}" | cut -d "/" -f 2)
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 # ]
 
 mkdir -p "$WORK_DIR"
