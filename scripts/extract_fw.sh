@@ -198,7 +198,7 @@ do
         if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
             if [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
                 echo -e "- Updating $MODEL firmware with $REGION CSC...\n"
-                EXTRACT_ALL
+                rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
             else
                 echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
                 continue
