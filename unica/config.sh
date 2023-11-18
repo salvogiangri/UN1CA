@@ -25,11 +25,13 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_VNDK_VERSION=33
         SOURCE_HAS_SYSTEM_EXT=true
         ;;
+    # Exynos
     "essi")
         # Galaxy S23 FE (One UI 5.1)
         SOURCE_FIRMWARE="SM-S711B/SEK"
         SOURCE_API_LEVEL=33
-        SOURCE_HAS_SYSTEM_EXT=true
+        SOURCE_VNDK_VERSION=31
+        SOURCE_HAS_SYSTEM_EXT=false
         ;;
     *)
         echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."
