@@ -42,7 +42,7 @@ DO_DEBLOAT()
 }
 
 source "$OUT_DIR/config.sh"
-source "$SRC_DIR/unica/debloat.sh"
+source "$SRC_DIR/unica/debloat/$TARGET_SINGLE_SYSTEM_IMAGE.sh"
 source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
 # ]
 
