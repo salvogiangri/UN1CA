@@ -108,7 +108,16 @@ EXTRACT_OS_PARTITIONS()
                     sudo getfattr -n security.selinux --only-values -h "$i" | sed 's/.$//'
                     echo ""
                 } >> "file_context-$PARTITION"
-                echo "$(sudo stat -c "%n %u %g %a capabilities=0x0" "$i")" >> "fs_config-$PARTITION"
+
+                case "$i" in
+                    *"run-as" | *"simpleperf_app_runner")
+                        CAPABILITIES="0xc0"
+                        ;;
+                    *)
+                        CAPABILITIES="0x0"
+                        ;;
+                esac
+                echo "$(sudo stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i")" >> "fs_config-$PARTITION"
             done
             if [ "$PARTITION" = "system" ]; then
                 sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
