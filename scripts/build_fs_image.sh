@@ -109,17 +109,11 @@ elif $F2FS; then
     IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
     IMG_SIZE=${IMG_SIZE%.*}
 
-    # (https://github.com/nmeum/android-tools/issues/127)
-    #$SPARSE && SPARSE_FLAG="-S"
-    mkf2fsuserimg "$2/../$PARTITION.img.raw" "$IMG_SIZE" \
+    $SPARSE && SPARSE_FLAG="-S"
+    mkf2fsuserimg "$2/../$PARTITION.img" "$IMG_SIZE" \
         $SPARSE_FLAG -C "$4" -f "$2" \
         -s "$3" -t "$MOUNT_POINT" -T 1640995200 \
         -L "$MOUNT_POINT" --prjquota --compression
-    if $SPARSE; then
-        img2simg "$2/../$PARTITION.img.raw" "$2/../$PARTITION.img" && rm "$2/../$PARTITION.img.raw"
-    else
-        mv "$2/../$PARTITION.img.raw" "$2/../$PARTITION.img"
-    fi
 elif $EROFS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
