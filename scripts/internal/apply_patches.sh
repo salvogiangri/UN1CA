@@ -41,8 +41,11 @@ SET_PROP()
     fi
 
     if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
-        echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
-        sed -i "/$PROP/d" "$FILE"
+        PROP="$(echo -n "$PROP" | sed 's/=//g')"
+        if grep -Fq "$PROP" "$FILE"; then
+            echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
+            sed -i "/$PROP/d" "$FILE"
+        fi
     else
         if grep -Fq "$PROP" "$FILE"; then
             echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
@@ -56,7 +59,7 @@ SET_PROP()
 
 READ_AND_APPLY_PROP_PATCHES()
 {
-    for patch in "$PATCH_DIR/props/*.prop"
+    for patch in "$PATCH_DIR/props/"*.prop
     do
         PARTITION=$(basename "$patch" | sed 's/.prop//g')
         case "$PARTITION" in
@@ -82,12 +85,15 @@ READ_AND_APPLY_PROP_PATCHES()
         while read i; do
             [[ "$i" = "#"* ]] && continue
 
-            if [[ "$i" == *"delete" ]]; then
+            if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
                 SET_PROP $(echo -n "$i" | cut -d " " -f 1) --delete \
                     "$FILE"
-            else
+            elif echo -n "$i" | grep -q "="; then
                 SET_PROP $(echo -n "$i" | cut -d "=" -f 1) $(echo -n "$i" | cut -d "=" -f 2) \
                     "$FILE"
+            else
+                echo "Malformed string in $patch: \"$i\""
+                return 1
             fi
         done < "$patch"
     done

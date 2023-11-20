@@ -3,5 +3,5 @@
 #
 # Usage:
 # prop=value: Adds/replaces prop with the specified value
-# prop --delete: Removes prop
+# prop --delete OR prop=: Removes prop
 #
