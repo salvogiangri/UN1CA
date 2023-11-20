@@ -64,5 +64,4 @@ for f in $VENDOR_DEBLOAT; do
     DO_DEBLOAT "vendor" "$f"
 done
 
-echo ""
 exit 0
