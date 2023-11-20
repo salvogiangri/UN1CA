@@ -53,6 +53,14 @@ DOWNLOAD_FIRMWARE()
     cd "$PDR"
 }
 
+FORCE=false
+if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then
+    FORCE=true
+elif [[ -n "$1" ]]; then
+    echo "Unknown argument: \"$1\""
+    exit 1
+fi
+
 source "$OUT_DIR/config.sh"
 
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
@@ -74,8 +82,15 @@ do
     if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
         [ -z "$(GET_LATEST_FIRMWARE)" ] && continue
         if [[ "$(GET_LATEST_FIRMWARE)" != "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" ]]; then
-            echo "- Updating $MODEL firmware with $REGION CSC..."
-            rm -rf "$ODIN_DIR/${MODEL}_${REGION}" && DOWNLOAD_FIRMWARE
+            if $FORCE; then
+                echo "- Updating $MODEL firmware with $REGION CSC..."
+                rm -rf "$ODIN_DIR/${MODEL}_${REGION}" && DOWNLOAD_FIRMWARE
+            else
+                echo    "- $MODEL firmware with $REGION CSC already downloaded"
+                echo    "  A newer version of this device's firmware is available."
+                echo -e "  To download, clean your Odin firmwares directory or run this cmd with \"--force\"\n"
+                continue
+            fi
         else
             echo -e "- $MODEL firmware with $REGION CSC already downloaded\n"
             continue

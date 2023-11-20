@@ -176,6 +176,14 @@ EXTRACT_ALL()
     echo ""
 }
 
+FORCE=false
+if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then
+    FORCE=true
+elif [[ -n "$1" ]]; then
+    echo "Unknown argument: \"$1\""
+    exit 1
+fi
+
 source "$OUT_DIR/config.sh"
 
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
@@ -197,8 +205,15 @@ do
     if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
         if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
             if [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
-                echo -e "- Updating $MODEL firmware with $REGION CSC...\n"
-                rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
+                if $FORCE; then
+                    echo "- Updating $MODEL firmware with $REGION CSC..."
+                    rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
+                else
+                    echo    "- $MODEL firmware with $REGION CSC is already extracted."
+                    echo    "  A newer version of this device's firmware is available."
+                    echo -e "  To extract, clean your extracted firmwares directory or run this cmd with \"--force\"\n"
+                    continue
+                fi
             else
                 echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
                 continue
