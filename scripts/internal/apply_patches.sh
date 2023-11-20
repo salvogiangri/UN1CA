@@ -16,4 +16,86 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+set -e
+
+# [
+SRC_DIR="$(git rev-parse --show-toplevel)"
+PATCH_DIR="$SRC_DIR/unica/patches"
+OUT_DIR="$SRC_DIR/out"
+WORK_DIR="$OUT_DIR/work_dir"
+
+SET_PROP()
+{
+    if [ "$#" -lt 3 ]; then
+        echo "Usage: SET_PROP <prop> <value> <file>"
+        return 1
+    fi
+
+    local PROP="$1"
+    local VALUE="$2"
+    local FILE="$3"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+        echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
+        sed -i "/$PROP/d" "$FILE"
+    else
+        if grep -Fq "$PROP" "$FILE"; then
+            echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            sed -i "$(sed -n "/${PROP}/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
+        else
+            echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            echo "$PROP=$VALUE" >> $FILE
+        fi
+    fi
+}
+
+READ_AND_APPLY_PROP_PATCHES()
+{
+    for patch in "$PATCH_DIR/props/*.prop"
+    do
+        PARTITION=$(basename "$patch" | sed 's/.prop//g')
+        case "$PARTITION" in
+            "odm")
+                FILE="$WORK_DIR/odm/etc/build.prop"
+                ;;
+            "product")
+                FILE="$WORK_DIR/product/etc/build.prop"
+                ;;
+            "system")
+                FILE="$WORK_DIR/system/system/build.prop"
+                ;;
+            "system_ext")
+                $TARGET_HAS_SYSTEM_EXT \
+                    && FILE="$WORK_DIR/system_ext/etc/build.prop" \
+                    || FILE="$WORK_DIR/system/system/system_ext/etc/build.prop"
+                ;;
+            *)
+                return 1
+                ;;
+        esac
+
+        while read i; do
+            [[ "$i" = "#"* ]] && continue
+
+            if [[ "$i" == *"delete" ]]; then
+                SET_PROP $(echo -n "$i" | cut -d " " -f 1) --delete \
+                    "$FILE"
+            else
+                SET_PROP $(echo -n "$i" | cut -d "=" -f 1) $(echo -n "$i" | cut -d "=" -f 2) \
+                    "$FILE"
+            fi
+        done < "$patch"
+    done
+}
+
+source "$OUT_DIR/config.sh"
+# ]
+
+READ_AND_APPLY_PROP_PATCHES
+
 exit 0
