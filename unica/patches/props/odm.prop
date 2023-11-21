@@ -5,3 +5,6 @@
 # prop=value: Adds/replaces prop with the specified value
 # prop --delete OR prop=: Removes prop
 #
+
+# Enable ADB at boot
+persist.sys.usb.config=mtp,adb
