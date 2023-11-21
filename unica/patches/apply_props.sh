@@ -73,6 +73,7 @@ READ_AND_APPLY_PROPS()
 
         while read -r i; do
             [[ "$i" = "#"* ]] && continue
+            [[ -z "$i" ]] && continue
 
             if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
                 SET_PROP "$(echo -n "$i" | cut -d " " -f 1)" --delete \
