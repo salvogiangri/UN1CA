@@ -18,11 +18,10 @@
 
 # shellcheck disable=SC1091
 
-set -e
+set -
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
-PATCH_DIR="$SRC_DIR/unica/patches"
 OUT_DIR="$SRC_DIR/out"
 WORK_DIR="$OUT_DIR/work_dir"
 
@@ -54,9 +53,9 @@ SET_PROP()
     fi
 }
 
-READ_AND_APPLY_PROP_PATCHES()
+READ_AND_APPLY_PROPS()
 {
-    for patch in "$PATCH_DIR/props/"*.prop
+    for patch in "$1"/*.prop
     do
         PARTITION=$(basename "$patch" | sed 's/.prop//g')
         case "$PARTITION" in
@@ -73,6 +72,9 @@ READ_AND_APPLY_PROP_PATCHES()
                 $TARGET_HAS_SYSTEM_EXT \
                     && FILE="$WORK_DIR/system_ext/etc/build.prop" \
                     || FILE="$WORK_DIR/system/system/system_ext/etc/build.prop"
+                ;;
+            "vendor")
+                FILE="$WORK_DIR/vendor/build.prop"
                 ;;
             *)
                 return 1
@@ -99,6 +101,8 @@ READ_AND_APPLY_PROP_PATCHES()
 source "$OUT_DIR/config.sh"
 # ]
 
-READ_AND_APPLY_PROP_PATCHES
+READ_AND_APPLY_PROPS "$SRC_DIR/unica/patches/props"
+[[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches/props" ]] \
+    && READ_AND_APPLY_PROPS "$SRC_DIR/target/$TARGET_CODENAME/patches/props"
 
 exit 0
