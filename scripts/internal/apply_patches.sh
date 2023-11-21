@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1091
+
 set -e
 
 # [
@@ -26,11 +28,6 @@ WORK_DIR="$OUT_DIR/work_dir"
 
 SET_PROP()
 {
-    if [ "$#" -lt 3 ]; then
-        echo "Usage: SET_PROP <prop> <value> <file>"
-        return 1
-    fi
-
     local PROP="$1"
     local VALUE="$2"
     local FILE="$3"
@@ -52,7 +49,7 @@ SET_PROP()
             sed -i "$(sed -n "/${PROP}/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
         else
             echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
-            echo "$PROP=$VALUE" >> $FILE
+            echo "$PROP=$VALUE" >> "$FILE"
         fi
     fi
 }
@@ -82,14 +79,14 @@ READ_AND_APPLY_PROP_PATCHES()
                 ;;
         esac
 
-        while read i; do
+        while read -r i; do
             [[ "$i" = "#"* ]] && continue
 
             if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
-                SET_PROP $(echo -n "$i" | cut -d " " -f 1) --delete \
+                SET_PROP "$(echo -n "$i" | cut -d " " -f 1)" --delete \
                     "$FILE"
             elif echo -n "$i" | grep -q "="; then
-                SET_PROP $(echo -n "$i" | cut -d "=" -f 1) $(echo -n "$i" | cut -d "=" -f 2) \
+                SET_PROP "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)" \
                     "$FILE"
             else
                 echo "Malformed string in $patch: \"$i\""

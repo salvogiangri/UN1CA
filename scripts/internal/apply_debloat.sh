@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1090,SC1091
+
 set -e
 
 # [
@@ -56,9 +58,11 @@ for f in $SYSTEM_DEBLOAT; do
     DO_DEBLOAT "system" "$f"
 done
 for f in $SYSTEM_EXT_DEBLOAT; do
-    $TARGET_HAS_SYSTEM_EXT \
-        && DO_DEBLOAT "system_ext" "$f" \
-        || DO_DEBLOAT "system" "system/system_ext/$f"
+    if $TARGET_HAS_SYSTEM_EXT; then
+        DO_DEBLOAT "system_ext" "$f"
+    else
+        DO_DEBLOAT "system" "system/system_ext/$f"
+    fi
 done
 for f in $VENDOR_DEBLOAT; do
     DO_DEBLOAT "vendor" "$f"
