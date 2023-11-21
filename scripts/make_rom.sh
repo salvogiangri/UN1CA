@@ -20,18 +20,32 @@ set -e
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
+OUT_DIR="$SRC_DIR/out"
+WORK_DIR="$OUT_DIR/work_dir"
+
+START=$SECONDS
 # ]
 
-bash "$SRC_DIR/scripts/download_fw.sh"
-bash "$SRC_DIR/scripts/extract_fw.sh"
+if [[ ! -f "$WORK_DIR/.completed" ]]; then
+    bash "$SRC_DIR/scripts/download_fw.sh"
+    bash "$SRC_DIR/scripts/extract_fw.sh"
 
-echo -e "- Creating work dir..."
-bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
+    echo -e "- Creating work dir..."
+    bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
 
-echo -e "\n- Applying debloat list..."
-bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
+    echo -e "\n- Applying debloat list..."
+    bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
-echo -e "\n- Applying ROM patches..."
-bash "$SRC_DIR/scripts/internal/apply_patches.sh"
+    echo -e "\n- Applying ROM patches..."
+    find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash {} \;
+    [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
+        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash {} \;
+
+    echo ""
+    touch "$WORK_DIR/.completed"
+fi
+
+ESTIMATED=$((SECONDS-START))
+echo -e "\nBuild completed in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."
 
 exit 0
