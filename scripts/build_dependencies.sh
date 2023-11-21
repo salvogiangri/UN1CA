@@ -160,6 +160,12 @@ BUILD_SMALI()
 }
 # ]
 
+if [ "$#" -gt 0 ]; then
+    echo "Usage: build_dependencies"
+    echo "This cmd does not accepts any arguments."
+    exit 1
+fi
+
 mkdir -p "$TOOLS_DIR"
 
 ANDROID_TOOLS=true

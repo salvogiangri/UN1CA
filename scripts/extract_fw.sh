@@ -196,6 +196,12 @@ if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
 fi
 # ]
 
+if [ "$#" -gt 0 ]; then
+    echo "Usage: extract_fw"
+    echo "This cmd does not accepts any arguments."
+    exit 1
+fi
+
 mkdir -p "$FW_DIR"
 
 for i in "${FIRMWARES[@]}"

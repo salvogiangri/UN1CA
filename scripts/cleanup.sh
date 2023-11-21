@@ -33,37 +33,42 @@ FW=false
 WORK=false
 TOOLS=false
 
-if [ -z "$1" ]; then
+if [ "$#" == 0 ]; then
     echo "Usage: cleanup <type>"
     exit 1
 else
-    case "$1" in
-        "all")
-            ALL=true
+    while [ "$#" != 0 ]; do
+        case "$1" in
+            "all")
+                ALL=true
+                break
+                ;;
+            *"odin"*)
+                ODIN=true
+                ;;
+            *"fw"*)
+                FW=true
+                ;;
+            *"work_dir"*)
+                WORK=true
+                ;;
+            *"tools"*)
+                TOOLS=true
+                ;;
+            *)
+                echo "\"$1\" is not valid type."
+                echo "Available options (multiple can be accepted with a separator):"
+                echo "all"
+                echo "odin"
+                echo "fw"
+                echo "work_dir"
+                echo "tools"
+                exit 1
             ;;
-        *"odin"*)
-            ODIN=true
-            ;;
-        *"fw"*)
-            FW=true
-            ;;
-        *"work_dir"*)
-            WORK=true
-            ;;
-        *"tools"*)
-            TOOLS=true
-            ;;
-        *)
-            echo "\"$1\" is not valid type."
-            echo "Available options (multiple can be accepted with a separator):"
-            echo "all"
-            echo "odin"
-            echo "fw"
-            echo "work_dir"
-            echo "tools"
-            exit 1
-            ;;
-    esac
+        esac
+
+        shift
+    done
 fi
 
 if $ALL; then

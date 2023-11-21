@@ -47,7 +47,8 @@ run_cmd()
 
 TARGETS="$(ls "$SRC_DIR/target")"
 
-if [ -z "$1" ]; then
+if [ "$#" != 1 ]; then
+    echo "Usage: source buildenv.sh <target>"
     echo -e "Available devices:\n$TARGETS"
     return 1
 elif [[ ! "$TARGETS" =~ $s$1$e ]]; then

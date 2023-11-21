@@ -72,6 +72,12 @@ if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
 fi
 # ]
 
+if [ "$#" -gt 0 ]; then
+    echo "Usage: download_fw"
+    echo "This cmd does not accepts any arguments."
+    exit 1
+fi
+
 mkdir -p "$ODIN_DIR"
 
 for i in "${FIRMWARES[@]}"

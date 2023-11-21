@@ -26,25 +26,31 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 PATH="$TOOLS_DIR:$PATH"
 # ]
 
-if [ -z "$1" ]; then
-    echo "Usage: unsign_bin <image>"
+if [ "$#" == 0 ]; then
+    echo "Usage: unsign_bin <image> (<image>...)"
     exit 1
-elif [ ! -f "$1" ]; then
-    echo "File not found: $1"
-    exit 1
-else
-    if avbtool info_image --image "$1" &>/dev/null; then
-        echo "Removing AVB footer"
-        avbtool erase_footer --image "$1"
-    fi
-    if tail "$1" | grep -q "SignerVer02"; then
-        echo "Removing Samsung v2 signature"
-        truncate -s -512 "$1"
-    fi
-    if tail "$1" | grep -q "SignerVer03"; then
-        echo "Removing Samsung v3 signature"
-        truncate -s -784 "$1"
-    fi
 fi
+
+while [ "$#" != 0 ]; do
+    if [ ! -f "$1" ]; then
+        echo "File not found: $1"
+        exit 1
+    else
+        if avbtool info_image --image "$1" &>/dev/null; then
+            echo "Removing AVB footer"
+            avbtool erase_footer --image "$1"
+        fi
+        if tail "$1" | grep -q "SignerVer02"; then
+            echo "Removing Samsung v2 signature"
+            truncate -s -512 "$1"
+        fi
+        if tail "$1" | grep -q "SignerVer03"; then
+            echo "Removing Samsung v3 signature"
+            truncate -s -784 "$1"
+        fi
+    fi
+
+    shift
+done
 
 exit 0

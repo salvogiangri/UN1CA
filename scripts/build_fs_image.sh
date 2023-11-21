@@ -28,7 +28,7 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 PATH="$TOOLS_DIR:$PATH"
 # ]
 
-if [ "$#" -lt 4 ]; then
+if [ "$#" != 4 ]; then
     echo "Usage: build_fs_image <fs> <dir> <file_context> <fs_config>"
     exit 1
 fi
