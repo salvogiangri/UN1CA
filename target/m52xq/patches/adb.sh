@@ -4,17 +4,15 @@
 # DESCRIPTION:  Enabled ADB at boot
 #====================================================
 
-# shellcheck disable=SC1091
-
 set -e
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
 WORK_DIR="$OUT_DIR/work_dir"
-
-source "$OUT_DIR/config.sh"
 # ]
+
+echo "Enabling ADB at boot"
 
 sed -i \
     "$(sed -n "/persist.sys.usb.config/=" "$WORK_DIR/vendor/default.prop") cpersist.sys.usb.config=mtp,adb" \
