@@ -99,6 +99,7 @@ EXTRACT_OS_PARTITIONS()
             for i in $(sudo find "$PARTITION"); do
                 sudo chown -h "$(whoami)":"$(whoami)" "$i"
             done
+            [[ -e "$PARTITION/lost+found" ]] && rm -rf "$PARTITION/lost+found"
 
             [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
             [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
