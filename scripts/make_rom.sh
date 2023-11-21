@@ -24,6 +24,8 @@ OUT_DIR="$SRC_DIR/out"
 WORK_DIR="$OUT_DIR/work_dir"
 
 START=$SECONDS
+
+source "$OUT_DIR/config.sh"
 # ]
 
 if [[ ! -f "$WORK_DIR/.completed" ]]; then
