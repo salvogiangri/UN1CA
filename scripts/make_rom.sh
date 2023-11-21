@@ -20,10 +20,6 @@ set -e
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
-
-source "$OUT_DIR/config.sh"
 # ]
 
 bash "$SRC_DIR/scripts/download_fw.sh"
@@ -31,7 +27,6 @@ bash "$SRC_DIR/scripts/extract_fw.sh"
 
 echo -e "- Creating work dir..."
 bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
-bash "$SRC_DIR/target/$TARGET_CODENAME/work_dir.sh"
 
 echo -e "\n- Applying debloat list..."
 bash "$SRC_DIR/scripts/internal/apply_debloat.sh"

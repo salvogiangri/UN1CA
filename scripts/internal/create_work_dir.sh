@@ -26,9 +26,12 @@ OUT_DIR="$SRC_DIR/out"
 FW_DIR="$OUT_DIR/fw"
 WORK_DIR="$OUT_DIR/work_dir"
 
-CREATE_WORK_DIR()
+COPY_SOURCE_FIRMWARE()
 {
-    mkdir -p "$WORK_DIR/configs"
+    local MODEL
+    local REGION
+    MODEL=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 1)
+    REGION=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 2)
 
     local COMMON_FOLDERS="odm product system"
     for folder in $COMMON_FOLDERS
@@ -69,14 +72,32 @@ CREATE_WORK_DIR()
     fi
 }
 
-source "$OUT_DIR/config.sh"
+COPY_TARGET_FIRMWARE()
+{
+    local MODEL
+    local REGION
+    MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+    REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
-MODEL=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 2)
+    local COMMON_FOLDERS="system_dlkm vendor vendor_dlkm"
+    for folder in $COMMON_FOLDERS
+    do
+        [[ ! -d "$FW_DIR/${MODEL}_${REGION}/$folder" ]] && continue
+        if [ ! -d "$WORK_DIR/$folder" ]; then
+            mkdir -p "$WORK_DIR/$folder"
+            cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$folder" "$WORK_DIR"
+            cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/file_context-$folder" "$WORK_DIR/configs"
+            cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/fs_config-$folder" "$WORK_DIR/configs"
+        fi
+    done
+}
+
+source "$OUT_DIR/config.sh"
 # ]
 
 mkdir -p "$WORK_DIR"
-
-CREATE_WORK_DIR
+mkdir -p "$WORK_DIR/configs"
+COPY_SOURCE_FIRMWARE
+COPY_TARGET_FIRMWARE
 
 exit 0
