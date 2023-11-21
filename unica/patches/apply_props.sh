@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091
 
-set -
+set -e
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
