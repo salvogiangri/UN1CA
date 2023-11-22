@@ -35,5 +35,6 @@ VENDOR_DEBLOAT="
 recovery-from-boot.p
 tima_measurement_info
 bin/install-recovery.sh
+etc/dpolicy
 etc/init/vendor_flash_recovery.rc
 "
