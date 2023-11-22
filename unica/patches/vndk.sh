@@ -3,7 +3,11 @@
 # AUTHOR:       BlackMesa123
 # DESCRIPTION:  Check the source VNDK package and
 #               replaces it if it's mismatched from
-#               target device
+#               target device. Available APEXs:
+#               - v30 (SM-A736B, DWK2)
+#               - v31 (SM-S901B, DWK4)
+#               - v32 (SM-F936B, ZWJJ)
+#               - v33 (SM-S911B, BWK5)
 #====================================================
 
 # shellcheck disable=SC1091
