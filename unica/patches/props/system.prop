@@ -6,5 +6,8 @@
 # prop --delete OR prop=: Removes prop
 #
 
+# Remove ICCC prop
+ro.config.iccc_version=
+
 # Disable OEM unlock toggle
 ro.oem_unlock_supported=0
