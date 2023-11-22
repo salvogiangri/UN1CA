@@ -6,6 +6,8 @@
 #               target device
 #====================================================
 
+# shellcheck disable=SC1091
+
 set -e
 
 # [
