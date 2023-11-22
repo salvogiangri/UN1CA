@@ -104,5 +104,6 @@ cp -a --preserve=all "$SRC_DIR/target/m52xq/patches/wpss/"* "$WORK_DIR/vendor"
     echo "vendor/firmware/wlan/m526br/rev3/wpss.b01 0 0 644 capabilities=0x0"
     echo "vendor/firmware/wlan/m526br/rev3/wpss.mdt 0 0 644 capabilities=0x0"
 } >> "$WORK_DIR/configs/fs_config-vendor"
+echo "(allow init_30_0 vendor_firmware_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
 
 exit 0
