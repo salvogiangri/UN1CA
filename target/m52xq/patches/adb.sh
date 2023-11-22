@@ -25,3 +25,5 @@ if ! grep -q "persist.vendor.radio.port_index" "$WORK_DIR/vendor/etc/init/hw/ini
         echo "    setprop sys.usb.config adb"
     } >> "$WORK_DIR/vendor/etc/init/hw/init.target.rc"
 fi
+
+exit 0

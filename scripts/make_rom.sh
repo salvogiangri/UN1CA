@@ -29,19 +29,19 @@ source "$OUT_DIR/config.sh"
 # ]
 
 if [[ ! -f "$WORK_DIR/.completed" ]]; then
-    bash "$SRC_DIR/scripts/download_fw.sh"
-    bash "$SRC_DIR/scripts/extract_fw.sh"
+    bash -e "$SRC_DIR/scripts/download_fw.sh"
+    bash -e "$SRC_DIR/scripts/extract_fw.sh"
 
     echo -e "- Creating work dir..."
-    bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
+    bash -e "$SRC_DIR/scripts/internal/create_work_dir.sh"
 
     echo -e "\n- Applying debloat list..."
-    bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
+    bash -e "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
     echo -e "\n- Applying ROM patches..."
-    find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash {} \;
+    find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash -e {} \;
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
-        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash {} \;
+        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash -e {} \;
 
     echo ""
     touch "$WORK_DIR/.completed"

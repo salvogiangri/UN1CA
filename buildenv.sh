@@ -40,7 +40,7 @@ run_cmd()
         return 1
     else
         shift
-        bash "$SRC_DIR/scripts/$CMD.sh" "$@"
+        bash -e "$SRC_DIR/scripts/$CMD.sh" "$@"
     fi
 }
 # ]
@@ -58,7 +58,7 @@ elif [[ ! "$TARGETS" =~ $s$1$e ]]; then
 else
     mkdir -p "$OUT_DIR"
     run_cmd build_dependencies
-    bash "$SRC_DIR/scripts/internal/gen_config_file.sh" "$1" || return 1
+    bash -e "$SRC_DIR/scripts/internal/gen_config_file.sh" "$1"
 fi
 
 return 0
