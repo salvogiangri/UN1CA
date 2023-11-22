@@ -1,5 +1,6 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text eol=lf
-
 # Git LFS
 unica/patches/vndk/** filter=lfs diff=lfs merge=lfs -text
+target/a52sxq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
+target/m52xq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
