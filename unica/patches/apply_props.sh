@@ -30,12 +30,12 @@ SET_PROP()
         PROP="$(echo -n "$PROP" | sed 's/=//g')"
         if grep -Fq "$PROP" "$FILE"; then
             echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
-            sed -i "/$PROP/d" "$FILE"
+            sed -i "/^$PROP/d" "$FILE"
         fi
     else
         if grep -Fq "$PROP" "$FILE"; then
             echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
-            sed -i "$(sed -n "/${PROP}/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
+            sed -i "$(sed -n "/^${PROP}\b/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
         else
             echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
             echo "$PROP=$VALUE" >> "$FILE"
