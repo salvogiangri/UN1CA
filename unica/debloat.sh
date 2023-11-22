@@ -27,6 +27,28 @@ PRODUCT_DEBLOAT="
 
 SYSTEM_DEBLOAT="
 dpolicy_system
+system/framework/arm
+system/framework/arm64
+system/framework/oat
+system/framework/boot-apache-xml.vdex
+system/framework/boot-bouncycastle.vdex
+system/framework/boot-core-icu4j.vdex
+system/framework/boot-core-libart.vdex
+system/framework/boot-esecomm.vdex
+system/framework/boot-ext.vdex
+system/framework/boot-framework-adservices.vdex
+system/framework/boot-framework-graphics.vdex
+system/framework/boot-framework.vdex
+system/framework/boot-ims-common.vdex
+system/framework/boot-knoxsdk.vdex
+system/framework/boot-okhttp.vdex
+system/framework/boot-QPerformance.vdex
+system/framework/boot-tcmiface.vdex
+system/framework/boot-telephony-common.vdex
+system/framework/boot-telephony-ext.vdex
+system/framework/boot-UxPerformance.vdex
+system/framework/boot.vdex
+system/framework/boot-voip-common.vdex
 system/priv-app/OneDrive_Samsung_v3
 "
 
