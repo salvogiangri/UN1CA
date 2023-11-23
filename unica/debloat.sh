@@ -49,6 +49,7 @@ system/framework/boot-telephony-ext.vdex
 system/framework/boot-UxPerformance.vdex
 system/framework/boot.vdex
 system/framework/boot-voip-common.vdex
+system/priv-app/FotaAgent
 system/priv-app/OneDrive_Samsung_v3
 "
 
