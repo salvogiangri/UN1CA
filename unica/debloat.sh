@@ -27,6 +27,8 @@ PRODUCT_DEBLOAT="
 
 SYSTEM_DEBLOAT="
 dpolicy_system
+system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
+system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/framework/arm
 system/framework/arm64
 system/framework/oat
