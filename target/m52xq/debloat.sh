@@ -39,15 +39,6 @@ firmware/ipa_fws.b03
 firmware/ipa_fws.b04
 firmware/ipa_fws.elf
 firmware/ipa_fws.mdt
-firmware/wpss.b00
-firmware/wpss.b01
-firmware/wpss.b02
-firmware/wpss.b03
-firmware/wpss.b04
-firmware/wpss.b05
-firmware/wpss.b06
-firmware/wpss.b07
-firmware/wpss.mdt
 firmware/yupik_ipa_fws.b00
 firmware/yupik_ipa_fws.b01
 firmware/yupik_ipa_fws.b02

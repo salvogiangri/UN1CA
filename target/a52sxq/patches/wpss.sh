@@ -15,8 +15,9 @@ WORK_DIR="$OUT_DIR/work_dir"
 
 echo "Add custom wpss firmware mount"
 
-[[ -d "$WORK_DIR/vendor/firmware/wlan/a528b" ]] && exit 0
+[[ -f "$WORK_DIR/vendor/etc/init/wifi_firmware.rc" ]] && exit 0
 
+rm -f "$WORK_DIR/vendor/firmware/wpss."*
 cp -a --preserve=all "$SRC_DIR/target/a52sxq/patches/wpss/"* "$WORK_DIR/vendor"
 {
     echo "/vendor/etc/init/wifi_firmware\.rc u:object_r:vendor_configs_file:s0"
