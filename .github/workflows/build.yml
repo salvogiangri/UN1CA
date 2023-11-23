@@ -19,6 +19,9 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+
       - name: Set up build environment
         run: |
           sudo apt update
