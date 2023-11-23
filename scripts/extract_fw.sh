@@ -152,7 +152,7 @@ EXTRACT_AVB_BINARIES()
     echo "- Extracting AVB binaries..."
     cd "$FW_DIR/${MODEL}_${REGION}"
     if [ ! -f "vbmeta.img" ] && tar tf "$BL_TAR" "vbmeta.img.lz4" &>/dev/null; then
-        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4"
+        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4" "vbmeta.img"
     fi
     if [ ! -f "vbmeta_patched.img" ]; then
         cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
