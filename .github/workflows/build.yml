@@ -43,9 +43,16 @@ jobs:
           node-version: 'latest'
 
       - name: Build dependencies
-        run: |
-          ./scripts/build_dependencies.sh
+        run: ./scripts/build_dependencies.sh
+
+      - name: Generate build config
+        run: source ./buildenv.sh ${{ matrix.target }}
+
+      - name: Download stock firmwares
+        run: run_cmd download_fw
+
+      - name: Extract stock firmwares
+        run: run_cmd extract_fw
 
       - name: Build ROM
-        run: |
-          source ./buildenv.sh ${{ matrix.target }}
+        run: run_cmd make_rom
