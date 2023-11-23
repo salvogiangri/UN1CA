@@ -31,12 +31,7 @@ SYSTEM_DEBLOAT+="
 SYSTEM_EXT_DEBLOAT+="
 "
 
-VENDOR_DEBLOAT="
-recovery-from-boot.p
-tima_measurement_info
-bin/install-recovery.sh
-etc/dpolicy
-etc/init/vendor_flash_recovery.rc
+VENDOR_DEBLOAT+="
 firmware/ipa_fws.b00
 firmware/ipa_fws.b01
 firmware/ipa_fws.b02
