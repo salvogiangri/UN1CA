@@ -20,18 +20,21 @@ jobs:
           submodules: 'recursive'
 
       - name: Free disk space
-        uses: jlumbroso/free-disk-space@main
+        uses: rokibhasansagar/slimhub_actions@main
 
       - name: Set up build environment
         run: |
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            ccache clang cmake golang libgtest-dev \
-            libprotobuf-dev libunwind-dev libusb-1.0-0-dev linux-modules-extra-$(uname -r) lld \
-            protobuf-compiler ninja-build
+            attr ccache clang file golang \
+            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev \
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler ninja-build
           sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v1.14.1
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3
@@ -55,7 +58,9 @@ jobs:
         run: ./scripts/download_fw.sh
 
       - name: Extract stock firmwares
-        run: ./scripts/extract_fw.sh
+        run: |
+          ./scripts/extract_fw.sh
+          ./scripts/cleanup.sh odin
 
       - name: Build ROM
         run: ./scripts/make_rom.sh
