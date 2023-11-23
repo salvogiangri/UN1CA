@@ -62,12 +62,26 @@ COPY_SOURCE_FIRMWARE()
                 {
                     sed "1d" "$FW_DIR/${MODEL}_${REGION}/fs_config-system_ext" | sed "s/^system_ext/system\/system_ext/g"
                 } >> "$WORK_DIR/configs/fs_config-system"
+                rm -f "$WORK_DIR/system/system/system_ext/etc/NOTICE.xml.gz"
+                sed -i "/system\/system_ext\/etc\/NOTICE\\\.xml\\\.gz/d" "$WORK_DIR/configs/file_context-system"
+                sed -i "/system\/system_ext\/etc\/NOTICE.xml.gz/d" "$WORK_DIR/configs/fs_config-system"
+                rm -f "$WORK_DIR/system/system/system_ext/etc/fs_config_dirs"
+                sed -i "/system\/system_ext\/etc\/fs_config_dirs/d" "$WORK_DIR/configs/file_context-system"
+                sed -i "/system\/system_ext\/etc\/fs_config_dirs/d" "$WORK_DIR/configs/fs_config-system"
+                rm -f "$WORK_DIR/system/system/system_ext/etc/fs_config_files"
+                sed -i "/system\/system_ext\/etc\/fs_config_files/d" "$WORK_DIR/configs/file_context-system"
+                sed -i "/system\/system_ext\/etc\/fs_config_files/d" "$WORK_DIR/configs/fs_config-system"
             fi
         elif [ ! -d "$WORK_DIR/system_ext" ]; then
             mkdir -p "$WORK_DIR/system_ext"
             cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system_ext" "$WORK_DIR"
             cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/file_context-system_ext" "$WORK_DIR/configs"
             cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/fs_config-system_ext" "$WORK_DIR/configs"
+        fi
+    else
+        if $TARGET_HAS_SYSTEM_EXT; then
+            # TODO: handle separate system_ext partition
+            true
         fi
     fi
 }
