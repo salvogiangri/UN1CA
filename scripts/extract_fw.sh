@@ -31,10 +31,15 @@ PATH="$TOOLS_DIR:$PATH"
 
 GET_IMG_FS_TYPE()
 {
-    [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]] && echo "ext4"
-    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]] && echo "f2fs"
-    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]] && echo "erofs" \
-        || echo "unknown"
+    if [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]]; then
+        echo "ext4"
+    elif [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]]; then
+        echo "f2fs"
+    elif [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]]; then
+        echo "erofs"
+    else
+        echo "unknown"
+    fi
 }
 
 EXTRACT_KERNEL_BINARIES()
