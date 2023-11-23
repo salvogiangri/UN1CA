@@ -29,6 +29,7 @@ SYSTEM_DEBLOAT="
 dpolicy_system
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
+system/etc/public.libraries-wsm.samsung.txt
 system/framework/arm
 system/framework/arm64
 system/framework/oat
@@ -51,6 +52,10 @@ system/framework/boot-telephony-ext.vdex
 system/framework/boot-UxPerformance.vdex
 system/framework/boot.vdex
 system/framework/boot-voip-common.vdex
+system/lib/libhal.wsm.samsung.so
+system/lib/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
+system/lib64/libhal.wsm.samsung.so
+system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
 system/priv-app/FotaAgent
 system/priv-app/OneDrive_Samsung_v3
 "
