@@ -31,15 +31,10 @@ PATH="$TOOLS_DIR:$PATH"
 
 GET_IMG_FS_TYPE()
 {
-    local IS_EXT4=false
-    local IS_F2FS=false
-    local IS_EROFS=false
-
-    [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]] && IS_EXT4=true
-    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]] && IS_F2FS=true
-    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]] && IS_EROFS=true
-
-    $IS_EXT4 || $IS_F2FS || $IS_EROFS || false
+    [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]] && echo "ext4"
+    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]] && echo "f2fs"
+    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]] && echo "erofs" \
+        || echo "unknown"
 }
 
 EXTRACT_KERNEL_BINARIES()
@@ -92,27 +87,41 @@ EXTRACT_OS_PARTITIONS()
         mkdir -p "tmp_out"
         for img in *.img
         do
+            local PREFIX=""
             local PARTITION="${img%.img}"
 
-            if ! GET_IMG_FS_TYPE "$img"; then
-                echo "Ignoring $img"
-                continue
-            fi
-
-            [ -d "$PARTITION" ] && rm -rf "$PARTITION"
-            mkdir -p "$PARTITION"
-            sudo cp -a --preserve=all tmp_out/* "$PARTITION"
-            for i in $(sudo find "$PARTITION"); do
-                sudo chown -h "$(whoami)":"$(whoami)" "$i"
-            done
-            [[ -e "$PARTITION/lost+found" ]] && rm -rf "$PARTITION/lost+found"
+            case "$(GET_IMG_FS_TYPE "$img")" in
+                "erofs")
+                    PREFIX=""
+                    [ -d "$PARTITION" ] && rm -rf "$PARTITION"
+                    mkdir -p "$PARTITION"
+                    fuse.erofs "$img" "tmp_out"
+                    cp -a --preserve=all tmp_out/* "$PARTITION"
+                    ;;
+                "f2fs" | "ext4")
+                    PREFIX="sudo"
+                    [ -d "$PARTITION" ] && rm -rf "$PARTITION"
+                    mkdir -p "$PARTITION"
+                    $PREFIX mount "$img" "tmp_out"
+                    $PREFIX cp -a --preserve=all tmp_out/* "$PARTITION"
+                    for i in $($PREFIX find "$PARTITION"); do
+                        $PREFIX chown -h "$(whoami)":"$(whoami)" "$i"
+                    done
+                    [[ -e "$PARTITION/lost+found" ]] && rm -rf "$PARTITION/lost+found"
+                    ;;
+                *)
+                    echo "Ignoring $img"
+                    continue
+                    ;;
+            esac
 
             [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
             [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
-            for i in $(sudo find "tmp_out"); do
+            for i in $($PREFIX find "tmp_out"); do
                 {
                     echo -n "$i "
-                    sudo getfattr -n security.selinux --only-values -h "$i" | sed 's/.$//'
+                    $PREFIX getfattr -n security.selinux --only-values -h "$i"
+                    [ ! -z "$PREFIX" ] && sed 's/.$//'
                     echo ""
                 } >> "file_context-$PARTITION"
 
@@ -124,7 +133,7 @@ EXTRACT_OS_PARTITIONS()
                         CAPABILITIES="0x0"
                         ;;
                 esac
-                echo "$(sudo stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i")" >> "fs_config-$PARTITION"
+                echo "$($PREFIX stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i")" >> "fs_config-$PARTITION"
             done
             if [ "$PARTITION" = "system" ]; then
                 sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
@@ -140,7 +149,7 @@ EXTRACT_OS_PARTITIONS()
                 && sed -i 's/\+/\\+/g' "file_context-$PARTITION" \
                 && sed -i 's/\[/\\[/g' "file_context-$PARTITION"
 
-            sudo umount "tmp_out"
+            $PREFIX umount "tmp_out"
             rm "$img"
         done
 
