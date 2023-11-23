@@ -49,10 +49,10 @@ jobs:
         run: source ./buildenv.sh ${{ matrix.target }}
 
       - name: Download stock firmwares
-        run: run_cmd download_fw
+        run: ./scripts/download_fw.sh
 
       - name: Extract stock firmwares
-        run: run_cmd extract_fw
+        run: ./scripts/extract_fw.sh
 
       - name: Build ROM
-        run: run_cmd make_rom
+        run: ./scripts/make_rom.sh
