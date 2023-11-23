@@ -29,6 +29,19 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 
 PATH="$TOOLS_DIR:$PATH"
 
+GET_IMG_FS_TYPE()
+{
+    local IS_EXT4=false
+    local IS_F2FS=false
+    local IS_EROFS=false
+
+    [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]] && IS_EXT4=true
+    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]] && IS_F2FS=true
+    [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]] && IS_EROFS=true
+
+    $IS_EXT4 || $IS_F2FS || $IS_EROFS || false
+}
+
 EXTRACT_KERNEL_BINARIES()
 {
     local PDR
@@ -80,18 +93,11 @@ EXTRACT_OS_PARTITIONS()
         for img in *.img
         do
             local PARTITION="${img%.img}"
-            local TYPE
-            TYPE="$(file -b "$img")"
 
-            case "$TYPE" in
-                "EROFS"* | "F2FS"* | *"rev 1.0 ext"*)
-                    sudo mount "$img" "tmp_out"
-                    ;;
-                *)
-                    echo "Ignoring $img"
-                    continue
-                    ;;
-            esac
+            if ! GET_IMG_FS_TYPE "$img"; then
+                echo "Ignoring $img"
+                continue
+            fi
 
             [ -d "$PARTITION" ] && rm -rf "$PARTITION"
             mkdir -p "$PARTITION"
