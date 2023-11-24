@@ -141,6 +141,23 @@ BUILD_SAMFIRM()
     cd "$PDR"
 }
 
+BUILD_SIGNAPK()
+{
+    local PDR
+    PDR="$(pwd)"
+
+    echo -e "- Building signapk...\n"
+
+    mkdir -p "$TOOLS_DIR/../lib64"
+    cd "$SRC_DIR/external/signapk"
+    cp --preserve=all "libconscrypt_openjdk_jni.so" "$TOOLS_DIR/../lib64/libconscrypt_openjdk_jni.so"
+    cp --preserve=all "signapk.jar" "$TOOLS_DIR/signapk.jar"
+    cp --preserve=all "signapk" "$TOOLS_DIR/signapk"
+
+    echo ""
+    cd "$PDR"
+}
+
 BUILD_SMALI()
 {
     local PDR
@@ -173,6 +190,7 @@ APKTOOL=true
 EROFS_UTILS=true
 IMG2SDAT=true
 SAMFIRM=true
+SIGNAPK=true
 SMALI=true
 
 ANDROID_TOOLS_EXEC=(
@@ -200,6 +218,10 @@ SAMFIRM_EXEC=(
     "samfirm"
 )
 CHECK_TOOLS "${SAMFIRM_EXEC[@]}" && SAMFIRM=false
+SIGNAPK_EXEC=(
+    "signapk" "signapk.jar"
+)
+CHECK_TOOLS "${SIGNAPK_EXEC[@]}" && SIGNAPK=false
 SMALI_EXEC=(
     "baksmali" "baksmali.jar" "smali" "smali.jar"
 )
@@ -210,6 +232,7 @@ $APKTOOL && BUILD_APKTOOL
 $EROFS_UTILS && BUILD_EROFS_UTILS
 $IMG2SDAT && BUILD_IMG2SDAT
 $SAMFIRM && BUILD_SAMFIRM
+$SIGNAPK && BUILD_SIGNAPK
 $SMALI && BUILD_SMALI
 
 exit 0
