@@ -35,10 +35,10 @@ DO_DEBLOAT()
         echo "Debloating /$PARTITION/$FILE"
         rm -rf "$FILE_PATH"
 
-        FILE="$(echo -n "$FILE" | sed "s/\//\\\\\//g")"
+        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
         sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
 
-        FILE="$(echo -n "$FILE" | sed "s/\./\\\./g")"
+        FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
         sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
