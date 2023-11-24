@@ -16,18 +16,11 @@
 #
 
 # Debloat list for Galaxy M52 5G (m52xq)
+# - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
-ODM_DEBLOAT+="
-"
-
-PRODUCT_DEBLOAT+="
-"
-
-SYSTEM_DEBLOAT+="
-"
-
+# QCC
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
@@ -52,6 +45,7 @@ lib64/vendor.qti.hardware.qccvndhal@1.0.so
 lib64/vendor.qti.qccvndhal_aidl-V1-ndk.so
 "
 
+# Qualcomm IPA firmware blobs
 VENDOR_DEBLOAT+="
 firmware/ipa_fws.b00
 firmware/ipa_fws.b01
