@@ -47,6 +47,9 @@ if [[ ! -f "$WORK_DIR/.completed" ]]; then
     touch "$WORK_DIR/.completed"
 fi
 
+echo "- Building ROM zip..."
+bash -e "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
+
 ESTIMATED=$((SECONDS-START))
 echo -e "\nBuild completed in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."
 
