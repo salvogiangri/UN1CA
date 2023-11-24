@@ -2,6 +2,7 @@
 * text eol=lf
 
 # Git LFS
+unica/flashable-zip/updater filter=lfs diff=lfs merge=lfs -text
 unica/patches/vndk/** filter=lfs diff=lfs merge=lfs -text
 target/a52sxq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
 target/m52xq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
