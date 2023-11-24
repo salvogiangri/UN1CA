@@ -38,6 +38,7 @@ cd "${oldwd}"
 
 jarfile=signapk.jar
 libdir="$progdir"
+providerLibdir="$libdir/../lib64"
 
 if [ ! -r "$libdir/$jarfile" ]; then
     # set signapk.jar location for the SDK case
