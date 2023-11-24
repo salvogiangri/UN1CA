@@ -55,7 +55,8 @@ EXTRACT_KERNEL_BINARIES()
     do
         [ -f "${file%.lz4}" ] && continue
         tar tf "$AP_TAR" "$file" &>/dev/null || continue
-        tar xf "$AP_TAR" "$file" && lz4 -d --rm "$file" "${file%.lz4}"
+        echo "Extracting ${file%.lz4}"
+        tar xf "$AP_TAR" "$file" && lz4 -d -q --rm "$file" "${file%.lz4}"
     done
 
     cd "$PDR"
@@ -81,14 +82,15 @@ EXTRACT_OS_PARTITIONS()
 
     if $SHOULD_EXTRACT; then
         if [ ! -f "lpdump" ] || $SHOULD_EXTRACT_SUPER; then
+            echo "Extracting super.img"
             tar xf "$AP_TAR" "super.img.lz4"
-            lz4 -d --rm "super.img.lz4" "super.img.sparse"
+            lz4 -d -q --rm "super.img.lz4" "super.img.sparse"
             simg2img "super.img.sparse" "super.img" && rm "super.img.sparse"
-            lpunpack "super.img"
+            lpunpack "super.img" 2>&1 > /dev/null
             lpdump "super.img" > "lpdump" && rm "super.img"
         fi
 
-        [ -d "tmp_out" ] && sudo umount "tmp_out"
+        [ -d "tmp_out" ] && mountpoint -q "tmp_out" && sudo umount "tmp_out"
         mkdir -p "tmp_out"
         for img in *.img
         do
@@ -97,13 +99,15 @@ EXTRACT_OS_PARTITIONS()
 
             case "$(GET_IMG_FS_TYPE "$img")" in
                 "erofs")
+                    echo "Extracting $img"
                     PREFIX=""
                     [ -d "$PARTITION" ] && rm -rf "$PARTITION"
                     mkdir -p "$PARTITION"
-                    fuse.erofs "$img" "tmp_out"
+                    fuse.erofs "$img" "tmp_out" 2>&1 > /dev/null
                     cp -a --preserve=all tmp_out/* "$PARTITION"
                     ;;
                 "f2fs" | "ext4")
+                    echo "Extracting $img"
                     PREFIX="sudo"
                     [ -d "$PARTITION" ] && rm -rf "$PARTITION"
                     mkdir -p "$PARTITION"
@@ -115,18 +119,17 @@ EXTRACT_OS_PARTITIONS()
                     [[ -e "$PARTITION/lost+found" ]] && rm -rf "$PARTITION/lost+found"
                     ;;
                 *)
-                    echo "Ignoring $img"
                     continue
                     ;;
             esac
 
+            echo "Generating fs_config/file_context for $img"
             [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
             [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
             for i in $($PREFIX find "tmp_out"); do
                 {
                     echo -n "$i "
                     $PREFIX getfattr -n security.selinux --only-values -h "$i"
-                    [ ! -z "$PREFIX" ] && sed 's/.$//'
                     echo ""
                 } >> "file_context-$PARTITION"
 
@@ -150,7 +153,8 @@ EXTRACT_OS_PARTITIONS()
                 sed -i "s/tmp_out / /g" "fs_config-$PARTITION" \
                     && sed -i "s/tmp_out/$PARTITION/g" "fs_config-$PARTITION"
             fi
-            sed -i 's/\./\\./g' "file_context-$PARTITION" \
+            sed -i "s/\x0//g" "file_context-$PARTITION" \
+                && sed -i 's/\./\\./g' "file_context-$PARTITION" \
                 && sed -i 's/\+/\\+/g' "file_context-$PARTITION" \
                 && sed -i 's/\[/\\[/g' "file_context-$PARTITION"
 
@@ -172,9 +176,11 @@ EXTRACT_AVB_BINARIES()
     echo "- Extracting AVB binaries..."
     cd "$FW_DIR/${MODEL}_${REGION}"
     if [ ! -f "vbmeta.img" ] && tar tf "$BL_TAR" "vbmeta.img.lz4" &>/dev/null; then
-        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d --rm "vbmeta.img.lz4" "vbmeta.img"
+        echo "Extracting vbmeta.img"
+        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d -q --rm "vbmeta.img.lz4" "vbmeta.img"
     fi
     if [ ! -f "vbmeta_patched.img" ]; then
+        echo "Generating vbmeta_patched.img"
         cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
         printf "\x03" | dd of="vbmeta_patched.img" bs=1 seek=123 count=1 conv=notrunc &> /dev/null
     fi
