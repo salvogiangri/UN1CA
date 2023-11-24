@@ -243,7 +243,7 @@ GENERATE_UPDATER_SCRIPT
 
 echo "Creating zip"
 [ -f "$OUT_DIR/rom.zip" ] && rm -f "$OUT_DIR/rom.zip"
-cd "$TMP_DIR" ; zip -rq ../rom.zip ./* 2>&1 > /dev/null ; cd -
+cd "$TMP_DIR" ; zip -rq ../rom.zip ./* ; cd - &> /dev/null
 
 echo "Signing zip"
 [ -f "$OUT_DIR/$FILE_NAME-sign.zip" ] && rm -f "$OUT_DIR/$FILE_NAME-sign.zip"
