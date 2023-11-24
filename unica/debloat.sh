@@ -16,20 +16,29 @@
 #
 
 # UN1CA debloat list
+# - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
-ODM_DEBLOAT="
-"
-
-PRODUCT_DEBLOAT="
-"
-
-SYSTEM_DEBLOAT="
+# Samsung Defex policy
+SYSTEM_DEBLOAT+="
 dpolicy_system
-system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
-system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
+"
+VENDOR_DEBLOAT+="
+etc/dpolicy
+"
+
+# WSM
+SYSTEM_DEBLOAT+="
 system/etc/public.libraries-wsm.samsung.txt
+system/lib/libhal.wsm.samsung.so
+system/lib/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
+system/lib64/libhal.wsm.samsung.so
+system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
+"
+
+# .odex files
+SYSTEM_DEBLOAT+="
 system/framework/arm
 system/framework/arm64
 system/framework/oat
@@ -52,21 +61,19 @@ system/framework/boot-telephony-ext.vdex
 system/framework/boot-UxPerformance.vdex
 system/framework/boot.vdex
 system/framework/boot-voip-common.vdex
-system/lib/libhal.wsm.samsung.so
-system/lib/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
-system/lib64/libhal.wsm.samsung.so
-system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
+"
+
+# Recovery restoration script
+VENDOR_DEBLOAT+="
+recovery-from-boot.p
+bin/install-recovery.sh
+etc/init/vendor_flash_recovery.rc
+"
+
+# Apps debloat
+SYSTEM_DEBLOAT+="
+system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
+system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/priv-app/FotaAgent
 system/priv-app/OneDrive_Samsung_v3
-"
-
-SYSTEM_EXT_DEBLOAT="
-"
-
-VENDOR_DEBLOAT="
-recovery-from-boot.p
-tima_measurement_info
-bin/install-recovery.sh
-etc/dpolicy
-etc/init/vendor_flash_recovery.rc
 "
