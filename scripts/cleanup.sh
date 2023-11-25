@@ -23,6 +23,7 @@ SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
 ODIN_DIR="$OUT_DIR/odin"
 FW_DIR="$OUT_DIR/fw"
+APKTOOL_DIR="$OUT_DIR/apktool"
 WORK_DIR="$OUT_DIR/work_dir"
 TOOLS_DIR="$OUT_DIR/tools/bin"
 # ]
@@ -30,6 +31,7 @@ TOOLS_DIR="$OUT_DIR/tools/bin"
 ALL=false
 ODIN=false
 FW=false
+APKTOOL=false
 WORK=false
 TOOLS=false
 
@@ -43,24 +45,28 @@ else
                 ALL=true
                 break
                 ;;
-            *"odin"*)
+            "odin")
                 ODIN=true
                 ;;
-            *"fw"*)
+            "fw")
                 FW=true
                 ;;
-            *"work_dir"*)
+            "apktool")
+                APKTOOL=true
+                ;;
+            "work_dir")
                 WORK=true
                 ;;
-            *"tools"*)
+            "tools")
                 TOOLS=true
                 ;;
             *)
                 echo "\"$1\" is not valid type."
-                echo "Available options (multiple can be accepted with a separator):"
+                echo "Available options (multiple can be accepted):"
                 echo "all"
                 echo "odin"
                 echo "fw"
+                echo "apktool"
                 echo "work_dir"
                 echo "tools"
                 exit 1
@@ -85,6 +91,11 @@ fi
 if $FW; then
     echo "- Cleaning extracted firmwares dir..."
     rm -rf "$FW_DIR"
+fi
+
+if $APKTOOL; then
+    echo "- Cleaning decompiled apks/jars dir..."
+    rm -rf "$APKTOOL_DIR"
 fi
 
 if $WORK; then

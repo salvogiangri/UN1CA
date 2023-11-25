@@ -1,0 +1,217 @@
+#!/bin/bash
+#
+# Copyright (C) 2023 BlackMesa123
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+set -e
+
+# [
+SRC_DIR="$(git rev-parse --show-toplevel)"
+OUT_DIR="$SRC_DIR/out"
+APKTOOL_DIR="$OUT_DIR/apktool"
+WORK_DIR="$OUT_DIR/work_dir"
+TOOLS_DIR="$OUT_DIR/tools/bin"
+
+PATH="$TOOLS_DIR:$PATH"
+
+PRINT_USAGE()
+{
+    echo "Usage: apktool d[ecode]/b[uild] <apk> (<apk>...)"
+    echo "- APK/JAR path MUST not be full and match an existing file inside work_dir"
+    echo "- Output files will be stored in ($APKTOOL_DIR)"
+    echo "- Recompiled apk will be copied back to its original directory"
+}
+
+REMOVE_FROM_WORK_DIR()
+{
+    local FILE_PATH="$1"
+
+    if [ -e "$FILE_PATH" ]; then
+        local FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
+        local PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
+
+        rm -rf "$FILE_PATH"
+
+        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+        FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+    fi
+}
+
+DO_DECOMPILE()
+{
+    local OUT_DIR="$1"
+    local APK_PATH
+
+    [[ "$OUT_DIR" != "/"* ]] && OUT_DIR="/$OUT_DIR"
+
+    case "$OUT_DIR" in
+        "/system/system_ext/"*)
+            if $TARGET_HAS_SYSTEM_EXT; then
+                APK_PATH="$WORK_DIR$(echo "$OUT_DIR" | sed 's/\/system\/system_ext/\/system_ext/')"
+            else
+                APK_PATH="$WORK_DIR/system$OUT_DIR"
+            fi
+            OUT_DIR="$(echo "$OUT_DIR" | sed 's/\/system\/system_ext/\/system_ext/')"
+        ;;
+        "/system_ext/"*)
+            if $TARGET_HAS_SYSTEM_EXT; then
+                APK_PATH="$WORK_DIR$OUT_DIR"
+            else
+                APK_PATH="$WORK_DIR/system/system$OUT_DIR"
+            fi
+            ;;
+        "/system/system/"*)
+            APK_PATH="$WORK_DIR$OUT_DIR"
+            OUT_DIR="$(echo "$OUT_DIR" | sed 's/\/system\/system/\/system/')"
+            ;;
+        "/system/"*)
+            APK_PATH="$WORK_DIR/system$OUT_DIR"
+            ;;
+        *)
+            APK_PATH="$WORK_DIR$OUT_DIR"
+            ;;
+    esac
+
+    if [ ! -f "$APK_PATH" ]; then
+        echo "File not found: $OUT_DIR"
+        return 1
+    elif [[ "$(xxd -p -l "4" "$APK_PATH")" != "504b0304" ]]; then
+        echo "File not valid: $OUT_DIR"
+        return 1
+    fi
+
+    echo "Decompiling $OUT_DIR"
+    apktool -q d -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
+    sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
+}
+
+DO_RECOMPILE()
+{
+    local IN_DIR="$1"
+    local APK_PATH
+
+    [[ "$IN_DIR" != "/"* ]] && IN_DIR="/$IN_DIR"
+
+    case "$IN_DIR" in
+        "/system/system_ext/"*)
+            if $TARGET_HAS_SYSTEM_EXT; then
+                APK_PATH="$WORK_DIR$(echo "$IN_DIR" | sed 's/\/system\/system_ext/\/system_ext/')"
+            else
+                APK_PATH="$WORK_DIR/system$IN_DIR"
+            fi
+            IN_DIR="$(echo "$IN_DIR" | sed 's/\/system\/system_ext/\/system_ext/')"
+        ;;
+        "/system_ext/"*)
+            if $TARGET_HAS_SYSTEM_EXT; then
+                APK_PATH="$WORK_DIR$IN_DIR"
+            else
+                APK_PATH="$WORK_DIR/system/system$IN_DIR"
+            fi
+            ;;
+        "/system/system/"*)
+            APK_PATH="$WORK_DIR$IN_DIR"
+            IN_DIR="$(echo "$IN_DIR" | sed 's/\/system\/system/\/system/')"
+            ;;
+        "/system/"*)
+            APK_PATH="$WORK_DIR/system$IN_DIR"
+            ;;
+        *)
+            APK_PATH="$WORK_DIR$IN_DIR"
+            ;;
+    esac
+
+    if [ ! -d "$APKTOOL_DIR$IN_DIR" ]; then
+        echo "Folder not found: $IN_DIR"
+        return 1
+    fi
+
+    local APK_NAME="$(basename "$APK_PATH")"
+
+    echo "Recompiling $IN_DIR"
+    apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
+    # TODO apk signing
+    #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
+    #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
+    mv -f "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APK_PATH"
+    rm -rf "$APKTOOL_DIR$IN_DIR/build" && rm -rf "$APKTOOL_DIR$IN_DIR/dist"
+
+    if [ -d "${APK_PATH%/*}/oat" ]; then
+        REMOVE_FROM_WORK_DIR "${APK_PATH%/*}/oat"
+    fi
+    if [ -f "${APK_PATH%/*}/$APK_NAME.prof" ]; then
+        REMOVE_FROM_WORK_DIR "${APK_PATH%/*}/$APK_NAME.prof"
+    fi
+}
+
+source "$OUT_DIR/config.sh"
+
+FW_DIR="$APKTOOL_DIR/bin/fw"
+# ]
+
+if [ ! -d "$FW_DIR" ]; then
+    if [ -f "$WORK_DIR/system/system/framework/framework-res.apk" ]; then
+        echo "Set up apktool env"
+        apktool -q if -p "$FW_DIR" "$WORK_DIR/system/system/framework/framework-res.apk"
+    else
+        echo "Please set up your work_dir first."
+        exit 1
+    fi
+fi
+
+if [ "$#" == 0 ]; then
+    PRINT_USAGE
+    exit 1
+fi
+
+DECOMPILE=false
+RECOMPILE=true
+
+case "$1" in
+    "d" | "decode")
+        DECOMPILE=true
+        ;;
+    "b" | "build")
+        RECOMPILE=true
+        ;;
+    *)
+        PRINT_USAGE
+        exit 1
+        ;;
+esac
+
+shift
+
+if [ "$#" == 0 ]; then
+    PRINT_USAGE
+    exit 1
+fi
+
+while [ "$#" != 0 ]; do
+    if $DECOMPILE; then
+        DO_DECOMPILE "$1"
+    elif $RECOMPILE; then
+        DO_RECOMPILE "$1"
+    else
+        PRINT_USAGE
+        exit 1
+    fi
+    shift
+done
+
+exit 0
