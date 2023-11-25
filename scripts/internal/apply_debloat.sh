@@ -45,7 +45,8 @@ DO_DEBLOAT()
 
 source "$OUT_DIR/config.sh"
 source "$SRC_DIR/unica/debloat.sh"
-source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
+[ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ] \
+    && source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
 # ]
 
 for f in $ODM_DEBLOAT; do
