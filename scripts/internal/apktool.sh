@@ -96,9 +96,23 @@ DO_DECOMPILE()
         return 1
     fi
 
+    if [[ "$APK_PATH" == *".jar" ]]; then
+        API="-api $SOURCE_API_LEVEL"
+    fi
+
     echo "Decompiling $OUT_DIR"
-    apktool -q d -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
+    apktool -q d "$API" -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
     sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
+
+    # Workaround for U framework.jar
+    if [[ "$APK_PATH" == *"framework.jar" ]]; then
+        if unzip -l "$APK_PATH" | grep -q "debian.mime.types"; then
+            unzip -q "$APK_PATH" "res/*" -d "$APKTOOL_DIR$OUT_DIR/unknown"
+            sed -i \
+                '/^doNotCompress/i \ \ res\/android.mime.types: 8\n\ \ res\/debian.mime.types: 8\n\ \ res\/vendor.mime.types: 8' \
+                "$APKTOOL_DIR$OUT_DIR/apktool.yml"
+        fi
+    fi
 }
 
 DO_RECOMPILE()
