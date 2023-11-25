@@ -24,9 +24,6 @@ set -e
 SRC_DIR="$(git rev-parse --show-toplevel)"
 OUT_DIR="$SRC_DIR/out"
 
-source "$SRC_DIR/target/$1/config.sh"
-source "$SRC_DIR/unica/config.sh"
-
 GEN_CONFIG_FILE()
 {
     [ -f "$OUT_DIR/config.sh" ] && rm "$OUT_DIR/config.sh"
@@ -55,6 +52,9 @@ GEN_CONFIG_FILE()
         echo "TARGET_SUPER_GROUP_SIZE=$TARGET_SUPER_GROUP_SIZE"
     } > "$OUT_DIR/config.sh"
 }
+
+source "$SRC_DIR/target/$1/config.sh"
+source "$SRC_DIR/unica/config.sh"
 # ]
 
 GEN_CONFIG_FILE
