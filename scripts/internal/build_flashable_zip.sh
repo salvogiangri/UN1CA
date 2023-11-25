@@ -206,7 +206,7 @@ mkdir -p "$TMP_DIR"
 mkdir -p "$TMP_DIR/META-INF/com/google/android"
 cp --preserve=all "$SRC_DIR/unica/flashable-zip/updater" "$TMP_DIR/META-INF/com/google/android/update-binary"
 
-for i in $(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d); do
+while read -r i; do
     PARTITION=$(basename "$i")
     [[ "$PARTITION" == "configs" ]] && continue
     [ -f "$TMP_DIR/$PARTITION.img" ] && rm -f "$TMP_DIR/$PARTITION.img"
@@ -216,12 +216,12 @@ for i in $(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d); do
     bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM+sparse" "$WORK_DIR/$PARTITION" \
         "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" 2>&1 > /dev/null
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
-done
+done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
 echo "Generating dynamic_partitions_op_list"
 GENERATE_OP_LIST
 
-for i in $(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type f -name "*.img"); do
+while read -r i; do
     PARTITION="$(basename "$i" | sed "s/.img//g")"
     if [ -f "$TMP_DIR/$PARTITION.new.dat" ] || [ -f "$TMP_DIR/$PARTITION.new.dat.br" ]; then
         rm -f "$TMP_DIR/$PARTITION.new.dat" \
@@ -236,7 +236,7 @@ for i in $(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type f -name "*.img"); do
     echo "Compressing $PARTITION.new.dat"
     brotli --quality=6 --output="$TMP_DIR/$PARTITION.new.dat.br" "$TMP_DIR/$PARTITION.new.dat" \
         && rm "$TMP_DIR/$PARTITION.new.dat"
-done
+done <<< "$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type f -name "*.img")"
 
 echo "Generating updater-script"
 GENERATE_UPDATER_SCRIPT

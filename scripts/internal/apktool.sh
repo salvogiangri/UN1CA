@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1091
+
 set -e
 
 # [
@@ -40,8 +42,10 @@ REMOVE_FROM_WORK_DIR()
     local FILE_PATH="$1"
 
     if [ -e "$FILE_PATH" ]; then
-        local FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        local PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
+        local FILE
+        local PARTITION
+        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
+        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
 
         rm -rf "$FILE_PATH"
 
@@ -155,7 +159,8 @@ DO_RECOMPILE()
         return 1
     fi
 
-    local APK_NAME="$(basename "$APK_PATH")"
+    local APK_NAME
+    APK_NAME="$(basename "$APK_PATH")"
 
     echo "Recompiling $IN_DIR"
     apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"

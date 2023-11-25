@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091,SC2005
+# shellcheck disable=SC1091,SC2005,SC2069
 
 set -e
 

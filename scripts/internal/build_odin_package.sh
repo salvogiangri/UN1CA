@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1091,SC2069
+
 set -e
 
 # [
@@ -118,7 +120,7 @@ FILE_NAME="UNICA"
 echo "Set up tmp dir"
 mkdir -p "$TMP_DIR"
 
-for i in $(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d); do
+while read -r i; do
     PARTITION=$(basename "$i")
     [[ "$PARTITION" == "configs" ]] && continue
     [ -f "$TMP_DIR/$PARTITION.img" ] && rm -f "$TMP_DIR/$PARTITION.img"
@@ -128,7 +130,7 @@ for i in $(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d); do
     bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM" "$WORK_DIR/$PARTITION" \
         "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" 2>&1 > /dev/null
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
-done
+done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
 echo "Building super.img"
 [ -f "$TMP_DIR/super.img" ] && rm -f "$TMP_DIR/super.img"
@@ -145,7 +147,7 @@ lz4 -B6 --content-size -q --rm "$TMP_DIR/super.img" "$TMP_DIR/super.img.lz4" &> 
 
 echo "Creating tar"
 [ -f "$OUT_DIR/$FILE_NAME.tar" ] && rm -f "$OUT_DIR/$FILE_NAME.tar"
-cd "$TMP_DIR" ; tar -c --format=gnu -f "$OUT_DIR/$FILE_NAME.tar" * ; cd - &> /dev/null
+cd "$TMP_DIR" ; tar -c --format=gnu -f "$OUT_DIR/$FILE_NAME.tar" -- * ; cd - &> /dev/null
 
 echo "Generating checksum"
 [ -f "$OUT_DIR/$FILE_NAME.tar.md5" ] && rm -f "$OUT_DIR/$FILE_NAME.tar.md5"
