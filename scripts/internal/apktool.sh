@@ -105,7 +105,7 @@ DO_DECOMPILE()
     fi
 
     echo "Decompiling $OUT_DIR"
-    apktool -q d "$API" -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
+    apktool -q d $API -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
     sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
 
     # Workaround for U framework.jar
@@ -164,9 +164,17 @@ DO_RECOMPILE()
 
     echo "Recompiling $IN_DIR"
     apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
-    # TODO apk signing
-    #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
-    #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
+    if [[ "$APK_PATH" == *".jar" ]]; then
+        echo "Zipaligning $IN_DIR"
+        zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.jar" \
+            && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.jar" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
+    else
+        # TODO apk signing
+        #echo "Signing $IN_DIR"
+        #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
+        #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
+        true
+    fi
     mv -f "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APK_PATH"
     rm -rf "$APKTOOL_DIR$IN_DIR/build" && rm -rf "$APKTOOL_DIR$IN_DIR/dist"
 
