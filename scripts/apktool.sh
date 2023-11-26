@@ -87,8 +87,12 @@ DO_DECOMPILE()
         "/system/"*)
             APK_PATH="$WORK_DIR/system$OUT_DIR"
             ;;
-        *)
+        "/odm/"* | "/product/"* | "/system_dlkm/"* | "/vendor/"* | "/vendor_dlkm/"*)
             APK_PATH="$WORK_DIR$OUT_DIR"
+            ;;
+        *)
+            echo "Unvalid path: $OUT_DIR"
+            return 1
             ;;
     esac
 
@@ -149,8 +153,12 @@ DO_RECOMPILE()
         "/system/"*)
             APK_PATH="$WORK_DIR/system$IN_DIR"
             ;;
-        *)
+        "/odm/"* | "/product/"* | "/system_dlkm/"* | "/vendor/"* | "/vendor_dlkm/"*)
             APK_PATH="$WORK_DIR$IN_DIR"
+            ;;
+        *)
+            echo "Unvalid path: $IN_DIR"
+            return 1
             ;;
     esac
 
@@ -165,11 +173,10 @@ DO_RECOMPILE()
     echo "Recompiling $IN_DIR"
     apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
     if [[ "$APK_PATH" == *".apk" ]]; then
+        echo "Signing $IN_DIR"
         # TODO apk signing
-        #echo "Signing $IN_DIR"
         #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
         #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
-        true
     else
         echo "Zipaligning $IN_DIR"
         zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp" \
