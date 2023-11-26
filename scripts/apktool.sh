@@ -109,7 +109,7 @@ DO_DECOMPILE()
     fi
 
     echo "Decompiling $OUT_DIR"
-    apktool -q d $API -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
+    apktool -q d $API -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" "$APK_PATH"
     sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
 
     # Workaround for U framework.jar
@@ -171,12 +171,12 @@ DO_RECOMPILE()
     APK_NAME="$(basename "$APK_PATH")"
 
     echo "Recompiling $IN_DIR"
-    apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
+    apktool -q b -c -p "$FRAMEWORK_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
-        # TODO apk signing
-        #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
-        #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
+        signapk "$SRC_DIR/unica/security/aosp_platform.x509.pem" "$SRC_DIR/unica/security/aosp_platform.pk8" \
+            "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
+            && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
     else
         echo "Zipaligning $IN_DIR"
         zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp" \
@@ -195,13 +195,13 @@ DO_RECOMPILE()
 
 source "$OUT_DIR/config.sh"
 
-FW_DIR="$APKTOOL_DIR/bin/fw"
+FRAMEWORK_DIR="$APKTOOL_DIR/bin/fw"
 # ]
 
-if [ ! -d "$FW_DIR" ]; then
+if [ ! -d "$FRAMEWORK_DIR" ]; then
     if [ -f "$WORK_DIR/system/system/framework/framework-res.apk" ]; then
         echo "Set up apktool env"
-        apktool -q if -p "$FW_DIR" "$WORK_DIR/system/system/framework/framework-res.apk"
+        apktool -q if -p "$FRAMEWORK_DIR" "$WORK_DIR/system/system/framework/framework-res.apk"
     else
         echo "Please set up your work_dir first."
         exit 1
