@@ -30,6 +30,23 @@ START=$SECONDS
 source "$OUT_DIR/config.sh"
 # ]
 
+BUILD_ROM_ZIP=true
+
+while [ "$#" != 0 ]; do
+    case "$1" in
+        "--no-rom-zip")
+            BUILD_ROM_ZIP=false
+            ;;
+        *)
+            echo "Usage: make_rom [options]"
+            echo " --no-rom-zip : Do not build ROM zip"
+            exit 1
+            ;;
+    esac
+
+    shift
+done
+
 if [[ ! -f "$WORK_DIR/.completed" ]]; then
     bash -e "$SRC_DIR/scripts/download_fw.sh"
     bash -e "$SRC_DIR/scripts/extract_fw.sh"
@@ -49,10 +66,13 @@ if [[ ! -f "$WORK_DIR/.completed" ]]; then
     touch "$WORK_DIR/.completed"
 fi
 
-echo "- Building ROM zip..."
-bash -e "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
+if $BUILD_ROM_ZIP; then
+    echo "- Building ROM zip..."
+    bash -e "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
+    echo ""
+fi
 
 ESTIMATED=$((SECONDS-START))
-echo -e "\nBuild completed in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."
+echo "Build completed in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."
 
 exit 0
