@@ -20,6 +20,12 @@
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
+# Overlays
+PRODUCT_DEBLOAT+="
+overlay/SoftapOverlay6GHz
+overlay/SoftapOverlayOWE
+"
+
 # QCC
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
