@@ -57,10 +57,12 @@ if [[ ! -f "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so" ]]; 
     sed -i "s/$SOURCE_LIB_NAME/$TARGET_LIB_NAME/g" "$WORK_DIR/configs/fs_config-system"
 
     # Workaround for pre-U libs
-    sed -i "s/\<CoverAttached\>/coverAttached/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
-    sed -i "s/\<StartLedCover\>/startLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
-    sed -i "s/\<StopLedCover\>/stopLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
-    sed -i "s/\<TransceiveLedCover\>/transceiveLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
+    if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
+        sed -i "s/\<CoverAttached\>/coverAttached/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
+        sed -i "s/\<StartLedCover\>/startLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
+        sed -i "s/\<StopLedCover\>/stopLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
+        sed -i "s/\<TransceiveLedCover\>/transceiveLedCover/g" "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so"
+    fi
 
     if [[ "$TARGET_LIB_NAME" == "nxp"* ]] && [[ ! -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" "$WORK_DIR/system/system/lib64"
