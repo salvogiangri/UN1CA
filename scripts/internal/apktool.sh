@@ -164,16 +164,16 @@ DO_RECOMPILE()
 
     echo "Recompiling $IN_DIR"
     apktool -q b -c -p "$FW_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
-    if [[ "$APK_PATH" == *".jar" ]]; then
-        echo "Zipaligning $IN_DIR"
-        zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.jar" \
-            && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.jar" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
-    else
+    if [[ "$APK_PATH" == *".apk" ]]; then
         # TODO apk signing
         #echo "Signing $IN_DIR"
         #signapk <.x509.pem> <.pk8> "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
         #   && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
         true
+    else
+        echo "Zipaligning $IN_DIR"
+        zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp" \
+            && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
     fi
     mv -f "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APK_PATH"
     rm -rf "$APKTOOL_DIR$IN_DIR/build" && rm -rf "$APKTOOL_DIR$IN_DIR/dist"
