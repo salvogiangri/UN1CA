@@ -127,6 +127,8 @@ DO_RECOMPILE()
 {
     local IN_DIR="$1"
     local APK_PATH
+    local CERT_PREFIX="aosp"
+    $ROM_IS_OFFICIAL && CERT_PREFIX="unica"
 
     [[ "$IN_DIR" != "/"* ]] && IN_DIR="/$IN_DIR"
 
@@ -174,7 +176,7 @@ DO_RECOMPILE()
     apktool -q b -c -p "$FRAMEWORK_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
-        signapk "$SRC_DIR/unica/security/aosp_platform.x509.pem" "$SRC_DIR/unica/security/aosp_platform.pk8" \
+        signapk "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.x509.pem" "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.pk8" \
             "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
             && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
     else
