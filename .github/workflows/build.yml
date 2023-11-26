@@ -33,6 +33,8 @@ jobs:
           sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > unica/security/unica_platform.pk8
+          echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > unica/security/unica_platform.x509.pem
 
       - name: Set up CMake
         uses: jwlawson/actions-setup-cmake@v1.14.1
