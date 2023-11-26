@@ -206,6 +206,7 @@ EXTRACT_ALL()
 FORCE=false
 if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then
     FORCE=true
+    shift
 elif [[ -n "$1" ]]; then
     echo "Unknown argument: \"$1\""
     exit 1
