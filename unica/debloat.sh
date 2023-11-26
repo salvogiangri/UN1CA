@@ -71,6 +71,16 @@ etc/init/vendor_flash_recovery.rc
 "
 
 # Apps debloat
+PRODUCT_DEBLOAT+="
+app/Chrome
+app/DuoStub
+app/Gmail2
+app/Maps
+app/YouTube
+priv-app/Messages
+priv-app/SearchSelector
+priv-app/Velvet
+"
 SYSTEM_DEBLOAT+="
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
