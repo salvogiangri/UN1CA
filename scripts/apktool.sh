@@ -109,7 +109,7 @@ DO_DECOMPILE()
     fi
 
     echo "Decompiling $OUT_DIR"
-    apktool -q d $API -b -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
+    apktool -q d $API -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FW_DIR" "$APK_PATH"
     sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
 
     # Workaround for U framework.jar
@@ -230,6 +230,11 @@ case "$1" in
 esac
 
 shift
+
+if [[ "$1" == "-f" ]]|| [[ "$1" == "--force" ]]; then
+    FORCE="-f"
+    shift
+fi
 
 if [ "$#" == 0 ]; then
     PRINT_USAGE
