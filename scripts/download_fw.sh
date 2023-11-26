@@ -54,13 +54,6 @@ DOWNLOAD_FIRMWARE()
 }
 
 FORCE=false
-if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then
-    FORCE=true
-    shift
-elif [[ -n "$1" ]]; then
-    echo "Unknown argument: \"$1\""
-    exit 1
-fi
 
 source "$OUT_DIR/config.sh"
 
@@ -73,11 +66,20 @@ if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
 fi
 # ]
 
-if [ "$#" -gt 0 ]; then
-    echo "Usage: download_fw"
-    echo "This cmd does not accepts any arguments."
-    exit 1
-fi
+while [ "$#" != 0 ]; do
+    case "$1" in
+        "-f" | "--force")
+            FORCE=true
+            ;;
+        *)
+            echo "Usage: download_fw [options]"
+            echo " -f, --force : Force firmware download"
+            exit 1
+            ;;
+    esac
+
+    shift
+done
 
 mkdir -p "$ODIN_DIR"
 
