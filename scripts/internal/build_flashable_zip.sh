@@ -248,7 +248,7 @@ cd "$TMP_DIR" ; zip -rq ../rom.zip ./* ; cd - &> /dev/null
 echo "Signing zip"
 [ -f "$OUT_DIR/$FILE_NAME-sign.zip" ] && rm -f "$OUT_DIR/$FILE_NAME-sign.zip"
 signapk -w \
-    "$SRC_DIR/unica/flashable-zip/testkey.x509.pem" "$SRC_DIR/unica/flashable-zip/testkey.pk8" \
+    "$SRC_DIR/unica/security/aosp_testkey.x509.pem" "$SRC_DIR/unica/security/aosp_testkey.pk8" \
     "$OUT_DIR/rom.zip" "$OUT_DIR/$FILE_NAME-sign.zip" \
     && rm -f "$OUT_DIR/rom.zip"
 

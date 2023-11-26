@@ -2,7 +2,7 @@
 * text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
-unica/flashable-zip/** binary
+unica/security/*.pk8 binary
 
 # Git LFS
 external/signapk/libconscrypt_openjdk_jni.so filter=lfs diff=lfs merge=lfs -text
