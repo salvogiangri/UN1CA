@@ -58,7 +58,7 @@ elif [[ ! "$TARGETS" =~ $s$1$e ]]; then
 else
     mkdir -p "$OUT_DIR"
     run_cmd build_dependencies
-    bash -e "$SRC_DIR/scripts/internal/gen_config_file.sh" "$1"
+    bash "$SRC_DIR/scripts/internal/gen_config_file.sh" "$1" || return 1
 fi
 
 return 0
