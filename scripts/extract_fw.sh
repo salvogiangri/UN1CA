@@ -208,6 +208,12 @@ FORCE=false
 source "$OUT_DIR/config.sh"
 
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
+if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
+    for i in "${SOURCE_EXTRA_FIRMWARES[@]}"
+    do
+        FIRMWARES+=( "$i" )
+    done
+fi
 if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
     for i in "${TARGET_EXTRA_FIRMWARES[@]}"
     do
