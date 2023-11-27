@@ -1,0 +1,196 @@
+From ec14ff5a505422acc8ea62cb1a6c7a5a96d15fe0 Mon Sep 17 00:00:00 2001
+From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
+Date: Thu, 5 Apr 2018 10:01:19 +0800
+Subject: [PATCH] Disable vendor mismatch warning
+
+Change-Id: Ieb8fe91e2f02462f074312ed0f4885d183e9780b
+---
+ ...calService$$ExternalSyntheticLambda5.smali |  34 ------
+ ...ivityTaskManagerService$LocalService.smali | 113 +-----------------
+ 2 files changed, 1 insertion(+), 146 deletions(-)
+ delete mode 100644 smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5.smali
+
+diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5.smali
+deleted file mode 100644
+index 10403942..00000000
+--- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5.smali
++++ /dev/null
+@@ -1,34 +0,0 @@
+-.class public final synthetic Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5;
+-.super Ljava/lang/Object;
+-.source "R8$$SyntheticClass"
+-
+-# interfaces
+-.implements Ljava/lang/Runnable;
+-
+-
+-# instance fields
+-.field public final synthetic f$0:Lcom/android/server/wm/ActivityTaskManagerService$LocalService;
+-
+-
+-# direct methods
+-.method public synthetic constructor <init>(Lcom/android/server/wm/ActivityTaskManagerService$LocalService;)V
+-    .locals 0
+-
+-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+-
+-    iput-object p1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5;->f$0:Lcom/android/server/wm/ActivityTaskManagerService$LocalService;
+-
+-    return-void
+-.end method
+-
+-
+-# virtual methods
+-.method public final run()V
+-    .locals 0
+-
+-    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5;->f$0:Lcom/android/server/wm/ActivityTaskManagerService$LocalService;
+-
+-    invoke-static {p0}, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->$r8$lambda$d3WwhGdEaRRn8LC-skv20mj0uvs(Lcom/android/server/wm/ActivityTaskManagerService$LocalService;)V
+-
+-    return-void
+-.end method
+diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
+index 997a8e7c..2da05c7c 100644
+--- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
++++ b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
+@@ -58,14 +58,6 @@
+     return-void
+ .end method
+ 
+-.method public static synthetic $r8$lambda$d3WwhGdEaRRn8LC-skv20mj0uvs(Lcom/android/server/wm/ActivityTaskManagerService$LocalService;)V
+-    .locals 0
+-
+-    invoke-direct {p0}, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->lambda$showSystemReadyErrorDialogsIfNeeded$1()V
+-
+-    return-void
+-.end method
+-
+ .method public constructor <init>(Lcom/android/server/wm/ActivityTaskManagerService;)V
+     .locals 0
+ 
+@@ -499,99 +491,6 @@
+     return-void
+ .end method
+ 
+-.method private synthetic lambda$showSystemReadyErrorDialogsIfNeeded$1()V
+-    .locals 3
+-
+-    iget-object v0, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    invoke-static {v0}, Lcom/android/server/wm/ActivityTaskManagerService;->-$$Nest$fgetmShowDialogs(Lcom/android/server/wm/ActivityTaskManagerService;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    new-instance v0, Lcom/android/server/am/BaseErrorDialog;
+-
+-    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    invoke-static {v1}, Lcom/android/server/wm/ActivityTaskManagerService;->-$$Nest$fgetmUiContext(Lcom/android/server/wm/ActivityTaskManagerService;)Landroid/content/Context;
+-
+-    move-result-object v1
+-
+-    invoke-direct {v0, v1}, Lcom/android/server/am/BaseErrorDialog;-><init>(Landroid/content/Context;)V
+-
+-    invoke-virtual {v0}, Landroid/app/AlertDialog;->getWindow()Landroid/view/Window;
+-
+-    move-result-object v1
+-
+-    const/16 v2, 0x7da
+-
+-    invoke-virtual {v1, v2}, Landroid/view/Window;->setType(I)V
+-
+-    const/4 v1, 0x0
+-
+-    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setCancelable(Z)V
+-
+-    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    invoke-static {v1}, Lcom/android/server/wm/ActivityTaskManagerService;->-$$Nest$fgetmUiContext(Lcom/android/server/wm/ActivityTaskManagerService;)Landroid/content/Context;
+-
+-    move-result-object v1
+-
+-    const v2, 0x10401ae
+-
+-    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+-
+-    move-result-object v1
+-
+-    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setTitle(Ljava/lang/CharSequence;)V
+-
+-    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    invoke-static {v1}, Lcom/android/server/wm/ActivityTaskManagerService;->-$$Nest$fgetmUiContext(Lcom/android/server/wm/ActivityTaskManagerService;)Landroid/content/Context;
+-
+-    move-result-object v1
+-
+-    const v2, 0x1040dfc
+-
+-    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+-
+-    move-result-object v1
+-
+-    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setMessage(Ljava/lang/CharSequence;)V
+-
+-    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    invoke-static {v1}, Lcom/android/server/wm/ActivityTaskManagerService;->-$$Nest$fgetmUiContext(Lcom/android/server/wm/ActivityTaskManagerService;)Landroid/content/Context;
+-
+-    move-result-object v1
+-
+-    const v2, 0x104000a
+-
+-    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+-
+-    move-result-object v1
+-
+-    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiHandler:Lcom/android/server/wm/ActivityTaskManagerService$UiHandler;
+-
+-    const/4 v2, 0x1
+-
+-    invoke-virtual {p0, v2, v0}, Landroid/os/Handler;->obtainMessage(ILjava/lang/Object;)Landroid/os/Message;
+-
+-    move-result-object p0
+-
+-    const/4 v2, -0x1
+-
+-    invoke-virtual {v0, v2, v1, p0}, Landroid/app/AlertDialog;->setButton(ILjava/lang/CharSequence;Landroid/os/Message;)V
+-
+-    invoke-virtual {v0}, Landroid/app/AlertDialog;->show()V
+-
+-    :cond_0
+-    return-void
+-.end method
+-
+ .method private synthetic lambda$updateTopComponentForFactoryTest$3(Ljava/lang/CharSequence;)V
+     .locals 2
+ 
+@@ -6746,20 +6645,10 @@
+ 
+     const-string v1, "ActivityTaskManager"
+ 
+-    const-string v2, "Build fingerprint is not consistent, warning user"
++    const-string v2, "Build fingerprint is not consistent"
+ 
+     invoke-static {v1, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
+-
+-    iget-object v1, v1, Lcom/android/server/wm/ActivityTaskManagerService;->mUiHandler:Lcom/android/server/wm/ActivityTaskManagerService$UiHandler;
+-
+-    new-instance v2, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5;
+-
+-    invoke-direct {v2, p0}, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda5;-><init>(Lcom/android/server/wm/ActivityTaskManagerService$LocalService;)V
+-
+-    invoke-virtual {v1, v2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+-
+     :cond_1
+     monitor-exit v0
+     :try_end_1
+-- 
+2.43.0
+
