@@ -126,7 +126,7 @@ EXTRACT_OS_PARTITIONS()
             echo "Generating fs_config/file_context for $img"
             [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
             [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
-            for i in $($PREFIX find "tmp_out"); do
+            while read -r i; do
                 {
                     echo -n "$i "
                     $PREFIX getfattr -n security.selinux --only-values -h "$i"
@@ -142,7 +142,7 @@ EXTRACT_OS_PARTITIONS()
                         ;;
                 esac
                 echo "$($PREFIX stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i")" >> "fs_config-$PARTITION"
-            done
+            done <<< "$($PREFIX find "tmp_out")"
             if [ "$PARTITION" = "system" ]; then
                 sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
                     && sed -i "s/tmp_out\//\//g" "file_context-$PARTITION"
