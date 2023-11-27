@@ -1,0 +1,25 @@
+From d767f9c3d0957ebb9b031b5abe20f846eda093cb Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Mon, 27 Nov 2023 22:03:36 +0100
+Subject: [PATCH] Bypass ICD verification
+
+---
+ .../samsung/android/security/keystore/AttestParameterSpec.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali/com/samsung/android/security/keystore/AttestParameterSpec.smali b/smali/com/samsung/android/security/keystore/AttestParameterSpec.smali
+index a55e31d..869d1a6 100644
+--- a/smali/com/samsung/android/security/keystore/AttestParameterSpec.smali
++++ b/smali/com/samsung/android/security/keystore/AttestParameterSpec.smali
+@@ -183,7 +183,7 @@
+ .method public isVerifiableIntegrity()Z
+     .locals 1
+ 
+-    iget-boolean v0, p0, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mVerifiableIntegrity:Z
++    const/4 v0, 0x1
+ 
+     return v0
+ .end method
+-- 
+2.43.0
+
