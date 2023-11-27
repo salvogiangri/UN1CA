@@ -87,3 +87,14 @@ system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/priv-app/FotaAgent
 system/priv-app/OneDrive_Samsung_v3
 "
+
+# eSIM
+if $SOURCE_IS_ESIM_SUPPORTED; then
+    if ! $TARGET_IS_ESIM_SUPPORTED; then
+        SYSTEM_DEBLOAT+="
+        system/etc/permissions/privapp-permissions-com.samsung.euicc.xml
+        system/etc/sysconfig/preinstalled-packages-com.samsung.euicc.xml
+        system/priv-app/EuiccService
+        "
+    fi
+fi
