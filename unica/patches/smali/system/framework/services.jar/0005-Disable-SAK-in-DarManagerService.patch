@@ -1,0 +1,165 @@
+From 28111c5cb15795108106931cfd1741ed180f3e1c Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Tue, 28 Nov 2023 22:01:31 +0100
+Subject: [PATCH] Disable SAK in DarManagerService
+
+---
+ .../server/knox/dar/DarManagerService.smali   | 129 +-----------------
+ 1 file changed, 4 insertions(+), 125 deletions(-)
+
+diff --git a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
+index d3f21189..97648b71 100644
+--- a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
++++ b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
+@@ -481,50 +481,11 @@
+ .end method
+ 
+ .method public final checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z
+-    .locals 1
+-
+-    const/4 p0, 0x0
+-
+-    aget-object p1, p1, p0
+-
+-    check-cast p1, Ljava/security/cert/X509Certificate;
+-
+-    :try_start_0
+-    new-instance v0, Lcom/android/server/knox/dar/AttestedCertParser;
+-
+-    invoke-direct {v0, p1}, Lcom/android/server/knox/dar/AttestedCertParser;-><init>(Ljava/security/cert/X509Certificate;)V
+-
+-    invoke-virtual {v0}, Lcom/android/server/knox/dar/AttestedCertParser;->getIntegrityStatus()Lcom/android/server/knox/dar/IntegrityStatus;
+-
+-    move-result-object p1
+-
+-    if-eqz p1, :cond_0
+-
+-    invoke-virtual {p1}, Lcom/android/server/knox/dar/IntegrityStatus;->getWarranty()I
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    invoke-virtual {p1}, Lcom/android/server/knox/dar/IntegrityStatus;->getTrustBoot()I
+-
+-    move-result p1
+-    :try_end_0
+-    .catch Ljava/security/cert/CertificateParsingException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    if-nez p1, :cond_0
++    .locals 0
+ 
+     const/4 p0, 0x1
+ 
+     return p0
+-
+-    :catch_0
+-    move-exception p1
+-
+-    invoke-virtual {p1}, Ljava/security/cert/CertificateParsingException;->printStackTrace()V
+-
+-    :cond_0
+-    return p0
+ .end method
+ 
+ .method public final checkSystemPermission()V
+@@ -2320,93 +2281,11 @@
+ .end method
+ 
+ .method public isKnoxKeyInstallable()Z
+-    .locals 7
+-
+-    const-string v0, "KnoxTestKey"
+-
+-    iget-object v1, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v1}, Lcom/android/server/knox/dar/DarManagerService$Injector;->binderClearCallingIdentity()J
+-
+-    move-result-wide v1
+-
+-    const/4 v3, 0x0
+-
+-    :try_start_0
+-    new-instance v4, Lcom/samsung/android/security/keystore/AttestationUtils;
+-
+-    invoke-direct {v4}, Lcom/samsung/android/security/keystore/AttestationUtils;-><init>()V
+-
+-    new-instance v5, Lcom/samsung/android/security/keystore/AttestParameterSpec$Builder;
+-
+-    const/16 v6, 0x8
+-
+-    invoke-static {v6}, Lcom/android/server/knox/dar/SecureUtil;->generateRandomBytes(I)[B
+-
+-    move-result-object v6
+-
+-    invoke-direct {v5, v0, v6}, Lcom/samsung/android/security/keystore/AttestParameterSpec$Builder;-><init>(Ljava/lang/String;[B)V
+-
+-    const/4 v6, 0x1
+-
+-    invoke-virtual {v5, v6}, Lcom/samsung/android/security/keystore/AttestParameterSpec$Builder;->setVerifiableIntegrity(Z)Lcom/samsung/android/security/keystore/AttestParameterSpec$Builder;
+-
+-    move-result-object v5
+-
+-    invoke-virtual {v5}, Lcom/samsung/android/security/keystore/AttestParameterSpec$Builder;->build()Lcom/samsung/android/security/keystore/AttestParameterSpec;
+-
+-    move-result-object v5
+-
+-    invoke-virtual {v4, v5}, Lcom/samsung/android/security/keystore/AttestationUtils;->generateKeyPair(Lcom/samsung/android/security/keystore/AttestParameterSpec;)Ljava/security/KeyPair;
+-
+-    move-result-object v5
+-
+-    if-eqz v5, :cond_0
+-
+-    invoke-virtual {v4, v0}, Lcom/samsung/android/security/keystore/AttestationUtils;->getCertificateChain(Ljava/lang/String;)[Ljava/security/cert/Certificate;
+-
+-    move-result-object v5
+-
+-    invoke-virtual {p0, v5}, Lcom/android/server/knox/dar/DarManagerService;->checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z
+-
+-    move-result v3
+-
+-    if-eqz v3, :cond_0
+-
+-    invoke-virtual {v4, v0}, Lcom/samsung/android/security/keystore/AttestationUtils;->deleteKey(Ljava/lang/String;)V
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    goto :goto_0
+-
+-    :catchall_0
+-    move-exception v0
+-
+-    goto :goto_1
+-
+-    :catch_0
+-    move-exception v0
+-
+-    :try_start_1
+-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
+-    :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    :cond_0
+-    :goto_0
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0, v1, v2}, Lcom/android/server/knox/dar/DarManagerService$Injector;->binderRestoreCallingIdentity(J)V
+-
+-    return v3
+-
+-    :goto_1
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
++    .locals 1
+ 
+-    invoke-virtual {p0, v1, v2}, Lcom/android/server/knox/dar/DarManagerService$Injector;->binderRestoreCallingIdentity(J)V
++    const/4 v0, 0x1
+ 
+-    throw v0
++    return v0
+ .end method
+ 
+ .method public isLicensed()I
+-- 
+2.43.0
+
