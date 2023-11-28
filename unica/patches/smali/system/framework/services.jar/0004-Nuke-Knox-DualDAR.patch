@@ -1,10 +1,10 @@
-From 6d517a420818e2952cb8c19035773c8bc66bee20 Mon Sep 17 00:00:00 2001
+From cf673b62c4b77c0b3234b08ec99549d13a7cf111 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Tue, 28 Nov 2023 18:41:36 +0100
+Date: Tue, 28 Nov 2023 22:19:04 +0100
 Subject: [PATCH] Nuke Knox DualDAR
 
 ---
- .../server/am/ActivityManagerService.smali    |  213 +-
+ .../server/am/ActivityManagerService.smali    |  217 +-
  smali/com/android/server/am/ProcessList.smali |  165 +-
  .../android/server/am/UserController.smali    |  454 +---
  .../DevicePolicyManagerService.smali          |  164 +-
@@ -73,7 +73,7 @@ Subject: [PATCH] Nuke Knox DualDAR
  .../server/trust/TrustManagerService$1.smali  |  156 +-
  .../server/trust/TrustManagerService$2.smali  |   16 +-
  .../server/trust/TrustManagerService.smali    |  542 +---
- 69 files changed, 1671 insertions(+), 11535 deletions(-)
+ 69 files changed, 1673 insertions(+), 11537 deletions(-)
  delete mode 100644 smali_classes2/com/android/server/devicepolicy/DualDarProvisioningHelper$2.smali
  delete mode 100644 smali_classes2/com/android/server/devicepolicy/DualDarProvisioningHelper$4.smali
  delete mode 100644 smali_classes2/com/android/server/locksettings/LockSettingsService$$ExternalSyntheticLambda18.smali
@@ -84,7 +84,7 @@ Subject: [PATCH] Nuke Knox DualDAR
  delete mode 100644 smali_classes3/com/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda6.smali
 
 diff --git a/smali/com/android/server/am/ActivityManagerService.smali b/smali/com/android/server/am/ActivityManagerService.smali
-index 86d3cf40..5129c123 100644
+index 86d3cf40..31b83f53 100644
 --- a/smali/com/android/server/am/ActivityManagerService.smali
 +++ b/smali/com/android/server/am/ActivityManagerService.smali
 @@ -38118,46 +38118,6 @@
@@ -133,6 +133,24 @@ index 86d3cf40..5129c123 100644
 -
  .method public final ensureAllowedAssociations()V
      .locals 8
+ 
+@@ -39564,7 +39524,7 @@
+ 
+     monitor-exit p0
+     :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_2
++    .catchall {:try_start_0 .. :try_end_0} :catchall_1
+ 
+     invoke-static {}, Lcom/android/server/am/ActivityManagerService;->resetPriorityAfterLockedSection()V
+ 
+@@ -39576,7 +39536,7 @@
+ 
+     monitor-exit p0
+     :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_2
++    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+ 
+     invoke-static {}, Lcom/android/server/am/ActivityManagerService;->resetPriorityAfterLockedSection()V
  
 @@ -39657,12 +39617,6 @@
  
