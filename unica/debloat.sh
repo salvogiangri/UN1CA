@@ -83,8 +83,10 @@ priv-app/Velvet
 "
 SYSTEM_DEBLOAT+="
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.kgclient.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/priv-app/FotaAgent
+system/priv-app/KnoxGuard
 system/priv-app/OneDrive_Samsung_v3
 "
 
