@@ -1,0 +1,34 @@
+From e6a7c23f390c2ccf188c7ebfef6912cfcb554398 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Tue, 28 Nov 2023 23:12:15 +0100
+Subject: [PATCH] Better device/model detection in CoreRune
+
+---
+ smali_classes5/com/samsung/android/rune/CoreRune.smali | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/smali_classes5/com/samsung/android/rune/CoreRune.smali b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+index 4870523e..290261f4 100644
+--- a/smali_classes5/com/samsung/android/rune/CoreRune.smali
++++ b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+@@ -4433,7 +4433,7 @@
+ 
+     if-eqz v0, :cond_4e
+ 
+-    const-string/jumbo v0, "ro.product.model"
++    const-string/jumbo v0, "ro.product.vendor.model"
+ 
+     invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+@@ -4457,7 +4457,7 @@
+     :goto_4c
+     sput-boolean v0, Lcom/samsung/android/rune/CoreRune;->FAST_MADVISE_ENABLED:Z
+ 
+-    const-string/jumbo v0, "ro.product.device"
++    const-string/jumbo v0, "ro.product.vendor.device"
+ 
+     invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+-- 
+2.43.0
+
