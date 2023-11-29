@@ -28,6 +28,14 @@ VENDOR_DEBLOAT+="
 etc/dpolicy
 "
 
+# DualDAR
+SYSTEM_DEBLOAT+="
+system/bin/dualdard
+system/etc/init/dualdard.rc
+system/lib/libdualdar.so
+system/lib64/libdualdar.so
+"
+
 # WSM
 SYSTEM_DEBLOAT+="
 system/etc/public.libraries-wsm.samsung.txt
