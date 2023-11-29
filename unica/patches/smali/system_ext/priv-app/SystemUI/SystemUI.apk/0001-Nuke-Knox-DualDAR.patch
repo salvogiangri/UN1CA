@@ -1,6 +1,6 @@
-From eb18e87cef0e93e844c48b06a2cb92d8ba7f1685 Mon Sep 17 00:00:00 2001
+From 5536f9c93c5746e4f721d5c2a62cb368e7d49041 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 29 Nov 2023 11:55:28 +0100
+Date: Wed, 29 Nov 2023 16:33:12 +0100
 Subject: [PATCH] Nuke Knox DualDAR
 
 ---
@@ -35,7 +35,7 @@ Subject: [PATCH] Nuke Knox DualDAR
  .../keyguard/KeyguardSecUpdateMonitor.smali   |  22 -
  ...nitorImpl$$ExternalSyntheticLambda22.smali |  40 --
  ...onitorImpl$$ExternalSyntheticLambda8.smali |  16 +-
- .../KeyguardSecUpdateMonitorImpl.smali        | 479 +++-----------
+ .../KeyguardSecUpdateMonitorImpl.smali        | 485 +++-----------
  .../KeyguardUpdateMonitorCallback.smali       |  12 -
  .../com/android/keyguard/SecurityUtils.smali  |  37 +-
  ...ller$keyguardUpdateMonitorCallback$1.smali |  30 -
@@ -44,7 +44,7 @@ Subject: [PATCH] Nuke Knox DualDAR
  .../systemui/knox/KnoxStateMonitorImpl.smali  | 332 +---------
  .../knox/container/KnoxContainerManager.smali |  39 +-
  .../android/knox/ddar/DualDARPolicy.smali     |   4 +-
- 40 files changed, 505 insertions(+), 5476 deletions(-)
+ 40 files changed, 508 insertions(+), 5479 deletions(-)
  delete mode 100644 smali/com/android/keyguard/DualDarInnerLockScreenController$$ExternalSyntheticLambda0.smali
  delete mode 100644 smali/com/android/keyguard/DualDarInnerLockScreenController$1.smali
  delete mode 100644 smali/com/android/keyguard/DualDarInnerLockScreenController$2.smali
@@ -6035,7 +6035,7 @@ index 243d40ca..3f91816c 100644
          :pswitch_2
          :pswitch_1
 diff --git a/smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl.smali b/smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl.smali
-index b818096c..d6c9b26f 100644
+index b818096c..9436bb0c 100644
 --- a/smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl.smali
 +++ b/smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl.smali
 @@ -94,10 +94,6 @@
@@ -6762,9 +6762,30 @@ index b818096c..d6c9b26f 100644
  
      new-instance p0, Ljava/lang/StringBuilder;
  
-@@ -15097,7 +14949,7 @@
+@@ -15070,7 +14922,7 @@
  
-     invoke-static {v3, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+     move-result-object p0
+ 
+-    invoke-static {v3, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v4, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+     :try_end_0
+     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_1
+     .catch Ljava/lang/NullPointerException; {:try_start_0 .. :try_end_0} :catch_0
+@@ -15086,7 +14938,7 @@
+ 
+     move-result-object p0
+ 
+-    invoke-static {v3, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v4, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     goto :goto_5
+ 
+@@ -15095,9 +14947,9 @@
+ 
+     const-string p1, "Fail to check windows by RemoteException"
+ 
+-    invoke-static {v3, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    invoke-static {v4, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
  
 -    :cond_27
 +    :cond_26
