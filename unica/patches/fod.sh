@@ -1,7 +1,9 @@
 #====================================================
 # FILE:         fod.sh
 # AUTHOR:       BlackMesa123
-# DESCRIPTION:  Replace SF blobs with FOD
+# DESCRIPTION:  Check for target optical FOD support
+#               and replace surfaceflinger blobs
+#               accordingly if required.
 #====================================================
 
 # shellcheck disable=SC1091
