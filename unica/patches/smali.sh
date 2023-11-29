@@ -57,6 +57,11 @@ fi
 FILES_TO_PATCH="$(echo "$FILES_TO_PATCH" | tr " " "\n" | nl | sort -u -k2 | sort -n | cut -f2-)"
 
 for i in $FILES_TO_PATCH; do
+    if [[ "$i" == *"0000-"* ]]; then
+        [[ "$i" == *"AOSP"* ]] && $ROM_IS_OFFICIAL && continue
+        [[ "$i" == *"UNICA"* ]] && ! $ROM_IS_OFFICIAL && continue
+    fi
+
     APPLY_PATCHES "$i"
 done
 
