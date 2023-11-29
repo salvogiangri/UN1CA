@@ -8,7 +8,7 @@
 
 # shellcheck disable=SC1091
 
-set -Ee
+set -Eeo pipefail
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
@@ -29,13 +29,18 @@ APPLY_PATCHES()
         PATCHES+="$(find "$SRC_DIR/target/$TARGET_CODENAME/patches/smali$TARGET" -type f -name "*.patch" -printf "%p ")"
     fi
 
-    [ ! -d "$APKTOOL_DIR$TARGET" ] && bash -e "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
+    [ ! -d "$APKTOOL_DIR$TARGET" ] && bash "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
 
     cd "$APKTOOL_DIR$TARGET"
     for patch in $PATCHES; do
         local OUT
         local COMMIT_NAME
         COMMIT_NAME="$(grep "^Subject:" "$patch" | sed 's/.*PATCH] //')"
+
+        if [[ "$patch" == *"0000-"* ]]; then
+            [[ "$patch" == *"AOSP"* ]] && $ROM_IS_OFFICIAL && continue
+            [[ "$patch" == *"UNICA"* ]] && $ROM_IS_OFFICIAL || continue
+        fi
 
         echo "Applying \"$COMMIT_NAME\" to $TARGET"
         OUT="$(patch -p1 -s -t -N --dry-run < "$patch")" \
@@ -44,7 +49,7 @@ APPLY_PATCHES()
     done
     cd - &> /dev/null
 
-    bash -e "$SRC_DIR/scripts/apktool.sh" b "$TARGET"
+    bash "$SRC_DIR/scripts/apktool.sh" b "$TARGET"
 }
 
 source "$OUT_DIR/config.sh"
@@ -57,11 +62,6 @@ fi
 FILES_TO_PATCH="$(echo "$FILES_TO_PATCH" | tr " " "\n" | nl | sort -u -k2 | sort -n | cut -f2-)"
 
 for i in $FILES_TO_PATCH; do
-    if [[ "$i" == *"0000-"* ]]; then
-        [[ "$i" == *"AOSP"* ]] && $ROM_IS_OFFICIAL && continue
-        [[ "$i" == *"UNICA"* ]] && ! $ROM_IS_OFFICIAL && continue
-    fi
-
     APPLY_PATCHES "$i"
 done
 
