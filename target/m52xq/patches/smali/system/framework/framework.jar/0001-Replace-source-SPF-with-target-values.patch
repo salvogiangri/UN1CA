@@ -1,18 +1,18 @@
-From 2faad24951c8d60b022d35486687e9a9fe11d859 Mon Sep 17 00:00:00 2001
+From 9b11a9376dfd525b31303c9c3163f5a7b52201b9 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 29 Nov 2023 00:52:07 +0100
+Date: Wed, 29 Nov 2023 01:43:27 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
  .../fingerprint/FingerprintManager.smali      |  4 +--
- .../com/samsung/android/audio/Rune.smali      |  6 ++--
+ .../com/samsung/android/audio/Rune.smali      | 10 ++++---
  ...emFingerprintManager$Characteristics.smali |  4 +--
  .../fingerprint/SemFingerprintManager.smali   |  2 +-
  .../camera/mic/SemMultiMicManager.smali       |  4 +--
  .../hardware/display/RefreshRateConfig.smali  | 30 ++++++++-----------
  .../com/samsung/android/rune/CoreRune.smali   |  4 +--
  .../samsung/android/vibrator/VibRune.smali    | 22 +++++++-------
- 8 files changed, 37 insertions(+), 39 deletions(-)
+ 8 files changed, 39 insertions(+), 41 deletions(-)
 
 diff --git a/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali b/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali
 index f15b1005..aef2a2c3 100644
@@ -37,9 +37,27 @@ index f15b1005..aef2a2c3 100644
      invoke-virtual {v1, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
  
 diff --git a/smali_classes5/com/samsung/android/audio/Rune.smali b/smali_classes5/com/samsung/android/audio/Rune.smali
-index fb0d1edf..621e79af 100644
+index fb0d1edf..112011ff 100644
 --- a/smali_classes5/com/samsung/android/audio/Rune.smali
 +++ b/smali_classes5/com/samsung/android/audio/Rune.smali
+@@ -250,7 +250,7 @@
+ 
+ .field public static final blacklist SEC_AUDIO_SUPPORT_ACH_RINGTONE:Z
+ 
+-.field public static final blacklist SEC_AUDIO_SUPPORT_DUAL_SPEAKER:Z = true
++.field public static final blacklist SEC_AUDIO_SUPPORT_DUAL_SPEAKER:Z = false
+ 
+ .field public static final blacklist SEC_AUDIO_SUPPORT_FOLD_STATE:Z = false
+ 
+@@ -309,7 +309,7 @@
+ .method static constructor blacklist <clinit>()V
+     .locals 10
+ 
+-    const-string v0, "2"
++    const-string v0, "1"
+ 
+     invoke-static {v0}, Ljava/lang/Integer;->valueOf(Ljava/lang/String;)Ljava/lang/Integer;
+ 
 @@ -423,9 +423,11 @@
  
      sput-boolean v2, Lcom/samsung/android/audio/Rune;->SEC_AUDIO_SUPPORT_SOUND_THEME:Z

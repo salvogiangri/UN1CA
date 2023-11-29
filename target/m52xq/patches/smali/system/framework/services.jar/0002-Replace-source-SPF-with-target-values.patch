@@ -1,15 +1,29 @@
-From 94bece3dd7bda81fe2ac46443dd60ef8295f7f1c Mon Sep 17 00:00:00 2001
+From c5f80f05861baf8c7071b246b22b94773bad56d8 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 29 Nov 2023 00:46:54 +0100
+Date: Wed, 29 Nov 2023 01:40:48 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
- .../biometrics/sensors/fingerprint/FingerprintUtils.smali     | 2 +-
- .../android/hardware/display/SemMdnieManagerService.smali     | 2 +-
- .../android/server/enterprise/hdm/HdmVendorController.smali   | 2 +-
- .../com/android/server/power/PowerManagerUtil.smali           | 4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ smali/com/android/server/audio/AudioService.smali               | 2 +-
+ .../biometrics/sensors/fingerprint/FingerprintUtils.smali       | 2 +-
+ .../android/hardware/display/SemMdnieManagerService.smali       | 2 +-
+ .../com/android/server/enterprise/hdm/HdmVendorController.smali | 2 +-
+ smali_classes3/com/android/server/power/PowerManagerUtil.smali  | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/smali/com/android/server/audio/AudioService.smali b/smali/com/android/server/audio/AudioService.smali
+index 3969eea3..ccd35389 100644
+--- a/smali/com/android/server/audio/AudioService.smali
++++ b/smali/com/android/server/audio/AudioService.smali
+@@ -4562,7 +4562,7 @@
+ 
+     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->println(Z)V
+ 
 diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
 index 484cd1a5..1803de9c 100644
 --- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
@@ -50,26 +64,17 @@ index 8f57af8e..2b5d17ad 100644
      invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
 diff --git a/smali_classes3/com/android/server/power/PowerManagerUtil.smali b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
-index f1163443..1b786c5c 100644
+index f1163443..502868b2 100644
 --- a/smali_classes3/com/android/server/power/PowerManagerUtil.smali
 +++ b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
-@@ -327,7 +327,7 @@
-     :goto_7
-     sput-boolean v11, Lcom/android/server/power/PowerManagerUtil;->EUREKA_PROJECT:Z
+@@ -845,7 +845,7 @@
  
--    const-string v12, "5"
-+    const-string v12, "3"
+     sput-boolean v11, Lcom/android/server/power/PowerManagerUtil;->SEC_FEATURE_HQM_SEND_LBHD_HIGHEST:Z
  
-     invoke-static {v12}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
  
-@@ -989,7 +989,7 @@
-     :goto_19
-     sput-boolean v0, Lcom/android/server/power/PowerManagerUtil;->SEC_FEATURE_HOMEHUB:Z
- 
--    const-string v0, "33"
-+    const-string v0, "30"
- 
-     invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+     sput-boolean v0, Lcom/android/server/power/PowerManagerUtil;->SECURITY_FINGERPRINT_IN_DISPLAY:Z
  
 -- 
 2.43.0
