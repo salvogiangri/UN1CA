@@ -193,6 +193,9 @@ DO_RECOMPILE()
     if [ -f "${APK_PATH%/*}/$APK_NAME.prof" ]; then
         REMOVE_FROM_WORK_DIR "${APK_PATH%/*}/$APK_NAME.prof"
     fi
+    if [ -f "${APK_PATH%/*}/$APK_NAME.bprof" ]; then
+        REMOVE_FROM_WORK_DIR "${APK_PATH%/*}/$APK_NAME.bprof"
+    fi
 }
 
 source "$OUT_DIR/config.sh"
