@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091
 
-set -e
+set -Eeo pipefail
 START=$SECONDS
 
 # [
@@ -72,19 +72,19 @@ if $FORCE; then
 fi
 
 if $BUILD_ROM; then
-    bash -e "$SRC_DIR/scripts/download_fw.sh"
-    bash -e "$SRC_DIR/scripts/extract_fw.sh"
+    bash "$SRC_DIR/scripts/download_fw.sh"
+    bash "$SRC_DIR/scripts/extract_fw.sh"
 
     echo -e "- Creating work dir..."
-    bash -e "$SRC_DIR/scripts/internal/create_work_dir.sh"
+    bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
 
     echo -e "\n- Applying debloat list..."
-    bash -e "$SRC_DIR/scripts/internal/apply_debloat.sh"
+    bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
     echo -e "\n- Applying ROM patches..."
-    find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash -e {} \;
+    find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash {} \;
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
-        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash -e {} \;
+        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash {} \;
 
     echo ""
     echo -n "$WORK_DIR_HASH" > "$WORK_DIR/.completed"
@@ -94,7 +94,7 @@ fi
 
 if $BUILD_ZIP; then
     echo "- Building ROM zip..."
-    bash -e "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
+    bash "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
     echo ""
 fi
 
