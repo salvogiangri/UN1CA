@@ -26,6 +26,14 @@ overlay/SoftapOverlay6GHz
 overlay/SoftapOverlayOWE
 "
 
+# HDCP
+SYSTEM_DEBLOAT+="
+system/bin/dhkprov
+system/bin/qchdcpkprov
+system/etc/init/dhkprov.rc
+system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
+"
+
 # QCC
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
