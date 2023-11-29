@@ -39,6 +39,6 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libepm.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/lipkeyutils.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libknox_filemanager.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libpersona.so"
-cp -a --preserve=all "$SRC_DIR/unica/patches/knox/"* "$WORK_DIR/system/system"
+cp -a --preserve=all "$SRC_DIR/unica/packages/knox/"* "$WORK_DIR/system/system"
 
 exit 0

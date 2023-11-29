@@ -81,6 +81,9 @@ if $BUILD_ROM; then
     echo -e "\n- Applying debloat list..."
     bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
+    echo -e "\n- Applying ROM packages..."
+    find "$SRC_DIR/unica/packages" -maxdepth 1 -executable -type f -exec bash {} \;
+
     echo -e "\n- Applying ROM patches..."
     find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash {} \;
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \

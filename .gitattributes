@@ -10,8 +10,8 @@ target/m52xq/patches/assistant/** binary
 external/signapk/libconscrypt_openjdk_jni.so filter=lfs diff=lfs merge=lfs -text
 external/signapk/signapk.jar filter=lfs diff=lfs merge=lfs -text
 unica/flashable-zip/updater filter=lfs diff=lfs merge=lfs -text
-unica/patches/fod/** filter=lfs diff=lfs merge=lfs -text
-unica/patches/knox/** filter=lfs diff=lfs merge=lfs -text
-unica/patches/vndk/** filter=lfs diff=lfs merge=lfs -text
+unica/packages/fod/** filter=lfs diff=lfs merge=lfs -text
+unica/packages/knox/** filter=lfs diff=lfs merge=lfs -text
+unica/packages/vndk/** filter=lfs diff=lfs merge=lfs -text
 target/a52sxq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
 target/m52xq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text

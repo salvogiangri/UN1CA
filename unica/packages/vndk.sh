@@ -36,7 +36,7 @@ if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
 
         rm -f "$SYS_EXT_DIR/apex/com.android.vndk.v$SOURCE_VNDK_VERSION.apex"
         cp --preserve=all \
-            "$SRC_DIR/unica/patches/vndk/com.android.vndk.v$TARGET_VNDK_VERSION.apex" "$SYS_EXT_DIR/apex/com.android.vndk.v$TARGET_VNDK_VERSION.apex"
+            "$SRC_DIR/unica/packages/vndk/com.android.vndk.v$TARGET_VNDK_VERSION.apex" "$SYS_EXT_DIR/apex/com.android.vndk.v$TARGET_VNDK_VERSION.apex"
         sed -i "s/com\\\.android\\\.vndk\\\.v$SOURCE_VNDK_VERSION/com\\\.android\\\.vndk\\\.v$TARGET_VNDK_VERSION/g" \
             "$WORK_DIR/configs/file_context-$PARTITION"
         sed -i "s/com.android.vndk.v$SOURCE_VNDK_VERSION/com.android.vndk.v$TARGET_VNDK_VERSION/g" \
