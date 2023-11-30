@@ -14,6 +14,26 @@ OUT_DIR="$SRC_DIR/out"
 FW_DIR="$OUT_DIR/fw"
 WORK_DIR="$OUT_DIR/work_dir"
 
+REMOVE_FROM_WORK_DIR()
+{
+    local FILE_PATH="$1"
+
+    if [ -e "$FILE_PATH" ]; then
+        local FILE
+        local PARTITION
+        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
+        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
+
+        rm -rf "$FILE_PATH"
+
+        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+        FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+    fi
+}
+
 source "$OUT_DIR/config.sh"
 # ]
 
@@ -50,5 +70,24 @@ for blob in $BLOBS_LIST
 do
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}$blob" "$WORK_DIR$blob"
 done
+
+echo "Replacing saiv blobs with stock"
+BLOBS_LIST="
+/system/system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
+/system/system/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
+"
+for blob in $BLOBS_LIST
+do
+    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}$blob" "$WORK_DIR$blob"
+done
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/saiv"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/saiv" "$WORK_DIR/system/system/saiv"
+while read -r i; do
+    FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
+    [ -d "$i" ] && echo "$FILE 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+    [ -f "$i" ] && echo "$FILE 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+    FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+    echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
+done <<< "$(find "$WORK_DIR/system/system/saiv")"
 
 exit 0
