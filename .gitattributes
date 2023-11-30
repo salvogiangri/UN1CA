@@ -5,6 +5,7 @@
 unica/security/*.pk8 binary
 target/a52sxq/patches/assistant/** binary
 target/m52xq/patches/assistant/** binary
+*.png binary
 
 # Git LFS
 external/signapk/libconscrypt_openjdk_jni.so filter=lfs diff=lfs merge=lfs -text
