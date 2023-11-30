@@ -96,20 +96,26 @@ system/etc/init/samsung_pass_authenticator_service.rc
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.app.kfa.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.authfw.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.carkey.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.kgclient.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
+system/etc/sysconfig/digitalkey.xml
+system/etc/sysconfig/preinstalled-packages-com.samsung.android.dkey.xml
 system/etc/sysconfig/preinstalled-packages-com.samsung.android.spayfw.xml
 system/etc/sysconfig/samsungauthframework.xml
 system/etc/sysconfig/samsungpassapp.xml
 system/hidden/SmartTutor
 system/priv-app/AuthFramework
+system/priv-app/DigitalKey
 system/priv-app/FotaAgent
 system/priv-app/KnoxAIFrameworkApp
 system/priv-app/KnoxGuard
 system/priv-app/OneDrive_Samsung_v3
 system/priv-app/PaymentFramework
+system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
 "
 
