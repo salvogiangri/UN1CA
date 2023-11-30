@@ -23,3 +23,6 @@ ro.security.bio.release=
 ro.security.mdf.ux=
 ro.security.fips.ux=Disabled
 ro.security.fips_bssl.ver=
+
+# Disable HDCP in WFD
+wlan.wfd.hdcp=disable
