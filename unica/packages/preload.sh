@@ -24,6 +24,11 @@ DOWNLOAD_APK()
 }
 # ]
 
+# Patched GoodLock Manager @corsicanu
+# https://github.com/corsicanu/goodlock_dump
+DOWNLOAD_APK "https://github.com/corsicanu/goodlock_dump/raw/main/GoodLock_patched.apk" \
+    "GoodLock/GoodLock.apk"
+
 sed -i "/system\/preload/d" "$WORK_DIR/configs/fs_config-system" \
     && sed -i "/system\/preload/d" "$WORK_DIR/configs/file_context-system"
 while read -r i; do
