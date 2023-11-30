@@ -38,6 +38,9 @@ SET_PROP()
             sed -i "$(sed -n "/^${PROP}\b/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
         else
             echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            if ! grep -q "Added by unica" "$FILE"; then
+                echo "# Added by unica/patches/apply_props.sh -->" >> "$FILE"
+            fi
             echo "$PROP=$VALUE" >> "$FILE"
         fi
     fi
