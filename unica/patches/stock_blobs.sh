@@ -1,8 +1,7 @@
 #====================================================
-# FILE:         bootanimation.sh
+# FILE:         stock_blobs.sh
 # AUTHOR:       BlackMesa123
-# DESCRIPTION:  Replace source boot animation blobs
-#               with stock ones
+# DESCRIPTION:  Replace source blobs with target ones
 #====================================================
 
 # shellcheck disable=SC1091
@@ -18,11 +17,10 @@ WORK_DIR="$OUT_DIR/work_dir"
 source "$OUT_DIR/config.sh"
 # ]
 
-echo "Replacing boot animation blobs with stock"
-
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
+echo "Replacing boot animation blobs with stock"
 BLOBS_LIST="
 /system/system/media/battery_error.spi
 /system/system/media/battery_lightning_fast.spi
