@@ -108,6 +108,7 @@ system/etc/sysconfig/preinstalled-packages-com.samsung.android.spayfw.xml
 system/etc/sysconfig/samsungauthframework.xml
 system/etc/sysconfig/samsungpassapp.xml
 system/hidden/SmartTutor
+system/preload/Facebook_stub_preload
 system/priv-app/AuthFramework
 system/priv-app/DigitalKey
 system/priv-app/FotaAgent
