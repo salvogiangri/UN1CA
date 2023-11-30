@@ -90,4 +90,15 @@ while read -r i; do
     echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
 done <<< "$(find "$WORK_DIR/system/system/saiv")"
 
+echo "Replacing cameradata blobs with stock"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/cameradata"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/cameradata" "$WORK_DIR/system/system/cameradata"
+while read -r i; do
+    FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
+    [ -d "$i" ] && echo "$FILE 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+    [ -f "$i" ] && echo "$FILE 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+    FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+    echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
+done <<< "$(find "$WORK_DIR/system/system/cameradata")"
+
 exit 0
