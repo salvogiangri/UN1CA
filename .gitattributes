@@ -2,17 +2,15 @@
 * text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
-unica/security/*.pk8 binary
-target/a52sxq/patches/assistant/** binary
-target/m52xq/patches/assistant/** binary
+unica/flashable-zip/updater binary
+unica/packages/fod/** binary
+unica/packages/knox/** binary
+unica/packages/vndk/30/** binary
+target/a52sxq/patches/wpss/firmware/** binary
+target/m52xq/patches/wpss/firmware/** binary
+*.apk binary
+*.apex binary
+*.so binary
+*.jar binary
+*.pk8 binary
 *.png binary
-
-# Git LFS
-external/signapk/libconscrypt_openjdk_jni.so filter=lfs diff=lfs merge=lfs -text
-external/signapk/signapk.jar filter=lfs diff=lfs merge=lfs -text
-unica/flashable-zip/updater filter=lfs diff=lfs merge=lfs -text
-unica/packages/fod/** filter=lfs diff=lfs merge=lfs -text
-unica/packages/knox/** filter=lfs diff=lfs merge=lfs -text
-unica/packages/vndk/** filter=lfs diff=lfs merge=lfs -text
-target/a52sxq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text
-target/m52xq/patches/wpss/firmware/** filter=lfs diff=lfs merge=lfs -text

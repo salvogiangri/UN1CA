@@ -35,8 +35,14 @@ if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
         echo "Adding VNDK v$TARGET_VNDK_VERSION APEX package"
 
         rm -f "$SYS_EXT_DIR/apex/com.android.vndk.v$SOURCE_VNDK_VERSION.apex"
-        cp --preserve=all \
-            "$SRC_DIR/unica/packages/vndk/com.android.vndk.v$TARGET_VNDK_VERSION.apex" "$SYS_EXT_DIR/apex/com.android.vndk.v$TARGET_VNDK_VERSION.apex"
+        if [ "$TARGET_VNDK_VERSION" -eq 30 ]; then
+            cat "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex.00" \
+                "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex.01" \
+                "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex.02" > "$SYS_EXT_DIR/apex/com.android.vndk.v30.apex"
+        else
+            cp --preserve=all \
+                "$SRC_DIR/unica/packages/vndk/$TARGET_VNDK_VERSION/com.android.vndk.v$TARGET_VNDK_VERSION.apex" "$SYS_EXT_DIR/apex/com.android.vndk.v$TARGET_VNDK_VERSION.apex"
+        fi
         sed -i "s/com\\\.android\\\.vndk\\\.v$SOURCE_VNDK_VERSION/com\\\.android\\\.vndk\\\.v$TARGET_VNDK_VERSION/g" \
             "$WORK_DIR/configs/file_context-$PARTITION"
         sed -i "s/com.android.vndk.v$SOURCE_VNDK_VERSION/com.android.vndk.v$TARGET_VNDK_VERSION/g" \
