@@ -18,7 +18,7 @@ DOWNLOAD_APK()
     local URL="$1"
     local APK_PATH="system/preload/$2"
 
-    echo "Downloading /$APK_PATH"
+    echo "Adding $(basename "$APK_PATH") to preload apps"
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
     curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$URL"
 }
@@ -39,7 +39,6 @@ while read -r i; do
     echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
 done <<< "$(find "$WORK_DIR/system/system/preload")"
 
-echo "Regenerating /system/etc/vpl_apks_count_list.txt"
 rm -f "$WORK_DIR/system/system/etc/vpl_apks_count_list.txt"
 while read -r i; do
     FILE="$(echo "$i" | sed "s.$WORK_DIR/system..")"
