@@ -33,7 +33,7 @@ fi
 
 # One UI 6-compatible camera-feature.xml
 echo "Replacing camera-feature.xml"
-cp -a --preserve=all "$SRC_DIR/unica/target/a52sxq/patches/camera/camera-feature.xml" \
+cp -a --preserve=all "$SRC_DIR/target/a52sxq/patches/camera/camera-feature.xml" \
     "$WORK_DIR/system/system/cameradata/camera-feature.xml"
 
 exit 0
