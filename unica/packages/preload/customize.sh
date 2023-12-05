@@ -1,17 +1,4 @@
-#====================================================
-# FILE:         preload.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Add custom preload apps in ROM
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
+SKIPUNZIP=1
 
 DOWNLOAD_APK()
 {
@@ -22,7 +9,6 @@ DOWNLOAD_APK()
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
     curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$URL"
 }
-# ]
 
 # Patched GoodLock Manager @corsicanu
 # https://github.com/corsicanu/goodlock_dump
@@ -44,5 +30,3 @@ while read -r i; do
     FILE="$(echo "$i" | sed "s.$WORK_DIR/system..")"
     echo "$FILE" >> "$WORK_DIR/system/system/etc/vpl_apks_count_list.txt"
 done <<< "$(find "$WORK_DIR/system/system/preload" -name "*.apk")"
-
-exit 0

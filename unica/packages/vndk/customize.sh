@@ -1,26 +1,4 @@
-#====================================================
-# FILE:         vndk.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Check the source VNDK package and
-#               replaces it if it's mismatched from
-#               target device. Available APEXs:
-#               - v30 (SM-A736B, DWK2)
-#               - v31 (SM-S901B, DWK4)
-#               - v32 (SM-F936B, ZWJJ)
-#               - v33 (SM-S911B, BWK5)
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
-
-source "$OUT_DIR/config.sh"
-# ]
+SKIPUNZIP=1
 
 if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
     if $TARGET_HAS_SYSTEM_EXT; then
@@ -49,7 +27,9 @@ if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
             "$WORK_DIR/configs/fs_config-$PARTITION"
 
         sed -i "s/version>$SOURCE_VNDK_VERSION/version>$TARGET_VNDK_VERSION/g" "$SYS_EXT_DIR/etc/vintf/manifest.xml"
+    else
+        echo "VNDK v$TARGET_VNDK_VERSION apex is already in place. Ignoring"
     fi
+else
+    echo "SOURCE_VNDK_VERSION and TARGET_VNDK_VERSION are the same. Ignoring"
 fi
-
-exit 0

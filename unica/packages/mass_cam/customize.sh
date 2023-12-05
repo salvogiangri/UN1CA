@@ -1,18 +1,4 @@
-#====================================================
-# FILE:         mass_cam.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Check for target camera app variant
-#               and replace accordingly if required.
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
+SKIPUNZIP=1
 
 REMOVE_FROM_WORK_DIR()
 {
@@ -34,9 +20,6 @@ REMOVE_FROM_WORK_DIR()
     fi
 }
 
-source "$OUT_DIR/config.sh"
-# ]
-
 if ! $SOURCE_HAS_MASS_CAMERA_APP; then
     if $TARGET_HAS_MASS_CAMERA_APP; then
         echo "Adding Samsung Camera mass app"
@@ -55,7 +38,9 @@ if ! $SOURCE_HAS_MASS_CAMERA_APP; then
                 echo "system/app/FunModeSDK/FunModeSDK.apk 0 0 644 capabilities=0x0"
             } >> "$WORK_DIR/configs/fs_config-system"
         fi
+    else
+        echo "TARGET_HAS_MASS_CAMERA_APP is not set. Ignoring"
     fi
+else
+    echo "SOURCE_HAS_MASS_CAMERA_APP is set. Ignoring"
 fi
-
-exit 0

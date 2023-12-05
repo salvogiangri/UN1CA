@@ -75,7 +75,7 @@ if $BUILD_ROM; then
     bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
     echo -e "\n- Applying ROM packages..."
-    find "$SRC_DIR/unica/packages" -maxdepth 1 -executable -type f -exec bash {} \;
+    bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/packages"
 
     echo -e "\n- Applying ROM patches..."
     find "$SRC_DIR/unica/patches" -maxdepth 1 -executable -type f -exec bash {} \;
