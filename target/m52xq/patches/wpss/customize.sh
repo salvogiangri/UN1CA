@@ -1,24 +1,3 @@
-#====================================================
-# FILE:         wpss.sh
-# AUTHOR:       Simon1511
-# DESCRIPTION:  Add support for all the bootloader
-#               revisions
-#====================================================
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
-# ]
-
-echo "Add custom wpss firmware mount"
-
-[[ -f "$WORK_DIR/vendor/etc/init/wifi_firmware.rc" ]] && exit 0
-
-rm -f "$WORK_DIR/vendor/firmware/wpss."*
-cp -a --preserve=all "$SRC_DIR/target/m52xq/patches/wpss/"* "$WORK_DIR/vendor"
 {
     echo "/vendor/etc/init/wifi_firmware\.rc u:object_r:vendor_configs_file:s0"
     echo "/vendor/firmware/wpss\.b00 u:object_r:vendor_firmware_file:s0"
@@ -106,5 +85,3 @@ cp -a --preserve=all "$SRC_DIR/target/m52xq/patches/wpss/"* "$WORK_DIR/vendor"
     echo "vendor/firmware/wlan/m526br/rev3/wpss.mdt 0 0 644 capabilities=0x0"
 } >> "$WORK_DIR/configs/fs_config-vendor"
 echo "(allow init_30_0 vendor_firmware_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
-
-exit 0

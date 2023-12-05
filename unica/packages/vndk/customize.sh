@@ -10,8 +10,6 @@ if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
     fi
 
     if [ ! -f "$SYS_EXT_DIR/apex/com.android.vndk.v$TARGET_VNDK_VERSION.apex" ]; then
-        echo "Adding VNDK v$TARGET_VNDK_VERSION APEX package"
-
         rm -f "$SYS_EXT_DIR/apex/com.android.vndk.v$SOURCE_VNDK_VERSION.apex"
         if [ "$TARGET_VNDK_VERSION" -eq 30 ]; then
             cat "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex.00" \

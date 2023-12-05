@@ -80,7 +80,7 @@ if $BUILD_ROM; then
     echo -e "\n- Applying ROM patches..."
     bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/patches"
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
-        && find "$SRC_DIR/target/$TARGET_CODENAME/patches" -maxdepth 1 -executable -type f -exec bash {} \;
+        && bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/target/$TARGET_CODENAME/patches"
 
     echo -e "\n- Recompiling APKs/JARs..."
     while read -r i; do

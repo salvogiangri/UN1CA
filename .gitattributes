@@ -6,8 +6,8 @@ unica/flashable-zip/updater binary
 unica/packages/fod/** binary
 unica/packages/knox/** binary
 unica/packages/vndk/30/** binary
-target/a52sxq/patches/wpss/firmware/** binary
-target/m52xq/patches/wpss/firmware/** binary
+target/a52sxq/patches/wpss/vendor/firmware/** binary
+target/m52xq/patches/wpss/vendor/firmware/** binary
 *.apk binary
 *.apex binary
 *.so binary

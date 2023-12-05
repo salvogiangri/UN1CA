@@ -58,6 +58,8 @@ APPLY_MODULE()
         exit 1
     fi
 
+    [[ "$MODPATH" == *"$TARGET_CODENAME/patches/props"* ]] && return 0
+
     if [ ! -f "$MODPATH/module.prop" ]; then
         echo "File not found: $MODPATH/module.prop"
         exit 1

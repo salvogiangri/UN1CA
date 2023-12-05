@@ -19,6 +19,6 @@ REMOVE_FROM_WORK_DIR()
 }
 
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libepm.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/lipkeyutils.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libkeyutils.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libknox_filemanager.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libpersona.so"

@@ -1,19 +1,4 @@
-#====================================================
-# FILE:         miscs.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Misc patches
-#====================================================
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-FW_DIR="$OUT_DIR/fw"
-WORK_DIR="$OUT_DIR/work_dir"
-
-source "$OUT_DIR/config.sh"
-# ]
+SKIPUNZIP=1
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
@@ -30,5 +15,3 @@ sed -i "/# Removed by /d" "$WORK_DIR/product/etc/build.prop" \
     && sed -i "s/#bluetooth./bluetooth./g" "$WORK_DIR/product/etc/build.prop" \
     && sed -i "s/?=/=/g" "$WORK_DIR/product/etc/build.prop" \
     && sed -i "$(sed -n "/provisioning.hostname/=" "$WORK_DIR/product/etc/build.prop" | sed "2p;d")d" "$WORK_DIR/product/etc/build.prop"
-
-exit 0

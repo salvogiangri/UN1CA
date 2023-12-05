@@ -22,7 +22,6 @@ REMOVE_FROM_WORK_DIR()
 
 if ! $SOURCE_HAS_MASS_CAMERA_APP; then
     if $TARGET_HAS_MASS_CAMERA_APP; then
-        echo "Adding Samsung Camera mass app"
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SamsungCamera/oat"
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
         cp -a --preserve=all "$SRC_DIR/unica/packages/mass_cam/"* "$WORK_DIR/system/system"

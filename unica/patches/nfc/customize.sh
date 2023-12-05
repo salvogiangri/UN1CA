@@ -3,8 +3,6 @@ SKIPUNZIP=1
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
-echo "Replacing NFC blobs with stock"
-
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci.conf" "$WORK_DIR/system/system/etc/libnfc-nci.conf"
 
 TARGET_CHIPNAME="$(grep "ro.vendor.nfc.feature.chipname" "$FW_DIR/${MODEL}_${REGION}/vendor/build.prop" | cut -d "=" -f 2)"
@@ -47,12 +45,26 @@ if [[ ! -f "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so" ]]; 
     fi
 
     if [[ "$TARGET_LIB_NAME" == "nxp"* ]] && [[ ! -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]]; then
-        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" "$WORK_DIR/system/system/lib64"
-        echo "/system/lib64/libstatslog_nfc_nxp\.so u:object_r:system_lib_file:s0" >> "$WORK_DIR/configs/file_context-system"
-        echo "system/lib64/libstatslog_nfc_nxp.so 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    elif [[ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]]; then
-        rm -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so"
-        sed -i "/libstatslog_nfc_nxp/d" "$WORK_DIR/configs/file_context-system"
-        sed -i "/libstatslog_nfc_nxp/d" "$WORK_DIR/configs/fs_config-system"
+        if [[ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]]; then
+            rm -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so"
+            sed -i "/libstatslog_nfc/d" "$WORK_DIR/configs/file_context-system"
+            sed -i "/libstatslog_nfc/d" "$WORK_DIR/configs/fs_config-system"
+        fi
+        if [[ "$TARGET_API_LEVEL" -ge 34 ]]; then
+            cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" "$WORK_DIR/system/system/lib64"
+            echo "/system/lib64/libstatslog_nfc_nxp\.so u:object_r:system_lib_file:s0" >> "$WORK_DIR/configs/file_context-system"
+            echo "system/lib64/libstatslog_nfc_nxp.so 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+        fi
+    elif [[ ! -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]]; then
+        if [[ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]]; then
+            rm -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so"
+            sed -i "/libstatslog_nfc_nxp/d" "$WORK_DIR/configs/file_context-system"
+            sed -i "/libstatslog_nfc_nxp/d" "$WORK_DIR/configs/fs_config-system"
+        fi
+        if [[ "$TARGET_API_LEVEL" -ge 34 ]]; then
+            cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc.so" "$WORK_DIR/system/system/lib64"
+            echo "/system/lib64/libstatslog_nfc\.so u:object_r:system_lib_file:s0" >> "$WORK_DIR/configs/file_context-system"
+            echo "system/lib64/libstatslog_nfc.so 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+        fi
     fi
 fi
