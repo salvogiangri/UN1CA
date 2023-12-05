@@ -1,19 +1,4 @@
-#====================================================
-# FILE:         apply_props.sh
-# AUTHOR:       BlackMesa123, xpirt
-# DESCRIPTION:  Read and applies all the ".prop"
-#               files inside the "props" folder in
-#               work_dir.
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
+SKIPUNZIP=1
 
 SET_PROP()
 {
@@ -39,7 +24,7 @@ SET_PROP()
         else
             echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
             if ! grep -q "Added by unica" "$FILE"; then
-                echo "# Added by unica/patches/apply_props.sh" >> "$FILE"
+                echo "# Added by unica/patches/apply_props/customize.sh" >> "$FILE"
             fi
             echo "$PROP=$VALUE" >> "$FILE"
         fi
@@ -70,7 +55,7 @@ READ_AND_APPLY_PROPS()
                 FILE="$WORK_DIR/vendor/build.prop"
                 ;;
             *)
-                return 1
+                continue
                 ;;
         esac
 
@@ -92,11 +77,7 @@ READ_AND_APPLY_PROPS()
     done
 }
 
-source "$OUT_DIR/config.sh"
-# ]
-
 READ_AND_APPLY_PROPS "$SRC_DIR/unica/patches/props"
+
 [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches/props" ]] \
     && READ_AND_APPLY_PROPS "$SRC_DIR/target/$TARGET_CODENAME/patches/props"
-
-exit 0

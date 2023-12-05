@@ -1,22 +1,4 @@
-#====================================================
-# FILE:         nfc.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Replace source NFC system blobs with
-#               stock ones
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-FW_DIR="$OUT_DIR/fw"
-WORK_DIR="$OUT_DIR/work_dir"
-
-source "$OUT_DIR/config.sh"
-# ]
+SKIPUNZIP=1
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
@@ -74,5 +56,3 @@ if [[ ! -f "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so" ]]; 
         sed -i "/libstatslog_nfc_nxp/d" "$WORK_DIR/configs/fs_config-system"
     fi
 fi
-
-exit 0

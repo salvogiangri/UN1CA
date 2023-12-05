@@ -1,18 +1,4 @@
-#====================================================
-# FILE:         stock_blobs.sh
-# AUTHOR:       BlackMesa123
-# DESCRIPTION:  Replace source blobs with target ones
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-FW_DIR="$OUT_DIR/fw"
-WORK_DIR="$OUT_DIR/work_dir"
+SKIPUNZIP=1
 
 REMOVE_FROM_WORK_DIR()
 {
@@ -33,9 +19,6 @@ REMOVE_FROM_WORK_DIR()
         sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
-
-source "$OUT_DIR/config.sh"
-# ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
@@ -100,5 +83,3 @@ while read -r i; do
     FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
     echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
 done <<< "$(find "$WORK_DIR/system/system/cameradata")"
-
-exit 0

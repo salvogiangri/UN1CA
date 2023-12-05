@@ -1,19 +1,4 @@
-#====================================================
-# FILE:         floating_feature.sh
-# AUTHOR:       BlackMesa123, ImbaWind, xpirt
-# DESCRIPTION:  Read and applies all the configs
-#               defined in the "sff.sh" file inside
-#               the target folder.
-#====================================================
-
-# shellcheck disable=SC1091
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
+SKIPUNZIP=1
 
 SET_CONFIG()
 {
@@ -35,7 +20,7 @@ SET_CONFIG()
             echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
             sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
             if ! grep -q "Added by unica" "$FILE"; then
-                echo "    <!-- Added by unica/patches/floating_feature.sh -->" >> "$FILE"
+                echo "    <!-- Added by unica/patches/floating_feature/customize.sh -->" >> "$FILE"
             fi
             echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
             echo "</SecFloatingFeatureSet>" >> "$FILE"
@@ -64,9 +49,6 @@ READ_AND_APPLY_CONFIGS()
     fi
 }
 
-source "$OUT_DIR/config.sh"
-# ]
-
 # Apply target floating feature
 READ_AND_APPLY_CONFIGS
 
@@ -80,5 +62,3 @@ fi
 
 # Smart Tutor
 SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_SMARTTUTOR_PACKAGES_PATH" --delete
-
-exit 0
