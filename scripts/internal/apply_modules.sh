@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# shellcheck disable=SC1091,SC2015
+
 set -Eeu
 
 #[
@@ -23,8 +25,9 @@ APPLY_SMALI_PATCHES()
 {
     local PATCHES_PATH="$1"
     local TARGET="$2"
+    local PATCHES
 
-    local PATCHES="$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" -printf "%p ")"
+    PATCHES="$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" -printf "%p " | sort)"
 
     [ ! -d "$APKTOOL_DIR$TARGET" ] && bash "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
 
