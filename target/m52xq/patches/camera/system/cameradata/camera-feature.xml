@@ -7,7 +7,7 @@
     <local name="SHOOTING_MODE_VIDEO" back="VIDEO" front="VIDEO" enable="true" more="false" order="4" />
 
     <local name="SHOOTING_MODE_PRO" back="PRO" enable="true" more="true" order="5" />
-    <local name="SHOOTING_MODE_PRO_VIDEO" back="PRO_VIDEO" enable="true" more="true" order="6"/>    
+    <local name="SHOOTING_MODE_PRO_VIDEO" back="PRO_VIDEO" enable="true" more="true" order="6"/>
     <local name="SHOOTING_MODE_SINGLE_TAKE_VIDEO" back="SINGLE_TAKE_VIDEO" front="SINGLE_TAKE_VIDEO" enable="true" more="true" order="7" preview-size="1440x1080" capture-size="3264x2448" front-capture-size="2944x2208" />
     <local name="SHOOTING_MODE_NIGHT" back="NIGHT" front="NIGHT" enable="true" more="true" order="8" />
     <local name="SHOOTING_MODE_FOOD" enable="true" back="FOOD" more="true" order="9" />
@@ -24,13 +24,6 @@
     <local name="BACK_CAMERA_RESOLUTION_16BY9_LARGE" value="4624x2604" />
     <local name="BACK_CAMERA_RESOLUTION_1BY1_LARGE" value="3456x3456" />
     <local name="BACK_CAMERA_RESOLUTION_FULL_RATIO" value="4624x2084" />
-
-    <!-- Back Night shot low performance resolution -->
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_LARGE" value="4000x3000" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_MEDIUM" value="4000x3000" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_16BY9_LARGE" value="4000x2252" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_1BY1_LARGE" value="2992x2992" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_FULL_RATIO" value="4000x1800" />
 
     <!-- Back camera high resolution -->
     <local name="BACK_CAMERA_RESOLUTION_HIGH_RESOLUTION_FULL_RATIO" value="4624x2084"/>
@@ -52,6 +45,13 @@
     <local name="BACK_MACRO_CAMERA_RESOLUTION_16BY9" value="2560x1440" />
     <local name="BACK_MACRO_CAMERA_RESOLUTION_1BY1" value="1920x1920" />
     <local name="BACK_MACRO_CAMERA_RESOLUTION_FULL_RATIO" value="2576x1160" />
+
+    <!-- Capture resolution - BACK NIGHT -->
+    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_LARGE" value="4000x3000" />
+    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_MEDIUM" value="4000x3000" />
+    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_16BY9_LARGE" value="4000x2252" />
+    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_1BY1_LARGE" value="2992x2992" />
+    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_FULL_RATIO" value="4000x1800" />
 
     <!-- Capture resolution - FRONT -->
     <local name="FRONT_CAMERA_PICTURE_DEFAULT_RESOLUTION" value="4000x3000" />
@@ -126,7 +126,6 @@
     <local name="SUPPORT_COMPOSITION_GUIDE" value="true" />
     <local name="SUPPORT_MACRO_NUDGE" value="true" />
     <local name="SUPPORT_SCENE_DETECTION_LITE" value="false" />
-	<local name="SUPPORT_NO_NIGHT_ICON_IN_HIGH_RESOLUTION" value="true" />
 
     <!-- Video features -->
     <local name="SUPPORT_BACK_VIDEO_BEAUTY" value="true"/>
@@ -154,8 +153,8 @@
     <local name="SINGLE_TAKE_CAPTURE_INTERVAL" value="1000"/>
     <local name="REAR_SINGLE_TAKE_CAPTURE_INTERVAL" value="1200"/>
     <local name="SINGLE_TAKE_FRONT_CAMERA_DYNAMIC_FOV" value="false"/>
-	<local name="SINGLE_TAKE_PHOTO_LOW_PERFORMANCE" value="true" />
-    <local name="SINGLE_TAKE_RECORDING_DURATION" value="10"/>
+    <local name="SINGLE_TAKE_PHOTO_LOW_PERFORMANCE" value="true" />
+    <local name="SINGLE_TAKE_RECORDING_DURATION" value="10" />
     <local name="SINGLE_TAKE_USING_BEAUTY" value="false" />
     <local name="SINGLE_TAKE_USING_CONTINUOUS_AF" value="true"/>
     <local name="SINGLE_TAKE_USING_SCENE_OPTIMIZER" value="false"/>
@@ -168,6 +167,7 @@
     <local name="SUPPORT_NIGHT_MODE_FRONT_ANGLE" value="true" />
     <local name="SUPPORT_NIGHT_MODE_REAR_LENS" value="true" />
     <local name="SUPPORT_NIGHT_MODE_ZOOM" value="true" />
+    <local name="LOW_PERFORMANCE_REAR_NIGHT_SHOT" value="true"/>	
 
     <!-- Super Slow Motion features -->
     <local name="SUPPORT_SUPER_SLOW_MOTION_AUTO_DETECTION" value="false"/>
@@ -179,6 +179,7 @@
 
     <!-- Hyperlapse features -->
     <local name="SUPPORT_HYPER_LAPSE_NIGHT" value="true" />
+    <local name="SUPPORT_HYPER_LAPSE_SUPER_STEADY" value="true" />
 
     <!-- Multi-camera features -->
     <local name="BACK_WIDE_CAMERA_ID" value="2"/>
@@ -207,7 +208,7 @@
 	<!-- Special Features - Camera Settings -->
     <local name="SUPPORT_HEIF_FORMAT" value="true"/>
     <local name="SUPPORT_AUTO_HDR_MENU" value="true"/>
-	<local name="SUPPORT_ADVANCED_RECORDING_OPTIONS" value="false"/>
+    <local name="SUPPORT_ADVANCED_RECORDING_OPTIONS" value="false"/>
     <local name="SUPPORT_TRUE_HDR" value="true"/>
     <local name="SUPPORT_3HDR_RECORDING" value="true"/>
     <!-- Special Features - Capture -->
