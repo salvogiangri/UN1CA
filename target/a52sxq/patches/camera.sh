@@ -1,7 +1,8 @@
 #====================================================
 # FILE:         camera.sh
-# AUTHOR:       BlackMesa123, DavidArsene
-# DESCRIPTION:  Various camera-related patches
+# AUTHOR:       DavidArsene
+# DESCRIPTION:  Fix camera lock for devices with a
+#               rear SLSI sensor
 #====================================================
 
 set -e
@@ -12,8 +13,8 @@ OUT_DIR="$SRC_DIR/out"
 WORK_DIR="$OUT_DIR/work_dir"
 # ]
 
-# Fix camera lock for devices with a rear SLSI sensor
 echo "Patching camera HAL"
+
 HAL_LIBS="
 $WORK_DIR/vendor/lib/hw/camera.qcom.so
 $WORK_DIR/vendor/lib/hw/com.qti.chi.override.so
@@ -23,17 +24,5 @@ $WORK_DIR/vendor/lib64/hw/com.qti.chi.override.so
 for f in $HAL_LIBS; do
     sed -i "s/ro.boot.flash.locked/ro.camera.notify_nfc/g" "$f"
 done
-
-# Fix SELinux denials
-echo "Fix camera SELinux denials"
-if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
-    echo "" >> "$WORK_DIR/vendor/ueventd.rc"
-    cat "$SRC_DIR/target/a52sxq/patches/camera/ueventd" >> "$WORK_DIR/vendor/ueventd.rc"
-fi
-
-# One UI 6-compatible camera-feature.xml
-echo "Replacing camera-feature.xml"
-cp -a --preserve=all "$SRC_DIR/target/a52sxq/patches/camera/camera-feature.xml" \
-    "$WORK_DIR/system/system/cameradata/camera-feature.xml"
 
 exit 0

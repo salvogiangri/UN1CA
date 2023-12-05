@@ -26,18 +26,6 @@ overlay/SoftapOverlay6GHz
 overlay/SoftapOverlayOWE
 "
 
-# fabric_crypto
-SYSTEM_DEBLOAT+="
-system/bin/fabric_crypto
-system/etc/init/fabric_crypto.rc
-system/etc/permissions/FabricCryptoLib.xml
-system/etc/vintf/manifest/fabric_crypto_manifest.xml
-system/framework/FabricCryptoLib.jar
-system/lib64/com.samsung.security.fabric.cryptod-V1-cpp.so
-system/lib64/vendor.samsung.hardware.security.fkeymaster-V1-cpp.so
-system/lib64/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
-"
-
 # HDCP
 SYSTEM_DEBLOAT+="
 system/bin/dhkprov

@@ -25,13 +25,6 @@ if [ ! -f "$WORK_DIR/odm/ueventd.rc" ]; then
     echo "odm/ueventd.rc 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-odm"
 fi
 
-echo "Add /spu in rootfs"
-if [ ! -d "$WORK_DIR/system/spu" ]; then
-    mkdir -p "$WORK_DIR/system/spu"
-    echo "/spu u:object_r:spu_file:s0" >> "$WORK_DIR/configs/file_context-system"
-    echo "spu 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-fi
-
 echo "Fix up /product/etc/build.prop"
 sed -i "/# Removed by /d" "$WORK_DIR/product/etc/build.prop" \
     && sed -i "s/#bluetooth./bluetooth./g" "$WORK_DIR/product/etc/build.prop" \
