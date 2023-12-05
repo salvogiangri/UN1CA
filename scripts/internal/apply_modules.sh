@@ -71,15 +71,15 @@ APPLY_MODULE()
     echo "- Processing \"$MODNAME\" by \"$MODAUTH\""
 
     if ! grep -q '^SKIPUNZIP=1$' "$MODPATH/customize.sh" 2> /dev/null; then
-        [ -d "$MODPATH/odm" ] && cp -a --preserve=all "$MODPATH/odm"* "$WORK_DIR/odm"
-        [ -d "$MODPATH/product" ] && cp -a --preserve=all "$MODPATH/product"* "$WORK_DIR/product"
-        [ -d "$MODPATH/system" ] && cp -a --preserve=all "$MODPATH/system"* "$WORK_DIR/system"
+        [ -d "$MODPATH/odm" ] && cp -a --preserve=all "$MODPATH/odm/"* "$WORK_DIR/odm"
+        [ -d "$MODPATH/product" ] && cp -a --preserve=all "$MODPATH/product/"* "$WORK_DIR/product"
+        [ -d "$MODPATH/system" ] && cp -a --preserve=all "$MODPATH/system/"* "$WORK_DIR/system/system"
         if $TARGET_HAS_SYSTEM_EXT; then
-            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext"* "$WORK_DIR/system_ext"
+            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext/"* "$WORK_DIR/system_ext"
         else
-            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext"* "$WORK_DIR/system/system/system_ext"
+            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext/"* "$WORK_DIR/system/system/system_ext"
         fi
-        [ -d "$MODPATH/vendor" ] && cp -a --preserve=all "$MODPATH/vendor"* "$WORK_DIR/vendor"
+        [ -d "$MODPATH/vendor" ] && cp -a --preserve=all "$MODPATH/vendor/"* "$WORK_DIR/vendor"
     fi
 
     [ -f "$MODPATH/customize.sh" ] && . "$MODPATH/customize.sh"

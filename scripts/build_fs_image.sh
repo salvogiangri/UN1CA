@@ -89,6 +89,7 @@ if $EXT4; then
             && echo "lost+found 0 0 700 capabilities=0x0" >> "$4" || echo "$PARTITION/lost+found 0 0 700 capabilities=0x0" >> "$4"
     fi
 
+    SPARSE_FLAG=""
     $SPARSE && SPARSE_FLAG="-s"
     { mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
         -L "$MOUNT_POINT" -i "$(echo "$INODES + $SPARE_INODES" | bc -l)" -I 256 \
@@ -99,6 +100,7 @@ elif $F2FS; then
     IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
     IMG_SIZE=${IMG_SIZE%.*}
 
+    SPARSE_FLAG=""
     $SPARSE && SPARSE_FLAG="-S"
     mkf2fsuserimg "$2/../$PARTITION.img" "$IMG_SIZE" \
         $SPARSE_FLAG -C "$4" -f "$2" \

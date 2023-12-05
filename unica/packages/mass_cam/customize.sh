@@ -24,7 +24,7 @@ if ! $SOURCE_HAS_MASS_CAMERA_APP; then
     if $TARGET_HAS_MASS_CAMERA_APP; then
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SamsungCamera/oat"
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
-        cp -a --preserve=all "$SRC_DIR/unica/packages/mass_cam/"* "$WORK_DIR/system/system"
+        cp -a --preserve=all "$SRC_DIR/unica/packages/mass_cam/system/"* "$WORK_DIR/system/system"
         if ! grep -q "FunModeSDK" "$WORK_DIR/configs/file_context-system"; then
             {
                 echo "/system/app/FunModeSDK u:object_r:system_file:s0"
