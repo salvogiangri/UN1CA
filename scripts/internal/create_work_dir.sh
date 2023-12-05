@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -18,14 +18,9 @@
 
 # shellcheck disable=SC1091
 
-set -e
+set -eu
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-FW_DIR="$OUT_DIR/fw"
-WORK_DIR="$OUT_DIR/work_dir"
-
 COPY_SOURCE_FIRMWARE()
 {
     local MODEL
@@ -105,8 +100,6 @@ COPY_TARGET_FIRMWARE()
         fi
     done
 }
-
-source "$OUT_DIR/config.sh"
 # ]
 
 mkdir -p "$WORK_DIR"

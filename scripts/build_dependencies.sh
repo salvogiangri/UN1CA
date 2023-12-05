@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,12 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -e
+set -eu
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
+JOBS="$(nproc)"
 
 CHECK_TOOLS()
 {
@@ -35,8 +33,6 @@ CHECK_TOOLS()
 
     $EXISTS
 }
-
-JOBS="$(nproc)"
 
 BUILD_ANDROID_TOOLS()
 {

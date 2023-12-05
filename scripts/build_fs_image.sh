@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,17 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC2069
-
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-
-PATH="$TOOLS_DIR:$PATH"
-# ]
+set -eu
 
 if [ "$#" != 4 ]; then
     echo "Usage: build_fs_image <fs> <dir> <file_context> <fs_config>"
@@ -100,9 +90,9 @@ if $EXT4; then
     fi
 
     $SPARSE && SPARSE_FLAG="-s"
-    mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
+    { mkuserimg_mke2fs $SPARSE_FLAG -j 0 -T 1230735600 -C "$4" \
         -L "$MOUNT_POINT" -i "$(echo "$INODES + $SPARE_INODES" | bc -l)" -I 256 \
-        "$2" "$2/../$PARTITION.img" ext4 "$MOUNT_POINT" "$IMG_SIZE" "$3" 2>&1 > /dev/null
+        "$2" "$2/../$PARTITION.img" ext4 "$MOUNT_POINT" "$IMG_SIZE" "$3" > /dev/null; } 2>&1
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)

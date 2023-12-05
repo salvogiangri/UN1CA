@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -18,13 +18,10 @@
 
 # shellcheck disable=SC1090,SC1091
 
-set -Eeu
+set -Ee
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-
-trap "rm -f $OUT_DIR/config.sh" ERR
+trap 'rm -f $OUT_DIR/config.sh' ERR
 
 GET_OFFICIAL_STATUS()
 {

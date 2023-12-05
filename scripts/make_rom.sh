@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -18,25 +18,18 @@
 
 # shellcheck disable=SC1091
 
-set -Eeo pipefail
+set -Eeuo pipefail
 START=$SECONDS
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
-
 COMMIT_HASH="$(git rev-parse HEAD)"
 CONFIG_HASH="$(sha1sum "$OUT_DIR/config.sh" | cut -d " " -f 1)"
 WORK_DIR_HASH="$(echo -n "$COMMIT_HASH$CONFIG_HASH" | sha1sum | cut -d " " -f 1)"
+# ]
 
 FORCE=false
-HASH_MATCHES=false
 BUILD_ROM=false
 BUILD_ZIP=true
-
-source "$OUT_DIR/config.sh"
-# ]
 
 while [ "$#" != 0 ]; do
     case "$1" in

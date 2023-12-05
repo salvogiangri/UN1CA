@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,19 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091,SC2069
+# shellcheck disable=SC1091
 
-set -e
+set -eu
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-TMP_DIR="$OUT_DIR/tmp"
-WORK_DIR="$OUT_DIR/work_dir"
-
-PATH="$TOOLS_DIR:$PATH"
-
 GET_SPARSE_IMG_SIZE()
 {
     local FILE_INFO
@@ -195,8 +187,6 @@ GENERATE_UPDATER_SCRIPT()
     true
 }
 
-source "$OUT_DIR/config.sh"
-
 FILE_NAME="UNICA"
 # ]
 
@@ -213,8 +203,8 @@ while read -r i; do
     [ -f "$WORK_DIR/$PARTITION.img" ] && rm -f "$WORK_DIR/$PARTITION.img"
 
     echo "Building $PARTITION.img"
-    bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM+sparse" "$WORK_DIR/$PARTITION" \
-        "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" 2>&1 > /dev/null
+     { bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM+sparse" "$WORK_DIR/$PARTITION" \
+        "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" > /dev/null; } 2>&1
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
 done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
@@ -231,7 +221,7 @@ while read -r i; do
     fi
 
     echo "Converting $PARTITION.img to $PARTITION.new.dat"
-    img2sdat -o "$TMP_DIR" "$i" 2>&1 > /dev/null \
+    { img2sdat -o "$TMP_DIR" "$i" > /dev/null; } 2>&1 \
         && rm "$i"
     echo "Compressing $PARTITION.new.dat"
     brotli --quality=6 --output="$TMP_DIR/$PARTITION.new.dat.br" "$TMP_DIR/$PARTITION.new.dat" \

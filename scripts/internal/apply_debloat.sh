@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -21,10 +21,6 @@
 set -e
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-WORK_DIR="$OUT_DIR/work_dir"
-
 DO_DEBLOAT()
 {
     local PARTITION="$1"
@@ -43,7 +39,6 @@ DO_DEBLOAT()
     fi
 }
 
-source "$OUT_DIR/config.sh"
 source "$SRC_DIR/unica/debloat.sh"
 [ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ] \
     && source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"

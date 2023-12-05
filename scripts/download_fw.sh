@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,18 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091,SC2069
+# shellcheck disable=SC1091
 
 set -e
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-ODIN_DIR="$OUT_DIR/odin"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-
-PATH="$TOOLS_DIR:$PATH"
-
 GET_LATEST_FIRMWARE()
 {
     curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
@@ -40,7 +33,7 @@ DOWNLOAD_FIRMWARE()
     PDR="$(pwd)"
 
     cd "$ODIN_DIR"
-    samfirm -m "$MODEL" -r "$REGION" 2>&1 > /dev/null \
+    { samfirm -m "$MODEL" -r "$REGION" > /dev/null; } 2>&1 \
         && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
         || exit 1
     [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && {
@@ -52,10 +45,6 @@ DOWNLOAD_FIRMWARE()
     echo ""
     cd "$PDR"
 }
-
-FORCE=false
-
-source "$OUT_DIR/config.sh"
 
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
 if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
@@ -71,6 +60,8 @@ if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
     done
 fi
 # ]
+
+FORCE=false
 
 while [ "$#" != 0 ]; do
     case "$1" in

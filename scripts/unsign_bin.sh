@@ -16,15 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -e
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-
-PATH="$TOOLS_DIR:$PATH"
-# ]
+set -eu
 
 if [ "$#" == 0 ]; then
     echo "Usage: unsign_bin <image> (<image>...)"

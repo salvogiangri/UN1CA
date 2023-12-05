@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,19 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091,SC2005,SC2069
+# shellcheck disable=SC1091
 
 set -e
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-ODIN_DIR="$OUT_DIR/odin"
-FW_DIR="$OUT_DIR/fw"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-
-PATH="$TOOLS_DIR:$PATH"
-
 GET_IMG_FS_TYPE()
 {
     if [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]]; then
@@ -86,7 +78,7 @@ EXTRACT_OS_PARTITIONS()
             tar xf "$AP_TAR" "super.img.lz4"
             lz4 -d -q --rm "super.img.lz4" "super.img.sparse"
             simg2img "super.img.sparse" "super.img" && rm "super.img.sparse"
-            lpunpack "super.img" 2>&1 > /dev/null
+            { lpunpack "super.img" > /dev/null; } 2>&1
             lpdump "super.img" > "lpdump" && rm "super.img"
         fi
 
@@ -103,7 +95,7 @@ EXTRACT_OS_PARTITIONS()
                     PREFIX=""
                     [ -d "$PARTITION" ] && rm -rf "$PARTITION"
                     mkdir -p "$PARTITION"
-                    fuse.erofs "$img" "tmp_out" 2>&1 > /dev/null
+                    { fuse.erofs "$img" "tmp_out" > /dev/null; } 2>&1
                     cp -a --preserve=all tmp_out/* "$PARTITION"
                     ;;
                 "f2fs" | "ext4")
@@ -141,7 +133,7 @@ EXTRACT_OS_PARTITIONS()
                         CAPABILITIES="0x0"
                         ;;
                 esac
-                echo "$($PREFIX stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i")" >> "fs_config-$PARTITION"
+                $PREFIX stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i" >> "fs_config-$PARTITION"
             done <<< "$($PREFIX find "tmp_out")"
             if [ "$PARTITION" = "system" ]; then
                 sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
@@ -203,10 +195,6 @@ EXTRACT_ALL()
     echo ""
 }
 
-FORCE=false
-
-source "$OUT_DIR/config.sh"
-
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
 if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
     for i in "${SOURCE_EXTRA_FIRMWARES[@]}"
@@ -221,6 +209,8 @@ if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
     done
 fi
 # ]
+
+FORCE=false
 
 while [ "$#" != 0 ]; do
     case "$1" in

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -18,17 +18,9 @@
 
 # shellcheck disable=SC1091
 
-set -e
+set -eu
 
 # [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-APKTOOL_DIR="$OUT_DIR/apktool"
-WORK_DIR="$OUT_DIR/work_dir"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-
-PATH="$TOOLS_DIR:$PATH"
-
 PRINT_USAGE()
 {
     echo "Usage: apktool d[ecode]/b[uild] <apk> (<apk>...)"
@@ -105,11 +97,11 @@ DO_DECOMPILE()
     fi
 
     if [[ "$APK_PATH" == *".jar" ]]; then
-        API="-api $SOURCE_API_LEVEL"
+        API=( "-api" "$SOURCE_API_LEVEL" )
     fi
 
     echo "Decompiling $OUT_DIR"
-    apktool -q d $API -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" "$APK_PATH"
+    apktool -q d "${API[@]}" -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" "$APK_PATH"
     sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
 
     # Workaround for U framework.jar
@@ -198,8 +190,6 @@ DO_RECOMPILE()
     fi
 }
 
-source "$OUT_DIR/config.sh"
-
 FRAMEWORK_DIR="$APKTOOL_DIR/bin/fw"
 # ]
 
@@ -235,6 +225,8 @@ case "$1" in
 esac
 
 shift
+
+FORCE=""
 
 if [[ "$1" == "-f" ]]|| [[ "$1" == "--force" ]]; then
     FORCE="-f"

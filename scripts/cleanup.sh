@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2023 BlackMesa123
 #
@@ -16,17 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC2069,SC2164
-
-# [
-SRC_DIR="$(git rev-parse --show-toplevel)"
-OUT_DIR="$SRC_DIR/out"
-ODIN_DIR="$OUT_DIR/odin"
-FW_DIR="$OUT_DIR/fw"
-APKTOOL_DIR="$OUT_DIR/apktool"
-WORK_DIR="$OUT_DIR/work_dir"
-TOOLS_DIR="$OUT_DIR/tools/bin"
-# ]
+set -eu
 
 ALL=false
 ODIN=false
@@ -112,7 +102,7 @@ if $TOOLS; then
         cd "$SRC_DIR/external/erofs-utils" && git clean -f -d -x && cd -
         cd "$SRC_DIR/external/samfirm.js" && git clean -f -d -x && cd -
         cd "$SRC_DIR/external/smali" && git clean -f -d -x && cd -
-    } 2>&1 > /dev/null
+    } > /dev/null
 fi
 
 exit 0
