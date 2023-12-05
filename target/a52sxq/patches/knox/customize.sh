@@ -1,0 +1,76 @@
+SKIPUNZIP=1
+
+REMOVE_FROM_WORK_DIR()
+{
+    local FILE_PATH="$1"
+
+    if [ -e "$FILE_PATH" ]; then
+        local FILE
+        local PARTITION
+        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
+        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
+
+        rm -rf "$FILE_PATH"
+
+        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+        FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+    fi
+}
+
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/bin/dualdard"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/init/dualdard.rc"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdualdar.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdualdar.so"
+
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/installd" "$WORK_DIR/system/system/bin"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/sdp_cryptod" "$WORK_DIR/system/system/bin"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/vdc" "$WORK_DIR/system/system/bin"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/vold" "$WORK_DIR/system/system/bin"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/init/sdp_cryptod.rc" "$WORK_DIR/system/system/etc/init"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libandroid_servers.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libepm.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libmdf.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libmdfpp_req.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libsdp_crypto.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libsdp_kekm.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libsdp_sdk.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libsqlite.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libandroid_servers.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libepm.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libmdf.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libmdfpp_req.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libsdp_crypto.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libsdp_kekm.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libsdp_sdk.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libsqlite.so" "$WORK_DIR/system/system/lib64"
+
+{
+    echo "/system/bin/sdp_cryptod u:object_r:sdp_cryptod_exec:s0"
+    echo "/system/etc/init/sdp_cryptod\.rc u:object_r:system_file:s0"
+    echo "/system/lib/libmdfpp_req\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib/libsdp_crypto\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib/libsdp_sdk\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib/libsdp_kekm\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib64/libmdfpp_req\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib64/libsdp_crypto\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib64/libsdp_sdk\.so u:object_r:system_lib_file:s0"
+    echo "/system/lib64/libsdp_kekm\.so u:object_r:system_lib_file:s0"
+} >> "$WORK_DIR/configs/file_context-system"
+{
+    echo "system/bin/sdp_cryptod 0 2000 755 capabilities=0x0"
+    echo "system/etc/init/sdp_cryptod.rc 0 0 644 capabilities=0x0"
+    echo "system/lib/libmdfpp_req.so 0 0 644 capabilities=0x0"
+    echo "system/lib/libsdp_crypto.so 0 0 644 capabilities=0x0"
+    echo "system/lib/libsdp_sdk.so 0 0 644 capabilities=0x0"
+    echo "system/lib/libsdp_kekm.so 0 0 644 capabilities=0x0"
+    echo "system/lib64/libmdfpp_req.so 0 0 644 capabilities=0x0"
+    echo "system/lib64/libsdp_crypto.so 0 0 644 capabilities=0x0"
+    echo "system/lib64/libsdp_sdk.so 0 0 644 capabilities=0x0"
+    echo "system/lib64/libsdp_kekm.so 0 0 644 capabilities=0x0"
+} >> "$WORK_DIR/configs/fs_config-system"
