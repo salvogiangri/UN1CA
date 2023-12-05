@@ -1,0 +1,11 @@
+# SDP_CRYPTOD RC
+service sdp_cryptod /system/bin/sdp_cryptod
+    socket sdp stream 0660 system system
+    user system
+    group system
+
+on property:persist.sys.knox.sdp_cryptod=true
+    start sdp_cryptod
+
+on property:persist.sys.knox.sdp_cryptod=false
+    stop sdp_cryptod
