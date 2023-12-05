@@ -51,18 +51,20 @@ jobs:
           node-version: 'latest'
 
       - name: Build dependencies
-        run: ./scripts/build_dependencies.sh
-
-      - name: Generate build config
         run: source ./buildenv.sh ${{ matrix.target }}
 
       - name: Download stock firmwares
-        run: ./scripts/download_fw.sh
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/download_fw.sh
 
       - name: Extract stock firmwares
         run: |
+          source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
           ./scripts/cleanup.sh odin
 
       - name: Build ROM
-        run: ./scripts/make_rom.sh
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/make_rom.sh
