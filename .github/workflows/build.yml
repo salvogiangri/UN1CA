@@ -62,9 +62,8 @@ jobs:
         run: |
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
-          ./scripts/cleanup.sh odin
 
       - name: Build ROM
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh
+          ./scripts/make_rom.sh --no-rom-zip
