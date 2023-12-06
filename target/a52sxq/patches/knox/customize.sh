@@ -25,8 +25,16 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/bin/dualdard"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/init/dualdard.rc"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/hidl_comm_ddar_client.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/hidl_comm_snap_client.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdualdar.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.tlc.ddar@1.0.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.tlc.snap@1.0.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/hidl_comm_ddar_client.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/hidl_comm_snap_client.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdualdar.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.tlc.ddar@1.0.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.tlc.snap@1.0.so"
 
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/installd" "$WORK_DIR/system/system/bin"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/bin/sdp_cryptod" "$WORK_DIR/system/system/bin"
