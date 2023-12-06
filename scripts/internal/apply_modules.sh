@@ -166,6 +166,8 @@ APPLY_MODULE()
         [ -d "$MODPATH/vendor" ] && cp -a --preserve=all "$MODPATH/vendor/"* "$WORK_DIR/vendor"
     fi
 
+    READ_AND_APPLY_PROPS "$MODPATH"
+
     [ -f "$MODPATH/customize.sh" ] && . "$MODPATH/customize.sh"
 
     if [ -d "$MODPATH/smali" ]; then
@@ -176,8 +178,6 @@ APPLY_MODULE()
             APPLY_SMALI_PATCHES "$MODPATH/smali" "$i"
         done
     fi
-
-    READ_AND_APPLY_PROPS "$MODPATH"
 }
 #]
 
