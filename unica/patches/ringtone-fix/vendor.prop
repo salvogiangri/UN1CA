@@ -1,11 +1,3 @@
-#
-# UN1CA prop patch file
-#
-# Usage:
-# prop=value: Adds/replaces prop with the specified value
-# prop --delete OR prop=: Removes prop
-#
-
 # Fix default media sounds
 ro.config.ringtone=ACH_Galaxy_Bells.ogg
 ro.config.notification_sound=ACH_Spaceline.ogg

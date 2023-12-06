@@ -1,14 +1,3 @@
-#
-# UN1CA prop patch file
-#
-# Usage:
-# prop=value: Adds/replaces prop with the specified value
-# prop --delete OR prop=: Removes prop
-#
-
-# Remove ICCC prop
-ro.config.iccc_version=
-
 # Disable MDF
 security.mdf.result=
 security.mdf=
@@ -23,6 +12,3 @@ ro.security.bio.release=
 ro.security.mdf.ux=
 ro.security.fips.ux=Disabled
 ro.security.fips_bssl.ver=
-
-# Disable HDCP in WFD
-wlan.wfd.hdcp=disable
