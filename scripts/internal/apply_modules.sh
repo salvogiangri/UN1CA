@@ -27,7 +27,7 @@ APPLY_SMALI_PATCHES()
     local TARGET="$2"
     local PATCHES
 
-    PATCHES="$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" -printf "%p " | sort)"
+    PATCHES="$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" -printf "%p " | sort -n)"
 
     [ ! -d "$APKTOOL_DIR$TARGET" ] && bash "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
 
