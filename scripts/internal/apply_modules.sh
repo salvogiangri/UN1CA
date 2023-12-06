@@ -21,18 +21,99 @@
 set -Eeu
 
 #[
+SET_PROP()
+{
+    local PROP="$1"
+    local VALUE="$2"
+    local FILE="$3"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+        PROP="$(echo -n "$PROP" | sed 's/=//g')"
+        if grep -Fq "$PROP" "$FILE"; then
+            echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
+            sed -i "/^$PROP/d" "$FILE"
+        fi
+    else
+        if grep -Fq "$PROP" "$FILE"; then
+            echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            sed -i "$(sed -n "/^${PROP}\b/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
+        else
+            echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            if ! grep -q "Added by scripts" "$FILE"; then
+                echo "# Added by scripts/internal/apply_modules.sh" >> "$FILE"
+            fi
+            echo "$PROP=$VALUE" >> "$FILE"
+        fi
+    fi
+}
+
+READ_AND_APPLY_PROPS()
+{
+    local PARTITION
+    local FILE
+
+    for patch in "$1"/*.prop
+    do
+        PARTITION=$(basename "$patch" | sed 's/.prop//g')
+        case "$PARTITION" in
+            "odm")
+                FILE="$WORK_DIR/odm/etc/build.prop"
+                ;;
+            "product")
+                FILE="$WORK_DIR/product/etc/build.prop"
+                ;;
+            "system")
+                FILE="$WORK_DIR/system/system/build.prop"
+                ;;
+            "system_ext")
+                $TARGET_HAS_SYSTEM_EXT \
+                    && FILE="$WORK_DIR/system_ext/etc/build.prop" \
+                    || FILE="$WORK_DIR/system/system/system_ext/etc/build.prop"
+                ;;
+            "vendor")
+                FILE="$WORK_DIR/vendor/build.prop"
+                ;;
+            "module")
+                continue
+                ;;
+            *)
+                echo "Unvalid file: \"$patch\""
+                return 1
+                ;;
+        esac
+
+        while read -r i; do
+            [[ "$i" = "#"* ]] && continue
+            [[ -z "$i" ]] && continue
+
+            if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
+                SET_PROP "$(echo -n "$i" | cut -d " " -f 1)" --delete \
+                    "$FILE"
+            elif echo -n "$i" | grep -q "="; then
+                SET_PROP "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)" \
+                    "$FILE"
+            else
+                echo "Malformed string in $patch: \"$i\""
+                return 1
+            fi
+        done < "$patch"
+    done
+}
+
 APPLY_SMALI_PATCHES()
 {
     local PATCHES_PATH="$1"
     local TARGET="$2"
-    local PATCHES
-
-    PATCHES="$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" -printf "%p " | sort -n)"
 
     [ ! -d "$APKTOOL_DIR$TARGET" ] && bash "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
 
     cd "$APKTOOL_DIR$TARGET"
-    for patch in $PATCHES; do
+    while read -r patch; do
         local OUT
         local COMMIT_NAME
         COMMIT_NAME="$(grep "^Subject:" "$patch" | sed 's/.*PATCH] //')"
@@ -46,7 +127,7 @@ APPLY_SMALI_PATCHES()
         OUT="$(patch -p1 -s -t -N --dry-run < "$patch")" \
             || echo "$OUT" | grep -q "Skipping patch" || false
         patch -p1 -s -t -N < "$patch" &> /dev/null || true
-    done
+    done <<< "$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" | sort -n)"
     cd - &> /dev/null
 }
 
@@ -95,6 +176,8 @@ APPLY_MODULE()
             APPLY_SMALI_PATCHES "$MODPATH/smali" "$i"
         done
     fi
+
+    READ_AND_APPLY_PROPS "$MODPATH"
 }
 #]
 
