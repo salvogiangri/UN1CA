@@ -1,11 +1,3 @@
-#
-# UN1CA prop patch file
-#
-# Usage:
-# prop=value: Adds/replaces prop with the specified value
-# prop --delete OR prop=: Removes prop
-#
-
 # Remove duplicated props
 bluetooth.profile.bap.unicast.client.enabled=
 bluetooth.profile.csip.set_coordinator.enabled=
