@@ -130,6 +130,11 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$SCRIPT_FILE" ] && rm -f "$SCRIPT_FILE"
     touch "$SCRIPT_FILE"
     {
+        echo -n 'getprop("ro.product.device") == "'
+        echo -n "$TARGET_CODENAME"
+        echo -n '" || abort("E3004: This package is for \"'
+        echo -n "$TARGET_CODENAME"
+        echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
         echo -e "\n# --- Start patching dynamic partitions ---\n\n"
         echo -e "# Update dynamic partition metadata\n"
         echo    'assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));'
