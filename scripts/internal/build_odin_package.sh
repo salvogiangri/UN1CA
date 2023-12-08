@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091
 
-set -eu
+set -Eeuo pipefail
 
 # [
 GENERATE_LPMAKE_OPT()
@@ -107,6 +107,9 @@ GENERATE_LPMAKE_OPT()
 FILE_NAME="UNICA"
 # ]
 
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+
 echo "Set up tmp dir"
 mkdir -p "$TMP_DIR"
 
@@ -131,13 +134,23 @@ for i in "$TMP_DIR"/*; do
     rm -f "$i"
 done
 
-echo "Compressing super.img"
-[ -f "$TMP_DIR/super.img.lz4" ] && rm -f "$TMP_DIR/super.img.lz4"
-lz4 -B6 --content-size -q --rm "$TMP_DIR/super.img" "$TMP_DIR/super.img.lz4" &> /dev/null
+KERNEL_BINS="boot.img dtbo.img init_boot.img vendor_boot.img"
+for i in $KERNEL_BINS; do
+    [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
+    echo "Copying stock $i"
+    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$TMP_DIR/$i"
+    bash "$SRC_DIR/scripts/unsign_bin.sh" "$TMP_DIR/$i"
+done
+
+for i in "$TMP_DIR"/*.img; do
+    echo "Compressing $(basename $i)"
+    [ -f "$i.lz4" ] && rm -f "$i.lz4"
+    lz4 -B6 --content-size -q --rm "$i" "$i.lz4" &> /dev/null
+done
 
 echo "Creating tar"
 [ -f "$OUT_DIR/$FILE_NAME.tar" ] && rm -f "$OUT_DIR/$FILE_NAME.tar"
-cd "$TMP_DIR" ; tar -c --format=gnu -f "$OUT_DIR/$FILE_NAME.tar" -- * ; cd - &> /dev/null
+cd "$TMP_DIR" ; tar -c --format=gnu -f "$OUT_DIR/$FILE_NAME.tar" -- *.lz4 ; cd - &> /dev/null
 
 echo "Generating checksum"
 [ -f "$OUT_DIR/$FILE_NAME.tar.md5" ] && rm -f "$OUT_DIR/$FILE_NAME.tar.md5"
