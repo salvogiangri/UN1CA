@@ -1,0 +1,37 @@
+From 2c03e457ab343831caf11af404c9bacfa1d1f153 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Wed, 6 Dec 2023 17:31:51 +0100
+Subject: [PATCH] Disable HW mDNIe
+
+---
+ smali_classes4/android/view/accessibility/A11yRune.smali | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/smali_classes4/android/view/accessibility/A11yRune.smali b/smali_classes4/android/view/accessibility/A11yRune.smali
+index 2d1ad7f8..ac33b750 100644
+--- a/smali_classes4/android/view/accessibility/A11yRune.smali
++++ b/smali_classes4/android/view/accessibility/A11yRune.smali
+@@ -10,9 +10,9 @@
+ 
+ .field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_BLIND:Z = true
+ 
+-.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_FILTER:Z = true
++.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_FILTER:Z = false
+ 
+-.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_FILTER_NOT_MDNIE:Z = false
++.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_FILTER_NOT_MDNIE:Z = true
+ 
+ .field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_COLOR_LENS:Z = true
+ 
+@@ -20,7 +20,7 @@
+ 
+ .field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_DMC_COLORWEAKNESS:Z = true
+ 
+-.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_MDNIE_HW:Z = true
++.field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_MDNIE_HW:Z = false
+ 
+ .field public static final blacklist A11Y_COLOR_BOOL_SUPPORT_MDNIE_SW:Z = false
+ 
+-- 
+2.43.0
+
