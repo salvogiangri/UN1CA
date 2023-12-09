@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091
 
-set -eu
+set -Eeuo pipefail
 
 # [
 GET_SPARSE_IMG_SIZE()
@@ -109,6 +109,10 @@ GENERATE_OP_LIST()
 GENERATE_UPDATER_SCRIPT()
 {
     local SCRIPT_FILE="$TMP_DIR/META-INF/com/google/android/updater-script"
+    local HAS_BOOT=false
+    local HAS_DTBO=false
+    local HAS_INIT_BOOT=false
+    local HAS_VENDOR_BOOT=false
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -118,6 +122,10 @@ GENERATE_UPDATER_SCRIPT()
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
 
+    [ -f "$TMP_DIR/boot.img" ] && HAS_BOOT=true
+    [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
+    [ -f "$TMP_DIR/init_boot.img" ] && HAS_INIT_BOOT=true
+    [ -f "$TMP_DIR/vendor_boot.img" ] && HAS_VENDOR_BOOT=true
     [ -f "$TMP_DIR/system.new.dat.br" ] && HAS_SYSTEM=true
     [ -f "$TMP_DIR/vendor.new.dat.br" ] && HAS_VENDOR=true
     [ -f "$TMP_DIR/product.new.dat.br" ] && HAS_PRODUCT=true
@@ -187,6 +195,30 @@ GENERATE_UPDATER_SCRIPT()
             echo    '  abort("E2001: Failed to update system_dlkm image.");'
         fi
         echo -e "\n# --- End patching dynamic partitions ---\n"
+        if $HAS_DTBO; then
+            echo    'ui_print("Full Patching dtbo.img img...");'
+            echo -n 'package_extract_file("dtbo.img", "'
+            echo -n "$TARGET_BOOT_DEVICE_PATH"
+            echo    '/dtbo");'
+        fi
+        if $HAS_INIT_BOOT; then
+            echo    'ui_print("Full Patching init_boot.img img...");'
+            echo -n 'package_extract_file("init_boot.img", "'
+            echo -n "$TARGET_BOOT_DEVICE_PATH"
+            echo    '/init_boot");'
+        fi
+        if $HAS_VENDOR_BOOT; then
+            echo    'ui_print("Full Patching vendor_boot.img img...");'
+            echo -n 'package_extract_file("vendor_boot.img", "'
+            echo -n "$TARGET_BOOT_DEVICE_PATH"
+            echo    '/vendor_boot");'
+        fi
+        if $HAS_BOOT; then
+            echo    'ui_print("Installing boot image...");'
+            echo -n 'package_extract_file("boot.img", "'
+            echo -n "$TARGET_BOOT_DEVICE_PATH"
+            echo    '/boot");'
+        fi
     } >> "$SCRIPT_FILE"
 
     true
@@ -194,6 +226,9 @@ GENERATE_UPDATER_SCRIPT()
 
 FILE_NAME="UNICA"
 # ]
+
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 echo "Set up tmp dir"
 mkdir -p "$TMP_DIR"
@@ -208,7 +243,7 @@ while read -r i; do
     [ -f "$WORK_DIR/$PARTITION.img" ] && rm -f "$WORK_DIR/$PARTITION.img"
 
     echo "Building $PARTITION.img"
-     { bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM+sparse" "$WORK_DIR/$PARTITION" \
+     { bash "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM+sparse" "$WORK_DIR/$PARTITION" \
         "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" > /dev/null; } 2>&1
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
 done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
@@ -232,6 +267,14 @@ while read -r i; do
     brotli --quality=6 --output="$TMP_DIR/$PARTITION.new.dat.br" "$TMP_DIR/$PARTITION.new.dat" \
         && rm "$TMP_DIR/$PARTITION.new.dat"
 done <<< "$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type f -name "*.img")"
+
+KERNEL_BINS="boot.img dtbo.img init_boot.img vendor_boot.img"
+for i in $KERNEL_BINS; do
+    [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
+    echo "Copying stock $i"
+    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$TMP_DIR/$i"
+    bash "$SRC_DIR/scripts/unsign_bin.sh" "$TMP_DIR/$i"
+done
 
 echo "Generating updater-script"
 GENERATE_UPDATER_SCRIPT
