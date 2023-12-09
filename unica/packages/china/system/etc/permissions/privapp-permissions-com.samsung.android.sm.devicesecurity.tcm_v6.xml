@@ -1,0 +1,13 @@
+<permissions>
+    <privapp-permissions package="com.samsung.android.sm.devicesecurity.tcm">
+       <permission name="android.permission.DELETE_PACKAGES"/>
+       <permission name="android.permission.FORCE_STOP_PACKAGES"/>
+       <permission name="android.permission.MANAGE_DEVICE_ADMINS"/>
+       <permission name="android.permission.MANAGE_USERS"/>
+       <permission name="android.permission.REAL_GET_TASKS"/>
+       <permission name="android.permission.UPDATE_APP_OPS_STATS"/>
+       <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+       <permission name="android.permission.START_ACTIVITIES_FROM_BACKGROUND"/>
+       <permission name="com.samsung.android.permission.PACKAGE_VERIFICATION_AGENT2"/>
+    </privapp-permissions>
+</permissions>

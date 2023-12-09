@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<!--
+This XML file declares which signature|privileged permissions should be granted to privileged
+applications that come with the Device Maintenance(Smart Manager) package
+-->
+<permissions>
+    <privapp-permissions package="com.samsung.android.sm_cn">
+        <permission name="android.permission.BATTERY_STATS" />
+        <permission name="android.permission.CLEAR_APP_CACHE" />
+        <permission name="android.permission.DELETE_CACHE_FILES" />
+        <permission name="android.permission.DELETE_PACKAGES" />
+        <permission name="android.permission.FORCE_STOP_PACKAGES" />
+        <permission name="android.permission.INSTALL_PACKAGES" />
+        <permission name="android.permission.MANAGE_DEVICE_ADMINS" />
+        <permission name="android.permission.MANAGE_USERS" />
+        <permission name="android.permission.MASTER_CLEAR" />
+        <permission name="android.permission.PACKAGE_USAGE_STATS" />
+        <permission name="android.permission.READ_LOGS" />
+        <permission name="android.permission.READ_SEARCH_INDEXABLES" />
+        <permission name="android.permission.REBOOT" />
+        <permission name="android.permission.WRITE_SECURE_SETTINGS" />
+        <permission name="com.samsung.permission.READ_DMF_DATA" />
+        <permission name="com.samsung.permission.WRITE_DMF_DATA" />
+        <permission name="android.permission.REAL_GET_TASKS" />
+        <permission name="com.samsung.android.permission.MODIFY_THEME" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+        <permission name="com.sec.android.diagmonagent.permission.DIAGMON" />
+        <permission name="com.sec.android.diagmonagent.permission.DIAGMON_SURVEY" />
+        <permission name="com.sec.android.diagmonagent.permission.PROVIDER" />
+        <permission name="com.sec.android.settings.permission.SOFT_RESET" />
+        <permission name="com.samsung.android.permission.RUN_DISK_DEFRAGMENTATION" />
+        <permission name="com.samsung.permission.HRM_EXT" />
+        <permission name="android.permission.WAKE_LOCK" />
+        <permission name="com.samsung.sea.retailagent.permission.RETAILMODE" />
+        <permission name="android.permission.SYSTEM_ALERT_WINDOW" />
+        <permission name="android.permission.MODIFY_PHONE_STATE"/>
+        <permission name="com.samsung.permission.HQM_NOTIFICATION_PERMISSION" />
+        <permission name="com.samsung.android.permission.SEM_APP_RESTRICTION" />
+        <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+        <permission name="android.permission.WRITE_DEVICE_CONFIG" />
+        <permission name="android.permission.READ_DEVICE_CONFIG" />
+        <permission name="android.permission.MANAGE_APP_OPS_MODES"/>
+        <permission name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS"/>
+        <permission name="android.permission.MODIFY_DAY_NIGHT_MODE"/>
+        <permission name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    </privapp-permissions>
+</permissions>
