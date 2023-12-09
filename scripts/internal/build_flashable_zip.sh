@@ -106,6 +106,63 @@ GENERATE_OP_LIST()
     true
 }
 
+GENERATE_LPMAKE_OPT()
+{
+    local OPT
+    local GROUP_NAME="group_basic"
+    local HAS_SYSTEM=false
+    local HAS_VENDOR=false
+    local HAS_PRODUCT=false
+    local HAS_SYSTEM_EXT=false
+    local HAS_ODM=false
+    local HAS_VENDOR_DLKM=false
+    local HAS_ODM_DLKM=false
+    local HAS_SYSTEM_DLKM=false
+
+    [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && GROUP_NAME="qti_dynamic_partitions"
+
+    [ -f "$TMP_DIR/system.img" ] && HAS_SYSTEM=true
+    [ -f "$TMP_DIR/vendor.img" ] && HAS_VENDOR=true
+    [ -f "$TMP_DIR/product.img" ] && HAS_PRODUCT=true
+    [ -f "$TMP_DIR/system_ext.img" ] && HAS_SYSTEM_EXT=true
+    [ -f "$TMP_DIR/odm.img" ] && HAS_ODM=true
+    [ -f "$TMP_DIR/vendor_dlkm.img" ] && HAS_VENDOR_DLKM=true
+    [ -f "$TMP_DIR/odm_dlkm.img" ] && HAS_ODM_DLKM=true
+    [ -f "$TMP_DIR/system_dlkm.img" ] && HAS_SYSTEM_DLKM=true
+
+    OPT+=" -o $TMP_DIR/super_empty.img"
+    OPT+=" --device-size $TARGET_SUPER_PARTITION_SIZE"
+    OPT+=" --metadata-size 65536 --metadata-slots 2"
+    OPT+=" -g $GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
+
+    if $HAS_SYSTEM; then
+        OPT+=" -p system:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_VENDOR; then
+        OPT+=" -p vendor:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_PRODUCT; then
+        OPT+=" -p product:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_SYSTEM_EXT; then
+        OPT+=" -p system_ext:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_ODM; then
+        OPT+=" -p odm:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_VENDOR_DLKM; then
+        OPT+=" -p vendor_dlkm:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_ODM_DLKM; then
+        OPT+=" -p odm_dlkm:readonly:0:$GROUP_NAME"
+    fi
+    if $HAS_SYSTEM_DLKM; then
+        OPT+=" -p system_dlkm:readonly:0:$GROUP_NAME"
+    fi
+
+    echo "$OPT"
+}
+
 GENERATE_UPDATER_SCRIPT()
 {
     local SCRIPT_FILE="$TMP_DIR/META-INF/com/google/android/updater-script"
@@ -113,6 +170,7 @@ GENERATE_UPDATER_SCRIPT()
     local HAS_DTBO=false
     local HAS_INIT_BOOT=false
     local HAS_VENDOR_BOOT=false
+    local HAS_SUPER_EMPTY=false
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -126,6 +184,7 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
     [ -f "$TMP_DIR/init_boot.img" ] && HAS_INIT_BOOT=true
     [ -f "$TMP_DIR/vendor_boot.img" ] && HAS_VENDOR_BOOT=true
+    [ -f "$TMP_DIR/super_empty.img" ] && HAS_SUPER_EMPTY=true
     [ -f "$TMP_DIR/system.new.dat.br" ] && HAS_SYSTEM=true
     [ -f "$TMP_DIR/vendor.new.dat.br" ] && HAS_VENDOR=true
     [ -f "$TMP_DIR/product.new.dat.br" ] && HAS_PRODUCT=true
@@ -143,6 +202,11 @@ GENERATE_UPDATER_SCRIPT()
         echo -n '" || abort("E3004: This package is for \"'
         echo -n "$TARGET_CODENAME"
         echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
+        if $HAS_SUPER_EMPTY; then
+            echo -n 'package_extract_file("super_empty.img", "'
+            echo -n "$TARGET_BOOT_DEVICE_PATH"
+            echo    '/super");'
+        fi
         echo -e "\n# --- Start patching dynamic partitions ---\n\n"
         echo -e "# Update dynamic partition metadata\n"
         echo    'assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));'
@@ -248,11 +312,19 @@ while read -r i; do
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
 done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
+echo "Building super_empty.img"
+[ -f "$TMP_DIR/super_empty.img" ] && rm -f "$TMP_DIR/super_empty.img"
+CMD="lpmake $(GENERATE_LPMAKE_OPT)"
+$CMD &> /dev/null
+
 echo "Generating dynamic_partitions_op_list"
 GENERATE_OP_LIST
 
 while read -r i; do
     PARTITION="$(basename "$i" | sed "s/.img//g")"
+
+    [[ "$PARTITION" == "super_empty" ]] && continue
+
     if [ -f "$TMP_DIR/$PARTITION.new.dat" ] || [ -f "$TMP_DIR/$PARTITION.new.dat.br" ]; then
         rm -f "$TMP_DIR/$PARTITION.new.dat" \
             && rm -f "$TMP_DIR/$PARTITION.new.dat.br" \
