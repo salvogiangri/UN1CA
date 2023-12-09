@@ -35,3 +35,8 @@ cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/vendor.sams
     echo "system/lib64/android.hardware.biometrics.fingerprint@2.1.so 0 0 644 capabilities=0x0"
     echo "system/lib64/vendor.samsung.hardware.biometrics.fingerprint@3.0.so 0 0 644 capabilities=0x0"
 } >> "$WORK_DIR/configs/fs_config-system"
+
+echo "Disable OEM unlock toggle"
+sed -i \
+    "$(sed -n "/ro.oem_unlock_supported/=" "$WORK_DIR/vendor/default.prop") cro.oem_unlock_supported=0" \
+    "$WORK_DIR/vendor/default.prop"

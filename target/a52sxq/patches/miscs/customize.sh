@@ -35,3 +35,8 @@ cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/
     echo "system/system_ext/lib/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
     echo "system/system_ext/lib64/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
 } >> "$WORK_DIR/configs/fs_config-system"
+
+echo "Disable OEM unlock toggle"
+sed -i \
+    "$(sed -n "/ro.oem_unlock_supported/=" "$WORK_DIR/vendor/default.prop") cro.oem_unlock_supported=0" \
+    "$WORK_DIR/vendor/default.prop"
