@@ -82,6 +82,7 @@ priv-app/SearchSelector
 priv-app/Velvet
 "
 SYSTEM_DEBLOAT+="
+system/app/FBAppManager_NS
 system/app/PlayAutoInstallConfig
 system/app/SamsungPassAutofill_v1
 system/etc/init/samsung_pass_authenticator_service.rc
@@ -93,7 +94,9 @@ system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
+system/etc/permissions/privapp-permissions-meta.xml
 system/etc/sysconfig/digitalkey.xml
+system/etc/sysconfig/meta-hiddenapi-package-allowlist.xml
 system/etc/sysconfig/preinstalled-packages-com.samsung.android.dkey.xml
 system/etc/sysconfig/preinstalled-packages-com.samsung.android.spayfw.xml
 system/etc/sysconfig/samsungauthframework.xml
@@ -102,6 +105,8 @@ system/hidden/SmartTutor
 system/preload/Facebook_stub_preload
 system/priv-app/AuthFramework
 system/priv-app/DigitalKey
+system/priv-app/FBInstaller_NS
+system/priv-app/FBServices
 system/priv-app/FotaAgent
 system/priv-app/KnoxAIFrameworkApp
 system/priv-app/OneDrive_Samsung_v3
