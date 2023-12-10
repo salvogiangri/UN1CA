@@ -1,11 +1,11 @@
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
-echo "Add stock /odm/ueventd.rc"
-if [ ! -f "$WORK_DIR/odm/ueventd.rc" ]; then
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/odm/ueventd.rc" "$WORK_DIR/odm/ueventd.rc"
-    echo "/odm/ueventd\.rc u:object_r:vendor_file:s0" >> "$WORK_DIR/configs/file_context-odm"
-    echo "odm/ueventd.rc 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-odm"
+echo "Add stock /vendor/ueventd.rc"
+if [ ! -f "$WORK_DIR/vendor/ueventd.rc" ]; then
+    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/vendor/ueventd.rc" "$WORK_DIR/vendor/ueventd.rc"
+    echo "/vendor/ueventd\.rc u:object_r:vendor_file:s0" >> "$WORK_DIR/configs/file_context-odm"
+    echo "vendor/ueventd.rc 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-odm"
 fi
 
 echo "Fix up /product/etc/build.prop"

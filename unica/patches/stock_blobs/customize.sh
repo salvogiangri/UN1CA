@@ -54,17 +54,27 @@ do
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}$blob" "$WORK_DIR$blob"
 done
 
+if [ -e $FW_DIR/${MODEL}_${REGION}/system/system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info ]
+then
+    SAIV_PATH=system/system
+    echo $SAIV_PATH
+elif [ -e $FW_DIR/${MODEL}_${REGION}/vendor/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info ]
+then
+    SAIV_PATH=vendor
+    echo $SAIV_PATH
+fi
+
 echo "Replacing saiv blobs with stock"
 BLOBS_LIST="
-/system/system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
-/system/system/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
+/$SAIV_PATH/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
+/$SAIV_PATH/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
 "
 for blob in $BLOBS_LIST
 do
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}$blob" "$WORK_DIR$blob"
 done
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/saiv"
-cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/saiv" "$WORK_DIR/system/system/saiv"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$SAIV_PATH/saiv" "$WORK_DIR/system/system/saiv"
 while read -r i; do
     FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
     [ -d "$i" ] && echo "$FILE 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
