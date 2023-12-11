@@ -48,21 +48,15 @@ PRINT_HEADER()
         ONEUI_VERSION="$MAJOR.$MINOR"
     fi
 
-    echo    'ui_print("");'
+    echo    'ui_print(" ");'
     echo    'ui_print("****************************************");'
     echo -n 'ui_print("'
     echo -n "UN1CA $ROM_VERSION for $TARGET_NAME"
     echo    '");'
-    echo    'ui_print("Coded by BlackMesa123");'
+    echo    'ui_print("Coded by BlackMesa123 @XDAforums");'
     echo    'ui_print("****************************************");'
     echo -n 'ui_print("'
-    echo -n "Android version: $(GET_PROP "ro.build.version.release" "$WORK_DIR/system/system/build.prop")"
-    echo    '");'
-    echo -n 'ui_print("'
     echo -n "One UI version: $ONEUI_VERSION"
-    echo    '");'
-    echo -n 'ui_print("'
-    echo -n "Build hash: $(cat "$WORK_DIR/.completed")"
     echo    '");'
     echo -n 'ui_print("'
     echo -n "Source: $(GET_PROP "ro.system.build.fingerprint" "$WORK_DIR/system/system/build.prop")"
@@ -231,6 +225,7 @@ GENERATE_UPDATER_SCRIPT()
     local HAS_VENDOR_DLKM=false
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
+    local HAS_POST_INSTALL=false
 
     [ -f "$TMP_DIR/boot.img" ] && HAS_BOOT=true
     [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
@@ -245,6 +240,7 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$TMP_DIR/vendor_dlkm.new.dat.br" ] && HAS_VENDOR_DLKM=true
     [ -f "$TMP_DIR/odm_dlkm.new.dat.br" ] && HAS_ODM_DLKM=true
     [ -f "$TMP_DIR/system_dlkm.new.dat.br" ] && HAS_SYSTEM_DLKM=true
+    [ -d "$TMP_DIR/cache" ] && HAS_POST_INSTALL=true
 
     [ -f "$SCRIPT_FILE" ] && rm -f "$SCRIPT_FILE"
     touch "$SCRIPT_FILE"
@@ -339,8 +335,17 @@ GENERATE_UPDATER_SCRIPT()
             echo    '/boot");'
         fi
 
-        echo    'ui_print("****************************************");'
-        echo    'ui_print("");'
+        if $HAS_POST_INSTALL; then
+            echo    'package_extract_dir("cache", "/cache");'
+            echo    'ui_print("****************************************");'
+            echo    'ui_print("Rebooting to execute post-install script...");'
+            echo    'ui_print(" ");'
+            echo    'run_program("/system/bin/sleep", "5");'
+            echo    'run_program("/system/bin/reboot", "recovery");'
+        else
+            echo    'ui_print("****************************************");'
+            echo    'ui_print(" ");'
+        fi
     } >> "$SCRIPT_FILE"
 
     true
@@ -387,7 +392,7 @@ while read -r i; do
         rm -f "$TMP_DIR/$PARTITION.new.dat" \
             && rm -f "$TMP_DIR/$PARTITION.new.dat.br" \
             && rm -f "$TMP_DIR/$PARTITION.patch.dat" \
-            && rm -f "$TMP_DIR/$PARTITION.patch.dat"
+            && rm -f "$TMP_DIR/$PARTITION.transfer.list"
     fi
 
     echo "Converting $PARTITION.img to $PARTITION.new.dat"
@@ -402,9 +407,23 @@ KERNEL_BINS="boot.img dtbo.img init_boot.img vendor_boot.img"
 for i in $KERNEL_BINS; do
     [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
     echo "Copying stock $i"
+    [ -f "$TMP_DIR/$i" ] && rm -f "$TMP_DIR/$i"
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$TMP_DIR/$i"
     bash "$SRC_DIR/scripts/unsign_bin.sh" "$TMP_DIR/$i"
 done
+
+if [ ! -z "$TARGET_POST_INSTALL_ZIP" ]; then
+    echo "Creating post-install files"
+    [ -d "$TMP_DIR/cache/recovery" ] && rm -rf "$TMP_DIR/cache/recovery"
+    mkdir -p "$TMP_DIR/cache/recovery"
+    curl -L -s -o "$TMP_DIR/cache/recovery/post-install.zip" "$TARGET_POST_INSTALL_ZIP"
+    touch "$TMP_DIR/cache/recovery/openrecoveryscript"
+    {
+        echo "install /cache/recovery/post-install.zip"
+        echo "wipe cache"
+        echo "reboot recovery"
+    } >> "$TMP_DIR/cache/recovery/openrecoveryscript"
+fi
 
 echo "Generating updater-script"
 GENERATE_UPDATER_SCRIPT
