@@ -101,7 +101,6 @@ if $TOOLS; then
         cd "$SRC_DIR/external/apktool" && git clean -f -d -x && cd -
         cd "$SRC_DIR/external/erofs-utils" && git clean -f -d -x && cd -
         cd "$SRC_DIR/external/samfirm.js" && git clean -f -d -x && cd -
-        cd "$SRC_DIR/external/smali" && git clean -f -d -x && cd -
     } > /dev/null
 fi
 

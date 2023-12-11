@@ -153,24 +153,6 @@ BUILD_SIGNAPK()
     echo ""
     cd "$PDR"
 }
-
-BUILD_SMALI()
-{
-    local PDR
-    PDR="$(pwd)"
-
-    echo -e "- Building baksmali/smali...\n"
-
-    cd "$SRC_DIR/external/smali"
-    ./gradlew build -q
-    cp --preserve=all "scripts/baksmali" "$TOOLS_DIR"
-    cp --preserve=all "scripts/smali" "$TOOLS_DIR"
-    cp --preserve=all "baksmali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/baksmali.jar"
-    cp --preserve=all "smali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/smali.jar"
-
-    echo ""
-    cd "$PDR"
-}
 # ]
 
 if [ "$#" -gt 0 ]; then
@@ -187,7 +169,6 @@ EROFS_UTILS=true
 IMG2SDAT=true
 SAMFIRM=true
 SIGNAPK=true
-SMALI=true
 
 ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
@@ -218,10 +199,6 @@ SIGNAPK_EXEC=(
     "signapk" "signapk.jar"
 )
 CHECK_TOOLS "${SIGNAPK_EXEC[@]}" && SIGNAPK=false
-SMALI_EXEC=(
-    "baksmali" "baksmali.jar" "smali" "smali.jar"
-)
-CHECK_TOOLS "${SMALI_EXEC[@]}" && SMALI=false
 
 $ANDROID_TOOLS && BUILD_ANDROID_TOOLS
 $APKTOOL && BUILD_APKTOOL
@@ -229,6 +206,5 @@ $EROFS_UTILS && BUILD_EROFS_UTILS
 $IMG2SDAT && BUILD_IMG2SDAT
 $SAMFIRM && BUILD_SAMFIRM
 $SIGNAPK && BUILD_SIGNAPK
-$SMALI && BUILD_SMALI
 
 exit 0
