@@ -15,15 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# UN1CA configuration file for Qualcomm devices
-# Base firmware: Galaxy S23 (One UI 6.0)
-SOURCE_FIRMWARE="SM-S911B/BTE"
-SOURCE_EXTRA_FIRMWARES=()
-SOURCE_API_LEVEL=34
-SOURCE_VNDK_VERSION=33
-SOURCE_HAS_SYSTEM_EXT=true
+# UN1CA configuration file
 
-# SEC Product Feature
-SOURCE_HAS_MASS_CAMERA_APP=false
-SOURCE_HAS_OPTICAL_FP_SENSOR=false
-SOURCE_IS_ESIM_SUPPORTED=true
+# Source ROM firmware
+case "$TARGET_SINGLE_SYSTEM_IMAGE" in
+    # Qualcomm
+    "qssi")
+        # Galaxy S23 (One UI 6.0)
+        SOURCE_FIRMWARE="SM-S911B/BTE"
+        SOURCE_EXTRA_FIRMWARES=()
+        SOURCE_API_LEVEL=34
+        SOURCE_VNDK_VERSION=33
+        SOURCE_HAS_SYSTEM_EXT=true
+        # SEC Product Feature
+        SOURCE_HAS_MASS_CAMERA_APP=false
+        SOURCE_HAS_OPTICAL_FP_SENSOR=false
+        SOURCE_IS_ESIM_SUPPORTED=true
+        ;;
+    *)
+        echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."
+        return 1
+        ;;
+esac
+
+return 0

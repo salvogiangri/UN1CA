@@ -88,12 +88,7 @@ GEN_CONFIG_FILE()
 }
 
 source "$SRC_DIR/target/$1/config.sh"
-if [ -f "$SRC_DIR/unica/$TARGET_SINGLE_SYSTEM_IMAGE.sh" ]; then
-    source "$SRC_DIR/unica/$TARGET_SINGLE_SYSTEM_IMAGE.sh"
-else
-    echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."
-    exit 1
-fi
+source "$SRC_DIR/unica/config.sh"
 # ]
 
 GEN_CONFIG_FILE
