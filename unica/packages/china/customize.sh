@@ -8,6 +8,7 @@ REMOVE_FROM_WORK_DIR()
         FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
         PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
 
+        echo "Debloating /$FILE"
         rm -rf "$FILE_PATH"
 
         FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"

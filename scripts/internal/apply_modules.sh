@@ -175,10 +175,10 @@ APPLY_MODULE()
         exit 1
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
-        MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//")"
+        MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//" | sed "s/, /, @/")"
     fi
 
-    echo "- Processing \"$MODNAME\" by \"$MODAUTH\""
+    echo "- Processing \"$MODNAME\" by @$MODAUTH"
 
     if ! grep -q '^SKIPUNZIP=1$' "$MODPATH/customize.sh" 2> /dev/null; then
         [ -d "$MODPATH/odm" ] && cp -a --preserve=all "$MODPATH/odm/"* "$WORK_DIR/odm"
