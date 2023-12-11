@@ -64,13 +64,13 @@ PRINT_MODULE_INFO()
         exit 1
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
-        MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//" | sed "s/, /, @/")"
+        MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//")"
         MODDESC="$(grep "^description" "$MODPATH/module.prop" | sed "s/description=//")"
     fi
 
     echo "-- Module $MODULES_COUNT:"
     echo "Name: $MODNAME"
-    echo "Author(s): @$MODAUTH"
+    echo "Author(s): $MODAUTH"
     echo "Description: $MODDESC"
 }
 #]
