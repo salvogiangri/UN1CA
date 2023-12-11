@@ -16,6 +16,7 @@
 #
 
 # Device configuration file for Galaxy A52s 5G (a52sxq)
+TARGET_NAME="Galaxy A52s 5G"
 TARGET_CODENAME="a52sxq"
 TARGET_FIRMWARE="SM-A528B/BTU"
 TARGET_EXTRA_FIRMWARES=()

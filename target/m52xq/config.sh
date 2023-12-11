@@ -16,6 +16,7 @@
 #
 
 # Device configuration file for Galaxy M52 5G (m52xq)
+TARGET_NAME="Galaxy M52 5G"
 TARGET_CODENAME="m52xq"
 TARGET_FIRMWARE="SM-M526B/INS"
 TARGET_EXTRA_FIRMWARES=()
