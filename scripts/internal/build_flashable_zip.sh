@@ -21,6 +21,58 @@
 set -Eeuo pipefail
 
 # [
+GET_PROP()
+{
+    local PROP="$1"
+    local FILE="$2"
+
+    if [ ! -f "$2" ]; then
+        echo "File not found: $2"
+        exit 1
+    fi
+
+    cat "$2" | grep "^$1=" | cut -d "=" -f2-
+}
+
+PRINT_HEADER()
+{
+    local ONEUI_VERSION
+
+    ONEUI_VERSION="$(GET_PROP "ro.build.version.oneui" "$WORK_DIR/system/system/build.prop")"
+    local MAJOR=$(echo "scale=0; $ONEUI_VERSION / 10000" | bc -l)
+    local MINOR=$(echo "$ONEUI_VERSION % 10000 / 100" | bc -l)
+    local PATCH=$(echo "$ONEUI_VERSION % 100" | bc -l)
+    if [[ "$PATCH" != "0" ]]; then
+        ONEUI_VERSION="$MAJOR.$MINOR.$PATCH"
+    else
+        ONEUI_VERSION="$MAJOR.$MINOR"
+    fi
+
+    echo    'ui_print("");'
+    echo    'ui_print("****************************************");'
+    echo -n 'ui_print("'
+    echo -n "UN1CA $ROM_VERSION for $TARGET_NAME"
+    echo    '");'
+    echo    'ui_print("Coded by BlackMesa123");'
+    echo    'ui_print("****************************************");'
+    echo -n 'ui_print("'
+    echo -n "Android version: $(GET_PROP "ro.build.version.release" "$WORK_DIR/system/system/build.prop")"
+    echo    '");'
+    echo -n 'ui_print("'
+    echo -n "One UI version: $ONEUI_VERSION"
+    echo    '");'
+    echo -n 'ui_print("'
+    echo -n "Build hash: $(cat "$WORK_DIR/.completed")"
+    echo    '");'
+    echo -n 'ui_print("'
+    echo -n "Source: $(GET_PROP "ro.system.build.fingerprint" "$WORK_DIR/system/system/build.prop")"
+    echo    '");'
+    echo -n 'ui_print("'
+    echo -n "Target: $(GET_PROP "ro.vendor.build.fingerprint" "$WORK_DIR/vendor/build.prop")"
+    echo    '");'
+    echo    'ui_print("****************************************");'
+}
+
 GET_SPARSE_IMG_SIZE()
 {
     local FILE_INFO
@@ -202,6 +254,9 @@ GENERATE_UPDATER_SCRIPT()
         echo -n '" || abort("E3004: This package is for \"'
         echo -n "$TARGET_CODENAME"
         echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
+
+        PRINT_HEADER
+
         if $HAS_SUPER_EMPTY; then
             echo -n 'package_extract_file("super_empty.img", "'
             echo -n "$TARGET_BOOT_DEVICE_PATH"
@@ -283,12 +338,15 @@ GENERATE_UPDATER_SCRIPT()
             echo -n "$TARGET_BOOT_DEVICE_PATH"
             echo    '/boot");'
         fi
+
+        echo    'ui_print("****************************************");'
+        echo    'ui_print("");'
     } >> "$SCRIPT_FILE"
 
     true
 }
 
-FILE_NAME="UNICA"
+FILE_NAME="UN1CA_${ROM_VERSION}_$(date +%Y%m%d)_${TARGET_CODENAME}"
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
