@@ -4,9 +4,10 @@
 # Denote all files that are truly binary and should not be modified.
 unica/flashable-zip/updater binary
 unica/packages/fod/system/** binary
+unica/packages/knox/none/system/** binary
+unica/packages/knox/sdp/system/** binary
 unica/packages/vndk/30/** binary
 target/a52sxq/patches/wpss/vendor/firmware/** binary
-target/m52xq/patches/knox/system/** binary
 target/m52xq/patches/vendor/vendor/** binary
 *.apk binary
 *.apex binary

@@ -21,6 +21,28 @@
 set -Eeu
 
 #[
+GEN_KNOX_SUBDIR()
+{
+    local SOURCE_SUBDIR
+    local TARGET_SUBDIR
+
+    $SOURCE_HAS_KNOX_DUALDAR && SOURCE_SUBDIR+="ddar_"
+    $SOURCE_HAS_KNOX_SDP && SOURCE_SUBDIR+="sdp_"
+    SOURCE_SUBDIR="$(echo "$SOURCE_SUBDIR" | sed "s/_$//")"
+    [ -z "$SOURCE_SUBDIR" ] && SOURCE_SUBDIR="none"
+
+    $TARGET_HAS_KNOX_DUALDAR && TARGET_SUBDIR+="ddar_"
+    $TARGET_HAS_KNOX_SDP && TARGET_SUBDIR+="sdp_"
+    TARGET_SUBDIR="$(echo "$TARGET_SUBDIR" | sed "s/_$//")"
+    [ -z "$TARGET_SUBDIR" ] && TARGET_SUBDIR="none"
+
+    if [[ "$SOURCE_SUBDIR" != "$TARGET_SUBDIR" ]]; then
+        echo "$TARGET_SUBDIR"
+    else
+        echo ""
+    fi
+}
+
 SET_PROP()
 {
     local PROP="$1"
@@ -142,7 +164,11 @@ APPLY_MODULE()
         exit 1
     fi
 
-    [[ "$MODPATH" == *"$TARGET_CODENAME/patches/props"* ]] && return 0
+    if [[ "$MODPATH" == *"unica/packages/knox" ]]; then
+        local SUBDIR=$(GEN_KNOX_SUBDIR)
+        [ -z "$SUBDIR" ] && continue
+        MODPATH="$MODPATH/$SUBDIR"
+    fi
 
     if [ ! -f "$MODPATH/module.prop" ]; then
         echo "File not found: $MODPATH/module.prop"
