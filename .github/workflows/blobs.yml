@@ -1,0 +1,88 @@
+name: Update prebuilt blobs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - module: "Samsung China apps"
+            path: "unica/packages/china"
+          - module: "Optical FOD blobs"
+            path: "unica/packages/fod"
+          - module: "Knox'nt blobs"
+            path: "unica/packages/knox/none"
+          - module: "Knox SDP blobs"
+            path: "unica/packages/knox/sdp"
+          - module: "Low-end Samsung Camera app"
+            path: "unica/packages/mass_cam"
+          - module: "VNDK 30 apex"
+            path: "unica/packages/vndk/30"
+          - module: "VNDK 31 apex"
+            path: "unica/packages/vndk/31"
+          - module: "VNDK 33 apex"
+            path: "unica/packages/vndk/33"
+          - module: "(m52xq) Google Assistant fix"
+            path: "target/m52xq/patches/assistant"
+          - module: "(m52xq) /vendor proprietary blobs"
+            path: "target/m52xq/patches/vendor"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Free disk space
+        uses: rokibhasansagar/slimhub_actions@main
+
+      - name: Set up build environment
+        run: |
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            attr ccache clang golang libbrotli-dev \
+            libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev \
+            linux-modules-extra-$(uname -r) lld ninja-build protobuf-compiler zipalign
+          sudo modprobe erofs f2fs
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > unica/security/unica_platform.pk8
+          echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > unica/security/unica_platform.x509.pem
+
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v1.14.1
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'gradle'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'
+
+      - name: Build dependencies
+        run: source ./buildenv.sh a52sxq
+
+      - name: Update prebuilt blobs
+        run: |
+          source ./buildenv.sh a52sxq
+          ./scripts/internal/update_prebuilt_blobs.sh ${{ matrix.path }}
+          echo "PDA_BUILD=$(cat ./${{ matrix.path }}/.current | cut -d "/" -f 1)" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          add-paths: |
+            ${{ matrix.path }}
+          title: 'Update ${{ matrix.path }} blobs to $PDA_BUILD'
