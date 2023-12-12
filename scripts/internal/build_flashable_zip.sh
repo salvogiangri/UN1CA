@@ -369,6 +369,7 @@ cp --preserve=all "$SRC_DIR/unica/flashable-zip/updater" "$TMP_DIR/META-INF/com/
 while read -r i; do
     PARTITION=$(basename "$i")
     [[ "$PARTITION" == "configs" ]] && continue
+    [[ "$PARTITION" == "kernel" ]] && continue
     [ -f "$TMP_DIR/$PARTITION.img" ] && rm -f "$TMP_DIR/$PARTITION.img"
     [ -f "$WORK_DIR/$PARTITION.img" ] && rm -f "$WORK_DIR/$PARTITION.img"
 

@@ -27,14 +27,18 @@ cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/ve
     "$WORK_DIR/system/system/system_ext/lib"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/vendor.samsung.hardware.biometrics.face@3.0.so" \
     "$WORK_DIR/system/system/system_ext/lib64"
-{
-    echo "/system/system_ext/lib/vendor\.samsung\.hardware\.biometrics\.face@3\.0\.so u:object_r:system_lib_file:s0"
-    echo "/system/system_ext/lib64/vendor\.samsung\.hardware\.biometrics\.face@3\.0\.so u:object_r:system_lib_file:s0"
-} >> "$WORK_DIR/configs/file_context-system"
-{
-    echo "system/system_ext/lib/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
-    echo "system/system_ext/lib64/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
-} >> "$WORK_DIR/configs/fs_config-system"
+if ! grep -q "face@3\.0\.so" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/system_ext/lib/vendor\.samsung\.hardware\.biometrics\.face@3\.0\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/vendor\.samsung\.hardware\.biometrics\.face@3\.0\.so u:object_r:system_lib_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "face@3.0.so" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/system_ext/lib/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
 
 echo "Disable OEM unlock toggle"
 sed -i \
