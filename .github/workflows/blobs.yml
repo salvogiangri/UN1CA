@@ -85,4 +85,10 @@ jobs:
         with:
           add-paths: |
             ${{ matrix.path }}
-          title: 'Update ${{ matrix.path }} blobs to $PDA_BUILD'
+          commit-message: '${{ matrix.path }}: update blobs to ${{ env.PDA_BUILD }}'
+          committer: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
+          author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
+          branch: '${{ matrix.path }}'
+          delete-branch: true
+          title: 'Update ${{ matrix.path }} blobs to ${{ env.PDA_BUILD }}'
+          body: ''
