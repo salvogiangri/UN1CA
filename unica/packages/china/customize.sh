@@ -57,8 +57,14 @@ SET_CONFIG "SEC_FLOATING_FEATURE_SMARTMANAGER_CONFIG_PACKAGE_NAME" "com.samsung.
 
 if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/file_context-system"; then
     {
+        echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.applock\.xml u:object_r:system_file:s0"
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm\.devicesecurity\.tcm_v6\.xml u:object_r:system_file:s0"
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm_cn\.xml u:object_r:system_file:s0"
+        echo "/system/etc/permissions/privapp-permissions-com\.sec\.android\.app\.firewall\.xml u:object_r:system_file:s0"
+        echo "/system/priv-app/AppLock u:object_r:system_file:s0"
+        echo "/system/priv-app/AppLock/AppLock\.apk u:object_r:system_file:s0"
+        echo "/system/priv-app/Firewall u:object_r:system_file:s0"
+        echo "/system/priv-app/Firewall/Firewall\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManagerCN u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManagerCN/SmartManagerCN\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManager_v6_DeviceSecurity_CN u:object_r:system_file:s0"
@@ -67,8 +73,14 @@ if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/file_context-system"; then
 fi
 if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/fs_config-system"; then
     {
+        echo "system/etc/permissions/privapp-permissions-com.samsung.android.applock.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity.tcm_v6.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/privapp-permissions-com.samsung.android.sm_cn.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/permissions/privapp-permissions-com.sec.android.app.firewall.xml 0 0 644 capabilities=0x0"
+        echo "system/priv-app/AppLock 0 0 755 capabilities=0x0"
+        echo "system/priv-app/AppLock/AppLock.apk 0 0 644 capabilities=0x0"
+        echo "system/priv-app/Firewall 0 0 755 capabilities=0x0"
+        echo "system/priv-app/Firewall/Firewall.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/SmartManagerCN 0 0 755 capabilities=0x0"
         echo "system/priv-app/SmartManagerCN/SmartManagerCN.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/SmartManager_v6_DeviceSecurity_CN 0 0 755 capabilities=0x0"
