@@ -26,22 +26,25 @@ GET_PROP()
     local PROP="$1"
     local FILE="$2"
 
-    if [ ! -f "$2" ]; then
-        echo "File not found: $2"
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
         exit 1
     fi
 
-    cat "$2" | grep "^$1=" | cut -d "=" -f2-
+    grep "^$PROP=" "$FILE" | cut -d "=" -f2-
 }
 
 PRINT_HEADER()
 {
     local ONEUI_VERSION
+    local MAJOR
+    local MINOR
+    local PATCH
 
     ONEUI_VERSION="$(GET_PROP "ro.build.version.oneui" "$WORK_DIR/system/system/build.prop")"
-    local MAJOR=$(echo "scale=0; $ONEUI_VERSION / 10000" | bc -l)
-    local MINOR=$(echo "$ONEUI_VERSION % 10000 / 100" | bc -l)
-    local PATCH=$(echo "$ONEUI_VERSION % 100" | bc -l)
+    MAJOR=$(echo "scale=0; $ONEUI_VERSION / 10000" | bc -l)
+    MINOR=$(echo "$ONEUI_VERSION % 10000 / 100" | bc -l)
+    PATCH=$(echo "$ONEUI_VERSION % 100" | bc -l)
     if [[ "$PATCH" != "0" ]]; then
         ONEUI_VERSION="$MAJOR.$MINOR.$PATCH"
     else
@@ -412,7 +415,7 @@ for i in $KERNEL_BINS; do
     bash "$SRC_DIR/scripts/unsign_bin.sh" "$TMP_DIR/$i"
 done
 
-if [ ! -z "$TARGET_POST_INSTALL_ZIP" ]; then
+if [[ "$TARGET_POST_INSTALL_ZIP" != "none" ]]; then
     echo "Creating post-install files"
     [ -d "$TMP_DIR/cache/recovery" ] && rm -rf "$TMP_DIR/cache/recovery"
     mkdir -p "$TMP_DIR/cache/recovery"

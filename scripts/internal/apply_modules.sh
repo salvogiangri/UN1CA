@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091,SC2015
+# shellcheck disable=SC1091,SC2001,SC2015
 
 set -Eeu
 
@@ -165,8 +165,9 @@ APPLY_MODULE()
     fi
 
     if [[ "$MODPATH" == *"unica/packages/knox" ]]; then
-        local SUBDIR=$(GEN_KNOX_SUBDIR)
-        [ -z "$SUBDIR" ] && continue
+        local SUBDIR
+        SUBDIR=$(GEN_KNOX_SUBDIR)
+        [ -z "$SUBDIR" ] && return 0
         MODPATH="$MODPATH/$SUBDIR"
     fi
 

@@ -143,7 +143,7 @@ for i in $KERNEL_BINS; do
 done
 
 for i in "$TMP_DIR"/*.img; do
-    echo "Compressing $(basename $i)"
+    echo "Compressing $(basename "$i")"
     [ -f "$i.lz4" ] && rm -f "$i.lz4"
     lz4 -B6 --content-size -q --rm "$i" "$i.lz4" &> /dev/null
 done
