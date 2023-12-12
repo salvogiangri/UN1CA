@@ -100,11 +100,29 @@ COPY_TARGET_FIRMWARE()
         fi
     done
 }
+
+COPY_TARGET_KERNEL()
+{
+    local MODEL
+    local REGION
+    MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+    REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+
+    mkdir -p "$WORK_DIR/kernel"
+
+    local COMMON_KERNEL_BINS="boot.img dtbo.img init_boot.img vendor_boot.img"
+    for i in $COMMON_KERNEL_BINS; do
+        [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
+        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$WORK_DIR/kernel/$i"
+        bash "$SRC_DIR/scripts/unsign_bin.sh" "$WORK_DIR/kernel/$i" &> /dev/null
+    done
+}
 # ]
 
 mkdir -p "$WORK_DIR"
 mkdir -p "$WORK_DIR/configs"
 COPY_SOURCE_FIRMWARE
 COPY_TARGET_FIRMWARE
+COPY_TARGET_KERNEL
 
 exit 0

@@ -134,13 +134,12 @@ for i in "$TMP_DIR"/*; do
     rm -f "$i"
 done
 
-KERNEL_BINS="boot.img dtbo.img init_boot.img vendor_boot.img"
-for i in $KERNEL_BINS; do
-    [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
-    echo "Copying stock $i"
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$TMP_DIR/$i"
-    bash "$SRC_DIR/scripts/unsign_bin.sh" "$TMP_DIR/$i"
-done
+while read -r i; do
+    IMG="$(basename "$i")"
+    echo "Copying $IMG"
+    [ -f "$TMP_DIR/$IMG" ] && rm -f "$TMP_DIR/$IMG"
+    cp -a --preserve=all "$i" "$TMP_DIR/$IMG"
+done <<< "$(find "$WORK_DIR/kernel" -mindepth 1 -maxdepth 1 -type f -name "*.img")"
 
 for i in "$TMP_DIR"/*.img; do
     echo "Compressing $(basename "$i")"
