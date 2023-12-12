@@ -118,9 +118,8 @@ for i in $BLOBS; do
             split -db 52428800 "$FW_DIR/${MODEL}_${REGION}/$i" \
                 "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex."
         else
-            VNDK_VERSION="$(basename "$i" | cut -d "." -f 4 | sed "s/v//")"
             cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-                "$SRC_DIR/$MODULE/$VNDK_VERSION/$(basename "$i")"
+                "$SRC_DIR/$MODULE/$(basename "$i")"
         fi
 
         continue
