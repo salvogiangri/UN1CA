@@ -28,15 +28,6 @@ VENDOR_DEBLOAT+="
 etc/dpolicy
 "
 
-# WSM
-SYSTEM_DEBLOAT+="
-system/etc/public.libraries-wsm.samsung.txt
-system/lib/libhal.wsm.samsung.so
-system/lib/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
-system/lib64/libhal.wsm.samsung.so
-system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so
-"
-
 # .odex files
 SYSTEM_DEBLOAT+="
 system/framework/arm

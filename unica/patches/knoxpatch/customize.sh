@@ -22,4 +22,9 @@ REMOVE_FROM_WORK_DIR()
 }
 
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.kgclient.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/public.libraries-wsm.samsung.txt"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libhal.wsm.samsung.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.security.wsm.service-V1-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhal.wsm.samsung.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxGuard"
