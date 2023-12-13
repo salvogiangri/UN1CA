@@ -1,24 +1,24 @@
-From 62c3f8a6e24d9c1fb9d1475cbde5b2e6480b44f7 Mon Sep 17 00:00:00 2001
+From 04db28505913339d160b97cb07831dc1187becc1 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 13 Dec 2023 19:58:50 +0100
+Date: Wed, 13 Dec 2023 21:04:57 +0100
 Subject: [PATCH] Introduce KnoxPatchHooks
 
 ---
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SemSystemProperties.smali      |  14 +
- .../mesalabs/knoxpatch/KnoxPatchHooks.smali   | 327 ++++++++++++++++++
+ .../io/mesalabs/unica/KnoxPatchHooks.smali    | 327 ++++++++++++++++++
  3 files changed, 345 insertions(+)
- create mode 100644 smali_classes6/io/mesalabs/knoxpatch/KnoxPatchHooks.smali
+ create mode 100644 smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
-index 86460ff3..4d7cd5d4 100644
+index 86460ff3..5017c88a 100644
 --- a/smali/android/app/Instrumentation.smali
 +++ b/smali/android/app/Instrumentation.smali
 @@ -632,6 +632,8 @@
  
      invoke-virtual {v0, p1}, Landroid/app/Application;->attach(Landroid/content/Context;)V
  
-+    invoke-static {p1}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->init(Landroid/content/Context;)V
++    invoke-static {p1}, Lio/mesalabs/unica/KnoxPatchHooks;->init(Landroid/content/Context;)V
 +
      return-object v0
  .end method
@@ -27,20 +27,20 @@ index 86460ff3..4d7cd5d4 100644
  
      invoke-virtual {v0, p3}, Landroid/app/Application;->attach(Landroid/content/Context;)V
  
-+    invoke-static {p3}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->init(Landroid/content/Context;)V
++    invoke-static {p3}, Lio/mesalabs/unica/KnoxPatchHooks;->init(Landroid/content/Context;)V
 +
      return-object v0
  .end method
  
 diff --git a/smali_classes3/android/os/SemSystemProperties.smali b/smali_classes3/android/os/SemSystemProperties.smali
-index 37707148..e87d4ff7 100644
+index 37707148..bcda320b 100644
 --- a/smali_classes3/android/os/SemSystemProperties.smali
 +++ b/smali_classes3/android/os/SemSystemProperties.smali
 @@ -15,20 +15,34 @@
  .method public static whitelist get(Ljava/lang/String;)Ljava/lang/String;
      .locals 1
  
-+    invoke-static {p0}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {p0}, Lio/mesalabs/unica/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
@@ -57,7 +57,7 @@ index 37707148..e87d4ff7 100644
  .method public static whitelist get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
      .locals 1
  
-+    invoke-static {p0}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {p0}, Lio/mesalabs/unica/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
@@ -71,13 +71,13 @@ index 37707148..e87d4ff7 100644
      return-object v0
  .end method
  
-diff --git a/smali_classes6/io/mesalabs/knoxpatch/KnoxPatchHooks.smali b/smali_classes6/io/mesalabs/knoxpatch/KnoxPatchHooks.smali
+diff --git a/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali b/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
 new file mode 100644
-index 00000000..81d1b112
+index 00000000..5c378dc5
 --- /dev/null
-+++ b/smali_classes6/io/mesalabs/knoxpatch/KnoxPatchHooks.smali
++++ b/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
 @@ -0,0 +1,327 @@
-+.class public Lio/mesalabs/knoxpatch/KnoxPatchHooks;
++.class public Lio/mesalabs/unica/KnoxPatchHooks;
 +.super Ljava/lang/Object;
 +.source "KnoxPatchHooks.java"
 +
@@ -124,7 +124,7 @@ index 00000000..81d1b112
 +
 +    move-result-object v1
 +
-+    sget-object v2, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sPackageName:Ljava/lang/String;
++    sget-object v2, Lio/mesalabs/unica/KnoxPatchHooks;->sPackageName:Ljava/lang/String;
 +
 +    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
@@ -169,7 +169,7 @@ index 00000000..81d1b112
 +    goto :goto_2
 +
 +    :cond_0
-+    sput-object v1, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sPackageName:Ljava/lang/String;
++    sput-object v1, Lio/mesalabs/unica/KnoxPatchHooks;->sPackageName:Ljava/lang/String;
 +
 +    const-string v2, "com.samsung.android.scpm"
 +
@@ -177,7 +177,7 @@ index 00000000..81d1b112
 +
 +    move-result v2
 +
-+    sput-boolean v2, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofBuildType:Z
++    sput-boolean v2, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofBuildType:Z
 +
 +    const-string v2, "com.sec.android.app.shealth"
 +
@@ -185,7 +185,7 @@ index 00000000..81d1b112
 +
 +    move-result v2
 +
-+    sput-boolean v2, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofKeystore:Z
++    sput-boolean v2, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKeystore:Z
 +
 +    :try_start_0
 +    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
@@ -218,7 +218,7 @@ index 00000000..81d1b112
 +    move v4, v0
 +
 +    :goto_0
-+    sput-boolean v4, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofKnox:Z
++    sput-boolean v4, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKnox:Z
 +    :try_end_0
 +    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 +
@@ -253,9 +253,9 @@ index 00000000..81d1b112
 +
 +    move-result-object v3
 +
-+    invoke-static {v3}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {v3}, Lio/mesalabs/unica/KnoxPatchHooks;->dlog(Ljava/lang/String;)V
 +
-+    sput-boolean v0, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofKnox:Z
++    sput-boolean v0, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKnox:Z
 +
 +    :goto_1
 +    return-void
@@ -268,7 +268,7 @@ index 00000000..81d1b112
 +.method public static blacklist onEDMGetAPILevelHook()I
 +    .locals 1
 +
-+    sget-boolean v0, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofKnox:Z
++    sget-boolean v0, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKnox:Z
 +
 +    if-nez v0, :cond_0
 +
@@ -338,7 +338,7 @@ index 00000000..81d1b112
 +
 +    if-eqz v1, :cond_3
 +
-+    sget-boolean v1, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofBuildType:Z
++    sget-boolean v1, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofBuildType:Z
 +
 +    if-eqz v1, :cond_4
 +
@@ -355,7 +355,7 @@ index 00000000..81d1b112
 +
 +    if-eqz v1, :cond_4
 +
-+    sget-boolean v1, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->sSpoofKeystore:Z
++    sget-boolean v1, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKeystore:Z
 +
 +    if-eqz v1, :cond_4
 +
@@ -399,7 +399,7 @@ index 00000000..81d1b112
 +
 +    move-result-object v1
 +
-+    invoke-static {v1}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {v1}, Lio/mesalabs/unica/KnoxPatchHooks;->dlog(Ljava/lang/String;)V
 +
 +    :cond_5
 +    return-object v0
