@@ -1,0 +1,574 @@
+From 187b3d8380fe5596c2fb2e35c5d71b1f67a495ab Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Wed, 13 Dec 2023 20:40:33 +0100
+Subject: [PATCH] Introduce CscFeatureHooks
+
+---
+ .../android/feature/SemCscFeature.smali       |  98 +++++-
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 332 ++++++++++++++++++
+ 2 files changed, 418 insertions(+), 12 deletions(-)
+ create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
+
+diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
+index 7a29d842..b1f910bb 100644
+--- a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
++++ b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
+@@ -2727,6 +2727,19 @@
+ 
+     const/4 v0, 0x0
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetBooleanHook(Ljava/lang/String;)Ljava/lang/Boolean;
++
++    move-result-object v1
++
++    if-eqz v1, :cond_0
++
++    invoke-virtual {v1}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result v0
++
++    goto :goto_0
++
++    :cond_0
+     :try_start_0
+     iget-object v1, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2736,7 +2749,7 @@
+ 
+     check-cast v1, Ljava/lang/String;
+ 
+-    if-eqz v1, :cond_0
++    if-eqz v1, :cond_1
+ 
+     invoke-static {v1}, Ljava/lang/Boolean;->parseBoolean(Ljava/lang/String;)Z
+ 
+@@ -2746,7 +2759,8 @@
+ 
+     return v0
+ 
+-    :cond_0
++    :cond_1
++    :goto_0
+     return v0
+ 
+     :catch_0
+@@ -2758,6 +2772,19 @@
+ .method public whitelist getBoolean(Ljava/lang/String;Z)Z
+     .locals 2
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetBooleanHook(Ljava/lang/String;)Ljava/lang/Boolean;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_0
++
++    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result p2
++
++    goto :goto_0
++
++    :cond_0
+     :try_start_0
+     iget-object v0, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2767,7 +2794,7 @@
+ 
+     check-cast v0, Ljava/lang/String;
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     invoke-static {v0}, Ljava/lang/Boolean;->parseBoolean(Ljava/lang/String;)Z
+ 
+@@ -2777,7 +2804,8 @@
+ 
+     return v1
+ 
+-    :cond_0
++    :cond_1
++    :goto_0
+     return p2
+ 
+     :catch_0
+@@ -2811,6 +2839,19 @@
+ 
+     const/4 v0, -0x1
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetIntHook(Ljava/lang/String;)Ljava/lang/Integer;
++
++    move-result-object v1
++
++    if-eqz v1, :cond_0
++
++    invoke-virtual {v1}, Ljava/lang/Integer;->intValue()I
++
++    move-result v0
++
++    goto :goto_0
++
++    :cond_0
+     :try_start_0
+     iget-object v1, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2820,7 +2861,7 @@
+ 
+     check-cast v1, Ljava/lang/String;
+ 
+-    if-eqz v1, :cond_0
++    if-eqz v1, :cond_1
+ 
+     invoke-static {v1}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+@@ -2830,7 +2871,8 @@
+ 
+     return v0
+ 
+-    :cond_0
++    :cond_1
++    :goto_0
+     return v0
+ 
+     :catch_0
+@@ -2842,6 +2884,19 @@
+ .method public whitelist getInt(Ljava/lang/String;I)I
+     .locals 2
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetIntHook(Ljava/lang/String;)Ljava/lang/Integer;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_0
++
++    invoke-virtual {v0}, Ljava/lang/Integer;->intValue()I
++
++    move-result v1
++
++    goto :goto_0
++
++    :cond_0
+     :try_start_0
+     iget-object v0, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2851,7 +2906,7 @@
+ 
+     check-cast v0, Ljava/lang/String;
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+@@ -2859,9 +2914,10 @@
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
++    :goto_0
+     return v1
+ 
+-    :cond_0
++    :cond_1
+     return p2
+ 
+     :catch_0
+@@ -2935,6 +2991,15 @@
+ 
+     const-string v0, ""
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetStringHook(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    if-eqz v1, :cond_0
++
++    return-object v1
++
++    :cond_0
+     :try_start_0
+     iget-object v1, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2946,11 +3011,11 @@
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    if-eqz v1, :cond_0
++    if-eqz v1, :cond_1
+ 
+     return-object v1
+ 
+-    :cond_0
++    :cond_1
+     return-object v0
+ 
+     :catch_0
+@@ -2962,6 +3027,15 @@
+ .method public whitelist getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     .locals 1
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/CscFeatureHooks;->onGetStringHook(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_0
++
++    return-object v0
++
++    :cond_0
+     :try_start_0
+     iget-object v0, p0, Lcom/samsung/android/feature/SemCscFeature;->mFeatureList:Ljava/util/Hashtable;
+ 
+@@ -2973,11 +3047,11 @@
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     return-object v0
+ 
+-    :cond_0
++    :cond_1
+     return-object p2
+ 
+     :catch_0
+diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
+new file mode 100644
+index 00000000..19f3b213
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
+@@ -0,0 +1,332 @@
++.class public Lio/mesalabs/unica/CscFeatureHooks;
++.super Ljava/lang/Object;
++.source "CscFeatureHooks.java"
++
++
++# static fields
++.field private static final blacklist BOOLEAN_FEATURES:Ljava/util/HashMap;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/HashMap<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Boolean;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist DEBUG:Z = true
++
++.field private static final blacklist INTEGER_FEATURES:Ljava/util/HashMap;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/HashMap<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Integer;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist STRING_FEATURES:Ljava/util/HashMap;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/HashMap<",
++            "Ljava/lang/String;",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist TAG:Ljava/lang/String; = "CscFeatureHooks"
++
++
++# direct methods
++.method static constructor blacklist <clinit>()V
++    .locals 4
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    sput-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++
++    new-instance v1, Ljava/util/HashMap;
++
++    invoke-direct {v1}, Ljava/util/HashMap;-><init>()V
++
++    sput-object v1, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++
++    new-instance v2, Ljava/util/HashMap;
++
++    invoke-direct {v2}, Ljava/util/HashMap;-><init>()V
++
++    sput-object v2, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
++
++    const-string v2, "CscFeature_Common_SupportPrivateMode"
++
++    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v2, "CscFeature_Common_SupportZProjectFunctionInGlobal"
++
++    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v2, "CscFeature_Gallery_SupportAliveZoom"
++
++    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v2, "CscFeature_Setting_EnableHwVersionDisplay"
++
++    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v2, "CscFeature_Setting_SupportMenuSmartTutor"
++
++    sget-object v3, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v2, "CscFeature_Setting_SupportRealTimeNetworkSpeed"
++
++    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v0, "CscFeature_Common_ConfigSvcProviderForUnknownNumber"
++
++    const-string v2, "whitepages,whitepages,off"
++
++    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v0, "CscFeature_SmartManager_ConfigSubFeatures"
++
++    const-string v2, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
++
++    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v0, "CscFeature_VoiceCall_ConfigRecording"
++
++    const-string v2, "RecordingAllowed"
++
++    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-void
++.end method
++
++.method private constructor blacklist <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method public static blacklist dlog(Ljava/lang/String;)V
++    .locals 1
++
++    const-string v0, "CscFeatureHooks"
++
++    invoke-static {v0, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++
++    return-void
++.end method
++
++.method public static blacklist onGetBooleanHook(Ljava/lang/String;)Ljava/lang/Boolean;
++    .locals 3
++
++    const/4 v0, 0x0
++
++    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_0
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v1
++
++    move-object v0, v1
++
++    check-cast v0, Ljava/lang/Boolean;
++
++    :cond_0
++    if-eqz v0, :cond_1
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Spoofing \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\" to \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++
++    :cond_1
++    return-object v0
++.end method
++
++.method public static blacklist onGetIntHook(Ljava/lang/String;)Ljava/lang/Integer;
++    .locals 3
++
++    const/4 v0, 0x0
++
++    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_0
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v1
++
++    move-object v0, v1
++
++    check-cast v0, Ljava/lang/Integer;
++
++    :cond_0
++    if-eqz v0, :cond_1
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Spoofing \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\" to \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++
++    :cond_1
++    return-object v0
++.end method
++
++.method public static blacklist onGetStringHook(Ljava/lang/String;)Ljava/lang/String;
++    .locals 3
++
++    const/4 v0, 0x0
++
++    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_0
++
++    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v1
++
++    move-object v0, v1
++
++    check-cast v0, Ljava/lang/String;
++
++    :cond_0
++    if-eqz v0, :cond_1
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Spoofing \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\" to \""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    const-string v2, "\""
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++
++    :cond_1
++    return-object v0
++.end method
+-- 
+2.43.0
+
