@@ -70,7 +70,6 @@ app/Maps
 app/YouTube
 priv-app/Messages
 priv-app/SearchSelector
-priv-app/Velvet
 "
 SYSTEM_DEBLOAT+="
 system/app/FBAppManager_NS
