@@ -1,0 +1,45 @@
+From b9570c623efeaa545cc1a2b418bb19575ffefdf0 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Wed, 13 Dec 2023 18:42:07 +0100
+Subject: [PATCH] Introduce KnoxPatchHooks
+
+---
+ .../knox/EnterpriseDeviceManager.smali        | 20 +------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
+
+diff --git a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
+index bad19a5..041a3db 100644
+--- a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
++++ b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
+@@ -601,27 +601,9 @@
+ .method public static greylist getAPILevel()I
+     .locals 2
+ 
+-    :try_start_0
+-    invoke-static {}, Lcom/samsung/android/knox/EdmUtils;->getAPILevelForInternal()I
++    invoke-static {}, Lio/mesalabs/knoxpatch/KnoxPatchHooks;->onEDMGetAPILevelHook()I
+ 
+     move-result v0
+-    :try_end_0
+-    .catch Ljava/lang/UnsupportedOperationException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v0
+-
+-    :catch_0
+-    move-exception v0
+-
+-    sget-object v1, Lcom/samsung/android/knox/EnterpriseDeviceManager;->TAG:Ljava/lang/String;
+-
+-    invoke-virtual {v0}, Ljava/lang/UnsupportedOperationException;->getMessage()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const/4 v0, 0x0
+ 
+     return v0
+ .end method
+-- 
+2.43.0
+
