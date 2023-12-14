@@ -12,9 +12,16 @@
 </p>
 <p align="center">UN1CA <i>(/ˈu.ni.ka/)</i> is a work-in-progress custom firmware for Samsung Galaxy devices.</p>
 
+# How to build
+```bash
+git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
+. ./buildenv.sh <device>
+run_cmd make_rom
+```
+
 # Licensing
 
-This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE). External dependencies might be licensed under a different license, such as:
+This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE). External dependencies might be released under a different license, such as:
 - [android-tools](https://github.com/nmeum/android-tools), licensed under the [Apache License 2.0](https://github.com/nmeum/android-tools/blob/master/LICENSE)
 - [apktool](https://github.com/iBotPeaches/Apktool), licensed under the [Apache License 2.0](https://github.com/iBotPeaches/Apktool/blob/master/LICENSE.md)
 - [erofs-utils](https://github.com/sekaiacg/erofs-utils/), dual license ([GPL-2.0](https://github.com/sekaiacg/erofs-utils/blob/dev/LICENSES/GPL-2.0), [Apache-2.0](https://github.com/sekaiacg/erofs-utils/blob/dev/LICENSES/Apache-2.0))
