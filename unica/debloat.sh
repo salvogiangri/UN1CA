@@ -83,6 +83,7 @@ system/etc/permissions/privapp-permissions-com.samsung.android.carkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
+system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/etc/permissions/privapp-permissions-meta.xml
 system/etc/sysconfig/digitalkey.xml
@@ -94,6 +95,7 @@ system/etc/sysconfig/samsungpassapp.xml
 system/hidden/SmartTutor
 system/preload/Facebook_stub_preload
 system/priv-app/AuthFramework
+system/priv-app/DiagMonAgent91
 system/priv-app/DigitalKey
 system/priv-app/FBInstaller_NS
 system/priv-app/FBServices
