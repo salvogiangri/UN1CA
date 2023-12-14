@@ -23,7 +23,7 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
     # Qualcomm
     "qssi")
         # Galaxy S23 (One UI 6.0)
-        SOURCE_FIRMWARE="SM-S911B/BTE"
+        SOURCE_FIRMWARE="SM-S911B/INS"
         SOURCE_EXTRA_FIRMWARES=()
         SOURCE_API_LEVEL=34
         SOURCE_VNDK_VERSION=33
