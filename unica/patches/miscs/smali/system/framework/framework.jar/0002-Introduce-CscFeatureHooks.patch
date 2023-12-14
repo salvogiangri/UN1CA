@@ -1,12 +1,12 @@
-From 187b3d8380fe5596c2fb2e35c5d71b1f67a495ab Mon Sep 17 00:00:00 2001
+From ea9cfa76f6a649b3858c0d9e23910d61f4458109 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 13 Dec 2023 20:40:33 +0100
+Date: Thu, 14 Dec 2023 23:00:02 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
- .../android/feature/SemCscFeature.smali       |  98 +++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 332 ++++++++++++++++++
- 2 files changed, 418 insertions(+), 12 deletions(-)
+ .../android/feature/SemCscFeature.smali       |  98 ++++-
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 342 ++++++++++++++++++
+ 2 files changed, 428 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..19f3b213
+index 00000000..634efde8
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,332 @@
+@@ -0,0 +1,342 @@
 +.class public Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -283,7 +283,7 @@ index 00000000..19f3b213
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 4
++    .locals 5
 +
 +    new-instance v0, Ljava/util/HashMap;
 +
@@ -303,59 +303,69 @@ index 00000000..19f3b213
 +
 +    sput-object v2, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
 +
-+    const-string v2, "CscFeature_Common_SupportPrivateMode"
++    const-string v3, "CscFeature_Common_SupportPrivateMode"
 +
-+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "CscFeature_Common_SupportZProjectFunctionInGlobal"
++    const-string v3, "CscFeature_Common_SupportZProjectFunctionInGlobal"
 +
-+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "CscFeature_Gallery_SupportAliveZoom"
++    const-string v3, "CscFeature_Gallery_SupportAliveZoom"
 +
-+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "CscFeature_Setting_EnableHwVersionDisplay"
++    const-string v3, "CscFeature_Setting_EnableHwVersionDisplay"
 +
-+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "CscFeature_Setting_SupportMenuSmartTutor"
++    const-string v3, "CscFeature_Setting_SupportMenuSmartTutor"
 +
-+    sget-object v3, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "CscFeature_Setting_SupportRealTimeNetworkSpeed"
++    const-string v3, "CscFeature_Setting_SupportRealTimeNetworkSpeed"
 +
-+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v2, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v0, "CscFeature_Common_ConfigSvcProviderForUnknownNumber"
 +
-+    const-string v2, "whitepages,whitepages,off"
++    const-string v3, "whitepages,whitepages,off"
 +
-+    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v0, "CscFeature_SmartManager_ConfigSubFeatures"
 +
-+    const-string v2, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
++    const-string v3, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
 +
-+    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v0, "CscFeature_VoiceCall_ConfigRecording"
 +
-+    const-string v2, "RecordingAllowed"
++    const-string v3, "RecordingAllowed"
 +
-+    invoke-virtual {v1, v0, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v0, "CscFeature_Setting_ConfigTypeHelp"
++
++    const/4 v1, 0x0
++
++    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v1
++
++    invoke-virtual {v2, v0, v1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-void
 +.end method
