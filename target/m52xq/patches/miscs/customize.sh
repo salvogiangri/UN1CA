@@ -1,6 +1,3 @@
-MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
-
 echo "Fix up /product/etc/build.prop"
 sed -i "/# Removed by /d" "$WORK_DIR/product/etc/build.prop" \
     && sed -i "s/#bluetooth./bluetooth./g" "$WORK_DIR/product/etc/build.prop" \

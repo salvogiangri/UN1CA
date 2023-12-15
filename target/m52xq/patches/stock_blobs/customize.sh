@@ -1,3 +1,6 @@
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+
 echo "Fix Google Assistant"
 rm -rf "$WORK_DIR/product/priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON"
 rm -rf "$WORK_DIR/product/priv-app/HotwordEnrollmentXGoogleEx4HEXAGON"
