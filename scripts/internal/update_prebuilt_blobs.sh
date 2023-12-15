@@ -74,14 +74,16 @@ case "$1" in
     #    ;;
     "unica/packages/vndk/33")
         MODULE="$1"
-        FW="SM-S911B/BTE"
+        FW="SM-S911B/INS"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
         ;;
-    "target/m52xq/patches/assistant")
+    "target/m52xq/patches/stock_blobs")
         MODULE="$1"
-        FW="SM-A736B/INS"
-        BLOBS="$(find "$SRC_DIR/target/m52xq/patches/assistant/product" -type f \
-            | sed "s.$SRC_DIR/target/m52xq/patches/assistant/product..")"
+        FW="SM-A528B/BTU"
+        BLOBS="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/product" -type f \
+            | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs/product..")"
+        BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f \
+            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs.system.")"
         ;;
     "target/m52xq/patches/vendor")
         MODULE="$1"
