@@ -75,6 +75,7 @@ SYSTEM_DEBLOAT+="
 system/app/FBAppManager_NS
 system/app/PlayAutoInstallConfig
 system/app/SamsungPassAutofill_v1
+system/app/WebManual
 system/etc/init/samsung_pass_authenticator_service.rc
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.app.kfa.xml
