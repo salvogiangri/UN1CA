@@ -97,8 +97,13 @@ if $EXT4; then
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
-    IMG_SIZE=$(echo "$IMG_SIZE * 1.05" | bc -l)
+    IMG_SIZE=$(echo "$IMG_SIZE * 1.15" | bc -l)
     IMG_SIZE=${IMG_SIZE%.*}
+    [[ "$IMG_SIZE" -lt 56623104 ]] && IMG_SIZE=56623104
+
+    if [[ "$PARTITION" != "system" ]]; then
+        sed -i "s/\/$PARTITION /\/$PARTITION\/$PARTITION /g" "$3"
+    fi
 
     SPARSE_FLAG=""
     $SPARSE && SPARSE_FLAG="-S"
