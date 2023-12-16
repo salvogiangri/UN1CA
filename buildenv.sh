@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091,SC2012,SC2034
 
-set -a
+set -o allexport
 
 # [
 SRC_DIR="$(git rev-parse --show-toplevel)"
@@ -74,5 +74,6 @@ else
 fi
 
 unset TARGETS
+set +o allexport
 
 return 0
