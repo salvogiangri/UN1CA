@@ -1,34 +1,15 @@
-From f5fd8df828931e5e9b960a569139e13ee39586e1 Mon Sep 17 00:00:00 2001
+From d1363e6f1c0e029dfbf5d370bcf1bc6be5a8fe4a Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Thu, 14 Dec 2023 13:35:35 +0100
+Date: Sat, 16 Dec 2023 14:43:07 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
- smali/com/android/server/SystemServer.smali                   | 4 ++--
  .../biometrics/sensors/fingerprint/FingerprintUtils.smali     | 2 +-
  .../android/hardware/display/SemMdnieManagerService.smali     | 2 +-
  .../android/server/enterprise/hdm/HdmVendorController.smali   | 2 +-
  .../com/android/server/power/PowerManagerUtil.smali           | 4 ++--
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/smali/com/android/server/SystemServer.smali b/smali/com/android/server/SystemServer.smali
-index 21a1955b..4d2ea4c5 100644
---- a/smali/com/android/server/SystemServer.smali
-+++ b/smali/com/android/server/SystemServer.smali
-@@ -4780,11 +4780,11 @@
- 
-     const-string v10, "SystemServer"
- 
--    const-string v11, "MAINLINE_API_LEVEL: 33"
-+    const-string v11, "MAINLINE_API_LEVEL: 31"
- 
-     invoke-static {v10, v11}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
--    const-string v10, "33"
-+    const-string v10, "31"
- 
-     invoke-static {v10}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
- 
 diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
 index 484cd1a5..bc08124c 100644
 --- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
