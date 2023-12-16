@@ -31,9 +31,9 @@ cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_blockc
     "$WORK_DIR/system/system/lib/libtlc_blockchain_keystore.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_payment_spay.so" \
     "$WORK_DIR/system/system/lib/libtlc_payment_spay.so"
-cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_blockchain_keystore.so" \
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libtlc_blockchain_keystore.so" \
     "$WORK_DIR/system/system/lib64/libtlc_blockchain_keystore.so"
-cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_payment_spay.so" \
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libtlc_payment_spay.so" \
     "$WORK_DIR/system/system/lib64/libtlc_payment_spay.so"
 
 echo "Add HIDL face biometrics libs"
