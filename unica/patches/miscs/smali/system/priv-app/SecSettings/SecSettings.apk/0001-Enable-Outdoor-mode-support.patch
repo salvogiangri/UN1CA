@@ -1,0 +1,50 @@
+From df222795c20b00a36b902267cd7adb5b719e9861 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 17 Dec 2023 17:57:50 +0100
+Subject: [PATCH] Enable Outdoor mode support
+
+---
+ .../com/samsung/android/settings/Rune.smali   | 25 -------------------
+ 1 file changed, 25 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
+index afcca13f..275369ef 100644
+--- a/smali_classes4/com/samsung/android/settings/Rune.smali
++++ b/smali_classes4/com/samsung/android/settings/Rune.smali
+@@ -6125,33 +6125,8 @@
+ .method public static supportOutdoorMode(Landroid/content/Context;)Z
+     .locals 0
+ 
+-    invoke-static {p0}, Lcom/samsung/android/settings/Rune;->supportAutoBrightness(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-nez p0, :cond_1
+-
+-    invoke-static {}, Lcom/samsung/android/settings/Rune;->supportAdaptiveBrightnessNoLS()Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    invoke-static {}, Lcom/samsung/android/settings/Rune;->isSabcOSUpgrade()Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_1
+-
+-    :cond_0
+     const/4 p0, 0x1
+ 
+-    goto :goto_0
+-
+-    :cond_1
+-    const/4 p0, 0x0
+-
+-    :goto_0
+     return p0
+ .end method
+ 
+-- 
+2.43.0
+
