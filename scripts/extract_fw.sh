@@ -95,7 +95,7 @@ EXTRACT_OS_PARTITIONS()
                     PREFIX=""
                     [ -d "$PARTITION" ] && rm -rf "$PARTITION"
                     mkdir -p "$PARTITION"
-                    { fuse.erofs "$img" "tmp_out" > /dev/null; } 2>&1
+                    fuse.erofs "$img" "tmp_out" &>/dev/null
                     cp -a --preserve=all tmp_out/* "$PARTITION"
                     ;;
                 "f2fs" | "ext4")
@@ -103,7 +103,7 @@ EXTRACT_OS_PARTITIONS()
                     PREFIX="sudo"
                     [ -d "$PARTITION" ] && rm -rf "$PARTITION"
                     mkdir -p "$PARTITION"
-                    $PREFIX mount "$img" "tmp_out"
+                    $PREFIX mount -o ro "$img" "tmp_out"
                     $PREFIX cp -a --preserve=all tmp_out/* "$PARTITION"
                     for i in $($PREFIX find "$PARTITION"); do
                         $PREFIX chown -h "$(whoami)":"$(whoami)" "$i"
@@ -255,8 +255,9 @@ do
             EXTRACT_ALL
         fi
     else
-        echo -e "- $MODEL firmware with $REGION CSC is not downloaded. Skipping...\n"
-        continue
+        echo -e "- $MODEL firmware with $REGION CSC is not downloaded.\n"
+        echo    "  Please download the firmware first using the \"download_fw\" cmd"
+        exit 1
     fi
 done
 
