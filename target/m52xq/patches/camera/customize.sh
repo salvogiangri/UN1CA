@@ -96,7 +96,6 @@ BLOBS_LIST="
 /system/system/lib64/libhumantracking_util.camera.samsung.so
 /system/system/lib64/libhumantracking.arcsoft.so
 /system/system/lib64/liblow_light_hdr.arcsoft.so
-/system/system/lib64/libsrib_humanaware_engine.camera.samsung.so
 /system/system/lib64/libsrib_CNNInterface.camera.samsung.so
 /system/system/lib64/libsurfaceutil.camera.samsung.so
 /system/system/lib64/libtensorflowLite.myfilter.camera.samsung.so
