@@ -17,6 +17,8 @@ jobs:
             path: "unica/packages/china"
           - module: "Optical FOD blobs"
             path: "unica/packages/fod"
+          - module: "Legacy KeyMaster libs"
+            path: "unica/packages/keymaster"
           - module: "Knox'nt blobs"
             path: "unica/packages/knox/none"
           - module: "Knox SDP blobs"

@@ -42,6 +42,11 @@ case "$1" in
         FW="SM-X716B/EUX"
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f | sed "s.$SRC_DIR/unica/packages/fod.system.")"
         ;;
+    "unica/packages/keymaster")
+        MODULE="$1"
+        FW="SM-A528B/BTU"
+        BLOBS="$(find "$SRC_DIR/unica/packages/keymaster/system" -type f | sed "s.$SRC_DIR/unica/packages/keymaster.system.")"
+        ;;
     "unica/packages/knox/none")
         MODULE="$1"
         FW="SM-A736B/INS"
