@@ -18,7 +18,7 @@
 
 # shellcheck disable=SC1091,SC2001,SC2015
 
-set -Eeu
+set -Ee
 
 #[
 GEN_KNOX_SUBDIR()
