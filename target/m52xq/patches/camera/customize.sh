@@ -79,6 +79,7 @@ system/lib64/libsuperresolution_raw.arcsoft.so
 system/lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so
 system/lib64/libtensorflowLite2_11_0_dynamic_camera.so
 system/lib64/libtflite2.myfilters.camera.samsung.so
+system/lib64/vendor.samsung.hardware.snap-V2-ndk.so
 "
 for blob in $BLOBS_LIST
 do
@@ -96,9 +97,12 @@ BLOBS_LIST="
 /system/system/lib64/libhumantracking_util.camera.samsung.so
 /system/system/lib64/libhumantracking.arcsoft.so
 /system/system/lib64/liblow_light_hdr.arcsoft.so
+/system/system/lib64/libsecuresnap_aidl.snap.samsung.so
+/system/system/lib64/libsnap_aidl.snap.samsung.so
 /system/system/lib64/libsurfaceutil.camera.samsung.so
 /system/system/lib64/libtensorflowLite.myfilter.camera.samsung.so
 /system/system/lib64/libtensorflowlite_inference_api.myfilter.camera.samsung.so
+/system/system/lib64/vendor.samsung.hardware.snap-V1-ndk.so
 "
 for blob in $BLOBS_LIST
 do
@@ -108,14 +112,13 @@ if ! grep -q "libtensorflowLite\.myfilter" "$WORK_DIR/configs/file_context-syste
     {
         echo "/system/lib64/libtensorflowLite\.myfilter\.camera\.samsung.so u:object_r:system_file:s0"
         echo "/system/lib64/libtensorflowlite_inference_api\.myfilter\.camera\.samsung\.so u:object_r:system_file:s0"
+        echo "/system/lib64/vendor\.samsung\.hardware\.snap-V1-ndk\.so u:object_r:system_file:s0"
     } >> "$WORK_DIR/configs/file_context-system"
 fi
 if ! grep -q "libtensorflowLite.myfilter" "$WORK_DIR/configs/fs_config-system"; then
     {
         echo "system/lib64/libtensorflowLite.myfilter.camera.samsung.so 0 0 644 capabilities=0x0"
         echo "system/lib64/libtensorflowlite_inference_api.myfilter.camera.samsung.so 0 0 644 capabilities=0x0"
+        echo "system/lib64/vendor.samsung.hardware.snap-V1-ndk.so 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
-
-echo "Fix MIDAS model detection"
-sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
