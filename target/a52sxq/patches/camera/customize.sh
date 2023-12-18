@@ -97,6 +97,7 @@ BLOBS_LIST="
 /system/system/etc/public.libraries-camera.samsung.txt
 /system/system/lib64/libFaceRestoration.camera.samsung.so
 /system/system/lib64/libFacialStickerEngine.arcsoft.so
+/system/system/lib64/libImageCropper.camera.samsung.so
 /system/system/lib64/libMyFilter.camera.samsung.so
 /system/system/lib64/libPortraitDistortionCorrection.arcsoft.so
 /system/system/lib64/libhigh_dynamic_range.arcsoft.so
@@ -122,3 +123,6 @@ if ! grep -q "libtensorflowLite.myfilter" "$WORK_DIR/configs/fs_config-system"; 
         echo "system/lib64/libtensorflowlite_inference_api.myfilter.camera.samsung.so 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
+
+echo "Fix MIDAS model detection"
+sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
