@@ -37,6 +37,28 @@ if [ ! -f "$WORK_DIR/odm/ueventd.rc" ]; then
     echo "odm/ueventd.rc 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-odm"
 fi
 
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.flip.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level29.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml"
+echo "Add stock system features"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml" \
+    "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/permissions/com.sec.feature.sensorhub_level40.xml" \
+    "$WORK_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level40.xml"
+if ! grep -q "minisviewwalletcover" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/etc/permissions/com\.sec\.feature\.cover\.minisviewwalletcover\.xml u:object_r:system_file:s0"
+        echo "/system/etc/permissions/com\.sec\.feature\.sensorhub_level40\.xml u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "minisviewwalletcover" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/permissions/com.sec.feature.sensorhub_level40.xml 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+
 echo "Add HIDL fingerprint biometrics libs"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/android.hardware.biometrics.fingerprint@2.1.so" \
     "$WORK_DIR/system/system/lib"
