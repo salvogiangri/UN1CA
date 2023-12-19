@@ -12,6 +12,8 @@ permalink: /
   <a href="https://t.me/unicarom"><img loading="lazy" src="https://img.shields.io/badge/Telegram-229ed9?style=for-the-badge&logo=telegram&logoColor=ffffff"/></a>
 </p>
 
+### - [Supported devices]({% link devices/index.md %})
+<br>
 #### Thank you to the contributors of UN1CA!
 
 <ul class="list-style-none">
