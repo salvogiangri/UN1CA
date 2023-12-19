@@ -37,3 +37,13 @@ aux_links:
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
+
+footer_content: "Coded by BlackMesa123 &copy; 2023. Distributed under the <a href=\"https://github.com/BlackMesa123/UN1CA/tree/fourteen/LICENSE\">GPLv3 license.</a>"
+
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/BlackMesa123/UN1CA"
+gh_edit_branch: "fourteen"
+gh_edit_source: docs
+gh_edit_view_mode: "tree"
