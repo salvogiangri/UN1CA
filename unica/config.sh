@@ -31,7 +31,6 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         # SEC Product Feature
         SOURCE_HAS_KNOX_DUALDAR=true
         SOURCE_HAS_KNOX_SDP=false
-        SOURCE_HAS_KEYMINT=true
         SOURCE_HAS_MASS_CAMERA_APP=false
         SOURCE_HAS_OPTICAL_FP_SENSOR=false
         SOURCE_IS_ESIM_SUPPORTED=true
@@ -46,8 +45,7 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_HAS_SYSTEM_EXT=false
         # SEC Product Feature
         SOURCE_HAS_KNOX_DUALDAR=true
-        SOURCE_HAS_KNOX_SDP=false
-        SOURCE_HAS_KEYMINT=true
+        SOURCE_HAS_KNOX_SDP=true
         SOURCE_HAS_MASS_CAMERA_APP=false
         SOURCE_HAS_OPTICAL_FP_SENSOR=false
         SOURCE_IS_ESIM_SUPPORTED=true

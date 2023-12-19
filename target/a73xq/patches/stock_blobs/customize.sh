@@ -79,3 +79,50 @@ if ! grep -q "face@3.0.so" "$WORK_DIR/configs/fs_config-system"; then
         echo "system/system_ext/lib64/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
+
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.keymint-V3-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.secureclock-V1-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdk_native_keymint.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdk_native_keymint.so"
+echo "Add stock keymaster libs"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/android.hardware.keymaster@3.0.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/android.hardware.keymaster@4.0.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/android.hardware.keymaster@4.1.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/lib_nativeJni.dk.samsung.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libdk_native_keymaster.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libkeymaster4_1support.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libkeymaster4support.so" \
+    "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/lib_nativeJni.dk.samsung.so" \
+    "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libdk_native_keymaster.so" \
+    "$WORK_DIR/system/system/lib64"
+if ! grep -q "libdk_native_keymaster" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/lib/android\.hardware\.keymaster@3\.0\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/android\.hardware\.keymaster@4\.0\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/android\.hardware\.keymaster@4\.1\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libdk_native_keymaster\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libkeymaster4_1support\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libkeymaster4support\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib64/libdk_native_keymaster\.so u:object_r:system_lib_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "libdk_native_keymaster" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/lib/android.hardware.keymaster@3.0.so 0 0 644 capabilities=0x0"
+        echo "system/lib/android.hardware.keymaster@4.0.so 0 0 644 capabilities=0x0"
+        echo "system/lib/android.hardware.keymaster@4.1.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libdk_native_keymaster.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libkeymaster4_1support.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libkeymaster4support.so 0 0 644 capabilities=0x0"
+        echo "system/lib64/libdk_native_keymaster.so 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
