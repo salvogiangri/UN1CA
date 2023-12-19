@@ -234,26 +234,25 @@ do
     MODEL=$(echo -n "$i" | cut -d "/" -f 1)
     REGION=$(echo -n "$i" | cut -d "/" -f 2)
 
-    if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
-        if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
-            if [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
-                if $FORCE; then
-                    echo "- Updating $MODEL firmware with $REGION CSC..."
-                    rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
-                else
-                    echo    "- $MODEL firmware with $REGION CSC is already extracted."
-                    echo    "  A newer version of this device's firmware is available."
-                    echo -e "  To extract, clean your extracted firmwares directory or run this cmd with \"--force\"\n"
-                    continue
-                fi
+    if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
+        if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && \
+            [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
+            if $FORCE; then
+                echo "- Updating $MODEL firmware with $REGION CSC..."
+                rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
             else
-                echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
+                echo    "- $MODEL firmware with $REGION CSC is already extracted."
+                echo    "  A newer version of this device's firmware is available."
+                echo -e "  To extract, clean your extracted firmwares directory or run this cmd with \"--force\"\n"
                 continue
             fi
         else
-            echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
-            EXTRACT_ALL
+            echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
+            continue
         fi
+    elif [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
+        echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
+        EXTRACT_ALL
     else
         echo -e "- $MODEL firmware with $REGION CSC is not downloaded.\n"
         echo    "  Please download the firmware first using the \"download_fw\" cmd"
