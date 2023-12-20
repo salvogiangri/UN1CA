@@ -9,9 +9,11 @@ parent: Supported devices
 </p>
 
 # Galaxy A52s 5G (a52sxq)
-<br>
+{: .pb-4 }
 - Maintainer: [@BlackMesa123](https://github.com/BlackMesa123)
 - Latest version: ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=a52sxq*&style=flat-square)
+- Install method: Custom recovery
+- Requirements: [**Android 14 bootloader**](https://github.com/BlackMesa123/proprietary_vendor_samsung_a52sxq/releases)
 
 ## Support links
 

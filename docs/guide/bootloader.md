@@ -2,6 +2,7 @@
 layout: default
 title: Unlocking the bootloader
 parent: Installation instructions
+nav_order: 1
 ---
 
 # Unlocking the bootloader

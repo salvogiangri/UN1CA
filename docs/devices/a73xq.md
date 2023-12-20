@@ -9,9 +9,11 @@ parent: Supported devices
 </p>
 
 # Galaxy A73 5G (a73xq)
-<br>
+{: .pb-4 }
 - Maintainer: [@BlackMesa123](https://github.com/BlackMesa123)
 - Latest version: ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=a73xq*&style=flat-square)
+- Install method: Custom recovery
+- Requirements: [**Android 14 bootloader**](https://github.com/Simon1511/samsung-sm7325-fw/releases)
 
 ## Support links
 

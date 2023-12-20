@@ -47,3 +47,20 @@ gh_edit_repository: "https://github.com/BlackMesa123/UN1CA"
 gh_edit_branch: "fourteen"
 gh_edit_source: docs
 gh_edit_view_mode: "tree"
+
+callouts_level: loud
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red

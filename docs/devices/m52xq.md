@@ -9,9 +9,11 @@ parent: Supported devices
 </p>
 
 # Galaxy M52 5G (m52xq)
-<br>
+{: .pb-4 }
 - Maintainer: [@BlackMesa123](https://github.com/BlackMesa123)
 - Latest version: ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=m52xq*&style=flat-square)
+- Install method: Custom recovery
+- Requirements: [**Android 13 bootloader**](https://github.com/BlackMesa123/proprietary_vendor_samsung_m52xq/releases)
 
 ## Support links
 
