@@ -1,0 +1,2 @@
+# Disable ADB auth
+ro.adb.secure=0
