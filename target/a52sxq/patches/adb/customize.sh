@@ -1,6 +1,9 @@
 SKIPUNZIP=1
 
 sed -i \
+    "$(sed -n "/ro.adb.secure/=" "$WORK_DIR/vendor/default.prop") cro.adb.secure=0" \
+    "$WORK_DIR/vendor/default.prop"
+sed -i \
     "$(sed -n "/persist.sys.usb.config/=" "$WORK_DIR/vendor/default.prop") cpersist.sys.usb.config=mtp,adb" \
     "$WORK_DIR/vendor/default.prop"
 
