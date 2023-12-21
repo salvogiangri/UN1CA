@@ -55,3 +55,6 @@ Please note that:
 - This will again completely wipe your data.
 - The device must have already installed the full stock untouched firmware, otherwise issues might happen when locking back your bootloader.
 - Your Knox Warranty Bit will not be restored by locking back your bootloader, a solution such as [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) is suggested if you intend to stay on the stock firmware.
+
+{: .highlight }
+*Continue to Install UN1CA (Custom recovery) / [(Download mode)]({% link guide/download.md %})*
