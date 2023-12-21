@@ -131,6 +131,8 @@ Example:
 - APK files: `smali/system_ext/priv-app/SystemUI/SystemUI.apk`
 - JAR files: `smali/system/framework/framework.jar`
 
+To generate a patch file, use `git format-patch` or `diff -crB`.
+
 ### **customize.sh**
 {: .pb-2 }
 When created, this script allows to customize the patch application process. `SKIPUNZIP=1` variable can be declared if you want to skip the default patch application process (will only skip the partitions folders).
@@ -150,3 +152,6 @@ All the tools are directly accessible without having to put the full path before
 ### **.prop files**
 {: .pb-2 }
 These files follows the same format as `build.prop`. Each line comprises of `[key]=[value]`. When no value is set, the prop will be removed from its destination file.
+
+{: .highlight }
+*Continue to [Build UN1CA]({% link expert/build.md %})*
