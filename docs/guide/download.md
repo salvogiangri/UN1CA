@@ -10,7 +10,7 @@ nav_order: 3
 
 {: .important }
 > This guide is specific to devices in which the install method is marked as **"Download mode"**.
-> If your device uses the **"Custom recovery"** install method or the file name you downloaded ends with the `.zip` extension, follow this instead.
+> If your device uses the **"Custom recovery"** install method or the file name you downloaded ends with the `.zip` extension, follow [this]({% link guide/recovery.md %}) instead.
 
 {: .warning }
 > Installing UN1CA for the first time **REQUIRES** a full data wipe (this is NOT counting the data wipe when unlocking the bootloader nor rooting your device).
@@ -63,3 +63,7 @@ If you have followed every step correctly, the flash procedure will start and yo
 **A factory reset is required to avoid any sort of issues when installing the ROM for the first time in your device.** If your device asks you to do a factory reset, please do so.
 
 If any other error/issue occurs, please refer to the [Troubleshooting]({% link faq/index.md %}) section.
+
+## Updating the ROM
+{: .pb-2 }
+To update the ROM, you can simply follow the same exact steps you've followed for the first time install, expection made for the data wipe which is not necessary anymore.

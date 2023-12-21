@@ -254,8 +254,8 @@ do
         echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
         EXTRACT_ALL
     else
-        echo -e "- $MODEL firmware with $REGION CSC is not downloaded.\n"
-        echo    "  Please download the firmware first using the \"download_fw\" cmd"
+        echo    "- $MODEL firmware with $REGION CSC is not downloaded."
+        echo -e "  Please download the firmware first using the \"download_fw\" cmd\n"
         exit 1
     fi
 done

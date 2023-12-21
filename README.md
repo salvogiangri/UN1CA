@@ -8,7 +8,7 @@
   <a href="https://github.com/BlackMesa123/UN1CA/commits/fourteen"><img loading="lazy" src="https://img.shields.io/github/last-commit/BlackMesa123/UN1CA/fourteen?style=for-the-badge"/></a>
   <a href="https://github.com/BlackMesa123/UN1CA/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/BlackMesa123/UN1CA?style=for-the-badge"/></a>
   <a href="https://github.com/BlackMesa123/UN1CA/graphs/contributors"><img loading="lazy" src="https://img.shields.io/github/contributors/BlackMesa123/UN1CA?style=for-the-badge"/></a>
-  <a href="https://github.com/BlackMesa123/UN1CA/actions"><img loading="lazy" src="https://img.shields.io/github/actions/workflow/status/BlackMesa123/UN1CA/build.yml?style=for-the-badge"/></a>
+  <a href="https://github.com/BlackMesa123/UN1CA/actions/workflows/build.yml"><img loading="lazy" src="https://img.shields.io/github/actions/workflow/status/BlackMesa123/UN1CA/build.yml?style=for-the-badge"/></a>
 </p>
 <p align="center">UN1CA <i>(/ˈu.ni.ka/)</i> is a work-in-progress custom firmware for Samsung Galaxy devices.</p>
 
@@ -16,7 +16,6 @@
 ```bash
 git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
 . ./buildenv.sh <device>
-run_cmd download_fw
 run_cmd make_rom
 ```
 
