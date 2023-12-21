@@ -19,4 +19,4 @@ The following tools are also required depending on your PC platform:
 - Linux: [Samsung Odin4](https://xdaforums.com/t/official-samsung-odin-v4-1-2-1-dc05e3ea-for-linux.4453423/post-86977569), [Heimdall](https://git.sr.ht/~grimler/Heimdall)
 - macOS: [Heimdall](https://github.com/fathonix/heimdall-osx-arm64/releases/latest)
 
-Please also refer to your [device page]({% link devices/index.md %}) to see if any other requirements are needed.
+Please refer to your [device page]({% link devices/index.md %}) to see if any other requirements are needed.
