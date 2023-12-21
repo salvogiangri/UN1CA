@@ -2,7 +2,7 @@
 layout: default
 title: How the build system works
 parent: Developer guides
-nav_order: 1
+nav_order: 2
 ---
 
 # How the build system works
@@ -154,4 +154,4 @@ All the tools are directly accessible without having to put the full path before
 These files follows the same format as `build.prop`. Each line comprises of `[key]=[value]`. When no value is set, the prop will be removed from its destination file.
 
 {: .highlight }
-*Continue to [Build UN1CA]({% link expert/build.md %})*
+*Continue to [Available commands]({% link expert/help.md %})*

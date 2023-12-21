@@ -2,7 +2,7 @@
 layout: default
 title: Build UN1CA
 parent: Developer guides
-nav_order: 2
+nav_order: 1
 ---
 
 # Build UN1CA
@@ -67,3 +67,6 @@ run_cmd make_rom
 ```
 
 If everything went right, you'll find the generated flashable zip/tar file inside the `out` folder.
+
+{: .highlight }
+*Continue to [How the build system works]({% link expert/details.md %})*
