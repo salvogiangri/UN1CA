@@ -23,7 +23,7 @@ nav_order: 2
 Installing custom ROMs via a recovery has been the standard since Android early times, and today it's still the way to go in most devices.
 This guide will not go in deep details about how to install a custom recovery, as the procedure might differ from device to device, so please refer to the XDA community page of [your device]({% link devices/index.md %}).
 
-To install UN1CA, a custom recovery and/or other unofficial images are required and your device's bootloader **must be unlocked**. If you are unsure please take a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
+To install UN1CA, a custom recovery and/or other unofficial images, your device's bootloader **must be unlocked**. If you are unsure please take a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
 
 Once you have made sure your device's bootloader is unlocked and that you have a custom recovery installed, you can proceed with the following steps:
 
