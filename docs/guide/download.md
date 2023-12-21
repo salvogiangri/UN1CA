@@ -10,7 +10,7 @@ nav_order: 3
 
 {: .important }
 > This guide is specific to devices in which the install method is marked as **"Download mode"**.
-> If your device uses the **"Custom recovery"** install method or the file name you downloaded ends with the `.zip` extension, follow this instead.
+> If your device uses the **"Custom recovery"** install method or the file name you downloaded ends with the `.zip` extension, follow [this]({% link guide/recovery.md %}) instead.
 
 {: .warning }
 > Installing UN1CA for the first time **REQUIRES** a full data wipe (this is NOT counting the data wipe when unlocking the bootloader nor rooting your device).

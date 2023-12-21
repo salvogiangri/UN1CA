@@ -57,4 +57,4 @@ Please note that:
 - Your Knox Warranty Bit will not be restored by locking back your bootloader, a solution such as [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) is suggested if you intend to stay on the stock firmware.
 
 {: .highlight }
-*Continue to Install UN1CA (Custom recovery) / [(Download mode)]({% link guide/download.md %})*
+*Continue to Install UN1CA [(Custom recovery)]({% link guide/recovery.md %}) / [(Download mode)]({% link guide/download.md %})*
