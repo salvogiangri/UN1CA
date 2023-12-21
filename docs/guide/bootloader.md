@@ -36,7 +36,7 @@ Having KnoxGuard as `Active` or `Locked` will prevent you from installing/runnin
 {: .pb-1 }
 - Open the Settings app, enter About Phone → Software info and tap “Build number” 10 times to enable Developer Options.
 - Go back into main settings page and you should now see a new category called "Developer Options". Enter it and enable OEM unlocking.
-- Reboot your device into Download mode by powering off your device and press the Download mode key combo for your device.
+- Reboot your device into Download mode by powering off your device and pressing the Download mode key combo for your device.
 - Long press volume up to unlock the bootloader. **This will wipe your data and automatically reboot.**
 - Go through the initial setup. Skip through all the steps since data will be wiped again in later steps. **Connect the device to Internet during the setup.**
 - Enable Developer Options, and **confirm that the OEM unlocking option exists and is grayed out.** This means KnoxGuard hasn't locked your device.
