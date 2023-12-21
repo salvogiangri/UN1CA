@@ -49,6 +49,5 @@ parent: Supported devices
 ```bash
 git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
 . ./buildenv.sh a73xq
-run_cmd download_fw
 run_cmd make_rom
 ```

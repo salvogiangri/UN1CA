@@ -16,7 +16,6 @@
 ```bash
 git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
 . ./buildenv.sh <device>
-run_cmd download_fw
 run_cmd make_rom
 ```
 
