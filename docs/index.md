@@ -12,12 +12,13 @@ permalink: /
   <a href="https://t.me/unicarom"><img loading="lazy" src="https://img.shields.io/badge/Telegram-229ed9?style=for-the-badge&logo=telegram&logoColor=ffffff"/></a>
 </p>
 
-### - [Installation instructions]({% link guide/index.md %})
-### - [Supported devices]({% link devices/index.md %})
-### - [Troubleshooting]({% link faq/index.md %})
-<br>
-#### Thank you to the contributors of UN1CA!
+- [Installation instructions]({% link guide/index.md %})
+- [Supported devices]({% link devices/index.md %})
+- [Developer guides]({% link expert/index.md %})
+- [Troubleshooting]({% link faq/index.md %})
 
+#### Thank you to the contributors of UN1CA!
+{: .pt-6 }
 <ul class="list-style-none">
 {% for contributor in site.github.contributors %}
   <li class="d-inline-block mr-1">
