@@ -58,7 +58,7 @@ Once you've made sure your device's bootloader is unlocked and have downloaded/i
     heimdall flash --BOOT boot.img --DTBO dtbo.img --VENDOR_BOOT vendor_boot.img --SUPER super.img
     ```
 
-If you followed every step correctly, the flash procedure will start and you'll see a progress indicator both in your device and the tool you're using in your PC. Your device will automatically reboot into the OS once the flash procedure ends.
+If you have followed every step correctly, the flash procedure will start and you will see a progress indicator both in your device and the tool you're using in your PC. The device will automatically reboot into the OS once the flash procedure ends.
 
 **A factory reset is required to avoid any sort of issues when installing the ROM for the first time in your device.** If your device asks you to do a factory reset, please do so.
 
