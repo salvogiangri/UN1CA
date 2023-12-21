@@ -62,7 +62,7 @@ If you have followed every step correctly, the flash procedure will start and yo
 
 **A factory reset is required to avoid any sort of issues when installing the ROM for the first time in your device.** If your device asks you to do a factory reset, please do so.
 
-If any other error/issue occurs, please refer to the [Troubleshooting]({% link faq/index.md %}) section.
+If you encounter any error/issue, please refer to the [Troubleshooting]({% link faq/index.md %}) section.
 
 ## Updating the ROM
 {: .pb-2 }
