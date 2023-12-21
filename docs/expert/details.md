@@ -60,3 +60,73 @@ This script will automatically set up your current shell instance to build UN1CA
 . ./buildenv.sh <target>
 ```
 With `<target>` being the device name. A list of all the available devices can be seen by running the command without any argument.
+
+## Patching system
+{: .pb-2 }
+
+UN1CA patches structure is heavily inspired by the [Magisk/KernelSU modules](https://topjohnwu.github.io/Magisk/guides.html#magisk-modules) one:
+
+```tree
+patch
+├── odm
+├── product
+├── system
+├── system_ext
+├── vendor
+├── ...
+├── smali
+├── ...
+├── customize.sh
+├── ...
+├── module.prop
+├── ...
+├── odm.prop
+├── product.prop
+├── system_ext.prop
+├── system.prop
+└── vendor.prop
+```
+
+### **module.prop**
+{: .pb-2 }
+This is the strict format of `module.prop`:
+```
+id=<patch identifier>
+name=<patch name>
+author=<patch author(s)>
+description=<patch description>
+```
+Each property can be omitted, with the only requirement being the file existing.
+
+### **Partitions folders (odm, product, system, system_ext, vendor)**
+{: .pb-2 }
+All the files placed inside one of each folder will be added/replaced inside each respective partition.
+Please note new files will also need to be added as an entry in the file_context/fs_config configs to avoid issues when building the system images.
+
+### **smali folder**
+{: .pb-2 }
+This folder allows the patching of APK/JAR files. A `patch` formatted file must be put inside a folder which path matches the path of the destination APK/JAR file to patch.
+
+Example:
+- APK files: `smali/system_ext/priv-app/SystemUI/SystemUI.apk`
+- JAR files: `smali/system/framework/framework.jar`
+
+### **customize.sh**
+{: .pb-2 }
+When created, this script allows to customize the patch application process. `SKIPUNZIP=1` variable can be declared if you want to skip the default patch application process (will only skip the partitions folders).
+
+Together with all the config.sh flags, the following variables are also available in the script:
+- `SRC_DIR`: path of the UN1CA root directory
+- `OUT_DIR`: path of the output folder
+- `TMP_DIR`: path of the temporary folder, this doesn't exists by default and can be used to temporarily store files
+- `ODIN_DIR`: path of the downloaded firmwares folder
+- `FW_DIR`: path of the extracted firmwares folder
+- `APKTOOL_DIR`: path of the decompiled APKs/JARs folder
+- `WORK_DIR`: path of the work folder
+- `TOOLS_DIR`: path of the tools folder
+
+All the tools are directly accessible without having to put the full path before (eg. `$TOOLS_DIR/bin/mkbootimg`, use `mkbootimg` only).
+
+### **.prop files**
+{: .pb-2 }
+These files follows the same format as `build.prop`. Each line comprises of `[key]=[value]`. When no value is set, the prop will be removed from its destination file.
