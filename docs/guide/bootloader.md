@@ -12,10 +12,10 @@ nav_order: 1
   <img loading="lazy" src="/assets/images/bl-unlock.png" width="30%"/>
 </p>
 
-Unlocking your bootloader is a fundamental step when customizing your device, as this allows you to flash and install unofficial images in it. Please note this procedure **will completely wipe your data**, so make a backup before proceeding.
-To check if your bootloader is already unlocked, boot your device in Download mode with its key combo and check the OEM Lock status.
+Unlocking your bootloader is a fundamental step when customizing your device, as it allows you to flash and install unofficial images in it. Please note this procedure **will completely wipe your data**, so make a backup before proceeding.
+To check if the bootloader is already unlocked, boot your device in Download mode with its key combo and check the OEM Lock status.
 
-Possible OEM Lock values are the following:
+The possible OEM Lock values are the following:
 - **ON (L)**: fully locked.
 - **ON (U)**: bootloader locked, OEM unlocking enabled.
 - **OFF (U)**: fully unlocked.
@@ -30,12 +30,13 @@ Possible KnoxGuard values are the following:
 - `Prenormal`: your device is temporarily locked, reaching 168h of uptime should trigger unlock.
 - `Checking`, `Completed`, `Broken`: your device is unlocked.
 
-Having KnoxGuard active will prevent you from installing/running unofficial images regardless of your bootloader lock state.
+Having KnoxGuard as `Active` or `Locked` will prevent you from installing/running unofficial images regardless of your bootloader lock state.
 
 ## Unlocking the bootloader
 {: .pb-1 }
-- Open the Settings app, enter Developer Options and enable OEM unlocking (If you don't see Developer Options, enter into About phone → Software info and tap "Build number" 10 times to show it).
-- Reboot to download mode: power off your device and press the download mode key combo for your device.
+- Open the Settings app, enter About Phone → Software info and tap “Build number” 10 times to enable Developer Options.
+- Go back into main settings page and you should now see a new category called "Developer Options". Enter it and enable OEM unlocking.
+- Reboot your device into Download mode by powering off your device and pressing the Download mode key combo for your device.
 - Long press volume up to unlock the bootloader. **This will wipe your data and automatically reboot.**
 - Go through the initial setup. Skip through all the steps since data will be wiped again in later steps. **Connect the device to Internet during the setup.**
 - Enable Developer Options, and **confirm that the OEM unlocking option exists and is grayed out.** This means KnoxGuard hasn't locked your device.
