@@ -27,7 +27,7 @@ To boot in Download mode, you have to power off your device and turn it on again
 Samsung modern devices require you to **plug it via an USB cable to your PC** and **hold both volume up and volume down buttons** until the above screen appears in your device, then press volume up once.
 
 In the [main section page]({% link guide/index.md %}) you can find a list of tools you can use to communicate with your device while it's in Download mode, each for every platform your PC might be running on.
-To install UN1CA or other unofficial images, your device's bootloader **must be unlocked**, if you're unsure please give a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
+To install UN1CA or other unofficial images, your device's bootloader **must be unlocked**. If you're unsure please give a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
 
 Once you've made sure your device's bootloader is unlocked and have downloaded/installed all the required tools in your PC, you can proceed with the following steps:
 
