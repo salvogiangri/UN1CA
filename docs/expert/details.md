@@ -25,7 +25,7 @@ UN1CA
 ├── external            <--- Dependencies folder
 ├── scripts             <--- Scripts folder
 ├── target              <--- Devices folder
-├── out                 <--- Output folder
+├── out                 <--- Output directory
 ├── unica               <--- ROM folder
 └── buildenv.sh         <--- Shell config script
 ```
@@ -53,17 +53,37 @@ This folder contains all the devices supported by UN1CA, each with its own build
 {: .pb-2 }
 This folder contains the main ROM configuration file, along with all the mods/patches which are applied regardless of the device.
 
-### **buildenv.sh**
+### buildenv.sh
 {: .pb-2 }
-This script will automatically set up your current shell instance to build UN1CA, by adding the `run_cmd` function. Usage of this script is:
+When sourced, this script will automatically set up your current shell instance to build UN1CA, it will also add the `run_cmd` function. Usage of this script is:
 ```bash
 . ./buildenv.sh <target>
 ```
 With `<target>` being the device name. A list of all the available devices can be seen by running the command without any argument.
 
+## Output directory
+{: .pb-2 }
+This folder is created when sourcing `buildenv.sh` for the first time. It has the following structure:
+
+```tree
+out
+├── apktool
+├── fw
+├── odin
+├── tools
+├── work_dir
+└── config.sh
+```
+{: .pb-2 }
+- **apktool**: Folder containing all the decompiled APKs/JARs
+- **fw**: Folder containing the extracted firmwares
+- **odin**: Folder containing the downloaded firmwares
+- **tools**: Folder containing all the compiled tools used by the build system
+- **work_dir**: Work directory containing the ROM system files
+- config.sh: Automatically generated build config
+
 ## Patching system
 {: .pb-2 }
-
 UN1CA patches structure is heavily inspired by the [Magisk/KernelSU modules](https://topjohnwu.github.io/Magisk/guides.html#magisk-modules) one:
 
 ```tree
@@ -117,12 +137,12 @@ When created, this script allows to customize the patch application process. `SK
 
 Together with all the config.sh flags, the following variables are also available in the script:
 - `SRC_DIR`: path of the UN1CA root directory
-- `OUT_DIR`: path of the output folder
+- `OUT_DIR`: path of the output directory
 - `TMP_DIR`: path of the temporary folder, this doesn't exists by default and can be used to temporarily store files
 - `ODIN_DIR`: path of the downloaded firmwares folder
 - `FW_DIR`: path of the extracted firmwares folder
 - `APKTOOL_DIR`: path of the decompiled APKs/JARs folder
-- `WORK_DIR`: path of the work folder
+- `WORK_DIR`: path of the work directory
 - `TOOLS_DIR`: path of the tools folder
 
 All the tools are directly accessible without having to put the full path before (eg. `$TOOLS_DIR/bin/mkbootimg`, use `mkbootimg` only).
