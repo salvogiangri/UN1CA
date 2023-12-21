@@ -42,3 +42,7 @@ Once you've made sure your device's bootloader is unlocked and have installed a 
 If you have followed every step correctly, the ROM has been installed succesfully and you can now exit recovery by selecting Reboot → System.
 
 If any other error/issue occurs, please refer to the [Troubleshooting]({% link faq/index.md %}) section.
+
+## Updating the ROM
+{: .pb-2 }
+To update the ROM, you can simply follow the same exact steps you've followed for the first time install, expection made for the data wipe which is not necessary anymore.
