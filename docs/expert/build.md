@@ -7,7 +7,7 @@ nav_order: 1
 
 # Build UN1CA
 {: .pb-2 }
-Building UN1CA is pretty straightforward and only requires running a few commands to get the job done. However, setting up your environment correctly might be necessary before proceeding to avoid errors/issues.
+Building UN1CA is pretty straightforward and only requires running a few commands to get the job done. However, setting up your environment correctly is necessary before proceeding to avoid errors/issues.
 
 ## Minimum requirements
 {: .pb-2 }
@@ -27,7 +27,7 @@ The following dependencies must be installed:
 - [Node.js](https://nodejs.org/) (installing via [nvm](https://github.com/nvm-sh/nvm) is suggested)
 - [protobuf](https://github.com/protocolbuffers/protobuf)
 - [Python 3](https://www.python.org/) (or newer)
-- [Java 11](https://www.java.com/) (or newer)
+- [Java 11](https://www.java.com/)
 - [libusb](https://libusb.info/)
 - [lz4](https://github.com/lz4/lz4)
 - [PCRE](https://pcre.sourceforge.net/)
@@ -46,12 +46,12 @@ sudo apt install -y \
 
 ## Building UN1CA
 {: .pb-2 }
-Once you've made sure all the dependencies are installed, you can now clone the repository via git:
+Once you have made sure all the dependencies are installed, you can now clone the repository via git:
 ```bash
 git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
 ```
 
-If you've already cloned the repository but didn't clone the submodules, you can do so afterwards with the following command:
+If you have the repository cloned already, but didn't clone the submodules, you can do so afterwards with the following command:
 ```bash
 git submodule update --init --recursive
 ```

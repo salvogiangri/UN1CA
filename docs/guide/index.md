@@ -8,11 +8,11 @@ has_children: true
 
 # Installation instructions
 {: .pb-1 }
-In this section you'll find useful resources that will guide you through installing UN1CA. If you need help, please check the [Troubleshooting]({% link faq/index.md %}) section. Before proceeding, you'll need:
+In this section you'll find some useful resources that will guide you through installing UN1CA. If you need help, please check the [Troubleshooting]({% link faq/index.md %}) section. Before proceeding, you'll need:
 
 - A supported device
 - A PC
-- An USB cable to connect your device to your PC.
+- A USB cable to connect your device to your PC.
 
 The following tools are also required depending on your PC platform:
 - **Windows:** [Samsung Odin3](https://dl2018.sammobile.com/Odin.zip) (requires [Samsung USB Drivers](https://developer.samsung.com/android-usb-driver))

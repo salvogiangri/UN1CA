@@ -20,20 +20,19 @@ nav_order: 3
   <img loading="lazy" src="/assets/images/dwnl-mode.png" width="30%"/>
 </p>
 
-Every Android OEM worthy of its name implements in its devices a proprietary "rescue mode", useful when recovering the device from bad installs or either manually upgrading.
-While most of them nowadays rely on Google's open source [fastboot](https://android.googlesource.com/platform/system/core/+/refs/heads/main/fastboot/README.md), Samsung keeps its roots by still using their own **"Download mode"**.
+Every Android OEM worthy of its name implements a proprietary "rescue mode" in its devices, useful when recovering the device from bad installs or to manually update.
+While most of them rely on Google's open source [fastboot](https://android.googlesource.com/platform/system/core/+/refs/heads/main/fastboot/README.md), Samsung keeps its roots by still using their own **"Download mode"**.
 
-To boot in Download mode, you have to power off your device and turn it on again with a specific key combo that might differ from device to device.
-Samsung modern devices require you to **plug it via an USB cable to your PC** and **hold both volume up and volume down buttons** until the above screen appears in your device, then press volume up once.
+To boot to Download mode, you have to power off your device and turn it on again with a specific key combo that might differ from device to device.
+Samsung modern devices require you to **plug it via an USB cable to your PC** and **hold both volume up and volume down buttons** until the above screen appears on your device, then press volume up once.
 
-In the [main section page]({% link guide/index.md %}) you can find a list of tools you can use to communicate with your device while it's in Download mode, each for every platform your PC might be running on.
+In the [main section page]({% link guide/index.md %}) you can find a list of tools you can use to communicate with your device while it's in Download mode, for any platform that your PC might be running on.
 To install UN1CA or other unofficial images, your device's bootloader **must be unlocked**. If you're unsure please give a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
 
 Once you've made sure your device's bootloader is unlocked and have downloaded/installed all the required tools in your PC, you can proceed with the following steps:
 
 - Download the latest available UN1CA tar package for your device
-- Connect your device to your PC
-- Reboot your device into Download mode: power off your device and press the Download mode key combo for your device.
+- Reboot your device to Download mode: power off your device and connect it to your PC while pressing the Download mode key combo for your device.
 - Depending by your platform:
   - Odin3 **(Windows)**:\
     Open Odin3, click the **"AP"** button and select the UN1CA package you previously downloaded, then click the **"Start"** button.
@@ -52,7 +51,7 @@ Once you've made sure your device's bootloader is unlocked and have downloaded/i
     done
     ```
     Once you have all the `.img` files decompressed, run `heimdall flash` via your terminal to start the flash.
-    This command will take as arguments **the name of the partition slot** followed by **the actual file path**.
+    This command will be in the format of **--the name of the partition slot** followed by **the actual file path**.
     For example, this is the command you have to run if the `.tar` package you extracted contains `boot.img`, `dtbo.img`, `vendor_boot.img` and `super.img`:
     ```bash
     heimdall flash --BOOT boot.img --DTBO dtbo.img --VENDOR_BOOT vendor_boot.img --SUPER super.img
@@ -66,4 +65,4 @@ If you encounter any error/issue, please refer to the [Troubleshooting]({% link 
 
 ## Updating the ROM
 {: .pb-2 }
-To update the ROM, you can simply follow the same exact steps you've followed for the first time install, expection made for the data wipe which is not necessary anymore.
+To update the ROM, you can simply follow the same exact steps you've followed for the first time install, except for for the data wipe which is not necessary anymore.
