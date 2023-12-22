@@ -7,7 +7,7 @@ nav_order: 4
 
 # Build flags
 {: .pb-2 }
-This section contains all the available UN1CA build flags.
+This section covers all of the available UN1CA build flags.
 
 Source build flags must be set inside `unica/config.sh` and are related to the firmware which is used as the ROM base, while target build flags must be set in the `config.sh` file of the desidered target device.
 
@@ -32,7 +32,7 @@ Defines the source firmware [VNDK](https://source.android.com/docs/core/architec
 
 ### - **SOURCE_HAS_SYSTEM_EXT** (boolean, required)
 {: .pb-2 }
-Set this to true if the source device has a separate system_ext partition. You can check this by extracting the `super.img` partition or in the fstab config file.
+Set this flag to true if the source device has a separate system_ext partition. You can check this by extracting the `super.img` partition or in the fstab config file.
 
 ### - **SOURCE_HAS_KNOX_DUALDAR** (boolean, required)
 {: .pb-2 }

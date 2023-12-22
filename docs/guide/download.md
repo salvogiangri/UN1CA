@@ -9,7 +9,7 @@ nav_order: 3
 {: .pb-2 }
 
 {: .important }
-> This guide is specific to devices in which the install method is marked as **"Download mode"**.
+> This guide is specific to the devices in which the install method is marked as **"Download mode"**.
 > If your device uses the **"Custom recovery"** install method or the file name you downloaded ends with the `.zip` extension, follow [this]({% link guide/recovery.md %}) instead.
 
 {: .warning }
@@ -65,4 +65,4 @@ If you encounter any error/issue, please refer to the [Troubleshooting]({% link 
 
 ## Updating the ROM
 {: .pb-2 }
-To update the ROM, you can simply follow the same exact steps you've followed for the first time install, except for for the data wipe which is not necessary anymore.
+To update the ROM, you can simply follow the same exact steps you've followed for the first time install, except for the data wipe which is not necessary anymore.

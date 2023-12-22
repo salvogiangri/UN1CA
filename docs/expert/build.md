@@ -27,7 +27,7 @@ The following dependencies must be installed:
 - [Node.js](https://nodejs.org/) (installing via [nvm](https://github.com/nvm-sh/nvm) is suggested)
 - [protobuf](https://github.com/protocolbuffers/protobuf)
 - [Python 3](https://www.python.org/) (or newer)
-- [Java 11](https://www.java.com/)
+- [Java 11](https://www.java.com/) (or newer)
 - [libusb](https://libusb.info/)
 - [lz4](https://github.com/lz4/lz4)
 - [PCRE](https://pcre.sourceforge.net/)

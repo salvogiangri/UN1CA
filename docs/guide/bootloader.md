@@ -12,7 +12,7 @@ nav_order: 1
   <img loading="lazy" src="/assets/images/bl-unlock.png" width="30%"/>
 </p>
 
-Unlocking your bootloader is the first step when installing a custom rom your device, as it allows you to flash and install unofficial images on it. Please note this procedure **will completely wipe your data**, so make a backup before proceeding.
+Unlocking your bootloader is a fundamental step when customizing your device, as it allows you to flash and install unofficial images in it. Please note this procedure **will completely wipe your data**, so make a backup before proceeding.
 To check if the bootloader is already unlocked, boot your device in Download mode with its key combo and check the OEM Lock status.
 
 The possible OEM Lock values are:
