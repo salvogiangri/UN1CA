@@ -9,7 +9,7 @@ nav_order: 2
 {: .pb-2 }
 
 {: .important }
-> This guide is specific to devices in which the install method is marked as **"Custom recovery"**.
+> This guide is specific to the devices in which the install method is marked as **"Custom recovery"**.
 > If your device uses the **"Download mode"** install method or the file name you downloaded ends with the `.tar` extension, follow [this]({% link guide/download.md %}) instead.
 
 {: .warning }
@@ -21,7 +21,7 @@ nav_order: 2
 </p>
 
 Installing custom ROMs via a recovery has been the standard since Android early times, and today it's still the way to go in most devices.
-This guide will not go in deep details about how to install a custom recovery, as the procedure might differ from device to device, so please refer to the XDA community page of [your device]({% link devices/index.md %}).
+This guide will not go in deep details about how to install a custom recovery, as the procedure might differ from device to device, so please refer to the XDA community page for [your device]({% link devices/index.md %}).
 
 To install UN1CA, a custom recovery and/or other unofficial images, your device's bootloader **must be unlocked**. If you are unsure please take a look at the ["Unlocking the bootloader"]({% link guide/bootloader.md %}) page.
 
@@ -35,7 +35,7 @@ Once you have made sure your device's bootloader is unlocked and that you have a
     adb reboot recovery
     ```
   - **Magisk/KernelSU Manager**: open the Magisk/KernelSU Manager app and select "Reboot to recovery" option in the Toolbar menu.
-- Open the Install menu, select the UN1CA package you previously downloaded and flash it. UI might vary depending which recovery you've installed.
+- Open the Install menu, select the UN1CA package you previously downloaded and flash it. UI might vary depending which recovery you have installed.
 - Your specific device installer might have a "Post-install" feature enabled which will automatically reboot your device a few times. Don't worry about it.
 - Once the installation has finished, open the Wipe → Format Data menu, type "yes" and confirm. **This step is only required the very first time you install the ROM.**
 

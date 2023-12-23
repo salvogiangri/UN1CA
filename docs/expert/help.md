@@ -20,7 +20,7 @@ This command handles APKs/JARs decoding/building, which is controlled by the ver
 - `d`/`decode`: decodes the input APK/JAR file(s)
 - `b`/`build`: builds the input APK/JAR dir(s)
 
-Decoded APK/JAR files will be stored in `APKTOOL_DIR` (out/apktool), each in its respective original system path, while the built APK/JAR files will be copied back in their original path.
+Decoded APK/JAR files will be stored in `APKTOOL_DIR` (out/apktool), each in its respective original system path, while the built APK/JAR files will be copied back to their original path.
 
 The input APK/JAR files/folders **must match** the path in their respective system partition. Here there are some examples:
 ```bash
