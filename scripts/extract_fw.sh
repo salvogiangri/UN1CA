@@ -21,6 +21,12 @@
 set -e
 
 # [
+GET_LATEST_FIRMWARE()
+{
+    curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
+        | grep latest | sed 's/^[^>]*>//' | sed 's/<.*//'
+}
+
 GET_IMG_FS_TYPE()
 {
     if [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]]; then
@@ -235,6 +241,7 @@ do
     REGION=$(echo -n "$i" | cut -d "/" -f 2)
 
     if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
+        [ -z "$(GET_LATEST_FIRMWARE)" ] && continue
         if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && \
             [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
             if $FORCE; then
@@ -246,6 +253,11 @@ do
                 echo -e "  To extract, clean your extracted firmwares directory or run this cmd with \"--force\"\n"
                 continue
             fi
+        elif [[ "$(GET_LATEST_FIRMWARE)" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
+            echo    "- $MODEL firmware with $REGION CSC is already extracted."
+            echo    "  A newer version of this device's firmware is available."
+            echo -e "  Please download the firmware using the \"download_fw\" cmd\n"
+            continue
         else
             echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
             continue

@@ -81,8 +81,12 @@ if $FORCE; then
 fi
 
 if $BUILD_ROM; then
-    bash "$SRC_DIR/scripts/download_fw.sh"
-    bash "$SRC_DIR/scripts/extract_fw.sh"
+    NEED_FW_DOWNLOAD=false
+    bash "$SRC_DIR/scripts/extract_fw.sh" &> /dev/null || NEED_FW_DOWNLOAD=true
+    if $NEED_FW_DOWNLOAD; then
+        bash "$SRC_DIR/scripts/download_fw.sh"
+        bash "$SRC_DIR/scripts/extract_fw.sh"
+    fi
 
     echo -e "- Creating work dir..."
     bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
