@@ -37,10 +37,15 @@ case "$1" in
         FW="SM-S9110/CHC"
         BLOBS="$(find "$SRC_DIR/unica/packages/china/system" -type f | sed "s.$SRC_DIR/unica/packages/china.system.")"
         ;;
-    "unica/packages/fod")
+    "unica/packages/fod/essi")
+        MODULE="$1"
+        FW="SM-S711B/SEK"
+        BLOBS="$(find "$SRC_DIR/unica/packages/fod/essi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/essi.system.")"
+        ;;
+    "unica/packages/fod/qssi")
         MODULE="$1"
         FW="SM-X716B/EUX"
-        BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f | sed "s.$SRC_DIR/unica/packages/fod.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
         ;;
     "unica/packages/knox/none")
         MODULE="$1"
