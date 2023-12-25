@@ -164,7 +164,11 @@ APPLY_MODULE()
         exit 1
     fi
 
-    if [[ "$MODPATH" == *"unica/packages/knox" ]]; then
+    if [ -d "$MODPATH/$TARGET_SINGLE_SYSTEM_IMAGE" ]; then
+        MODPATH="$MODPATH/$TARGET_SINGLE_SYSTEM_IMAGE"
+    fi
+
+    if [[ "$MODPATH" == *"unica/packages/knox"* ]]; then
         local SUBDIR
         SUBDIR=$(GEN_KNOX_SUBDIR)
         [ -z "$SUBDIR" ] && return 0

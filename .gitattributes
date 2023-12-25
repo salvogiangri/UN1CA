@@ -5,8 +5,8 @@
 unica/flashable-zip/updater binary
 unica/packages/fod/essi/system/** binary
 unica/packages/fod/qssi/system/** binary
-unica/packages/knox/none/system/** binary
-unica/packages/knox/sdp/system/** binary
+unica/packages/knox/qssi/none/system/** binary
+unica/packages/knox/qssi/sdp/system/** binary
 unica/packages/vndk/30/** binary
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
