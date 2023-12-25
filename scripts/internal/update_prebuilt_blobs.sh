@@ -47,15 +47,15 @@ case "$1" in
         FW="SM-X716B/EUX"
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
         ;;
-    "unica/packages/knox/none")
+    "unica/packages/knox/qssi/none")
         MODULE="$1"
         FW="SM-A736B/INS"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/none.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/none.system.")"
         ;;
-    "unica/packages/knox/sdp")
+    "unica/packages/knox/qssi/sdp")
         MODULE="$1"
         FW="SM-A528B/BTU"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/sdp.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/sdp.system.")"
         ;;
     "unica/packages/mass_cam")
         MODULE="$1"
