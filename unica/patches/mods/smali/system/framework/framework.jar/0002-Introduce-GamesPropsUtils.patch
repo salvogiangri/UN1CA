@@ -1,0 +1,726 @@
+From ffcd86e0949077fa1328bc4568af4429de69625a Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Wed, 27 Dec 2023 23:41:37 +0100
+Subject: [PATCH] Introduce GamesPropsUtils
+
+---
+ smali/android/app/Instrumentation.smali       |   4 +
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 684 ++++++++++++++++++
+ 2 files changed, 688 insertions(+)
+ create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
+
+diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
+index 5017c88a..12481d4b 100644
+--- a/smali/android/app/Instrumentation.smali
++++ b/smali/android/app/Instrumentation.smali
+@@ -634,6 +634,8 @@
+ 
+     invoke-static {p1}, Lio/mesalabs/unica/KnoxPatchHooks;->init(Landroid/content/Context;)V
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/GamesPropsUtils;->setProps(Landroid/content/Context;)V
++
+     return-object v0
+ .end method
+ 
+@@ -3846,6 +3848,8 @@
+ 
+     invoke-static {p3}, Lio/mesalabs/unica/KnoxPatchHooks;->init(Landroid/content/Context;)V
+ 
++    invoke-static {p3}, Lio/mesalabs/unica/GamesPropsUtils;->setProps(Landroid/content/Context;)V
++
+     return-object v0
+ .end method
+ 
+diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
+new file mode 100644
+index 00000000..16ecbce0
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
+@@ -0,0 +1,684 @@
++.class public Lio/mesalabs/unica/GamesPropsUtils;
++.super Ljava/lang/Object;
++.source "GamesPropsUtils.java"
++
++
++# static fields
++.field private static final blacklist DEBUG:Z = true
++
++.field private static final blacklist TAG:Ljava/lang/String; = "GamesPropsUtils"
++
++.field private static final blacklist packagesToChangeBS4:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeF5:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeMI11TP:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeMI13P:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeOP8P:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeOP9P:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeROG6:[Ljava/lang/String;
++
++.field private static final blacklist packagesToChangeXP5:[Ljava/lang/String;
++
++.field private static final blacklist propsToChangeBS4:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeF5:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeMI11TP:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeMI13P:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeOP8P:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeOP9P:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeROG6:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final blacklist propsToChangeXP5:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++
++# direct methods
++.method static constructor blacklist <clinit>()V
++    .locals 16
++
++    const-string v0, "2SM-X706B"
++
++    const-string v1, "blackshark"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeBS4:Ljava/util/Map;
++
++    const-string v0, "com.proximabeta.mf.uamo"
++
++    filled-new-array {v0}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeBS4:[Ljava/lang/String;
++
++    const-string v0, "2107113SI"
++
++    const-string v1, "Xiaomi"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI11TP:Ljava/util/Map;
++
++    const-string v0, "com.supercell.clashofclans"
++
++    const-string v2, "com.vng.mlbbvn"
++
++    const-string v3, "com.ea.gp.apexlegendsmobilefps"
++
++    const-string v4, "com.levelinfinite.hotta.gp"
++
++    filled-new-array {v3, v4, v0, v2}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI11TP:[Ljava/lang/String;
++
++    const-string v0, "2210132C"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI13P:Ljava/util/Map;
++
++    const-string v0, "com.levelinfinite.sgameGlobal"
++
++    const-string v2, "com.tencent.tmgp.sgame"
++
++    filled-new-array {v0, v2}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI13P:[Ljava/lang/String;
++
++    const-string v0, "IN2020"
++
++    const-string v2, "OnePlus"
++
++    invoke-static {v0, v2}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP8P:Ljava/util/Map;
++
++    const-string v14, "com.tencent.tmgp.pubgmhd"
++
++    const-string v15, "com.vng.pubgmobile"
++
++    const-string v3, "com.netease.lztgglobal"
++
++    const-string v4, "com.pubg.imobile"
++
++    const-string v5, "com.pubg.krmobile"
++
++    const-string v6, "com.rekoo.pubgm"
++
++    const-string v7, "com.riotgames.league.wildrift"
++
++    const-string v8, "com.riotgames.league.wildrifttw"
++
++    const-string v9, "com.riotgames.league.wildriftvn"
++
++    const-string v10, "com.riotgames.league.teamfighttactics"
++
++    const-string v11, "com.riotgames.league.teamfighttacticstw"
++
++    const-string v12, "com.riotgames.league.teamfighttacticsvn"
++
++    const-string v13, "com.tencent.ig"
++
++    filled-new-array/range {v3 .. v15}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP8P:[Ljava/lang/String;
++
++    const-string v0, "LE2101"
++
++    invoke-static {v0, v2}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP9P:Ljava/util/Map;
++
++    const-string v0, "com.epicgames.portal"
++
++    const-string v2, "com.tencent.lolm"
++
++    const-string v3, "com.epicgames.fortnite"
++
++    filled-new-array {v3, v0, v2}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP9P:[Ljava/lang/String;
++
++    const-string v0, "23049PCD8G"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeF5:Ljava/util/Map;
++
++    const-string v0, "com.dts.freefireth"
++
++    const-string v1, "com.mobile.legends"
++
++    const-string v2, "com.dts.freefiremax"
++
++    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeF5:[Ljava/lang/String;
++
++    const-string v0, "ASUS_AI2201"
++
++    const-string v1, "asus"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeROG6:Ljava/util/Map;
++
++    const-string v5, "com.pearlabyss.blackdesertm"
++
++    const-string v6, "com.pearlabyss.blackdesertm.gl"
++
++    const-string v1, "com.activision.callofduty.shooter"
++
++    const-string v2, "com.ea.gp.fifamobile"
++
++    const-string v3, "com.gameloft.android.ANMP.GloftA9HM"
++
++    const-string v4, "com.madfingergames.legends"
++
++    filled-new-array/range {v1 .. v6}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeROG6:[Ljava/lang/String;
++
++    const-string v0, "SO-52A"
++
++    const-string v1, "Sony"
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeXP5:Ljava/util/Map;
++
++    const-string v0, "com.tencent.tmgp.kr.codm"
++
++    const-string v1, "com.vng.codmvn"
++
++    const-string v2, "com.garena.game.codm"
++
++    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeXP5:[Ljava/lang/String;
++
++    return-void
++.end method
++
++.method private constructor blacklist <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static blacklist createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    .locals 2
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "(",
++            "Ljava/lang/String;",
++            "Ljava/lang/String;",
++            ")",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "MODEL"
++
++    invoke-interface {v0, v1, p0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, p1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method public static blacklist dlog(Ljava/lang/String;)V
++    .locals 1
++
++    const-string v0, "GamesPropsUtils"
++
++    invoke-static {v0, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++
++    return-void
++.end method
++
++.method private static blacklist setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++    .locals 3
++
++    :try_start_0
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "Defining prop "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, " to "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Ljava/lang/Object;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Lio/mesalabs/unica/GamesPropsUtils;->dlog(Ljava/lang/String;)V
++
++    const-class v0, Landroid/os/Build;
++
++    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++    :try_end_0
++    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Failed to set prop "
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "GamesPropsUtils"
++
++    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :goto_0
++    return-void
++.end method
++
++.method public static blacklist setProps(Landroid/content/Context;)V
++    .locals 6
++
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_b
++
++    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    goto/16 :goto_2
++
++    :cond_0
++    const/4 v1, 0x0
++
++    const-string v2, "persist.sys.pixelprops.games"
++
++    const/4 v3, 0x1
++
++    invoke-static {v2, v3}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v2
++
++    if-nez v2, :cond_1
++
++    return-void
++
++    :cond_1
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeBS4:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_2
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeBS4:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_2
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI11TP:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_3
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI11TP:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_3
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI13P:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_4
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI13P:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_4
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP8P:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_5
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP8P:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_5
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP9P:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_6
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP9P:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_6
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeF5:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_7
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeF5:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_7
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeROG6:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_8
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeROG6:Ljava/util/Map;
++
++    goto :goto_0
++
++    :cond_8
++    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeXP5:[Ljava/lang/String;
++
++    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v2
++
++    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_9
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeXP5:Ljava/util/Map;
++
++    :cond_9
++    :goto_0
++    if-eqz v1, :cond_a
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v3, "Defining props for: "
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2}, Lio/mesalabs/unica/GamesPropsUtils;->dlog(Ljava/lang/String;)V
++
++    invoke-interface {v1}, Ljava/util/Map;->entrySet()Ljava/util/Set;
++
++    move-result-object v2
++
++    invoke-interface {v2}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
++
++    move-result-object v2
++
++    :goto_1
++    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v3
++
++    if-eqz v3, :cond_a
++
++    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v3
++
++    check-cast v3, Ljava/util/Map$Entry;
++
++    invoke-interface {v3}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
++
++    move-result-object v4
++
++    check-cast v4, Ljava/lang/String;
++
++    invoke-interface {v3}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
++
++    move-result-object v5
++
++    invoke-static {v4, v5}, Lio/mesalabs/unica/GamesPropsUtils;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    goto :goto_1
++
++    :cond_a
++    return-void
++
++    :cond_b
++    :goto_2
++    return-void
++.end method
+-- 
+2.43.0
+

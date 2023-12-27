@@ -1,4 +1,4 @@
-From 584d6c30a1ae19f46867d2cd2cd31da3dcbc42be Mon Sep 17 00:00:00 2001
+From 857e98801f837ed788a85b3495f7864f8e83d270 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -8,18 +8,19 @@ Subject: [PATCH] Add UN1CA Settings
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   6 +
  res/layout/unica_settings_logo_layout.xml     |   6 +
- res/values/public.xml                         |  13 +-
- res/values/strings.xml                        |   6 +
+ res/values/public.xml                         |  14 +-
+ res/values/strings.xml                        |   7 +
  res/xml/sec_top_level_settings.xml            |   3 +-
- res/xml/unica_settings.xml                    |  10 +
- .../com/android/settings/R$string.smali       |  12 +
+ res/xml/unica_settings.xml                    |  11 +
+ .../com/android/settings/R$string.smali       |  14 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         |  57 +++++
  .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++++++++++
+ .../GamesPropsPreferenceController.smali      | 179 ++++++++++++++
  .../ROMVersionPreferenceController.smali      | 195 +++++++++++++++
  ...SecureScreenshotPreferenceController.smali | 195 +++++++++++++++
- 15 files changed, 757 insertions(+), 3 deletions(-)
+ 16 files changed, 941 insertions(+), 3 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -27,6 +28,7 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
@@ -90,7 +92,7 @@ index 00000000..bbb70b4c
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimaryDark" app:tintMode="src_in" />
 +</FrameLayout>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 7ba70fd4..b061b830 100644
+index 7ba70fd4..f05dbf1f 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -11781,6 +11781,7 @@
@@ -118,20 +120,21 @@ index 7ba70fd4..b061b830 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0565" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014a" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a0" />
-@@ -31357,6 +31361,12 @@
+@@ -31357,6 +31361,13 @@
      <public type="string" name="zone_time_type_standard" id="0x7f1332a0" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f1332a1" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f1332a2" />
 +    <public type="string" name="keywords_unica_settings" id="0x7f1332a3" />
 +    <public type="string" name="menu_key_unica_settings" id="0x7f1332a4" />
 +    <public type="string" name="unica_extra_settings_title" id="0x7f1332a5" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1332a6" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1332a7" />
-+    <public type="string" name="unica_settings_title" id="0x7f1332a8" />
++    <public type="string" name="unica_games_spoof_title" id="0x7f1332a6" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1332a7" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1332a8" />
++    <public type="string" name="unica_settings_title" id="0x7f1332a9" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34045,4 +34055,5 @@
+@@ -34045,4 +34056,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16025e" />
      <public type="xml" name="zen_mode_settings" id="0x7f16025f" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f160260" />
@@ -140,16 +143,17 @@ index 7ba70fd4..b061b830 100644
 +    <public type="xml" name="unica_settings" id="0x7f160261" />
 +</resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 9c5963a1..5b9d55ac 100644
+index 9c5963a1..7b0f3101 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13588,4 +13588,10 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13588,4 +13588,11 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
 +    <string name="keywords_unica_settings">UN1CA Settings</string>
 +    <string name="menu_key_unica_settings">top_level_unica</string>
 +    <string name="unica_extra_settings_title">Extra settings</string>
++    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
 +    <string name="unica_rom_version_title">ROM version</string>
 +    <string name="unica_secure_ss_title">Allow secure screenshot</string>
 +    <string name="unica_settings_title">UN1CA Settings</string>
@@ -175,10 +179,10 @@ index 5bf6f32f..0f0dbd23 100644
 +</PreferenceScreen>
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..2543d074
+index 00000000..eabae4c8
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,11 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -187,13 +191,14 @@ index 00000000..2543d074
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
++        <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.GamesPropsPreferenceController" />
 +    </SecPreferenceCategory>
 +</PreferenceScreen>
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index fe88911c..6ad8f881 100644
+index fe88911c..3e2423b9 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12179,3 +12179,15 @@
+@@ -12179,3 +12179,17 @@
  .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f1332a1
  
  .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f1332a2
@@ -204,11 +209,13 @@ index fe88911c..6ad8f881 100644
 +
 +.field public static final unica_extra_settings_title:I = 0x7f1332a5
 +
-+.field public static final unica_rom_version_title:I = 0x7f1332a6
++.field public static final unica_games_spoof_title:I = 0x7f1332a6
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1332a7
++.field public static final unica_rom_version_title:I = 0x7f1332a7
 +
-+.field public static final unica_settings_title:I = 0x7f1332a8
++.field public static final unica_secure_ss_title:I = 0x7f1332a8
++
++.field public static final unica_settings_title:I = 0x7f1332a9
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
 index 9e7b0dfb..7b18d280 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
@@ -530,6 +537,191 @@ index 00000000..00e24add
 +
 +    return p0
 +.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
+new file mode 100644
+index 00000000..1b366108
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
+@@ -0,0 +1,179 @@
++.class public Lio/mesalabs/unica/settings/GamesPropsPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "GamesPropsPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getDatabaseUri()Landroid/net/Uri;
++    .locals 0
++
++    const-string p0, "unica_games_spoof"
++
++    invoke-static {p0}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 1
++
++    const-string p0, "persist.sys.pixelprops.games"
++
++    const/4 v0, 0x1
++
++    invoke-static {p0, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    const-string p0, "persist.sys.pixelprops.games"
++
++    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {p0, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
 new file mode 100644
 index 00000000..502dc3a6
@@ -733,7 +925,7 @@ index 00000000..502dc3a6
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 new file mode 100644
-index 00000000..6cd0c44c
+index 00000000..8c16bbab
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 @@ -0,0 +1,195 @@
@@ -916,7 +1108,7 @@ index 00000000..6cd0c44c
 +
 +    const-string v0, "unica_secure_ss"
 +
-+    invoke-static {p0, v0, p1}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
 +    move-result p0
 +
