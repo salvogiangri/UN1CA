@@ -47,6 +47,9 @@ SET_CONFIG()
     fi
 }
 
+mv -f "$WORK_DIR/system/system/priv-app/AppLock" "$WORK_DIR/system/system/priv-app/SAppLock"
+mv -f "$WORK_DIR/system/system/priv-app/SAppLock/AppLock.apk" "$WORK_DIR/system/system/priv-app/SAppLock/SAppLock.apk"
+
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SmartManager_v5"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SmartManager_v6_DeviceSecurity"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
@@ -61,10 +64,10 @@ if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/file_context-system"; then
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm\.devicesecurity\.tcm_v6\.xml u:object_r:system_file:s0"
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm_cn\.xml u:object_r:system_file:s0"
         echo "/system/etc/permissions/privapp-permissions-com\.sec\.android\.app\.firewall\.xml u:object_r:system_file:s0"
-        echo "/system/priv-app/AppLock u:object_r:system_file:s0"
-        echo "/system/priv-app/AppLock/AppLock\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/Firewall u:object_r:system_file:s0"
         echo "/system/priv-app/Firewall/Firewall\.apk u:object_r:system_file:s0"
+        echo "/system/priv-app/SAppLock u:object_r:system_file:s0"
+        echo "/system/priv-app/SAppLock/SAppLock\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManagerCN u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManagerCN/SmartManagerCN\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/SmartManager_v6_DeviceSecurity_CN u:object_r:system_file:s0"
@@ -77,10 +80,10 @@ if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/fs_config-system"; then
         echo "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity.tcm_v6.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/privapp-permissions-com.samsung.android.sm_cn.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/privapp-permissions-com.sec.android.app.firewall.xml 0 0 644 capabilities=0x0"
-        echo "system/priv-app/AppLock 0 0 755 capabilities=0x0"
-        echo "system/priv-app/AppLock/AppLock.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/Firewall 0 0 755 capabilities=0x0"
         echo "system/priv-app/Firewall/Firewall.apk 0 0 644 capabilities=0x0"
+        echo "system/priv-app/SAppLock 0 0 755 capabilities=0x0"
+        echo "system/priv-app/SAppLock/SAppLock.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/SmartManagerCN 0 0 755 capabilities=0x0"
         echo "system/priv-app/SmartManagerCN/SmartManagerCN.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/SmartManager_v6_DeviceSecurity_CN 0 0 755 capabilities=0x0"
