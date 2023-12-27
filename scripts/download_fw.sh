@@ -33,7 +33,7 @@ DOWNLOAD_FIRMWARE()
     PDR="$(pwd)"
 
     cd "$ODIN_DIR"
-    { samfirm -m "$MODEL" -r "$REGION" > /dev/null; } 2>&1 \
+    { samfirm -m "$MODEL" -r "$REGION" -i "$IMEI" > /dev/null; } 2>&1 \
         && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
         || exit 1
     [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && {
@@ -84,6 +84,7 @@ for i in "${FIRMWARES[@]}"
 do
     MODEL=$(echo -n "$i" | cut -d "/" -f 1)
     REGION=$(echo -n "$i" | cut -d "/" -f 2)
+    IMEI=$(echo -n "$i" | cut -d "/" -f 3)
 
     if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
         [ -z "$(GET_LATEST_FIRMWARE)" ] && continue
