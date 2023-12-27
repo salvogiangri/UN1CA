@@ -1,0 +1,937 @@
+From 584d6c30a1ae19f46867d2cd2cd31da3dcbc42be Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Wed, 27 Dec 2023 13:17:48 +0100
+Subject: [PATCH] Add UN1CA Settings
+
+---
+ AndroidManifest.xml                           |  10 +-
+ res/drawable/sec_ic_settings_unica.xml        |   9 +
+ .../unica_settings_logo_layout.xml            |   6 +
+ res/layout/unica_settings_logo_layout.xml     |   6 +
+ res/values/public.xml                         |  13 +-
+ res/values/strings.xml                        |   6 +
+ res/xml/sec_top_level_settings.xml            |   3 +-
+ res/xml/unica_settings.xml                    |  10 +
+ .../com/android/settings/R$string.smali       |  12 +
+ .../com/android/settings/R$xml.smali          |   2 +
+ .../Settings$UnicaSettingsActivity.smali      |  13 +
+ .../unica/UnicaSettingsFragment.smali         |  57 +++++
+ .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++++++++++
+ .../ROMVersionPreferenceController.smali      | 195 +++++++++++++++
+ ...SecureScreenshotPreferenceController.smali | 195 +++++++++++++++
+ 15 files changed, 757 insertions(+), 3 deletions(-)
+ create mode 100644 res/drawable/sec_ic_settings_unica.xml
+ create mode 100644 res/layout-night/unica_settings_logo_layout.xml
+ create mode 100644 res/layout/unica_settings_logo_layout.xml
+ create mode 100644 res/xml/unica_settings.xml
+ create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 40b33ff4..f6935e7a 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -4978,5 +4978,13 @@
+             <meta-data android:name="com.samsung.android.sdk.routines.v3.version" android:value="3.1.5"/>
+             <meta-data android:name="com.samsung.android.sdk.routines.v3.version_code" android:value="30105"/>
+         </provider>
++        <activity android:exported="true" android:label="@string/unica_settings_title" android:name="com.android.settings.Settings$UnicaSettingsActivity">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN"/>
++                <category android:name="android.intent.category.DEFAULT"/>
++            </intent-filter>
++            <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.UnicaSettingsFragment"/>
++            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_settings"/>
++        </activity>
+     </application>
+-</manifest>
+\ No newline at end of file
++</manifest>
+diff --git a/res/drawable/sec_ic_settings_unica.xml b/res/drawable/sec_ic_settings_unica.xml
+new file mode 100644
+index 00000000..7ec3582d
+--- /dev/null
++++ b/res/drawable/sec_ic_settings_unica.xml
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="utf-8"?>
++<vector android:height="28.0dip" android:width="28.0dip" android:viewportWidth="28.0" android:viewportHeight="28.0"
++  xmlns:android="http://schemas.android.com/apk/res/android">
++    <path android:fillColor="#ff89bcff" android:pathData="M24.856,3.144C23.13,1.522 20.774,0.601 18.174,0.257C15.691,-0.072 14,0.009 14,0.009C14,0.009 12.309,-0.072 9.826,0.257C7.226,0.601 4.87,1.522 3.144,3.144C1.521,4.87 0.601,7.226 0.257,9.826C-0.072,12.309 0.009,14 0.009,14C0.009,14 -0.072,15.691 0.257,18.174C0.601,20.774 1.521,23.13 3.144,24.856C4.87,26.478 7.226,27.399 9.826,27.743C12.309,28.072 14,27.991 14,27.991C14,27.991 15.691,28.072 18.174,27.743C20.774,27.399 23.13,26.478 24.856,24.856C26.479,23.13 27.399,20.774 27.743,18.174C28.072,15.691 27.991,14 27.991,14C27.991,14 28.072,12.309 27.743,9.826C27.399,7.226 26.479,4.87 24.856,3.144Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
++    <group android:translateX="-4.0" android:translateY="-4.0">
++        <path android:fillColor="#ffffffff" android:pathData="M25.4968,20.1083L24.2135,18.825C24.0301,18.6417 23.9385,18.3667 23.9385,18.1833C23.9385,18.1833 23.9385,18.1833 23.9385,18C23.9385,17.8167 23.9385,17.8167 23.9385,17.8167C23.9385,17.6333 24.0301,17.3583 24.2135,17.175L25.4968,15.8917C25.6801,15.7083 25.6801,15.4333 25.5885,15.1583L24.2135,12.775C24.1218,12.5917 23.7551,12.4083 23.5718,12.5L21.8301,12.9583C21.5551,13.05 21.2801,12.9583 21.0968,12.8667C20.9135,12.775 20.4551,12.3167 20.3635,12.0417L19.9051,10.3C19.8135,10.025 19.6301,9.8417 19.3551,9.8417L16.6051,9.8417C16.3301,9.8417 16.0551,10.025 16.0551,10.3L15.5968,12.0417C15.5051,12.3167 15.3218,12.5917 15.1385,12.6833C14.9551,12.775 14.3135,12.9583 14.1301,12.9583L12.3885,12.5C12.1135,12.4083 11.8385,12.5917 11.7468,12.775L10.3718,15.1583C10.2801,15.3417 10.2801,15.7083 10.4635,15.8917L11.7468,17.175C11.9301,17.3583 12.0218,17.6333 12.0218,17.8167C12.0218,17.8167 12.0218,17.8167 12.0218,18C12.0218,18.1833 12.0218,18.1833 12.0218,18.1833C12.0218,18.3667 11.9301,18.6417 11.7468,18.825L10.4635,20.1083C10.2801,20.2917 10.2801,20.5667 10.3718,20.8417L11.7468,23.225C11.8385,23.4083 12.2051,23.5917 12.3885,23.5L14.1301,23.0417C14.4051,22.95 14.6801,23.0417 14.8635,23.1333C15.0468,23.225 15.5051,23.6833 15.5968,23.9583L16.0551,25.7C16.1468,25.975 16.3301,26.1583 16.6051,26.1583L19.3551,26.1583C19.6301,26.1583 19.9051,25.975 19.9051,25.7L20.3635,23.9583C20.4551,23.6833 20.6385,23.4083 20.8218,23.3167C21.0051,23.225 21.6468,23.0417 21.8301,23.0417L23.5718,23.5C23.8468,23.5917 24.1218,23.4083 24.2135,23.225L25.5885,20.8417C25.7718,20.6583 25.6801,20.2917 25.4968,20.1083ZM18.0718,20.75C16.5135,20.75 15.3218,19.5583 15.3218,18C15.3218,16.4417 16.5135,15.25 18.0718,15.25C19.6301,15.25 20.8218,16.4417 20.8218,18C20.8218,19.5583 19.5385,20.75 18.0718,20.75Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="nonZero" />
++    </group>
++    <path android:fillColor="@color/sec_dashboard_layer_color" android:pathData="M24.856,3.144C23.13,1.522 20.774,0.601 18.174,0.257C15.691,-0.072 14,0.009 14,0.009C14,0.009 12.309,-0.072 9.826,0.257C7.226,0.601 4.87,1.522 3.144,3.144C1.521,4.87 0.601,7.226 0.257,9.826C-0.072,12.309 0.009,14 0.009,14C0.009,14 -0.072,15.691 0.257,18.174C0.601,20.774 1.521,23.13 3.144,24.856C4.87,26.478 7.226,27.399 9.826,27.743C12.309,28.072 14,27.991 14,27.991C14,27.991 15.691,28.072 18.174,27.743C20.774,27.399 23.13,26.478 24.856,24.856C26.479,23.13 27.399,20.774 27.743,18.174C28.072,15.691 27.991,14 27.991,14C27.991,14 28.072,12.309 27.743,9.826C27.399,7.226 26.479,4.87 24.856,3.144Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
++</vector>
+diff --git a/res/layout-night/unica_settings_logo_layout.xml b/res/layout-night/unica_settings_logo_layout.xml
+new file mode 100644
+index 00000000..e824e54c
+--- /dev/null
++++ b/res/layout-night/unica_settings_logo_layout.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
++  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimary" app:tintMode="src_in" />
++</FrameLayout>
+diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
+new file mode 100644
+index 00000000..bbb70b4c
+--- /dev/null
++++ b/res/layout/unica_settings_logo_layout.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
++  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimaryDark" app:tintMode="src_in" />
++</FrameLayout>
+diff --git a/res/values/public.xml b/res/values/public.xml
+index 7ba70fd4..b061b830 100644
+--- a/res/values/public.xml
++++ b/res/values/public.xml
+@@ -11781,6 +11781,7 @@
+     <public type="drawable" name="wifi_friction" id="0x7f080b6a" />
+     <public type="drawable" name="wifi_signal" id="0x7f080b6b" />
+     <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b6c" />
++    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080b71" />
+     <public type="drawable" name="$accessibility_shortcut_type_software_gesture__0" id="0x7f080016" />
+     <public type="drawable" name="$accessibility_shortcut_type_software_gesture__1" id="0x7f080017" />
+     <public type="drawable" name="$accessibility_shortcut_type_software_gesture_talkback__0" id="0x7f080018" />
+@@ -12411,6 +12412,8 @@
+     <public type="drawable" name="ws_ic_2step_02" id="0x7f080b6e" />
+     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b6f" />
+     <public type="drawable" name="ws_ic_system_lock" id="0x7f080b70" />
++    <public type="drawable" name="unica_logo_bg" id="0x7f080b72" />
++    <public type="drawable" name="unica_logo_fg" id="0x7f080b73" />
+     <public type="fraction" name="battery_button_height_fraction" id="0x7f090000" />
+     <public type="fraction" name="battery_subpixel_smoothing_left" id="0x7f090001" />
+     <public type="fraction" name="battery_subpixel_smoothing_right" id="0x7f090002" />
+@@ -18148,6 +18151,7 @@
+     <public type="layout" name="zen_rule_type" id="0x7f0d0602" />
+     <public type="layout" name="zen_rule_type_selection" id="0x7f0d0603" />
+     <public type="layout" name="zen_schedule_rule_day" id="0x7f0d0604" />
++    <public type="layout" name="unica_settings_logo_layout" id="0x7f0d0605" />
+     <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0565" />
+     <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014a" />
+     <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a0" />
+@@ -31357,6 +31361,12 @@
+     <public type="string" name="zone_time_type_standard" id="0x7f1332a0" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f1332a1" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f1332a2" />
++    <public type="string" name="keywords_unica_settings" id="0x7f1332a3" />
++    <public type="string" name="menu_key_unica_settings" id="0x7f1332a4" />
++    <public type="string" name="unica_extra_settings_title" id="0x7f1332a5" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1332a6" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1332a7" />
++    <public type="string" name="unica_settings_title" id="0x7f1332a8" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
+     <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
+@@ -34045,4 +34055,5 @@
+     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16025e" />
+     <public type="xml" name="zen_mode_settings" id="0x7f16025f" />
+     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f160260" />
+-</resources>
+\ No newline at end of file
++    <public type="xml" name="unica_settings" id="0x7f160261" />
++</resources>
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 9c5963a1..5b9d55ac 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -13588,4 +13588,10 @@ In Camera, you can use the Top button to take pictures."</string>
+     <string name="zone_time_type_standard">Standard time</string>
+     <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
+     <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
++    <string name="keywords_unica_settings">UN1CA Settings</string>
++    <string name="menu_key_unica_settings">top_level_unica</string>
++    <string name="unica_extra_settings_title">Extra settings</string>
++    <string name="unica_rom_version_title">ROM version</string>
++    <string name="unica_secure_ss_title">Allow secure screenshot</string>
++    <string name="unica_settings_title">UN1CA Settings</string>
+ </resources>
+diff --git a/res/xml/sec_top_level_settings.xml b/res/xml/sec_top_level_settings.xml
+index 5bf6f32f..0f0dbd23 100644
+--- a/res/xml/sec_top_level_settings.xml
++++ b/res/xml/sec_top_level_settings.xml
+@@ -61,6 +61,7 @@
+     <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_cloud_and_account" android:title="@string/cloud_and_accounts_title" android:key="top_level_accounts_backup" android:summary="@string/summary_placeholder" android:order="-130000" android:fragment="com.samsung.android.settings.account.CloudAccountSettings" settings:controller="com.samsung.android.settings.homepage.TopLevelCloudAccountPreferenceController" settings:highlightableMenuKey="@string/menu_key_accounts_backup" />
+     <com.samsung.android.settings.widget.SecInsetCategoryPreference android:order="-100000" />
+     <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_advanced_feature" android:title="@string/useful_feature_title" android:key="top_level_advanced_features" android:summary="@string/summary_placeholder" android:order="-40000" android:fragment="com.samsung.android.settings.usefulfeature.Usefulfeature" settings:controller="com.samsung.android.settings.homepage.TopLevelAdvancedFeaturesPreferenceController" settings:highlightableMenuKey="@string/menu_key_advanced_features" settings:keywords="@string/keywords_advanced_features_settings" />
++    <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_unica" android:title="@string/unica_settings_title" android:key="top_level_unica" android:summary="@string/summary_placeholder" android:order="-39999" android:fragment="io.mesalabs.unica.UnicaSettingsFragment" settings:controller="io.mesalabs.unica.UnicaSettingsPreferenceController" settings:highlightableMenuKey="@string/menu_key_unica_settings" settings:keywords="@string/keywords_unica_settings" />
+     <com.samsung.android.settings.widget.SecInsetCategoryPreference android:order="0" />
+     <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_digitalwellbeing" android:title="@string/app_name_digital_wellbeing" android:key="top_level_digitalwellbeing" android:summary="@string/summary_placeholder" android:order="40000" settings:controller="com.samsung.android.settings.homepage.TopLevelDigitalWellbeingPreferenceController" settings:highlightableMenuKey="@string/menu_key_digitalwellbeing">
+         <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
+@@ -98,4 +99,4 @@
+             <extra android:name="from_settings" android:value="true" />
+         </intent>
+     </com.android.settings.widget.HomepagePreference>
+-</PreferenceScreen>
+\ No newline at end of file
++</PreferenceScreen>
+diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
+new file mode 100644
+index 00000000..2543d074
+--- /dev/null
++++ b/res/xml/unica_settings.xml
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="utf-8"?>
++<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
++  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
++    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" />
++    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
++    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
++    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
++        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
++    </SecPreferenceCategory>
++</PreferenceScreen>
+diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
+index fe88911c..6ad8f881 100644
+--- a/smali_classes2/com/android/settings/R$string.smali
++++ b/smali_classes2/com/android/settings/R$string.smali
+@@ -12179,3 +12179,15 @@
+ .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f1332a1
+ 
+ .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f1332a2
++
++.field public static final keywords_unica_settings:I = 0x7f1332a3
++
++.field public static final menu_key_unica_settings:I = 0x7f1332a4
++
++.field public static final unica_extra_settings_title:I = 0x7f1332a5
++
++.field public static final unica_rom_version_title:I = 0x7f1332a6
++
++.field public static final unica_secure_ss_title:I = 0x7f1332a7
++
++.field public static final unica_settings_title:I = 0x7f1332a8
+diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
+index 9e7b0dfb..7b18d280 100644
+--- a/smali_classes2/com/android/settings/R$xml.smali
++++ b/smali_classes2/com/android/settings/R$xml.smali
+@@ -1041,3 +1041,5 @@
+ .field public static final zen_mode_settings:I = 0x7f16025f
+ 
+ .field public static final zen_mode_sound_vibration_settings:I = 0x7f160260
++
++.field public static final unica_settings:I = 0x7f160261
+diff --git a/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali b/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
+new file mode 100644
+index 00000000..18621dd0
+--- /dev/null
++++ b/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
+@@ -0,0 +1,13 @@
++.class public Lcom/android/settings/Settings$UnicaSettingsActivity;
++.super Lcom/android/settings/SettingsActivity;
++.source "Settings.java"
++
++
++# direct methods
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/SettingsActivity;-><init>()V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
+new file mode 100644
+index 00000000..cff34764
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
+@@ -0,0 +1,57 @@
++.class public Lio/mesalabs/unica/UnicaSettingsFragment;
++.super Lcom/android/settings/dashboard/DashboardFragment;
++.source "UnicaSettingsFragment.java"
++
++
++# static fields
++.field public static final SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++
++# direct methods
++.method public static constructor <clinit>()V
++    .locals 2
++
++    new-instance v0, Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    sget v1, Lcom/android/settings/R$xml;->unica_settings:I
++
++    invoke-direct {v0, v1}, Lcom/android/settings/search/BaseSearchIndexProvider;-><init>(I)V
++
++    sput-object v0, Lio/mesalabs/unica/UnicaSettingsFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getLogTag()Ljava/lang/String;
++    .locals 0
++
++    const-string p0, "UnicaSettingsFragment"
++
++    return-object p0
++.end method
++
++.method public getMetricsCategory()I
++    .locals 0
++
++    const/16 p0, 0x2e8
++
++    return p0
++.end method
++
++.method public getPreferenceScreenResId()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$xml;->unica_settings:I
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+new file mode 100644
+index 00000000..00e24add
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+@@ -0,0 +1,223 @@
++.class public Lio/mesalabs/unica/UnicaSettingsPreferenceController;
++.super Lcom/android/settings/core/BasePreferenceController;
++.source "UnicaSettingsPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getSliceHighlightMenuRes()I
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getSliceHighlightMenuRes()I
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSummary()Ljava/lang/CharSequence;
++    .locals 3
++
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    sget v2, Lcom/android/settings/R$string;->unica_rom_version_title:I
++
++    invoke-virtual {v1, v2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {v1}, Lcom/android/settings/Utils;->getTopLevelSummarySeparator(Landroid/content/Context;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    sget v1, Lcom/android/settings/R$string;->unica_extra_settings_title:I
++
++    invoke-virtual {p0, v1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getValue()Lcom/samsung/android/settings/cube/ControlValue;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public bridge synthetic isControllable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->isControllable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isPublicSlice()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isPublicSlice()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isSliceable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isSliceable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
+new file mode 100644
+index 00000000..502dc3a6
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
+@@ -0,0 +1,195 @@
++.class public Lio/mesalabs/unica/settings/ROMVersionPreferenceController;
++.super Lcom/android/settings/core/BasePreferenceController;
++.source "ROMVersionPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getSliceHighlightMenuRes()I
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getSliceHighlightMenuRes()I
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSummary()Ljava/lang/CharSequence;
++    .locals 2
++
++    const-string/jumbo v0, "ro.unica.version"
++
++    const-string v1, "Unknown"
++
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    return-object v0
++.end method
++
++.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getValue()Lcom/samsung/android/settings/cube/ControlValue;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public bridge synthetic isControllable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->isControllable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isPublicSlice()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isPublicSlice()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isSliceable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isSliceable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
+new file mode 100644
+index 00000000..6cd0c44c
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
+@@ -0,0 +1,195 @@
++.class public Lio/mesalabs/unica/settings/SecureScreenshotPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "SecureScreenshotPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getDatabaseUri()Landroid/net/Uri;
++    .locals 0
++
++    const-string p0, "unica_secure_ss"
++
++    invoke-static {p0}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_secure_ss"
++
++    const/4 v1, 0x1
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x0
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_secure_ss"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+-- 
+2.43.0
+
