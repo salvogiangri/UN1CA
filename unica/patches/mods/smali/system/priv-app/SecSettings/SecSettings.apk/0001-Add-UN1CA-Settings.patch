@@ -1,4 +1,4 @@
-From 857e98801f837ed788a85b3495f7864f8e83d270 Mon Sep 17 00:00:00 2001
+From 1784bc20110b5824e161b58b922b1cc804cf7033 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -17,10 +17,10 @@ Subject: [PATCH] Add UN1CA Settings
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         |  57 +++++
  .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++++++++++
- .../GamesPropsPreferenceController.smali      | 179 ++++++++++++++
+ .../GamesPropsPreferenceController.smali      | 167 +++++++++++++
  .../ROMVersionPreferenceController.smali      | 195 +++++++++++++++
- ...SecureScreenshotPreferenceController.smali | 195 +++++++++++++++
- 16 files changed, 941 insertions(+), 3 deletions(-)
+ ...SecureScreenshotPreferenceController.smali | 183 ++++++++++++++
+ 16 files changed, 917 insertions(+), 3 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -539,10 +539,10 @@ index 00000000..00e24add
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
 new file mode 100644
-index 00000000..1b366108
+index 00000000..66a58f0c
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
-@@ -0,0 +1,179 @@
+@@ -0,0 +1,167 @@
 +.class public Lio/mesalabs/unica/settings/GamesPropsPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "GamesPropsPreferenceController.java"
@@ -581,18 +581,6 @@ index 00000000..1b366108
 +    .locals 0
 +
 +    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
-+
-+    move-result-object p0
-+
-+    return-object p0
-+.end method
-+
-+.method public getDatabaseUri()Landroid/net/Uri;
-+    .locals 0
-+
-+    const-string p0, "unica_games_spoof"
-+
-+    invoke-static {p0}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
 +
 +    move-result-object p0
 +
@@ -925,10 +913,10 @@ index 00000000..502dc3a6
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 new file mode 100644
-index 00000000..8c16bbab
+index 00000000..b3500e39
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
-@@ -0,0 +1,195 @@
+@@ -0,0 +1,183 @@
 +.class public Lio/mesalabs/unica/settings/SecureScreenshotPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "SecureScreenshotPreferenceController.java"
@@ -967,18 +955,6 @@ index 00000000..8c16bbab
 +    .locals 0
 +
 +    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
-+
-+    move-result-object p0
-+
-+    return-object p0
-+.end method
-+
-+.method public getDatabaseUri()Landroid/net/Uri;
-+    .locals 0
-+
-+    const-string p0, "unica_secure_ss"
-+
-+    invoke-static {p0}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
 +
 +    move-result-object p0
 +
