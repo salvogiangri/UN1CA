@@ -1,0 +1,1378 @@
+From 738c257c8dabe41b07bb8caf9b5a58511ed3a368 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Mon, 25 Dec 2023 15:11:22 +0100
+Subject: [PATCH] Nuke Knox DualDAR/SDP
+
+---
+ smali/android/content/pm/UserInfo.smali       |  37 +--
+ .../database/sqlite/SQLiteDatabase.smali      | 119 ++-----
+ .../database/sqlite/SQLiteSdpHelper.smali     |  95 +-----
+ ...tternUtils$$ExternalSyntheticLambda0.smali |  38 ---
+ .../internal/widget/LockPatternUtils.smali    | 313 ++----------------
+ .../widget/VerifyCredentialResponse$1.smali   |  75 +----
+ .../widget/VerifyCredentialResponse.smali     |  33 --
+ .../android/knox/SemPersonaManager.smali      | 110 +-----
+ .../samsung/android/knox/dar/DarRune.smali    |  10 +-
+ .../knox/dar/ddar/DualDarManager.smali        |  17 +-
+ .../com/samsung/android/rune/CoreRune.smali   |   6 +-
+ 11 files changed, 102 insertions(+), 751 deletions(-)
+ delete mode 100644 smali_classes5/com/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0.smali
+
+diff --git a/smali/android/content/pm/UserInfo.smali b/smali/android/content/pm/UserInfo.smali
+index 9f08003b..fdafee0b 100644
+--- a/smali/android/content/pm/UserInfo.smali
++++ b/smali/android/content/pm/UserInfo.smali
+@@ -1227,48 +1227,23 @@
+ .end method
+ 
+ .method public blacklist isSuperLocked()Z
+-    .locals 3
+-
+-    iget v0, p0, Landroid/content/pm/UserInfo;->flags:I
+-
+-    const/high16 v1, 0x6000000
+-
+-    and-int/2addr v0, v1
+-
+-    const/4 v1, 0x1
+-
+-    const/4 v2, 0x0
+-
+-    if-lez v0, :cond_1
++    .locals 1
+ 
+     iget v0, p0, Landroid/content/pm/UserInfo;->attributes:I
+ 
+-    and-int/lit8 v0, v0, 0x1c
++    and-int/lit8 v0, v0, 0xc
+ 
+     if-lez v0, :cond_0
+ 
++    const/4 v0, 0x1
++
+     goto :goto_0
+ 
+     :cond_0
+-    move v1, v2
++    const/4 v0, 0x0
+ 
+     :goto_0
+-    return v1
+-
+-    :cond_1
+-    iget v0, p0, Landroid/content/pm/UserInfo;->attributes:I
+-
+-    and-int/lit8 v0, v0, 0xc
+-
+-    if-lez v0, :cond_2
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    move v1, v2
+-
+-    :goto_1
+-    return v1
++    return v0
+ .end method
+ 
+ .method public blacklist isUserTypeAppSeparation()Z
+diff --git a/smali/android/database/sqlite/SQLiteDatabase.smali b/smali/android/database/sqlite/SQLiteDatabase.smali
+index 45806f48..2d3712a5 100644
+--- a/smali/android/database/sqlite/SQLiteDatabase.smali
++++ b/smali/android/database/sqlite/SQLiteDatabase.smali
+@@ -75,7 +75,7 @@
+ 
+ .field public static final whitelist SQLITE_MAX_LIKE_PATTERN_LENGTH:I = 0xc350
+ 
+-.field private static final blacklist SUPPORT_KNOX_SDP_SQLITE:Z = true
++.field private static final blacklist SUPPORT_KNOX_SDP_SQLITE:Z = false
+ 
+ .field public static final whitelist SYNC_MODE_EXTRA:Ljava/lang/String; = "EXTRA"
+ 
+@@ -1704,7 +1704,7 @@
+ .end method
+ 
+ .method private greylist-max-o dispose(Z)V
+-    .locals 4
++    .locals 3
+ 
+     iget-object v0, p0, Landroid/database/sqlite/SQLiteDatabase;->mLock:Ljava/lang/Object;
+ 
+@@ -1731,20 +1731,11 @@
+ 
+     iput-object v2, p0, Landroid/database/sqlite/SQLiteDatabase;->mConnectionPoolLocked:Landroid/database/sqlite/SQLiteConnectionPool;
+ 
+-    iget-object v3, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    iput-object v2, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+     monitor-exit v0
+     :try_end_0
+     .catchall {:try_start_0 .. :try_end_0} :catchall_1
+ 
+-    if-eqz v3, :cond_2
+-
+-    invoke-virtual {v3}, Landroid/database/sqlite/SQLiteSdpHelper;->unregisterListener()V
+-
+-    :cond_2
+-    if-nez p1, :cond_3
++    if-nez p1, :cond_2
+ 
+     sget-object v0, Landroid/database/sqlite/SQLiteDatabase;->sActiveDatabases:Ljava/util/WeakHashMap;
+ 
+@@ -1759,7 +1750,7 @@
+     :try_end_1
+     .catchall {:try_start_1 .. :try_end_1} :catchall_0
+ 
+-    if-eqz v1, :cond_3
++    if-eqz v1, :cond_2
+ 
+     invoke-virtual {v1}, Landroid/database/sqlite/SQLiteConnectionPool;->close()V
+ 
+@@ -1775,7 +1766,7 @@
+ 
+     throw v2
+ 
+-    :cond_3
++    :cond_2
+     :goto_0
+     return-void
+ 
+@@ -3142,7 +3133,7 @@
+ 
+     monitor-exit v0
+     :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_3
++    .catchall {:try_start_0 .. :try_end_0} :catchall_2
+ 
+     iget-object v1, p0, Landroid/database/sqlite/SQLiteDatabase;->mLock:Ljava/lang/Object;
+ 
+@@ -3167,86 +3158,52 @@
+ 
+     monitor-exit v1
+     :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_2
++    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+ 
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteDatabase;->mLock:Ljava/lang/Object;
++    sget-object v0, Landroid/database/sqlite/SQLiteDatabase;->sActiveDatabases:Ljava/util/WeakHashMap;
+ 
+     monitor-enter v0
+ 
+     :try_start_2
+-    iget-object v1, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    if-nez v1, :cond_0
+-
+-    new-instance v1, Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    invoke-direct {v1, p0}, Landroid/database/sqlite/SQLiteSdpHelper;-><init>(Landroid/database/sqlite/SQLiteDatabase;)V
+-
+-    iput-object v1, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    :cond_0
+-    monitor-exit v0
+-    :try_end_2
+-    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+-
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    invoke-virtual {v0}, Landroid/database/sqlite/SQLiteSdpHelper;->registerListener()V
+-
+     sget-object v1, Landroid/database/sqlite/SQLiteDatabase;->sActiveDatabases:Ljava/util/WeakHashMap;
+ 
+-    monitor-enter v1
+-
+-    :try_start_3
+-    sget-object v0, Landroid/database/sqlite/SQLiteDatabase;->sActiveDatabases:Ljava/util/WeakHashMap;
+-
+     const/4 v2, 0x0
+ 
+-    invoke-virtual {v0, p0, v2}, Ljava/util/WeakHashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, p0, v2}, Ljava/util/WeakHashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    monitor-exit v1
++    monitor-exit v0
+ 
+     return-void
+ 
+     :catchall_0
+-    move-exception v0
+-
+-    monitor-exit v1
+-    :try_end_3
+-    .catchall {:try_start_3 .. :try_end_3} :catchall_0
+-
+-    throw v0
+-
+-    :catchall_1
+     move-exception v1
+ 
+-    :try_start_4
+     monitor-exit v0
+-    :try_end_4
+-    .catchall {:try_start_4 .. :try_end_4} :catchall_1
++    :try_end_2
++    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+ 
+     throw v1
+ 
+     :goto_0
+-    :try_start_5
++    :try_start_3
+     monitor-exit v1
+-    :try_end_5
+-    .catchall {:try_start_5 .. :try_end_5} :catchall_2
++    :try_end_3
++    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+ 
+     throw v0
+ 
+-    :catchall_2
++    :catchall_1
+     move-exception v0
+ 
+     goto :goto_0
+ 
+-    :catchall_3
++    :catchall_2
+     move-exception v1
+ 
+-    :try_start_6
++    :try_start_4
+     monitor-exit v0
+-    :try_end_6
+-    .catchall {:try_start_6 .. :try_end_6} :catchall_3
++    :try_end_4
++    .catchall {:try_start_4 .. :try_end_4} :catchall_2
+ 
+     throw v1
+ .end method
+@@ -9143,43 +9100,9 @@
+ .end method
+ 
+ .method public blacklist setSdpDatabase()V
+-    .locals 2
+-
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteDatabase;->mLock:Ljava/lang/Object;
+-
+-    monitor-enter v0
+-
+-    :try_start_0
+-    iget-object v1, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    if-nez v1, :cond_0
+-
+-    new-instance v1, Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    invoke-direct {v1, p0}, Landroid/database/sqlite/SQLiteSdpHelper;-><init>(Landroid/database/sqlite/SQLiteDatabase;)V
+-
+-    iput-object v1, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    :cond_0
+-    monitor-exit v0
+-    :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteDatabase;->mSdpHelper:Landroid/database/sqlite/SQLiteSdpHelper;
+-
+-    invoke-virtual {v0}, Landroid/database/sqlite/SQLiteSdpHelper;->registerListener()V
++    .locals 0
+ 
+     return-void
+-
+-    :catchall_0
+-    move-exception v1
+-
+-    :try_start_1
+-    monitor-exit v0
+-    :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    throw v1
+ .end method
+ 
+ .method public whitelist setTransactionSuccessful()V
+diff --git a/smali/android/database/sqlite/SQLiteSdpHelper.smali b/smali/android/database/sqlite/SQLiteSdpHelper.smali
+index b82a53c2..cb144558 100644
+--- a/smali/android/database/sqlite/SQLiteSdpHelper.smali
++++ b/smali/android/database/sqlite/SQLiteSdpHelper.smali
+@@ -6,7 +6,7 @@
+ # static fields
+ .field private static final blacklist TAG:Ljava/lang/String; = "SQLiteSdpHelper"
+ 
+-.field private static final blacklist mIsSdpSupported:Z = true
++.field private static final blacklist mIsSdpSupported:Z = false
+ 
+ .field private static blacklist sService:Lcom/samsung/android/knox/dar/IDarManagerService;
+ 
+@@ -158,100 +158,9 @@
+ .end method
+ 
+ .method private blacklist prepare()V
+-    .locals 2
+-
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mDatabase:Landroid/database/sqlite/SQLiteDatabase;
+-
+-    if-nez v0, :cond_0
+-
+-    return-void
+-
+-    :cond_0
+-    iget-object v0, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mLock:Ljava/lang/Object;
+-
+-    monitor-enter v0
+-
+-    :try_start_0
+-    iget-boolean v1, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mIsInitialized:Z
+-
+-    if-nez v1, :cond_3
+-
+-    invoke-direct {p0}, Landroid/database/sqlite/SQLiteSdpHelper;->getEngineId()I
+-
+-    move-result v1
+-
+-    iput v1, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mEngineId:I
+-
+-    if-gez v1, :cond_1
+-
+-    goto :goto_2
+-
+-    :cond_1
+-    new-instance v1, Landroid/database/sqlite/SQLiteSdpHelper$1;
+-
+-    invoke-direct {v1, p0}, Landroid/database/sqlite/SQLiteSdpHelper$1;-><init>(Landroid/database/sqlite/SQLiteSdpHelper;)V
+-
+-    iput-object v1, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mSdpListener:Landroid/database/sqlite/SQLiteSdpListener;
+-    :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    :try_start_1
+-    invoke-static {}, Landroid/database/sqlite/SQLiteSdpHelper;->getDarService()Lcom/samsung/android/knox/dar/IDarManagerService;
+-
+-    move-result-object v1
+-
+-    if-eqz v1, :cond_2
+-
+-    invoke-static {}, Landroid/database/sqlite/SQLiteSdpHelper;->getDarService()Lcom/samsung/android/knox/dar/IDarManagerService;
+-
+-    move-result-object v1
+-
+-    invoke-interface {v1}, Lcom/samsung/android/knox/dar/IDarManagerService;->isSdpSupported()Z
+-
+-    move-result v1
+-
+-    if-eqz v1, :cond_2
+-
+-    const/4 v1, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    const/4 v1, 0x0
+-
+-    :goto_0
+-    iput-boolean v1, p0, Landroid/database/sqlite/SQLiteSdpHelper;->mIsInitialized:Z
+-    :try_end_1
+-    .catch Landroid/os/RemoteException; {:try_start_1 .. :try_end_1} :catch_0
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    goto :goto_1
+-
+-    :catch_0
+-    move-exception v1
+-
+-    :try_start_2
+-    invoke-virtual {v1}, Landroid/os/RemoteException;->printStackTrace()V
+-
+-    :goto_1
+-    monitor-exit v0
+-
+-    return-void
+-
+-    :cond_3
+-    :goto_2
+-    monitor-exit v0
++    .locals 0
+ 
+     return-void
+-
+-    :catchall_0
+-    move-exception v1
+-
+-    monitor-exit v0
+-    :try_end_2
+-    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+-
+-    throw v1
+ .end method
+ 
+ 
+diff --git a/smali_classes5/com/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0.smali b/smali_classes5/com/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0.smali
+deleted file mode 100644
+index 89cd85c9..00000000
+--- a/smali_classes5/com/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0.smali
++++ /dev/null
+@@ -1,38 +0,0 @@
+-.class public final synthetic Lcom/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0;
+-.super Ljava/lang/Object;
+-.source "D8$$SyntheticClass"
+-
+-# interfaces
+-.implements Ljava/util/function/Function;
+-
+-
+-# instance fields
+-.field public final synthetic blacklist f$0:I
+-
+-
+-# direct methods
+-.method public synthetic constructor blacklist <init>(I)V
+-    .locals 0
+-
+-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+-
+-    iput p1, p0, Lcom/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0;->f$0:I
+-
+-    return-void
+-.end method
+-
+-
+-# virtual methods
+-.method public final whitelist test-api apply(Ljava/lang/Object;)Ljava/lang/Object;
+-    .locals 1
+-
+-    iget v0, p0, Lcom/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0;->f$0:I
+-
+-    check-cast p1, Lcom/samsung/android/knox/dar/IDarManagerService;
+-
+-    invoke-static {v0, p1}, Lcom/android/internal/widget/LockPatternUtils;->lambda$isSdpSupportedSecureFolder$0(ILcom/samsung/android/knox/dar/IDarManagerService;)Ljava/lang/Boolean;
+-
+-    move-result-object p1
+-
+-    return-object p1
+-.end method
+diff --git a/smali_classes5/com/android/internal/widget/LockPatternUtils.smali b/smali_classes5/com/android/internal/widget/LockPatternUtils.smali
+index bb74816a..7863a755 100644
+--- a/smali_classes5/com/android/internal/widget/LockPatternUtils.smali
++++ b/smali_classes5/com/android/internal/widget/LockPatternUtils.smali
+@@ -1093,38 +1093,13 @@
+ .end method
+ 
+ .method private blacklist getRequestedPasswordHistoryLength(I)I
+-    .locals 3
+-
+-    nop
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->isInnerAuthUserForDo(I)Z
+-
+-    move-result v0
+-
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_0
++    .locals 2
+ 
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+ 
+     move-result-object v0
+ 
+-    const/4 v2, 0x0
+-
+-    invoke-virtual {v0, v1, v2}, Landroid/app/admin/DevicePolicyManager;->getPasswordHistoryLength(Landroid/content/ComponentName;I)I
+-
+-    move-result v0
+-
+-    return v0
+-
+-    :cond_0
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+-
+-    move-result-object v0
++    const/4 v1, 0x0
+ 
+     invoke-virtual {v0, v1, p1}, Landroid/app/admin/DevicePolicyManager;->getPasswordHistoryLength(Landroid/content/ComponentName;I)I
+ 
+@@ -1522,41 +1497,8 @@
+ .end method
+ 
+ .method private blacklist isEnterpriseUser(I)Z
+-    .locals 2
+-
+-    invoke-static {p1}, Lcom/samsung/android/knox/SemPersonaManager;->isKnoxId(I)Z
+-
+-    move-result v0
+-
+-    const/4 v1, 0x1
+-
+-    if-eqz v0, :cond_1
+-
+-    invoke-static {p1}, Lcom/samsung/android/knox/SemPersonaManager;->isSecureFolderId(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-direct {p0, p1}, Lcom/android/internal/widget/LockPatternUtils;->isSdpSupportedSecureFolder(I)Z
+-
+-    move-result v0
+-
+-    return v0
+-
+-    :cond_0
+-    return v1
+-
+-    :cond_1
+-    invoke-static {p1}, Lcom/samsung/android/knox/SemPersonaManager;->isDoEnabled(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_2
+-
+-    return v1
++    .locals 1
+ 
+-    :cond_2
+     const/4 v0, 0x0
+ 
+     return v0
+@@ -1665,40 +1607,14 @@
+ .end method
+ 
+ .method private blacklist isSdpSupportedSecureFolder(I)Z
+-    .locals 2
+-
+-    invoke-direct {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDarManagerService()Ljava/util/Optional;
+-
+-    move-result-object v0
+-
+-    new-instance v1, Lcom/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0;
+-
+-    invoke-direct {v1, p1}, Lcom/android/internal/widget/LockPatternUtils$$ExternalSyntheticLambda0;-><init>(I)V
+-
+-    invoke-virtual {v0, v1}, Ljava/util/Optional;->map(Ljava/util/function/Function;)Ljava/util/Optional;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {v1}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+-
+-    move-result-object v1
+-
+-    invoke-virtual {v0, v1}, Ljava/util/Optional;->orElse(Ljava/lang/Object;)Ljava/lang/Object;
+-
+-    move-result-object v0
+-
+-    check-cast v0, Ljava/lang/Boolean;
+-
+-    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
++    .locals 1
+ 
+-    move-result v0
++    const/4 v0, 0x0
+ 
+     return v0
+ .end method
+ 
+-.method static synthetic blacklist lambda$isSdpSupportedSecureFolder$0(ILcom/samsung/android/knox/dar/IDarManagerService;)Ljava/lang/Boolean;
++.method private static synthetic blacklist lambda$isSdpSupportedSecureFolder$0(ILcom/samsung/android/knox/dar/IDarManagerService;)Ljava/lang/Boolean;
+     .locals 3
+ 
+     :try_start_0
+@@ -2172,17 +2088,6 @@
+ .method private blacklist reportEnabledTrustAgentsChanged(I)V
+     .locals 1
+ 
+-    nop
+-
+-    invoke-static {p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->isVirtualUserId(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    return-void
+-
+-    :cond_0
+     invoke-direct {p0}, Lcom/android/internal/widget/LockPatternUtils;->getTrustManager()Landroid/app/trust/TrustManager;
+ 
+     move-result-object v0
+@@ -2999,24 +2904,9 @@
+ 
+     invoke-direct {p0}, Lcom/android/internal/widget/LockPatternUtils;->throwIfCalledOnMainThread()V
+ 
+-    nop
+-
+     const/4 v0, 0x0
+ 
+     :try_start_0
+-    invoke-direct {p0, p2}, Lcom/android/internal/widget/LockPatternUtils;->isEnterpriseUser(I)Z
+-
+-    move-result v1
+-
+-    if-eqz v1, :cond_0
+-
+-    invoke-direct {p0, p1, p2, p3}, Lcom/android/internal/widget/LockPatternUtils;->checkCredentialForEnterpriseUser(Lcom/android/internal/widget/LockscreenCredential;ILcom/android/internal/widget/LockPatternUtils$CheckCredentialProgressCallback;)Z
+-
+-    move-result v0
+-
+-    return v0
+-
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockSettings()Lcom/android/internal/widget/ILockSettings;
+ 
+     move-result-object v1
+@@ -3029,27 +2919,27 @@
+ 
+     move-result-object v1
+ 
+-    if-nez v1, :cond_1
++    if-nez v1, :cond_0
+ 
+     return v0
+ 
+-    :cond_1
++    :cond_0
+     invoke-virtual {v1}, Lcom/android/internal/widget/VerifyCredentialResponse;->getResponseCode()I
+ 
+     move-result v2
+ 
+     const/4 v3, 0x1
+ 
+-    if-nez v2, :cond_2
++    if-nez v2, :cond_1
+ 
+     return v3
+ 
+-    :cond_2
++    :cond_1
+     invoke-virtual {v1}, Lcom/android/internal/widget/VerifyCredentialResponse;->getResponseCode()I
+ 
+     move-result v2
+ 
+-    if-ne v2, v3, :cond_4
++    if-ne v2, v3, :cond_3
+ 
+     nop
+ 
+@@ -3057,11 +2947,11 @@
+ 
+     move-result v2
+ 
+-    if-lez v2, :cond_3
++    if-lez v2, :cond_2
+ 
+     invoke-direct {p0, p2}, Lcom/android/internal/widget/LockPatternUtils;->reportPasswordThrottleAuditLog(I)V
+ 
+-    :cond_3
++    :cond_2
+     new-instance v2, Lcom/android/internal/widget/LockPatternUtils$RequestThrottledException;
+ 
+     invoke-virtual {v1}, Lcom/android/internal/widget/VerifyCredentialResponse;->getTimeout()I
+@@ -3074,7 +2964,7 @@
+     :try_end_0
+     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    :cond_4
++    :cond_3
+     return v0
+ 
+     :catch_0
+@@ -4009,22 +3899,7 @@
+ .method public blacklist getPasswordHistoryHashFactor(Lcom/android/internal/widget/LockscreenCredential;I)[B
+     .locals 3
+ 
+-    nop
+-
+     :try_start_0
+-    invoke-direct {p0, p2}, Lcom/android/internal/widget/LockPatternUtils;->isEnterpriseUser(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-direct {p0, p1, p2}, Lcom/android/internal/widget/LockPatternUtils;->getPasswordHistoryHashFactorForEnterpriseUser(Lcom/android/internal/widget/LockscreenCredential;I)[B
+-
+-    move-result-object v0
+-
+-    return-object v0
+-
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockSettings()Lcom/android/internal/widget/ILockSettings;
+ 
+     move-result-object v0
+@@ -4114,29 +3989,6 @@
+ .method public blacklist getRequestedMinimumPasswordLength(I)I
+     .locals 2
+ 
+-    nop
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->isInnerAuthUserForDo(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->getPasswordMinimumLengthForInner()I
+-
+-    move-result v0
+-
+-    return v0
+-
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+ 
+     move-result-object v0
+@@ -4163,33 +4015,8 @@
+ .end method
+ 
+ .method public blacklist getRequestedPasswordComplexity(IZ)I
+-    .locals 2
+-
+-    nop
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->isInnerAuthUserForDo(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    invoke-virtual {v0, v1, p2}, Landroid/app/admin/DevicePolicyManager;->getAggregatedPasswordComplexityForUser(IZ)I
+-
+-    move-result v0
+-
+-    return v0
++    .locals 1
+ 
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+ 
+     move-result-object v0
+@@ -4214,43 +4041,8 @@
+ .end method
+ 
+ .method public blacklist getRequestedPasswordMetrics(IZ)Landroid/app/admin/PasswordMetrics;
+-    .locals 2
+-
+-    nop
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->isInnerAuthUserForDo(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    invoke-virtual {v0, v1, p2}, Landroid/app/admin/DevicePolicyManager;->getPasswordMinimumMetrics(IZ)Landroid/app/admin/PasswordMetrics;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockPatternUtilForDualDarDo()Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;
+-
+-    move-result-object v1
+-
+-    invoke-virtual {v1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->getPasswordMinimumLengthForInner()I
+-
+-    move-result v1
+-
+-    iput v1, v0, Landroid/app/admin/PasswordMetrics;->length:I
+-
+-    return-object v0
++    .locals 1
+ 
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getDevicePolicyManager()Landroid/app/admin/DevicePolicyManager;
+ 
+     move-result-object v0
+@@ -6590,33 +6382,7 @@
+ 
+     invoke-direct {p0, p3, v0}, Lcom/android/internal/widget/LockPatternUtils;->makeLpuLog(ILjava/lang/String;)V
+ 
+-    nop
+-
+     :try_start_0
+-    invoke-direct {p0, p3}, Lcom/android/internal/widget/LockPatternUtils;->isEnterpriseUser(I)Z
+-
+-    move-result v0
+-    :try_end_0
+-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_1
+-
+-    const/4 v1, 0x0
+-
+-    const-string/jumbo v2, "setLockCredential return false!"
+-
+-    if-eqz v0, :cond_2
+-
+-    :try_start_1
+-    invoke-direct {p0, p1, p2, p3, p4}, Lcom/android/internal/widget/LockPatternUtils;->setLockCredentialForEnterpriseUser(Lcom/android/internal/widget/LockscreenCredential;Lcom/android/internal/widget/LockscreenCredential;IZ)Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_3
+-
+-    invoke-direct {p0, p3, v2}, Lcom/android/internal/widget/LockPatternUtils;->makeLpuLog(ILjava/lang/String;)V
+-
+-    return v1
+-
+-    :cond_2
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockSettings()Lcom/android/internal/widget/ILockSettings;
+ 
+     move-result-object v0
+@@ -6625,29 +6391,33 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_3
++    if-nez v0, :cond_2
+ 
+-    invoke-direct {p0, p3, v2}, Lcom/android/internal/widget/LockPatternUtils;->makeLpuLog(ILjava/lang/String;)V
+-    :try_end_1
+-    .catch Landroid/os/RemoteException; {:try_start_1 .. :try_end_1} :catch_1
++    const-string/jumbo v0, "setLockCredential return false!"
+ 
+-    return v1
++    invoke-direct {p0, p3, v0}, Lcom/android/internal/widget/LockPatternUtils;->makeLpuLog(ILjava/lang/String;)V
++    :try_end_0
++    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_1
+ 
+-    :cond_3
++    const/4 v0, 0x0
++
++    return v0
++
++    :cond_2
+     nop
+ 
+     invoke-virtual {p1}, Lcom/android/internal/widget/LockscreenCredential;->isNone()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_4
++    if-eqz v0, :cond_3
+ 
+     invoke-direct {p0, p3}, Lcom/android/internal/widget/LockPatternUtils;->clearBiometricAndLockState(I)V
+ 
+-    :cond_4
++    :cond_3
+     const/4 v0, 0x1
+ 
+-    :try_start_2
++    :try_start_1
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockSettings()Lcom/android/internal/widget/ILockSettings;
+ 
+     move-result-object v1
+@@ -6656,19 +6426,19 @@
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_5
++    if-eqz v2, :cond_4
+ 
+     move v2, v0
+ 
+     goto :goto_1
+ 
+-    :cond_5
++    :cond_4
+     const/4 v2, 0x2
+ 
+     :goto_1
+     invoke-interface {v1, v2}, Lcom/android/internal/widget/ILockSettings;->sendLockTypeChangedInfo(I)V
+-    :try_end_2
+-    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_0
++    :try_end_1
++    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+ 
+     goto :goto_2
+ 
+@@ -7255,19 +7025,6 @@
+     invoke-direct {p0}, Lcom/android/internal/widget/LockPatternUtils;->throwIfCalledOnMainThread()V
+ 
+     :try_start_0
+-    invoke-direct {p0, p2}, Lcom/android/internal/widget/LockPatternUtils;->isEnterpriseUser(I)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-direct {p0, p1, p2, p3}, Lcom/android/internal/widget/LockPatternUtils;->verifyCredentialForEnterpriseUser(Lcom/android/internal/widget/LockscreenCredential;II)Lcom/android/internal/widget/VerifyCredentialResponse;
+-
+-    move-result-object v0
+-
+-    return-object v0
+-
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils;->getLockSettings()Lcom/android/internal/widget/ILockSettings;
+ 
+     move-result-object v0
+@@ -7276,7 +7033,7 @@
+ 
+     move-result-object v0
+ 
+-    if-nez v0, :cond_1
++    if-nez v0, :cond_0
+ 
+     sget-object v1, Lcom/android/internal/widget/VerifyCredentialResponse;->ERROR:Lcom/android/internal/widget/VerifyCredentialResponse;
+     :try_end_0
+@@ -7284,7 +7041,7 @@
+ 
+     return-object v1
+ 
+-    :cond_1
++    :cond_0
+     return-object v0
+ 
+     :catch_0
+diff --git a/smali_classes5/com/android/internal/widget/VerifyCredentialResponse$1.smali b/smali_classes5/com/android/internal/widget/VerifyCredentialResponse$1.smali
+index d2bd12b4..94616fef 100644
+--- a/smali_classes5/com/android/internal/widget/VerifyCredentialResponse$1.smali
++++ b/smali_classes5/com/android/internal/widget/VerifyCredentialResponse$1.smali
+@@ -38,84 +38,41 @@
+ 
+ # virtual methods
+ .method public blacklist createFromParcel(Landroid/os/Parcel;)Lcom/android/internal/widget/VerifyCredentialResponse;
+-    .locals 17
++    .locals 13
+ 
+-    invoke-virtual/range {p1 .. p1}, Landroid/os/Parcel;->readInt()I
++    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+ 
+-    move-result v8
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/os/Parcel;->readInt()I
+-
+-    move-result v9
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/os/Parcel;->createByteArray()[B
+-
+-    move-result-object v10
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/os/Parcel;->readLong()J
+-
+-    move-result-wide v11
+-
+-    if-nez v8, :cond_1
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/os/Parcel;->readInt()I
+-
+-    move-result v13
+-
+-    if-lez v13, :cond_0
++    move-result v7
+ 
+-    new-array v14, v13, [B
++    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+ 
+-    move-object/from16 v15, p1
+-
+-    invoke-virtual {v15, v14}, Landroid/os/Parcel;->readByteArray([B)V
+-
+-    new-instance v16, Lcom/android/internal/widget/VerifyCredentialResponse;
+-
+-    const/4 v7, 0x0
+-
+-    move-object/from16 v0, v16
+-
+-    move v1, v8
+-
+-    move v2, v9
+-
+-    move-object v3, v10
+-
+-    move-wide v4, v11
+-
+-    move-object v6, v14
+-
+-    invoke-direct/range {v0 .. v7}, Lcom/android/internal/widget/VerifyCredentialResponse;-><init>(II[BJ[BLcom/android/internal/widget/VerifyCredentialResponse-IA;)V
++    move-result v8
+ 
+-    return-object v16
++    invoke-virtual {p1}, Landroid/os/Parcel;->createByteArray()[B
+ 
+-    :cond_0
+-    move-object/from16 v15, p1
++    move-result-object v9
+ 
+-    goto :goto_0
++    invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
+ 
+-    :cond_1
+-    move-object/from16 v15, p1
++    move-result-wide v10
+ 
+-    :goto_0
+-    new-instance v7, Lcom/android/internal/widget/VerifyCredentialResponse;
++    new-instance v12, Lcom/android/internal/widget/VerifyCredentialResponse;
+ 
+     const/4 v6, 0x0
+ 
+-    move-object v0, v7
++    move-object v0, v12
+ 
+-    move v1, v8
++    move v1, v7
+ 
+-    move v2, v9
++    move v2, v8
+ 
+-    move-object v3, v10
++    move-object v3, v9
+ 
+-    move-wide v4, v11
++    move-wide v4, v10
+ 
+     invoke-direct/range {v0 .. v6}, Lcom/android/internal/widget/VerifyCredentialResponse;-><init>(II[BJLcom/android/internal/widget/VerifyCredentialResponse-IA;)V
+ 
+-    return-object v7
++    return-object v12
+ .end method
+ 
+ .method public bridge synthetic whitelist createFromParcel(Landroid/os/Parcel;)Ljava/lang/Object;
+diff --git a/smali_classes5/com/android/internal/widget/VerifyCredentialResponse.smali b/smali_classes5/com/android/internal/widget/VerifyCredentialResponse.smali
+index 2175e3ad..d5f8a503 100644
+--- a/smali_classes5/com/android/internal/widget/VerifyCredentialResponse.smali
++++ b/smali_classes5/com/android/internal/widget/VerifyCredentialResponse.smali
+@@ -134,14 +134,6 @@
+     return-void
+ .end method
+ 
+-.method synthetic constructor blacklist <init>(II[BJ[BLcom/android/internal/widget/VerifyCredentialResponse-IA;)V
+-    .locals 0
+-
+-    invoke-direct/range {p0 .. p6}, Lcom/android/internal/widget/VerifyCredentialResponse;-><init>(II[BJ[B)V
+-
+-    return-void
+-.end method
+-
+ .method public static blacklist fromError()Lcom/android/internal/widget/VerifyCredentialResponse;
+     .locals 7
+ 
+@@ -477,30 +469,5 @@
+ 
+     invoke-virtual {p1, v0, v1}, Landroid/os/Parcel;->writeLong(J)V
+ 
+-    iget v0, p0, Lcom/android/internal/widget/VerifyCredentialResponse;->mResponseCode:I
+-
+-    if-nez v0, :cond_1
+-
+-    iget-object v0, p0, Lcom/android/internal/widget/VerifyCredentialResponse;->mSecret:[B
+-
+-    if-eqz v0, :cond_0
+-
+-    array-length v0, v0
+-
+-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+-
+-    iget-object v0, p0, Lcom/android/internal/widget/VerifyCredentialResponse;->mSecret:[B
+-
+-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeByteArray([B)V
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    const/4 v0, 0x0
+-
+-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+-
+-    :cond_1
+-    :goto_0
+     return-void
+ .end method
+diff --git a/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali b/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
+index 2792a3e1..ff2d48f1 100644
+--- a/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
++++ b/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
+@@ -343,7 +343,7 @@
+ 
+ .field public static final greylist SEC_PRODUCT_FEATURE_KNOX_SUPPORT_CONTAINER:Z = true
+ 
+-.field private static final greylist SEC_PRODUCT_FEATURE_KNOX_SUPPORT_DUAL_DAR:Z = true
++.field private static final greylist SEC_PRODUCT_FEATURE_KNOX_SUPPORT_DUAL_DAR:Z = false
+ 
+ .field public static final greylist SEC_PRODUCT_FEATURE_KNOX_SUPPORT_MDM:Z = true
+ 
+@@ -3752,30 +3752,16 @@
+ .end method
+ 
+ .method public static whitelist isDarDualEncryptionEnabled(I)Z
+-    .locals 4
++    .locals 2
+ 
+     invoke-static {p0}, Lcom/samsung/android/knox/SemPersonaManager;->getUserInfo(I)Landroid/content/pm/UserInfo;
+ 
+     move-result-object v0
+ 
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_1
+-
+-    iget v2, v0, Landroid/content/pm/UserInfo;->flags:I
+-
+-    const/high16 v3, 0x6000000
+-
+-    and-int/2addr v2, v3
+-
+-    if-lez v2, :cond_0
+-
+-    const/4 v1, 0x1
++    nop
+ 
+-    :cond_0
+-    return v1
++    const/4 v1, 0x0
+ 
+-    :cond_1
+     return v1
+ .end method
+ 
+@@ -3837,58 +3823,30 @@
+ .end method
+ 
+ .method public static greylist isDualDARCustomCrypto(I)Z
+-    .locals 4
++    .locals 2
+ 
+     invoke-static {p0}, Lcom/samsung/android/knox/SemPersonaManager;->getUserInfo(I)Landroid/content/pm/UserInfo;
+ 
+     move-result-object v0
+ 
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_1
+-
+-    iget v2, v0, Landroid/content/pm/UserInfo;->flags:I
+-
+-    const/high16 v3, 0x4000000
+-
+-    and-int/2addr v2, v3
+-
+-    if-ne v2, v3, :cond_0
+-
+-    const/4 v1, 0x1
++    nop
+ 
+-    :cond_0
+-    return v1
++    const/4 v1, 0x0
+ 
+-    :cond_1
+     return v1
+ .end method
+ 
+ .method public static greylist isDualDARNativeCrypto(I)Z
+-    .locals 4
++    .locals 2
+ 
+     invoke-static {p0}, Lcom/samsung/android/knox/SemPersonaManager;->getUserInfo(I)Landroid/content/pm/UserInfo;
+ 
+     move-result-object v0
+ 
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_1
+-
+-    iget v2, v0, Landroid/content/pm/UserInfo;->flags:I
+-
+-    const/high16 v3, 0x2000000
+-
+-    and-int/2addr v2, v3
+-
+-    if-ne v2, v3, :cond_0
+-
+-    const/4 v1, 0x1
++    nop
+ 
+-    :cond_0
+-    return v1
++    const/4 v1, 0x0
+ 
+-    :cond_1
+     return v1
+ .end method
+ 
+@@ -6329,7 +6287,7 @@
+ .end method
+ 
+ .method public greylist getDualDARProfile()Landroid/os/Bundle;
+-    .locals 3
++    .locals 2
+ 
+     sget-object v0, Lcom/samsung/android/knox/SemPersonaManager;->TAG:Ljava/lang/String;
+ 
+@@ -6337,29 +6295,8 @@
+ 
+     invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    iget-object v0, p0, Lcom/samsung/android/knox/SemPersonaManager;->mService:Lcom/samsung/android/knox/ISemPersonaManager;
+-
+-    if-eqz v0, :cond_0
+-
+-    :try_start_0
+-    invoke-interface {v0}, Lcom/samsung/android/knox/ISemPersonaManager;->getDualDARProfile()Landroid/os/Bundle;
+-
+-    move-result-object v0
+-    :try_end_0
+-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return-object v0
+-
+-    :catch_0
+-    move-exception v0
+-
+-    sget-object v1, Lcom/samsung/android/knox/SemPersonaManager;->TAG:Ljava/lang/String;
+-
+-    const-string v2, "Failed talking with enterprise policy service"
+-
+-    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    nop
+ 
+-    :cond_0
+     const/4 v0, 0x0
+ 
+     return-object v0
+@@ -8146,29 +8083,8 @@
+ 
+     invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    iget-object v0, p0, Lcom/samsung/android/knox/SemPersonaManager;->mService:Lcom/samsung/android/knox/ISemPersonaManager;
+-
+-    if-eqz v0, :cond_0
+-
+-    :try_start_0
+-    invoke-interface {v0, p1}, Lcom/samsung/android/knox/ISemPersonaManager;->setDualDARProfile(Landroid/os/Bundle;)I
+-
+-    move-result v0
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v0
+-
+-    :catch_0
+-    move-exception v0
+-
+-    sget-object v1, Lcom/samsung/android/knox/SemPersonaManager;->TAG:Ljava/lang/String;
+-
+-    const-string/jumbo v2, "setDualDARProfile Remote exception"
+-
+-    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    nop
+ 
+-    :cond_0
+     const/4 v0, -0x1
+ 
+     return v0
+diff --git a/smali_classes5/com/samsung/android/knox/dar/DarRune.smali b/smali_classes5/com/samsung/android/knox/dar/DarRune.smali
+index 1a9e1f13..d89fc962 100644
+--- a/smali_classes5/com/samsung/android/knox/dar/DarRune.smali
++++ b/smali_classes5/com/samsung/android/knox/dar/DarRune.smali
+@@ -6,19 +6,19 @@
+ # static fields
+ .field public static final blacklist KNOX_SUPPORT_DAR:Z = true
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_DUAL:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_DUAL:Z = false
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_DUAL_DO:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_DUAL_DO:Z = false
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_SDP:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_SDP:Z = false
+ 
+ .field public static final blacklist KNOX_SUPPORT_DAR_SDP_LOG:Z = true
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_SDP_OR_DUAL:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_SDP_OR_DUAL:Z = false
+ 
+ .field public static final blacklist KNOX_SUPPORT_DAR_SECURE_FOLDER:Z = true
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_VIRTUAL_USER:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_VIRTUAL_USER:Z = false
+ 
+ .field public static final blacklist KNOX_SUPPORT_DAR_WEAVER:Z = true
+ 
+diff --git a/smali_classes5/com/samsung/android/knox/dar/ddar/DualDarManager.smali b/smali_classes5/com/samsung/android/knox/dar/ddar/DualDarManager.smali
+index 9f2fcca5..611e6c32 100644
+--- a/smali_classes5/com/samsung/android/knox/dar/ddar/DualDarManager.smali
++++ b/smali_classes5/com/samsung/android/knox/dar/ddar/DualDarManager.smali
+@@ -181,25 +181,10 @@
+ .end method
+ 
+ .method public static blacklist isOnDeviceOwnerEnabled()Z
+-    .locals 3
++    .locals 1
+ 
+     const/4 v0, 0x0
+ 
+-    const-string/jumbo v1, "persist.sys.dualdar.do"
+-
+-    const/4 v2, 0x0
+-
+-    invoke-static {v1, v2}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
+-
+-    move-result v1
+-
+-    if-eqz v1, :cond_0
+-
+-    const/4 v2, 0x1
+-
+-    :cond_0
+-    move v0, v2
+-
+     return v0
+ .end method
+ 
+diff --git a/smali_classes5/com/samsung/android/rune/CoreRune.smali b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+index f04fe9d3..e2bec117 100644
+--- a/smali_classes5/com/samsung/android/rune/CoreRune.smali
++++ b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+@@ -1228,11 +1228,11 @@
+ 
+ .field public static final blacklist KNOX_SUPPORT_DAR:Z = true
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_DUAL:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_DUAL:Z = false
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_DUAL_DO:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_DUAL_DO:Z = false
+ 
+-.field public static final blacklist KNOX_SUPPORT_DAR_SDP:Z = true
++.field public static final blacklist KNOX_SUPPORT_DAR_SDP:Z = false
+ 
+ .field public static final blacklist KNOX_SUPPORT_DUAL_APP:Z = true
+ 
+-- 
+2.43.0
+

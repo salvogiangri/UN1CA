@@ -19,6 +19,8 @@ jobs:
             path: "unica/packages/fod/essi"
           - module: "(Qualcomm) Optical FOD blobs"
             path: "unica/packages/fod/qssi"
+          - module: "(Exynos) Knox'nt blobs"
+            path: "unica/packages/knox/essi/none"
           - module: "(Qualcomm) Knox'nt blobs"
             path: "unica/packages/knox/qssi/none"
           - module: "(Qualcomm) Knox SDP blobs"
