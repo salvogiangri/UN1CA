@@ -137,7 +137,7 @@ To generate a patch file, use `git format-patch` or `diff -crB`.
 {: .pb-2 }
 When created, this script allows to customize the patch application process. `SKIPUNZIP=1` variable can be declared if you want to skip the default patch application process (will only skip the partitions folders).
 
-Together with all the config.sh flags, the following variables are also available in the script:
+Together with [the build flags]({% link expert/flags.md %}), the following variables are also available in the script:
 - `SRC_DIR`: path of the UN1CA root directory
 - `OUT_DIR`: path of the output directory
 - `TMP_DIR`: path of the temporary folder, this doesn't exists by default and can be used to temporarily store files

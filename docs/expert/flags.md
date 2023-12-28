@@ -15,12 +15,13 @@ Source build flags must be set inside `unica/config.sh` and are related to the f
 
 ### - **SOURCE_FIRMWARE** (string, required)
 {: .pb-2 }
-Defines the source device firmware to use with the format of **"Model number/CSC"**. Currently, UN1CA uses Galaxy S23 (`SM-S911B/INS`) as base for Qualcomm devices and Galaxy S22 (`SM-S901B/BTE`) for Exynos devices.
+Defines the source device firmware to use with the format of **"Model number/CSC/IMEI"**. IMEI number is necessary to fetch the firmware from FUS.
+Currently, UN1CA uses Galaxy S23 (`SM-S911B` with `INS` CSC) as base for Qualcomm devices and Galaxy S22 (`SM-S901B` with `BTE` CSC) for Exynos devices.
 
 ### - **SOURCE_EXTRA_FIRMWARES** (array, optional)
 {: .pb-2 }
 When defined, this set of extra devices firmwares will be downloaded/extracted when running `download_fw`/`extract_fw` along with the one set in `SOURCE_FIRMWARE`.
-This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC"** (eg. `SOURCE_EXTRA_FIRMWARES=("SM-A528B/BTU" "SM-A528N/KOO")`).
+This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC/IMEI"** (eg. `SOURCE_EXTRA_FIRMWARES=("SM-A528B/BTU/352599501234566" "SM-A528N/KOO/354049881234560")`).
 
 ### - **SOURCE_API_LEVEL** (int, required)
 {: .pb-2 }
@@ -68,12 +69,12 @@ Defines the target device codename, this must match the `ro.product.vendor.devic
 
 ### - **TARGET_FIRMWARE** (string, required)
 {: .pb-2 }
-Defines the target device firmware to use with the format of **"Model number/CSC"**.
+Defines the target device firmware to use with the format of **"Model number/CSC/IMEI"**. IMEI number is necessary to fetch the firmware from FUS.
 
 ### - **TARGET_EXTRA_FIRMWARES** (array, optional)
 {: .pb-2 }
 When defined, this set of extra devices firmwares will be downloaded/extracted when running `download_fw`/`extract_fw` along with the one set in `TARGET_FIRMWARE`.
-This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC"** (eg. `TARGET_EXTRA_FIRMWARES=("SM-A528B/BTU" "SM-A528N/KOO")`).
+This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC/IMEI"** (eg. `TARGET_EXTRA_FIRMWARES=("SM-A528B/BTU/352599501234566" "SM-A528N/KOO/354049881234560")`).
 
 ### - **TARGET_API_LEVEL** (int, required)
 {: .pb-2 }
