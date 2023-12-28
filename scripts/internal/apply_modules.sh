@@ -62,8 +62,13 @@ SET_PROP()
         fi
     else
         if grep -Fq "$PROP" "$FILE"; then
+            local LINES
+
             echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
-            sed -i "$(sed -n "/^${PROP}\b/=" "$FILE") c${PROP}=${VALUE}" "$FILE"
+            LINES="$(sed -n "/^${PROP}\b/=" "$FILE")"
+            for l in $LINES; do
+                sed -i "$l c${PROP}=${VALUE}" "$FILE"
+            done
         else
             echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
             if ! grep -q "Added by scripts" "$FILE"; then
