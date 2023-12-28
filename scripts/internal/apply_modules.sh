@@ -153,7 +153,7 @@ APPLY_SMALI_PATCHES()
         echo "Applying \"$COMMIT_NAME\" to $TARGET"
         OUT="$(patch -p1 -s -t -N --dry-run < "$patch")" \
             || echo "$OUT" | grep -q "Skipping patch" || false
-        patch -p1 -s -t -N < "$patch" &> /dev/null || true
+        patch -p1 -s -t -N --no-backup-if-mismatch < "$patch" &> /dev/null || true
     done <<< "$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" | sort -n)"
     cd - &> /dev/null
 }
