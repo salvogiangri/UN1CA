@@ -34,42 +34,42 @@ fi
 case "$1" in
     "unica/packages/china")
         MODULE="$1"
-        FW="SM-S9110/CHC"
+        FW="SM-S9110/CHC/RFCW2198XNF"
         BLOBS="$(find "$SRC_DIR/unica/packages/china/system" -type f | sed "s.$SRC_DIR/unica/packages/china.system.")"
         ;;
     "unica/packages/fod/essi")
         MODULE="$1"
-        FW="SM-S711B/SEK"
+        FW="SM-S711B/SEK/358615311234564"
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/essi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/essi.system.")"
         ;;
     "unica/packages/fod/qssi")
         MODULE="$1"
-        FW="SM-X716B/EUX"
+        FW="SM-X716B/EUX/353439961234567"
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
         ;;
     "unica/packages/knox/qssi/none")
         MODULE="$1"
-        FW="SM-A736B/INS"
+        FW="SM-A736B/INS/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/none.system.")"
         ;;
     "unica/packages/knox/qssi/sdp")
         MODULE="$1"
-        FW="SM-A528B/BTU"
+        FW="SM-A528B/BTU/352599501234566"
         BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/sdp.system.")"
         ;;
     "unica/packages/mass_cam")
         MODULE="$1"
-        FW="SM-A736B/INS"
+        FW="SM-A736B/INS/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/packages/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/packages/mass_cam.system.")"
         ;;
     "unica/packages/vndk/30")
         MODULE="$1"
-        FW="SM-A736B/INS"
+        FW="SM-A736B/INS/352828291234563"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v30.apex"
         ;;
     "unica/packages/vndk/31")
         MODULE="$1"
-        FW="SM-S901B/BTE"
+        FW="SM-S901B/BTE/350330051234562"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v31.apex"
         ;;
     #"unica/packages/vndk/32")
@@ -79,12 +79,12 @@ case "$1" in
     #    ;;
     "unica/packages/vndk/33")
         MODULE="$1"
-        FW="SM-S911B/INS"
+        FW="SM-S911B/INS/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
         ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
-        FW="SM-A528B/BTU"
+        FW="SM-A528B/BTU/352599501234566"
         BLOBS="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/product" -type f \
             | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs/product..")"
         BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f \
@@ -92,7 +92,7 @@ case "$1" in
         ;;
     "target/m52xq/patches/vendor")
         MODULE="$1"
-        FW="SM-A528B/BTU"
+        FW="SM-A528B/BTU/352599501234566"
         BLOBS="$(find "$SRC_DIR/target/m52xq/patches/vendor/vendor" -type f \
             -not -path "*/firmware/*" ! -name "*wifi_firmware.rc" | sed "s.$SRC_DIR/target/m52xq/patches/vendor/..")"
         ;;
@@ -135,7 +135,7 @@ for i in $BLOBS; do
     if [[ "$i" == "system/system/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
             "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/.system/.")"
-    elif [[ "$i" == "vendor/"* ]]; then
+    elif [[ "$i" == "product/"* ]] || [[ "$i" == "vendor/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
             "$SRC_DIR/$MODULE/$i"
     fi
