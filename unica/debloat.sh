@@ -94,6 +94,7 @@ system/app/SmartSwitchStub/oat
 system/app/SmartTethering/oat
 system/app/SoundPicker_U/oat
 system/app/StickerCenter/oat
+system/app/TEEgrisTuiService/oat
 system/app/TetheringAutomation/oat
 system/app/UnifiedWFC/oat
 system/app/UniversalMDMClient/oat
@@ -141,6 +142,7 @@ system/priv-app/Bixby/oat
 system/priv-app/BixbyVisionFramework3.5/oat
 system/priv-app/BlueLightFilter/oat
 system/priv-app/CallBGProvider/oat
+system/priv-app/CallContentProvider/oat
 system/priv-app/CIDManager/oat
 system/priv-app/CMHProvider/oat
 system/priv-app/CocktailBarService_v3.2/oat
@@ -158,6 +160,8 @@ system/priv-app/EasySetup/oat
 system/priv-app/EmergencySOS/oat
 system/priv-app/EnhancedAttestationAgent/oat
 system/priv-app/EsimClient/oat
+system/priv-app/EsimKeyString/oat
+system/priv-app/EuiccService/oat
 system/priv-app/FaceService/oat
 system/priv-app/FactoryTestProvider/oat
 system/priv-app/Finder/oat
@@ -202,6 +206,7 @@ system/priv-app/Quickboard/oat
 system/priv-app/Routines/oat
 system/priv-app/SamsungBilling/oat
 system/priv-app/SamsungCalendarProvider/oat
+system/priv-app/SamsungCamera/oat
 system/priv-app/SamsungCloudClient/oat
 system/priv-app/SamsungContacts/oat
 system/priv-app/SamsungContactsProvider/oat
@@ -214,6 +219,7 @@ system/priv-app/SamsungMessages/oat
 system/priv-app/SamsungMultiConnectivity/oat
 system/priv-app/SamsungSmartSuggestions/oat
 system/priv-app/SamsungVideoPlayer/oat
+system/priv-app/SCameraSDKService/oat
 system/priv-app/SCPMAgent/oat
 system/priv-app/SDMConfig/oat
 system/priv-app/SecAppSeparation/oat
@@ -304,6 +310,7 @@ system/etc/permissions/privapp-permissions-com.samsung.android.app.kfa.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.authfw.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.carkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.game.gamehome.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
 system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
@@ -323,6 +330,7 @@ system/priv-app/DigitalKey
 system/priv-app/FBInstaller_NS
 system/priv-app/FBServices
 system/priv-app/FotaAgent
+system/priv-app/GameHome/GameHome.apk
 system/priv-app/KnoxAIFrameworkApp
 system/priv-app/OneDrive_Samsung_v3
 system/priv-app/PaymentFramework
