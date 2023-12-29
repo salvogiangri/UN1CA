@@ -39,7 +39,7 @@ case "$1" in
         ;;
     "unica/packages/fod/essi")
         MODULE="$1"
-        FW="SM-S711B/SEK/358615311234564"
+        FW="SM-S901B/BTE/350330051234562"
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/essi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/essi.system.")"
         ;;
     "unica/packages/fod/qssi")
