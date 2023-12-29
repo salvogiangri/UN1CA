@@ -33,8 +33,10 @@ if [[ ! -f "$WORK_DIR/system/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so" ]]; 
 
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libnfc"*.so "$WORK_DIR/system/system/lib64"
     ln -sf "/system/lib64/libnfc_${TARGET_LIB_NAME}_jni.so" "$WORK_DIR/system/system/app/NfcNci/lib/arm64/libnfc_${TARGET_LIB_NAME}_jni.so"
-    sed -i "s/$SOURCE_LIB_NAME/$TARGET_LIB_NAME/g" "$WORK_DIR/configs/file_context-system"
-    sed -i "s/$SOURCE_LIB_NAME/$TARGET_LIB_NAME/g" "$WORK_DIR/configs/fs_config-system"
+    sed -i "s/libnfc_${SOURCE_LIB_NAME}_jni/libnfc_${TARGET_LIB_NAME}_jni/g" "$WORK_DIR/configs/file_context-system"
+    sed -i "s/libnfc-${SOURCE_LIB_NAME}/libnfc-${TARGET_LIB_NAME}/g" "$WORK_DIR/configs/file_context-system"
+    sed -i "s/libnfc_${SOURCE_LIB_NAME}_jni/libnfc_${TARGET_LIB_NAME}_jni/g" "$WORK_DIR/configs/fs_config-system"
+    sed -i "s/libnfc-${SOURCE_LIB_NAME}/libnfc-${TARGET_LIB_NAME}/g" "$WORK_DIR/configs/fs_config-system"
 
     # Workaround for pre-U libs
     if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
