@@ -45,7 +45,8 @@ case "$1" in
     "unica/packages/fod/qssi")
         MODULE="$1"
         FW="SM-X716B/EUX/353439961234567"
-        BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f \
+            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
         ;;
     "unica/packages/knox/essi/none")
         MODULE="$1"
