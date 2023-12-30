@@ -1,11 +1,11 @@
-From 04db28505913339d160b97cb07831dc1187becc1 Mon Sep 17 00:00:00 2001
+From 8e3c6c1b81f5dff9cee52f4135d2f6c8dfc65b20 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 13 Dec 2023 21:04:57 +0100
+Date: Sat, 30 Dec 2023 12:46:07 +0100
 Subject: [PATCH] Introduce KnoxPatchHooks
 
 ---
  smali/android/app/Instrumentation.smali       |   4 +
- .../android/os/SemSystemProperties.smali      |  14 +
+ .../android/os/SystemProperties.smali         |  14 +
  .../io/mesalabs/unica/KnoxPatchHooks.smali    | 327 ++++++++++++++++++
  3 files changed, 345 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
@@ -32,13 +32,13 @@ index 86460ff3..5017c88a 100644
      return-object v0
  .end method
  
-diff --git a/smali_classes3/android/os/SemSystemProperties.smali b/smali_classes3/android/os/SemSystemProperties.smali
-index 37707148..bcda320b 100644
---- a/smali_classes3/android/os/SemSystemProperties.smali
-+++ b/smali_classes3/android/os/SemSystemProperties.smali
-@@ -15,20 +15,34 @@
- .method public static whitelist get(Ljava/lang/String;)Ljava/lang/String;
-     .locals 1
+diff --git a/smali_classes3/android/os/SystemProperties.smali b/smali_classes3/android/os/SystemProperties.smali
+index 25fa7c61..b3a63d50 100644
+--- a/smali_classes3/android/os/SystemProperties.smali
++++ b/smali_classes3/android/os/SystemProperties.smali
+@@ -367,10 +367,17 @@
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
  
 +    invoke-static {p0}, Lio/mesalabs/unica/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +
@@ -46,7 +46,7 @@ index 37707148..bcda320b 100644
 +
 +    if-nez v0, :cond_0
 +
-     invoke-static {p0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+     invoke-static {p0}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
  
      move-result-object v0
  
@@ -54,8 +54,9 @@ index 37707148..bcda320b 100644
      return-object v0
  .end method
  
- .method public static whitelist get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-     .locals 1
+@@ -379,10 +386,17 @@
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
  
 +    invoke-static {p0}, Lio/mesalabs/unica/KnoxPatchHooks;->onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +
@@ -63,7 +64,7 @@ index 37707148..bcda320b 100644
 +
 +    if-nez v0, :cond_0
 +
-     invoke-static {p0, p1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  
      move-result-object v0
  
