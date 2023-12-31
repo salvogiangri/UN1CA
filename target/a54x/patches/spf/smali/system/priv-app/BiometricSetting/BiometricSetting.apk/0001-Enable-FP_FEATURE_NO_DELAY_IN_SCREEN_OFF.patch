@@ -1,0 +1,50 @@
+From 4d979aad8efe41cce78610d92e942aa9ac91113a Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Fri, 29 Dec 2023 15:42:57 +0100
+Subject: [PATCH] Enable FP_FEATURE_NO_DELAY_IN_SCREEN_OFF
+
+---
+ .../samsung/android/biometrics/app/setting/Utils$Config.smali | 4 ++++
+ .../app/setting/fingerprint/OpticalController.smali           | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali b/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
+index f4685a1..15fe63b 100644
+--- a/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
++++ b/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
+@@ -45,6 +45,8 @@
+ 
+ .field public static final FP_FEATURE_HW_LIGHT_SOURCE:Z
+ 
++.field public static final FP_FEATURE_NO_DELAY_IN_SCREEN_OFF:Z
++
+ .field public static final FP_FEATURE_SENSOR_IS_IN_DISPLAY_TYPE:Z
+ 
+ .field public static final FP_FEATURE_SENSOR_IS_OPTICAL:Z
+@@ -222,6 +224,8 @@
+     :goto_3
+     sput-boolean v3, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_HW_LIGHT_SOURCE:Z
+ 
++    sput-boolean v1, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_NO_DELAY_IN_SCREEN_OFF:Z
++
+     sput-boolean v0, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_TSP_BLOCK:Z
+ 
+     sput-boolean v1, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_ENROLL_FRAME_MOVING_UX:Z
+diff --git a/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali b/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
+index 5db49ce..bdd8658 100644
+--- a/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
++++ b/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
+@@ -679,7 +679,9 @@
+ 
+     if-eqz p1, :cond_0
+ 
+-    sget-boolean p1, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FEATURE_FACE_HAL:Z
++    sget-boolean p1, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_NO_DELAY_IN_SCREEN_OFF:Z
++
++    if-nez p1, :cond_1
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/biometrics/app/setting/fingerprint/OpticalController;->removeKeyguardMaskClientIfExist()V
+ 
+-- 
+2.43.0
+
