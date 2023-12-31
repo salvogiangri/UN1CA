@@ -16,7 +16,7 @@ Source build flags must be set inside `unica/config.sh` and are related to the f
 ### - **SOURCE_FIRMWARE** (string, required)
 {: .pb-2 }
 Defines the source device firmware to use with the format of **"Model number/CSC/IMEI"**. IMEI number is necessary to fetch the firmware from FUS.
-Currently, UN1CA uses Galaxy S23 (`SM-S911B` with `INS` CSC) as base for Qualcomm devices and Galaxy S22 (`SM-S901B` with `BTE` CSC) for Exynos devices.
+Currently, UN1CA uses Galaxy S23 (`SM-S911B` with `INS` CSC) as base for Qualcomm devices and Galaxy S23 FE (`SM-S711B` with `SEK` CSC) for Exynos devices.
 
 ### - **SOURCE_EXTRA_FIRMWARES** (array, optional)
 {: .pb-2 }
