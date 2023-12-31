@@ -1,0 +1,53 @@
+From 5807ea03eed01a809a8acf3990b461ba3eb768f0 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 31 Dec 2023 14:46:26 +0100
+Subject: [PATCH] Replace source SPF with target values
+
+---
+ smali/com/android/server/SystemConfig.smali                     | 2 +-
+ .../biometrics/sensors/fingerprint/FingerprintUtils.smali       | 2 +-
+ .../com/samsung/ucm/ucmservice/CredentialManagerService.smali   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/smali/com/android/server/SystemConfig.smali b/smali/com/android/server/SystemConfig.smali
+index 2b23f673..33c41859 100644
+--- a/smali/com/android/server/SystemConfig.smali
++++ b/smali/com/android/server/SystemConfig.smali
+@@ -1060,7 +1060,7 @@
+ 
+     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    const-string v4, "UT8.0U"
++    const-string v4, "JCOP6.3U"
+ 
+     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
+index d1a037e5..932e0a6c 100644
+--- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
++++ b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
+@@ -442,7 +442,7 @@
+ .method public static semGetMaxTemplateNumberFromSPF()I
+     .locals 6
+ 
+-    const-string v0, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string v0, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     const-string v1, ","
+ 
+diff --git a/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali b/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
+index 24d5c414..68b857d0 100644
+--- a/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
++++ b/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
+@@ -23471,7 +23471,7 @@
+     :cond_6
+     const-string v2, "applet_ese_chip_vendor"
+ 
+-    const-string v4, "GEMALTO"
++    const-string v4, "NXP"
+ 
+     invoke-virtual {v3, v2, v4}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-- 
+2.43.0
+

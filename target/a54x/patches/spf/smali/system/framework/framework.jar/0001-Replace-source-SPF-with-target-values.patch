@@ -1,0 +1,162 @@
+From 932f9991b43bf2e7fb9e55a47499b05384debbb1 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 31 Dec 2023 14:26:14 +0100
+Subject: [PATCH] Replace source SPF with target values
+
+---
+ .../android/hardware/fingerprint/FingerprintManager.smali | 4 ++--
+ smali_classes5/com/android/server/SemService.smali        | 4 ++--
+ .../SemFingerprintManager$Characteristics.smali           | 4 ++--
+ .../android/bio/fingerprint/SemFingerprintManager.smali   | 2 +-
+ .../samsung/android/camera/mic/SemMultiMicManager.smali   | 4 ++--
+ .../android/hardware/display/RefreshRateConfig.smali      | 8 ++++----
+ smali_classes5/com/samsung/android/rune/CoreRune.smali    | 2 +-
+ 7 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali b/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali
+index 40c42827..03d11ede 100644
+--- a/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali
++++ b/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali
+@@ -1181,7 +1181,7 @@
+ 
+     const-string v0, "touch_display"
+ 
+-    const-string v1, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string v1, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     invoke-virtual {v1, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+@@ -1230,7 +1230,7 @@
+ 
+     const-string v0, "transition_effect_on"
+ 
+-    const-string v1, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string v1, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     invoke-virtual {v1, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+diff --git a/smali_classes5/com/android/server/SemService.smali b/smali_classes5/com/android/server/SemService.smali
+index bbb2e149..118720dd 100644
+--- a/smali_classes5/com/android/server/SemService.smali
++++ b/smali_classes5/com/android/server/SemService.smali
+@@ -123,11 +123,11 @@
+ 
+     sput-object v0, Lcom/android/server/SemService;->ERROR_NO_PERMISSION_STRING:Ljava/lang/String;
+ 
+-    const-string v0, "UT8.0U"
++    const-string v0, "JCOP6.3U"
+ 
+     sput-object v0, Lcom/android/server/SemService;->cosName:Ljava/lang/String;
+ 
+-    const-string v0, "GEMALTO"
++    const-string v0, "NXP"
+ 
+     sput-object v0, Lcom/android/server/SemService;->chipVendor:Ljava/lang/String;
+ 
+diff --git a/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager$Characteristics.smali b/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager$Characteristics.smali
+index 7b89f42c..fe5605c4 100644
+--- a/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager$Characteristics.smali
++++ b/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager$Characteristics.smali
+@@ -29,7 +29,7 @@
+ 
+ .field public static final whitelist SENSOR_TYPE_ULTRASONIC:I = 0x3
+ 
+-.field private static final blacklist mConfig:Ljava/lang/String; = "google_touch_display_optical,settings=3,aod_transition_animation"
++.field private static final blacklist mConfig:Ljava/lang/String; = "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+ 
+ # instance fields
+@@ -96,7 +96,7 @@
+ 
+     const-string/jumbo v0, "ultrasonic"
+ 
+-    const-string/jumbo v1, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string/jumbo v1, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     invoke-virtual {v1, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+diff --git a/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager.smali b/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager.smali
+index 44f04f5f..3c5a8f8c 100644
+--- a/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager.smali
++++ b/smali_classes5/com/samsung/android/bio/fingerprint/SemFingerprintManager.smali
+@@ -407,7 +407,7 @@
+ 
+     if-eq v0, v1, :cond_0
+ 
+-    const-string/jumbo v0, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string/jumbo v0, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     return-object v0
+ 
+diff --git a/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali b/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
+index 1445a3ab..166b793f 100644
+--- a/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
++++ b/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
+@@ -199,7 +199,7 @@
+     const/4 v0, 0x0
+ 
+     :try_start_0
+-    const-string v1, "07020"
++    const-string v1, "07010"
+ 
+     invoke-static {v1}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+@@ -287,7 +287,7 @@
+     const/4 v0, 0x0
+ 
+     :try_start_0
+-    const-string v2, "07020"
++    const-string v2, "07010"
+ 
+     invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+diff --git a/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali b/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+index b7bc7247..c8c42d47 100644
+--- a/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
++++ b/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+@@ -507,7 +507,7 @@
+ 
+     move-result-object v0
+ 
+-    const-string v1, "89,91"
++    const-string v1, "149,84"
+ 
+     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+@@ -586,7 +586,7 @@
+ 
+     move-result-object v0
+ 
+-    const-string v1, "200,2500"
++    const-string v1, "300,3500"
+ 
+     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+@@ -703,9 +703,9 @@
+ 
+     const-string/jumbo v3, "persist.dm.passive.ambient_brightness"
+ 
+-    const-string v4, "89,91"
++    const-string v4, "149,84"
+ 
+-    const-string v5, "200,2500"
++    const-string v5, "300,3500"
+ 
+     invoke-direct {v0, v4, v5, v2, v3}, Lcom/samsung/android/hardware/display/RefreshRateConfig$BrightnessThreshold;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ 
+diff --git a/smali_classes5/com/samsung/android/rune/CoreRune.smali b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+index 8296fd6c..0c403e19 100644
+--- a/smali_classes5/com/samsung/android/rune/CoreRune.smali
++++ b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+@@ -2629,7 +2629,7 @@
+ 
+     nop
+ 
+-    const-string/jumbo v3, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string/jumbo v3, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     const-string/jumbo v4, "touch_side"
+ 
+-- 
+2.43.0
+

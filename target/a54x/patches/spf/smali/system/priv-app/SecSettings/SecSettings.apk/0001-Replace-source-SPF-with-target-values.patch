@@ -1,0 +1,76 @@
+From 43acf7ccdbc1bc9f9603b85387a945531185f2c2 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 31 Dec 2023 14:56:13 +0100
+Subject: [PATCH] Replace source SPF with target values
+
+---
+ .../android/wifitrackerlib/WifiEntry.smali    | 29 ++-----------------
+ .../FingerprintSettingsUtils.smali            |  4 +--
+ 2 files changed, 4 insertions(+), 29 deletions(-)
+
+diff --git a/smali/com/android/wifitrackerlib/WifiEntry.smali b/smali/com/android/wifitrackerlib/WifiEntry.smali
+index 7ad977c2..e483089a 100644
+--- a/smali/com/android/wifitrackerlib/WifiEntry.smali
++++ b/smali/com/android/wifitrackerlib/WifiEntry.smali
+@@ -2785,34 +2785,9 @@
+ .end method
+ 
+ .method public semIsWifi6ENetwork()Z
+-    .locals 2
+-
+-    iget-object v0, p0, Lcom/android/wifitrackerlib/WifiEntry;->mWifiInfo:Landroid/net/wifi/WifiInfo;
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {v0}, Landroid/net/wifi/WifiInfo;->getFrequency()I
+-
+-    move-result v0
+-
+-    iget-object v1, p0, Lcom/android/wifitrackerlib/WifiEntry;->mWifiInfo:Landroid/net/wifi/WifiInfo;
+-
+-    invoke-virtual {v1}, Landroid/net/wifi/WifiInfo;->getWifiStandard()I
+-
+-    move-result v1
+-
+-    invoke-virtual {p0, v0, v1}, Lcom/android/wifitrackerlib/WifiEntry;->checkWifi6EStandard(II)Z
+-
+-    move-result p0
+-
+-    return p0
+-
+-    :cond_0
+-    iget-object p0, p0, Lcom/android/wifitrackerlib/WifiEntry;->mSemFlags:Lcom/samsung/android/wifitrackerlib/SemWifiEntryFlags;
+-
+-    invoke-virtual {p0}, Lcom/samsung/android/wifitrackerlib/SemWifiEntryFlags;->has6EStandard()Z
++    .locals 0
+ 
+-    move-result p0
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+index a23c377d..08cb1d69 100644
+--- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+@@ -848,7 +848,7 @@
+ 
+     const-string v0, ","
+ 
+-    const-string v1, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string v1, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     invoke-virtual {v1, v0}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
+ 
+@@ -1129,7 +1129,7 @@
+ 
+     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    const-string v2, "google_touch_display_optical,settings=3,aod_transition_animation"
++    const-string v2, "google_touch_display_optical,settings=3,no_delay_in_screen_off"
+ 
+     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-- 
+2.43.0
+
