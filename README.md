@@ -28,7 +28,7 @@ It also includes additional features and tweaks to ensure the best possible expe
 # Features
 - Based on the latest high-end Samsung devices firmware:
   - Galaxy S23 for Qualcomm devices
-  - Galaxy S22 for Exynos devices
+  - Galaxy S23 FE for Exynos devices
 - High end animations
 - Native/live blur support
 - Picture remaster support
