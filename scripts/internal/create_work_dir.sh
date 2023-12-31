@@ -116,6 +116,9 @@ COPY_TARGET_KERNEL()
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$WORK_DIR/kernel/$i"
         $TARGET_KEEP_ORIGINAL_SIGN || bash "$SRC_DIR/scripts/unsign_bin.sh" "$WORK_DIR/kernel/$i" &> /dev/null
     done
+    if $TARGET_INCLUDE_PATCHED_VBMETA; then
+        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/vbmeta_patched.img" "$WORK_DIR/kernel/vbmeta.img"
+    fi
 }
 # ]
 
