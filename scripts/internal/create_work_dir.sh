@@ -114,7 +114,7 @@ COPY_TARGET_KERNEL()
     for i in $COMMON_KERNEL_BINS; do
         [ ! -f "$FW_DIR/${MODEL}_${REGION}/$i" ] && continue
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" "$WORK_DIR/kernel/$i"
-        bash "$SRC_DIR/scripts/unsign_bin.sh" "$WORK_DIR/kernel/$i" &> /dev/null
+        $TARGET_KEEP_ORIGINAL_SIGN || bash "$SRC_DIR/scripts/unsign_bin.sh" "$WORK_DIR/kernel/$i" &> /dev/null
     done
 }
 # ]
