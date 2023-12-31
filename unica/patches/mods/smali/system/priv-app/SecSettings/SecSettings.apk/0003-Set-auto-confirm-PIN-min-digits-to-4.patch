@@ -1,0 +1,34 @@
+From 303684dcec30ed7b0ee4c72b2349eacdd6a89b7e Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 31 Dec 2023 15:20:09 +0100
+Subject: [PATCH] Set auto confirm PIN min digits to 4
+
+---
+ .../ChooseLockPassword$ChooseLockPasswordFragment.smali       | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali b/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
+index e7dd7ee5..b8661acc 100644
+--- a/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
++++ b/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
+@@ -2401,7 +2401,7 @@
+ .method public final isAutoPinConfirmPossible(I)Z
+     .locals 0
+ 
+-    const/4 p0, 0x6
++    const/4 p0, 0x4
+ 
+     if-lt p1, p0, :cond_0
+ 
+@@ -6112,7 +6112,7 @@
+ 
+     iget-object p0, p0, Lcom/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment;->mAutoPinConfirmOption:Landroid/widget/CheckBox;
+ 
+-    const/4 p1, 0x6
++    const/4 p1, 0x4
+ 
+     if-lt p2, p1, :cond_1
+ 
+-- 
+2.43.0
+
