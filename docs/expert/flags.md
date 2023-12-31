@@ -100,6 +100,10 @@ Defines whether to generate a flashable zip or a Odin tar package when building 
 {: .pb-2 }
 Defines the target device boot device path. Defaults to `/dev/block/bootdevice/by-name` when unset.
 
+### - **TARGET_KEEP_ORIGINAL_SIGN** (boolean, optional)
+{: .pb-2 }
+Set this to true if you want to keep the original AVB/Samsung signature footer in the bundled kernel images.
+
 ### - **TARGET_SUPER_PARTITION_SIZE** (int, required)
 {: .pb-2 }
 Defines the target device super partition size, which can be checked via the `lpdump` tool. Notice this is always **bigger** than `TARGET_SUPER_GROUP_SIZE`.
