@@ -33,6 +33,8 @@ jobs:
             path: "unica/packages/vndk/31"
           - module: "VNDK 33 apex"
             path: "unica/packages/vndk/33"
+          - module: "(a54x) /vendor proprietary blobs"
+            path: "target/a54x/patches/tee"
           - module: "(m52xq) OS proprietary blobs"
             path: "target/m52xq/patches/stock_blobs"
           - module: "(m52xq) /vendor proprietary blobs"

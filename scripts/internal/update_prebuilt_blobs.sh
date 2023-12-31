@@ -88,6 +88,12 @@ case "$1" in
         FW="SM-S911B/INS/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
         ;;
+    "target/a54x/patches/tee")
+        MODULE="$1"
+        FW="SM-A546E/EGY/350090711234564"
+        BLOBS="$(find "$SRC_DIR/target/a54x/patches/tee/vendor" -type f \
+            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a54x/patches/tee/..")"
+        ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A528B/BTU/352599501234566"
