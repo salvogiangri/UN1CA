@@ -1,7 +1,0 @@
-# a54xnaxx (eur_open)
-on fs && property:ro.boot.em.model=SM-A546B
-    mount none /vendor/tee_eur /vendor/tee bind
-
-# a54xnsxx (sea_open)
-on fs && property:ro.boot.em.model=SM-A546E
-    mount none /vendor/tee_sea /vendor/tee bind

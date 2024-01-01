@@ -1,0 +1,16 @@
+# a54xnaxx (eur_open)
+on fs && property:ro.boot.em.model=SM-A546B
+    # Firmware blobs
+    mount none /vendor/firmware/eur/AIE.bin /vendor/firmware/AIE.bin bind
+    mount none /vendor/firmware/eur/calliope_sram.bin /vendor/firmware/calliope_sram.bin bind
+    mount none /vendor/firmware/eur/mfc_fw.bin /vendor/firmware/mfc_fw.bin bind
+    mount none /vendor/firmware/eur/os.checked.bin /vendor/firmware/os.checked.bin bind
+    mount none /vendor/firmware/eur/pablo_icpufw.bin /vendor/firmware/pablo_icpufw.bin bind
+    mount none /vendor/firmware/eur/vts.bin /vendor/firmware/vts.bin bind
+    # TEEgris
+    mount none /vendor/tee_eur /vendor/tee bind
+
+# a54xnsxx (sea_open)
+on fs && property:ro.boot.em.model=SM-A546E
+    # TEEgris
+    mount none /vendor/tee_sea /vendor/tee bind
