@@ -90,7 +90,7 @@ case "$1" in
         ;;
     "target/a54x/patches/tee")
         MODULE="$1"
-        FW="SM-A546E/EGY/350090711234564"
+        FW="SM-A546B/BTE/350756481234568"
         BLOBS="$(find "$SRC_DIR/target/a54x/patches/tee/vendor" -type f \
             -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a54x/patches/tee/..")"
         ;;
