@@ -97,20 +97,20 @@ if $EXT4; then
 elif $F2FS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="$PARTITION"
     IMG_SIZE=$(du -sb "$2" | cut -f 1)
-    IMG_SIZE=$(echo "$IMG_SIZE * 1.15" | bc -l)
+    IMG_SIZE=$(echo "$IMG_SIZE * 1.11" | bc -l)
     IMG_SIZE=${IMG_SIZE%.*}
     [[ "$IMG_SIZE" -lt 56623104 ]] && IMG_SIZE=56623104
 
     if [[ "$PARTITION" != "system" ]]; then
-        sed -i "s/\/$PARTITION /\/$PARTITION\/$PARTITION /g" "$3"
+        sed -i "s/^\/$PARTITION /\/$PARTITION\/$PARTITION /g" "$3"
     fi
 
     SPARSE_FLAG=""
     $SPARSE && SPARSE_FLAG="-S"
-    mkf2fsuserimg "$2/../$PARTITION.img" "$IMG_SIZE" \
+    { mkf2fsuserimg "$2/../$PARTITION.img" "$IMG_SIZE" \
         $SPARSE_FLAG -C "$4" -f "$2" \
         -s "$3" -t "$MOUNT_POINT" -T 1640995200 \
-        -L "$MOUNT_POINT" --prjquota --compression
+        -L "$MOUNT_POINT" --prjquota --compression --readonly > /dev/null; } 2>&1
 elif $EROFS; then
     [[ $PARTITION == "system" ]] && MOUNT_POINT="/" || MOUNT_POINT="/$PARTITION"
 
