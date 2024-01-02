@@ -115,7 +115,7 @@ This command will print out all the packages and patches that will be processed 
 run_cmd unsign_bin <image> (<image>...)
 ```
 
-This command will strip off the [AVB footer](https://android.googlesource.com/platform/external/avb/+/master/README.md#the-vbmeta-struct) and/or Samsung signature from the supplied image files, useful to avoid bumping the target device's rollback prevention bit.
+This command will strip off the [AVB footer](https://android.googlesource.com/platform/external/avb/+/master/README.md#the-vbmeta-struct) and/or Samsung signature from the supplied image files, useful to avoid bumping the target device's [rollback protection bit](https://samfw.com/blog/what-is-bit-binary-value).
 **Do not supply bootloader images** as flashing those might hard brick your device.
 
 {: .highlight }
