@@ -78,11 +78,11 @@ case "$1" in
         FW="SM-S901B/BTE/350330051234562"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v31.apex"
         ;;
-    #"unica/packages/vndk/32")
-    #    MODULE="$1"
-    #    FW="SM-F936B/BTE"
-    #    BLOBS="system/system/system_ext/apex/com.android.vndk.v32.apex"
-    #    ;;
+    "unica/packages/vndk/32")
+        MODULE="$1"
+        FW="SM-F936B/INS/352334701234566"
+        BLOBS="system/system/system_ext/apex/com.android.vndk.v32.apex"
+        ;;
     "unica/packages/vndk/33")
         MODULE="$1"
         FW="SM-S911B/INS/352404911234563"

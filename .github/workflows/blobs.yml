@@ -31,6 +31,8 @@ jobs:
             path: "unica/packages/vndk/30"
           - module: "VNDK 31 apex"
             path: "unica/packages/vndk/31"
+          - module: "VNDK 32 apex"
+            path: "unica/packages/vndk/32"
           - module: "VNDK 33 apex"
             path: "unica/packages/vndk/33"
           - module: "(a54x) /vendor proprietary blobs"
