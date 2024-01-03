@@ -81,7 +81,7 @@ case "$1" in
     "unica/packages/vndk/32")
         MODULE="$1"
         FW="SM-F936B/INS/352334701234566"
-        BLOBS="system/system/system_ext/apex/com.android.vndk.v32.apex"
+        BLOBS="system_ext/apex/com.android.vndk.v32.apex"
         ;;
     "unica/packages/vndk/33")
         MODULE="$1"
