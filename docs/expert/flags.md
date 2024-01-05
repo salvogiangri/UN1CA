@@ -100,6 +100,10 @@ Defines whether to generate a flashable zip or a Odin tar package when building 
 {: .pb-2 }
 Defines the target device boot device path. Defaults to `/dev/block/bootdevice/by-name` when unset.
 
+### - **TARGET_INCLUDE_MAGISK** (boolean, optional)
+{: .pb-2 }
+Set this to true if you want to include Magisk in the generated flashable zip/Odin tar package.
+
 ### - **TARGET_INCLUDE_PATCHED_VBMETA** (boolean, optional)
 {: .pb-2 }
 Set this to true if you want to include a patched vbmeta image in the generated Odin tar package. Only applies when `TARGET_INSTALL_METHOD` is set to `odin`.
