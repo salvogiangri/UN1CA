@@ -47,6 +47,10 @@ cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/vintf/compati
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/vintf/manifest.xml" \
     "$WORK_DIR/system/system/etc/vintf/manifest.xml"
 
+echo "Add stock com.samsung.android.shell.apex"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/apex/com.samsung.android.shell.apex" \
+    "$WORK_DIR/system/system/apex/com.samsung.android.shell.apex"
+
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.flip.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level29.xml"
