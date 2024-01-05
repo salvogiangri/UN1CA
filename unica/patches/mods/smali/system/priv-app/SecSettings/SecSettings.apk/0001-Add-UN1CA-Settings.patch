@@ -1,26 +1,27 @@
-From 1784bc20110b5824e161b58b922b1cc804cf7033 Mon Sep 17 00:00:00 2001
+From 34641c94b55628585663d10292c54ed048422357 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
 
 ---
- AndroidManifest.xml                           |  10 +-
+ AndroidManifest.xml                           |   8 +
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   6 +
  res/layout/unica_settings_logo_layout.xml     |   6 +
- res/values/public.xml                         |  14 +-
- res/values/strings.xml                        |   7 +
- res/xml/sec_top_level_settings.xml            |   3 +-
- res/xml/unica_settings.xml                    |  11 +
- .../com/android/settings/R$string.smali       |  14 ++
+ res/values/public.xml                         |  13 +
+ res/values/strings.xml                        |   8 +
+ res/xml/sec_top_level_settings.xml            |   1 +
+ res/xml/unica_settings.xml                    |  12 +
+ .../com/android/settings/R$string.smali       |  16 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         |  57 +++++
  .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++++++++++
+ .../AppDowngradePreferenceController.smali    | 183 ++++++++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++++++++
  .../ROMVersionPreferenceController.smali      | 195 +++++++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++++++++++
- 16 files changed, 917 insertions(+), 3 deletions(-)
+ 17 files changed, 1102 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -28,12 +29,13 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index 40b33ff4..f6935e7a 100644
+index 40b33ff4..28c38b18 100644
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
 @@ -4978,5 +4978,13 @@
@@ -49,12 +51,11 @@ index 40b33ff4..f6935e7a 100644
 +            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_settings"/>
 +        </activity>
      </application>
--</manifest>
+ </manifest>
 \ No newline at end of file
-+</manifest>
 diff --git a/res/drawable/sec_ic_settings_unica.xml b/res/drawable/sec_ic_settings_unica.xml
 new file mode 100644
-index 00000000..7ec3582d
+index 00000000..0cd223e4
 --- /dev/null
 +++ b/res/drawable/sec_ic_settings_unica.xml
 @@ -0,0 +1,9 @@
@@ -67,32 +68,35 @@ index 00000000..7ec3582d
 +    </group>
 +    <path android:fillColor="@color/sec_dashboard_layer_color" android:pathData="M24.856,3.144C23.13,1.522 20.774,0.601 18.174,0.257C15.691,-0.072 14,0.009 14,0.009C14,0.009 12.309,-0.072 9.826,0.257C7.226,0.601 4.87,1.522 3.144,3.144C1.521,4.87 0.601,7.226 0.257,9.826C-0.072,12.309 0.009,14 0.009,14C0.009,14 -0.072,15.691 0.257,18.174C0.601,20.774 1.521,23.13 3.144,24.856C4.87,26.478 7.226,27.399 9.826,27.743C12.309,28.072 14,27.991 14,27.991C14,27.991 15.691,28.072 18.174,27.743C20.774,27.399 23.13,26.478 24.856,24.856C26.479,23.13 27.399,20.774 27.743,18.174C28.072,15.691 27.991,14 27.991,14C27.991,14 28.072,12.309 27.743,9.826C27.399,7.226 26.479,4.87 24.856,3.144Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
 +</vector>
+\ No newline at end of file
 diff --git a/res/layout-night/unica_settings_logo_layout.xml b/res/layout-night/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..e824e54c
+index 00000000..b4ee07d3
 --- /dev/null
 +++ b/res/layout-night/unica_settings_logo_layout.xml
 @@ -0,0 +1,6 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimary" app:tintMode="src_in" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimary" app:tintMode="src_in" />
 +</FrameLayout>
+\ No newline at end of file
 diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..bbb70b4c
+index 00000000..7b802f76
 --- /dev/null
 +++ b/res/layout/unica_settings_logo_layout.xml
 @@ -0,0 +1,6 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimaryDark" app:tintMode="src_in" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimaryDark" app:tintMode="src_in" />
 +</FrameLayout>
+\ No newline at end of file
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 7ba70fd4..f05dbf1f 100644
+index 7ba70fd4..7d0e7804 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -11781,6 +11781,7 @@
@@ -120,38 +124,39 @@ index 7ba70fd4..f05dbf1f 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0565" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014a" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a0" />
-@@ -31357,6 +31361,13 @@
+@@ -31357,6 +31361,14 @@
      <public type="string" name="zone_time_type_standard" id="0x7f1332a0" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f1332a1" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f1332a2" />
 +    <public type="string" name="keywords_unica_settings" id="0x7f1332a3" />
 +    <public type="string" name="menu_key_unica_settings" id="0x7f1332a4" />
-+    <public type="string" name="unica_extra_settings_title" id="0x7f1332a5" />
-+    <public type="string" name="unica_games_spoof_title" id="0x7f1332a6" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1332a7" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1332a8" />
-+    <public type="string" name="unica_settings_title" id="0x7f1332a9" />
++    <public type="string" name="unica_allow_downgrade_title" id="0x7f1332a5" />
++    <public type="string" name="unica_extra_settings_title" id="0x7f1332a6" />
++    <public type="string" name="unica_games_spoof_title" id="0x7f1332a7" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1332a8" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1332a9" />
++    <public type="string" name="unica_settings_title" id="0x7f1332aa" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34045,4 +34056,5 @@
+@@ -34045,4 +34057,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16025e" />
      <public type="xml" name="zen_mode_settings" id="0x7f16025f" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f160260" />
--</resources>
-\ No newline at end of file
 +    <public type="xml" name="unica_settings" id="0x7f160261" />
-+</resources>
+ </resources>
+\ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 9c5963a1..7b0f3101 100644
+index 9c5963a1..297cd391 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13588,4 +13588,11 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13588,4 +13588,12 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
 +    <string name="keywords_unica_settings">UN1CA Settings</string>
 +    <string name="menu_key_unica_settings">top_level_unica</string>
++    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
 +    <string name="unica_extra_settings_title">Extra settings</string>
 +    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
 +    <string name="unica_rom_version_title">ROM version</string>
@@ -159,7 +164,7 @@ index 9c5963a1..7b0f3101 100644
 +    <string name="unica_settings_title">UN1CA Settings</string>
  </resources>
 diff --git a/res/xml/sec_top_level_settings.xml b/res/xml/sec_top_level_settings.xml
-index 5bf6f32f..0f0dbd23 100644
+index 5bf6f32f..592bc70f 100644
 --- a/res/xml/sec_top_level_settings.xml
 +++ b/res/xml/sec_top_level_settings.xml
 @@ -61,6 +61,7 @@
@@ -170,19 +175,12 @@ index 5bf6f32f..0f0dbd23 100644
      <com.samsung.android.settings.widget.SecInsetCategoryPreference android:order="0" />
      <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_digitalwellbeing" android:title="@string/app_name_digital_wellbeing" android:key="top_level_digitalwellbeing" android:summary="@string/summary_placeholder" android:order="40000" settings:controller="com.samsung.android.settings.homepage.TopLevelDigitalWellbeingPreferenceController" settings:highlightableMenuKey="@string/menu_key_digitalwellbeing">
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
-@@ -98,4 +99,4 @@
-             <extra android:name="from_settings" android:value="true" />
-         </intent>
-     </com.android.settings.widget.HomepagePreference>
--</PreferenceScreen>
-\ No newline at end of file
-+</PreferenceScreen>
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..eabae4c8
+index 00000000..957b580a
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,12 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -190,15 +188,17 @@ index 00000000..eabae4c8
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
++        <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.GamesPropsPreferenceController" />
 +    </SecPreferenceCategory>
 +</PreferenceScreen>
+\ No newline at end of file
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index fe88911c..3e2423b9 100644
+index fe88911c..0a7b3c1e 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12179,3 +12179,17 @@
+@@ -12179,3 +12179,19 @@
  .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f1332a1
  
  .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f1332a2
@@ -207,15 +207,17 @@ index fe88911c..3e2423b9 100644
 +
 +.field public static final menu_key_unica_settings:I = 0x7f1332a4
 +
-+.field public static final unica_extra_settings_title:I = 0x7f1332a5
++.field public static final unica_allow_downgrade_title:I = 0x7f1332a5
 +
-+.field public static final unica_games_spoof_title:I = 0x7f1332a6
++.field public static final unica_extra_settings_title:I = 0x7f1332a6
 +
-+.field public static final unica_rom_version_title:I = 0x7f1332a7
++.field public static final unica_games_spoof_title:I = 0x7f1332a7
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1332a8
++.field public static final unica_rom_version_title:I = 0x7f1332a8
 +
-+.field public static final unica_settings_title:I = 0x7f1332a9
++.field public static final unica_secure_ss_title:I = 0x7f1332a9
++
++.field public static final unica_settings_title:I = 0x7f1332aa
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
 index 9e7b0dfb..7b18d280 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
@@ -526,6 +528,195 @@ index 00000000..00e24add
 +    move-result-object p0
 +
 +    return-object p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
+new file mode 100644
+index 00000000..079c6187
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
+@@ -0,0 +1,183 @@
++.class public Lio/mesalabs/unica/settings/AppDowngradePreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "AppDowngradePreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_downgrade"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x1
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_downgrade"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z
@@ -1101,5 +1292,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.43.0
+2.34.1
 

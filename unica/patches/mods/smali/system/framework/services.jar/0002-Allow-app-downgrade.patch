@@ -1,0 +1,39 @@
+From 93be81e53b6cf9d66eeb87d9c71c4b2f63a1de97 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Fri, 5 Jan 2024 14:22:17 +0100
+Subject: [PATCH] Allow app downgrade
+
+---
+ .../android/server/pm/InstallPackageHelper.smali | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
+index 609f79ad..1ec0cdea 100644
+--- a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
++++ b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
+@@ -25882,6 +25882,22 @@
+ 
+     if-nez p2, :cond_5
+ 
++    iget-object p2, p0, Lcom/android/server/pm/InstallPackageHelper;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p2
++
++    const-string p4, "unica_allow_downgrade"
++
++    const/4 v5, 0x0
++
++    invoke-static {p2, p4, v5}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p2
++
++    if-nez p2, :cond_5
++
+     :try_start_1
+     invoke-static {v2, p1}, Lcom/android/server/pm/PackageManagerServiceUtils;->checkDowngrade(Lcom/android/server/pm/pkg/AndroidPackage;Landroid/content/pm/PackageInfoLite;)V
+     :try_end_1
+-- 
+2.34.1
+
