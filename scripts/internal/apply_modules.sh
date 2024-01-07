@@ -146,8 +146,11 @@ APPLY_SMALI_PATCHES()
         COMMIT_NAME="$(grep "^Subject:" "$patch" | sed 's/.*PATCH] //')"
 
         if [[ "$patch" == *"0000-"* ]]; then
-            [[ "$patch" == *"AOSP"* ]] && $ROM_IS_OFFICIAL && continue
-            [[ "$patch" == *"UNICA"* ]] && $ROM_IS_OFFICIAL || continue
+            if $ROM_IS_OFFICIAL; then
+                [[ "$patch" == *"AOSP"* ]] && continue
+            else
+                [[ "$patch" == *"UNICA"* ]] && continue
+            fi
         fi
 
         echo "Applying \"$COMMIT_NAME\" to $TARGET"
