@@ -77,6 +77,20 @@ if ! grep -q "minisviewwalletcover" "$WORK_DIR/configs/fs_config-system"; then
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
 
+echo "Add stock Tlc libs"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libhidl_comm_mpos_tui_client.so" \
+    "$WORK_DIR/system/system/lib/libhidl_comm_mpos_tui_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/hidl_tlc_blockchain_comm_client.so" \
+    "$WORK_DIR/system/system/lib/hidl_tlc_blockchain_comm_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/hidl_tlc_payment_comm_client.so" \
+    "$WORK_DIR/system/system/lib/hidl_tlc_payment_comm_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libhidl_comm_mpos_tui_client.so" \
+    "$WORK_DIR/system/system/lib64/libhidl_comm_mpos_tui_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/hidl_tlc_blockchain_comm_client.so" \
+    "$WORK_DIR/system/system/lib64/hidl_tlc_blockchain_comm_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/hidl_tlc_payment_comm_client.so" \
+    "$WORK_DIR/system/system/lib64/hidl_tlc_payment_comm_client.so"
+
 echo "Add HIDL face biometrics libs"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/vendor.samsung.hardware.biometrics.face@3.0.so" \
     "$WORK_DIR/system/system/system_ext/lib"
