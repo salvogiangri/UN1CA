@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 # [
-KERNELSU_ZIP="https://downloads.mesalabs.io/s/GPPM2Nx3FoxHYr5/download/KSU-v0.7.2-20240105-a52sxq_FWK4.zip"
-KERNELSU_MANAGER_APK="https://github.com/tiann/KernelSU/releases/download/v0.7.2/KernelSU_v0.7.2_11413-release.apk"
+KERNELSU_ZIP="https://downloads.mesalabs.io/s/nnRbcGNAKXNHwqp/download/KSU-v0.7.5-20240107-a52sxq_FWK4.zip"
+KERNELSU_MANAGER_APK="https://github.com/tiann/KernelSU/releases/download/v0.7.5/KernelSU_v0.7.5_11434-release.apk"
 
 REMOVE_FROM_WORK_DIR()
 {
