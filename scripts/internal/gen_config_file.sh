@@ -103,5 +103,6 @@ source "$SRC_DIR/unica/config.sh"
 # ]
 
 GEN_CONFIG_FILE
+[ -f "$OUT_DIR/config.sh" ] || exit 1
 
 exit 0
