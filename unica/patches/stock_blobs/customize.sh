@@ -91,6 +91,7 @@ done <<< "$(find "$WORK_DIR/system/system/cameradata")"
 
 if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/usr/share/alsa/alsa.conf" ]; then
     echo "Add stock alsa.conf"
+    mkdir -p "$WORK_DIR/system/system/usr/share/alsa"
     cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/usr/share/alsa/alsa.conf" \
         "$WORK_DIR/system/system/usr/share/alsa/alsa.conf"
     if ! grep -q "alsa\.conf" "$WORK_DIR/configs/file_context-system"; then
