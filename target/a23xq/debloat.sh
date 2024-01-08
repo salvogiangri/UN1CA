@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 Fede2782
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,27 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy M52 5G (m52xq)
+# Debloat list for Galaxy A23 5G (a23xq)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
-
-#Remaster suite and SingleTake
-#Not supported
-SYSTEM_DEBLOAT+="
-system/priv-app/PhotoRemasterService
-system/priv-app/SumeNNService
-system/priv-app/SingleTakeService
-system/etc/permissions/privapp-permissions-com.samsung.android.photoremasterservice.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.singletake.service.xml
-system/etc/default-permissions/default-permissions-com.samsung.android.singletake.service.xml
-"
-#AOD not supported
-SYSTEM_DEBLOAT+="
-system/priv-app/AODService_v80
-system/etc/permissions/privapp-permissions-com.samsung.android.app.aodservice.xml
-"
-
 
 # Overlays
 SYSTEM_DEBLOAT+="
@@ -58,6 +41,22 @@ system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
 # GameDriver
 SYSTEM_DEBLOAT+="
 system/priv-app/GameDriver-SM8550
+"
+
+# AOD
+SYSTEM_DEBLOAT+="
+system/priv-app/AODService_v80
+system/etc/permissions/privapp-permissions-com.samsung.android.app.aodservice.xml
+"
+
+# Photo Remaster, Single Take
+SYSTEM_DEBLOAT+="
+system/priv-app/PhotoRemasterService
+system/priv-app/SumeNNService
+system/priv-app/SingleTakeService
+system/etc/permissions/privapp-permissions-com.samsung.android.photoremasterservice.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.singletake.service.xml
+system/etc/default-permissions/default-permissions-com.samsung.android.singletake.service.xml
 "
 
 # Camera SDK
@@ -131,6 +130,8 @@ lib/vendor.qti.hardware.qccsyshal@1.0.so
 lib/vendor.qti.hardware.qccsyshal@1.1.so
 lib/vendor.qti.hardware.qccsyshal@1.2.so
 lib/vendor.qti.hardware.qccvndhal@1.0.so
+lib/vendor.qti.hardware.trustedui@1.1.so
+lib/vendor.qti.hardware.trustedui@1.2.so
 lib/vendor.qti.qccvndhal_aidl-V1-ndk.so
 lib64/libqcc.so
 lib64/libqcc_file_agent_sys.so
@@ -141,6 +142,9 @@ lib64/vendor.qti.hardware.qccsyshal@1.1.so
 lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so
 lib64/vendor.qti.hardware.qccsyshal@1.2.so
 lib64/vendor.qti.hardware.qccvndhal@1.0.so
+lib64/vendor.qti.hardware.trustedui@1.1.so
+lib64/vendor.qti.hardware.trustedui@1.2.so
 lib64/vendor.qti.qccvndhal_aidl-V1-ndk.so
 priv-app/com.qualcomm.location
+priv-app/com.qualcomm.qti.services.systemhelper
 "
