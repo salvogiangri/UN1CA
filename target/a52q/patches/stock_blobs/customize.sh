@@ -80,12 +80,20 @@ fi
 echo "Add stock Tlc libs"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libhidl_comm_mpos_tui_client.so" \
     "$WORK_DIR/system/system/lib/libhidl_comm_mpos_tui_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_blockchain_keystore.so" \
+    "$WORK_DIR/system/system/lib/libtlc_blockchain_keystore.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libtlc_payment_spay.so" \
+    "$WORK_DIR/system/system/lib/libtlc_payment_spay.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/hidl_tlc_blockchain_comm_client.so" \
     "$WORK_DIR/system/system/lib/hidl_tlc_blockchain_comm_client.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/hidl_tlc_payment_comm_client.so" \
     "$WORK_DIR/system/system/lib/hidl_tlc_payment_comm_client.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libhidl_comm_mpos_tui_client.so" \
     "$WORK_DIR/system/system/lib64/libhidl_comm_mpos_tui_client.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libtlc_blockchain_keystore.so" \
+    "$WORK_DIR/system/system/lib64/libtlc_blockchain_keystore.so"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libtlc_payment_spay.so" \
+    "$WORK_DIR/system/system/lib64/libtlc_payment_spay.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/hidl_tlc_blockchain_comm_client.so" \
     "$WORK_DIR/system/system/lib64/hidl_tlc_blockchain_comm_client.so"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/hidl_tlc_payment_comm_client.so" \
