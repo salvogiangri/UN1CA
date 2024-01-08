@@ -46,8 +46,19 @@ system/priv-app/GameDriver-SM8550
 
 # Camera SDK
 SYSTEM_DEBLOAT+="
+system/app/ApexService
+system/bin/apexserver
+system/etc/init/apexserver.qcom.rc
 system/etc/permissions/cameraservice.xml
 system/framework/scamera_sep.jar
+system/lib/libamex.so
+system/lib/libppvdis_core.so
+system/lib/libsume_climgp.plugin.so
+system/lib/libsume_climgp.plugin.impl.so
+system/lib64/libamex.so
+system/lib64/libppvdis_core.so
+system/lib64/libsume_climgp.plugin.so
+system/lib64/libsume_climgp.plugin.impl.so
 system/priv-app/SCameraSDKService
 "
 
