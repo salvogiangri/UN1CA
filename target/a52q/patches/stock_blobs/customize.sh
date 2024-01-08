@@ -41,6 +41,25 @@ sed -i "s/HotwordEnrollmentXGoogleEx4HEXAGON/HotwordEnrollmentXGoogleEx3HEXAGON/
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/file_context-product"
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/fs_config-product"
 
+echo "Add stock CameraLightSensor app"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml" \
+    "$WORK_DIR/system/system/etc/permissions"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/priv-app/CameraLightSensor" "$WORK_DIR/system/system/priv-app"
+if ! grep -q "CameraLightSensor" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/etc/permissions/privapp-permissions-com\.samsung\.adaptivebrightnessgo\.cameralightsensor\.xml u:object_r:system_file:s0"
+        echo "/system/priv-app/CameraLightSensor u:object_r:system_file:s0"
+        echo "/system/priv-app/CameraLightSensor/CameraLightSensor\.apk u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "CameraLightSensor" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml 0 0 644 capabilities=0x0"
+        echo "system/priv-app/CameraLightSensor 0 0 755 capabilities=0x0"
+        echo "system/priv-app/CameraLightSensor/CameraLightSensor.apk 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+
 echo "Add stock FM Radio app"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/priv-app/HybridRadio" "$WORK_DIR/system/system/priv-app"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libfmradio_jni.so" "$WORK_DIR/system/system/lib"
@@ -127,6 +146,20 @@ if ! grep -q "minisviewwalletcover" "$WORK_DIR/configs/fs_config-system"; then
         echo "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/com.sec.feature.nsflp_level_600.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/com.sec.feature.sensorhub_level40.xml 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+
+echo "Add stock ev_lux_map_config.xml"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/ev_lux_map_config.xml" \
+    "$WORK_DIR/system/system/etc/ev_lux_map_config.xml"
+if ! grep -q "ev_lux_map_config" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/etc/ev_lux_map_config\.xml u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "ev_lux_map_config" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/etc/ev_lux_map_config.xml 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
 
