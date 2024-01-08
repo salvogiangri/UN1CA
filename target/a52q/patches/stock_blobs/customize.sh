@@ -41,6 +41,59 @@ sed -i "s/HotwordEnrollmentXGoogleEx4HEXAGON/HotwordEnrollmentXGoogleEx3HEXAGON/
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/file_context-product"
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/fs_config-product"
 
+echo "Add stock FM Radio app"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/priv-app/HybridRadio" "$WORK_DIR/system/system/priv-app"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib/libfmradio_jni.so" "$WORK_DIR/system/system/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libfmradio_jni.so" "$WORK_DIR/system/system/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/fm_helium.so" \
+    "$WORK_DIR/system/system/system_ext/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/libbeluga.so" \
+    "$WORK_DIR/system/system/system_ext/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/libfm-hci.so" \
+    "$WORK_DIR/system/system/system_ext/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib/vendor.qti.hardware.fm@1.0.so" \
+    "$WORK_DIR/system/system/system_ext/lib"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/fm_helium.so" \
+    "$WORK_DIR/system/system/system_ext/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/libbeluga.so" \
+    "$WORK_DIR/system/system/system_ext/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/libfm-hci.so" \
+    "$WORK_DIR/system/system/system_ext/lib64"
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext/lib64/vendor.qti.hardware.fm@1.0.so" \
+    "$WORK_DIR/system/system/system_ext/lib64"
+if ! grep -q "HybridRadio" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/priv-app/HybridRadio u:object_r:system_file:s0"
+        echo "/system/priv-app/HybridRadio/HybridRadio\.apk u:object_r:system_file:s0"
+        echo "/system/lib/libfmradio_jni\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib64/libfmradio_jni\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/fm_helium\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/libbeluga\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/libfm-hci\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/vendor\.qti\.hardware\.fm@1\.0\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/fm_helium\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/libbeluga\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/libfm-hci\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/vendor\.qti\.hardware\.fm@1\.0\.so u:object_r:system_lib_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "HybridRadio" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/priv-app/HybridRadio 0 0 755 capabilities=0x0"
+        echo "system/priv-app/HybridRadio/HybridRadio.apk 0 0 644 capabilities=0x0"
+        echo "system/lib/libfmradio_jni.so 0 0 644 capabilities=0x0"
+        echo "system/lib64/libfmradio_jni.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/fm_helium.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/libbeluga.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/libfm-hci.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/vendor.qti.hardware.fm@1.0.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/fm_helium.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/libbeluga.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/libfm-hci.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/vendor.qti.hardware.fm@1.0.so 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+
 echo "Add stock vintf manifest"
 cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/etc/vintf/compatibility_matrix.device.xml" \
     "$WORK_DIR/system/system/etc/vintf/compatibility_matrix.device.xml"
