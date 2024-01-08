@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 Fede2782
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Device configuration file for Galaxy M52 5G (m52xq)
+# Device configuration file for Galaxy A23 5G (a23xq)
 TARGET_NAME="Galaxy A23 5G"
 TARGET_CODENAME="a23xq"
 TARGET_FIRMWARE="SM-A236B/EUX/354120801234566"
@@ -24,10 +24,10 @@ TARGET_API_LEVEL=34
 TARGET_VNDK_VERSION=30
 TARGET_SINGLE_SYSTEM_IMAGE="qssi"
 TARGET_OS_FILE_SYSTEM="f2fs"
+TARGET_INSTALL_METHOD="odin"
 TARGET_SUPER_PARTITION_SIZE=9042919424
 TARGET_SUPER_GROUP_SIZE=9038725120
 TARGET_HAS_SYSTEM_EXT=false
-TARGET_INSTALL_METHOD="odin"
 
 # SEC Product Feature
 TARGET_HAS_KNOX_DUALDAR=false
