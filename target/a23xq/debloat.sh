@@ -22,6 +22,7 @@
 
 # Overlays
 SYSTEM_DEBLOAT+="
+system/app/WifiRROverlayAppH2E
 system/app/WifiRROverlayAppQC
 system/app/WifiRROverlayAppWifiLock
 "
