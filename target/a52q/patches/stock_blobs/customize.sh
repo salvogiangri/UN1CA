@@ -144,6 +144,12 @@ ADD_TO_WORK_DIR "system" "system/lib64/libtlc_payment_spay.so" 0 0 644 "u:object
 ADD_TO_WORK_DIR "system" "system/lib64/hidl_tlc_blockchain_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib64/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
+echo "Add stock TUI app"
+ADD_TO_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml" \
+    0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system_ext" "app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk" \
+    0 0 644 "u:object_r:system_file:s0"
+
 echo "Add HIDL face biometrics libs"
 ADD_TO_WORK_DIR "system_ext" "lib/vendor.samsung.hardware.biometrics.face@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system_ext" "lib64/vendor.samsung.hardware.biometrics.face@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
