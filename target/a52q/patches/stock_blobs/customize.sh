@@ -101,6 +101,10 @@ ADD_TO_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung
 ADD_TO_WORK_DIR "system" "system/priv-app/CameraLightSensor/CameraLightSensor.apk" 0 0 644 "u:object_r:system_file:s0"
 
 echo "Add stock FM Radio app"
+ADD_TO_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.sec.android.app.fm.xml" \
+    0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.sec.android.app.fm.xml" \
+    0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/priv-app/HybridRadio/HybridRadio.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib/libfmradio_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib64/libfmradio_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
