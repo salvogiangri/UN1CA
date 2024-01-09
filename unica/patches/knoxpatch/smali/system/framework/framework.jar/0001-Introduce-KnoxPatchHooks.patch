@@ -1,4 +1,4 @@
-From e6e70e91f1e66f5e69b9b9320a2082ed9889742f Mon Sep 17 00:00:00 2001
+From 6b570b9698679fcac4e95aef5e88b7685f962fd4 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 3 Jan 2024 01:48:58 +0100
 Subject: [PATCH] Introduce KnoxPatchHooks
@@ -6,8 +6,8 @@ Subject: [PATCH] Introduce KnoxPatchHooks
 ---
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
- .../io/mesalabs/unica/KnoxPatchHooks.smali    | 371 ++++++++++++++++++
- 3 files changed, 389 insertions(+)
+ .../io/mesalabs/unica/KnoxPatchHooks.smali    | 450 ++++++++++++++++++
+ 3 files changed, 468 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -74,10 +74,10 @@ index 25fa7c61..b3a63d50 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali b/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
 new file mode 100644
-index 00000000..abe0d164
+index 00000000..f1dad8b6
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KnoxPatchHooks.smali
-@@ -0,0 +1,371 @@
+@@ -0,0 +1,450 @@
 +.class public Lio/mesalabs/unica/KnoxPatchHooks;
 +.super Ljava/lang/Object;
 +.source "KnoxPatchHooks.java"
@@ -87,6 +87,8 @@ index 00000000..abe0d164
 +.field private static final blacklist AUTO_BLOCKER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.rampart"
 +
 +.field private static final blacklist DEBUG:Z = true
++
++.field private static final blacklist FM_RADIO_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.fm"
 +
 +.field private static final blacklist SAMSUNG_CLOUD_PLATFORM_MANAGER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.scpm"
 +
@@ -99,6 +101,8 @@ index 00000000..abe0d164
 +.field private static volatile blacklist sPackageName:Ljava/lang/String;
 +
 +.field private static volatile blacklist sSpoofBuildType:Z
++
++.field private static volatile blacklist sSpoofDeviceToA525G:Z
 +
 +.field private static volatile blacklist sSpoofKeystore:Z
 +
@@ -185,7 +189,7 @@ index 00000000..abe0d164
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_2
++    if-eqz v0, :cond_3
 +
 +    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
 +
@@ -197,6 +201,14 @@ index 00000000..abe0d164
 +
 +    :cond_0
 +    sput-object v0, Lio/mesalabs/unica/KnoxPatchHooks;->sPackageName:Ljava/lang/String;
++
++    const-string v1, "com.sec.android.app.fm"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    sput-boolean v1, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofDeviceToA525G:Z
 +
 +    sget-object v1, Lio/mesalabs/unica/KnoxPatchHooks;->sTargetPackages:[Ljava/lang/String;
 +
@@ -299,9 +311,20 @@ index 00000000..abe0d164
 +    sput-boolean v1, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofKnox:Z
 +
 +    :goto_1
-+    return-void
++    sget-boolean v1, Lio/mesalabs/unica/KnoxPatchHooks;->sSpoofDeviceToA525G:Z
++
++    if-eqz v1, :cond_2
++
++    const-string v1, "MODEL"
++
++    const-string v2, "SM-A526B"
++
++    invoke-static {v1, v2}, Lio/mesalabs/unica/KnoxPatchHooks;->setBuildField(Ljava/lang/String;Ljava/lang/String;)V
 +
 +    :cond_2
++    return-void
++
++    :cond_3
 +    :goto_2
 +    return-void
 +.end method
@@ -449,6 +472,62 @@ index 00000000..abe0d164
 +    :cond_5
 +    return-object v0
 +.end method
++
++.method private static blacklist setBuildField(Ljava/lang/String;Ljava/lang/String;)V
++    .locals 3
++
++    :try_start_0
++    const-class v0, Landroid/os/Build;
++
++    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++    :try_end_0
++    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Failed to spoof Build."
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "KnoxPatchHooks"
++
++    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :goto_0
++    return-void
++.end method
 -- 
-2.43.0
+2.34.1
 
