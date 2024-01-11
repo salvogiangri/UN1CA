@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy a72 (a72q)
+# Debloat list for Galaxy A72 (a72q)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
@@ -46,19 +46,8 @@ system/priv-app/GameDriver-SM8550
 
 # Camera SDK
 SYSTEM_DEBLOAT+="
-system/app/ApexService
-system/bin/apexserver
-system/etc/init/apexserver.qcom.rc
 system/etc/permissions/cameraservice.xml
 system/framework/scamera_sep.jar
-system/lib/libamex.so
-system/lib/libppvdis_core.so
-system/lib/libsume_climgp.plugin.so
-system/lib/libsume_climgp.plugin.impl.so
-system/lib64/libamex.so
-system/lib64/libppvdis_core.so
-system/lib64/libsume_climgp.plugin.so
-system/lib64/libsume_climgp.plugin.impl.so
 system/priv-app/SCameraSDKService
 "
 

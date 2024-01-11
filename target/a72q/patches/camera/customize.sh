@@ -19,9 +19,6 @@ REMOVE_FROM_WORK_DIR()
         if [[ "$PARTITION" == "system" ]] && [[ "$FILE" == *".arcsoft.so" ]]; then
             sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
         fi
-        if [[ "$PARTITION" == "system" ]] && [[ "$FILE" == *".media.samsung.so" ]]; then
-            sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-media.samsung.txt"
-        fi
 
         FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
         sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
@@ -35,7 +32,6 @@ MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 BLOBS_LIST="
-system/lib/libapex_motionphoto_utils_jni.media.samsung.so
 system/lib64/libAEBHDR_wrapper.camera.samsung.so
 system/lib64/libAIQSolution_MPI.camera.samsung.so
 system/lib64/libAIQSolution_MPISingleRGB40.camera.samsung.so
@@ -67,7 +63,6 @@ system/lib64/libacz_hhdr.arcsoft.so
 system/lib64/libae_bracket_hdr.arcsoft.so
 system/lib64/libaiclearzoom_raw.arcsoft.so
 system/lib64/libaiclearzoomraw_wrapper_v1.camera.samsung.so
-system/lib64/libapex_motionphoto_utils_jni.media.samsung.so
 system/lib64/libarcsoft_dualcam_portraitlighting.so
 system/lib64/libarcsoft_single_cam_glasses_seg.so
 system/lib64/libdualcam_refocus_image.so
@@ -88,14 +83,12 @@ done
 echo "Add stock camera libs"
 BLOBS_LIST="
 /system/system/etc/public.libraries-camera.samsung.txt
-/system/system/lib/libapex_jni.media.samsung.so
 /system/system/lib64/libFaceRestoration.camera.samsung.so
 /system/system/lib64/libFacialStickerEngine.arcsoft.so
 /system/system/lib64/libImageCropper.camera.samsung.so
 /system/system/lib64/libImageTagger.camera.samsung.so
 /system/system/lib64/libMyFilter.camera.samsung.so
 /system/system/lib64/libPortraitDistortionCorrection.arcsoft.so
-/system/system/lib64/libapex_jni.media.samsung.so
 /system/system/lib64/libhigh_dynamic_range.arcsoft.so
 /system/system/lib64/libhumantracking_util.camera.samsung.so
 /system/system/lib64/libhumantracking.arcsoft.so
