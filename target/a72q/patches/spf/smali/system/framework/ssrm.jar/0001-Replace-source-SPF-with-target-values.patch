@@ -1,6 +1,6 @@
-From fdb68d7599cc8a8f1306d77b7e7874f213d9b7dc Mon Sep 17 00:00:00 2001
+From f59748488e41a1441ee06bc16775df78a0c127f7 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 10 Dec 2023 14:45:09 +0100
+Date: Thu, 11 Jan 2024 16:06:43 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH] Replace source SPF with target values
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/smali/com/android/server/ssrm/Feature.smali b/smali/com/android/server/ssrm/Feature.smali
-index 4428f87..f48f780 100644
+index 4428f87..6e75c61 100644
 --- a/smali/com/android/server/ssrm/Feature.smali
 +++ b/smali/com/android/server/ssrm/Feature.smali
 @@ -324,7 +324,7 @@
@@ -44,5 +44,5 @@ index 273cc52..6fe2f71 100644
      invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
 -- 
-2.43.0
+2.34.1
 
