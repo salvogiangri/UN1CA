@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_mms_user_agent">Android-Mms/2.0</string>
+    <string name="config_mms_user_agent_profile_url">http://www.google.com/oha/rdf/ua-profile-kila.xml</string>
+    <string name="config_optionalPackageVerifierName">seemp.service</string>
+    <string name="config_persistentDataPackageName">com.google.android.gms</string>
+</resources>

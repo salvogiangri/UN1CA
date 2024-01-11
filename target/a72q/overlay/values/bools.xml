@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="config_adaptive_display_solution_enabled">true</bool>
+    <bool name="config_all_around_sensing_enabled">false</bool>
+    <bool name="config_big_data_logging_enabled">false</bool>
+    <bool name="config_bluetooth_hfp_inband_ringing_support">true</bool>
+    <bool name="config_bluetooth_le_peripheral_mode_supported">true</bool>
+    <bool name="config_camera_sound_forced">false</bool>
+    <bool name="config_carrier_volte_available">true</bool>
+    <bool name="config_cellBroadcastAppLinks">true</bool>
+    <bool name="config_device_volte_available">true</bool>
+    <bool name="config_device_vt_available">true</bool>
+    <bool name="config_device_wfc_ims_available">true</bool>
+    <bool name="config_dynamic_automatic_brightness_available">true</bool>
+    <bool name="config_enableMultiUserUI">true</bool>
+    <bool name="config_eye_comfort_solution_enabled">true</bool>
+    <bool name="config_hotswapCapable">true</bool>
+    <bool name="config_mdnie_scenario_control_enabled">true</bool>
+    <bool name="config_showNavigationBar">true</bool>
+    <bool name="config_speed_up_audio_on_mt_calls">true</bool>
+    <bool name="config_supportAudioSourceUnprocessed">false</bool>
+    <bool name="config_switch_phone_on_voice_reg_state_change">false</bool>
+    <bool name="config_unplugTurnsOnScreen">true</bool>
+    <bool name="config_useDevInputEventForAudioJack">true</bool>
+    <bool name="config_wifiDisplaySupportsProtectedBuffers">true</bool>
+    <bool name="config_wifi_background_scan_support">true</bool>
+    <bool name="config_wifi_batched_scan_supported">true</bool>
+    <bool name="config_wifi_dual_band_support">true</bool>
+    <bool name="skip_restoring_network_selection">true</bool>
+</resources>
