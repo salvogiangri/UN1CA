@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Device configuration file for Galaxy a72 (a72q)
-TARGET_NAME="Galaxy a72"
+# Device configuration file for Galaxy A72 (a72q)
+TARGET_NAME="Galaxy A72"
 TARGET_CODENAME="a72q"
-TARGET_FIRMWARE="SM-a725F/SER/353546291234560"
+TARGET_FIRMWARE="SM-A725F/SER/353546291234560"
 TARGET_EXTRA_FIRMWARES=()
 TARGET_API_LEVEL=34
 TARGET_VNDK_VERSION=30
 TARGET_SINGLE_SYSTEM_IMAGE="qssi"
 TARGET_OS_FILE_SYSTEM="ext4"
-TARGET_SUPER_PARTITION_SIZE=10385096704
-TARGET_SUPER_GROUP_SIZE=10380902400
+TARGET_SUPER_PARTITION_SIZE=10292822016
+TARGET_SUPER_GROUP_SIZE=10288627712
 TARGET_HAS_SYSTEM_EXT=false
 
 # SEC Product Feature
