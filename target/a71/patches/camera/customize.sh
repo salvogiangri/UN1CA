@@ -120,6 +120,3 @@ if ! grep -q "libtensorflowLite.myfilter" "$WORK_DIR/configs/fs_config-system"; 
         echo "system/lib64/vendor.samsung.hardware.snap-V1-ndk.so 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
-
-echo "Fix MIDAS model detection"
-sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
