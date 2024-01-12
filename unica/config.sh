@@ -16,7 +16,7 @@
 #
 
 # UN1CA configuration file
-ROM_VERSION="1.0.0-$(git rev-parse --short HEAD)"
+ROM_VERSION="1.1.0-$(git rev-parse --short HEAD)"
 
 # Source ROM firmware
 case "$TARGET_SINGLE_SYSTEM_IMAGE" in

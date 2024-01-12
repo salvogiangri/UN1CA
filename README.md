@@ -30,6 +30,7 @@ It also includes additional features and tweaks to ensure the best possible expe
   - Galaxy S23 for Qualcomm devices
   - Galaxy S23 FE for Exynos devices
 - High end animations
+- AOD clock transition support
 - Native/live blur support
 - Picture remaster support
 - Object, shadow and reflection eraser support
@@ -42,6 +43,7 @@ It also includes additional features and tweaks to ensure the best possible expe
 - [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) implemented in system frameworks
 - China Device Care app included
 - [Patched GoodLock](https://github.com/corsicanu/goodlock_dump) app included
+- Extra mods (Allow secure screenshot, FPS Unlock, Allow app downgrade)
 - Extra CSC features (Call recording, Hiya, Network speed in status bar, Quick switch to Secure Folder)
 
 # Licensing
