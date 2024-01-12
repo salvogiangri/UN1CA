@@ -186,6 +186,8 @@ APPLY_MODULE()
     if [ ! -f "$MODPATH/module.prop" ]; then
         echo "File not found: $MODPATH/module.prop"
         exit 1
+    elif [ -f "$MODPATH/disable" ]; then
+        exit 0
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
         MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//" | sed "s/, /, @/")"
