@@ -136,6 +136,9 @@ ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level
 echo "Add stock ev_lux_map_config.xml"
 ADD_TO_WORK_DIR "system" "system/etc/ev_lux_map_config.xml" 0 0 644 "u:object_r:system_file:s0"
 
+echo "Add stock sensorhub_services.json"
+ADD_TO_WORK_DIR "system" "system/etc/sensorhub_services.json" 0 0 644 "u:object_r:system_file:s0"
+
 echo "Add stock Tlc libs"
 ADD_TO_WORK_DIR "system" "system/lib/libhidl_comm_mpos_tui_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib/libtlc_blockchain_keystore.so" 0 0 644 "u:object_r:system_lib_file:s0"
