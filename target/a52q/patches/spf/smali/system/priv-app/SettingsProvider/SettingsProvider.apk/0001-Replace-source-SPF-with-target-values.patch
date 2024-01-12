@@ -1,14 +1,14 @@
-From 14cc4a53224b9118439b43b4023833fc89e91ddf Mon Sep 17 00:00:00 2001
+From 944080d9db164c4cb12dd4c3b5d1a25245478e54 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 29 Nov 2023 01:04:19 +0100
+Date: Fri, 12 Jan 2024 11:25:28 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
- smali/com/android/providers/settings/DatabaseHelper.smali | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ smali/com/android/providers/settings/DatabaseHelper.smali | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/smali/com/android/providers/settings/DatabaseHelper.smali b/smali/com/android/providers/settings/DatabaseHelper.smali
-index db5c78c..fcd826c 100644
+index db5c78c..1401a62 100644
 --- a/smali/com/android/providers/settings/DatabaseHelper.smali
 +++ b/smali/com/android/providers/settings/DatabaseHelper.smali
 @@ -2571,7 +2571,7 @@
@@ -20,6 +20,15 @@ index db5c78c..fcd826c 100644
  
      goto :goto_0
  
+@@ -2590,7 +2590,7 @@
+     return-void
+ 
+     :cond_1
+-    const-string v2, "120"
++    const-string v2, "90"
+ 
+     invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
 -- 
-2.43.0
+2.34.1
 
