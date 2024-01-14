@@ -1,0 +1,25 @@
+From 93a93a1069581caab11873e4c05af7537843c829 Mon Sep 17 00:00:00 2001
+From: ShaDisNX255 <rayo_dis_nx@hotmail.com>
+Date: Sun, 14 Jan 2024 01:42:07 +0100
+Subject: [PATCH] Enable display cutout protection
+
+---
+ res/values/bools.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/res/values/bools.xml b/res/values/bools.xml
+index 1fef410b..fedcd766 100644
+--- a/res/values/bools.xml
++++ b/res/values/bools.xml
+@@ -15,7 +15,7 @@
+     <bool name="config_enableBouncerUserSwitcher">false</bool>
+     <bool name="config_enableCoverScreenPrivacyDot">false</bool>
+     <bool name="config_enableCoverScreenRoundedCorner">false</bool>
+-    <bool name="config_enableDisplayCutoutProtection">false</bool>
++    <bool name="config_enableDisplayCutoutProtection">true</bool>
+     <bool name="config_enableFullscreenUserSwitcher">false</bool>
+     <bool name="config_enableLockScreenCustomClocks">true</bool>
+     <item type="bool" name="config_enableLockScreenRotation">@android:bool/config_enableScreenshotChord</item>
+-- 
+2.34.1
+
