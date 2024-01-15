@@ -68,3 +68,15 @@ on fs && property:ro.boot.rp=5 && property:ro.boot.em.model=SM-A528B
     mount none /vendor/firmware/wlan/a528b/rev5/wpss.b06 /vendor/firmware/wpss.b06 bind
     mount none /vendor/firmware/wlan/a528b/rev5/wpss.b07 /vendor/firmware/wpss.b07 bind
     mount none /vendor/firmware/wlan/a528b/rev5/wpss.mdt /vendor/firmware/wpss.mdt bind
+
+# bootloader revision 6, A528B (international)
+on fs && property:ro.boot.rp=6 && property:ro.boot.em.model=SM-A528B
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b00 /vendor/firmware/wpss.b00 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b01 /vendor/firmware/wpss.b01 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b02 /vendor/firmware/wpss.b02 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b03 /vendor/firmware/wpss.b03 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b04 /vendor/firmware/wpss.b04 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b05 /vendor/firmware/wpss.b05 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b06 /vendor/firmware/wpss.b06 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.b07 /vendor/firmware/wpss.b07 bind
+    mount none /vendor/firmware/wlan/a528b/rev6/wpss.mdt /vendor/firmware/wpss.mdt bind
