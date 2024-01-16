@@ -16,7 +16,9 @@
 #
 
 # UN1CA configuration file
-ROM_VERSION="1.1.0-$(git rev-parse --short HEAD)"
+ROM_VERSION="1.1.0"
+ROM_VERSION+="-$(git rev-parse --short HEAD)"
+ROM_CODENAME="Diamond"
 
 # Source ROM firmware
 case "$TARGET_SINGLE_SYSTEM_IMAGE" in
