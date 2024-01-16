@@ -21,6 +21,8 @@ jobs:
             path: "unica/packages/fod/qssi"
           - module: "(Exynos) Knox'nt blobs"
             path: "unica/packages/knox/essi/none"
+          - module: "(Exynos) Knox SDP blobs"
+            path: "unica/packages/knox/essi/sdp"
           - module: "(Qualcomm) Knox'nt blobs"
             path: "unica/packages/knox/qssi/none"
           - module: "(Qualcomm) Knox SDP blobs"
