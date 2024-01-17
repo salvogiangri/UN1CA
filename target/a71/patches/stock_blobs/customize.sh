@@ -278,6 +278,18 @@ fi
 echo "Add stock /odm/etc/media_profiles_V1_0.xml"
 ADD_TO_WORK_DIR "odm" "etc/media_profiles_V1_0.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
 
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.samsung.feature.audio_fast_listenback.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.samsung.feature.audio_listenback.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.flip.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level29.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml"
+echo "Add stock system features"
+ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nsflp_level_600.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketmode_level6.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level34.xml" 0 0 644 "u:object_r:system_file:s0"
+
 echo "Add stock NFC libs"
 ADD_TO_WORK_DIR "system" "system/lib64/vendor.nxp.nxpnfc@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib64/vendor.nxp.nxpnfc@1.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
