@@ -80,9 +80,55 @@ REMOVE_FROM_WORK_DIR()
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
+sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/file_context-system"
+sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/fs_config-system"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/lib_SoundBooster_ver1100.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/lib_SoundBooster_ver1100.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/midas/SRIBMidas_aiBLURDETECT_Stage1_V140_FP32.tflite"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/midas/SRIBMidas_aiBLURDETECT_Stage2_V130_FP32.tflite"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/midas/SRIBMidas_aiDEBLUR_FP16_V0132.dlc"
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/etc/permissions/privapp-permissions-com\.samsung\.adaptivebrightnessgo\.cameralightsensor\.xml u:object_r:system_file:s0"
+        echo "/system/etc/permissions/privapp-permissions-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0"
+        echo "/system/etc/sysconfig/preinstalled-packages-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0"
+        echo "/system/lib/libfmradio_jni\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libhdcp2\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplay_wfd\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplayservice\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libsecuibc\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libstagefright_hdcp\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib64/libfmradio_jni\.so u:object_r:system_lib_file:s0"
+        echo "/system/priv-app/CameraLightSensor u:object_r:system_file:s0"
+        echo "/system/priv-app/CameraLightSensor/CameraLightSensor\.apk u:object_r:system_file:s0"
+        echo "/system/priv-app/HybridRadio u:object_r:system_file:s0"
+        echo "/system/priv-app/HybridRadio/HybridRadio\.apk u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/permissions/privapp-permissions-com.sec.android.app.fm.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/sysconfig/preinstalled-packages-com.sec.android.app.fm.xml 0 0 644 capabilities=0x0"
+        echo "system/lib/libfmradio_jni.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libhdcp2.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplay_wfd.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplayservice.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libsecuibc.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libstagefright_hdcp.so 0 0 644 capabilities=0x0"
+        echo "system/lib64/libfmradio_jni.so 0 0 644 capabilities=0x0"
+        echo "system/priv-app/CameraLightSensor 0 0 755 capabilities=0x0"
+        echo "system/priv-app/CameraLightSensor/CameraLightSensor.apk 0 0 644 capabilities=0x0"
+        echo "system/priv-app/HybridRadio 0 0 755 capabilities=0x0"
+        echo "system/priv-app/HybridRadio/HybridRadio.apk 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
 if ! grep -q "moire_detection" "$WORK_DIR/configs/file_context-vendor"; then
     {
         echo "/vendor/etc/midas/SRIBMQA_aiFiQA_V100_FP32\.tflite u:object_r:vendor_configs_file:s0"
@@ -125,35 +171,6 @@ sed -i "s/HotwordEnrollmentXGoogleEx4HEXAGON/HotwordEnrollmentXGoogleEx3HEXAGON/
 sed -i "s/HotwordEnrollmentXGoogleEx4HEXAGON/HotwordEnrollmentXGoogleEx3HEXAGON/g" "$WORK_DIR/configs/fs_config-product"
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/file_context-product"
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/fs_config-product"
-
-sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/file_context-system"
-sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/fs_config-system"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/lib_SoundBooster_ver1100.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/lib_SoundBooster_ver1100.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
-if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
-    {
-        echo "/system/lib/libhdcp2\.so u:object_r:system_lib_file:s0"
-        echo "/system/lib/libremotedisplay_wfd\.so u:object_r:system_lib_file:s0"
-        echo "/system/lib/libremotedisplayservice\.so u:object_r:system_lib_file:s0"
-        echo "/system/lib/libsecuibc\.so u:object_r:system_lib_file:s0"
-        echo "/system/lib/libstagefright_hdcp\.so u:object_r:system_lib_file:s0"
-    } >> "$WORK_DIR/configs/file_context-system"
-fi
-if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
-    {
-        echo "system/lib/libhdcp2.so 0 0 644 capabilities=0x0"
-        echo "system/lib/libremotedisplay_wfd.so 0 0 644 capabilities=0x0"
-        echo "system/lib/libremotedisplayservice.so 0 0 644 capabilities=0x0"
-        echo "system/lib/libsecuibc.so 0 0 644 capabilities=0x0"
-        echo "system/lib/libstagefright_hdcp.so 0 0 644 capabilities=0x0"
-    } >> "$WORK_DIR/configs/fs_config-system"
-fi
 
 echo "Add stock /odm/etc/permissions"
 ADD_TO_WORK_DIR "odm" "etc/permissions" 0 0 755 "u:object_r:vendor_configs_file:s0"
