@@ -20,10 +20,11 @@ REMOVE_FROM_WORK_DIR()
             sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
         fi
 
+        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
         FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
         sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
 
-        FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
+        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
         sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
