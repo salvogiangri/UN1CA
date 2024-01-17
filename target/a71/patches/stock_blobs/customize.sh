@@ -97,6 +97,7 @@ if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
     {
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.adaptivebrightnessgo\.cameralightsensor\.xml u:object_r:system_file:s0"
         echo "/system/etc/permissions/privapp-permissions-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0"
+        echo "/system/etc/sysconfig/preinstalled-packages-com\.qualcomm\.qti\.services\.secureui\.xml u:object_r:system_file:s0"
         echo "/system/etc/sysconfig/preinstalled-packages-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0"
         echo "/system/lib/libfmradio_jni\.so u:object_r:system_lib_file:s0"
         echo "/system/lib/libhdcp2\.so u:object_r:system_lib_file:s0"
@@ -109,12 +110,23 @@ if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
         echo "/system/priv-app/CameraLightSensor/CameraLightSensor\.apk u:object_r:system_file:s0"
         echo "/system/priv-app/HybridRadio u:object_r:system_file:s0"
         echo "/system/priv-app/HybridRadio/HybridRadio\.apk u:object_r:system_file:s0"
+        echo "/system/system_ext/app/com\.qualcomm\.qti\.services\.secureui u:object_r:system_file:s0"
+        echo "/system/system_ext/app/com\.qualcomm\.qti\.services\.secureui/com\.qualcomm\.qti\.services\.secureui\.apk u:object_r:system_file:s0"
+        echo "/system/system_ext/lib/fm_helium\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/libbeluga\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/libfm-hci\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib/vendor\.qti\.hardware\.fm@1\.0\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/fm_helium\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/libbeluga\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/libfm-hci\.so u:object_r:system_lib_file:s0"
+        echo "/system/system_ext/lib64/vendor\.qti\.hardware\.fm@1\.0\.so u:object_r:system_lib_file:s0"
     } >> "$WORK_DIR/configs/file_context-system"
 fi
 if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
     {
         echo "system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml 0 0 644 capabilities=0x0"
         echo "system/etc/permissions/privapp-permissions-com.sec.android.app.fm.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml 0 0 644 capabilities=0x0"
         echo "system/etc/sysconfig/preinstalled-packages-com.sec.android.app.fm.xml 0 0 644 capabilities=0x0"
         echo "system/lib/libfmradio_jni.so 0 0 644 capabilities=0x0"
         echo "system/lib/libhdcp2.so 0 0 644 capabilities=0x0"
@@ -127,6 +139,15 @@ if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
         echo "system/priv-app/CameraLightSensor/CameraLightSensor.apk 0 0 644 capabilities=0x0"
         echo "system/priv-app/HybridRadio 0 0 755 capabilities=0x0"
         echo "system/priv-app/HybridRadio/HybridRadio.apk 0 0 644 capabilities=0x0"
+        echo "system/system_ext/app/com.qualcomm.qti.services.secureui 0 0 755 capabilities=0x0"
+        echo "system/system_ext/app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/fm_helium.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/libbeluga.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/libfm-hci.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/fm_helium.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/libbeluga.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib64/libfm-hci.so 0 0 644 capabilities=0x0"
+        echo "system/system_ext/lib/vendor.qti.hardware.fm@1.0.so 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
 fi
 if ! grep -q "moire_detection" "$WORK_DIR/configs/file_context-vendor"; then
