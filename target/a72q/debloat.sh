@@ -86,6 +86,11 @@ system/priv-app/EarphoneTypeC
 system/priv-app/SohService
 "
 
+# system clean-up
+SYSTEM_DEBLOAT+="
+system/imagefilter_program_binary
+"
+
 # system_ext clean-up
 SYSTEM_DEBLOAT+="
 system/etc/permissions/org.carconnectivity.android.digitalkey.rangingintent.xml
