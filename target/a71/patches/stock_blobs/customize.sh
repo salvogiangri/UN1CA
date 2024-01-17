@@ -130,6 +130,30 @@ sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/file_c
 sed -i "s/SoundBooster_ver1100/SoundBooster_ver1050/g" "$WORK_DIR/configs/fs_config-system"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/lib_SoundBooster_ver1100.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/lib_SoundBooster_ver1100.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/lib/libhdcp2\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplay_wfd\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplayservice\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libsecuibc\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libstagefright_hdcp\.so u:object_r:system_lib_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/lib/libhdcp2.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplay_wfd.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplayservice.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libsecuibc.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libstagefright_hdcp.so 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
 
 echo "Add stock /odm/etc/permissions"
 ADD_TO_WORK_DIR "odm" "etc/permissions" 0 0 755 "u:object_r:vendor_configs_file:s0"
