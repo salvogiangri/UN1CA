@@ -99,6 +99,18 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/target/a54x/patches/vendor/vendor" -type f \
             -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a54x/patches/vendor/..")"
         ;;
+    "target/a71/patches/stock_blobs")
+        MODULE="$1"
+        FW="SM-A525F/SER/352938771234569"
+        BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/product" -type f \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/product..")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f \
+            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/vendor" -type f \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/vendor..")"
+        ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A528B/BTU/352599501234566"

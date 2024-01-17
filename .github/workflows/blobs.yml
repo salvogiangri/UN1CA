@@ -39,6 +39,8 @@ jobs:
             path: "unica/packages/vndk/33"
           - module: "(a54x) /vendor proprietary blobs"
             path: "target/a54x/patches/vendor"
+          - module: "(a71) OS proprietary blobs"
+            path: "target/a71/patches/stock_blobs"
           - module: "(m52xq) OS proprietary blobs"
             path: "target/m52xq/patches/stock_blobs"
           - module: "(m52xq) /vendor proprietary blobs"
