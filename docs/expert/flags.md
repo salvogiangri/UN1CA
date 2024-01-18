@@ -45,6 +45,11 @@ This must match the `KNOX_SUPPORT_DAR_DUAL` value in the `com.samsung.android.ru
 Set this to true if the source device has [Knox SDP](https://docs.samsungknox.com/admin/fundamentals/whitepaper/core-platform-security/sensitive-data-protection/).
 This must match the `KNOX_SUPPORT_DAR_SDP` value in the `com.samsung.android.rune.CoreRune` class inside `framework.jar`.
 
+### - **SOURCE_HAS_HW_MDNIE** (boolean, required)
+{: .pb-2 }
+Set this to true if the source device has mDNIe hardware display feature.
+This must match the `A11Y_COLOR_BOOL_SUPPORT_MDNIE_HW` value in the `android.view.accessibility.A11yRune` class inside `framework.jar`.
+
 ### - **SOURCE_HAS_MASS_CAMERA_APP** (boolean, required)
 {: .pb-2 }
 Set this to true if the source device has the low-end version of the stock Samsung Camera app. You can check this in the app manifest under the `SPDE.build.signature` entry (app variant must match `hal3_mass-phone-release`).
@@ -138,6 +143,11 @@ This must match the `KNOX_SUPPORT_DAR_DUAL` value in the `com.samsung.android.ru
 {: .pb-2 }
 Set this to true if the target device has [Knox SDP](https://docs.samsungknox.com/admin/fundamentals/whitepaper/core-platform-security/sensitive-data-protection/).
 This must match the `KNOX_SUPPORT_DAR_SDP` value in the `com.samsung.android.rune.CoreRune` class inside `framework.jar`.
+
+### - **TARGET_HAS_HW_MDNIE** (boolean, required)
+{: .pb-2 }
+Set this to true if the target device has mDNIe hardware display feature.
+This must match the `A11Y_COLOR_BOOL_SUPPORT_MDNIE_HW` value in the `android.view.accessibility.A11yRune` class inside `framework.jar`.
 
 ### - **TARGET_HAS_MASS_CAMERA_APP** (boolean, required)
 {: .pb-2 }
