@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 # [
-KERNELSU_TAR="https://downloads.mesalabs.io/s/qpKkWzzMcWiA9Ay/download/KSU-v0.7.5-20240107-a54xnsxx-BWK4.tar.md5"
-KERNELSU_MANAGER_APK="https://github.com/tiann/KernelSU/releases/download/v0.7.5/KernelSU_v0.7.5_11434-release.apk"
+KERNELSU_TAR="https://downloads.mesalabs.io/s/cQ5WrKZwfFa8Ga2/download/KSU-v0.7.6-20240119-a54xnsxx-BWK4.tar.md5"
+KERNELSU_MANAGER_APK="https://github.com/tiann/KernelSU/releases/download/v0.7.6/KernelSU_v0.7.6_11458-release.apk"
 
 REPLACE_KERNEL_BINARIES()
 {
