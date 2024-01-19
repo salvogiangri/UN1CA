@@ -11,7 +11,7 @@ Building UN1CA is pretty straightforward and only requires running a few command
 
 ## Minimum requirements
 {: .pb-2 }
-- Linux-based OS x64 (WSL has not been tested yet)
+- Linux-based OS x64
 - 16 GB+ RAM
 - 40 GB+ free space
 
@@ -21,9 +21,9 @@ The following dependencies must be installed:
 - [brotli](https://github.com/google/brotli)
 - [Ccache](https://ccache.dev/)
 - [Clang](https://clang.llvm.org/)
+- [CMake](https://cmake.org/)
 - [Git](https://git-scm.com/)
 - [Google Test](https://github.com/google/googletest)
-- [Ninja](https://ninja-build.org/)
 - [Node.js](https://nodejs.org/) (installing via [nvm](https://github.com/nvm-sh/nvm) is suggested)
 - [protobuf](https://github.com/protocolbuffers/protobuf)
 - [Python 3](https://www.python.org/) (or newer)
@@ -40,9 +40,8 @@ For reference, here's an example on how to install most of the dependencies via 
 ```bash
 sudo apt install -y \
     attr ccache clang git golang libbrotli-dev \
-    libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev lld \
-    ninja-build openjdk-11-jdk protobuf-compiler zip zipalign liblz4-dev \
-    libpcre2-dev
+    libgtest-dev liblz4-dev libpcre2-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev \
+    libzstd-dev lld openjdk-11-jdk protobuf-compiler zip zipalign
 ```
 
 ## Building UN1CA
