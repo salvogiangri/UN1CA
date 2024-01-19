@@ -42,7 +42,7 @@ sudo apt install -y \
     attr ccache clang git golang libbrotli-dev \
     libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev lld \
     ninja-build openjdk-11-jdk protobuf-compiler zip zipalign nodejs \
-    liblz4-dev libpcre2-dev
+    liblz4-dev libpcre2-dev npm
 ```
 
 ## Building UN1CA
