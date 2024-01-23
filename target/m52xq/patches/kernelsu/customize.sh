@@ -64,7 +64,7 @@ REPLACE_KERNEL_BINARIES()
 ADD_MANAGER_APK_TO_PRELOAD()
 {
     # https://github.com/tiann/KernelSU/issues/886
-    local APK_PATH="system/preload/KernelSU/me.weishu.kernelsu-mesa/base.apk"
+    local APK_PATH="system/preload/KernelSU/me.weishu.kernelsu-mesa==/base.apk"
 
     echo "Adding KernelSU.apk to preload apps"
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
