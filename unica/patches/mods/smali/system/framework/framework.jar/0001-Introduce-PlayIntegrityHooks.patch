@@ -1,0 +1,1323 @@
+From 7a51f2688afe960002996b9bfa5586f3293540d7 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 28 Jan 2024 01:48:48 +0100
+Subject: [PATCH] Introduce PlayIntegrityHooks
+
+---
+ smali/android/app/Instrumentation.smali       |    4 +
+ .../keystore2/AndroidKeyStoreSpi.smali        |    2 +
+ ...grityHooks$$ExternalSyntheticLambda0.smali |   30 +
+ .../mesalabs/unica/PlayIntegrityHooks$1.smali |   79 ++
+ .../mesalabs/unica/PlayIntegrityHooks.smali   | 1142 +++++++++++++++++
+ 5 files changed, 1257 insertions(+)
+ create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali
+ create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
+ create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
+
+diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
+index 86460ff3..a0f4bf02 100644
+--- a/smali/android/app/Instrumentation.smali
++++ b/smali/android/app/Instrumentation.smali
+@@ -632,6 +632,8 @@
+ 
+     invoke-virtual {v0, p1}, Landroid/app/Application;->attach(Landroid/content/Context;)V
+ 
++    invoke-static {p1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
++
+     return-object v0
+ .end method
+ 
+@@ -3842,6 +3844,8 @@
+ 
+     invoke-virtual {v0, p3}, Landroid/app/Application;->attach(Landroid/content/Context;)V
+ 
++    invoke-static {p3}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
++
+     return-object v0
+ .end method
+ 
+diff --git a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
+index d3b5e17c..192a32c4 100644
+--- a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
++++ b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
+@@ -3837,6 +3837,8 @@
+ .method public whitelist test-api engineGetCertificateChain(Ljava/lang/String;)[Ljava/security/cert/Certificate;
+     .locals 9
+ 
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->onEngineGetCertificateChain()V
++
+     invoke-direct {p0, p1}, Landroid/security/keystore2/AndroidKeyStoreSpi;->getKeyMetadata(Ljava/lang/String;)Landroid/system/keystore2/KeyEntryResponse;
+ 
+     move-result-object v0
+diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali
+new file mode 100644
+index 00000000..f7515c18
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali
+@@ -0,0 +1,30 @@
++.class public final synthetic Lio/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/function/Predicate;
++
++
++# direct methods
++.method public synthetic constructor blacklist <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final blacklist test(Ljava/lang/Object;)Z
++    .locals 0
++
++    check-cast p1, Ljava/lang/StackTraceElement;
++
++    invoke-static {p1}, Lio/mesalabs/unica/PlayIntegrityHooks;->lambda$isCallerSafetyNet$0(Ljava/lang/StackTraceElement;)Z
++
++    move-result p1
++
++    return p1
++.end method
+diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
+new file mode 100644
+index 00000000..64bc5f5f
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
+@@ -0,0 +1,79 @@
++.class Lio/mesalabs/unica/PlayIntegrityHooks$1;
++.super Landroid/app/TaskStackListener;
++.source "PlayIntegrityHooks.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingMethod;
++    value = Lio/mesalabs/unica/PlayIntegrityHooks;->shouldTryToCertifyDevice()Z
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x0
++    name = null
++.end annotation
++
++
++# instance fields
++.field final synthetic blacklist val$was:Z
++
++
++# direct methods
++.method constructor blacklist <init>(Z)V
++    .locals 0
++
++    iput-boolean p1, p0, Lio/mesalabs/unica/PlayIntegrityHooks$1;->val$was:Z
++
++    invoke-direct {p0}, Landroid/app/TaskStackListener;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public blacklist onTaskStackChanged()V
++    .locals 4
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->access$000()Z
++
++    move-result v0
++
++    iget-boolean v1, p0, Lio/mesalabs/unica/PlayIntegrityHooks$1;->val$was:Z
++
++    xor-int/2addr v1, v0
++
++    if-eqz v1, :cond_0
++
++    invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
++
++    move-result-object v1
++
++    iget-boolean v2, p0, Lio/mesalabs/unica/PlayIntegrityHooks$1;->val$was:Z
++
++    invoke-static {v2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
++
++    move-result-object v2
++
++    const-string v3, "GmsAddAccountActivityOnTop"
++
++    filled-new-array {v3, v1, v2}, [Ljava/lang/Object;
++
++    move-result-object v1
++
++    const-string v2, "%s changed: isNow=%b, was=%b, killing myself!"
++
++    invoke-static {v2, v1}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    invoke-static {}, Landroid/os/Process;->myPid()I
++
++    move-result v1
++
++    invoke-static {v1}, Landroid/os/Process;->killProcess(I)V
++
++    :cond_0
++    return-void
++.end method
+diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
+new file mode 100644
+index 00000000..10293450
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
+@@ -0,0 +1,1142 @@
++.class public Lio/mesalabs/unica/PlayIntegrityHooks;
++.super Ljava/lang/Object;
++.source "PlayIntegrityHooks.java"
++
++
++# static fields
++.field private static final blacklist DEBUG:Z = true
++
++.field private static final blacklist GMS_ADD_ACCOUNT_ACTIVITY:Landroid/content/ComponentName;
++
++.field private static final blacklist PACKAGE_FINSKY:Ljava/lang/String; = "com.android.vending"
++
++.field private static final blacklist PACKAGE_GMS:Ljava/lang/String; = "com.google.android.gms"
++
++.field private static final blacklist PIF_PROP_BRAND:Ljava/lang/String; = "persist.sys.pif.brand"
++
++.field private static final blacklist PIF_PROP_DEVICE:Ljava/lang/String; = "persist.sys.pif.device"
++
++.field private static final blacklist PIF_PROP_FINGERPRINT:Ljava/lang/String; = "persist.sys.pif.fingerprint"
++
++.field private static final blacklist PIF_PROP_FIRST_API_LEVEL:Ljava/lang/String; = "persist.sys.pif.first_api_level"
++
++.field private static final blacklist PIF_PROP_MANUFACTURER:Ljava/lang/String; = "persist.sys.pif.manufacturer"
++
++.field private static final blacklist PIF_PROP_MODEL:Ljava/lang/String; = "persist.sys.pif.model"
++
++.field private static final blacklist PIF_PROP_PRODUCT:Ljava/lang/String; = "persist.sys.pif.product"
++
++.field private static final blacklist PIF_PROP_SECURITY_PATCH:Ljava/lang/String; = "persist.sys.pif.security_patch"
++
++.field private static final blacklist PIF_PROP_VERSION:Ljava/lang/String; = "persist.sys.pif.version"
++
++.field private static final blacklist PIF_VERSION:Ljava/lang/String; = "20240128"
++
++.field private static final blacklist PROCESS_GMS_UNSTABLE:Ljava/lang/String; = "com.google.android.gms.unstable"
++
++.field private static final blacklist TAG:Ljava/lang/String; = "PlayIntegrityHooks"
++
++.field private static volatile blacklist sIsFinsky:Z
++
++.field private static volatile blacklist sIsGms:Z
++
++.field private static volatile blacklist sProcessName:Ljava/lang/String;
++
++
++# direct methods
++.method static constructor blacklist <clinit>()V
++    .locals 1
++
++    const-string v0, "com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity"
++
++    invoke-static {v0}, Landroid/content/ComponentName;->unflattenFromString(Ljava/lang/String;)Landroid/content/ComponentName;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/PlayIntegrityHooks;->GMS_ADD_ACCOUNT_ACTIVITY:Landroid/content/ComponentName;
++
++    return-void
++.end method
++
++.method private constructor blacklist <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method static synthetic blacklist access$000()Z
++    .locals 1
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
++
++    move-result v0
++
++    return v0
++.end method
++
++.method public static blacklist dlog(Ljava/lang/String;)V
++    .locals 2
++
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "["
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    sget-object v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sProcessName:Ljava/lang/String;
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, "] "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "PlayIntegrityHooks"
++
++    invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++
++    return-void
++.end method
++
++.method private static blacklist isCallerSafetyNet()Z
++    .locals 2
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldTryToCertifyDevice()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    sget-boolean v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
++
++    if-eqz v0, :cond_0
++
++    invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/Thread;->getStackTrace()[Ljava/lang/StackTraceElement;
++
++    move-result-object v0
++
++    invoke-static {v0}, Ljava/util/Arrays;->stream([Ljava/lang/Object;)Ljava/util/stream/Stream;
++
++    move-result-object v0
++
++    new-instance v1, Lio/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0;
++
++    invoke-direct {v1}, Lio/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0;-><init>()V
++
++    invoke-interface {v0, v1}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    const/4 v0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v0, 0x0
++
++    :goto_0
++    return v0
++.end method
++
++.method private static blacklist isGmsAddAccountActivityOnTop()Z
++    .locals 4
++
++    const/4 v0, 0x0
++
++    :try_start_0
++    invoke-static {}, Landroid/app/ActivityTaskManager;->getService()Landroid/app/IActivityTaskManager;
++
++    move-result-object v1
++
++    invoke-interface {v1}, Landroid/app/IActivityTaskManager;->getFocusedRootTaskInfo()Landroid/app/ActivityTaskManager$RootTaskInfo;
++
++    move-result-object v1
++
++    if-eqz v1, :cond_0
++
++    iget-object v2, v1, Landroid/app/ActivityTaskManager$RootTaskInfo;->topActivity:Landroid/content/ComponentName;
++
++    if-eqz v2, :cond_0
++
++    iget-object v2, v1, Landroid/app/ActivityTaskManager$RootTaskInfo;->topActivity:Landroid/content/ComponentName;
++
++    sget-object v3, Lio/mesalabs/unica/PlayIntegrityHooks;->GMS_ADD_ACCOUNT_ACTIVITY:Landroid/content/ComponentName;
++
++    invoke-virtual {v2, v3}, Landroid/content/ComponentName;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    if-eqz v2, :cond_0
++
++    const/4 v0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    nop
++
++    :goto_0
++    return v0
++
++    :catch_0
++    move-exception v1
++
++    const-string v2, "PlayIntegrityHooks"
++
++    const-string v3, "Unable to get top activity!"
++
++    invoke-static {v2, v3, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    return v0
++.end method
++
++.method static synthetic blacklist lambda$isCallerSafetyNet$0(Ljava/lang/StackTraceElement;)Z
++    .locals 2
++
++    invoke-virtual {p0}, Ljava/lang/StackTraceElement;->getClassName()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "DroidGuard"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v0
++
++    return v0
++.end method
++
++.method public static blacklist onEngineGetCertificateChain()V
++    .locals 2
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isCallerSafetyNet()Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
++    sget-boolean v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
++
++    if-nez v0, :cond_0
++
++    return-void
++
++    :cond_0
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "Blocked key attestation sIsGms="
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    sget-boolean v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, " sIsFinsky="
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    sget-boolean v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    new-instance v0, Ljava/lang/UnsupportedOperationException;
++
++    invoke-direct {v0}, Ljava/lang/UnsupportedOperationException;-><init>()V
++
++    throw v0
++.end method
++
++.method private static blacklist setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++    .locals 3
++
++    :try_start_0
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "Defining prop "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, " to "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Ljava/lang/Object;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-class v0, Landroid/os/Build;
++
++    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++    :try_end_0
++    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Failed to set prop "
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "PlayIntegrityHooks"
++
++    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :goto_0
++    return-void
++.end method
++
++.method public static blacklist setProps(Landroid/content/Context;)V
++    .locals 4
++
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {}, Landroid/app/Application;->getProcessName()Ljava/lang/String;
++
++    move-result-object v1
++
++    if-eqz v0, :cond_4
++
++    if-eqz v1, :cond_4
++
++    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v2
++
++    if-eqz v2, :cond_0
++
++    goto :goto_2
++
++    :cond_0
++    sput-object v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sProcessName:Ljava/lang/String;
++
++    const-string v2, "com.google.android.gms"
++
++    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    if-eqz v3, :cond_1
++
++    const-string v3, "com.google.android.gms.unstable"
++
++    invoke-virtual {v1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    if-eqz v3, :cond_1
++
++    const/4 v3, 0x1
++
++    goto :goto_0
++
++    :cond_1
++    const/4 v3, 0x0
++
++    :goto_0
++    sput-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
++
++    const-string v3, "com.android.vending"
++
++    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    sput-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
++
++    sget-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
++
++    if-eqz v3, :cond_2
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldTryToCertifyDevice()Z
++
++    move-result v2
++
++    if-eqz v2, :cond_3
++
++    const-string v2, "Spoofing build for GMS to pass CTS/Play Integrity API"
++
++    invoke-static {v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->spoofBuildGms()V
++
++    goto :goto_1
++
++    :cond_2
++    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_3
++
++    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
++
++    move-result-wide v2
++
++    invoke-static {v2, v3}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
++
++    move-result-object v2
++
++    const-string v3, "TIME"
++
++    invoke-static {v3, v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_3
++    :goto_1
++    return-void
++
++    :cond_4
++    :goto_2
++    return-void
++.end method
++
++.method private static blacklist setVersionFieldInt(Ljava/lang/String;I)V
++    .locals 3
++
++    :try_start_0
++    const-class v0, Landroid/os/Build$VERSION;
++
++    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v1
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v2, v1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++    :try_end_0
++    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Failed to spoof Build."
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "PlayIntegrityHooks"
++
++    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :goto_0
++    return-void
++.end method
++
++.method private static blacklist setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
++    .locals 3
++
++    :try_start_0
++    const-class v0, Landroid/os/Build$VERSION;
++
++    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++    :try_end_0
++    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Failed to spoof Build."
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "PlayIntegrityHooks"
++
++    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    :goto_0
++    return-void
++.end method
++
++.method public static blacklist shouldBypassTaskPermission(Landroid/content/Context;)Z
++    .locals 5
++
++    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
++
++    move-result v0
++
++    const/4 v1, 0x0
++
++    :try_start_0
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object v2
++
++    const-string v3, "com.google.android.gms"
++
++    invoke-virtual {v2, v3, v1}, Landroid/content/pm/PackageManager;->getApplicationInfo(Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;
++
++    move-result-object v2
++
++    iget v2, v2, Landroid/content/pm/ApplicationInfo;->uid:I
++
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "shouldBypassTaskPermission: gmsUid:"
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    const-string v4, " callingUid:"
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-static {v3}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    nop
++
++    if-ne v2, v0, :cond_0
++
++    const/4 v1, 0x1
++
++    :cond_0
++    return v1
++
++    :catch_0
++    move-exception v2
++
++    const-string v3, "PlayIntegrityHooks"
++
++    const-string v4, "shouldBypassTaskPermission: unable to get gms uid"
++
++    invoke-static {v3, v4, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    return v1
++.end method
++
++.method private static blacklist shouldTryToCertifyDevice()Z
++    .locals 8
++
++    invoke-static {}, Landroid/app/Application;->getProcessName()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "unstable"
++
++    invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    const/4 v2, 0x0
++
++    if-nez v1, :cond_0
++
++    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v3, "pixelmigrate"
++
++    invoke-virtual {v1, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_0
++
++    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v3, "instrumentation"
++
++    invoke-virtual {v1, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_0
++
++    return v2
++
++    :cond_0
++    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
++
++    move-result-wide v3
++
++    invoke-static {v3, v4}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
++
++    move-result-object v1
++
++    const-string v3, "TIME"
++
++    invoke-static {v3, v1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
++
++    move-result v1
++
++    const-string v3, "GmsAddAccountActivityOnTop"
++
++    const/4 v4, 0x1
++
++    if-nez v1, :cond_1
++
++    return v4
++
++    :cond_1
++    const-string v5, "Skip spoofing build for GMS, because GmsAddAccountActivityOnTop!"
++
++    invoke-static {v5}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    new-instance v5, Lio/mesalabs/unica/PlayIntegrityHooks$1;
++
++    invoke-direct {v5, v1}, Lio/mesalabs/unica/PlayIntegrityHooks$1;-><init>(Z)V
++
++    :try_start_0
++    invoke-static {}, Landroid/app/ActivityTaskManager;->getService()Landroid/app/IActivityTaskManager;
++
++    move-result-object v6
++
++    invoke-interface {v6, v5}, Landroid/app/IActivityTaskManager;->registerTaskStackListener(Landroid/app/ITaskStackListener;)V
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    return v2
++
++    :catch_0
++    move-exception v2
++
++    const-string v6, "PlayIntegrityHooks"
++
++    const-string v7, "Failed to register task stack listener!"
++
++    invoke-static {v6, v7, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    return v4
++.end method
++
++.method private static blacklist spoofBuildGms()V
++    .locals 14
++
++    const-string v0, "0"
++
++    const-string v1, "persist.sys.pif.version"
++
++    invoke-static {v1, v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result v2
++
++    const-string v3, "20240128"
++
++    invoke-static {v3}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result v4
++
++    const-string v5, "persist.sys.pif.first_api_level"
++
++    const-string v6, "persist.sys.pif.security_patch"
++
++    const-string v7, "persist.sys.pif.fingerprint"
++
++    const-string v8, "persist.sys.pif.model"
++
++    const-string v9, "persist.sys.pif.brand"
++
++    const-string v10, "persist.sys.pif.manufacturer"
++
++    const-string v11, "persist.sys.pif.device"
++
++    const-string v12, "persist.sys.pif.product"
++
++    const-string v13, "null"
++
++    if-ge v2, v4, :cond_0
++
++    invoke-static {v1, v3}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "pmeuhl_00709"
++
++    invoke-static {v12, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "htc_pmeuhl"
++
++    invoke-static {v11, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "HTC"
++
++    invoke-static {v10, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "htc"
++
++    invoke-static {v9, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "HTC_M10h"
++
++    invoke-static {v8, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "htc/pmeuhl_00709/htc_pmeuhl:8.0.0/OPR1.170623.027/1012001.8:user/release-keys"
++
++    invoke-static {v7, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v1, "2018-02-01"
++
++    invoke-static {v6, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    invoke-static {v5, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    :cond_0
++    invoke-static {v12, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_1
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v3, "PRODUCT: "
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v2, "PRODUCT"
++
++    invoke-static {v2, v1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_1
++    invoke-static {v11, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v2, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    if-nez v3, :cond_2
++
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "DEVICE: "
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-static {v3}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v3, "DEVICE"
++
++    invoke-static {v3, v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_2
++    invoke-static {v10, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v4
++
++    if-nez v4, :cond_3
++
++    new-instance v4, Ljava/lang/StringBuilder;
++
++    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "MANUFACTURER: "
++
++    invoke-virtual {v4, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v4
++
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v4
++
++    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-static {v4}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v4, "MANUFACTURER"
++
++    invoke-static {v4, v3}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_3
++    invoke-static {v9, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-virtual {v4, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v9
++
++    if-nez v9, :cond_4
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "BRAND: "
++
++    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-static {v9}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v9, "BRAND"
++
++    invoke-static {v9, v4}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_4
++    invoke-static {v8, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v8
++
++    invoke-virtual {v8, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v9
++
++    if-nez v9, :cond_5
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "MODEL: "
++
++    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-static {v9}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v9, "MODEL"
++
++    invoke-static {v9, v8}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_5
++    invoke-static {v7, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v7
++
++    invoke-virtual {v7, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v9
++
++    if-nez v9, :cond_6
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "FINGERPRINT: "
++
++    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-static {v9}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v9, "FINGERPRINT"
++
++    invoke-static {v9, v7}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++
++    :cond_6
++    invoke-static {v6, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-virtual {v6, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v9
++
++    if-nez v9, :cond_7
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "SECURITY_PATCH: "
++
++    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-static {v9}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v9, "SECURITY_PATCH"
++
++    invoke-static {v9, v6}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
++
++    :cond_7
++    invoke-static {v5, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v5
++
++    invoke-virtual {v5, v13}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v9
++
++    if-nez v9, :cond_8
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v10, "FIRST_API_LEVEL: "
++
++    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-static {v9}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v9, "DEVICE_INITIAL_SDK_INT"
++
++    invoke-static {v5}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result v10
++
++    invoke-static {v9, v10}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldInt(Ljava/lang/String;I)V
++
++    :cond_8
++    return-void
++.end method
+-- 
+2.34.1
+

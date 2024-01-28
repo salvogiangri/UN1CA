@@ -1,4 +1,4 @@
-From 6c69b1ff7c11ceabc1df9967698b2f178da334bc Mon Sep 17 00:00:00 2001
+From c6f8be97c3c6a0b19cab0dc1de02fc8ca2d8d8ec Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -8,21 +8,26 @@ Subject: [PATCH] Add UN1CA Settings
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   6 +
  res/layout/unica_settings_logo_layout.xml     |   6 +
- res/values/public.xml                         |  14 ++
- res/values/strings.xml                        |   9 +
+ res/values/public.xml                         |  19 +
+ res/values/strings.xml                        |  14 +
  res/xml/sec_top_level_settings.xml            |   1 +
- res/xml/unica_settings.xml                    |  13 +
- .../com/android/settings/R$string.smali       |  18 ++
+ res/xml/unica_settings.xml                    |  14 +
+ .../com/android/settings/R$string.smali       |  28 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         |  57 +++++
- .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++++++++
- .../AppDowngradePreferenceController.smali    | 183 ++++++++++++++
- .../DeviceNamePreferenceController.smali      | 211 ++++++++++++++++
- .../GamesPropsPreferenceController.smali      | 167 ++++++++++++
- .../ROMVersionPreferenceController.smali      | 238 ++++++++++++++++++
- ...SecureScreenshotPreferenceController.smali | 183 ++++++++++++++
- 18 files changed, 1361 insertions(+)
+ .../unica/UnicaSettingsFragment.smali         |  57 +++
+ .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++
+ .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 +++
+ .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
+ .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 +++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 388 ++++++++++++++++++
+ .../AppDowngradePreferenceController.smali    | 183 +++++++++
+ .../DeviceNamePreferenceController.smali      | 211 ++++++++++
+ .../GamesPropsPreferenceController.smali      | 167 ++++++++
+ .../PIFVersionPreferenceController.smali      | 207 ++++++++++
+ .../ROMVersionPreferenceController.smali      | 238 +++++++++++
+ ...SecureScreenshotPreferenceController.smali | 183 +++++++++
+ 23 files changed, 2103 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -30,9 +35,14 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
@@ -98,7 +108,7 @@ index 00000000..7b802f76
 +</FrameLayout>
 \ No newline at end of file
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 7ba70fd4..72c81ae4 100644
+index 7ba70fd4..4f287da1 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -11781,6 +11781,7 @@
@@ -126,7 +136,7 @@ index 7ba70fd4..72c81ae4 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0565" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014a" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a0" />
-@@ -31357,6 +31361,15 @@
+@@ -31357,6 +31361,20 @@
      <public type="string" name="zone_time_type_standard" id="0x7f1332a0" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f1332a1" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f1332a2" />
@@ -136,13 +146,18 @@ index 7ba70fd4..72c81ae4 100644
 +    <public type="string" name="unica_device_name_title" id="0x7f1332a6" />
 +    <public type="string" name="unica_extra_settings_title" id="0x7f1332a7" />
 +    <public type="string" name="unica_games_spoof_title" id="0x7f1332a8" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1332a9" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1332aa" />
-+    <public type="string" name="unica_settings_title" id="0x7f1332ab" />
++    <public type="string" name="unica_pif_checking" id="0x7f1332a9" />
++    <public type="string" name="unica_pif_error" id="0x7f1332aa" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f1332ab" />
++    <public type="string" name="unica_pif_updated" id="0x7f1332ac" />
++    <public type="string" name="unica_pif_version_title" id="0x7f1332ad" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1332ae" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1332af" />
++    <public type="string" name="unica_settings_title" id="0x7f1332b0" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34045,4 +34058,5 @@
+@@ -34045,4 +34063,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16025e" />
      <public type="xml" name="zen_mode_settings" id="0x7f16025f" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f160260" />
@@ -150,10 +165,10 @@ index 7ba70fd4..72c81ae4 100644
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 9c5963a1..ad24f692 100644
+index 9c5963a1..e2eeabf7 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13588,4 +13588,13 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13588,4 +13588,18 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -163,6 +178,11 @@ index 9c5963a1..ad24f692 100644
 +    <string name="unica_device_name_title">Device name</string>
 +    <string name="unica_extra_settings_title">Extra settings</string>
 +    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
++    <string name="unica_pif_checking">Checking for updates…</string>
++    <string name="unica_pif_error">An error occurred.</string>
++    <string name="unica_pif_up_to_date">You\'re running the latest version.</string>
++    <string name="unica_pif_updated">Update completed successfully.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix version</string>
 +    <string name="unica_rom_version_title">ROM version</string>
 +    <string name="unica_secure_ss_title">Allow secure screenshot</string>
 +    <string name="unica_settings_title">UN1CA Settings</string>
@@ -181,17 +201,18 @@ index 5bf6f32f..592bc70f 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..d4ec3ff9
+index 00000000..0ec9259d
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,14 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
 +    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" />
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
-+      <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
++    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
++    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
 +        <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
@@ -200,10 +221,10 @@ index 00000000..d4ec3ff9
 +</PreferenceScreen>
 \ No newline at end of file
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index fe88911c..0a634177 100644
+index fe88911c..e332f515 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12179,3 +12179,21 @@
+@@ -12179,3 +12179,31 @@
  .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f1332a1
  
  .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f1332a2
@@ -220,11 +241,21 @@ index fe88911c..0a634177 100644
 +
 +.field public static final unica_games_spoof_title:I = 0x7f1332a8
 +
-+.field public static final unica_rom_version_title:I = 0x7f1332a9
++.field public static final unica_pif_checking:I = 0x7f1332a9
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1332aa
++.field public static final unica_pif_error:I = 0x7f1332aa
 +
-+.field public static final unica_settings_title:I = 0x7f1332ab
++.field public static final unica_pif_up_to_date:I = 0x7f1332ab
++
++.field public static final unica_pif_updated:I = 0x7f1332ac
++
++.field public static final unica_pif_version_title:I = 0x7f1332ad
++
++.field public static final unica_rom_version_title:I = 0x7f1332ae
++
++.field public static final unica_secure_ss_title:I = 0x7f1332af
++
++.field public static final unica_settings_title:I = 0x7f1332b0
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
 index 9e7b0dfb..7b18d280 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
@@ -545,6 +576,544 @@ index 00000000..00e24add
 +    move-result p0
 +
 +    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
+new file mode 100644
+index 00000000..1359aa12
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
+@@ -0,0 +1,46 @@
++.class public final synthetic Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# instance fields
++.field public final synthetic f$0:Landroid/content/Context;
++
++.field public final synthetic f$1:Lorg/json/JSONObject;
++
++.field public final synthetic f$2:Landroidx/preference/Preference;
++
++
++# direct methods
++.method public synthetic constructor <init>(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$0:Landroid/content/Context;
++
++    iput-object p2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$1:Lorg/json/JSONObject;
++
++    iput-object p3, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$2:Landroidx/preference/Preference;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .locals 3
++
++    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$0:Landroid/content/Context;
++
++    iget-object v1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$1:Lorg/json/JSONObject;
++
++    iget-object v2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$2:Landroidx/preference/Preference;
++
++    invoke-static {v0, v1, v2}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
+new file mode 100644
+index 00000000..96dc69e3
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
+@@ -0,0 +1,34 @@
++.class public final synthetic Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# instance fields
++.field public final synthetic f$0:Landroid/content/Context;
++
++
++# direct methods
++.method public synthetic constructor <init>(Landroid/content/Context;)V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;->f$0:Landroid/content/Context;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .locals 1
++
++    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;->f$0:Landroid/content/Context;
++
++    invoke-static {v0}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$1(Landroid/content/Context;)V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali
+new file mode 100644
+index 00000000..07ba1d77
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali
+@@ -0,0 +1,46 @@
++.class public final synthetic Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# instance fields
++.field public final synthetic f$0:Landroid/os/Handler;
++
++.field public final synthetic f$1:Landroid/content/Context;
++
++.field public final synthetic f$2:Landroidx/preference/Preference;
++
++
++# direct methods
++.method public synthetic constructor <init>(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$0:Landroid/os/Handler;
++
++    iput-object p2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$1:Landroid/content/Context;
++
++    iput-object p3, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$2:Landroidx/preference/Preference;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .locals 3
++
++    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$0:Landroid/os/Handler;
++
++    iget-object v1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$1:Landroid/content/Context;
++
++    iget-object v2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$2:Landroidx/preference/Preference;
++
++    invoke-static {v0, v1, v2}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$2(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
+new file mode 100644
+index 00000000..b1afab03
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
+@@ -0,0 +1,388 @@
++.class public Lio/mesalabs/unica/pif/PIFUtils;
++.super Ljava/lang/Object;
++.source "PIFUtils.java"
++
++
++# static fields
++.field private static final STATUS_CHECKING:I = 0x0
++
++.field private static final STATUS_ERROR:I = 0x3
++
++.field private static final STATUS_UPDATED:I = 0x1
++
++.field private static final STATUS_UP_TO_DATE:I = 0x2
++
++.field private static final TAG:Ljava/lang/String; = "PIFUtils"
++
++.field private static final URL:Ljava/lang/String; = "https://raw.githubusercontent.com/BlackMesa123/UN1CA/fourteen/unica/pif.json"
++
++
++# direct methods
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static getJson()Lorg/json/JSONObject;
++    .locals 8
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/io/IOException;,
++            Lorg/json/JSONException;
++        }
++    .end annotation
++
++    new-instance v0, Ljava/net/URL;
++
++    const-string v1, "https://raw.githubusercontent.com/BlackMesa123/UN1CA/fourteen/unica/pif.json"
++
++    invoke-direct {v0, v1}, Ljava/net/URL;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v0}, Ljava/net/URL;->openStream()Ljava/io/InputStream;
++
++    move-result-object v1
++
++    :try_start_0
++    new-instance v2, Ljava/io/InputStreamReader;
++
++    invoke-direct {v2, v1}, Ljava/io/InputStreamReader;-><init>(Ljava/io/InputStream;)V
++
++    new-instance v3, Ljava/io/BufferedReader;
++
++    invoke-direct {v3, v2}, Ljava/io/BufferedReader;-><init>(Ljava/io/Reader;)V
++
++    new-instance v4, Ljava/lang/StringBuilder;
++
++    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
++
++    :goto_0
++    invoke-virtual {v3}, Ljava/io/BufferedReader;->read()I
++
++    move-result v5
++
++    move v6, v5
++
++    const/4 v7, -0x1
++
++    if-eq v5, v7, :cond_0
++
++    int-to-char v5, v6
++
++    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
++
++    goto :goto_0
++
++    :cond_0
++    new-instance v5, Lorg/json/JSONObject;
++
++    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v7
++
++    invoke-direct {v5, v7}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
++    :try_end_0
++    .catchall {:try_start_0 .. :try_end_0} :catchall_0
++
++    if-eqz v1, :cond_1
++
++    invoke-virtual {v1}, Ljava/io/InputStream;->close()V
++
++    :cond_1
++    return-object v5
++
++    :catchall_0
++    move-exception v2
++
++    if-eqz v1, :cond_2
++
++    :try_start_1
++    invoke-virtual {v1}, Ljava/io/InputStream;->close()V
++    :try_end_1
++    .catchall {:try_start_1 .. :try_end_1} :catchall_1
++
++    goto :goto_1
++
++    :catchall_1
++    move-exception v3
++
++    invoke-virtual {v2, v3}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :cond_2
++    :goto_1
++    throw v2
++.end method
++
++.method static synthetic lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
++    .locals 2
++
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->setPIFConfig(Landroid/content/Context;Lorg/json/JSONObject;)V
++
++    const-string v0, "persist.sys.pif.version"
++
++    const-string v1, "Unknown"
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {p2, v0}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
++
++    return-void
++.end method
++
++.method static synthetic lambda$updatePIF$1(Landroid/content/Context;)V
++    .locals 1
++
++    const/4 v0, 0x3
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++
++    return-void
++.end method
++
++.method static synthetic lambda$updatePIF$2(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
++    .locals 3
++
++    :try_start_0
++    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->getJson()Lorg/json/JSONObject;
++
++    move-result-object v0
++
++    new-instance v1, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;
++
++    invoke-direct {v1, p1, v0, p2}, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;-><init>(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
++
++    invoke-virtual {p0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++    :try_end_0
++    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
++    .catch Lorg/json/JSONException; {:try_start_0 .. :try_end_0} :catch_0
++
++    nop
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    const-string v1, "PIFUtils"
++
++    const-string v2, "Exception: "
++
++    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    new-instance v1, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;
++
++    invoke-direct {v1, p1}, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;-><init>(Landroid/content/Context;)V
++
++    invoke-virtual {p0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++
++    :goto_0
++    return-void
++.end method
++
++.method private static setPIFConfig(Landroid/content/Context;Lorg/json/JSONObject;)V
++    .locals 4
++
++    const-string v0, "VERSION"
++
++    const-string v1, "persist.sys.pif.version"
++
++    :try_start_0
++    const-string v2, "0"
++
++    invoke-static {v1, v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result v2
++
++    invoke-virtual {p1, v0}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-static {v3}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result v3
++
++    if-ge v2, v3, :cond_0
++
++    invoke-virtual {p1, v0}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v1, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.manufacturer"
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.brand"
++
++    const-string v1, "BRAND"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.model"
++
++    const-string v1, "MODEL"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.fingerprint"
++
++    const-string v1, "FINGERPRINT"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.security_patch"
++
++    const-string v1, "SECURITY_PATCH"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.first_api_level"
++
++    const-string v1, "FIRST_API_LEVEL"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const/4 v0, 0x1
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v0, 0x2
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++    :try_end_0
++    .catch Lorg/json/JSONException; {:try_start_0 .. :try_end_0} :catch_0
++
++    :goto_0
++    goto :goto_1
++
++    :catch_0
++    move-exception v0
++
++    const-string v1, "PIFUtils"
++
++    const-string v2, "Exception: "
++
++    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    const/4 v1, 0x3
++
++    invoke-static {p0, v1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++
++    :goto_1
++    return-void
++.end method
++
++.method private static showToast(Landroid/content/Context;I)V
++    .locals 2
++
++    packed-switch p1, :pswitch_data_0
++
++    return-void
++
++    :pswitch_0
++    sget v0, Lcom/android/settings/R$string;->unica_pif_error:I
++
++    goto :goto_0
++
++    :pswitch_1
++    sget v0, Lcom/android/settings/R$string;->unica_pif_up_to_date:I
++
++    goto :goto_0
++
++    :pswitch_2
++    sget v0, Lcom/android/settings/R$string;->unica_pif_updated:I
++
++    goto :goto_0
++
++    :pswitch_3
++    sget v0, Lcom/android/settings/R$string;->unica_pif_checking:I
++
++    nop
++
++    :goto_0
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Landroid/widget/Toast;->show()V
++
++    return-void
++
++    nop
++
++    :pswitch_data_0
++    .packed-switch 0x0
++        :pswitch_3
++        :pswitch_2
++        :pswitch_1
++        :pswitch_0
++    .end packed-switch
++.end method
++
++.method public static updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
++    .locals 3
++
++    const/4 v0, 0x0
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++
++    invoke-static {}, Ljava/util/concurrent/Executors;->newSingleThreadExecutor()Ljava/util/concurrent/ExecutorService;
++
++    move-result-object v0
++
++    new-instance v1, Landroid/os/Handler;
++
++    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
++
++    move-result-object v2
++
++    invoke-direct {v1, v2}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
++
++    new-instance v2, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;
++
++    invoke-direct {v2, v1, p0, p1}, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;-><init>(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
++
++    invoke-interface {v0, v2}, Ljava/util/concurrent/ExecutorService;->execute(Ljava/lang/Runnable;)V
++
++    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
 new file mode 100644
@@ -1114,6 +1683,219 @@ index 00000000..66a58f0c
 +    const/4 p0, 0x1
 +
 +    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
+new file mode 100644
+index 00000000..6705558e
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
+@@ -0,0 +1,207 @@
++.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
++.super Lcom/android/settings/core/BasePreferenceController;
++.source "PIFVersionPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getSliceHighlightMenuRes()I
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getSliceHighlightMenuRes()I
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSummary()Ljava/lang/CharSequence;
++    .locals 2
++
++    const-string/jumbo v0, "persist.sys.pif.version"
++
++    const-string v1, "Unknown"
++
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    return-object v0
++.end method
++
++.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getValue()Lcom/samsung/android/settings/cube/ControlValue;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
++    .locals 2
++
++    const/4 v0, 0x1
++
++    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {v1, p1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
++
++    return v0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public bridge synthetic isControllable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->isControllable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isPublicSlice()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isPublicSlice()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isSliceable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isSliceable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++
++    move-result-object p0
++
++    return-object p0
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z

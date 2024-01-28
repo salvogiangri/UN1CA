@@ -1,4 +1,4 @@
-From 8d59addb3883698a7a4897c37b218fce3c6f014f Mon Sep 17 00:00:00 2001
+From 30e3fd7ca74b8e69d9f009bf3dbb61a0adb4a5b1 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:27:07 +0100
 Subject: [PATCH] Introduce GamesPropsUtils
@@ -10,10 +10,10 @@ Subject: [PATCH] Introduce GamesPropsUtils
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
-index fd6534b0..f55faffc 100644
+index e5056216..801b269d 100644
 --- a/smali/android/app/Instrumentation.smali
 +++ b/smali/android/app/Instrumentation.smali
-@@ -634,6 +634,8 @@
+@@ -636,6 +636,8 @@
  
      invoke-static {p1}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
  
@@ -22,7 +22,7 @@ index fd6534b0..f55faffc 100644
      return-object v0
  .end method
  
-@@ -3846,6 +3848,8 @@
+@@ -3850,6 +3852,8 @@
  
      invoke-static {p3}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
  

@@ -1,0 +1,74 @@
+From 85ed898041c5ab583940e42e1c827196752c326e Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 28 Jan 2024 01:56:23 +0100
+Subject: [PATCH] Introduce PlayIntegrityHooks
+
+---
+ .../wm/ActivityTaskManagerService.smali       | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
+index 70926b9a..5eee06eb 100644
+--- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
++++ b/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
+@@ -6894,10 +6894,19 @@
+ .method public getFocusedRootTaskInfo()Landroid/app/ActivityTaskManager$RootTaskInfo;
+     .locals 4
+ 
++    iget-object v0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mContext:Landroid/content/Context;
++
++    invoke-static {v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldBypassTaskPermission(Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
+     const-string v0, "getFocusedRootTaskInfo()"
+ 
+     invoke-static {v0}, Lcom/android/server/wm/ActivityTaskManagerService;->enforceTaskPermission(Ljava/lang/String;)V
+ 
++    :cond_0
+     invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
+ 
+     move-result-wide v0
+@@ -6916,7 +6925,7 @@
+ 
+     move-result-object v3
+ 
+-    if-eqz v3, :cond_0
++    if-eqz v3, :cond_1
+ 
+     iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mRootWindowContainer:Lcom/android/server/wm/RootWindowContainer;
+ 
+@@ -6936,7 +6945,7 @@
+ 
+     return-object p0
+ 
+-    :cond_0
++    :cond_1
+     :try_start_2
+     monitor-exit v2
+     :try_end_2
+@@ -13391,10 +13400,19 @@
+ .method public registerTaskStackListener(Landroid/app/ITaskStackListener;)V
+     .locals 1
+ 
++    iget-object v0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mContext:Landroid/content/Context;
++
++    invoke-static {v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldBypassTaskPermission(Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
+     const-string/jumbo v0, "registerTaskStackListener()"
+ 
+     invoke-static {v0}, Lcom/android/server/wm/ActivityTaskManagerService;->enforceTaskPermission(Ljava/lang/String;)V
+ 
++    :cond_0
+     iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mTaskChangeNotificationController:Lcom/android/server/wm/TaskChangeNotificationController;
+ 
+     invoke-virtual {p0, p1}, Lcom/android/server/wm/TaskChangeNotificationController;->registerTaskStackListener(Landroid/app/ITaskStackListener;)V
+-- 
+2.34.1
+
