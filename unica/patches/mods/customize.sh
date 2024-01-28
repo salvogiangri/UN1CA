@@ -43,6 +43,10 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhal.wsm.samsung.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxGuard"
 
+echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_dm1qxxx.rc"
+echo "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_dm1qxxx.rc"
+echo "    exec - root root -- /system/bin/resetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_dm1qxxx.rc"
+
 echo "ro.unica.version=$ROM_VERSION" >> "$WORK_DIR/system/system/build.prop"
 echo "ro.unica.codename=$ROM_CODENAME" >> "$WORK_DIR/system/system/build.prop"
 
