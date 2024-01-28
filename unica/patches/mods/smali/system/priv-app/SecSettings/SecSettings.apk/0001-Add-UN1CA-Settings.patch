@@ -1,4 +1,4 @@
-From c6f8be97c3c6a0b19cab0dc1de02fc8ca2d8d8ec Mon Sep 17 00:00:00 2001
+From 2b9707138767dee7f4719ce108313321c8f05ef7 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -24,10 +24,10 @@ Subject: [PATCH] Add UN1CA Settings
  .../AppDowngradePreferenceController.smali    | 183 +++++++++
  .../DeviceNamePreferenceController.smali      | 211 ++++++++++
  .../GamesPropsPreferenceController.smali      | 167 ++++++++
- .../PIFVersionPreferenceController.smali      | 207 ++++++++++
+ .../PIFVersionPreferenceController.smali      | 226 ++++++++++
  .../ROMVersionPreferenceController.smali      | 238 +++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 +++++++++
- 23 files changed, 2103 insertions(+)
+ 23 files changed, 2122 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1696,10 +1696,10 @@ index 00000000..66a58f0c
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..6705558e
+index 00000000..f4c01140
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
-@@ -0,0 +1,207 @@
+@@ -0,0 +1,226 @@
 +.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "PIFVersionPreferenceController.java"
@@ -1811,11 +1811,30 @@ index 00000000..6705558e
 +.method public handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
 +    .locals 2
 +
++    invoke-virtual {p1}, Landroidx/preference/Preference;->getKey()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {p0}, Lcom/android/settings/core/BasePreferenceController;->getPreferenceKey()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
++    const/4 v0, 0x0
++
++    return v0
++
++    :cond_0
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {v0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
++
 +    const/4 v0, 0x1
-+
-+    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
-+
-+    invoke-static {v1, p1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
 +
 +    return v0
 +.end method
