@@ -1,3 +1,16 @@
+GET_PROP()
+{
+    local PROP="$1"
+    local FILE="$2"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        exit 1
+    fi
+
+    grep "^$PROP=" "$FILE" | cut -d "=" -f2-
+}
+
 REMOVE_FROM_WORK_DIR()
 {
     local FILE_PATH="$1"
@@ -48,6 +61,9 @@ CODENAME="dm1qxxx"
 echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo -n "    exec - root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then
+    echo -en "\n    exec - root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+fi
 
 echo "ro.unica.version=$ROM_VERSION" >> "$WORK_DIR/system/system/build.prop"
 echo "ro.unica.codename=$ROM_CODENAME" >> "$WORK_DIR/system/system/build.prop"
