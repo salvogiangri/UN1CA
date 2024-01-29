@@ -22,14 +22,14 @@ REMOVE_FROM_WORK_DIR()
 
 if ! grep -q "system/media/audio/ui/Power" "$WORK_DIR/configs/file_context-system"; then
     {
-        echo "/system/bin/resetprop u:object_r:su:s0"
+        echo "/system/bin/rezetprop u:object_r:su:s0"
         echo "/system/media/audio/ui/PowerOn\.ogg u:object_r:system_file:s0"
         echo "/system/media/audio/ui/PowerOff\.ogg u:object_r:system_file:s0"
     } >> "$WORK_DIR/configs/file_context-system"
 fi
 if ! grep -q "system/media/audio/ui/Power" "$WORK_DIR/configs/fs_config-system"; then
     {
-        echo "system/bin/resetprop 0 2000 755 capabilities=0x0"
+        echo "system/bin/rezetprop 0 2000 755 capabilities=0x0"
         echo "system/media/audio/ui/PowerOn.ogg 0 0 644 capabilities=0x0"
         echo "system/media/audio/ui/PowerOff.ogg 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-system"
@@ -47,7 +47,7 @@ CODENAME="dm1qxxx"
 [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]] && CODENAME="r11sxxx"
 echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
-echo -n "    exec - root root -- /system/bin/resetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+echo -n "    exec - root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 
 echo "ro.unica.version=$ROM_VERSION" >> "$WORK_DIR/system/system/build.prop"
 echo "ro.unica.codename=$ROM_CODENAME" >> "$WORK_DIR/system/system/build.prop"
