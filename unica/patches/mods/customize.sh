@@ -35,7 +35,7 @@ REMOVE_FROM_WORK_DIR()
 
 if ! grep -q "system/media/audio/ui/Power" "$WORK_DIR/configs/file_context-system"; then
     {
-        echo "/system/bin/rezetprop u:object_r:su:s0"
+        echo "/system/bin/rezetprop u:object_r:system_file:s0"
         echo "/system/media/audio/ui/PowerOn\.ogg u:object_r:system_file:s0"
         echo "/system/media/audio/ui/PowerOff\.ogg u:object_r:system_file:s0"
     } >> "$WORK_DIR/configs/file_context-system"
@@ -60,9 +60,11 @@ CODENAME="dm1qxxx"
 [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]] && CODENAME="r11sxxx"
 echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
-echo -n "    exec - root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+echo    "    exec u:r:magisk:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+echo -n "    exec u:object_r:su:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then
-    echo -en "\n    exec - root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+    echo -e "\n    exec u:r:magisk:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+    echo -n "    exec u:object_r:su:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 fi
 
 echo "ro.unica.version=$ROM_VERSION" >> "$WORK_DIR/system/system/build.prop"
