@@ -1,4 +1,4 @@
-From 2b9707138767dee7f4719ce108313321c8f05ef7 Mon Sep 17 00:00:00 2001
+From fdbdfbf0bde5a75a0d9db703de68f3085c2f4048 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -1696,7 +1696,7 @@ index 00000000..66a58f0c
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..f4c01140
+index 00000000..c489b897
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 @@ -0,0 +1,226 @@
@@ -1789,7 +1789,7 @@ index 00000000..f4c01140
 +
 +    const-string/jumbo v0, "persist.sys.pif.version"
 +
-+    const-string v1, "Unknown"
++    const-string v1, "Not installed"
 +
 +    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
