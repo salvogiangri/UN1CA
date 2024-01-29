@@ -5,17 +5,9 @@ ASCENDIA_IMG="https://downloads.simon1511.de/s/SHzASGR4nYTbjQ4/download/Ascendia
 
 REPLACE_KERNEL_BINARIES()
 {
-    [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
-    mkdir -p "$TMP_DIR"
-
+    [ -f "$WORK_DIR/kernel/boot.img" ] && rm -rf "$WORK_DIR/kernel/boot.img"
     echo "Downloading $(basename "$ASCENDIA_IMG")"
-    curl -L -s -o "$TMP_DIR/boot.img" "$ASCENDIA_IMG"
-
-    echo "Extracting kernel binaries"
-    rm -f "$WORK_DIR/kernel/boot.img"
-    cp "$TMP_DIR/boot.img" "$WORK_DIR/kernel/"
-
-    rm -rf "$TMP_DIR"
+    curl -L -s -o "$WORK_DIR/kernel/boot.img" "$ASCENDIA_IMG"
 }
 # ]
 
