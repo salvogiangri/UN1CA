@@ -9,7 +9,7 @@ unica/packages/vndk/30/** binary
 unica/patches/mods/system/bin/rezetprop binary
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a54x/patches/vendor/vendor/tee/** binary
-target/a71/patches/stock_blobs/vendor/** binary
+target/a71/patches/*/*/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
 target/m52xq/patches/vendor/vendor/** binary
 *.apk binary
