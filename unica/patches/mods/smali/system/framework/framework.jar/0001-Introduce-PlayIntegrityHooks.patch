@@ -1,4 +1,4 @@
-From fe3a62bed3a89197c789d09764cf1202c5019405 Mon Sep 17 00:00:00 2001
+From 39b8949f55ee3036cc20c7e22d88d34b08541625 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 28 Jan 2024 01:48:48 +0100
 Subject: [PATCH] Introduce PlayIntegrityHooks
@@ -172,7 +172,7 @@ index 00000000..64bc5f5f
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 new file mode 100644
-index 00000000..e8a8d3b3
+index 00000000..751874a5
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 @@ -0,0 +1,1152 @@
@@ -194,9 +194,9 @@ index 00000000..e8a8d3b3
 +
 +.field private static final blacklist PIF_DEVICE:Ljava/lang/String; = "htc_pmeuhl"
 +
-+.field private static final blacklist PIF_FINGERPRINT:Ljava/lang/String; = "htc/pmeuhl_00709/htc_pmeuhl:8.0.0/OPR1.170623.027/1012001.8:user/release-keys"
++.field private static final blacklist PIF_DEVICE_INITIAL_SDK_INT:Ljava/lang/String; = "null"
 +
-+.field private static final blacklist PIF_FIRST_API_LEVEL:Ljava/lang/String; = "null"
++.field private static final blacklist PIF_FINGERPRINT:Ljava/lang/String; = "htc/pmeuhl_00709/htc_pmeuhl:8.0.0/OPR1.170623.027/1012001.8:user/release-keys"
 +
 +.field private static final blacklist PIF_MANUFACTURER:Ljava/lang/String; = "HTC"
 +
@@ -1301,7 +1301,7 @@ index 00000000..e8a8d3b3
 +
 +    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
 +
-+    const-string v10, "FIRST_API_LEVEL: "
++    const-string v10, "DEVICE_INITIAL_SDK_INT: "
 +
 +    invoke-virtual {v2, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +

@@ -1,4 +1,4 @@
-From 8411fee4e233aaef86def318ff853d003d025128 Mon Sep 17 00:00:00 2001
+From b7f4707e2443572c2ac9260892a6e7c3b4474c35 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:17:48 +0100
 Subject: [PATCH] Add UN1CA Settings
@@ -15,19 +15,19 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$string.smali       |  28 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         |  92 +++++
+ .../unica/UnicaSettingsFragment.smali         |  92 ++++
  .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++
- .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 +++
+ .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
- .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 +++
- .../io/mesalabs/unica/pif/PIFUtils.smali      | 388 ++++++++++++++++++
- .../AppDowngradePreferenceController.smali    | 183 +++++++++
- .../DeviceNamePreferenceController.smali      | 211 ++++++++++
- .../GamesPropsPreferenceController.smali      | 167 ++++++++
+ .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 408 ++++++++++++++++++
+ .../AppDowngradePreferenceController.smali    | 183 ++++++++
+ .../DeviceNamePreferenceController.smali      | 211 +++++++++
+ .../GamesPropsPreferenceController.smali      | 167 +++++++
  .../PIFVersionPreferenceController.smali      | 226 ++++++++++
- .../ROMVersionPreferenceController.smali      | 238 +++++++++++
- ...SecureScreenshotPreferenceController.smali | 183 +++++++++
- 23 files changed, 2157 insertions(+)
+ .../ROMVersionPreferenceController.smali      | 238 ++++++++++
+ ...SecureScreenshotPreferenceController.smali | 183 ++++++++
+ 23 files changed, 2177 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -758,10 +758,10 @@ index 00000000..07ba1d77
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..b1afab03
+index 00000000..42a95bdc
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
-@@ -0,0 +1,388 @@
+@@ -0,0 +1,408 @@
 +.class public Lio/mesalabs/unica/pif/PIFUtils;
 +.super Ljava/lang/Object;
 +.source "PIFUtils.java"
@@ -981,6 +981,26 @@ index 00000000..b1afab03
 +
 +    invoke-static {v1, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
 +
++    const-string v0, "persist.sys.pif.product"
++
++    const-string v1, "PRODUCT"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.device"
++
++    const-string v1, "DEVICE"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
 +    const-string v0, "persist.sys.pif.manufacturer"
 +
 +    const-string v1, "MANUFACTURER"
@@ -1033,7 +1053,7 @@ index 00000000..b1afab03
 +
 +    const-string v0, "persist.sys.pif.first_api_level"
 +
-+    const-string v1, "FIRST_API_LEVEL"
++    const-string v1, "DEVICE_INITIAL_SDK_INT"
 +
 +    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
 +
