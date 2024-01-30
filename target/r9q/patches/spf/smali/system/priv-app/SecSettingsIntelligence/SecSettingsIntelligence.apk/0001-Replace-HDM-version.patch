@@ -1,6 +1,6 @@
-From 16815bc93dd0cfc06672532cd25a452c99455700 Mon Sep 17 00:00:00 2001
+From 69a812a30c21fae176a1a0c8b4cd6bf0aefaecaf Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Fri, 8 Dec 2023 13:52:14 +0100
+Date: Tue, 30 Jan 2024 23:40:47 +0100
 Subject: [PATCH] Replace HDM version
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Replace HDM version
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/smali/com/samsung/android/knox/hdm/HdmManager.smali b/smali/com/samsung/android/knox/hdm/HdmManager.smali
-index d72e866..0ff6300 100644
+index d72e866..b34c54f 100644
 --- a/smali/com/samsung/android/knox/hdm/HdmManager.smali
 +++ b/smali/com/samsung/android/knox/hdm/HdmManager.smali
 @@ -75,7 +75,7 @@
@@ -25,10 +25,10 @@ index d72e866..0ff6300 100644
      invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    const-string v1, "115"
-+    const-string v1, "5"
++    const-string v1, "1D"
  
      invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -- 
-2.43.0
+2.34.1
 

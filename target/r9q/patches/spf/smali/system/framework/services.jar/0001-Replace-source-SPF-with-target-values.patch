@@ -1,15 +1,29 @@
-From d0d30f44d46cdb5043d7177a81d9b56d8ea2acee Mon Sep 17 00:00:00 2001
+From 726b09e140f2b62925a48584f9452af077575005 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Fri, 15 Dec 2023 12:36:06 +0100
+Date: Tue, 30 Jan 2024 23:27:17 +0100
 Subject: [PATCH] Replace source SPF with target values
 
 ---
+ smali/com/android/server/SystemConfig.smali                   | 2 +-
  .../biometrics/sensors/fingerprint/FingerprintUtils.smali     | 2 +-
  .../android/hardware/display/SemMdnieManagerService.smali     | 4 ++--
  .../android/server/enterprise/hdm/HdmVendorController.smali   | 2 +-
- .../com/android/server/power/PowerManagerUtil.smali           | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ .../com/android/server/power/PowerManagerUtil.smali           | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/smali/com/android/server/SystemConfig.smali b/smali/com/android/server/SystemConfig.smali
+index 33c41859..ab40ab10 100644
+--- a/smali/com/android/server/SystemConfig.smali
++++ b/smali/com/android/server/SystemConfig.smali
+@@ -1060,7 +1060,7 @@
+ 
+     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    const-string v4, "JCOP6.3U"
++    const-string v4, "JCOP5.3T"
+ 
+     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
 diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
 index 484cd1a5..4fa051f2 100644
 --- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
@@ -24,7 +38,7 @@ index 484cd1a5..4fa051f2 100644
      const-string v1, ","
  
 diff --git a/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-index ed39a90f..b00eb0fd 100644
+index ed39a90f..48486a2b 100644
 --- a/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 +++ b/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 @@ -703,7 +703,7 @@
@@ -32,7 +46,7 @@ index ed39a90f..b00eb0fd 100644
      iput-object v12, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mLock:Ljava/lang/Object;
  
 -    const-string v12, "65303"
-+    const-string v12, "37905"
++    const-string v12, "61457"
  
      invoke-static {v12}, Ljava/lang/Integer;->valueOf(Ljava/lang/String;)Ljava/lang/Integer;
  
@@ -59,18 +73,9 @@ index 8f57af8e..2b5d17ad 100644
      invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
 diff --git a/smali_classes3/com/android/server/power/PowerManagerUtil.smali b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
-index f1163443..1b786c5c 100644
+index f1163443..0e6dbddf 100644
 --- a/smali_classes3/com/android/server/power/PowerManagerUtil.smali
 +++ b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
-@@ -327,7 +327,7 @@
-     :goto_7
-     sput-boolean v11, Lcom/android/server/power/PowerManagerUtil;->EUREKA_PROJECT:Z
- 
--    const-string v12, "5"
-+    const-string v12, "3"
- 
-     invoke-static {v12}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
- 
 @@ -989,7 +989,7 @@
      :goto_19
      sput-boolean v0, Lcom/android/server/power/PowerManagerUtil;->SEC_FEATURE_HOMEHUB:Z
@@ -81,5 +86,5 @@ index f1163443..1b786c5c 100644
      invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
 -- 
-2.43.0
+2.34.1
 

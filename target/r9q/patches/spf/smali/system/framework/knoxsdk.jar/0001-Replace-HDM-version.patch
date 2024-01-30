@@ -1,6 +1,6 @@
-From 14cff293ef4d1cab8a9389730af45fd9bda90553 Mon Sep 17 00:00:00 2001
+From c6b861866e8b4fff9715a8e93b8a96163fc1bc9d Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Fri, 8 Dec 2023 14:04:40 +0100
+Date: Tue, 30 Jan 2024 23:16:23 +0100
 Subject: [PATCH] Replace HDM version
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Replace HDM version
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/smali/com/samsung/android/knox/hdm/HdmManager.smali b/smali/com/samsung/android/knox/hdm/HdmManager.smali
-index 5a15683..31dfd77 100644
+index 5a15683..7f80ca5 100644
 --- a/smali/com/samsung/android/knox/hdm/HdmManager.smali
 +++ b/smali/com/samsung/android/knox/hdm/HdmManager.smali
 @@ -43,7 +43,7 @@
@@ -16,10 +16,10 @@ index 5a15683..31dfd77 100644
      invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
 -    const-string v0, "3.0 - 115"
-+    const-string v0, "2.0 - 5"
++    const-string v0, "2.0 - 1D"
  
      return-object v0
  .end method
 -- 
-2.43.0
+2.34.1
 
