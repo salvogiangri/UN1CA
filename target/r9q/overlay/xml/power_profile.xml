@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<device name="Android">
+    <item name="ambient.on.display0">0.1</item>
+    <item name="screen.on.display0">0.1</item>
+    <item name="screen.full.display0">0.1</item>
+    <item name="bluetooth.active">0.1</item>
+    <item name="bluetooth.on">0.1</item>
+    <item name="wifi.on">0.1</item>
+    <item name="wifi.active">0.1</item>
+    <item name="wifi.scan">0.1</item>
+    <item name="audio">0.1</item>
+    <item name="video">0.1</item>
+    <item name="camera.flashlight">0.1</item>
+    <item name="camera.avg">0.1</item>
+    <item name="gps.on">0.1</item>
+    <item name="radio.active">0.1</item>
+    <item name="radio.scanning">0.1</item>
+    <array name="radio.on">
+        <value>0.2</value>
+        <value>0.1</value>
+    </array>
+    <array name="cpu.active">
+        <value>0.1</value>
+    </array>
+    <array name="cpu.clusters.cores">
+        <value>1</value>
+    </array>
+    <array name="cpu.speeds.cluster0">
+        <value>400000</value>
+    </array>
+    <array name="cpu.active.cluster0">
+        <value>0.1</value>
+    </array>
+    <item name="cpu.idle">0.1</item>
+    <array name="memory.bandwidths">
+        <value>22.7</value>
+    </array>
+    <item name="battery.capacity">1000</item>
+    <item name="wifi.controller.idle">0</item>
+    <item name="wifi.controller.rx">0</item>
+    <item name="wifi.controller.tx">0</item>
+    <array name="wifi.controller.tx_levels" />
+    <item name="wifi.controller.voltage">0</item>
+    <array name="wifi.batchedscan">
+        <value>.0002</value>
+        <value>.002</value>
+        <value>.02</value>
+        <value>.2</value>
+        <value>2</value>
+    </array>
+    <modem>
+        <sleep>0</sleep>
+        <idle>0</idle>
+        <active rat="DEFAULT">
+            <receive>0</receive>
+            <transmit level="0">0</transmit>
+            <transmit level="1">0</transmit>
+            <transmit level="2">0</transmit>
+            <transmit level="3">0</transmit>
+            <transmit level="4">0</transmit>
+        </active>
+    </modem>
+    <item name="modem.controller.voltage">0</item>
+    <array name="gps.signalqualitybased">
+        <value>0</value>
+        <value>0</value>
+    </array>
+    <item name="gps.voltage">0</item>
+</device>
