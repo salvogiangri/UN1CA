@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,23 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Device configuration file for Galaxy S21 FE (r9q)
-TARGET_NAME="Galaxy S21 FE"
+# Device configuration file for Galaxy S21 FE 5G (Qualcomm) (r9q)
+TARGET_NAME="Galaxy S21 FE 5G (Qualcomm)"
 TARGET_CODENAME="r9q"
-TARGET_FIRMWARE="SM-G990B/EUX/353943674230622"
+TARGET_FIRMWARE="SM-G990B/EUX/353718681234563"
 TARGET_EXTRA_FIRMWARES=()
 TARGET_API_LEVEL=34
 TARGET_VNDK_VERSION=30
 TARGET_SINGLE_SYSTEM_IMAGE="qssi"
 TARGET_OS_FILE_SYSTEM="ext4"
-TARGET_INSTALL_METHOD="zip"
-TARGET_KEEP_ORIGINAL_SIGN=true
 TARGET_SUPER_PARTITION_SIZE=11744051200
-TARGET_SUPER_GROUP_SIZE=11739856896 # qti_dynamic_partitions
+TARGET_SUPER_GROUP_SIZE=11739856896
 TARGET_HAS_SYSTEM_EXT=false
 
 # SEC Product Feature
-TARGET_HAS_KNOX_DUALDAR=false
+TARGET_HAS_KNOX_DUALDAR=true
 TARGET_HAS_KNOX_SDP=true
 TARGET_HAS_HW_MDNIE=false
 TARGET_HAS_MASS_CAMERA_APP=true
