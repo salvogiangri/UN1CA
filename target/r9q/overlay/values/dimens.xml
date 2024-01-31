@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="dimen" name="config_screenBrightnessDimFloat">0.047058824</item>
+    <item type="dimen" name="config_screenBrightnessSettingDefaultFloat">0.5019608</item>
+    <item type="dimen" name="config_screenBrightnessSettingMaximumFloat">1.0</item>
+    <item type="dimen" name="config_screenBrightnessSettingMinimumFloat">0.0</item>
+    <dimen name="cover_clear_view_bottom">780.0dip</dimen>
+    <dimen name="cover_clear_view_left">262.0dip</dimen>
+    <dimen name="cover_clear_view_right">360.0dip</dimen>
+    <dimen name="cover_clear_view_top">0.0dip</dimen>
+    <dimen name="physical_power_button_center_screen_location_y">807.0px</dimen>
+    <dimen name="rounded_corner_radius">121.0px</dimen>
+    <dimen name="status_bar_camera_side_padding">30.0px</dimen>
+    <dimen name="status_bar_camera_top_margin">28.0px</dimen>
+    <dimen name="status_bar_height_portrait">6.13797mm</dimen>
+    <dimen name="status_bar_indicator_corner_padding">62.0px</dimen>
+</resources>
