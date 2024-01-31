@@ -30,14 +30,6 @@ overlay/SoftapOverlayOWE
 overlay/SoftapOverlayQC
 "
 
-# HDCP
-SYSTEM_DEBLOAT+="
-system/bin/dhkprov
-system/bin/qchdcpkprov
-system/etc/init/dhkprov.rc
-system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
-"
-
 # GameDriver
 SYSTEM_DEBLOAT+="
 system/priv-app/GameDriver-SM8550
