@@ -30,7 +30,6 @@ parent: Supported devices
 | Shipped OS                     | Android 11 (One UI 3.1)                                                          |
 | Storage                        | 128GB / 256GB (UFS 2.1)                                                          |
 | SIM                            | Single SIM (Nano-SIM) or Dual SIM (Nano-SIM, dual stand-by)                      |
-| MicroSD                        | Up to 1TB                                                                        |
 | Battery                        | 4500mAh Li-Ion (non-removable), 25W fast charge                                  |
 | Dimensions                     | 155.7 x 74.5 x 7.9 mm (6.13 x 2.93 x 0.31 in)                                    |
 | Display                        | 6.4", 1080 x 2340 pixels, 19.5:9 ratio, Super AMOLED, 120Hz (~403 ppi density)   |
