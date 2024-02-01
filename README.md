@@ -39,6 +39,7 @@ It also includes additional features and tweaks to ensure the best possible expe
 - Camera privacy toggle support
 - Slight debloat
 - Enabled ADB at boot
+- Play Integrity Fix included **(root required)**
 - [BluetoothLibraryPatcher](https://github.com/3arthur6/BluetoothLibraryPatcher) included
 - [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) implemented in system frameworks
 - China Device Care app included
