@@ -27,7 +27,7 @@ parent: Supported devices
 | CPU                            | Octa-core (1x2.84 GHz Cortex-X1 & 3x2.42 GHz Cortex-A78 & 4x1.80 GHz Cortex-A55) |
 | GPU                            | Qualcomm Adreno 660                                                              |
 | Memory                         | 6GB / 8GB RAM (LPDDR4X)                                                          |
-| Shipped OS                     | Android 11 (One UI 3.1)                                                          |
+| Shipped OS                     | Android 12 (One UI 4.0)                                                          |
 | Storage                        | 128GB / 256GB (UFS 2.1)                                                          |
 | SIM                            | Single SIM (Nano-SIM) or Dual SIM (Nano-SIM, dual stand-by)                      |
 | Battery                        | 4500mAh Li-Ion (non-removable), 25W fast charge                                  |
