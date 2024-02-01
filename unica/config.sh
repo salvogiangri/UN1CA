@@ -16,7 +16,7 @@
 #
 
 # UN1CA configuration file
-ROM_VERSION="1.1.0"
+ROM_VERSION="1.1.5"
 ROM_VERSION+="-$(git rev-parse --short HEAD)"
 ROM_CODENAME="Diamond"
 
