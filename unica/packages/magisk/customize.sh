@@ -1,7 +1,7 @@
 SKIPUNZIP=1
 
 # [
-MAGISK_MANAGER_APK="https://github.com/topjohnwu/magisk-files/raw/2b3030fba9f24a6eeb148527d2d8cce7b294609e/app-release.apk"
+MAGISK_MANAGER_APK="https://github.com/topjohnwu/magisk-files/raw/020c7134ff62000744480d03a8be5d8fbfdd226b/app-release.apk"
 
 PATCH_KERNEL()
 {
