@@ -61,10 +61,10 @@ CODENAME="dm1qxxx"
 echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo    "    exec u:r:magisk:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
-echo -n "    exec u:object_r:su:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+echo -n "    exec u:r:su:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then
     echo -e "\n    exec u:r:magisk:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
-    echo -n "    exec u:object_r:su:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+    echo -n "    exec u:r:su:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 fi
 
 echo "ro.unica.version=$ROM_VERSION" >> "$WORK_DIR/system/system/build.prop"
