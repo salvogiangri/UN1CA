@@ -58,6 +58,9 @@ GEN_CONFIG_FILE()
         echo "SOURCE_VNDK_VERSION=\"${SOURCE_VNDK_VERSION:?}\""
         echo "TARGET_NAME=\"${TARGET_NAME:?}\""
         echo "TARGET_CODENAME=\"${TARGET_CODENAME:?}\""
+        if [ "${#TARGET_ASSERT_MODEL[@]}" -ge 1 ]; then
+            echo "TARGET_ASSERT_MODEL=\"$( IFS=:; printf '%s' "${TARGET_ASSERT_MODEL[*]}" )\""
+        fi
         echo "TARGET_FIRMWARE=\"${TARGET_FIRMWARE:?}\""
         if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
             echo "TARGET_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${TARGET_EXTRA_FIRMWARES[*]}" )\""

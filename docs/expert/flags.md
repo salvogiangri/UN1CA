@@ -73,6 +73,11 @@ Defines the target device market name.
 {: .pb-2 }
 Defines the target device codename, this must match the `ro.product.vendor.device` value in `/vendor/build.prop`.
 
+### - **TARGET_ASSERT_MODEL** (array, optional)
+{: .pb-2 }
+When defined, the flashable zip will check for the exact device model number via `ro.boot.em.model` instead of using `ro.product.device`.
+This flag is passed as a string array in bash syntax (eg. `TARGET_ASSERT_MODEL=("SM-A528B" "SM-A528N")`). Only applies when `TARGET_INSTALL_METHOD` is unset or set to `zip`.
+
 ### - **TARGET_FIRMWARE** (string, required)
 {: .pb-2 }
 Defines the target device firmware to use with the format of **"Model number/CSC/IMEI"**. IMEI number is necessary to fetch the firmware from FUS.

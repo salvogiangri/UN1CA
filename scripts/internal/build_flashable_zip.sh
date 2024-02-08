@@ -248,11 +248,24 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$SCRIPT_FILE" ] && rm -f "$SCRIPT_FILE"
     touch "$SCRIPT_FILE"
     {
-        echo -n 'getprop("ro.product.device") == "'
-        echo -n "$TARGET_CODENAME"
-        echo -n '" || abort("E3004: This package is for \"'
-        echo -n "$TARGET_CODENAME"
-        echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
+        if [ -n "$TARGET_ASSERT_MODEL" ]; then
+            IFS=':' read -a TARGET_ASSERT_MODEL <<< "$TARGET_ASSERT_MODEL"
+            for i in "${TARGET_ASSERT_MODEL[@]}"
+            do
+                echo -n 'getprop("ro.boot.em.model") == "'
+                echo -n "$i"
+                echo -n '" || '
+            done
+            echo -n 'abort("E3004: This package is for \"'
+            echo -n "$TARGET_CODENAME"
+            echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
+        else
+            echo -n 'getprop("ro.product.device") == "'
+            echo -n "$TARGET_CODENAME"
+            echo -n '" || abort("E3004: This package is for \"'
+            echo -n "$TARGET_CODENAME"
+            echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
+        fi
 
         PRINT_HEADER
 
