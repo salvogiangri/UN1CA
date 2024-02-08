@@ -22,6 +22,7 @@ Currently, UN1CA uses Galaxy S23 (`SM-S911B` with `INS` CSC) as base for Qualcom
 {: .pb-2 }
 When defined, this set of extra devices firmwares will be downloaded/extracted when running `download_fw`/`extract_fw` along with the one set in `SOURCE_FIRMWARE`.
 This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC/IMEI"** (eg. `SOURCE_EXTRA_FIRMWARES=("SM-A528B/BTU/352599501234566" "SM-A528N/KOO/354049881234560")`).
+Due to bash limitations however, this array is then stored as a string with an IFS (input field separator) `:`, so make sure to convert it back as an array before getting its values (eg. `IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"`).
 
 ### - **SOURCE_API_LEVEL** (int, required)
 {: .pb-2 }
@@ -80,6 +81,7 @@ Defines the target device firmware to use with the format of **"Model number/CSC
 {: .pb-2 }
 When defined, this set of extra devices firmwares will be downloaded/extracted when running `download_fw`/`extract_fw` along with the one set in `TARGET_FIRMWARE`.
 This flag is passed as a string array in bash syntax, with each string element having the format of **"Model number/CSC/IMEI"** (eg. `TARGET_EXTRA_FIRMWARES=("SM-A528B/BTU/352599501234566" "SM-A528N/KOO/354049881234560")`).
+Due to bash limitations however, this array is then stored as a string with an IFS (input field separator) `:`, so make sure to convert it back as an array before getting its values (eg. `IFS=':' read -a TARGET_EXTRA_FIRMWARES <<< "$TARGET_EXTRA_FIRMWARES"`).
 
 ### - **TARGET_API_LEVEL** (int, required)
 {: .pb-2 }

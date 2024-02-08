@@ -52,12 +52,7 @@ GEN_CONFIG_FILE()
         echo "ROM_CODENAME=\"${ROM_CODENAME:?}\""
         echo "SOURCE_FIRMWARE=\"${SOURCE_FIRMWARE:?}\""
         if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
-            echo -n "SOURCE_EXTRA_FIRMWARES=( "
-            for i in "${SOURCE_EXTRA_FIRMWARES[@]}"
-            do
-                echo -n "\"$i\" "
-            done
-            echo ")"
+            echo "SOURCE_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${SOURCE_EXTRA_FIRMWARES[*]}" )\""
         fi
         echo "SOURCE_API_LEVEL=\"${SOURCE_API_LEVEL:?}\""
         echo "SOURCE_VNDK_VERSION=\"${SOURCE_VNDK_VERSION:?}\""
@@ -65,12 +60,7 @@ GEN_CONFIG_FILE()
         echo "TARGET_CODENAME=\"${TARGET_CODENAME:?}\""
         echo "TARGET_FIRMWARE=\"${TARGET_FIRMWARE:?}\""
         if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
-            echo -n "TARGET_EXTRA_FIRMWARES=( "
-            for i in "${TARGET_EXTRA_FIRMWARES[@]}"
-            do
-                echo -n "\"$i\" "
-            done
-            echo ")"
+            echo "TARGET_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${TARGET_EXTRA_FIRMWARES[*]}" )\""
         fi
         echo "TARGET_API_LEVEL=\"${TARGET_API_LEVEL:?}\""
         echo "TARGET_VNDK_VERSION=\"${TARGET_VNDK_VERSION:?}\""
