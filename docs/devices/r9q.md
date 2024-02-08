@@ -11,7 +11,7 @@ parent: Supported devices
 # Galaxy S21 FE 5G (Qualcomm)
 {: .pb-4 }
 - Maintainer: [@glikched](https://github.com/glikched)
-- Latest version: ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=r9q*&style=flat-square&color=89bcff)
+- Latest version: ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=r9q-*&style=flat-square&color=89bcff) ![img](https://img.shields.io/github/v/release/BlackMesa123/UN1CA?filter=r9q2*&style=flat-square&color=89bcff)
 - Install method: [Custom recovery]({% link guide/recovery.md %})
 - Requirements: **Android 14 bootloader**
 
@@ -46,5 +46,8 @@ parent: Supported devices
 ```bash
 git clone --recurse-submodules https://github.com/BlackMesa123/UN1CA.git && cd UN1CA
 . ./buildenv.sh r9q
+run_cmd make_rom
+run_cmd cleanup apktool work_dir
+. ./buildenv.sh r9q2
 run_cmd make_rom
 ```
