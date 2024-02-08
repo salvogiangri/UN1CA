@@ -53,6 +53,8 @@ GEN_CONFIG_FILE()
         echo "SOURCE_FIRMWARE=\"${SOURCE_FIRMWARE:?}\""
         if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
             echo "SOURCE_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${SOURCE_EXTRA_FIRMWARES[*]}" )\""
+        else
+            echo "SOURCE_EXTRA_FIRMWARES=\"\""
         fi
         echo "SOURCE_API_LEVEL=\"${SOURCE_API_LEVEL:?}\""
         echo "SOURCE_VNDK_VERSION=\"${SOURCE_VNDK_VERSION:?}\""
@@ -60,10 +62,14 @@ GEN_CONFIG_FILE()
         echo "TARGET_CODENAME=\"${TARGET_CODENAME:?}\""
         if [ "${#TARGET_ASSERT_MODEL[@]}" -ge 1 ]; then
             echo "TARGET_ASSERT_MODEL=\"$( IFS=:; printf '%s' "${TARGET_ASSERT_MODEL[*]}" )\""
+        else
+            echo "TARGET_ASSERT_MODEL=\"\""
         fi
         echo "TARGET_FIRMWARE=\"${TARGET_FIRMWARE:?}\""
         if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
             echo "TARGET_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${TARGET_EXTRA_FIRMWARES[*]}" )\""
+        else
+            echo "TARGET_EXTRA_FIRMWARES=\"\""
         fi
         echo "TARGET_API_LEVEL=\"${TARGET_API_LEVEL:?}\""
         echo "TARGET_VNDK_VERSION=\"${TARGET_VNDK_VERSION:?}\""
