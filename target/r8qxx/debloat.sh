@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy S21 FE (r9q)
+# Debloat list for Galaxy S20 FE (Qualcomm) (r8qxx)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
@@ -23,31 +23,16 @@
 # Overlays
 SYSTEM_DEBLOAT+="
 system/app/WifiRROverlayAppQC
-system/app/WifiRROverlayAppWifiLock
 "
 PRODUCT_DEBLOAT+="
 overlay/SoftapOverlay6GHz
 overlay/SoftapOverlayOWE
-"
-
-# HDCP
-SYSTEM_DEBLOAT+="
-system/bin/dhkprov
-system/bin/qchdcpkprov
-system/etc/init/dhkprov.rc
-system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
+overlay/SoftapOverlayQC
 "
 
 # GameDriver
 SYSTEM_DEBLOAT+="
 system/priv-app/GameDriver-SM8550
-"
-
-# Camera SDK
-SYSTEM_DEBLOAT+="
-system/etc/permissions/cameraservice.xml
-system/framework/scamera_sep.jar
-system/priv-app/SCameraSDKService
 "
 
 # Mocca
@@ -57,32 +42,11 @@ system/app/MoccaMobile
 
 # eSE
 SYSTEM_DEBLOAT+="
-system/app/ESEServiceAgent
 system/bin/esecos_daemon
-system/bin/sem_daemon
 system/etc/init/esecos.rc
-system/etc/init/sem.rc
-system/etc/permissions/privapp-permissions-com.sec.factoryapp.xml
-system/lib/libsec_sem.so
-system/lib/libsec_semHal.so
-system/lib/libsec_semRil.so
-system/lib/libsec_semTlc.so
-system/lib/libspictrl.so
-system/lib/vendor.samsung.hardware.security.sem@1.0.so
-system/lib64/libsec_sem.so
-system/lib64/libsec_semHal.so
-system/lib64/libsec_semRil.so
-system/lib64/libsec_semTlc.so
-system/lib64/libspictrl.so
-system/lib64/vendor.samsung.hardware.security.sem@1.0.so
-system/priv-app/SEMFactoryApp
 "
 
 # system_ext clean-up
-SYSTEM_DEBLOAT+="
-system/etc/permissions/org.carconnectivity.android.digitalkey.rangingintent.xml
-system/etc/permissions/org.carconnectivity.android.digitalkey.secureelement.xml
-"
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
@@ -90,22 +54,12 @@ etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
 etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
-framework/org.carconnectivity.android.digitalkey.rangingintent.jar
-framework/org.carconnectivity.android.digitalkey.secureelement.jar
 framework/oat/arm/com.qti.location.sdk.art
 framework/oat/arm/com.qti.location.sdk.odex
 framework/oat/arm/com.qti.location.sdk.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.vdex
 framework/oat/arm64/com.qti.location.sdk.art
 framework/oat/arm64/com.qti.location.sdk.odex
 framework/oat/arm64/com.qti.location.sdk.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.vdex
 lib/libqcc.so
 lib/libqcc_file_agent_sys.so
 lib/libqccdme.so
@@ -126,15 +80,4 @@ lib64/vendor.qti.hardware.qccsyshal@1.2.so
 lib64/vendor.qti.hardware.qccvndhal@1.0.so
 lib64/vendor.qti.qccvndhal_aidl-V1-ndk.so
 priv-app/com.qualcomm.location
-"
-
-# Qualcomm IPA firmware blobs
-VENDOR_DEBLOAT+="
-firmware/ipa_fws.b00
-firmware/ipa_fws.b01
-firmware/ipa_fws.b02
-firmware/ipa_fws.b03
-firmware/ipa_fws.b04
-firmware/ipa_fws.elf
-firmware/ipa_fws.mdt
 "
