@@ -123,7 +123,7 @@ for i in $TARGET_NFC_CHIPNAMES; do
 done
 
 if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
-    if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
+    if grep -w "libstatslog_nfc_nxp" "$WORK_DIR/system/system/lib64/libnfc"*; then
         continue
     else
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so"
@@ -133,7 +133,7 @@ elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so
 fi
 
 if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]; then
-    if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc.so" ]; then
+    if grep -w "libstatslog_nfc" "$WORK_DIR/system/system/lib64/libnfc"*; then
         continue
     else
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc.so"
@@ -143,7 +143,7 @@ elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc.so" ];
 fi
 
 if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so" ]; then
-    if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_st.so" ]; then
+    if grep -w "libstatslog_nfc_st" "$WORK_DIR/system/system/lib64/libnfc"*; then
         continue
     else
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so"
