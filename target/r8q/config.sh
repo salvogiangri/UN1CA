@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Device configuration file for Galaxy S20 FE (r8q)
-TARGET_NAME="Galaxy S20 FE"
+# Device configuration file for Galaxy S20 FE (Qualcomm) (r8q)
+TARGET_NAME="Galaxy S20 FE (Qualcomm)"
 TARGET_CODENAME="r8q"
 TARGET_FIRMWARE="SM-G780G/BTU/358759461234568"
 TARGET_EXTRA_FIRMWARES=()
@@ -29,7 +29,7 @@ TARGET_SUPER_GROUP_SIZE=10288627712
 TARGET_HAS_SYSTEM_EXT=false
 
 # SEC Product Feature
-TARGET_HAS_KNOX_DUALDAR=true
+TARGET_HAS_KNOX_DUALDAR=false # TODO
 TARGET_HAS_KNOX_SDP=true
 TARGET_HAS_HW_MDNIE=false
 TARGET_HAS_MASS_CAMERA_APP=true

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 BlackMesa123
+# Copyright (C) 2024 BlackMesa123
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# SEC Floating Feature configuration file for Galaxy S20 FE (r8q)
+# SEC Floating Feature configuration file for Galaxy S20 FE (Qualcomm) (r8q)
 
 # Disable unsupported features
 SEC_FLOATING_FEATURE_ACCESSIBILITY_SUPPORT_HEARING_AIDS=
