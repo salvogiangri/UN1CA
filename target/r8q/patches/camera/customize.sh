@@ -95,7 +95,7 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
-    cat "$SRC_DIR/target/r8qxx/patches/camera/ueventd" >> "$WORK_DIR/vendor/ueventd.rc"
+    cat "$SRC_DIR/target/r8q/patches/camera/ueventd" >> "$WORK_DIR/vendor/ueventd.rc"
 fi
 
 BLOBS_LIST="

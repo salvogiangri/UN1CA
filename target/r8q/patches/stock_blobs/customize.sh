@@ -121,7 +121,7 @@ ADD_TO_WORK_DIR "system" "system/lib64/libdk_native_keymaster.so" 0 0 644 "u:obj
 
 echo "Add erofs disabled apex"
 rm "$WORK_DIR/system/system/apex/com.samsung.android.shell.apex"
-cp -a "$SRC_DIR/target/r8qxx/patches/stock_blobs/system/apex/com.samsung.android.shell.apex" "$WORK_DIR/system/system/apex"
+cp -a "$SRC_DIR/target/r8q/patches/stock_blobs/system/apex/com.samsung.android.shell.apex" "$WORK_DIR/system/system/apex"
 
 echo "Add stock GameDriver"
 ADD_TO_WORK_DIR "system" "system/priv-app/GameDriver-SM8250/GameDriver-SM8250.apk" 0 0 644 "u:object_r:system_file:s0"
