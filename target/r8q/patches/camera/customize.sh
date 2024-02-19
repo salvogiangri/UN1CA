@@ -161,5 +161,11 @@ do
     ADD_TO_WORK_DIR "system" "$blob" 0 0 644 "u:object_r:system_lib_file:s0"
 done
 
+echo "Add camera configs"
+rm -f "$WORK_DIR/system/system/cameradata/camera-feature.xml"
+rm -f "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+cp "$SRC_DIR/target/r8q/patches/camera/system/cameradata/camera-feature.xml" "$WORK_DIR/system/system/cameradata"
+cp "$SRC_DIR/target/r8q/patches/camera/system/etc/public.libraries-camera.samsung.txt" "$WORK_DIR/system/system/etc"
+
 echo "Fix MIDAS model detection"
 sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
