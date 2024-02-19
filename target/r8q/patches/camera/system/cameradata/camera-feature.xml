@@ -29,13 +29,13 @@
 
     <!-- Capture resolution - BACK SECOND -->
     <local name="BACK_CAMERA_SECOND_PICTURE_RESOLUTION_4BY3" value="4032x3024"/>
-    <local name="BACK_CAMERA_SECOND_PICTURE_RESOLUTION_16BY9" value="4000x2252"/>
+    <local name="BACK_CAMERA_SECOND_PICTURE_RESOLUTION_16BY9" value="4000x2256"/>
     <local name="BACK_CAMERA_SECOND_PICTURE_RESOLUTION_1BY1" value="2992x2992"/>
     <local name="BACK_CAMERA_SECOND_PICTURE_RESOLUTION_FULL_RATIO" value="4000x1848"/>
 
     <!-- Capture resolution - BACK ULTRA_WIDE -->
     <local name="BACK_WIDE_CAMERA_RESOLUTION_4BY3_LARGE" value="4000x3000"/>
-    <local name="BACK_WIDE_CAMERA_RESOLUTION_16BY9_LARGE" value="4000x2252"/>
+    <local name="BACK_WIDE_CAMERA_RESOLUTION_16BY9_LARGE" value="4000x2256"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_21BY9_LARGE" value="4000x1716"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_1BY1_LARGE" value="2992x2992"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_FULL_RATIO" value="4000x1848"/>
@@ -91,6 +91,7 @@
     <local name="FRONT_CAMERA_RECORDING_DEFAULT_RESOLUTION" value="1920x1080"/>
     <local name="FRONT_CAMERA_RECORDING_MIN_RESOLUTION" value="1280x720"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X2160" value="true" hdr="true" hdr10="false" snapshot-support="true" snapshot-size="3648x2052" vdis="false" super-vdis="false" effect="false" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="video"/>
+    <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X2160_60FPS" value="true" hdr="true" hdr10="false" snapshot-support="true" snapshot-size="3648x2052" vdis="false" super-vdis="false" effect="false" object-tracking="false" external-storage-support="true" touch-af="false" supported-mode="video"/>
 
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_2400X1080" value="true" hdr="true" hdr10="false" snapshot-support="true" snapshot-size="3648x1640" vdis="true" super-vdis="false" effect="true" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_1920X1440" value="false" hdr="true" hdr10="false" snapshot-support="true" snapshot-size="3648x2736" vdis="true" super-vdis="true" effect="true" object-tracking="true" external-storage-support="true" touch-af="true" supported-mode="video"/>
