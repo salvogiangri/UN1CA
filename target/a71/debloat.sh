@@ -60,10 +60,12 @@ SYSTEM_DEBLOAT+="
 system/etc/default-permissions/default-permissions-com.sec.android.mimage.avatarstickers.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.app.earphonetypec.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.aremojieditor.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.hdmapp.xml
 system/etc/permissions/privapp-permissions-com.sec.android.mimage.avatarstickers.xml
 system/priv-app/AREmojiEditor
 system/priv-app/AvatarEmojiSticker
 system/priv-app/EarphoneTypeC
+system/priv-app/HdmApk
 system/priv-app/IntelligentDynamicFpsService
 system/priv-app/SohService
 "

@@ -10,3 +10,8 @@ echo "Disable OEM unlock toggle"
 sed -i \
     "$(sed -n "/ro.oem_unlock_supported/=" "$WORK_DIR/vendor/default.prop") cro.oem_unlock_supported=0" \
     "$WORK_DIR/vendor/default.prop"
+
+echo "Disable display refresh rate override"
+sed -i \
+    "/max_frame_buffer_acquired_buffers/a ro.surface_flinger.enable_frame_rate_override=false" \
+    "$WORK_DIR/vendor/default.prop"
