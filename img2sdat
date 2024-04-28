@@ -31,7 +31,7 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=4):
     b = blockimgdiff.BlockImageDiff(image, None, VERSION)
     b.Compute(OUTDIR)
 
-    print('Done! Output files: %s' % os.path.dirname(OUTDIR))
+    print('Done! Output directory: %s' % os.path.dirname(OUTDIR))
     return
 
 def IsSparseImage(INPUT_IMAGE):
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Visit xda thread for more information.')
-    parser.add_argument('image', help='input system image')
+    parser.add_argument('image', help='input partition image')
     parser.add_argument('-o', '--outdir', help='output directory (current directory by default)')
     parser.add_argument('-v', '--version', help='transfer list version number, will be asked by default - more info on xda thread)')
 
