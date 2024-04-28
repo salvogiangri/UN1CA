@@ -23,7 +23,7 @@ import fnmatch
 import getopt
 import getpass
 import gzip
-import imp
+import importlib
 import json
 import logging
 import logging.config
@@ -3156,15 +3156,15 @@ class DeviceSpecificParams(object):
         return
       try:
         if os.path.isdir(path):
-          info = imp.find_module("releasetools", [path])
+          info = importlib.util.find_spec("releasetools", [path])
         else:
           d, f = os.path.split(path)
           b, x = os.path.splitext(f)
           if x == ".py":
             f = b
-          info = imp.find_module(f, [d])
+          info = importlib.util.find_spec(f, [d])
         logger.info("loaded device-specific extensions from %s", path)
-        self.module = imp.load_module("device_specific", *info)
+        self.module = importlib.import_module("device_specific", *info)
       except ImportError:
         logger.info("unable to load device-specific module; assuming none")
 
