@@ -73,7 +73,7 @@ BUILD_APKTOOL()
     cd "$SRC_DIR/external/apktool"
     ./gradlew build shadowJar -q
     cp --preserve=all "scripts/linux/apktool" "$TOOLS_DIR"
-    cp --preserve=all "brut.apktool/apktool-cli/build/libs/apktool-cli-all.jar" "$TOOLS_DIR/apktool.jar"
+    cp --preserve=all "brut.apktool/apktool-cli/build/libs/apktool-cli.jar" "$TOOLS_DIR/apktool.jar"
 
     echo ""
     cd "$PDR"
