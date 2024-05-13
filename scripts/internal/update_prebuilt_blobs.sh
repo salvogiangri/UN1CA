@@ -109,8 +109,8 @@ case "$1" in
         FW="SM-A525F/SER/352938771234569"
         BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/product" -type f \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/product..")"
-        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -printf "\n%p" \
-            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/vendor" -type f -printf "\n%p" \
@@ -121,8 +121,8 @@ case "$1" in
         FW="SM-A528B/BTU/352599501234566"
         BLOBS="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/product" -type f \
             | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs/product..")"
-        BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f -printf "\n%p" \
-            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs.system.")"
         ;;
     "target/m52xq/patches/vendor")
         MODULE="$1"
