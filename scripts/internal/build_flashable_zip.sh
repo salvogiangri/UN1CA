@@ -43,8 +43,8 @@ PRINT_HEADER()
 
     ONEUI_VERSION="$(GET_PROP "ro.build.version.oneui" "$WORK_DIR/system/system/build.prop")"
     MAJOR=$(echo "scale=0; $ONEUI_VERSION / 10000" | bc -l)
-    MINOR=$(echo "$ONEUI_VERSION % 10000 / 100" | bc -l)
-    PATCH=$(echo "$ONEUI_VERSION % 100" | bc -l)
+    MINOR=$(echo "scale=0; $ONEUI_VERSION % 10000 / 100" | bc -l)
+    PATCH=$(echo "scale=0; $ONEUI_VERSION % 100" | bc -l)
     if [[ "$PATCH" != "0" ]]; then
         ONEUI_VERSION="$MAJOR.$MINOR.$PATCH"
     else
