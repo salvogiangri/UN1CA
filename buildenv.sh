@@ -36,7 +36,7 @@ run_cmd()
 {
     local CMD=$1
     local CMDS
-    CMDS="$(ls --ignore "internal" "$SRC_DIR/scripts" | sed "s/.sh//")"
+    CMDS="$(find "scripts" -mindepth 1 -maxdepth 1 -printf '%f\n' | sed "s/.sh//g")"
 
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"
