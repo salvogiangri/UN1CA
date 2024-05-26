@@ -95,7 +95,7 @@ fi
 
 if $TOOLS; then
     echo "- Cleaning dependencies dir..."
-    rm -rf "$TOOLS_DIR"
+    rm -rf "$(dirname "$TOOLS_DIR")"
     {
         cd "$SRC_DIR/external/android-tools" && git clean -f -d -x && cd -
         cd "$SRC_DIR/external/apktool" && git clean -f -d -x && cd -
