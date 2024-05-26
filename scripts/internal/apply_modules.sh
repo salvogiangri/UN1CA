@@ -169,7 +169,7 @@ APPLY_MODULE()
 
     if [ ! -d "$MODPATH" ]; then
         echo "Folder not found: $MODPATH"
-        exit 1
+        return 1
     fi
 
     if [ -d "$MODPATH/$TARGET_SINGLE_SYSTEM_IMAGE" ]; then
@@ -185,9 +185,9 @@ APPLY_MODULE()
 
     if [ ! -f "$MODPATH/module.prop" ]; then
         echo "File not found: $MODPATH/module.prop"
-        exit 1
+        return 1
     elif [ -f "$MODPATH/disable" ]; then
-        exit 0
+        return 0
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
         MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//" | sed "s/, /, @/")"
