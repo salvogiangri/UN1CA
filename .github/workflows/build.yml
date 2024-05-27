@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - 'fourteen'
-    paths-ignore:
-      - 'docs/**'
 
 jobs:
   build:
