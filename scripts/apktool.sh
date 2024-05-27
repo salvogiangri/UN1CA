@@ -103,7 +103,6 @@ DO_DECOMPILE()
 
     echo "Decompiling $OUT_DIR"
     apktool -q d "${API[@]}" -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" "$APK_PATH"
-    sed -i "s/classes.dex/dex/g" "$APKTOOL_DIR$OUT_DIR/apktool.yml"
 
     # Workaround for U framework.jar
     if [[ "$APK_PATH" == *"framework.jar" ]]; then
