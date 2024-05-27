@@ -3,12 +3,11 @@
 
 # Denote all files that are truly binary and should not be modified.
 unica/flashable-zip/updater binary
-unica/packages/fod/*/system/** binary
-unica/packages/knox/*/*/system/** binary
+unica/packages/fod/system/** binary
+unica/packages/knox/*/system/** binary
 unica/packages/vndk/30/** binary
 unica/patches/mods/system/bin/rezetprop binary
 target/a52sxq/patches/wpss/vendor/firmware/** binary
-target/a54x/patches/vendor/vendor/tee/** binary
 target/a71/patches/*/*/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
 target/m52xq/patches/vendor/vendor/** binary

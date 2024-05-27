@@ -90,7 +90,7 @@ GET_SPARSE_IMG_SIZE()
 GENERATE_OP_LIST()
 {
     local OP_LIST_FILE="$TMP_DIR/dynamic_partitions_op_list"
-    local GROUP_NAME="group_basic"
+    local GROUP_NAME="qti_dynamic_partitions"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -99,8 +99,6 @@ GENERATE_OP_LIST()
     local HAS_VENDOR_DLKM=false
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
-
-    [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && GROUP_NAME="qti_dynamic_partitions"
 
     [ -f "$TMP_DIR/system.img" ] && HAS_SYSTEM=true
     [ -f "$TMP_DIR/vendor.img" ] && HAS_VENDOR=true
@@ -158,7 +156,7 @@ GENERATE_OP_LIST()
 GENERATE_LPMAKE_OPT()
 {
     local OPT
-    local GROUP_NAME="group_basic"
+    local GROUP_NAME="qti_dynamic_partitions"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -167,8 +165,6 @@ GENERATE_LPMAKE_OPT()
     local HAS_VENDOR_DLKM=false
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
-
-    [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && GROUP_NAME="qti_dynamic_partitions"
 
     [ -f "$TMP_DIR/system.img" ] && HAS_SYSTEM=true
     [ -f "$TMP_DIR/vendor.img" ] && HAS_VENDOR=true

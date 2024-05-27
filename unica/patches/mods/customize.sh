@@ -56,10 +56,8 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhal.wsm.samsung.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.wsm.service-V1-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxGuard"
 
-CODENAME="dm1qxxx"
-[[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]] && CODENAME="r11sxxx"
-echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
-echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
+echo -e "\n" >> "$WORK_DIR/system/system/etc/init/ssu_dm1qxxx.rc"
+echo    "on property:service.bootanim.exit=1" >> "$WORK_DIR/system/system/etc/init/ssu_dm1qxxx.rc"
 echo    "    exec u:r:magisk:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 echo -n "    exec u:r:su:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green" >> "$WORK_DIR/system/system/etc/init/ssu_$CODENAME.rc"
 if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then

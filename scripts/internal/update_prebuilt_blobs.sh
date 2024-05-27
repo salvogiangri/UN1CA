@@ -39,41 +39,26 @@ case "$1" in
         FW="SM-S9110/CHC/RFCW2198XNF"
         BLOBS="$(find "$SRC_DIR/unica/packages/china/system" -type f | sed "s.$SRC_DIR/unica/packages/china.system.")"
         ;;
-    "unica/packages/fod/essi")
-        MODULE="$1"
-        FW="SM-S901B/BTE/350330051234562"
-        BLOBS="$(find "$SRC_DIR/unica/packages/fod/essi/system" -type f | sed "s.$SRC_DIR/unica/packages/fod/essi.system.")"
-        ;;
-    "unica/packages/fod/qssi")
+    "unica/packages/fod")
         MODULE="$1"
         FW="SM-X716B/EUX/353439961234567"
-        BLOBS="$(find "$SRC_DIR/unica/packages/fod/qssi/system" -type f \
-            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod/qssi.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f \
+            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod.system.")"
         ;;
-    "unica/packages/knox/essi/none")
-        MODULE="$1"
-        FW="SM-A546B/BTE/350756481234568"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/essi/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/essi/none.system.")"
-        ;;
-    "unica/packages/knox/essi/sdp")
-        MODULE="$1"
-        FW="SM-A536B/BTE/355490891234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/essi/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/essi/sdp.system.")"
-        ;;
-    "unica/packages/knox/qssi/ddar_sdp")
+    "unica/packages/knox/ddar_sdp")
         MODULE="$1"
         FW="SM-G990B/EUX/353718681234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/ddar_sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/ddar_sdp.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/ddar_sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/ddar_sdp.system.")"
         ;;
-    "unica/packages/knox/qssi/none")
+    "unica/packages/knox/none")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/none.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/none.system.")"
         ;;
-    "unica/packages/knox/qssi/sdp")
+    "unica/packages/knox/sdp")
         MODULE="$1"
         FW="SM-A528B/BTU/352599501234566"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/qssi/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/qssi/sdp.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/sdp.system.")"
         ;;
     "unica/packages/mass_cam")
         MODULE="$1"
@@ -99,12 +84,6 @@ case "$1" in
         MODULE="$1"
         FW="SM-S911B/INS/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
-        ;;
-    "target/a54x/patches/vendor")
-        MODULE="$1"
-        FW="SM-A546B/BTE/350756481234568"
-        BLOBS="$(find "$SRC_DIR/target/a54x/patches/vendor/vendor" -type f \
-            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/a54x/patches/vendor/..")"
         ;;
     "target/a71/patches/stock_blobs")
         MODULE="$1"
