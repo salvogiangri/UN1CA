@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1091
+# shellcheck disable=SC2162
 
 set -Eeuo pipefail
 
@@ -369,9 +369,6 @@ GENERATE_UPDATER_SCRIPT()
 
 FILE_NAME="UN1CA_${ROM_VERSION}_$(date +%Y%m%d)_${TARGET_CODENAME}"
 # ]
-
-MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 echo "Set up tmp dir"
 mkdir -p "$TMP_DIR"
