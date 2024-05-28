@@ -13,32 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - module: "Samsung China apps"
-            path: "unica/packages/china"
           - module: "Optical FOD blobs"
             path: "unica/packages/fod"
-          - module: "Knox DDAR/SDP blobs"
-            path: "unica/packages/knox/ddar_sdp"
-          - module: "Knox'nt blobs"
-            path: "unica/packages/knox/none"
-          - module: "Knox SDP blobs"
-            path: "unica/packages/knox/sdp"
-          - module: "Low-end Samsung Camera app"
-            path: "unica/packages/mass_cam"
-          - module: "VNDK 30 apex"
-            path: "unica/packages/vndk/30"
-          - module: "VNDK 31 apex"
-            path: "unica/packages/vndk/31"
-          - module: "VNDK 32 apex"
-            path: "unica/packages/vndk/32"
-          - module: "VNDK 33 apex"
-            path: "unica/packages/vndk/33"
-          - module: "(a71) OS proprietary blobs"
-            path: "target/a71/patches/stock_blobs"
-          - module: "(m52xq) OS proprietary blobs"
-            path: "target/m52xq/patches/stock_blobs"
-          - module: "(m52xq) /vendor proprietary blobs"
-            path: "target/m52xq/patches/vendor"
 
     steps:
       - name: Checkout repo
