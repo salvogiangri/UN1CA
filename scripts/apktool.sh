@@ -100,7 +100,23 @@ DO_DECOMPILE()
     fi
 
     echo "Decompiling $OUT_DIR"
-    apktool -q d "${API[@]}" -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" "$APK_PATH"
+    apktool -q d "${API[@]}" -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" -s "$APK_PATH"
+
+    for f in "$APKTOOL_DIR$OUT_DIR/"*.dex
+    do
+        API="34"
+        [[ "$(xxd -p -l "2" --skip "5" "$f")" == "3339" ]] && API="29"
+        printf "$API" > "$APKTOOL_DIR$OUT_DIR/../dex_api_version"
+
+        if [[ "$f" == *"classes.dex" ]]; then
+            DIR_NAME="smali"
+        else
+            DIR_NAME="smali_$(basename ${f//.dex/})"
+        fi
+
+        baksmali d -a $API --ac false --di false -l -o "$APKTOOL_DIR$OUT_DIR/$DIR_NAME" --sl "$f"
+        rm "$f"
+    done
 
     # Workaround for U framework.jar
     if [[ "$APK_PATH" == *"framework.jar" ]]; then
@@ -163,7 +179,26 @@ DO_RECOMPILE()
     APK_NAME="$(basename "$APK_PATH")"
 
     echo "Recompiling $IN_DIR"
+
+    for f in "$APKTOOL_DIR$IN_DIR/"*
+    do
+        [[ "$f" != *"smali"* ]] && continue
+
+        API="34"
+        [[ "$(cat "$APKTOOL_DIR$IN_DIR/../dex_api_version")" == "29" ]] && API="29"
+
+        if [[ "$f" == *"smali" ]]; then
+            DEX_FILE="classes.dex"
+        else
+            DEX_FILE="$(basename ${f/smali_//}).dex"
+        fi
+
+        smali a -a $API -o "$APKTOOL_DIR$IN_DIR/$DEX_FILE" "$f"
+        rm -r "$f"
+    done
+
     apktool -q b -c -p "$FRAMEWORK_DIR" -srp "$APKTOOL_DIR$IN_DIR"
+
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
         signapk "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.x509.pem" "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.pk8" \
@@ -174,6 +209,7 @@ DO_RECOMPILE()
         zipalign -p 4 "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp" \
             && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
     fi
+
     mv -f "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APK_PATH"
     rm -rf "$APKTOOL_DIR$IN_DIR/build" && rm -rf "$APKTOOL_DIR$IN_DIR/dist"
 
