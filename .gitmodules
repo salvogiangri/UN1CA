@@ -14,3 +14,7 @@
 	path = external/samfirm.js
 	url = https://github.com/DavidArsene/samfirm.js.git
 	ignore = dirty
+[submodule "external/smali"]
+	path = external/smali
+	url = https://github.com/google/smali.git
+	ignore = dirty
