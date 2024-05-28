@@ -224,7 +224,6 @@ GENERATE_UPDATER_SCRIPT()
     local HAS_VENDOR_DLKM=false
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
-    local HAS_POST_INSTALL=false
 
     [ -f "$TMP_DIR/boot.img" ] && HAS_BOOT=true
     [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
@@ -239,7 +238,6 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$TMP_DIR/vendor_dlkm.new.dat.br" ] && HAS_VENDOR_DLKM=true
     [ -f "$TMP_DIR/odm_dlkm.new.dat.br" ] && HAS_ODM_DLKM=true
     [ -f "$TMP_DIR/system_dlkm.new.dat.br" ] && HAS_SYSTEM_DLKM=true
-    [ -d "$TMP_DIR/cache" ] && HAS_POST_INSTALL=true
 
     [ -f "$SCRIPT_FILE" ] && rm -f "$SCRIPT_FILE"
     touch "$SCRIPT_FILE"
@@ -347,17 +345,8 @@ GENERATE_UPDATER_SCRIPT()
             echo    '/boot");'
         fi
 
-        if $HAS_POST_INSTALL; then
-            echo    'package_extract_dir("cache", "/cache");'
-            echo    'ui_print("****************************************");'
-            echo    'ui_print("Rebooting to execute post-install script...");'
-            echo    'ui_print(" ");'
-            echo    'run_program("/system/bin/sleep", "5");'
-            echo    'run_program("/system/bin/reboot", "recovery");'
-        else
-            echo    'ui_print("****************************************");'
-            echo    'ui_print(" ");'
-        fi
+        echo    'ui_print("****************************************");'
+        echo    'ui_print(" ");'
     } >> "$SCRIPT_FILE"
 
     true
@@ -419,19 +408,6 @@ while read -r i; do
     [ -f "$TMP_DIR/$IMG" ] && rm -f "$TMP_DIR/$IMG"
     cp -a --preserve=all "$i" "$TMP_DIR/$IMG"
 done <<< "$(find "$WORK_DIR/kernel" -mindepth 1 -maxdepth 1 -type f -name "*.img")"
-
-if [[ "$TARGET_POST_INSTALL_ZIP" != "none" ]]; then
-    echo "Creating post-install files"
-    [ -d "$TMP_DIR/cache/recovery" ] && rm -rf "$TMP_DIR/cache/recovery"
-    mkdir -p "$TMP_DIR/cache/recovery"
-    curl -L -s -o "$TMP_DIR/cache/recovery/post-install.zip" "$TARGET_POST_INSTALL_ZIP"
-    touch "$TMP_DIR/cache/recovery/openrecoveryscript"
-    {
-        echo "install /cache/recovery/post-install.zip"
-        echo "wipe cache"
-        echo "reboot recovery"
-    } >> "$TMP_DIR/cache/recovery/openrecoveryscript"
-fi
 
 echo "Generating updater-script"
 GENERATE_UPDATER_SCRIPT
