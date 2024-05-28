@@ -21,28 +21,6 @@
 set -Ee
 
 # [
-GEN_KNOX_SUBDIR()
-{
-    local SOURCE_SUBDIR
-    local TARGET_SUBDIR
-
-    $SOURCE_HAS_KNOX_DUALDAR && SOURCE_SUBDIR+="ddar_"
-    $SOURCE_HAS_KNOX_SDP && SOURCE_SUBDIR+="sdp_"
-    SOURCE_SUBDIR="$(echo "$SOURCE_SUBDIR" | sed "s/_$//")"
-    [ -z "$SOURCE_SUBDIR" ] && SOURCE_SUBDIR="none"
-
-    $TARGET_HAS_KNOX_DUALDAR && TARGET_SUBDIR+="ddar_"
-    $TARGET_HAS_KNOX_SDP && TARGET_SUBDIR+="sdp_"
-    TARGET_SUBDIR="$(echo "$TARGET_SUBDIR" | sed "s/_$//")"
-    [ -z "$TARGET_SUBDIR" ] && TARGET_SUBDIR="none"
-
-    if [[ "$SOURCE_SUBDIR" != "$TARGET_SUBDIR" ]]; then
-        echo "$TARGET_SUBDIR"
-    else
-        echo ""
-    fi
-}
-
 PRINT_MODULE_INFO()
 {
     local MODPATH="$1"
@@ -57,13 +35,6 @@ PRINT_MODULE_INFO()
 
     if [ -d "$MODPATH/$TARGET_SINGLE_SYSTEM_IMAGE" ]; then
         MODPATH="$MODPATH/$TARGET_SINGLE_SYSTEM_IMAGE"
-    fi
-
-    if [[ "$MODPATH" == *"unica/packages/knox"* ]]; then
-        local SUBDIR
-        SUBDIR=$(GEN_KNOX_SUBDIR)
-        [ -z "$SUBDIR" ] && return 0
-        MODPATH="$MODPATH/$SUBDIR"
     fi
 
     if [ ! -f "$MODPATH/module.prop" ]; then
