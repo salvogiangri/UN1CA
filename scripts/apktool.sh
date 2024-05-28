@@ -163,7 +163,7 @@ DO_RECOMPILE()
     APK_NAME="$(basename "$APK_PATH")"
 
     echo "Recompiling $IN_DIR"
-    apktool -q b -c -p "$FRAMEWORK_DIR" --use-aapt2 "$APKTOOL_DIR$IN_DIR"
+    apktool -q b -c -p "$FRAMEWORK_DIR" -srp "$APKTOOL_DIR$IN_DIR"
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
         signapk "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.x509.pem" "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.pk8" \
