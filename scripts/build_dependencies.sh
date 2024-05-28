@@ -166,8 +166,8 @@ BUILD_SMALI()
     ./gradlew assemble baksmali:fatJar smali:fatJar -q
     cp --preserve=all "scripts/baksmali" "$TOOLS_DIR"
     cp --preserve=all "scripts/smali" "$TOOLS_DIR"
-    cp --preserve=all "baksmali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/baksmali.jar"
-    cp --preserve=all "smali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/smali.jar"
+    cp --preserve=all "baksmali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/smali-baksmali.jar"
+    cp --preserve=all "smali/build/libs/"*-dev-fat.jar "$TOOLS_DIR/android-smali.jar"
 
     echo ""
     cd "$PDR"
@@ -220,7 +220,7 @@ SIGNAPK_EXEC=(
 )
 CHECK_TOOLS "${SIGNAPK_EXEC[@]}" && SIGNAPK=false
 SMALI_EXEC=(
-    "baksmali" "baksmali.jar" "smali" "smali.jar"
+    "android-smali.jar" "baksmali" "smali" "smali-baksmali.jar"
 )
 CHECK_TOOLS "${SMALI_EXEC[@]}" && SMALI=false
 
