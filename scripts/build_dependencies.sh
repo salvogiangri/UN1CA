@@ -71,6 +71,7 @@ BUILD_APKTOOL()
     echo -e "- Building apktool...\n"
 
     cd "$SRC_DIR/external/apktool"
+    git apply "$SRC_DIR/external/patches/apktool/0001-feat-support-aapt-optimization.patch"
     ./gradlew build shadowJar -q
     cp --preserve=all "scripts/linux/apktool" "$TOOLS_DIR"
     cp --preserve=all "brut.apktool/apktool-cli/build/libs/apktool-cli.jar" "$TOOLS_DIR/apktool.jar"
