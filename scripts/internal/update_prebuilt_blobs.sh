@@ -36,7 +36,7 @@ fi
 case "$1" in
     "unica/packages/china")
         MODULE="$1"
-        FW="SM-S9110/CHC/RFCW2198XNF"
+        FW="SM-S9210/CHC/356724910402671"
         BLOBS="$(find "$SRC_DIR/unica/packages/china/system" -type f | sed "s.$SRC_DIR/unica/packages/china.system.")"
         ;;
     "unica/packages/fod")
@@ -45,10 +45,10 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f \
             -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod.system.")"
         ;;
-    "unica/packages/knox")
+    "unica/packages/deknox")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/system" -type f | sed "s.$SRC_DIR/unica/packages/knox.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/deknox/system" -type f | sed "s.$SRC_DIR/unica/packages/deknox.system.")"
         ;;
     "unica/packages/mass_cam")
         MODULE="$1"
