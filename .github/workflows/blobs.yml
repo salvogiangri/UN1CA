@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - module: "Optical FOD blobs"
-            path: "unica/packages/fod"
+          - module: "Low-end Samsung Camera app"
+            path: "unica/packages/mass_cam"
 
     steps:
       - name: Checkout repo
