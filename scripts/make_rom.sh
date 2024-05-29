@@ -92,13 +92,13 @@ if $BUILD_ROM; then
     echo -e "\n- Applying debloat list..."
     bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
 
-    echo -e "\n- Applying ROM packages..."
-    bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/packages"
-
     echo -e "\n- Applying ROM patches..."
     bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/patches"
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
         && bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/target/$TARGET_CODENAME/patches"
+
+    echo -e "\n- Applying ROM mods..."
+    bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/mods"
 
     echo -e "\n- Recompiling APKs/JARs..."
     while read -r i; do

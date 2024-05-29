@@ -34,46 +34,46 @@ if [ "$#" != 1 ]; then
 fi
 
 case "$1" in
-    "unica/packages/china")
+    "unica/patches/deknox")
         MODULE="$1"
-        FW="SM-S9210/CHC/356724910402671"
-        BLOBS="$(find "$SRC_DIR/unica/packages/china/system" -type f | sed "s.$SRC_DIR/unica/packages/china.system.")"
+        FW="SM-A736B/INS/352828291234563"
+        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
         ;;
-    "unica/packages/fod")
+    "unica/patches/fod")
         MODULE="$1"
         FW="SM-X716B/EUX/353439961234567"
-        BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f \
-            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/fod/system" -type f \
+            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/patches/fod.system.")"
         ;;
-    "unica/packages/deknox")
+    "unica/patches/mass_cam")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/deknox/system" -type f | sed "s.$SRC_DIR/unica/packages/deknox.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
         ;;
-    "unica/packages/mass_cam")
-        MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/packages/mass_cam.system.")"
-        ;;
-    "unica/packages/vndk/30")
+    "unica/patches/vndk/30")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v30.apex"
         ;;
-    "unica/packages/vndk/31")
+    "unica/patches/vndk/31")
         MODULE="$1"
         FW="SM-S901B/BTE/350330051234562"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v31.apex"
         ;;
-    "unica/packages/vndk/32")
+    "unica/patches/vndk/32")
         MODULE="$1"
         FW="SM-F936B/INS/352334701234566"
         BLOBS="system_ext/apex/com.android.vndk.v32.apex"
         ;;
-    "unica/packages/vndk/33")
+    "unica/patches/vndk/33")
         MODULE="$1"
-        FW="SM-S911B/INS/352404911234563"
+        FW="SM-S911B/EUX/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
+        ;;
+    "unica/mods/china")
+        MODULE="$1"
+        FW="SM-S9210/CHC/356724910402671"
+        BLOBS="$(find "$SRC_DIR/unica/mods/china/system" -type f | sed "s.$SRC_DIR/unica/mods/china.system.")"
         ;;
     "target/a71/patches/stock_blobs")
         MODULE="$1"
@@ -128,9 +128,9 @@ bash "$SRC_DIR/scripts/extract_fw.sh"
 for i in $BLOBS; do
     if [[ "$i" == *"system_ext/apex/com.android.vndk.v"* ]]; then
         if [[ "$i" == *"com.android.vndk.v30.apex" ]]; then
-            rm -rf "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex."*
+            rm -rf "$SRC_DIR/unica/patches/vndk/30/com.android.vndk.v30.apex."*
             split -db 52428800 "$FW_DIR/${MODEL}_${REGION}/$i" \
-                "$SRC_DIR/unica/packages/vndk/30/com.android.vndk.v30.apex."
+                "$SRC_DIR/unica/patches/vndk/30/com.android.vndk.v30.apex."
         else
             cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
                 "$SRC_DIR/$MODULE/$(basename "$i")"
