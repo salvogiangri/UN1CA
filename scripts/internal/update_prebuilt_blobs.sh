@@ -45,20 +45,10 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/packages/fod/system" -type f \
             -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/packages/fod.system.")"
         ;;
-    "unica/packages/knox/ddar_sdp")
-        MODULE="$1"
-        FW="SM-G990B/EUX/353718681234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/ddar_sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/ddar_sdp.system.")"
-        ;;
-    "unica/packages/knox/none")
+    "unica/packages/knox")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/none/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/none.system.")"
-        ;;
-    "unica/packages/knox/sdp")
-        MODULE="$1"
-        FW="SM-A528B/BTU/352599501234566"
-        BLOBS="$(find "$SRC_DIR/unica/packages/knox/sdp/system" -type f | sed "s.$SRC_DIR/unica/packages/knox/sdp.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/packages/knox/system" -type f | sed "s.$SRC_DIR/unica/packages/knox.system.")"
         ;;
     "unica/packages/mass_cam")
         MODULE="$1"
