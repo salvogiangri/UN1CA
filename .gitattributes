@@ -3,7 +3,7 @@
 
 # Denote all files that are truly binary and should not be modified.
 unica/flashable-zip/updater binary
-unica/mods/mods/system/bin/rezetprop binary
+unica/mods/pif/system/bin/rezetprop binary
 unica/patches/deknox/system/** binary
 unica/patches/fod/system/** binary
 unica/patches/vndk/30/** binary
