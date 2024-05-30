@@ -17,6 +17,7 @@
 #
 
 set -eu
+shopt -s nullglob
 
 # [
 PRINT_USAGE()
