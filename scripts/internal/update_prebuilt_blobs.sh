@@ -39,16 +39,16 @@ case "$1" in
         FW="SM-A736B/INS/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
         ;;
-    "unica/patches/fod")
-        MODULE="$1"
-        FW="SM-X716B/EUX/353439961234567"
-        BLOBS="$(find "$SRC_DIR/unica/patches/fod/system" -type f \
-            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/patches/fod.system.")"
-        ;;
     "unica/patches/mass_cam")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
+        ;;
+    "unica/patches/product_feature/optical_fod")
+        MODULE="$1"
+        FW="SM-X716B/EUX/353439961234567"
+        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/optical_fod/system" -type f \
+            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/patches/product_feature/optical_fod.system.")"
         ;;
     "unica/patches/vndk/30")
         MODULE="$1"
