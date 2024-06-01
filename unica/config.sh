@@ -35,6 +35,7 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_HAS_HW_MDNIE=true
         SOURCE_HAS_MASS_CAMERA_APP=false
         SOURCE_IS_ESIM_SUPPORTED=true
+        SOURCE_MULTI_MIC_MANAGER_VERSION="08020"
         ;;
     *)
         echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."

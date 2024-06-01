@@ -70,3 +70,16 @@ else
         true
     fi
 fi
+
+if [[ "$SOURCE_MULTI_MIC_MANAGER_VERSION" != "$TARGET_MULTI_MIC_MANAGER_VERSION" ]]; then
+    echo "Applying SemMultiMicManager patches"
+
+    DECOMPILE "system/framework/framework.jar"
+
+    FTP="
+    system/framework/framework.jar/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
+    "
+    for f in $FTP; do
+        sed -i "s/$SOURCE_MULTI_MIC_MANAGER_VERSION/$TARGET_MULTI_MIC_MANAGER_VERSION/g" "$APKTOOL_DIR/$f"
+    done
+fi
