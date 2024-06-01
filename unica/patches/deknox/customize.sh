@@ -74,6 +74,7 @@ REMOVE_FROM_WORK_DIR()
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/bin/dualdard"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/init/dualdard.rc"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.hdmapp.xml"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.kgclient.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdualdar.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libepm.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libkeyutils.so"
@@ -82,6 +83,7 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libpersona.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdualdar.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/HdmApk"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxAIFrameworkApp"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxGuard"
 
 if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -le "30" ]]; then
     SET_PROP "ro.product.first_api_level" "31" "$WORK_DIR/vendor/build.prop"
