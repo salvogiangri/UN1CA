@@ -94,3 +94,16 @@ if [[ "$SOURCE_MULTI_MIC_MANAGER_VERSION" != "$TARGET_MULTI_MIC_MANAGER_VERSION"
         sed -i "s/$SOURCE_MULTI_MIC_MANAGER_VERSION/$TARGET_MULTI_MIC_MANAGER_VERSION/g" "$APKTOOL_DIR/$f"
     done
 fi
+
+if [[ "$SOURCE_SSRM_CONFIG_NAME" != "$TARGET_SSRM_CONFIG_NAME" ]]; then
+    echo "Applying SSRM patches"
+
+    DECOMPILE "system/framework/ssrm.jar"
+
+    FTP="
+    system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali
+    "
+    for f in $FTP; do
+        sed -i "s/$SOURCE_SSRM_CONFIG_NAME/$TARGET_SSRM_CONFIG_NAME/g" "$APKTOOL_DIR/$f"
+    done
+fi
