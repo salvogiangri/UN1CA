@@ -335,7 +335,6 @@ system/priv-app/FBInstaller_NS
 system/priv-app/FBServices
 system/priv-app/FotaAgent
 system/priv-app/GameHome
-system/priv-app/KnoxAIFrameworkApp
 system/priv-app/OneDrive_Samsung_v3
 system/priv-app/PaymentFramework
 system/priv-app/SamsungCarKeyFw

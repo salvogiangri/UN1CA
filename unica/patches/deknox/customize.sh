@@ -81,6 +81,7 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libknox_filemanager.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libpersona.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdualdar.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/HdmApk"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/KnoxAIFrameworkApp"
 
 if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -le "30" ]]; then
     SET_PROP "ro.product.first_api_level" "31" "$WORK_DIR/vendor/build.prop"
