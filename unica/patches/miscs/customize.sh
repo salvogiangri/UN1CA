@@ -1,6 +1,13 @@
 SKIPUNZIP=1
 
 # [
+DECOMPILE()
+{
+    if [ ! -d "$APKTOOL_DIR/$1" ]; then
+        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
+    fi
+}
+
 GET_PROP()
 {
     local PROP="$1"
@@ -57,3 +64,12 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 SET_PROP "ro.build.flavor" \
     "$(GET_PROP "ro.build.flavor" "$FW_DIR/${MODEL}_${REGION}/system/system/build.prop")" \
     "$WORK_DIR/system/system/build.prop"
+
+if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION" ]]; then
+    DECOMPILE "system_ext/priv-app/SystemUI/SystemUI.apk"
+
+    FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
+    R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"
+
+    sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
+fi

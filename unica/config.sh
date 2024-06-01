@@ -39,6 +39,7 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_MDNIE_WEAKNESS_SOLUTION_FUNCTION="3"
         SOURCE_MULTI_MIC_MANAGER_VERSION="08020"
         SOURCE_SSRM_CONFIG_NAME="siop_dm1q_sm8550"
+        SOURCE_SUPPORT_CUTOUT_PROTECTION="false"
         ;;
     *)
         echo "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image."
