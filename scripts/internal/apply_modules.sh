@@ -203,6 +203,6 @@ fi
 
 while read -r i; do
     APPLY_MODULE "$i"
-done <<< "$(find "$1" -mindepth 1 -maxdepth 1 -type d)"
+done <<< "$(find "$1" -mindepth 1 -maxdepth 1 -type d | sort)"
 
 exit 0
