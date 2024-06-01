@@ -1,16 +1,16 @@
-From 97ccc81cbef9acf9e7dba32e86d9ae5e4551d5d1 Mon Sep 17 00:00:00 2001
+From cd05d43da24087c1ed483e00f51fc5ab7a1ca8e0 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 6 Dec 2023 17:32:04 +0100
+Date: Sat, 1 Jun 2024 15:23:22 +0200
 Subject: [PATCH] Disable HW mDNIe
 
 ---
  ...tyManagerService$A11YBrocastReceiver.smali | 209 ++--
  ...Service$AccessibilityContentObserver.smali |  12 +-
  ...e$ColorInversionStateContentObserver.smali |  65 +-
- .../AccessibilityManagerService.smali         | 902 ++++++++--------
- .../display/SemMdnieManagerService.smali      | 973 +++---------------
- .../custom/KnoxCustomManagerService.smali     | 204 +---
- 6 files changed, 785 insertions(+), 1580 deletions(-)
+ .../AccessibilityManagerService.smali         | 906 ++++++++--------
+ .../display/SemMdnieManagerService.smali      | 987 +++---------------
+ .../custom/KnoxCustomManagerService.smali     | 202 +---
+ 6 files changed, 796 insertions(+), 1585 deletions(-)
 
 diff --git a/smali/com/android/server/accessibility/AccessibilityManagerService$A11YBrocastReceiver.smali b/smali/com/android/server/accessibility/AccessibilityManagerService$A11YBrocastReceiver.smali
 index cb116485..391e70e3 100644
@@ -513,7 +513,7 @@ index b3e61ced..14a36db0 100644
      return-void
  .end method
 diff --git a/smali/com/android/server/accessibility/AccessibilityManagerService.smali b/smali/com/android/server/accessibility/AccessibilityManagerService.smali
-index f1fafbaa..2d7d380d 100644
+index 396894c9..87550105 100644
 --- a/smali/com/android/server/accessibility/AccessibilityManagerService.smali
 +++ b/smali/com/android/server/accessibility/AccessibilityManagerService.smali
 @@ -51,6 +51,8 @@
@@ -525,7 +525,7 @@ index f1fafbaa..2d7d380d 100644
  .field public final mContext:Landroid/content/Context;
  
  .field public mCurrentUserId:I
-@@ -989,6 +991,14 @@
+@@ -993,6 +995,14 @@
      return-void
  .end method
  
@@ -540,7 +540,7 @@ index f1fafbaa..2d7d380d 100644
  .method public static bridge synthetic -$$Nest$menableColorRelumino(Lcom/android/server/accessibility/AccessibilityManagerService;)V
      .locals 0
  
-@@ -1027,16 +1037,6 @@
+@@ -1031,16 +1041,6 @@
      return-object p0
  .end method
  
@@ -557,7 +557,7 @@ index f1fafbaa..2d7d380d 100644
  .method public static bridge synthetic -$$Nest$mmigrateAccessibilityButtonSettingsIfNecessaryLocked(Lcom/android/server/accessibility/AccessibilityManagerService;Lcom/android/server/accessibility/AccessibilityUserState;Ljava/lang/String;I)V
      .locals 0
  
-@@ -1343,22 +1343,6 @@
+@@ -1347,22 +1347,6 @@
      return-void
  .end method
  
@@ -580,7 +580,7 @@ index f1fafbaa..2d7d380d 100644
  .method public static bridge synthetic -$$Nest$msetNonA11yToolNotificationToMatchSafetyCenter(Lcom/android/server/accessibility/AccessibilityManagerService;)V
      .locals 0
  
-@@ -1383,6 +1367,14 @@
+@@ -1387,6 +1371,14 @@
      return-void
  .end method
  
@@ -595,12 +595,12 @@ index f1fafbaa..2d7d380d 100644
  .method public static bridge synthetic -$$Nest$mupdateMagnificationCapabilitiesSettingsChangeLocked(Lcom/android/server/accessibility/AccessibilityManagerService;Lcom/android/server/accessibility/AccessibilityUserState;)V
      .locals 0
  
-@@ -4897,6 +4889,138 @@
+@@ -5058,6 +5050,140 @@
      return-void
  .end method
  
 +.method public final enableColorLens()V
-+    .locals 9
++    .locals 10
 +
 +    iget-object v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +
@@ -608,17 +608,19 @@ index f1fafbaa..2d7d380d 100644
 +
 +    move-result-object v0
 +
-+    const-string v1, "color_lens_switch"
++    const/4 v1, -0x2
 +
-+    const/4 v2, 0x0
++    const-string v2, "color_lens_switch"
 +
-+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++    const/4 v3, 0x0
++
++    invoke-static {v0, v2, v3, v1}, Landroid/provider/Settings$Secure;->getIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)I
 +
 +    move-result v0
 +
 +    if-eqz v0, :cond_0
 +
-+    const/4 v2, 0x1
++    const/4 v3, 0x1
 +
 +    :cond_0
 +    new-instance v0, Ljava/lang/StringBuilder;
@@ -629,7 +631,7 @@ index f1fafbaa..2d7d380d 100644
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v0, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
 +
 +    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
@@ -641,23 +643,23 @@ index f1fafbaa..2d7d380d 100644
 +
 +    const-string/jumbo v0, "window"
 +
-+    if-eqz v2, :cond_1
++    if-eqz v3, :cond_1
 +
 +    new-instance v1, Landroid/view/WindowManager$LayoutParams;
 +
-+    const/4 v4, -0x1
-+
 +    const/4 v5, -0x1
 +
-+    const/16 v6, 0x7df
++    const/4 v6, -0x1
 +
-+    const/16 v7, 0x538
++    const/16 v7, 0x7df
 +
-+    const/4 v8, -0x3
++    const/16 v8, 0x538
 +
-+    move-object v3, v1
++    const/4 v9, -0x3
 +
-+    invoke-direct/range {v3 .. v8}, Landroid/view/WindowManager$LayoutParams;-><init>(IIIII)V
++    move-object v4, v1
++
++    invoke-direct/range {v4 .. v9}, Landroid/view/WindowManager$LayoutParams;-><init>(IIIII)V
 +
 +    iget v2, v1, Landroid/view/WindowManager$LayoutParams;->privateFlags:I
 +
@@ -734,7 +736,7 @@ index f1fafbaa..2d7d380d 100644
  .method public final enableColorRelumino()V
      .locals 7
  
-@@ -5466,6 +5590,228 @@
+@@ -5627,6 +5753,228 @@
      return p0
  .end method
  
@@ -963,7 +965,7 @@ index f1fafbaa..2d7d380d 100644
  .method public getContext()Landroid/content/Context;
      .locals 0
  
-@@ -14312,46 +14658,9 @@
+@@ -14590,46 +14938,9 @@
  .end method
  
  .method public semDisableMdnieColorFilter()Z
@@ -1012,7 +1014,7 @@ index f1fafbaa..2d7d380d 100644
  
      return p0
  .end method
-@@ -14400,71 +14709,16 @@
+@@ -14678,71 +14989,16 @@
  .end method
  
  .method public semEnableMdnieColorFilter(II)Z
@@ -1025,11 +1027,12 @@ index f1fafbaa..2d7d380d 100644
  
 -    return v0
 +    const/4 p0, 0x0
- 
--    :cond_0
--    new-instance v1, Ljava/lang/StringBuilder;
++
 +    return p0
  
+     :cond_0
+-    new-instance v1, Ljava/lang/StringBuilder;
+-
 -    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
 -
 -    const-string/jumbo v2, "semEnableMdnieColorFilter "
@@ -1084,12 +1087,11 @@ index f1fafbaa..2d7d380d 100644
 -    invoke-virtual {p0, v0, p1, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setColorVision(ZII)Z
 -
 -    move-result p0
-+    :cond_0
 +    const/4 p0, 0x1
  
      return p0
  .end method
-@@ -15396,7 +15650,7 @@
+@@ -15674,7 +15930,7 @@
  .end method
  
  .method public semToggleDarkScreenMode()V
@@ -1098,7 +1100,7 @@ index f1fafbaa..2d7d380d 100644
  
      iget-object v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mSecurityPolicy:Lcom/android/server/accessibility/AccessibilitySecurityPolicy;
  
-@@ -15406,11 +15660,11 @@
+@@ -15684,11 +15940,11 @@
  
      invoke-virtual {v0, v1, v2}, Lcom/android/server/accessibility/AccessibilitySecurityPolicy;->enforceCallingPermission(Ljava/lang/String;Ljava/lang/String;)V
  
@@ -1113,7 +1115,7 @@ index f1fafbaa..2d7d380d 100644
  
      invoke-virtual {p0}, Lcom/android/server/accessibility/AccessibilityManagerService;->isScreenReaderEnabled()Z
  
-@@ -15427,174 +15681,62 @@
+@@ -15705,174 +15961,62 @@
      :cond_0
      iget-boolean v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mCurtainModeIsRunning:Z
  
@@ -1126,8 +1128,8 @@ index f1fafbaa..2d7d380d 100644
  
      iget-object v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v3, 0x1040c38
-+    const v1, 0x1040c38
+-    const v3, 0x1040c43
++    const v1, 0x1040c43
  
 -    invoke-virtual {v0, v3}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 +    invoke-virtual {v0, v1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -1143,8 +1145,8 @@ index f1fafbaa..2d7d380d 100644
 -    iget-object v3, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +    iget-object v1, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v4, 0x1040c37
-+    const v2, 0x1040c37
+-    const v4, 0x1040c42
++    const v2, 0x1040c42
  
      filled-new-array {v0}, [Ljava/lang/Object;
  
@@ -1161,8 +1163,8 @@ index f1fafbaa..2d7d380d 100644
 -    iget-object v3, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +    iget-object v1, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v4, 0x1040c36
-+    const v2, 0x1040c36
+-    const v4, 0x1040c41
++    const v2, 0x1040c41
  
      filled-new-array {v0}, [Ljava/lang/Object;
  
@@ -1304,7 +1306,7 @@ index f1fafbaa..2d7d380d 100644
      return-void
  .end method
  
-@@ -17111,159 +17253,6 @@
+@@ -17389,159 +17533,6 @@
      throw p0
  .end method
  
@@ -1464,12 +1466,12 @@ index f1fafbaa..2d7d380d 100644
  .method public setGestureDetectionPassthroughRegion(ILandroid/graphics/Region;)V
      .locals 2
  
-@@ -19038,6 +19027,99 @@
+@@ -19316,6 +19307,101 @@
      throw p0
  .end method
  
 +.method public final updateColorLensValue()V
-+    .locals 4
++    .locals 5
 +
 +    iget-object v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +
@@ -1481,7 +1483,9 @@ index f1fafbaa..2d7d380d 100644
 +
 +    const/4 v2, 0x0
 +
-+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++    const/4 v3, -0x2
++
++    invoke-static {v0, v1, v2, v3}, Landroid/provider/Settings$Secure;->getIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)I
 +
 +    move-result v0
 +
@@ -1491,9 +1495,9 @@ index f1fafbaa..2d7d380d 100644
 +
 +    move-result-object v1
 +
-+    const-string v3, "color_lens_opacity"
++    const-string v4, "color_lens_opacity"
 +
-+    invoke-static {v1, v3, v2}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++    invoke-static {v1, v4, v2, v3}, Landroid/provider/Settings$Secure;->getIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)I
 +
 +    move-result v1
 +
@@ -1564,11 +1568,11 @@ index f1fafbaa..2d7d380d 100644
  .method public final updateFilterKeyEventsLocked(Lcom/android/server/accessibility/AccessibilityUserState;)V
      .locals 4
  
-diff --git a/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-index ed39a90f..ee506efb 100644
---- a/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-+++ b/smali/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-@@ -1924,444 +1924,6 @@
+diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
+index 125057d9..c18c3ffd 100644
+--- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
++++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
+@@ -1950,444 +1950,6 @@
      return v0
  .end method
  
@@ -2013,10 +2017,20 @@ index ed39a90f..ee506efb 100644
  
  # virtual methods
  .method public afpcDataApply()Z
-@@ -5675,454 +5237,238 @@
- .end method
+@@ -5691,464 +5253,248 @@
+     :try_end_0
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
  
- .method public setWhiteRGB(III)Z
+-    throw p0
+-
+-    :cond_3
+-    :goto_0
+-    const/4 p0, 0x0
+-
+-    return p0
+-.end method
+-
+-.method public setWhiteRGB(III)Z
 -    .locals 2
 -
 -    iget-boolean v0, p0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mEnvironmentAdaptiveDisplaySupported:Z
@@ -2209,12 +2223,19 @@ index ed39a90f..ee506efb 100644
 -    invoke-static {v1, v0}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
 -
 -    iget-boolean p0, p0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mCurtainModeIsRunning:Z
--
++    throw p0
+ 
 -    const/4 v0, 0x0
--
++    :cond_3
++    :goto_0
++    const/4 p0, 0x0
+ 
 -    if-nez p0, :cond_6
--
++    return p0
++.end method
+ 
 -    const/16 p0, 0xa
++.method public setWhiteRGB(III)Z
 +    .locals 2
  
 -    if-eq p1, p0, :cond_5
@@ -2589,7 +2610,7 @@ index ed39a90f..ee506efb 100644
  .end method
  
  .method public setmDNIeEmergencyMode(Z)Z
-@@ -6209,84 +5555,41 @@
+@@ -6235,84 +5581,41 @@
  .end method
  
  .method public setmDNIeNegative(Z)Z
@@ -2692,10 +2713,10 @@ index ed39a90f..ee506efb 100644
  
  .method public setmDNIeScreenCurtain(Z)Z
 diff --git a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
-index a2cbffa2..6243174f 100644
+index cb068dcd..9f644f6c 100644
 --- a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
 +++ b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
-@@ -51961,215 +51961,27 @@
+@@ -52268,213 +52268,27 @@
  .end method
  
  .method public final setScreenCurtainDirect()I
@@ -2713,7 +2734,7 @@ index a2cbffa2..6243174f 100644
  
 -    iget-object v0, p0, Lcom/samsung/android/knox/custom/KnoxCustomManagerService;->mContext:Landroid/content/Context;
 -
--    const-string v2, "mDNIe"
+-    const-string/jumbo v2, "mDNIe"
 -
 -    invoke-virtual {v0, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 -
@@ -2883,24 +2904,22 @@ index a2cbffa2..6243174f 100644
      iget-object p0, p0, Lcom/samsung/android/knox/custom/KnoxCustomManagerService;->mContext:Landroid/content/Context;
  
 -    sget-object v1, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
--
++    const-string/jumbo v0, "mDNIe"
+ 
 -    invoke-virtual {p0, v0, v1}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
 -
 -    goto :goto_4
-+    const-string v0, "mDNIe"
++    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
  
 -    :cond_9
 -    iget-boolean p0, p0, Lcom/samsung/android/knox/custom/KnoxCustomManagerService;->mKnoxCustomCurtainModeIsRunning:Z
-+    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    move-result-object p0
  
 -    invoke-virtual {v0, p0}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setmDNIeScreenCurtain(Z)Z
-+    move-result-object p0
++    check-cast p0, Lcom/samsung/android/hardware/display/SemMdnieManager;
  
 -    :goto_4
 -    return v3
-+    check-cast p0, Lcom/samsung/android/hardware/display/SemMdnieManager;
- 
--    nop
 +    const/4 p0, -0x6
  
 -    :array_0
@@ -2920,5 +2939,5 @@ index a2cbffa2..6243174f 100644
  
  .method public setScreenOffOnHomeLongPressState(Z)I
 -- 
-2.43.0
+2.45.1
 
