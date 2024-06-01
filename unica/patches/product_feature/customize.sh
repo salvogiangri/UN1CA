@@ -41,6 +41,17 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
     if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
         cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/optical_fod/system/"* "$WORK_DIR/system/system"
     fi
+
+    if [[ "$TARGET_FP_SENSOR_CONFIG" == *"no_delay_in_screen_off"* ]]; then
+        DECOMPILE "system/priv-app/BiometricSetting/BiometricSetting.apk"
+
+        cd "$APKTOOL_DIR/system/priv-app/BiometricSetting/BiometricSetting.apk"
+        PATCH="$SRC_DIR/unica/patches/product_feature/optical_fod/BiometricSetting.apk/0001-Enable-FP_FEATURE_NO_DELAY_IN_SCREEN_OFF.patch"
+        OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
+            || echo "$OUT" | grep -q "Skipping patch" || false
+        patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
+        cd - &> /dev/null
+    fi
 fi
 
 if $SOURCE_HAS_HW_MDNIE; then
