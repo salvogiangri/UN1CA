@@ -195,10 +195,10 @@ DO_RECOMPILE()
         fi
 
         smali a -a $API -o "$APKTOOL_DIR$IN_DIR/$DEX_FILE" "$f"
-        rm -r "$f"
     done
 
     apktool -q b -c -p "$FRAMEWORK_DIR" -srp "$APKTOOL_DIR$IN_DIR"
+    [[ -f "$APKTOOL_DIR$IN_DIR/classes.dex" ]] && rm "$APKTOOL_DIR$IN_DIR/"*.dex
 
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
