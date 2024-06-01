@@ -24,8 +24,11 @@ GET_FP_SENSOR_TYPE()
         echo "ultrasonic"
     elif [[ "$1" == *"optical"* ]]; then
         echo "optical"
+    elif [[ "$1" == *"side"* ]]; then
+        echo "side"
     else
-        echo "capacitance"
+        echo "Unsupported type: $1"
+        exit 1
     fi
 }
 # ]
@@ -49,14 +52,20 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
         sed -i "s/$SOURCE_FP_SENSOR_CONFIG/$TARGET_FP_SENSOR_CONFIG/g" "$APKTOOL_DIR/$f"
     done
 
-    # TODO: handle ultrasonic & capacitive fp devices
+    # TODO: handle ultrasonic devices
     if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
-        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/optical_fod/system/"* "$WORK_DIR/system/system"
+        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod/system/"* "$WORK_DIR/system/system"
+    elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
+        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system/"* "$WORK_DIR/system/system"
     fi
 
+    if [[ "$TARGET_FP_SENSOR_CONFIG" == *"navi=1"* ]]; then
+        APPLY_PATCH "system/framework/services.jar" \
+            "fingerprint/services.jar/0001-Enable-FP_FEATURE_GESTURE_MODE.patch"
+    fi
     if [[ "$TARGET_FP_SENSOR_CONFIG" == *"no_delay_in_screen_off"* ]]; then
         APPLY_PATCH "system/priv-app/BiometricSetting/BiometricSetting.apk" \
-            "optical_fod/BiometricSetting.apk/0001-Enable-FP_FEATURE_NO_DELAY_IN_SCREEN_OFF.patch"
+            "fingerprint/BiometricSetting.apk/0001-Enable-FP_FEATURE_NO_DELAY_IN_SCREEN_OFF.patch"
     fi
 fi
 
