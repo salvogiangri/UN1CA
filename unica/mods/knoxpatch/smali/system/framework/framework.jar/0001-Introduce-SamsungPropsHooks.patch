@@ -1,4 +1,4 @@
-From ac0ad30fd6cf4eee96662dcdf3ee50593892beeb Mon Sep 17 00:00:00 2001
+From 6c3e9e5e806b2305efc716c5d33ac45279578b75 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:23:58 +0100
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -6,8 +6,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
 ---
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 442 ++++++++++++++++++
- 3 files changed, 460 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 518 ++++++++++++++++++
+ 3 files changed, 536 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -74,10 +74,10 @@ index 25fa7c61..5ea40e7f 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..15a27256
+index 00000000..cc44bfe5
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,442 @@
+@@ -0,0 +1,518 @@
 +.class public Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -86,7 +86,7 @@ index 00000000..15a27256
 +# static fields
 +.field private static final blacklist AUTO_BLOCKER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.rampart"
 +
-+.field private static final blacklist DEBUG:Z = true
++.field private static final blacklist DEBUG:Z = false
 +
 +.field private static final blacklist FM_RADIO_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.fm"
 +
@@ -94,9 +94,11 @@ index 00000000..15a27256
 +
 +.field private static final blacklist SECURE_WIFI_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.fast"
 +
++.field private static final blacklist SMART_SUGGESTIONS_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartsuggestions"
++
 +.field private static final blacklist SMART_VIEW_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartmirroring"
 +
-+.field private static final blacklist TAG:Ljava/lang/String; = "KnoxPatchHooks"
++.field private static final blacklist TAG:Ljava/lang/String; = "SamsungPropsHooks"
 +
 +.field private static volatile blacklist sPackageName:Ljava/lang/String;
 +
@@ -110,6 +112,8 @@ index 00000000..15a27256
 +
 +.field private static volatile blacklist sSpoofProps:Z
 +
++.field private static volatile blacklist sSpoofVendorDevice:Z
++
 +.field private static final blacklist sTargetPackages:[Ljava/lang/String;
 +
 +
@@ -117,15 +121,33 @@ index 00000000..15a27256
 +.method static constructor blacklist <clinit>()V
 +    .locals 3
 +
-+    const-string v0, "com.sec.android.app.shealth"
++    const/4 v0, 0x4
 +
-+    const-string v1, "com.samsung.android.fast"
++    new-array v0, v0, [Ljava/lang/String;
++
++    const/4 v1, 0x0
 +
 +    const-string v2, "com.samsung.android.rampart"
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    aput-object v2, v0, v1
 +
-+    move-result-object v0
++    const/4 v1, 0x1
++
++    const-string v2, "com.sec.android.app.shealth"
++
++    aput-object v2, v0, v1
++
++    const/4 v1, 0x2
++
++    const-string v2, "com.samsung.android.fast"
++
++    aput-object v2, v0, v1
++
++    const/4 v1, 0x3
++
++    const-string v2, "com.samsung.android.smartsuggestions"
++
++    aput-object v2, v0, v1
 +
 +    sput-object v0, Lio/mesalabs/unica/SamsungPropsHooks;->sTargetPackages:[Ljava/lang/String;
 +
@@ -141,41 +163,7 @@ index 00000000..15a27256
 +.end method
 +
 +.method public static blacklist dlog(Ljava/lang/String;)V
-+    .locals 2
-+
-+    new-instance v0, Ljava/lang/StringBuilder;
-+
-+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
-+
-+    const-string v1, "["
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    sget-object v1, Lio/mesalabs/unica/SamsungPropsHooks;->sPackageName:Ljava/lang/String;
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    const-string v1, "] "
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    const-string v1, "KnoxPatchHooks"
-+
-+    invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    .locals 0
 +
 +    return-void
 +.end method
@@ -235,6 +223,14 @@ index 00000000..15a27256
 +    move-result v1
 +
 +    sput-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystore:Z
++
++    const-string v1, "com.samsung.android.smartsuggestions"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    sput-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDevice:Z
 +
 +    const/4 v1, 0x0
 +
@@ -366,8 +362,57 @@ index 00000000..15a27256
 +
 +    sget-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofProps:Z
 +
-+    if-eqz v1, :cond_3
++    if-eqz v1, :cond_1
 +
++    invoke-virtual {p0}, Ljava/lang/String;->hashCode()I
++
++    move-result v1
++
++    sparse-switch v1, :sswitch_data_0
++
++    :cond_0
++    goto :goto_0
++
++    :sswitch_0
++    const-string v1, "ro.boot.warranty_bit"
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const/4 v1, 0x2
++
++    goto :goto_1
++
++    :sswitch_1
++    const-string v1, "ro.boot.verifiedbootstate"
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const/4 v1, 0x1
++
++    goto :goto_1
++
++    :sswitch_2
++    const-string v1, "ro.security.keystore.keytype"
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const/4 v1, 0x3
++
++    goto :goto_1
++
++    :sswitch_3
 +    const-string v1, "ro.boot.flash.locked"
 +
 +    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -376,54 +421,67 @@ index 00000000..15a27256
 +
 +    if-eqz v1, :cond_0
 +
-+    const-string v0, "1"
++    const/4 v1, 0x0
 +
-+    goto :goto_0
++    goto :goto_1
 +
-+    :cond_0
-+    const-string v1, "ro.boot.verifiedbootstate"
++    :sswitch_4
++    const-string v1, "ro.product.vendor.device"
 +
 +    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const/4 v1, 0x4
++
++    goto :goto_1
++
++    :goto_0
++    const/4 v1, -0x1
++
++    :goto_1
++    packed-switch v1, :pswitch_data_0
++
++    goto :goto_2
++
++    :pswitch_0
++    sget-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDevice:Z
 +
 +    if-eqz v1, :cond_1
 +
-+    const-string v0, "green"
++    const-string v0, "dm1q"
 +
-+    goto :goto_0
++    goto :goto_2
 +
-+    :cond_1
-+    const-string v1, "ro.boot.warranty_bit"
-+
-+    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v1
-+
-+    if-eqz v1, :cond_2
-+
-+    const-string v0, "0"
-+
-+    goto :goto_0
-+
-+    :cond_2
-+    const-string v1, "ro.security.keystore.keytype"
-+
-+    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v1
-+
-+    if-eqz v1, :cond_3
-+
++    :pswitch_1
 +    sget-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystore:Z
 +
-+    if-eqz v1, :cond_3
++    if-eqz v1, :cond_1
 +
 +    const-string v0, ""
 +
-+    :cond_3
-+    :goto_0
-+    if-eqz v0, :cond_4
++    goto :goto_2
++
++    :pswitch_2
++    const-string v0, "0"
++
++    goto :goto_2
++
++    :pswitch_3
++    const-string v0, "green"
++
++    goto :goto_2
++
++    :pswitch_4
++    const-string v0, "1"
++
++    nop
++
++    :cond_1
++    :goto_2
++    if-eqz v0, :cond_2
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
@@ -461,8 +519,26 @@ index 00000000..15a27256
 +
 +    invoke-static {v1}, Lio/mesalabs/unica/SamsungPropsHooks;->dlog(Ljava/lang/String;)V
 +
-+    :cond_4
++    :cond_2
 +    return-object v0
++
++    :sswitch_data_0
++    .sparse-switch
++        -0x4c6e0df4 -> :sswitch_4
++        -0x21fa12d -> :sswitch_3
++        0xc90c28a -> :sswitch_2
++        0x17db1dec -> :sswitch_1
++        0x300d1355 -> :sswitch_0
++    .end sparse-switch
++
++    :pswitch_data_0
++    .packed-switch 0x0
++        :pswitch_4
++        :pswitch_3
++        :pswitch_2
++        :pswitch_1
++        :pswitch_0
++    .end packed-switch
 +.end method
 +
 +.method private static blacklist setBuildField(Ljava/lang/String;Ljava/lang/String;)V
@@ -513,7 +589,7 @@ index 00000000..15a27256
 +
 +    move-result-object v1
 +
-+    const-string v2, "KnoxPatchHooks"
++    const-string v2, "SamsungPropsHooks"
 +
 +    invoke-static {v2, v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 +
@@ -521,5 +597,5 @@ index 00000000..15a27256
 +    return-void
 +.end method
 -- 
-2.34.1
+2.45.1
 
