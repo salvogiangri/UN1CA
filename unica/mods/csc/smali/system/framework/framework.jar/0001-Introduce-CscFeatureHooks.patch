@@ -1,12 +1,12 @@
-From 2bd6ca7e19930b896793103e6fe44f73a80cb413 Mon Sep 17 00:00:00 2001
+From 839298de1200d51d22a3b06ad0b5cf16196fb5fe Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
  .../android/feature/SemCscFeature.smali       |  98 ++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 384 ++++++++++++++++++
- 2 files changed, 470 insertions(+), 12 deletions(-)
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 372 ++++++++++++++++++
+ 2 files changed, 458 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..218ac045
+index 00000000..4d6a69e5
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,384 @@
+@@ -0,0 +1,372 @@
 +.class public Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -254,7 +254,7 @@ index 00000000..218ac045
 +    .end annotation
 +.end field
 +
-+.field private static final blacklist DEBUG:Z = true
++.field private static final blacklist DEBUG:Z = false
 +
 +.field private static final blacklist INTEGER_FEATURES:Ljava/util/HashMap;
 +    .annotation system Ldalvik/annotation/Signature;
@@ -305,23 +305,7 @@ index 00000000..218ac045
 +
 +    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
 +
-+    const-string v1, "CscFeature_Common_DisableBixby"
-+
-+    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
-+
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
-+
 +    const-string v1, "CscFeature_Common_SupportPrivateMode"
-+
-+    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
-+
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
-+
-+    const-string v1, "CscFeature_Common_SupportZProjectFunctionInGlobal"
 +
 +    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
@@ -353,9 +337,17 @@ index 00000000..218ac045
 +
 +    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
 +
-+    const-string v1, "CscFeature_Setting_SupportRealTimeNetworkSpeed"
++    const-string v1, "CscFeature_Wifi_SupportBlockSkipForSetupWizard"
 +
-+    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++
++    const-string v1, "CscFeature_Wifi_SupportNetworkConnectionsRequired"
++
++    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
 +
 +    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -415,11 +407,7 @@ index 00000000..218ac045
 +.end method
 +
 +.method public static blacklist dlog(Ljava/lang/String;)V
-+    .locals 1
-+
-+    const-string v0, "CscFeatureHooks"
-+
-+    invoke-static {v0, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    .locals 0
 +
 +    return-void
 +.end method
@@ -622,5 +610,5 @@ index 00000000..218ac045
 +    return-object v0
 +.end method
 -- 
-2.34.1
+2.45.1
 
