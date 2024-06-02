@@ -1,12 +1,12 @@
-From d69cb266a63d440eaa8206147153afc80bb8767c Mon Sep 17 00:00:00 2001
+From 38433d3ebd5644a6df6b966952a44bcc112e35d8 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:27:07 +0100
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
  smali/android/app/Instrumentation.smali       |    4 +
- .../io/mesalabs/unica/GamesPropsUtils.smali   | 1075 +++++++++++++++++
- 2 files changed, 1079 insertions(+)
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 1071 +++++++++++++++++
+ 2 files changed, 1075 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -33,17 +33,17 @@ index e5056216..801b269d 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..547e94f3
+index 00000000..e3479cf9
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
-@@ -0,0 +1,1075 @@
+@@ -0,0 +1,1071 @@
 +.class public Lio/mesalabs/unica/GamesPropsUtils;
 +.super Ljava/lang/Object;
 +.source "GamesPropsUtils.java"
 +
 +
 +# static fields
-+.field private static final blacklist DEBUG:Z = true
++.field private static final blacklist DEBUG:Z = false
 +
 +.field private static final blacklist TAG:Ljava/lang/String; = "GamesPropsUtils"
 +
@@ -864,11 +864,7 @@ index 00000000..547e94f3
 +.end method
 +
 +.method public static blacklist dlog(Ljava/lang/String;)V
-+    .locals 1
-+
-+    const-string v0, "GamesPropsUtils"
-+
-+    invoke-static {v0, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    .locals 0
 +
 +    return-void
 +.end method
