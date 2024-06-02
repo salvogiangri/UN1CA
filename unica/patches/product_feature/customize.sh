@@ -60,10 +60,12 @@ if [[ "$SOURCE_AUTO_BRIGHTNESS_TYPE" != "$TARGET_AUTO_BRIGHTNESS_TYPE" ]]; then
 
     DECOMPILE "system/framework/services.jar"
     DECOMPILE "system/framework/ssrm.jar"
+    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
 
     FTP="
     system/framework/services.jar/smali_classes3/com/android/server/power/PowerManagerUtil.smali
     system/framework/ssrm.jar/smali/com/android/server/ssrm/PreMonitor.smali
+    system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/Rune.smali
     "
 
     for f in $FTP; do
@@ -143,6 +145,7 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     DECOMPILE "system/framework/gamemanager.jar"
     DECOMPILE "system/framework/gamesdk.jar"
     DECOMPILE "system/framework/secinputdev-service.jar"
+    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
     DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
 
     FTP="
@@ -151,6 +154,7 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     system/framework/gamemanager.jar/smali/com/samsung/android/game/GameManagerService.smali
     system/framework/gamesdk.jar/smali/com/samsung/android/gamesdk/vrr/GameSDKVrrManager.smali
     system/framework/secinputdev-service.jar/smali/com/samsung/android/hardware/secinputdev/SemInputDeviceManagerService.smali
+    system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
     system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
     "
     for f in $FTP; do
@@ -161,9 +165,11 @@ if [[ "$SOURCE_HFR_SUPPORTED_REFRESH_RATE" != "$TARGET_HFR_SUPPORTED_REFRESH_RAT
     echo "Applying HFR_SUPPORTED_REFRESH_RATE patches"
 
     DECOMPILE "system/framework/framework.jar"
+    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
 
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+    system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
     "
     for f in $FTP; do
         sed -i "s/\"$SOURCE_HFR_SUPPORTED_REFRESH_RATE\"/\"$TARGET_HFR_SUPPORTED_REFRESH_RATE\"/g" "$APKTOOL_DIR/$f"
@@ -173,10 +179,12 @@ if [[ "$SOURCE_HFR_DEFAULT_REFRESH_RATE" != "$TARGET_HFR_DEFAULT_REFRESH_RATE" ]
     echo "Applying HFR_DEFAULT_REFRESH_RATE patches"
 
     DECOMPILE "system/framework/framework.jar"
+    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
     DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
 
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+    system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
     system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
     "
     for f in $FTP; do
