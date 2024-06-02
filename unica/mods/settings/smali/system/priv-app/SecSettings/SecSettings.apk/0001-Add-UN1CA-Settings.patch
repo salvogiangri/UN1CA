@@ -1,6 +1,6 @@
-From b7f4707e2443572c2ac9260892a6e7c3b4474c35 Mon Sep 17 00:00:00 2001
+From 9038d5011d6c525f8056fa4245908f999b8fe007 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 27 Dec 2023 13:17:48 +0100
+Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
 
 ---
@@ -47,10 +47,10 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index 40b33ff4..28c38b18 100644
+index 737a4a65..e49f04be 100644
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
-@@ -4978,5 +4978,13 @@
+@@ -5102,5 +5102,13 @@
              <meta-data android:name="com.samsung.android.sdk.routines.v3.version" android:value="3.1.5"/>
              <meta-data android:name="com.samsung.android.sdk.routines.v3.version_code" android:value="30105"/>
          </provider>
@@ -108,67 +108,67 @@ index 00000000..7b802f76
 +</FrameLayout>
 \ No newline at end of file
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 7ba70fd4..4f287da1 100644
+index 23eb925b..a9e3f19f 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
-@@ -11781,6 +11781,7 @@
-     <public type="drawable" name="wifi_friction" id="0x7f080b6a" />
-     <public type="drawable" name="wifi_signal" id="0x7f080b6b" />
-     <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b6c" />
-+    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080b71" />
+@@ -11957,6 +11957,7 @@
+     <public type="drawable" name="wifi_friction" id="0x7f080b97" />
+     <public type="drawable" name="wifi_signal" id="0x7f080b98" />
+     <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b99" />
++    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080b9e" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__0" id="0x7f080016" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__1" id="0x7f080017" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture_talkback__0" id="0x7f080018" />
-@@ -12411,6 +12412,8 @@
-     <public type="drawable" name="ws_ic_2step_02" id="0x7f080b6e" />
-     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b6f" />
-     <public type="drawable" name="ws_ic_system_lock" id="0x7f080b70" />
-+    <public type="drawable" name="unica_logo_bg" id="0x7f080b72" />
-+    <public type="drawable" name="unica_logo_fg" id="0x7f080b73" />
+@@ -12586,6 +12587,8 @@
+     <public type="drawable" name="ws_ic_2step_02" id="0x7f080b9b" />
+     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b9c" />
+     <public type="drawable" name="ws_ic_system_lock" id="0x7f080b9d" />
++    <public type="drawable" name="unica_logo_bg" id="0x7f080b9f" />
++    <public type="drawable" name="unica_logo_fg" id="0x7f080ba0" />
      <public type="fraction" name="battery_button_height_fraction" id="0x7f090000" />
      <public type="fraction" name="battery_subpixel_smoothing_left" id="0x7f090001" />
      <public type="fraction" name="battery_subpixel_smoothing_right" id="0x7f090002" />
-@@ -18148,6 +18151,7 @@
-     <public type="layout" name="zen_rule_type" id="0x7f0d0602" />
-     <public type="layout" name="zen_rule_type_selection" id="0x7f0d0603" />
-     <public type="layout" name="zen_schedule_rule_day" id="0x7f0d0604" />
-+    <public type="layout" name="unica_settings_logo_layout" id="0x7f0d0605" />
-     <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0565" />
-     <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014a" />
-     <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a0" />
-@@ -31357,6 +31361,20 @@
-     <public type="string" name="zone_time_type_standard" id="0x7f1332a0" />
-     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f1332a1" />
-     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f1332a2" />
-+    <public type="string" name="keywords_unica_settings" id="0x7f1332a3" />
-+    <public type="string" name="menu_key_unica_settings" id="0x7f1332a4" />
-+    <public type="string" name="unica_allow_downgrade_title" id="0x7f1332a5" />
-+    <public type="string" name="unica_device_name_title" id="0x7f1332a6" />
-+    <public type="string" name="unica_extra_settings_title" id="0x7f1332a7" />
-+    <public type="string" name="unica_games_spoof_title" id="0x7f1332a8" />
-+    <public type="string" name="unica_pif_checking" id="0x7f1332a9" />
-+    <public type="string" name="unica_pif_error" id="0x7f1332aa" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f1332ab" />
-+    <public type="string" name="unica_pif_updated" id="0x7f1332ac" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f1332ad" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1332ae" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1332af" />
-+    <public type="string" name="unica_settings_title" id="0x7f1332b0" />
+@@ -18437,6 +18440,7 @@
+     <public type="layout" name="zen_rule_type" id="0x7f0d0625" />
+     <public type="layout" name="zen_rule_type_selection" id="0x7f0d0626" />
+     <public type="layout" name="zen_schedule_rule_day" id="0x7f0d0627" />
++    <public type="layout" name="unica_settings_logo_layout" id="0x7f0d0628" />
+     <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
+     <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
+     <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
+@@ -31911,6 +31915,20 @@
+     <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
++    <public type="string" name="keywords_unica_settings" id="0x7f13339e" />
++    <public type="string" name="menu_key_unica_settings" id="0x7f13339f" />
++    <public type="string" name="unica_allow_downgrade_title" id="0x7f1333a0" />
++    <public type="string" name="unica_device_name_title" id="0x7f1333a1" />
++    <public type="string" name="unica_extra_settings_title" id="0x7f1333a2" />
++    <public type="string" name="unica_games_spoof_title" id="0x7f1333a3" />
++    <public type="string" name="unica_pif_checking" id="0x7f1333a4" />
++    <public type="string" name="unica_pif_error" id="0x7f1333a5" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f1333a6" />
++    <public type="string" name="unica_pif_updated" id="0x7f1333a7" />
++    <public type="string" name="unica_pif_version_title" id="0x7f1333a8" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1333a9" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1333aa" />
++    <public type="string" name="unica_settings_title" id="0x7f1333ab" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34045,4 +34063,5 @@
-     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16025e" />
-     <public type="xml" name="zen_mode_settings" id="0x7f16025f" />
-     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f160260" />
-+    <public type="xml" name="unica_settings" id="0x7f160261" />
+@@ -34627,4 +34645,5 @@
+     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
+     <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
+     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
++    <public type="xml" name="unica_settings" id="0x7f16026d" />
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 9c5963a1..e2eeabf7 100644
+index 486d035b..969621e1 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13588,4 +13588,18 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13851,4 +13851,18 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -180,7 +180,7 @@ index 9c5963a1..e2eeabf7 100644
 +    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
 +    <string name="unica_pif_checking">Checking for updates…</string>
 +    <string name="unica_pif_error">An error occurred.</string>
-+    <string name="unica_pif_up_to_date">You\'re running the latest version.</string>
++    <string name="unica_pif_up_to_date">"You're running the latest version."</string>
 +    <string name="unica_pif_updated">Update completed successfully.</string>
 +    <string name="unica_pif_version_title">Play Integrity Fix version</string>
 +    <string name="unica_rom_version_title">ROM version</string>
@@ -188,13 +188,13 @@ index 9c5963a1..e2eeabf7 100644
 +    <string name="unica_settings_title">UN1CA Settings</string>
  </resources>
 diff --git a/res/xml/sec_top_level_settings.xml b/res/xml/sec_top_level_settings.xml
-index 5bf6f32f..592bc70f 100644
+index e79896f6..a16c39b5 100644
 --- a/res/xml/sec_top_level_settings.xml
 +++ b/res/xml/sec_top_level_settings.xml
 @@ -61,6 +61,7 @@
      <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_cloud_and_account" android:title="@string/cloud_and_accounts_title" android:key="top_level_accounts_backup" android:summary="@string/summary_placeholder" android:order="-130000" android:fragment="com.samsung.android.settings.account.CloudAccountSettings" settings:controller="com.samsung.android.settings.homepage.TopLevelCloudAccountPreferenceController" settings:highlightableMenuKey="@string/menu_key_accounts_backup" />
      <com.samsung.android.settings.widget.SecInsetCategoryPreference android:order="-100000" />
-     <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_advanced_feature" android:title="@string/useful_feature_title" android:key="top_level_advanced_features" android:summary="@string/summary_placeholder" android:order="-40000" android:fragment="com.samsung.android.settings.usefulfeature.Usefulfeature" settings:controller="com.samsung.android.settings.homepage.TopLevelAdvancedFeaturesPreferenceController" settings:highlightableMenuKey="@string/menu_key_advanced_features" settings:keywords="@string/keywords_advanced_features_settings" />
+     <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_advanced_feature" android:layout="@layout/sec_homepage_software_update_preference" android:title="@string/useful_feature_title" android:key="top_level_advanced_features" android:summary="@string/summary_placeholder" android:order="-40000" android:fragment="com.samsung.android.settings.usefulfeature.Usefulfeature" settings:controller="com.samsung.android.settings.homepage.TopLevelAdvancedFeaturesPreferenceController" settings:highlightableMenuKey="@string/menu_key_advanced_features" settings:keywords="@string/keywords_advanced_features_settings" />
 +    <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_unica" android:title="@string/unica_settings_title" android:key="top_level_unica" android:summary="@string/summary_placeholder" android:order="-39999" android:fragment="io.mesalabs.unica.UnicaSettingsFragment" settings:controller="io.mesalabs.unica.UnicaSettingsPreferenceController" settings:highlightableMenuKey="@string/menu_key_unica_settings" settings:keywords="@string/keywords_unica_settings" />
      <com.samsung.android.settings.widget.SecInsetCategoryPreference android:order="0" />
      <com.android.settings.widget.HomepagePreference android:icon="@drawable/sec_ic_settings_digitalwellbeing" android:title="@string/app_name_digital_wellbeing" android:key="top_level_digitalwellbeing" android:summary="@string/summary_placeholder" android:order="40000" settings:controller="com.samsung.android.settings.homepage.TopLevelDigitalWellbeingPreferenceController" settings:highlightableMenuKey="@string/menu_key_digitalwellbeing">
@@ -221,51 +221,51 @@ index 00000000..0ec9259d
 +</PreferenceScreen>
 \ No newline at end of file
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index fe88911c..e332f515 100644
+index 91fbf763..298d317d 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12179,3 +12179,31 @@
- .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f1332a1
+@@ -12519,3 +12519,31 @@
+ .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f13339c
  
- .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f1332a2
+ .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f13339d
 +
-+.field public static final keywords_unica_settings:I = 0x7f1332a3
++.field public static final keywords_unica_settings:I = 0x7f13339e
 +
-+.field public static final menu_key_unica_settings:I = 0x7f1332a4
++.field public static final menu_key_unica_settings:I = 0x7f13339f
 +
-+.field public static final unica_allow_downgrade_title:I = 0x7f1332a5
++.field public static final unica_allow_downgrade_title:I = 0x7f1333a0
 +
-+.field public static final unica_device_name_title:I = 0x7f1332a6
++.field public static final unica_device_name_title:I = 0x7f1333a1
 +
-+.field public static final unica_extra_settings_title:I = 0x7f1332a7
++.field public static final unica_extra_settings_title:I = 0x7f1333a2
 +
-+.field public static final unica_games_spoof_title:I = 0x7f1332a8
++.field public static final unica_games_spoof_title:I = 0x7f1333a3
 +
-+.field public static final unica_pif_checking:I = 0x7f1332a9
++.field public static final unica_pif_checking:I = 0x7f1333a4
 +
-+.field public static final unica_pif_error:I = 0x7f1332aa
++.field public static final unica_pif_error:I = 0x7f1333a5
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f1332ab
++.field public static final unica_pif_up_to_date:I = 0x7f1333a6
 +
-+.field public static final unica_pif_updated:I = 0x7f1332ac
++.field public static final unica_pif_updated:I = 0x7f1333a7
 +
-+.field public static final unica_pif_version_title:I = 0x7f1332ad
++.field public static final unica_pif_version_title:I = 0x7f1333a8
 +
-+.field public static final unica_rom_version_title:I = 0x7f1332ae
++.field public static final unica_rom_version_title:I = 0x7f1333a9
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1332af
++.field public static final unica_secure_ss_title:I = 0x7f1333aa
 +
-+.field public static final unica_settings_title:I = 0x7f1332b0
++.field public static final unica_settings_title:I = 0x7f1333ab
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
-index 9e7b0dfb..7b18d280 100644
+index 4d5b41c4..44cfdfb4 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
 +++ b/smali_classes2/com/android/settings/R$xml.smali
-@@ -1041,3 +1041,5 @@
- .field public static final zen_mode_settings:I = 0x7f16025f
+@@ -1063,3 +1063,5 @@
+ .field public static final zen_mode_settings:I = 0x7f16026b
  
- .field public static final zen_mode_sound_vibration_settings:I = 0x7f160260
+ .field public static final zen_mode_sound_vibration_settings:I = 0x7f16026c
 +
-+.field public static final unica_settings:I = 0x7f160261
++.field public static final unica_settings:I = 0x7f16026d
 diff --git a/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali b/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
 new file mode 100644
 index 00000000..18621dd0
@@ -2415,5 +2415,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.34.1
+2.45.1
 
