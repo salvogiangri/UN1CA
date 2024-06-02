@@ -32,6 +32,7 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_VNDK_VERSION=33
         SOURCE_HAS_SYSTEM_EXT=true
         # SEC Product Feature
+        SOURCE_AUTO_BRIGHTNESS_TYPE="5"
         SOURCE_FP_SENSOR_CONFIG="google_touch_display_ultrasonic"
         SOURCE_HAS_HW_MDNIE=true
         SOURCE_HAS_MASS_CAMERA_APP=false

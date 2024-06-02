@@ -53,6 +53,22 @@ if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]];
     done
 fi
 
+if [[ "$SOURCE_AUTO_BRIGHTNESS_TYPE" != "$TARGET_AUTO_BRIGHTNESS_TYPE" ]]; then
+    echo "Applying auto brightness type patches"
+
+    DECOMPILE "system/framework/services.jar"
+    DECOMPILE "system/framework/ssrm.jar"
+
+    FTP="
+    system/framework/services.jar/smali_classes3/com/android/server/power/PowerManagerUtil.smali
+    system/framework/ssrm.jar/smali/com/android/server/ssrm/PreMonitor.smali
+    "
+
+    for f in $FTP; do
+        sed -i "s/\"$SOURCE_AUTO_BRIGHTNESS_TYPE\"/\"$TARGET_AUTO_BRIGHTNESS_TYPE\"/g" "$APKTOOL_DIR/$f"
+    done
+fi
+
 if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" ]]; then
     echo "Applying fingerprint sensor patches"
 
