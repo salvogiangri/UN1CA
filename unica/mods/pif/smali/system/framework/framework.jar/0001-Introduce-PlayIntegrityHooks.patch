@@ -1,4 +1,4 @@
-From 39b8949f55ee3036cc20c7e22d88d34b08541625 Mon Sep 17 00:00:00 2001
+From cdbcbf1a2a657e55a2e87682aacdf8a5e628a15d Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 28 Jan 2024 01:48:48 +0100
 Subject: [PATCH] Introduce PlayIntegrityHooks
@@ -8,8 +8,8 @@ Subject: [PATCH] Introduce PlayIntegrityHooks
  .../keystore2/AndroidKeyStoreSpi.smali        |    2 +
  ...grityHooks$$ExternalSyntheticLambda0.smali |   30 +
  .../mesalabs/unica/PlayIntegrityHooks$1.smali |   79 ++
- .../mesalabs/unica/PlayIntegrityHooks.smali   | 1152 +++++++++++++++++
- 5 files changed, 1267 insertions(+)
+ .../mesalabs/unica/PlayIntegrityHooks.smali   | 1059 +++++++++++++++++
+ 5 files changed, 1174 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
@@ -37,10 +37,10 @@ index 86460ff3..a0f4bf02 100644
  .end method
  
 diff --git a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
-index d3b5e17c..192a32c4 100644
+index f8640991..502e7662 100644
 --- a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
 +++ b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
-@@ -3837,6 +3837,8 @@
+@@ -3877,6 +3877,8 @@
  .method public whitelist test-api engineGetCertificateChain(Ljava/lang/String;)[Ljava/security/cert/Certificate;
      .locals 9
  
@@ -172,10 +172,10 @@ index 00000000..64bc5f5f
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 new file mode 100644
-index 00000000..751874a5
+index 00000000..b753a36b
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
-@@ -0,0 +1,1152 @@
+@@ -0,0 +1,1059 @@
 +.class public Lio/mesalabs/unica/PlayIntegrityHooks;
 +.super Ljava/lang/Object;
 +.source "PlayIntegrityHooks.java"
@@ -208,13 +208,9 @@ index 00000000..751874a5
 +
 +.field private static final blacklist PIF_VERSION:Ljava/lang/String; = "20240128"
 +
-+.field private static final blacklist PROCESS_GMS_UNSTABLE:Ljava/lang/String; = "com.google.android.gms.unstable"
-+
 +.field private static final blacklist TAG:Ljava/lang/String; = "PlayIntegrityHooks"
 +
 +.field private static volatile blacklist sIsFinsky:Z
-+
-+.field private static volatile blacklist sIsGms:Z
 +
 +.field private static volatile blacklist sProcessName:Ljava/lang/String;
 +
@@ -295,16 +291,6 @@ index 00000000..751874a5
 +.method private static blacklist isCallerSafetyNet()Z
 +    .locals 2
 +
-+    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldTryToCertifyDevice()Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_0
-+
-+    sget-boolean v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
-+
-+    if-eqz v0, :cond_0
-+
 +    invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 +
 +    move-result-object v0
@@ -325,16 +311,6 @@ index 00000000..751874a5
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_0
-+
-+    const/4 v0, 0x1
-+
-+    goto :goto_0
-+
-+    :cond_0
-+    const/4 v0, 0x0
-+
-+    :goto_0
 +    return v0
 +.end method
 +
@@ -399,7 +375,11 @@ index 00000000..751874a5
 +
 +    move-result-object v0
 +
-+    const-string v1, "DroidGuard"
++    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "droidguard"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
 +
@@ -409,7 +389,7 @@ index 00000000..751874a5
 +.end method
 +
 +.method public static blacklist onEngineGetCertificateChain()V
-+    .locals 2
++    .locals 1
 +
 +    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isCallerSafetyNet()Z
 +
@@ -424,37 +404,7 @@ index 00000000..751874a5
 +    return-void
 +
 +    :cond_0
-+    new-instance v0, Ljava/lang/StringBuilder;
-+
-+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
-+
-+    const-string v1, "Blocked key attestation sIsGms="
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    sget-boolean v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    const-string v1, " sIsFinsky="
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    sget-boolean v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+
-+    move-result-object v0
-+
-+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v0
++    const-string v0, "Blocked key attestation"
 +
 +    invoke-static {v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
 +
@@ -566,9 +516,9 @@ index 00000000..751874a5
 +
 +    move-result-object v1
 +
-+    if-eqz v0, :cond_4
++    if-eqz v0, :cond_3
 +
-+    if-eqz v1, :cond_4
++    if-eqz v1, :cond_3
 +
 +    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
 +
@@ -576,54 +526,32 @@ index 00000000..751874a5
 +
 +    if-eqz v2, :cond_0
 +
-+    goto :goto_2
++    goto :goto_0
 +
 +    :cond_0
 +    sput-object v1, Lio/mesalabs/unica/PlayIntegrityHooks;->sProcessName:Ljava/lang/String;
++
++    const-string v2, "com.android.vending"
++
++    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    sput-boolean v2, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
 +
 +    const-string v2, "com.google.android.gms"
 +
 +    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
-+    move-result v3
++    move-result v2
 +
-+    if-eqz v3, :cond_1
-+
-+    const-string v3, "com.google.android.gms.unstable"
-+
-+    invoke-virtual {v1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v3
-+
-+    if-eqz v3, :cond_1
-+
-+    const/4 v3, 0x1
-+
-+    goto :goto_0
-+
-+    :cond_1
-+    const/4 v3, 0x0
-+
-+    :goto_0
-+    sput-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
-+
-+    const-string v3, "com.android.vending"
-+
-+    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v3
-+
-+    sput-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
-+
-+    sget-boolean v3, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsGms:Z
-+
-+    if-eqz v3, :cond_2
++    if-eqz v2, :cond_2
 +
 +    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->shouldTryToCertifyDevice()Z
 +
 +    move-result v2
 +
-+    if-eqz v2, :cond_3
++    if-eqz v2, :cond_1
 +
 +    const-string v2, "Spoofing build for GMS to pass CTS/Play Integrity API"
 +
@@ -631,15 +559,7 @@ index 00000000..751874a5
 +
 +    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->spoofBuildGms()V
 +
-+    goto :goto_1
-+
-+    :cond_2
-+    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_3
-+
++    :cond_1
 +    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 +
 +    move-result-wide v2
@@ -652,12 +572,11 @@ index 00000000..751874a5
 +
 +    invoke-static {v3, v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
 +
-+    :cond_3
-+    :goto_1
++    :cond_2
 +    return-void
 +
-+    :cond_4
-+    :goto_2
++    :cond_3
++    :goto_0
 +    return-void
 +.end method
 +
@@ -900,18 +819,6 @@ index 00000000..751874a5
 +    return v2
 +
 +    :cond_0
-+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
-+
-+    move-result-wide v3
-+
-+    invoke-static {v3, v4}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
-+
-+    move-result-object v1
-+
-+    const-string v3, "TIME"
-+
-+    invoke-static {v3, v1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
-+
 +    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
 +
 +    move-result v1
@@ -1329,5 +1236,5 @@ index 00000000..751874a5
 +    return-void
 +.end method
 -- 
-2.34.1
+2.45.1
 
