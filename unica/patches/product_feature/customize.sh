@@ -37,6 +37,8 @@ GET_FP_SENSOR_TYPE()
 # ]
 
 if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]]; then
+    echo "Applying MAINLINE_API_LEVEL patches"
+
     DECOMPILE "system/framework/esecomm.jar"
     DECOMPILE "system/framework/services.jar"
 
@@ -108,7 +110,7 @@ fi
 
 if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
     [[ "$SOURCE_MDNIE_WEAKNESS_SOLUTION_FUNCTION" != "$TARGET_MDNIE_WEAKNESS_SOLUTION_FUNCTION" ]]; then
-    echo "Applying mDNIe patches"
+    echo "Applying mDNIe features patches"
 
     DECOMPILE "system/framework/services.jar"
 
@@ -123,6 +125,7 @@ if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
 fi
 if $SOURCE_HAS_HW_MDNIE; then
     if ! $TARGET_HAS_HW_MDNIE; then
+        echo "Applying HW mDNIe patches"
         APPLY_PATCH "system/framework/framework.jar" "mdnie/framework.jar/0001-Disable-HW-mDNIe.patch"
         APPLY_PATCH "system/framework/services.jar" "mdnie/services.jar/0001-Disable-HW-mDNIe.patch"
     fi
@@ -130,6 +133,73 @@ else
     if $TARGET_HAS_HW_MDNIE; then
         # TODO: add HW mDNIe support
         true
+    fi
+fi
+
+if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
+    echo "Applying HFR_MODE patches"
+
+    DECOMPILE "system/framework/framework.jar"
+    DECOMPILE "system/framework/gamemanager.jar"
+    DECOMPILE "system/framework/gamesdk.jar"
+    DECOMPILE "system/framework/secinputdev-service.jar"
+    DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
+
+    FTP="
+    system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+    system/framework/framework.jar/smali_classes5/com/samsung/android/rune/CoreRune.smali
+    system/framework/gamemanager.jar/smali/com/samsung/android/game/GameManagerService.smali
+    system/framework/gamesdk.jar/smali/com/samsung/android/gamesdk/vrr/GameSDKVrrManager.smali
+    system/framework/secinputdev-service.jar/smali/com/samsung/android/hardware/secinputdev/SemInputDeviceManagerService.smali
+    system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
+    "
+    for f in $FTP; do
+        sed -i "s/\"$SOURCE_HFR_MODE\"/\"$TARGET_HFR_MODE\"/g" "$APKTOOL_DIR/$f"
+    done
+fi
+if [[ "$SOURCE_HFR_SUPPORTED_REFRESH_RATE" != "$TARGET_HFR_SUPPORTED_REFRESH_RATE" ]]; then
+    echo "Applying HFR_SUPPORTED_REFRESH_RATE patches"
+
+    DECOMPILE "system/framework/framework.jar"
+
+    FTP="
+    system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+    "
+    for f in $FTP; do
+        sed -i "s/\"$SOURCE_HFR_SUPPORTED_REFRESH_RATE\"/\"$TARGET_HFR_SUPPORTED_REFRESH_RATE\"/g" "$APKTOOL_DIR/$f"
+    done
+fi
+if [[ "$SOURCE_HFR_DEFAULT_REFRESH_RATE" != "$TARGET_HFR_DEFAULT_REFRESH_RATE" ]]; then
+    echo "Applying HFR_DEFAULT_REFRESH_RATE patches"
+
+    DECOMPILE "system/framework/framework.jar"
+    DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
+
+    FTP="
+    system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+    system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
+    "
+    for f in $FTP; do
+        sed -i "s/\"$SOURCE_HFR_DEFAULT_REFRESH_RATE\"/\"$TARGET_HFR_DEFAULT_REFRESH_RATE\"/g" "$APKTOOL_DIR/$f"
+    done
+fi
+if [[ "$SOURCE_HFR_SEAMLESS_BRT" != "$TARGET_HFR_SEAMLESS_BRT" ]] || \
+    [[ "$SOURCE_HFR_SEAMLESS_LUX" != "$TARGET_HFR_SEAMLESS_LUX" ]]; then
+    echo "Applying HFR_SEAMLESS_BRT/HFR_SEAMLESS_LUX patches"
+
+    if [[ "$TARGET_HFR_SEAMLESS_BRT" == "none" ]] && [[ "$TARGET_HFR_SEAMLESS_LUX" == "none" ]]; then
+        APPLY_PATCH "system/framework/framework.jar" "hfr/framework.jar/0001-Remove-brightness-threshold-values.patch"
+    else
+        DECOMPILE "system/framework/framework.jar"
+
+        FTP="
+        system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
+        "
+
+        for f in $FTP; do
+            sed -i "s/\"$SOURCE_HFR_SEAMLESS_BRT\"/\"$TARGET_HFR_SEAMLESS_BRT\"/g" "$APKTOOL_DIR/$f"
+            sed -i "s/\"$SOURCE_HFR_SEAMLESS_LUX\"/\"$TARGET_HFR_SEAMLESS_LUX\"/g" "$APKTOOL_DIR/$f"
+        done
     fi
 fi
 
