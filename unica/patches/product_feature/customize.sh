@@ -8,6 +8,9 @@ DECOMPILE()
 
 APPLY_PATCH()
 {
+    local PATCH
+    local OUT
+
     DECOMPILE "$1"
 
     cd "$APKTOOL_DIR/$1"
@@ -32,6 +35,23 @@ GET_FP_SENSOR_TYPE()
     fi
 }
 # ]
+
+if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]]; then
+    DECOMPILE "system/framework/esecomm.jar"
+    DECOMPILE "system/framework/services.jar"
+
+    FTP="
+    system/framework/esecomm.jar/smali/com/sec/esecomm/EsecommAdapter.smali
+    system/framework/services.jar/smali/com/android/server/SystemServer.smali
+    system/framework/services.jar/smali_classes2/com/android/server/enterprise/hdm/HdmVendorController.smali
+    system/framework/services.jar/smali_classes2/com/android/server/knox/dar/ddar/ta/TAProxy.smali
+    system/framework/services.jar/smali_classes3/com/android/server/power/PowerManagerUtil.smali
+    "
+
+    for f in $FTP; do
+        sed -i "s/\"$SOURCE_PRODUCT_FIRST_API_LEVEL\"/\"$TARGET_PRODUCT_FIRST_API_LEVEL\"/g" "$APKTOOL_DIR/$f"
+    done
+fi
 
 if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" ]]; then
     echo "Applying fingerprint sensor patches"
