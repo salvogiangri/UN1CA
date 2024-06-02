@@ -32,7 +32,9 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_VNDK_VERSION=33
         SOURCE_HAS_SYSTEM_EXT=true
         # SEC Product Feature
+        SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER=true
         SOURCE_AUTO_BRIGHTNESS_TYPE="5"
+        SOURCE_DVFS_CONFIG_NAME="dvfs_policy_default"
         SOURCE_FP_SENSOR_CONFIG="google_touch_display_ultrasonic"
         SOURCE_HAS_HW_MDNIE=true
         SOURCE_HAS_MASS_CAMERA_APP=false

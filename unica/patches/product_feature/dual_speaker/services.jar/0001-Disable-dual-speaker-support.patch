@@ -1,0 +1,25 @@
+From 6e2e47e335306b78d67cb9cec7270db8deabbdac Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sun, 2 Jun 2024 13:14:16 +0200
+Subject: [PATCH] Disable dual speaker support
+
+---
+ smali/com/android/server/audio/AudioService.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali/com/android/server/audio/AudioService.smali b/smali/com/android/server/audio/AudioService.smali
+index 71596f05..45732836 100644
+--- a/smali/com/android/server/audio/AudioService.smali
++++ b/smali/com/android/server/audio/AudioService.smali
+@@ -4603,7 +4603,7 @@
+ 
+     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->println(Z)V
+ 
+-- 
+2.45.1
+
