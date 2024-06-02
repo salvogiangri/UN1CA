@@ -1,12 +1,12 @@
-From 30e3fd7ca74b8e69d9f009bf3dbb61a0adb4a5b1 Mon Sep 17 00:00:00 2001
+From d69cb266a63d440eaa8206147153afc80bb8767c Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:27:07 +0100
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
- smali/android/app/Instrumentation.smali       |   4 +
- .../io/mesalabs/unica/GamesPropsUtils.smali   | 684 ++++++++++++++++++
- 2 files changed, 688 insertions(+)
+ smali/android/app/Instrumentation.smali       |    4 +
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 1075 +++++++++++++++++
+ 2 files changed, 1079 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -33,10 +33,10 @@ index e5056216..801b269d 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..16ecbce0
+index 00000000..547e94f3
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
-@@ -0,0 +1,684 @@
+@@ -0,0 +1,1075 @@
 +.class public Lio/mesalabs/unica/GamesPropsUtils;
 +.super Ljava/lang/Object;
 +.source "GamesPropsUtils.java"
@@ -47,106 +47,27 @@ index 00000000..16ecbce0
 +
 +.field private static final blacklist TAG:Ljava/lang/String; = "GamesPropsUtils"
 +
-+.field private static final blacklist packagesToChangeBS4:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeF5:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeMI11TP:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeMI13P:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeOP8P:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeOP9P:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeROG6:[Ljava/lang/String;
-+
-+.field private static final blacklist packagesToChangeXP5:[Ljava/lang/String;
-+
-+.field private static final blacklist propsToChangeBS4:Ljava/util/Map;
++.field private static final blacklist packagesToChange:Ljava/util/Map;
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "Ljava/util/Map<",
 +            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
++            "[",
++            "Ljava/lang/String;",
 +            ">;"
 +        }
 +    .end annotation
 +.end field
 +
-+.field private static final blacklist propsToChangeF5:Ljava/util/Map;
++.field private static final blacklist propsToChange:Ljava/util/Map;
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "Ljava/util/Map<",
 +            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeMI11TP:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
 +            "Ljava/util/Map<",
 +            "Ljava/lang/String;",
 +            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeMI13P:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeOP8P:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeOP9P:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeROG6:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+.end field
-+
-+.field private static final blacklist propsToChangeXP5:Ljava/util/Map;
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
++            ">;>;"
 +        }
 +    .end annotation
 +.end field
@@ -154,199 +75,381 @@ index 00000000..16ecbce0
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 16
++    .locals 12
 +
-+    const-string v0, "2SM-X706B"
++    new-instance v0, Ljava/util/HashMap;
 +
-+    const-string v1, "blackshark"
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    move-result-object v0
++    new-instance v0, Ljava/util/HashMap;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeBS4:Ljava/util/Map;
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
 +
-+    const-string v0, "com.proximabeta.mf.uamo"
++    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    filled-new-array {v0}, [Ljava/lang/String;
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    move-result-object v0
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createBS4Props()Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeBS4:[Ljava/lang/String;
++    move-result-object v1
 +
-+    const-string v0, "2107113SI"
++    const-string v2, "BS4"
 +
-+    const-string v1, "Xiaomi"
++    invoke-interface {v0, v2, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    move-result-object v0
++    const/4 v1, 0x1
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI11TP:Ljava/util/Map;
++    new-array v3, v1, [Ljava/lang/String;
 +
-+    const-string v0, "com.supercell.clashofclans"
++    const-string v4, "com.proximabeta.mf.uamo"
 +
-+    const-string v2, "com.vng.mlbbvn"
++    const/4 v5, 0x0
 +
-+    const-string v3, "com.ea.gp.apexlegendsmobilefps"
++    aput-object v4, v3, v5
 +
-+    const-string v4, "com.levelinfinite.hotta.gp"
++    invoke-interface {v0, v2, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    filled-new-array {v3, v4, v0, v2}, [Ljava/lang/String;
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    move-result-object v0
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createF5Props()Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI11TP:[Ljava/lang/String;
++    move-result-object v2
 +
-+    const-string v0, "2210132C"
++    const-string v3, "F5"
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    invoke-interface {v0, v3, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    move-result-object v0
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI13P:Ljava/util/Map;
++    const/4 v2, 0x3
 +
-+    const-string v0, "com.levelinfinite.sgameGlobal"
++    new-array v4, v2, [Ljava/lang/String;
 +
-+    const-string v2, "com.tencent.tmgp.sgame"
++    const-string v6, "com.dts.freefiremax"
 +
-+    filled-new-array {v0, v2}, [Ljava/lang/String;
++    aput-object v6, v4, v5
 +
-+    move-result-object v0
++    const-string v6, "com.dts.freefireth"
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI13P:[Ljava/lang/String;
++    aput-object v6, v4, v1
 +
-+    const-string v0, "IN2020"
++    const-string v6, "com.mobile.legends"
 +
-+    const-string v2, "OnePlus"
++    const/4 v7, 0x2
 +
-+    invoke-static {v0, v2}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    aput-object v6, v4, v7
 +
-+    move-result-object v0
++    invoke-interface {v0, v3, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP8P:Ljava/util/Map;
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    const-string v14, "com.tencent.tmgp.pubgmhd"
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createiQ11Props()Ljava/util/Map;
 +
-+    const-string v15, "com.vng.pubgmobile"
++    move-result-object v3
 +
-+    const-string v3, "com.netease.lztgglobal"
++    const-string v4, "iQ11"
 +
-+    const-string v4, "com.pubg.imobile"
++    invoke-interface {v0, v4, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v5, "com.pubg.krmobile"
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    const-string v6, "com.rekoo.pubgm"
++    const/4 v3, 0x4
 +
-+    const-string v7, "com.riotgames.league.wildrift"
++    new-array v6, v3, [Ljava/lang/String;
++
++    const-string v8, "com.tencent.KiHan"
++
++    aput-object v8, v6, v5
++
++    const-string v8, "com.tencent.tmgp.cf"
++
++    aput-object v8, v6, v1
++
++    const-string v8, "com.tencent.tmgp.cod"
++
++    aput-object v8, v6, v7
++
++    const-string v8, "com.tencent.tmgp.gnyx"
++
++    aput-object v8, v6, v2
++
++    invoke-interface {v0, v4, v6}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI11TProps()Ljava/util/Map;
++
++    move-result-object v4
++
++    const-string v6, "MI11T"
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    new-array v4, v3, [Ljava/lang/String;
++
++    const-string v8, "com.ea.gp.apexlegendsmobilefps"
++
++    aput-object v8, v4, v5
++
++    const-string v8, "com.levelinfinite.hotta.gp"
++
++    aput-object v8, v4, v1
++
++    const-string v8, "com.supercell.clashofclans"
++
++    aput-object v8, v4, v7
++
++    const-string v8, "com.vng.mlbbvn"
++
++    aput-object v8, v4, v2
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI13PProps()Ljava/util/Map;
++
++    move-result-object v4
++
++    const-string v6, "MI13P"
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    new-array v4, v7, [Ljava/lang/String;
++
++    const-string v8, "com.levelinfinite.sgameGlobal"
++
++    aput-object v8, v4, v5
++
++    const-string v8, "com.tencent.tmgp.sgame"
++
++    aput-object v8, v4, v1
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createNX729JProps()Ljava/util/Map;
++
++    move-result-object v4
++
++    const-string v6, "NX729J"
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    new-array v4, v1, [Ljava/lang/String;
++
++    const-string v8, "com.YoStar.AetherGazer"
++
++    aput-object v8, v4, v5
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP8PProps()Ljava/util/Map;
++
++    move-result-object v4
++
++    const-string v6, "OP8P"
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    const/16 v4, 0xa
++
++    new-array v4, v4, [Ljava/lang/String;
++
++    const-string v8, "com.netease.lztgglobal"
++
++    aput-object v8, v4, v5
++
++    const-string v8, "com.pubg.imobile"
++
++    aput-object v8, v4, v1
++
++    const-string v8, "com.pubg.krmobile"
++
++    aput-object v8, v4, v7
++
++    const-string v8, "com.rekoo.pubgm"
++
++    aput-object v8, v4, v2
++
++    const-string v8, "com.riotgames.league.wildrift"
++
++    aput-object v8, v4, v3
 +
 +    const-string v8, "com.riotgames.league.wildrifttw"
 +
-+    const-string v9, "com.riotgames.league.wildriftvn"
++    const/4 v9, 0x5
 +
-+    const-string v10, "com.riotgames.league.teamfighttactics"
++    aput-object v8, v4, v9
 +
-+    const-string v11, "com.riotgames.league.teamfighttacticstw"
++    const-string v8, "com.riotgames.league.wildriftvn"
 +
-+    const-string v12, "com.riotgames.league.teamfighttacticsvn"
++    const/4 v10, 0x6
 +
-+    const-string v13, "com.tencent.ig"
++    aput-object v8, v4, v10
 +
-+    filled-new-array/range {v3 .. v15}, [Ljava/lang/String;
++    const/4 v8, 0x7
 +
-+    move-result-object v0
++    const-string v11, "com.tencent.ig"
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP8P:[Ljava/lang/String;
++    aput-object v11, v4, v8
 +
-+    const-string v0, "LE2101"
++    const/16 v8, 0x8
 +
-+    invoke-static {v0, v2}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    const-string v11, "com.tencent.tmgp.pubgmhd"
 +
-+    move-result-object v0
++    aput-object v11, v4, v8
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP9P:Ljava/util/Map;
++    const/16 v8, 0x9
 +
-+    const-string v0, "com.epicgames.portal"
++    const-string v11, "com.vng.pubgmobile"
 +
-+    const-string v2, "com.tencent.lolm"
++    aput-object v11, v4, v8
 +
-+    const-string v3, "com.epicgames.fortnite"
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    filled-new-array {v3, v0, v2}, [Ljava/lang/String;
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    move-result-object v0
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP9PProps()Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP9P:[Ljava/lang/String;
++    move-result-object v4
 +
-+    const-string v0, "23049PCD8G"
++    const-string v6, "OP9P"
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    move-result-object v0
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeF5:Ljava/util/Map;
++    new-array v4, v3, [Ljava/lang/String;
 +
-+    const-string v0, "com.dts.freefireth"
++    const-string v8, "com.epicgames.fortnite"
 +
-+    const-string v1, "com.mobile.legends"
++    aput-object v8, v4, v5
 +
-+    const-string v2, "com.dts.freefiremax"
++    const-string v8, "com.epicgames.portal"
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    aput-object v8, v4, v1
 +
-+    move-result-object v0
++    const-string v8, "com.tencent.lolm"
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeF5:[Ljava/lang/String;
++    aput-object v8, v4, v7
 +
-+    const-string v0, "ASUS_AI2201"
++    const-string v8, "jp.konami.pesam"
 +
-+    const-string v1, "asus"
++    aput-object v8, v4, v2
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    move-result-object v0
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeROG6:Ljava/util/Map;
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG3Props()Ljava/util/Map;
 +
-+    const-string v5, "com.pearlabyss.blackdesertm"
++    move-result-object v4
 +
-+    const-string v6, "com.pearlabyss.blackdesertm.gl"
++    const-string v6, "ROG3"
 +
-+    const-string v1, "com.activision.callofduty.shooter"
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, "com.ea.gp.fifamobile"
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    const-string v3, "com.gameloft.android.ANMP.GloftA9HM"
++    new-array v4, v2, [Ljava/lang/String;
 +
-+    const-string v4, "com.madfingergames.legends"
++    const-string v8, "com.ea.gp.fifamobile"
 +
-+    filled-new-array/range {v1 .. v6}, [Ljava/lang/String;
++    aput-object v8, v4, v5
 +
-+    move-result-object v0
++    const-string v8, "com.pearlabyss.blackdesertm"
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeROG6:[Ljava/lang/String;
++    aput-object v8, v4, v1
 +
-+    const-string v0, "SO-52A"
++    const-string v8, "com.pearlabyss.blackdesertm.gl"
 +
-+    const-string v1, "Sony"
++    aput-object v8, v4, v7
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/GamesPropsUtils;->createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    move-result-object v0
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
 +
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeXP5:Ljava/util/Map;
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG6Props()Ljava/util/Map;
 +
-+    const-string v0, "com.tencent.tmgp.kr.codm"
++    move-result-object v4
++
++    const-string v6, "ROG6"
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    new-array v4, v10, [Ljava/lang/String;
++
++    const-string v8, "com.activision.callofduty.shooter"
++
++    aput-object v8, v4, v5
++
++    const-string v8, "com.gameloft.android.ANMP.GloftA9HM"
++
++    aput-object v8, v4, v1
++
++    const-string v8, "com.madfingergames.legends"
++
++    aput-object v8, v4, v7
++
++    const-string v8, "com.riotgames.league.teamfighttactics"
++
++    aput-object v8, v4, v2
++
++    const-string v8, "com.riotgames.league.teamfighttacticstw"
++
++    aput-object v8, v4, v3
++
++    const-string v3, "com.riotgames.league.teamfighttacticsvn"
++
++    aput-object v3, v4, v9
++
++    invoke-interface {v0, v6, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createXP5Props()Ljava/util/Map;
++
++    move-result-object v3
++
++    const-string v4, "XP5"
++
++    invoke-interface {v0, v4, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
++
++    new-array v2, v2, [Ljava/lang/String;
++
++    const-string v3, "com.tencent.tmgp.kr.codm"
++
++    aput-object v3, v2, v5
++
++    const-string v3, "com.garena.game.codm"
++
++    aput-object v3, v2, v1
 +
 +    const-string v1, "com.vng.codmvn"
 +
-+    const-string v2, "com.garena.game.codm"
++    aput-object v1, v2, v7
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    sput-object v0, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeXP5:[Ljava/lang/String;
++    invoke-interface {v0, v4, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-void
 +.end method
@@ -359,14 +462,11 @@ index 00000000..16ecbce0
 +    return-void
 +.end method
 +
-+.method private static blacklist createMap(Ljava/lang/String;Ljava/lang/String;)Ljava/util/Map;
-+    .locals 2
++.method private static blacklist createBS4Props()Ljava/util/Map;
++    .locals 3
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
-+            "(",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/String;",
-+            ")",
++            "()",
 +            "Ljava/util/Map<",
 +            "Ljava/lang/String;",
 +            "Ljava/lang/Object;",
@@ -378,13 +478,387 @@ index 00000000..16ecbce0
 +
 +    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
 +
-+    const-string v1, "MODEL"
++    const-string v1, "BRAND"
 +
-+    invoke-interface {v0, v1, p0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v2, "blackshark"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "MANUFACTURER"
 +
-+    invoke-interface {v0, v1, p1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "SHARK PRS-A0"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createF5Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Xiaomi"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "23049PCD8G"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createMI11TProps()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Xiaomi"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "21081111RG"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createMI13PProps()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Xiaomi"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "2210132C"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createNX729JProps()Ljava/util/Map;
++    .locals 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "nubia"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "NX729J"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createOP8PProps()Ljava/util/Map;
++    .locals 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "OnePlus"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "OnePlus8Pro"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "IN2020"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createOP9PProps()Ljava/util/Map;
++    .locals 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "OnePlus"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "OnePlus9Pro"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "LE2101"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createROG3Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "asus"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "ASUS_I003D"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createROG6Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "asus"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "ASUS_AI2201"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createXP5Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Sony"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "SO-52A"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createiQ11Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "vivo"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "V2243A"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-object v0
 +.end method
@@ -490,13 +964,13 @@ index 00000000..16ecbce0
 +.end method
 +
 +.method public static blacklist setProps(Landroid/content/Context;)V
-+    .locals 6
++    .locals 8
 +
 +    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_b
++    if-eqz v0, :cond_5
 +
 +    invoke-virtual {v0}, Ljava/lang/String;->isEmpty()Z
 +
@@ -504,223 +978,140 @@ index 00000000..16ecbce0
 +
 +    if-eqz v1, :cond_0
 +
-+    goto/16 :goto_2
++    goto/16 :goto_3
 +
 +    :cond_0
-+    const/4 v1, 0x0
++    const-string v1, "persist.sys.pixelprops.games"
 +
-+    const-string v2, "persist.sys.pixelprops.games"
++    const/4 v2, 0x0
 +
-+    const/4 v3, 0x1
++    invoke-static {v1, v2}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
-+    invoke-static {v2, v3}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    move-result v1
 +
-+    move-result v2
-+
-+    if-nez v2, :cond_1
++    if-nez v1, :cond_1
 +
 +    return-void
 +
 +    :cond_1
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeBS4:[Ljava/lang/String;
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    invoke-interface {v1}, Ljava/util/Map;->keySet()Ljava/util/Set;
 +
-+    move-result-object v2
++    move-result-object v1
 +
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++    invoke-interface {v1}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
 +
-+    move-result v2
++    move-result-object v1
 +
-+    if-eqz v2, :cond_2
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeBS4:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_2
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI11TP:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_3
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI11TP:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_3
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeMI13P:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++    :goto_0
++    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
 +
 +    move-result v2
 +
 +    if-eqz v2, :cond_4
 +
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeMI13P:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_4
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP8P:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
 +    move-result-object v2
 +
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++    check-cast v2, Ljava/lang/String;
 +
-+    move-result v2
++    sget-object v3, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChange:Ljava/util/Map;
 +
-+    if-eqz v2, :cond_5
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP8P:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_5
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeOP9P:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_6
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeOP9P:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_6
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeF5:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_7
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeF5:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_7
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeROG6:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_8
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeROG6:Ljava/util/Map;
-+
-+    goto :goto_0
-+
-+    :cond_8
-+    sget-object v2, Lio/mesalabs/unica/GamesPropsUtils;->packagesToChangeXP5:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    if-eqz v2, :cond_9
-+
-+    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChangeXP5:Ljava/util/Map;
-+
-+    :cond_9
-+    :goto_0
-+    if-eqz v1, :cond_a
-+
-+    new-instance v2, Ljava/lang/StringBuilder;
-+
-+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
-+
-+    const-string v3, "Defining props for: "
-+
-+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v2
-+
-+    invoke-static {v2}, Lio/mesalabs/unica/GamesPropsUtils;->dlog(Ljava/lang/String;)V
-+
-+    invoke-interface {v1}, Ljava/util/Map;->entrySet()Ljava/util/Set;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-+
-+    move-result-object v2
-+
-+    :goto_1
-+    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
-+
-+    move-result v3
-+
-+    if-eqz v3, :cond_a
-+
-+    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++    invoke-interface {v3, v2}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    move-result-object v3
 +
-+    check-cast v3, Ljava/util/Map$Entry;
++    check-cast v3, [Ljava/lang/String;
 +
-+    invoke-interface {v3}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
++    invoke-static {v3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
 +    move-result-object v4
 +
-+    check-cast v4, Ljava/lang/String;
++    invoke-interface {v4, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
 +
-+    invoke-interface {v3}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
++    move-result v4
++
++    if-eqz v4, :cond_3
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "Defining props for: "
++
++    invoke-virtual {v1, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1}, Lio/mesalabs/unica/GamesPropsUtils;->dlog(Ljava/lang/String;)V
++
++    sget-object v1, Lio/mesalabs/unica/GamesPropsUtils;->propsToChange:Ljava/util/Map;
++
++    invoke-interface {v1, v2}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v1
++
++    check-cast v1, Ljava/util/Map;
++
++    invoke-interface {v1}, Ljava/util/Map;->entrySet()Ljava/util/Set;
++
++    move-result-object v4
++
++    invoke-interface {v4}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
++
++    move-result-object v4
++
++    :goto_1
++    invoke-interface {v4}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v5
++
++    if-eqz v5, :cond_2
++
++    invoke-interface {v4}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
 +    move-result-object v5
 +
-+    invoke-static {v4, v5}, Lio/mesalabs/unica/GamesPropsUtils;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
++    check-cast v5, Ljava/util/Map$Entry;
++
++    invoke-interface {v5}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
++
++    move-result-object v6
++
++    check-cast v6, Ljava/lang/String;
++
++    invoke-interface {v5}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
++
++    move-result-object v7
++
++    invoke-static {v6, v7}, Lio/mesalabs/unica/GamesPropsUtils;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
 +
 +    goto :goto_1
 +
-+    :cond_a
++    :cond_2
++    goto :goto_2
++
++    :cond_3
++    goto :goto_0
++
++    :cond_4
++    :goto_2
 +    return-void
 +
-+    :cond_b
-+    :goto_2
++    :cond_5
++    :goto_3
 +    return-void
 +.end method
 -- 
-2.34.1
+2.45.1
 
