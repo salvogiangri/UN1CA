@@ -1,12 +1,12 @@
-From 839298de1200d51d22a3b06ad0b5cf16196fb5fe Mon Sep 17 00:00:00 2001
+From b4b8465b5c31f8a7611c819c3bca1f9b19d93bf5 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
  .../android/feature/SemCscFeature.smali       |  98 ++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 372 ++++++++++++++++++
- 2 files changed, 458 insertions(+), 12 deletions(-)
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 380 ++++++++++++++++++
+ 2 files changed, 466 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..4d6a69e5
+index 00000000..a5d6a3d2
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,372 @@
+@@ -0,0 +1,380 @@
 +.class public Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -372,6 +372,14 @@ index 00000000..4d6a69e5
 +    const-string v1, "CscFeature_SmartManager_ConfigSubFeatures"
 +
 +    const-string v2, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
++
++    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++
++    const-string v1, "CscFeature_VoiceCall_ConfigCallButton"
++
++    const-string v2, "ShowVoiceFocus"
 +
 +    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -610,5 +618,5 @@ index 00000000..4d6a69e5
 +    return-object v0
 +.end method
 -- 
-2.45.1
+2.45.2
 
