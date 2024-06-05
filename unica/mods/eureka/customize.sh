@@ -56,6 +56,28 @@ ADD_TO_WORK_DIR()
         TMP="$(dirname "$TMP")"
     done
 }
+
+REMOVE_FROM_WORK_DIR()
+{
+    local FILE_PATH="$1"
+
+    if [ -e "$FILE_PATH" ]; then
+        local FILE
+        local PARTITION
+        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
+        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
+
+        echo "Debloating /$FILE"
+        rm -rf "$FILE_PATH"
+
+        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
+        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
+        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+    fi
+}
 # ]
 
 if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-S92"* ]]; then
@@ -66,6 +88,15 @@ IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
 MODEL=$(echo -n "${SOURCE_EXTRA_FIRMWARES[0]}" | cut -d "/" -f 1)
 REGION=$(echo -n "${SOURCE_EXTRA_FIRMWARES[0]}" | cut -d "/" -f 2)
 
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio"
+
+cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/media/audio" "$WORK_DIR/system/system/media/audio"
+cat "$FW_DIR/${MODEL}_${REGION}/fs_config-system" | grep -F "system/media/audio" >> "$WORK_DIR/configs/fs_config-system"
+cat "$FW_DIR/${MODEL}_${REGION}/file_context-system" | grep -F "system/media/audio" >> "$WORK_DIR/configs/file_context-system"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "system" "system/etc/ringtones_count_list.txt" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/priv-app/wallpaper-res/wallpaper-res.apk" 0 0 644 "u:object_r:system_file:s0"
+
+echo "- Processing \"Custom boot animation\" by @BlackMesa123"
+bash "$SRC_DIR/unica/mods/bootanim/customize.sh"
