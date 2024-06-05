@@ -1,3 +1,12 @@
+TWOTHREE_TARGETS=""
+TWOFOUR_TARGETS="a52q a52sxq a71 a72q a73xq m52xq r9q r9q2"
+
+if echo "$TWOTHREE_TARGETS" | grep -q -w "$CMD"; then
+    cp -a --preserve=all "$SRC_DIR/unica/mods/bootanim/2340x1080/"* "$WORK_DIR/system/system/media"
+elif echo "$TWOFOUR_TARGETS" | grep -q -w "$CMD"; then
+    cp -a --preserve=all "$SRC_DIR/unica/mods/bootanim/2400x1080/"* "$WORK_DIR/system/system/media"
+fi
+
 if ! grep -q "system/media/audio/ui/Power" "$WORK_DIR/configs/file_context-system"; then
     {
         echo "/system/media/audio/ui/PowerOn\.ogg u:object_r:system_file:s0"

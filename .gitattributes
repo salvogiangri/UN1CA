@@ -2,15 +2,8 @@
 * text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
-unica/flashable-zip/updater binary
-unica/mods/pif/system/bin/rezetprop binary
-unica/patches/deknox/system/** binary
-unica/patches/product_feature/fingerprint/optical_fod/system/** binary
-unica/patches/vndk/30/** binary
-target/a52sxq/patches/wpss/vendor/firmware/** binary
-target/a71/patches/*/*/** binary
-target/a73xq/patches/wpss/vendor/firmware/** binary
-target/m52xq/patches/vendor/vendor/** binary
+
+# Common file extensions
 *.apk binary
 *.apex binary
 *.bin binary
@@ -21,4 +14,18 @@ target/m52xq/patches/vendor/vendor/** binary
 *.ico binary
 *.jpg binary
 *.png binary
+*.qmg binary
 *.webp binary
+
+# ROM-specific prebuilt blobs
+unica/flashable-zip/updater binary
+unica/mods/pif/system/bin/rezetprop binary
+unica/patches/deknox/system/** binary
+unica/patches/product_feature/fingerprint/optical_fod/system/** binary
+unica/patches/vndk/30/** binary
+
+# Device-specific prebuilt blobs
+target/a52sxq/patches/wpss/vendor/firmware/** binary
+target/a71/patches/*/*/** binary
+target/a73xq/patches/wpss/vendor/firmware/** binary
+target/m52xq/patches/vendor/vendor/** binary
