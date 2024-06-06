@@ -1,0 +1,25 @@
+From 661cbbedf61af0d6e36f7e817d2165166b50248a Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Thu, 6 Jun 2024 11:20:58 +0200
+Subject: [PATCH] Enable isOpticalSensor
+
+---
+ .../biometrics/fingerprint/FingerprintSettingsUtils.smali       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+index 90f8e223..40d253a2 100644
+--- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+@@ -1189,7 +1189,7 @@
+ .method public static isOpticalSensor()Z
+     .locals 1
+ 
+-    const/4 v0, 0x0
++    const/4 v0, 0x1
+ 
+     return v0
+ .end method
+-- 
+2.45.2
+
