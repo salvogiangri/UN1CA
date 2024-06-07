@@ -409,8 +409,11 @@ system/priv-app/Upday
 if $SOURCE_IS_ESIM_SUPPORTED; then
     if ! $TARGET_IS_ESIM_SUPPORTED; then
         SYSTEM_DEBLOAT+="
+        system/etc/permissions/privapp-permissions-com.samsung.android.app.esimkeystring.xml
         system/etc/permissions/privapp-permissions-com.samsung.euicc.xml
+        system/etc/sysconfig/preinstalled-packages-com.samsung.android.app.esimkeystring.xml
         system/etc/sysconfig/preinstalled-packages-com.samsung.euicc.xml
+        system/priv-app/EsimKeyString
         system/priv-app/EuiccService
         "
     fi
