@@ -1,0 +1,25 @@
+From b760e6dcdb9c3b00a9f4852d6279a8074b64bbee Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Fri, 7 Jun 2024 08:15:21 +0200
+Subject: [PATCH] Show real device model number
+
+---
+ .../settings/deviceinfo/aboutphone/ModelNameGetter.smali        | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
+index cacdfe70..85627e35 100644
+--- a/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
++++ b/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
+@@ -52,7 +52,7 @@
+ 
+     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    const-string/jumbo v1, "ro.product.model"
++    const-string/jumbo v1, "ro.boot.em.model"
+ 
+     invoke-static {v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+-- 
+2.45.2
+
