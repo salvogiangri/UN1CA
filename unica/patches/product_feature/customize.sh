@@ -34,6 +34,34 @@ GET_FP_SENSOR_TYPE()
         exit 1
     fi
 }
+
+SET_CONFIG()
+{
+    local CONFIG="$1"
+    local VALUE="$2"
+    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
+
+    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+        CONFIG="$(echo -n "$CONFIG" | sed 's/=//g')"
+        if grep -Fq "$CONFIG" "$FILE"; then
+            echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
+            sed -i "/$CONFIG/d" "$FILE"
+        fi
+    else
+        if grep -Fq "<$CONFIG>" "$FILE"; then
+            echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
+            sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
+        else
+            echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
+            sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
+            if ! grep -q "Added by unica" "$FILE"; then
+                echo "    <!-- Added by unica/patches/floating_feature/customize.sh -->" >> "$FILE"
+            fi
+            echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
+            echo "</SecFloatingFeatureSet>" >> "$FILE"
+        fi
+    fi
+}
 # ]
 
 if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]]; then
@@ -123,6 +151,8 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
         APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
     elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
         cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system/"* "$WORK_DIR/system/system"
+        APPLY_PATCH "system/framework/services.jar" "fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
     fi
 
     if [[ "$TARGET_FP_SENSOR_CONFIG" == *"navi=1"* ]]; then
@@ -153,6 +183,7 @@ fi
 if $SOURCE_HAS_HW_MDNIE; then
     if ! $TARGET_HAS_HW_MDNIE; then
         echo "Applying HW mDNIe patches"
+        SET_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" --delete
         APPLY_PATCH "system/framework/framework.jar" "mdnie/framework.jar/0001-Disable-HW-mDNIe.patch"
         APPLY_PATCH "system/framework/services.jar" "mdnie/services.jar/0001-Disable-HW-mDNIe.patch"
     fi
@@ -277,4 +308,11 @@ if [[ "$SOURCE_DVFS_CONFIG_NAME" != "$TARGET_DVFS_CONFIG_NAME" ]]; then
     for f in $FTP; do
         sed -i "s/$SOURCE_DVFS_CONFIG_NAME/$TARGET_DVFS_CONFIG_NAME/g" "$APKTOOL_DIR/$f"
     done
+fi
+
+if $SOURCE_IS_ESIM_SUPPORTED; then
+    if ! $TARGET_IS_ESIM_SUPPORTED; then
+        SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_EMBEDDED_SIM_SLOTSWITCH" --delete
+        SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_EMBEDDED_SIM" --delete
+    fi
 fi

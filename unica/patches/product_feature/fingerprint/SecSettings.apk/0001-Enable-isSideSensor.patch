@@ -1,0 +1,34 @@
+From f6ccd5df6bf14f70325bb413095fcc1b49e8d739 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Fri, 7 Jun 2024 07:09:36 +0200
+Subject: [PATCH] Enable isSideSensor
+
+---
+ .../biometrics/fingerprint/FingerprintSettingsUtils.smali     | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+index 90f8e223..b070d672 100644
+--- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
+@@ -971,7 +971,7 @@
+ .method public static isDisplaySensor()Z
+     .locals 1
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     return v0
+ .end method
+@@ -1205,7 +1205,7 @@
+ .method public static isSideSensor()Z
+     .locals 1
+ 
+-    const/4 v0, 0x0
++    const/4 v0, 0x1
+ 
+     return v0
+ .end method
+-- 
+2.45.2
+

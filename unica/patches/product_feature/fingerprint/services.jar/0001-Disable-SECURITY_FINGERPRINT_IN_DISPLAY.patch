@@ -1,0 +1,25 @@
+From 0b27d738651b94802742e13f61deaedfe8955814 Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Fri, 7 Jun 2024 07:11:29 +0200
+Subject: [PATCH] Disable SECURITY_FINGERPRINT_IN_DISPLAY
+
+---
+ smali_classes3/com/android/server/power/PowerManagerUtil.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali_classes3/com/android/server/power/PowerManagerUtil.smali b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
+index 18b81631..a3af868f 100644
+--- a/smali_classes3/com/android/server/power/PowerManagerUtil.smali
++++ b/smali_classes3/com/android/server/power/PowerManagerUtil.smali
+@@ -889,7 +889,7 @@
+ 
+     sput-boolean v11, Lcom/android/server/power/PowerManagerUtil;->SEC_FEATURE_HQM_SEND_LBHD_HIGHEST:Z
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     sput-boolean v0, Lcom/android/server/power/PowerManagerUtil;->SECURITY_FINGERPRINT_IN_DISPLAY:Z
+ 
+-- 
+2.45.2
+
