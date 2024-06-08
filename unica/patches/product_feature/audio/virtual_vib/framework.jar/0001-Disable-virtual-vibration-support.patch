@@ -1,17 +1,62 @@
-From d7a186291d235aacaa67b796dcf0cea7842aeaf8 Mon Sep 17 00:00:00 2001
+From d6f93dc915eef246a7adf5ff0ef84384f05e03d9 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 5 Jun 2024 22:57:32 +0200
-Subject: [PATCH] Disable ACH ringtone support
+Date: Sat, 8 Jun 2024 15:23:28 +0200
+Subject: [PATCH] Disable virtual vibration support
 
 ---
- .../com/samsung/android/audio/Rune.smali      |  6 +++--
- .../samsung/android/vibrator/VibRune.smali    | 22 +++++++++----------
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ .../os/VibrationAttributes$Builder.smali      | 17 +------------
+ .../com/samsung/android/audio/Rune.smali      |  8 ++++---
+ .../samsung/android/vibrator/VibRune.smali    | 24 +++++++++----------
+ 3 files changed, 18 insertions(+), 31 deletions(-)
 
+diff --git a/smali_classes3/android/os/VibrationAttributes$Builder.smali b/smali_classes3/android/os/VibrationAttributes$Builder.smali
+index 3c940f32..a7badfc4 100644
+--- a/smali_classes3/android/os/VibrationAttributes$Builder.smali
++++ b/smali_classes3/android/os/VibrationAttributes$Builder.smali
+@@ -56,7 +56,7 @@
+ .end method
+ 
+ .method public constructor whitelist <init>(Landroid/media/AudioAttributes;)V
+-    .locals 2
++    .locals 1
+ 
+     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+ 
+@@ -78,21 +78,6 @@
+ 
+     invoke-direct {p0, p1}, Landroid/os/VibrationAttributes$Builder;->setFlags(Landroid/media/AudioAttributes;)V
+ 
+-    invoke-virtual {p1}, Landroid/media/AudioAttributes;->getTags()Ljava/util/Set;
+-
+-    move-result-object v0
+-
+-    const-string v1, "VIRTUAL_VIB_SOUND"
+-
+-    invoke-interface {v0, v1}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {p0, v1}, Landroid/os/VibrationAttributes$Builder;->semAddTag(Ljava/lang/String;)Landroid/os/VibrationAttributes$Builder;
+-
+-    :cond_0
+     return-void
+ .end method
+ 
 diff --git a/smali_classes5/com/samsung/android/audio/Rune.smali b/smali_classes5/com/samsung/android/audio/Rune.smali
-index 706cd7f7..067fa894 100644
+index 706cd7f7..8c756901 100644
 --- a/smali_classes5/com/samsung/android/audio/Rune.smali
 +++ b/smali_classes5/com/samsung/android/audio/Rune.smali
+@@ -270,7 +270,7 @@
+ 
+ .field public static final blacklist SEC_AUDIO_SUPPORT_SOUND_THEME:Z
+ 
+-.field public static final blacklist SEC_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND:Z = true
++.field public static final blacklist SEC_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND:Z = false
+ 
+ .field public static final blacklist SEC_AUDIO_SUPPORT_VOIP_ANTI_HOWLING:Z
+ 
 @@ -433,9 +433,11 @@
  
      sput-boolean v2, Lcom/samsung/android/audio/Rune;->SEC_AUDIO_SUPPORT_SOUND_THEME:Z
@@ -27,9 +72,18 @@ index 706cd7f7..067fa894 100644
      move-result v0
  
 diff --git a/smali_classes5/com/samsung/android/vibrator/VibRune.smali b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
-index 90dc188f..a4604f7b 100644
+index 90dc188f..f190f9f0 100644
 --- a/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 +++ b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
+@@ -60,7 +60,7 @@
+ 
+ .field public static final blacklist SUPPORT_VIBRATION_TAG:Z = true
+ 
+-.field public static final blacklist SUPPORT_VIRTUAL_VIBRATION_SOUND:Z = true
++.field public static final blacklist SUPPORT_VIRTUAL_VIBRATION_SOUND:Z = false
+ 
+ .field public static final blacklist TO_DO:Z = false
+ 
 @@ -81,7 +81,9 @@
  
      const-string v1, "ACH"

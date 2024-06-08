@@ -82,18 +82,6 @@ if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]];
     done
 fi
 
-if $SOURCE_AUDIO_SUPPORT_ACH_RINGTONE; then
-    if ! $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
-        echo "Applying ACH ringtone patches"
-        APPLY_PATCH "system/framework/framework.jar" "audio/ach/framework.jar/0001-Disable-ACH-ringtone-support.patch"
-    fi
-else
-    if $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
-        # TODO: won't be necessary anyway
-        true
-    fi
-fi
-
 if $SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER; then
     if ! $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER; then
         echo "Applying dual speaker patches"
@@ -102,6 +90,21 @@ if $SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER; then
     fi
 else
     if $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER; then
+        # TODO: won't be necessary anyway
+        true
+    fi
+fi
+
+if $SOURCE_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
+    if ! $TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
+        echo "Applying virtual vibration patches"
+        APPLY_PATCH "system/framework/framework.jar" "audio/virtual_vib/framework.jar/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/framework/services.jar" "audio/virtual_vib/services.jar/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "audio/virtual_vib/SecSettings.apk/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "audio/virtual_vib/SettingsProvider.apk/0001-Disable-virtual-vibration-support.patch"
+    fi
+else
+    if $TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
         # TODO: won't be necessary anyway
         true
     fi
