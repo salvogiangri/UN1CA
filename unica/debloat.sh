@@ -340,6 +340,7 @@ etc/init/vendor_flash_recovery.rc
 
 # Apps debloat
 PRODUCT_DEBLOAT+="
+app/AssistantShell
 app/Chrome
 app/DuoStub
 app/Gmail2
