@@ -1,6 +1,28 @@
 SKIPUNZIP=1
 
 # [
+DECOMPILE()
+{
+    if [ ! -d "$APKTOOL_DIR/$1" ]; then
+        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
+    fi
+}
+
+APPLY_PATCH()
+{
+    local PATCH
+    local OUT
+
+    DECOMPILE "$1"
+
+    cd "$APKTOOL_DIR/$1"
+    PATCH="$SRC_DIR/unica/patches/nfc/$2"
+    OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
+        || echo "$OUT" | grep -q "Skipping patch" || false
+    patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
+    cd - &> /dev/null
+}
+
 ADD_TO_WORK_DIR()
 {
     local PARTITION="$1"
@@ -150,4 +172,43 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so" ]; then
     fi
 elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_st.so" ]; then
     ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc_st.so" 0 0 644 "u:object_r:system_lib_file:s0"
+fi
+
+if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
+    [[ "$SOURCE_ESE_COS_NAME" != "$TARGET_ESE_COS_NAME" ]]; then
+    DECOMPILE "system/framework/framework.jar"
+    DECOMPILE "system/framework/services.jar"
+
+    if [[ "$TARGET_ESE_CHIP_VENDOR" == "none" ]] && [[ "$TARGET_ESE_COS_NAME" == "none" ]]; then
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/app/ESEServiceAgent"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/bin/sem_daemon"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/init/sem.rc"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.sem.factoryapp.xml"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_sem.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semHal.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semRil.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semTlc.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libspictrl.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.security.sem@1.0.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_sem.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semHal.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semRil.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semTlc.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libspictrl.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
+        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SEMFactoryApp"
+        cp -a --preserve=all "$SRC_DIR/unica/patches/nfc/system/"* "$WORK_DIR/system/system"
+        APPLY_PATCH "system/framework/framework.jar" "ese/framework.jar/0001-Disable-SemService.patch"
+        APPLY_PATCH "system/framework/services.jar" "ese/services.jar/0001-Disable-SemService.patch"
+    else
+        FTP="
+        system/framework/framework.jar/smali_classes5/com/android/server/SemService.smali
+        system/framework/services.jar/smali/com/android/server/SystemConfig.smali
+        system/framework/services.jar/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
+        "
+        for f in $FTP; do
+            sed -i "s/\"$SOURCE_ESE_CHIP_VENDOR\"/\"$TARGET_ESE_CHIP_VENDOR\"/g" "$APKTOOL_DIR/$f"
+            sed -i "s/\"$SOURCE_ESE_COS_NAME\"/\"$TARGET_ESE_COS_NAME\"/g" "$APKTOOL_DIR/$f"
+        done
+    fi
 fi
