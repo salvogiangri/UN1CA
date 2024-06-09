@@ -1,4 +1,4 @@
-From 9fea1507fae0a17abe6838476490d5994f0a8f22 Mon Sep 17 00:00:00 2001
+From c36f775ecc683e05b8be864f4e6b066f0cbfbb71 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -20,14 +20,14 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
- .../io/mesalabs/unica/pif/PIFUtils.smali      | 408 ++++++++++++++++++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 418 ++++++++++++++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++++
  .../DeviceNamePreferenceController.smali      | 211 +++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
  .../PIFVersionPreferenceController.smali      | 226 ++++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++++
- 23 files changed, 2177 insertions(+)
+ 23 files changed, 2187 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -758,10 +758,10 @@ index 00000000..07ba1d77
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..42a95bdc
+index 00000000..9f2e3986
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
-@@ -0,0 +1,408 @@
+@@ -0,0 +1,418 @@
 +.class public Lio/mesalabs/unica/pif/PIFUtils;
 +.super Ljava/lang/Object;
 +.source "PIFUtils.java"
@@ -1024,6 +1024,16 @@ index 00000000..42a95bdc
 +    const-string v0, "persist.sys.pif.model"
 +
 +    const-string v1, "MODEL"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.id"
++
++    const-string v1, "ID"
 +
 +    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
 +
