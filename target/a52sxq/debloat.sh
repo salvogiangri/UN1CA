@@ -27,6 +27,7 @@ system/app/WifiRROverlayAppWifiLock
 "
 PRODUCT_DEBLOAT+="
 overlay/SoftapOverlay6GHz
+overlay/SoftapOverlayDualAp
 overlay/SoftapOverlayOWE
 "
 
@@ -45,37 +46,18 @@ system/priv-app/GameDriver-SM8550
 
 # Camera SDK
 SYSTEM_DEBLOAT+="
+system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
 system/etc/permissions/cameraservice.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
 system/framework/scamera_sep.jar
+system/priv-app/GlobalPostProcMgr
+system/priv-app/PetService
 system/priv-app/SCameraSDKService
 "
 
 # Mocca
 SYSTEM_DEBLOAT+="
 system/app/MoccaMobile
-"
-
-# eSE
-SYSTEM_DEBLOAT+="
-system/app/ESEServiceAgent
-system/bin/esecos_daemon
-system/bin/sem_daemon
-system/etc/init/esecos.rc
-system/etc/init/sem.rc
-system/etc/permissions/privapp-permissions-com.sec.factoryapp.xml
-system/lib/libsec_sem.so
-system/lib/libsec_semHal.so
-system/lib/libsec_semRil.so
-system/lib/libsec_semTlc.so
-system/lib/libspictrl.so
-system/lib/vendor.samsung.hardware.security.sem@1.0.so
-system/lib64/libsec_sem.so
-system/lib64/libsec_semHal.so
-system/lib64/libsec_semRil.so
-system/lib64/libsec_semTlc.so
-system/lib64/libspictrl.so
-system/lib64/vendor.samsung.hardware.security.sem@1.0.so
-system/priv-app/SEMFactoryApp
 "
 
 # system_ext clean-up
