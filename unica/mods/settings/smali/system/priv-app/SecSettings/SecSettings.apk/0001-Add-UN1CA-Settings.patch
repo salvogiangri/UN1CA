@@ -1,4 +1,4 @@
-From c36f775ecc683e05b8be864f4e6b066f0cbfbb71 Mon Sep 17 00:00:00 2001
+From 522312ab22d266155368e0cc82f8a4d22ca94a2c Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -8,11 +8,11 @@ Subject: [PATCH] Add UN1CA Settings
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   6 +
  res/layout/unica_settings_logo_layout.xml     |   6 +
- res/values/public.xml                         |  19 +
- res/values/strings.xml                        |  14 +
+ res/values/public.xml                         |  24 +
+ res/values/strings.xml                        |  19 +
  res/xml/sec_top_level_settings.xml            |   1 +
- res/xml/unica_settings.xml                    |  14 +
- .../com/android/settings/R$string.smali       |  28 ++
+ res/xml/unica_settings.xml                    |  15 +
+ .../com/android/settings/R$string.smali       |  38 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         |  92 ++++
@@ -24,10 +24,12 @@ Subject: [PATCH] Add UN1CA Settings
  .../AppDowngradePreferenceController.smali    | 183 ++++++++
  .../DeviceNamePreferenceController.smali      | 211 +++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
+ ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
+ .../LiveBlurPreferenceController.smali        | 301 +++++++++++++
  .../PIFVersionPreferenceController.smali      | 226 ++++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++++
- 23 files changed, 2187 insertions(+)
+ 25 files changed, 2543 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -42,6 +44,8 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
@@ -108,7 +112,7 @@ index 00000000..7b802f76
 +</FrameLayout>
 \ No newline at end of file
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 23eb925b..a9e3f19f 100644
+index 23eb925b..4be12b78 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -11957,6 +11957,7 @@
@@ -136,7 +140,7 @@ index 23eb925b..a9e3f19f 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
-@@ -31911,6 +31915,20 @@
+@@ -31911,6 +31915,25 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
@@ -146,18 +150,23 @@ index 23eb925b..a9e3f19f 100644
 +    <public type="string" name="unica_device_name_title" id="0x7f1333a1" />
 +    <public type="string" name="unica_extra_settings_title" id="0x7f1333a2" />
 +    <public type="string" name="unica_games_spoof_title" id="0x7f1333a3" />
-+    <public type="string" name="unica_pif_checking" id="0x7f1333a4" />
-+    <public type="string" name="unica_pif_error" id="0x7f1333a5" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f1333a6" />
-+    <public type="string" name="unica_pif_updated" id="0x7f1333a7" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f1333a8" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1333a9" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1333aa" />
-+    <public type="string" name="unica_settings_title" id="0x7f1333ab" />
++    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f1333a4" />
++    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f1333a5" />
++    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f1333a6" />
++    <public type="string" name="unica_native_blur_dialog_title" id="0x7f1333a7" />
++    <public type="string" name="unica_native_blur_title" id="0x7f1333a8" />
++    <public type="string" name="unica_pif_checking" id="0x7f1333a9" />
++    <public type="string" name="unica_pif_error" id="0x7f1333aa" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f1333ab" />
++    <public type="string" name="unica_pif_updated" id="0x7f1333ac" />
++    <public type="string" name="unica_pif_version_title" id="0x7f1333ad" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1333ae" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1333af" />
++    <public type="string" name="unica_settings_title" id="0x7f1333b0" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34627,4 +34645,5 @@
+@@ -34627,4 +34650,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
@@ -165,10 +174,10 @@ index 23eb925b..a9e3f19f 100644
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 486d035b..969621e1 100644
+index 486d035b..765d08f5 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13851,4 +13851,18 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13851,4 +13851,23 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -178,6 +187,11 @@ index 486d035b..969621e1 100644
 +    <string name="unica_device_name_title">Device name</string>
 +    <string name="unica_extra_settings_title">Extra settings</string>
 +    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
++    <string name="unica_native_blur_dialog_msg">To apply the changes, a restart is required.</string>
++    <string name="unica_native_blur_dialog_negative">Not now</string>
++    <string name="unica_native_blur_dialog_positive">Restart</string>
++    <string name="unica_native_blur_dialog_title">Restart required</string>
++    <string name="unica_native_blur_title">Enable live blur effect</string>
 +    <string name="unica_pif_checking">Checking for updates…</string>
 +    <string name="unica_pif_error">An error occurred.</string>
 +    <string name="unica_pif_up_to_date">"You're running the latest version."</string>
@@ -201,10 +215,10 @@ index e79896f6..a16c39b5 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..0ec9259d
+index 00000000..8ee18f97
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,15 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -214,6 +228,7 @@ index 00000000..0ec9259d
 +    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
 +    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
++        <SecSwitchPreference android:title="@string/unica_native_blur_title" android:key="unica_native_blur" settings:controller="io.mesalabs.unica.settings.LiveBlurPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.GamesPropsPreferenceController" />
@@ -221,10 +236,10 @@ index 00000000..0ec9259d
 +</PreferenceScreen>
 \ No newline at end of file
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 91fbf763..298d317d 100644
+index 91fbf763..3783f4a0 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12519,3 +12519,31 @@
+@@ -12519,3 +12519,41 @@
  .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f13339c
  
  .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f13339d
@@ -241,21 +256,31 @@ index 91fbf763..298d317d 100644
 +
 +.field public static final unica_games_spoof_title:I = 0x7f1333a3
 +
-+.field public static final unica_pif_checking:I = 0x7f1333a4
++.field public static final unica_native_blur_dialog_msg:I = 0x7f1333a4
 +
-+.field public static final unica_pif_error:I = 0x7f1333a5
++.field public static final unica_native_blur_dialog_negative:I = 0x7f1333a5
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f1333a6
++.field public static final unica_native_blur_dialog_positive:I = 0x7f1333a6
 +
-+.field public static final unica_pif_updated:I = 0x7f1333a7
++.field public static final unica_native_blur_dialog_title:I = 0x7f1333a7
 +
-+.field public static final unica_pif_version_title:I = 0x7f1333a8
++.field public static final unica_native_blur_title:I = 0x7f1333a8
 +
-+.field public static final unica_rom_version_title:I = 0x7f1333a9
++.field public static final unica_pif_checking:I = 0x7f1333a9
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1333aa
++.field public static final unica_pif_error:I = 0x7f1333aa
 +
-+.field public static final unica_settings_title:I = 0x7f1333ab
++.field public static final unica_pif_up_to_date:I = 0x7f1333ab
++
++.field public static final unica_pif_updated:I = 0x7f1333ac
++
++.field public static final unica_pif_version_title:I = 0x7f1333ad
++
++.field public static final unica_rom_version_title:I = 0x7f1333ae
++
++.field public static final unica_secure_ss_title:I = 0x7f1333af
++
++.field public static final unica_settings_title:I = 0x7f1333b0
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
 index 4d5b41c4..44cfdfb4 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
@@ -1748,6 +1773,353 @@ index 00000000..66a58f0c
 +    const/4 p0, 0x1
 +
 +    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
+new file mode 100644
+index 00000000..dc46c7ae
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
+@@ -0,0 +1,34 @@
++.class public final synthetic Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/settings/LiveBlurPreferenceController;)V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;->f$0:Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .locals 1
++
++    iget-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;->f$0:Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
++
++    invoke-virtual {v0, p1, p2}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
+new file mode 100644
+index 00000000..99e3e369
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
+@@ -0,0 +1,301 @@
++.class public Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "LiveBlurPreferenceController.java"
++
++
++# static fields
++.field private static final UNSUPPORTED_DEVICES:[Ljava/lang/String;
++
++
++# instance fields
++.field private mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++
++.field private mIsSupported:Z
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .locals 3
++
++    const/4 v0, 0x1
++
++    new-array v0, v0, [Ljava/lang/String;
++
++    const/4 v1, 0x0
++
++    const-string v2, "a71"
++
++    aput-object v2, v0, v1
++
++    sput-object v0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->UNSUPPORTED_DEVICES:[Ljava/lang/String;
++
++    return-void
++.end method
++
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 2
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    const-string v0, "ro.product.vendor.device"
++
++    const-string v1, ""
++
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    sget-object v1, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->UNSUPPORTED_DEVICES:[Ljava/lang/String;
++
++    invoke-static {v1}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v1
++
++    invoke-interface {v1, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    xor-int/lit8 v1, v1, 0x1
++
++    iput-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
++
++    return-void
++.end method
++
++.method private showRebootAlertDialog()V
++    .locals 4
++
++    iget-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++
++    if-nez v0, :cond_0
++
++    new-instance v0, Landroidx/appcompat/app/AlertDialog$Builder;
++
++    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-direct {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    sget v1, Lcom/android/settings/R$string;->unica_native_blur_dialog_title:I
++
++    invoke-virtual {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;->setTitle(I)Landroidx/appcompat/app/AlertDialog$Builder;
++
++    move-result-object v1
++
++    sget v2, Lcom/android/settings/R$string;->unica_native_blur_dialog_msg:I
++
++    invoke-virtual {v1, v2}, Landroidx/appcompat/app/AlertDialog$Builder;->setMessage(I)Landroidx/appcompat/app/AlertDialog$Builder;
++
++    move-result-object v1
++
++    sget v2, Lcom/android/settings/R$string;->unica_native_blur_dialog_positive:I
++
++    new-instance v3, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;
++
++    invoke-direct {v3, p0}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;-><init>(Lio/mesalabs/unica/settings/LiveBlurPreferenceController;)V
++
++    invoke-virtual {v1, v2, v3}, Landroidx/appcompat/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroidx/appcompat/app/AlertDialog$Builder;
++
++    move-result-object v1
++
++    sget v2, Lcom/android/settings/R$string;->unica_native_blur_dialog_negative:I
++
++    const/4 v3, 0x0
++
++    invoke-virtual {v1, v2, v3}, Landroidx/appcompat/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroidx/appcompat/app/AlertDialog$Builder;
++
++    invoke-virtual {v0}, Landroidx/appcompat/app/AlertDialog$Builder;->create()Landroidx/appcompat/app/AlertDialog;
++
++    move-result-object v1
++
++    iput-object v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++
++    :cond_0
++    iget-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++
++    invoke-virtual {v0}, Landroidx/appcompat/app/AlertDialog;->show()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 2
++
++    const/4 v0, 0x0
++
++    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
++
++    if-nez v1, :cond_0
++
++    const/4 v0, 0x3
++
++    :cond_0
++    return v0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    const-string v0, "persist.sys.unica.nativeblur"
++
++    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
++
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    return v0
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method synthetic lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
++    .locals 2
++
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    const-string v1, "power"
++
++    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/os/PowerManager;
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, v1}, Landroid/os/PowerManager;->reboot(Ljava/lang/String;)V
++
++    return-void
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 2
++
++    const-string v0, "persist.sys.unica.nativeblur"
++
++    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->showRebootAlertDialog()V
++
++    const/4 v0, 0x1
++
++    return v0
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z
