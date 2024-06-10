@@ -36,6 +36,8 @@ case "$TARGET_SINGLE_SYSTEM_IMAGE" in
         SOURCE_AUDIO_SUPPORT_VIRTUAL_VIBRATION=true
         SOURCE_AUTO_BRIGHTNESS_TYPE="5"
         SOURCE_DVFS_CONFIG_NAME="dvfs_policy_default"
+        SOURCE_ESE_CHIP_VENDOR="NXP"
+        SOURCE_ESE_COS_NAME="JCOP6.3U"
         SOURCE_FP_SENSOR_CONFIG="google_touch_display_ultrasonic"
         SOURCE_HAS_HW_MDNIE=true
         SOURCE_HAS_MASS_CAMERA_APP=false
