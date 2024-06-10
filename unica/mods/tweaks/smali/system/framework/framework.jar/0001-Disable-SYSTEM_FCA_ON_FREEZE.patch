@@ -1,0 +1,25 @@
+From 958e17af3d2db37735368de18b0911de9f64093a Mon Sep 17 00:00:00 2001
+From: BlackMesa123 <giangrecosalvo9@gmail.com>
+Date: Sat, 8 Jun 2024 14:02:25 +0200
+Subject: [PATCH] Disable SYSTEM_FCA_ON_FREEZE
+
+---
+ smali_classes5/com/samsung/android/rune/CoreRune.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali_classes5/com/samsung/android/rune/CoreRune.smali b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+index 3b6cfcec..4b3196a0 100644
+--- a/smali_classes5/com/samsung/android/rune/CoreRune.smali
++++ b/smali_classes5/com/samsung/android/rune/CoreRune.smali
+@@ -2294,7 +2294,7 @@
+ 
+ .field public static final blacklist SYSPERF_VI_BOOST:Z
+ 
+-.field public static final blacklist SYSTEM_FCA_ON_FREEZE:Z = true
++.field public static final blacklist SYSTEM_FCA_ON_FREEZE:Z = false
+ 
+ .field public static final blacklist SYSUI_GRADLE_BUILD:Z
+ 
+-- 
+2.45.2
+
