@@ -47,3 +47,28 @@ on fs && property:ro.boot.rp=6 && property:ro.boot.em.model=SM-A736B
     mount none /vendor/firmware/wlan/rev6/wpss.b05 /vendor/firmware/wpss.b05 bind
     mount none /vendor/firmware/wlan/rev6/wpss.b06 /vendor/firmware/wpss.b06 bind
     mount none /vendor/firmware/wlan/rev6/wpss.b07 /vendor/firmware/wpss.b07 bind
+
+# bootloader revision 7, A736B
+on fs && property:ro.boot.rp=7 && property:ro.boot.em.model=SM-A736B
+    mount none /vendor/firmware/wlan/rev7/wpss.b01 /vendor/firmware/wpss.b01 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.mdt /vendor/firmware/wpss.mdt bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b00 /vendor/firmware/wpss.b00 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b02 /vendor/firmware/wpss.b02 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b03 /vendor/firmware/wpss.b03 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b04 /vendor/firmware/wpss.b04 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b05 /vendor/firmware/wpss.b05 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b06 /vendor/firmware/wpss.b06 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b07 /vendor/firmware/wpss.b07 bind
+
+# bootloader revision 8, A736B
+on fs && property:ro.boot.rp=8 && property:ro.boot.em.model=SM-A736B
+    mount none /vendor/firmware/wlan/rev8/wpss.b01 /vendor/firmware/wpss.b01 bind
+    mount none /vendor/firmware/wlan/rev8/wpss.mdt /vendor/firmware/wpss.mdt bind
+    # BL rev 8 firmware works on all rev7 devices
+    mount none /vendor/firmware/wlan/rev7/wpss.b00 /vendor/firmware/wpss.b00 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b02 /vendor/firmware/wpss.b02 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b03 /vendor/firmware/wpss.b03 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b04 /vendor/firmware/wpss.b04 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b05 /vendor/firmware/wpss.b05 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b06 /vendor/firmware/wpss.b06 bind
+    mount none /vendor/firmware/wlan/rev7/wpss.b07 /vendor/firmware/wpss.b07 bind
