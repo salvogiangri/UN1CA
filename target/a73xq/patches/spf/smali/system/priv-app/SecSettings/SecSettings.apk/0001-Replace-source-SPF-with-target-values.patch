@@ -1,98 +1,37 @@
-From 15ba19970842a92d37be2948067083754244c12c Mon Sep 17 00:00:00 2001
+From a41382ccb9dbb7131dbaa6a4f0b8476d7dc2a4c0 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Thu, 14 Dec 2023 13:39:19 +0100
+Date: Sun, 9 Jun 2024 16:51:46 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
- smali_classes4/com/samsung/android/settings/Rune.smali    | 2 +-
- .../biometrics/fingerprint/FingerprintSettingsUtils.smali | 6 +++---
- .../android/settings/display/SecDisplayUtils.smali        | 8 ++++----
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../wifi/mobileap/utils/WifiApFeatureUtils.smali     | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
-index afcca13f..3122c61a 100644
---- a/smali_classes4/com/samsung/android/settings/Rune.smali
-+++ b/smali_classes4/com/samsung/android/settings/Rune.smali
-@@ -247,7 +247,7 @@
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+index 4fb68093..5f90f0e1 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+@@ -87,20 +87,8 @@
+ .method public static isDualBand2GhzAnd5GhzSupported(Landroid/content/Context;)Z
+     .locals 0
  
-     sput-object v0, Lcom/samsung/android/settings/Rune;->mSupportDisplayCut:Ljava/lang/Boolean;
+-    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->is5GhzBandSupported(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_0
+     const/4 p0, 0x0
  
--    const-string v2, "5"
-+    const-string v2, "3"
- 
-     invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
- 
-diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-index 27e7f97f..e8becd7d 100644
---- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-+++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-@@ -848,7 +848,7 @@
- 
-     const-string v0, ","
- 
--    const-string v1, "google_touch_display_ultrasonic"
-+    const-string v1, "google_touch_display_optical,settings=3,no_delay_in_screen_off,transition_effect_on"
- 
-     invoke-virtual {v1, v0}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
- 
-@@ -1129,7 +1129,7 @@
- 
-     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    const-string v2, "google_touch_display_ultrasonic"
-+    const-string v2, "google_touch_display_optical,settings=3,no_delay_in_screen_off,transition_effect_on"
- 
-     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
-@@ -1189,7 +1189,7 @@
- .method public static isOpticalSensor()Z
-     .locals 1
- 
--    const/4 v0, 0x0
-+    const/4 v0, 0x1
- 
-     return v0
+-    :goto_0
+     return p0
  .end method
-diff --git a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-index 20e66c57..f9fb3cb1 100644
---- a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-+++ b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-@@ -2712,7 +2712,7 @@
- 
-     if-eq p1, v0, :cond_0
- 
--    const-string p0, "2"
-+    const-string p0, "1"
- 
-     invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
- 
-@@ -2754,7 +2754,7 @@
- 
-     if-eq p1, v0, :cond_0
- 
--    const-string p0, "24,10,30,48,60,96,120"
-+    const-string p0, "60,120"
- 
-     invoke-virtual {p0, v1}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
- 
-@@ -2897,7 +2897,7 @@
- .method public static getMinSupportedRefreshRate()I
-     .locals 2
- 
--    const-string v0, "24,10,30,48,60,96,120"
-+    const-string v0, "60,120"
- 
-     invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
- 
-@@ -6896,7 +6896,7 @@
- 
-     if-eq p1, v3, :cond_1
- 
--    const-string p0, "2"
-+    const-string p0, "1"
- 
-     invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
 -- 
-2.43.0
+2.45.2
 
