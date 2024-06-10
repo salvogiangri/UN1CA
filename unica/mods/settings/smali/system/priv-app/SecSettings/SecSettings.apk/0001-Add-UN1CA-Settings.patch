@@ -1,4 +1,4 @@
-From 522312ab22d266155368e0cc82f8a4d22ca94a2c Mon Sep 17 00:00:00 2001
+From 40dca9b1b7a9a892e393c2df930d910679c7890d Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -6,16 +6,21 @@ Subject: [PATCH] Add UN1CA Settings
 ---
  AndroidManifest.xml                           |   8 +
  res/drawable/sec_ic_settings_unica.xml        |   9 +
- .../unica_settings_logo_layout.xml            |   6 +
- res/layout/unica_settings_logo_layout.xml     |   6 +
- res/values/public.xml                         |  24 +
+ res/layout/unica_settings_logo_layout.xml     |   7 +
+ res/values/colors.xml                         |   1 +
+ res/values/ids.xml                            |   1 +
+ res/values/public.xml                         |  26 ++
  res/values/strings.xml                        |  19 +
+ res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   1 +
  res/xml/unica_settings.xml                    |  15 +
+ .../com/android/settings/R$drawable.smali     |   6 +
+ .../com/android/settings/R$id.smali           |   2 +
+ .../com/android/settings/R$layout.smali       |   2 +
  .../com/android/settings/R$string.smali       |  38 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         |  92 ++++
+ .../unica/UnicaSettingsFragment.smali         | 141 ++++++
  .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
@@ -29,9 +34,8 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 226 ++++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++++
- 25 files changed, 2543 insertions(+)
+ 30 files changed, 2602 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
- create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
@@ -85,37 +89,53 @@ index 00000000..0fba1952
 +    <path android:fillColor="@color/sec_dashboard_layer_color" android:pathData="M24.856,3.144C23.13,1.522 20.774,0.601 18.174,0.257C15.691,-0.072 14,0.009 14,0.009C14,0.009 12.309,-0.072 9.826,0.257C7.226,0.601 4.87,1.522 3.144,3.144C1.521,4.87 0.601,7.226 0.257,9.826C-0.072,12.309 0.009,14 0.009,14C0.009,14 -0.072,15.691 0.257,18.174C0.601,20.774 1.521,23.13 3.144,24.856C4.87,26.478 7.226,27.399 9.826,27.743C12.309,28.072 14,27.991 14,27.991C14,27.991 15.691,28.072 18.174,27.743C20.774,27.399 23.13,26.478 24.856,24.856C26.479,23.13 27.399,20.774 27.743,18.174C28.072,15.691 27.991,14 27.991,14C27.991,14 28.072,12.309 27.743,9.826C27.399,7.226 26.479,4.87 24.856,3.144Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
 +</vector>
 \ No newline at end of file
-diff --git a/res/layout-night/unica_settings_logo_layout.xml b/res/layout-night/unica_settings_logo_layout.xml
-new file mode 100644
-index 00000000..b4ee07d3
---- /dev/null
-+++ b/res/layout-night/unica_settings_logo_layout.xml
-@@ -0,0 +1,6 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
-+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimary" app:tintMode="src_in" />
-+</FrameLayout>
-\ No newline at end of file
 diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..7b802f76
+index 00000000..73a18da9
 --- /dev/null
 +++ b/res/layout/unica_settings_logo_layout.xml
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,7 @@
 +<?xml version="1.0" encoding="utf-8"?>
-+<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
++<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" android:paddingVertical="16.0dip" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="360.0dip" android:layout_height="wrap_content" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" android:alpha="0.6" android:paddingVertical="16.0dip" app:tint="?colorPrimaryDark" app:tintMode="src_in" />
++    <androidx.appcompat.widget.AppCompatImageView android:id="@id/unica_logo_wp" android:layout_width="fill_parent" android:layout_height="150.0dip" android:scaleType="centerCrop" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="75.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="75.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
 \ No newline at end of file
+diff --git a/res/values/colors.xml b/res/values/colors.xml
+index a576c7ea..cf1ff26f 100644
+--- a/res/values/colors.xml
++++ b/res/values/colors.xml
+@@ -2235,4 +2235,5 @@
+     <color name="wifi_preference_title_color">#ff010102</color>
+     <color name="wifi_wps_fg">#ff252525</color>
+     <color name="work_profile_lock_screen_text_color">#fffafaff</color>
++    <color name="unica_logo_accent">#ff4374ff</color>
+ </resources>
+diff --git a/res/values/ids.xml b/res/values/ids.xml
+index 4fd038f8..d3a6d0f7 100644
+--- a/res/values/ids.xml
++++ b/res/values/ids.xml
+@@ -3660,4 +3660,5 @@
+     <item type="id" name="zen_radio_buttons" />
+     <item type="id" name="zen_radio_buttons_content" />
+     <item type="id" name="zoom_layer" />
++    <item type="id" name="unica_logo_wp" />
+ </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 23eb925b..4be12b78 100644
+index 23eb925b..716b41eb 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
-@@ -11957,6 +11957,7 @@
+@@ -5125,6 +5125,7 @@
+     <public type="color" name="wifi_preference_title_color" id="0x7f0609e9" />
+     <public type="color" name="wifi_wps_fg" id="0x7f0609ea" />
+     <public type="color" name="work_profile_lock_screen_text_color" id="0x7f0609eb" />
++    <public type="color" name="unica_logo_accent" id="0x7f0609ec" />
+     <public type="color" name="vswl_bottom_buttons_area_background_color" id="0x7f060982" />
+     <public type="color" name="dialog_body_text_color" id="0x7f060132" />
+     <public type="color" name="homepage_status_bar_color" id="0x7f06018a" />
+@@ -11957,6 +11958,7 @@
      <public type="drawable" name="wifi_friction" id="0x7f080b97" />
      <public type="drawable" name="wifi_signal" id="0x7f080b98" />
      <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b99" />
@@ -123,7 +143,7 @@ index 23eb925b..4be12b78 100644
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__0" id="0x7f080016" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__1" id="0x7f080017" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture_talkback__0" id="0x7f080018" />
-@@ -12586,6 +12587,8 @@
+@@ -12586,6 +12588,8 @@
      <public type="drawable" name="ws_ic_2step_02" id="0x7f080b9b" />
      <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b9c" />
      <public type="drawable" name="ws_ic_system_lock" id="0x7f080b9d" />
@@ -132,7 +152,15 @@ index 23eb925b..4be12b78 100644
      <public type="fraction" name="battery_button_height_fraction" id="0x7f090000" />
      <public type="fraction" name="battery_subpixel_smoothing_left" id="0x7f090001" />
      <public type="fraction" name="battery_subpixel_smoothing_right" id="0x7f090002" />
-@@ -18437,6 +18440,7 @@
+@@ -16587,6 +16591,7 @@
+     <public type="id" name="zen_radio_buttons" id="0x7f0a0f90" />
+     <public type="id" name="zen_radio_buttons_content" id="0x7f0a0f91" />
+     <public type="id" name="zoom_layer" id="0x7f0a0f92" />
++    <public type="id" name="unica_logo_wp" id="0x7f0a0f93" />
+     <public type="integer" name="app_bar_elevation_anim_duration" id="0x7f0b0000" />
+     <public type="integer" name="as_no_item_bottom_weight" id="0x7f0b0001" />
+     <public type="integer" name="as_no_item_top_weight" id="0x7f0b0002" />
+@@ -18437,6 +18442,7 @@
      <public type="layout" name="zen_rule_type" id="0x7f0d0625" />
      <public type="layout" name="zen_rule_type_selection" id="0x7f0d0626" />
      <public type="layout" name="zen_schedule_rule_day" id="0x7f0d0627" />
@@ -140,7 +168,7 @@ index 23eb925b..4be12b78 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
-@@ -31911,6 +31915,25 @@
+@@ -31911,6 +31917,25 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
@@ -166,7 +194,7 @@ index 23eb925b..4be12b78 100644
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34627,4 +34650,5 @@
+@@ -34627,4 +34652,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
@@ -201,6 +229,19 @@ index 486d035b..765d08f5 100644
 +    <string name="unica_secure_ss_title">Allow secure screenshot</string>
 +    <string name="unica_settings_title">UN1CA Settings</string>
  </resources>
+diff --git a/res/xml/meta_009_settings.xml b/res/xml/meta_009_settings.xml
+index cc8b212b..18db5fe3 100644
+--- a/res/xml/meta_009_settings.xml
++++ b/res/xml/meta_009_settings.xml
+@@ -116,6 +116,7 @@
+         <Property Comment="Main text color" DefaultValue="#ff010101" DestAttribName="sec_dashboard_simplified_title_text_color" UID="9-47-2" ValueRef="1-1-3" ValueType="TextColor" />
+         <Property Comment="Sub text color" DefaultValue="#ff8c8c8c" DestAttribName="sec_dashboard_simplified_summary_text_color" UID="9-47-3" ValueRef="1-1-4" ValueType="TextColor" />
+         <Property Comment="RGB label text color" DefaultValue="#ff686868" DestAttribName="sec_display_color_balance_label_text_color" UID="9-48-1" ValueRef="24-B" ValueType="TextColor" />
++        <Property Comment="UN1CA logo accent color" DefaultValue="#ff4374ff" DestAttribName="unica_logo_accent" UID="9-49-1" ValueRef="24-E" ValueType="TintColor" />
+         <Property Comment="Suggestion icon tint" DefaultValue="" DestAttribName="" UID="9-61-5" ValueRef="1-3-1" ValueType="TintColor" />
+     </AppMetaData>
+ </ThemeMetaData>
+\ No newline at end of file
 diff --git a/res/xml/sec_top_level_settings.xml b/res/xml/sec_top_level_settings.xml
 index e79896f6..a16c39b5 100644
 --- a/res/xml/sec_top_level_settings.xml
@@ -215,14 +256,14 @@ index e79896f6..a16c39b5 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..8ee18f97
+index 00000000..2537bc21
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
 @@ -0,0 +1,15 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
-+    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" />
++    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:key="unica_logo" android:selectable="false" />
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
@@ -235,19 +276,82 @@ index 00000000..8ee18f97
 +    </SecPreferenceCategory>
 +</PreferenceScreen>
 \ No newline at end of file
+diff --git a/smali_classes2/com/android/settings/R$drawable.smali b/smali_classes2/com/android/settings/R$drawable.smali
+index ff840b57..f01b44e3 100644
+--- a/smali_classes2/com/android/settings/R$drawable.smali
++++ b/smali_classes2/com/android/settings/R$drawable.smali
+@@ -670,6 +670,8 @@
+ 
+ .field public static final sec_ic_settings_tips:I = 0x7f080794
+ 
++.field public static final sec_ic_settings_unica:I = 0x7f080b9e
++
+ .field public static final sec_ic_settings_user_manual:I = 0x7f080795
+ 
+ .field public static final sec_ic_smart_things:I = 0x7f080798
+@@ -1064,6 +1066,10 @@
+ 
+ .field public static final udfps_enroll_checkmark:I = 0x7f080b7d
+ 
++.field public static final unica_logo_bg:I = 0x7f080b9f
++
++.field public static final unica_logo_fg:I = 0x7f080ba0
++
+ .field public static final use_accessibility_button:I = 0x7f080b7f
+ 
+ .field public static final use_accessibility_button_floating:I = 0x7f080b80
+diff --git a/smali_classes2/com/android/settings/R$id.smali b/smali_classes2/com/android/settings/R$id.smali
+index e316f715..097157d6 100644
+--- a/smali_classes2/com/android/settings/R$id.smali
++++ b/smali_classes2/com/android/settings/R$id.smali
+@@ -4210,6 +4210,8 @@
+ 
+ .field public static final udfps_enroll_animation_fp_view:I = 0x7f0a0e65
+ 
++.field public static final unica_logo_wp:I = 0x7f0a0f93
++
+ .field public static final uninstall:I = 0x7f0a0e69
+ 
+ .field public static final uninstall_button:I = 0x7f0a0e6a
+diff --git a/smali_classes2/com/android/settings/R$layout.smali b/smali_classes2/com/android/settings/R$layout.smali
+index 10435a45..5e2d71d4 100644
+--- a/smali_classes2/com/android/settings/R$layout.smali
++++ b/smali_classes2/com/android/settings/R$layout.smali
+@@ -1512,6 +1512,8 @@
+ 
+ .field public static final udfps_enroll_find_sensor_layout:I = 0x7f0d05df
+ 
++.field public static final unica_settings_logo_layout:I = 0x7f0d0628
++
+ .field public static final usage_view:I = 0x7f0d05e2
+ 
+ .field public static final user_credential:I = 0x7f0d05e4
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 91fbf763..3783f4a0 100644
+index 91fbf763..d13e3917 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
-@@ -12519,3 +12519,41 @@
- .field public static final zzz_lgt_password_wrong_pin_code1:I = 0x7f13339c
+@@ -4086,6 +4086,8 @@
  
- .field public static final zzz_lgt_password_wrong_pin_code2:I = 0x7f13339d
-+
+ .field public static final keywords_styles:I = 0x7f1312b4
+ 
 +.field public static final keywords_unica_settings:I = 0x7f13339e
 +
+ .field public static final keywords_wallpaper:I = 0x7f1312d4
+ 
+ .field public static final keywords_wifi:I = 0x7f1312d5
+@@ -4786,6 +4788,8 @@
+ 
+ .field public static final menu_key_system:I = 0x7f1315c5
+ 
 +.field public static final menu_key_unica_settings:I = 0x7f13339f
 +
+ .field public static final menu_restore:I = 0x7f1315d0
+ 
+ .field public static final menu_save:I = 0x7f1315d1
+@@ -10410,6 +10414,40 @@
+ 
+ .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132b60
+ 
 +.field public static final unica_allow_downgrade_title:I = 0x7f1333a0
 +
 +.field public static final unica_device_name_title:I = 0x7f1333a1
@@ -281,16 +385,23 @@ index 91fbf763..3783f4a0 100644
 +.field public static final unica_secure_ss_title:I = 0x7f1333af
 +
 +.field public static final unica_settings_title:I = 0x7f1333b0
++
+ .field public static final uninstall:I = 0x7f132b64
+ 
+ .field public static final uninstall_all_users_text:I = 0x7f132b65
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
-index 4d5b41c4..44cfdfb4 100644
+index 4d5b41c4..a0289763 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
 +++ b/smali_classes2/com/android/settings/R$xml.smali
-@@ -1063,3 +1063,5 @@
- .field public static final zen_mode_settings:I = 0x7f16026b
+@@ -968,6 +968,8 @@
  
- .field public static final zen_mode_sound_vibration_settings:I = 0x7f16026c
-+
+ .field public static final turn_screen_on_permissions_details:I = 0x7f160239
+ 
 +.field public static final unica_settings:I = 0x7f16026d
++
+ .field public static final unrestricted_data_access_settings:I = 0x7f16023a
+ 
+ .field public static final usb_default_fragment:I = 0x7f16023b
 diff --git a/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali b/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
 new file mode 100644
 index 00000000..18621dd0
@@ -312,10 +423,10 @@ index 00000000..18621dd0
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
 new file mode 100644
-index 00000000..b8aef5f2
+index 00000000..5fb0327e
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
-@@ -0,0 +1,92 @@
+@@ -0,0 +1,141 @@
 +.class public Lio/mesalabs/unica/UnicaSettingsFragment;
 +.super Lcom/android/settings/dashboard/DashboardFragment;
 +.source "UnicaSettingsFragment.java"
@@ -345,6 +456,47 @@ index 00000000..b8aef5f2
 +
 +    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
 +
++    return-void
++.end method
++
++.method private setWallpaperasLogoBg(Landroidx/preference/Preference;)V
++    .locals 4
++
++    instance-of v0, p1, Lcom/android/settingslib/widget/LayoutPreference;
++
++    if-eqz v0, :cond_0
++
++    move-object v0, p1
++
++    check-cast v0, Lcom/android/settingslib/widget/LayoutPreference;
++
++    sget v1, Lcom/android/settings/R$id;->unica_logo_wp:I
++
++    invoke-virtual {v0, v1}, Lcom/android/settingslib/widget/LayoutPreference;->findViewById(I)Landroid/view/View;
++
++    move-result-object v1
++
++    check-cast v1, Landroidx/appcompat/widget/AppCompatImageView;
++
++    if-eqz v1, :cond_0
++
++    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
++
++    move-result-object v2
++
++    invoke-static {v2}, Landroid/app/WallpaperManager;->getInstance(Landroid/content/Context;)Landroid/app/WallpaperManager;
++
++    move-result-object v2
++
++    const/4 v3, 0x1
++
++    invoke-virtual {v2, v3}, Landroid/app/WallpaperManager;->getDrawable(I)Landroid/graphics/drawable/Drawable;
++
++    move-result-object v3
++
++    invoke-virtual {v1, v3}, Landroidx/appcompat/widget/AppCompatImageView;->setImageDrawable(Landroid/graphics/drawable/Drawable;)V
++
++    :cond_0
 +    return-void
 +.end method
 +
@@ -378,6 +530,14 @@ index 00000000..b8aef5f2
 +    .locals 2
 +
 +    invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
++
++    const-string v0, "unica_logo"
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++
++    move-result-object v0
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
 +
 +    const-string/jumbo v0, "persist.sys.pif.version"
 +
@@ -1826,7 +1986,7 @@ index 00000000..dc46c7ae
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..99e3e369
+index 00000000..8a27ac97
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 @@ -0,0 +1,301 @@
@@ -1840,9 +2000,9 @@ index 00000000..99e3e369
 +
 +
 +# instance fields
-+.field private mRebootDialog:Landroidx/appcompat/app/AlertDialog;
-+
 +.field private mIsSupported:Z
++
++.field private mRebootDialog:Landroidx/appcompat/app/AlertDialog;
 +
 +
 +# direct methods
