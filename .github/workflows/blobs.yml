@@ -13,8 +13,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - module: "Knox'nt blobs"
+            path: "unica/patches/deknox"
           - module: "Low-end Samsung Camera app"
-            path: "unica/packages/mass_cam"
+            path: "unica/patches/mass_cam"
+          - module: "Non-eSE blobs"
+            path: "unica/patches/nfc"
+          - module: "VNDK 30 apex"
+            path: "unica/patches/vndk/30"
 
     steps:
       - name: Checkout repo
