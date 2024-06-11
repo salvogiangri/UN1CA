@@ -1,4 +1,4 @@
-From 40dca9b1b7a9a892e393c2df930d910679c7890d Mon Sep 17 00:00:00 2001
+From 40058f84356faf6a69c30206158f30a568eb06fc Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -91,7 +91,7 @@ index 00000000..0fba1952
 \ No newline at end of file
 diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..73a18da9
+index 00000000..b3e881b4
 --- /dev/null
 +++ b/res/layout/unica_settings_logo_layout.xml
 @@ -0,0 +1,7 @@
@@ -99,8 +99,8 @@ index 00000000..73a18da9
 +<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 +    <androidx.appcompat.widget.AppCompatImageView android:id="@id/unica_logo_wp" android:layout_width="fill_parent" android:layout_height="150.0dip" android:scaleType="centerCrop" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="75.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
-+    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="75.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
 \ No newline at end of file
 diff --git a/res/values/colors.xml b/res/values/colors.xml
