@@ -91,6 +91,8 @@ GENERATE_OP_LIST()
 {
     local OP_LIST_FILE="$TMP_DIR/dynamic_partitions_op_list"
     local GROUP_NAME="qti_dynamic_partitions"
+    local PART_SIZE=0
+    local OCCUPIED_SPACE=0
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -132,23 +134,60 @@ GENERATE_OP_LIST()
         $HAS_ODM_DLKM && echo "add odm_dlkm $GROUP_NAME"
         $HAS_SYSTEM_DLKM && echo "# Add partition system_dlkm to group $GROUP_NAME"
         $HAS_SYSTEM_DLKM && echo "add system_dlkm $GROUP_NAME"
-        $HAS_SYSTEM && echo "# Grow partition system from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system.img")"
-        $HAS_SYSTEM && echo "resize system $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system.img")"
-        $HAS_VENDOR && echo "# Grow partition vendor from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor.img")"
-        $HAS_VENDOR && echo "resize vendor $(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor.img")"
-        $HAS_PRODUCT && echo "# Grow partition product from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/product.img")"
-        $HAS_PRODUCT && echo "resize product $(GET_SPARSE_IMG_SIZE "$TMP_DIR/product.img")"
-        $HAS_SYSTEM_EXT && echo "# Grow partition system_ext from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_ext.img")"
-        $HAS_SYSTEM_EXT && echo "resize system_ext $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_ext.img")"
-        $HAS_ODM && echo "# Grow partition odm from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm.img")"
-        $HAS_ODM && echo "resize odm $(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm.img")"
-        $HAS_VENDOR_DLKM && echo "# Grow partition vendor_dlkm from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor_dlkm.img")"
-        $HAS_VENDOR_DLKM && echo "resize vendor_dlkm $(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor_dlkm.img")"
-        $HAS_ODM_DLKM && echo "# Grow partition odm_dlkm from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm_dlkm.img")"
-        $HAS_ODM_DLKM && echo "resize odm_dlkm $(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm_dlkm.img")"
-        $HAS_SYSTEM_DLKM && echo "# Grow partition system_dlkm from 0 to $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_dlkm.img")"
-        $HAS_SYSTEM_DLKM && echo "resize system_dlkm $(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_dlkm.img")"
+        if $HAS_SYSTEM; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/system.img")"
+            echo "# Grow partition system from 0 to $PART_SIZE"
+            echo "resize system $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_VENDOR; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor.img")"
+            echo "# Grow partition vendor from 0 to $PART_SIZE"
+            echo "resize vendor $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_PRODUCT; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/product.img")"
+            echo "# Grow partition product from 0 to $PART_SIZE"
+            echo "resize product $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_SYSTEM_EXT; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_ext.img")"
+            echo "# Grow partition system_ext from 0 to $PART_SIZE"
+            echo "resize system_ext $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_ODM; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm.img")"
+            echo "# Grow partition odm from 0 to $PART_SIZE"
+            echo "resize odm $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_VENDOR_DLKM; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/vendor_dlkm.img")"
+            echo "# Grow partition vendor_dlkm from 0 to $PART_SIZE"
+            echo "resize vendor_dlkm $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_ODM_DLKM; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/odm_dlkm.img")"
+            echo "# Grow partition odm_dlkm from 0 to $PART_SIZE"
+            echo "resize odm_dlkm $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
+        if $HAS_SYSTEM_DLKM; then
+            PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/system_dlkm.img")"
+            echo "# Grow partition system_dlkm from 0 to $PART_SIZE"
+            echo "resize system_dlkm $PART_SIZE"
+            OCCUPIED_SPACE=$((OCCUPIED_SPACE + PART_SIZE))
+        fi
     } >> "$OP_LIST_FILE"
+
+    if [[ "$OCCUPIED_SPACE" -gt "$TARGET_SUPER_GROUP_SIZE" ]]; then
+        echo "OS size ($OCCUPIED_SPACE) is bigger than target group size ($TARGET_SUPER_GROUP_SIZE)."
+        exit 1
+    fi
 
     true
 }
