@@ -1,4 +1,4 @@
-From 40058f84356faf6a69c30206158f30a568eb06fc Mon Sep 17 00:00:00 2001
+From ebad0887cc7ab2455454bac10fb6314368135774 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -30,11 +30,11 @@ Subject: [PATCH] Add UN1CA Settings
  .../DeviceNamePreferenceController.smali      | 211 +++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 301 +++++++++++++
+ .../LiveBlurPreferenceController.smali        | 306 +++++++++++++
  .../PIFVersionPreferenceController.smali      | 226 ++++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++++
- 30 files changed, 2602 insertions(+)
+ 30 files changed, 2607 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -1986,21 +1986,21 @@ index 00000000..dc46c7ae
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..8a27ac97
+index 00000000..b3a60101
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
-@@ -0,0 +1,301 @@
+@@ -0,0 +1,306 @@
 +.class public Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "LiveBlurPreferenceController.java"
 +
 +
 +# static fields
-+.field private static final UNSUPPORTED_DEVICES:[Ljava/lang/String;
++.field private static final DEFAULT_DISABLED_DEVICES:[Ljava/lang/String;
 +
 +
 +# instance fields
-+.field private mIsSupported:Z
++.field private mDefaultValue:Z
 +
 +.field private mRebootDialog:Landroidx/appcompat/app/AlertDialog;
 +
@@ -2009,7 +2009,7 @@ index 00000000..8a27ac97
 +.method static constructor <clinit>()V
 +    .locals 3
 +
-+    const/4 v0, 0x1
++    const/4 v0, 0x3
 +
 +    new-array v0, v0, [Ljava/lang/String;
 +
@@ -2019,7 +2019,19 @@ index 00000000..8a27ac97
 +
 +    aput-object v2, v0, v1
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->UNSUPPORTED_DEVICES:[Ljava/lang/String;
++    const/4 v1, 0x1
++
++    const-string v2, "a52q"
++
++    aput-object v2, v0, v1
++
++    const/4 v1, 0x2
++
++    const-string v2, "a72q"
++
++    aput-object v2, v0, v1
++
++    sput-object v0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->DEFAULT_DISABLED_DEVICES:[Ljava/lang/String;
 +
 +    return-void
 +.end method
@@ -2037,7 +2049,7 @@ index 00000000..8a27ac97
 +
 +    move-result-object v0
 +
-+    sget-object v1, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->UNSUPPORTED_DEVICES:[Ljava/lang/String;
++    sget-object v1, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->DEFAULT_DISABLED_DEVICES:[Ljava/lang/String;
 +
 +    invoke-static {v1}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -2049,7 +2061,7 @@ index 00000000..8a27ac97
 +
 +    xor-int/lit8 v1, v1, 0x1
 +
-+    iput-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
++    iput-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
 +
 +    return-void
 +.end method
@@ -2112,18 +2124,11 @@ index 00000000..8a27ac97
 +
 +# virtual methods
 +.method public getAvailabilityStatus()I
-+    .locals 2
++    .locals 0
 +
-+    const/4 v0, 0x0
++    const/4 p0, 0x0
 +
-+    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
-+
-+    if-nez v1, :cond_0
-+
-+    const/4 v0, 0x3
-+
-+    :cond_0
-+    return v0
++    return p0
 +.end method
 +
 +.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
@@ -2207,7 +2212,7 @@ index 00000000..8a27ac97
 +
 +    const-string v0, "persist.sys.unica.nativeblur"
 +
-+    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mIsSupported:Z
++    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
 +
 +    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
