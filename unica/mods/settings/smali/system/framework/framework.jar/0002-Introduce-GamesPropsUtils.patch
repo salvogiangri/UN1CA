@@ -1,6 +1,6 @@
-From 38433d3ebd5644a6df6b966952a44bcc112e35d8 Mon Sep 17 00:00:00 2001
+From 6b9bac1bd1e9c6efda6c91e5a33b1dbeadfbdec5 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Tue, 16 Jan 2024 20:27:07 +0100
+Date: Wed, 12 Jun 2024 16:50:22 +0200
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH] Introduce GamesPropsUtils
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
-index e5056216..801b269d 100644
+index 236e3ab4..e29afd3b 100644
 --- a/smali/android/app/Instrumentation.smali
 +++ b/smali/android/app/Instrumentation.smali
 @@ -636,6 +636,8 @@
  
-     invoke-static {p1}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
+     invoke-static {p1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
  
 +    invoke-static {p1}, Lio/mesalabs/unica/GamesPropsUtils;->setProps(Landroid/content/Context;)V
 +
@@ -24,7 +24,7 @@ index e5056216..801b269d 100644
  
 @@ -3850,6 +3852,8 @@
  
-     invoke-static {p3}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
+     invoke-static {p3}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
  
 +    invoke-static {p3}, Lio/mesalabs/unica/GamesPropsUtils;->setProps(Landroid/content/Context;)V
 +
@@ -1109,5 +1109,5 @@ index 00000000..e3479cf9
 +    return-void
 +.end method
 -- 
-2.45.1
+2.45.2
 

@@ -1,6 +1,6 @@
-From ff6584ce06165cf23a070f31df7f44c44110b4bf Mon Sep 17 00:00:00 2001
+From 414d0b80c8e2e8e1ff1af94be38cd04ea2dac52d Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 28 Jan 2024 01:48:48 +0100
+Date: Wed, 12 Jun 2024 16:48:49 +0200
 Subject: [PATCH] Introduce PlayIntegrityHooks
 
 ---
@@ -15,21 +15,21 @@ Subject: [PATCH] Introduce PlayIntegrityHooks
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
-index 86460ff3..a0f4bf02 100644
+index fd6534b0..236e3ab4 100644
 --- a/smali/android/app/Instrumentation.smali
 +++ b/smali/android/app/Instrumentation.smali
-@@ -632,6 +632,8 @@
+@@ -634,6 +634,8 @@
  
-     invoke-virtual {v0, p1}, Landroid/app/Application;->attach(Landroid/content/Context;)V
+     invoke-static {p1}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
  
 +    invoke-static {p1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
 +
      return-object v0
  .end method
  
-@@ -3842,6 +3844,8 @@
+@@ -3846,6 +3848,8 @@
  
-     invoke-virtual {v0, p3}, Landroid/app/Application;->attach(Landroid/content/Context;)V
+     invoke-static {p3}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
  
 +    invoke-static {p3}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
 +
@@ -87,7 +87,7 @@ index 00000000..f7515c18
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
 new file mode 100644
-index 00000000..64bc5f5f
+index 00000000..5ec912ff
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
 @@ -0,0 +1,79 @@
@@ -127,7 +127,7 @@ index 00000000..64bc5f5f
 +.method public blacklist onTaskStackChanged()V
 +    .locals 4
 +
-+    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->access$000()Z
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->-$$Nest$smisGmsAddAccountActivityOnTop()Z
 +
 +    move-result v0
 +
@@ -172,7 +172,7 @@ index 00000000..64bc5f5f
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 new file mode 100644
-index 00000000..557c13f5
+index 00000000..73ce275e
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 @@ -0,0 +1,1064 @@
@@ -218,6 +218,16 @@ index 00000000..557c13f5
 +
 +
 +# direct methods
++.method static bridge synthetic blacklist -$$Nest$smisGmsAddAccountActivityOnTop()Z
++    .locals 1
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
++
++    move-result v0
++
++    return v0
++.end method
++
 +.method static constructor blacklist <clinit>()V
 +    .locals 1
 +
@@ -238,16 +248,6 @@ index 00000000..557c13f5
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
 +    return-void
-+.end method
-+
-+.method static synthetic blacklist access$000()Z
-+    .locals 1
-+
-+    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
-+
-+    move-result v0
-+
-+    return v0
 +.end method
 +
 +.method public static blacklist dlog(Ljava/lang/String;)V
@@ -1241,5 +1241,5 @@ index 00000000..557c13f5
 +    return-void
 +.end method
 -- 
-2.45.1
+2.45.2
 
