@@ -1,8 +1,8 @@
 {
-  "version": "1.5.15",
+  "version": "2.0.1",
   "device_types": "flagships, innovative",
   "description": "Configurations file for Midas PhotoRemaster IPs",
-  "comment": "Upscaler TFLite exec_type changes as SNAPLITE for GPU execution",
+  "comment": "input/output node names",
   "dnn_models_path": "/vendor/etc/midas/",
   "device_property": "ro.product.device",
   
@@ -13,13 +13,31 @@
         768,
         768
       ],
-      "nChannel": 12,
-      "noOfModels": 1,
-      "input_node": ["input"],
-      "output_node": ["output_192"],
+      "nChannel": 12,      
       "dnn_model_info": [
         {
-          "version": "132",
+          "version": "140",
+          "input_node": ["input.13"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -72,6 +90,8 @@
         },
         {
           "version": "132",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
           "compatible_models": [
             {
               "id": "olympus",
@@ -97,15 +117,17 @@
           "exec_type": "FLOAT16"
         },
         {
-          "version": "132",
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
           "compatible_models": [
             {
               "id": "mtk",
               "model_file": [
-                "SRIBMidas_aiDEBLUR_V0132_FP16_mtk02.dla"
+                "SRIBMidas_aiDEBLUR_V140_FP16_mtk02.dla"
               ],
               "models_list": [
-                
+                "m53x", "a34x"
               ]
             }
           ],
@@ -115,6 +137,8 @@
         },
         {
           "version": "default",
+          "input_node": ["input.13"],
+          "output_node": ["116"],
           "compatible_models": [
             {
             "id": "adreno,amd",
@@ -125,7 +149,6 @@
             ]
           }
         ],
-        "inference_type": "SNAP",
         "compute_unit": "GPU",
         "model_format": "SNAPLITE",
         "exec_type": "FLOAT16"
@@ -139,12 +162,11 @@
         512
       ],
       "nChannel": 12,
-      "noOfModels": 2,
-      "input_node": ["input","input"],
-      "output_node": ["output","output"],
       "dnn_model_info": [
         {
           "version": "600",
+          "input_node": ["input"],
+          "output_node": ["output"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -176,6 +198,8 @@
         },
         {
           "version": "430",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
           "compatible_models": [
             {
               "id": "olympus",
@@ -205,6 +229,8 @@
         },
         {
           "version": "430",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
           "compatible_models": [
             {
               "id": "mtk",
@@ -223,6 +249,8 @@
         },
         {
           "version": "default",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
           "compatible_models": [
             {
             "id": "adreno,amd",
@@ -246,13 +274,12 @@
         512,
         512
       ],
-      "nChannel": 12,
-      "noOfModels": 2,
-      "input_node": ["input_layer","input_layer"],
-      "output_node": ["output_layer","output_layer"],
+      "nChannel": 12,      
       "dnn_model_info": [
         {
           "version": "100",
+          "input_node": ["input_layer","input_layer"],
+          "output_node": ["output_layer","output_layer"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -275,6 +302,8 @@
         },
         {
           "version": "default",
+          "input_node": ["input_layer","input_layer"],
+          "output_node": ["output_layer","output_layer"],
           "compatible_models": [
             {
             "id": "adreno,amd",
@@ -299,12 +328,31 @@
         512
       ],
       "nChannel": 12,
-      "noOfModels": 2,
-      "input_node": ["input","input"],
-      "output_node": ["output_179","output"],
       "dnn_model_info": [
         {
           "version": "900",
+          "input_node": ["input_layer","input_layer"],
+          "output_node": ["output_layer","output_layer"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVAL_Coarse_V900_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiMOIREREMOVAL_Fine_V900_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "900",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -341,14 +389,17 @@
         },
         {
           "version": "900",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
           "compatible_models": [
             {
               "id": "pamir",
               "model_file": [
-                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_eden411.nnc",
-                "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_eden411.nnc"
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_eden511.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_eden511.nnc"
               ],
               "models_list": [
+                "e1s", "e2s"
               ]
             }
           ],
@@ -358,6 +409,8 @@
         },
         {
           "version": "132",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
           "compatible_models": [
             {
               "id": "mtk",
@@ -375,7 +428,29 @@
           "exec_type": "FLOAT16"
         },
         {
+          "version": "900",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "rose",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_INT16_rose.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_INT16_rose.nnc"
+              ],
+              "models_list": [
+                "a55x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "QASYMM16"
+        },
+        {
           "version": "default",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
           "compatible_models": [
             {
             "id": "adreno,amd",
@@ -401,13 +476,31 @@
         256,
         256
       ],
-      "nChannel": 12,
-      "noOfModels": 1,
-      "input_node": ["input"],
-      "output_node": ["output"],
+      "nChannel": 12,      
       "dnn_model_info": [
         {
           "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -441,7 +534,47 @@
           "exec_type": "FLOAT16"
         },
         {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "pamir",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_FP16_eden511.nnc"
+              ],
+              "models_list": [
+                "e1s", "e2s"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "mtk",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
           "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output"],
           "compatible_models": [
             {
               "id": "adreno,amd",
@@ -464,21 +597,42 @@
         256,
         256
       ],
-      "nChannel": 12,
-      "noOfModels": 4,
-      "input_node": ["input","input","input","input"],
-      "output_node": ["output","output","output","output"],
+      "nChannel": 12,      
       "dnn_model_info": [
         {
+          "version": "200",
+          "input_node": ["x.1","x.1","x.1","x.1"],
+          "output_node": ["output","output","output","output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiUPSCALER_2X_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiUPSCALER_3X_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiUPSCALER_4X_V200_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
           "version": "100",
+          "input_node": ["input","input","input","input"],
+          "output_node": ["output","output","output","output"],
           "compatible_models": [
             {
               "id": "2.3.1",
               "model_file": [
                 "SRIBMidas_aiUPSCALER_1X_V200_FP16_sm8550_snpe231.dlc",
-                "SRIBMidas_aiUPSCALER_2X_V200_FP16_sm8550_snpe231.dlc",
-                "SRIBMidas_aiUPSCALER_3X_V200_FP16_sm8550_snpe231.dlc",
-                "SRIBMidas_aiUPSCALER_4X_V200_FP16_sm8550_snpe231.dlc"
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_sm8550_snpe231.dlc",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_sm8550_snpe231.dlc",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_sm8550_snpe231.dlc"
               ],
               "models_list": [
                 "dm1q", "dm2q", "dm3q",
@@ -492,9 +646,9 @@
               "id": "2.10.6",
               "model_file": [
                 "SRIBMidas_aiUPSCALER_1X_V210_FP16_sm8450_snpe210.dlc",
-                "SRIBMidas_aiUPSCALER_2X_V201_FP16_sm8450_snpe210.dlc",
-                "SRIBMidas_aiUPSCALER_3X_V201_FP16_sm8450_snpe210.dlc",
-                "SRIBMidas_aiUPSCALER_4X_V201_FP16_sm8450_snpe210.dlc"
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_sm8450_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_sm8450_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_sm8450_snpe210.dlc"
               ],
               "models_list": [
                 "r0q", "g0q", "b0q", "r11q",
@@ -510,15 +664,39 @@
           "exec_type": "FLOAT16"
         },
         {
+          "version": "200",
+          "input_node": ["input","input","input","input"],
+          "output_node": ["output","output","output","output"],
+          "compatible_models": [
+            {
+              "id": "mtk",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
           "version": "default",
+          "input_node": ["x.1","x.1","x.1","x.1"],
+          "output_node": ["1938","1938","1966","1938"],
           "compatible_models": [
             {
               "id": "adreno,amd",
               "model_file": [
                 "SRIBMidas_aiUPSCALER_1X_V200_FP32.tflite",
-                "SRIBMidas_aiUPSCALER_2X_V200_FP32.tflite",
-                "SRIBMidas_aiUPSCALER_3X_V200_FP32.tflite",
-                "SRIBMidas_aiUPSCALER_4X_V200_FP32.tflite"
+                "SRIBMidas_aiUPSCALER_2X_V210_FP32.tflite",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP32.tflite",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP32.tflite"
                 
               ],
               "models_list": [
@@ -539,12 +717,11 @@
         512
       ],
       "nChannel": 3,
-      "noOfModels": 1,
-      "input_node": ["input"],
-      "output_node": ["output"],
       "dnn_model_info": [
         {
           "version": "1.0.0",
+          "input_node": ["input"],
+          "output_node": ["output"],
           "compatible_models": [
             {
               "id": "2.3.1",
@@ -552,21 +729,62 @@
                 "SRIBMidas_aiFACERESTORE_V100_FP16_sm8550_snpe231.dlc"
               ],
               "models_list": [
-                "dm1q", "dm2q", "dm3q",
+                "dm1q", "dm2q", "dm3q", "q5q", "b5q",
                 "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
                 "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
-                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
-	            	"q5q", "b5q"
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi"
               ]
             }
         ],
-          "inference_type": "SNAP",
           "compute_unit": "DSP",
           "model_format": "SNPE",
           "exec_type": "FLOAT16"
         },
         {
+          "version": "tvm",
+          "input_node": ["1","1"],
+          "output_node": ["879","1040"],
+          "compatible_models": [
+            {
+              "id": "2.14.3",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_sm8650_qnn2143.tvm.so"
+                
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q"
+              ]
+            }
+        ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "NNC",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V100_INT16_rose.nnc"
+
+              ],
+              "models_list": [
+                "a55x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "QASYMM16"
+        },
+        {
           "version": "default",
+          "input_node": ["x.2"],
+          "output_node": ["471"],
           "compatible_models": [
             {
               "id": "adreno,amd",
@@ -593,13 +811,12 @@
         1024,
         1024
       ],
-      "nChannel": 3,
-      "noOfModels": 1,
-      "input_node": ["input"],
-      "output_node": ["output_154"],
+      "nChannel": 3,      
       "dnn_model_info": [
         {
           "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output_154"],
           "compatible_models": [
             {
               "id": "adreno,amd",
@@ -624,12 +841,11 @@
         896
       ],
       "nChannel": 3,
-      "noOfModels": 1,
-      "input_node": ["x.1"],
-      "output_node": ["26"],
       "dnn_model_info": [
         {
           "version": "default",
+          "input_node": ["x.1"],
+          "output_node": ["26"],
           "compatible_models": [
             {
             "id": "adreno,amd",
@@ -654,12 +870,12 @@
         448
       ],
       "nChannel": 3,
-      "noOfModels": 1,
-      "input_node": ["input"],
-      "output_node": ["output"],
+      
       "dnn_model_info": [
         {
           "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output"],
           "compatible_models": [
             { 
               "id": "adreno,amd",
@@ -684,12 +900,11 @@
         512
       ],
       "nChannel": 3,
-      "noOfModels": 1,
-      "input_node": ["serving_default_input:0"],
-      "output_node": ["StatefulPartitionedCall:0"],
       "dnn_model_info": [
         {
           "version": "default",
+          "input_node": ["serving_default_input:0"],
+          "output_node": ["StatefulPartitionedCall:0"],
           "compatible_models": [
             { 
               "id": "adreno,amd",

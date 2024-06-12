@@ -155,6 +155,7 @@
     <local name="REAR_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MIN" value="15" />
     <local name="FRONT_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MAX" value="24" />
     <local name="FRONT_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MIN" value="8" />
+	<local name="SUPPORT_SINGLE_TAKE_MULTI_CAMERA" value="false" />
 
     <!-- Night features -->
     <local name="SUPPORT_NIGHT_MODE_FRONT_ANGLE" value="true" />

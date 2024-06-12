@@ -28,6 +28,7 @@ system/app/WifiRROverlayAppWifiLock
 "
 PRODUCT_DEBLOAT+="
 overlay/SoftapOverlay6GHz
+overlay/SoftapOverlayDualAp
 overlay/SoftapOverlayOWE
 "
 
@@ -46,11 +47,15 @@ system/priv-app/GameDriver-SM8550
 
 # Camera SDK
 SYSTEM_DEBLOAT+="
+system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
 system/etc/permissions/cameraservice.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
 system/etc/permissions/sec_camerax_impl.xml
 system/etc/permissions/sec_camerax_service.xml
 system/framework/sec_camerax_impl.jar
 system/framework/scamera_sep.jar
+system/priv-app/GlobalPostProcMgr
+system/priv-app/PetService
 system/priv-app/SCameraSDKService
 system/priv-app/sec_camerax_service
 "
@@ -76,26 +81,13 @@ system/etc/permissions/org.carconnectivity.android.digitalkey.secureelement.xml
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
+etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc
 etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
 etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
 framework/org.carconnectivity.android.digitalkey.rangingintent.jar
 framework/org.carconnectivity.android.digitalkey.secureelement.jar
-framework/oat/arm/com.qti.location.sdk.art
-framework/oat/arm/com.qti.location.sdk.odex
-framework/oat/arm/com.qti.location.sdk.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.vdex
-framework/oat/arm64/com.qti.location.sdk.art
-framework/oat/arm64/com.qti.location.sdk.odex
-framework/oat/arm64/com.qti.location.sdk.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.vdex
 lib/libqcc.so
 lib/libqcc_file_agent_sys.so
 lib/libqccdme.so
