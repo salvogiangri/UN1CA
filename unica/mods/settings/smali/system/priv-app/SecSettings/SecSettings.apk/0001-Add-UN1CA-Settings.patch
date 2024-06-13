@@ -1,4 +1,4 @@
-From ebad0887cc7ab2455454bac10fb6314368135774 Mon Sep 17 00:00:00 2001
+From 15f98bce814259b302975f28897983cbb143f0c7 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -9,32 +9,32 @@ Subject: [PATCH] Add UN1CA Settings
  res/layout/unica_settings_logo_layout.xml     |   7 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
- res/values/public.xml                         |  26 ++
- res/values/strings.xml                        |  19 +
+ res/values/public.xml                         |  27 ++
+ res/values/strings.xml                        |  20 +
  res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   1 +
  res/xml/unica_settings.xml                    |  15 +
  .../com/android/settings/R$drawable.smali     |   6 +
  .../com/android/settings/R$id.smali           |   2 +
  .../com/android/settings/R$layout.smali       |   2 +
- .../com/android/settings/R$string.smali       |  38 ++
+ .../com/android/settings/R$string.smali       |  40 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         | 141 ++++++
- .../UnicaSettingsPreferenceController.smali   | 223 ++++++++++
+ .../UnicaSettingsPreferenceController.smali   | 223 +++++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
- .../io/mesalabs/unica/pif/PIFUtils.smali      | 418 ++++++++++++++++++
- .../AppDowngradePreferenceController.smali    | 183 ++++++++
- .../DeviceNamePreferenceController.smali      | 211 +++++++++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 455 ++++++++++++++++++
+ .../AppDowngradePreferenceController.smali    | 183 +++++++
+ .../DeviceNamePreferenceController.smali      | 211 ++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 306 +++++++++++++
- .../PIFVersionPreferenceController.smali      | 226 ++++++++++
- .../ROMVersionPreferenceController.smali      | 238 ++++++++++
- ...SecureScreenshotPreferenceController.smali | 183 ++++++++
- 30 files changed, 2607 insertions(+)
+ .../LiveBlurPreferenceController.smali        | 306 ++++++++++++
+ .../PIFVersionPreferenceController.smali      | 235 +++++++++
+ .../ROMVersionPreferenceController.smali      | 238 +++++++++
+ ...SecureScreenshotPreferenceController.smali | 183 +++++++
+ 30 files changed, 2657 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -124,7 +124,7 @@ index 4fd038f8..d3a6d0f7 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 23eb925b..716b41eb 100644
+index 23eb925b..2dd645ec 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5125,6 +5125,7 @@
@@ -168,7 +168,7 @@ index 23eb925b..716b41eb 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
-@@ -31911,6 +31917,25 @@
+@@ -31911,6 +31917,26 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
@@ -185,16 +185,17 @@ index 23eb925b..716b41eb 100644
 +    <public type="string" name="unica_native_blur_title" id="0x7f1333a8" />
 +    <public type="string" name="unica_pif_checking" id="0x7f1333a9" />
 +    <public type="string" name="unica_pif_error" id="0x7f1333aa" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f1333ab" />
-+    <public type="string" name="unica_pif_updated" id="0x7f1333ac" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f1333ad" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1333ae" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1333af" />
-+    <public type="string" name="unica_settings_title" id="0x7f1333b0" />
++    <public type="string" name="unica_pif_no_root" id="0x7f1333ab" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f1333ac" />
++    <public type="string" name="unica_pif_updated" id="0x7f1333ad" />
++    <public type="string" name="unica_pif_version_title" id="0x7f1333ae" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1333af" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1333b0" />
++    <public type="string" name="unica_settings_title" id="0x7f1333b1" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34627,4 +34652,5 @@
+@@ -34627,4 +34653,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
@@ -202,10 +203,10 @@ index 23eb925b..716b41eb 100644
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 486d035b..765d08f5 100644
+index 486d035b..7f08b5ac 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13851,4 +13851,23 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13851,4 +13851,24 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -222,6 +223,7 @@ index 486d035b..765d08f5 100644
 +    <string name="unica_native_blur_title">Enable live blur effect</string>
 +    <string name="unica_pif_checking">Checking for updates…</string>
 +    <string name="unica_pif_error">An error occurred.</string>
++    <string name="unica_pif_no_root">Root is required for Play Integrity Fix to work.</string>
 +    <string name="unica_pif_up_to_date">"You're running the latest version."</string>
 +    <string name="unica_pif_updated">Update completed successfully.</string>
 +    <string name="unica_pif_version_title">Play Integrity Fix version</string>
@@ -327,7 +329,7 @@ index 10435a45..5e2d71d4 100644
  
  .field public static final user_credential:I = 0x7f0d05e4
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 91fbf763..d13e3917 100644
+index 91fbf763..e59a8e13 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4086,6 +4086,8 @@
@@ -348,7 +350,7 @@ index 91fbf763..d13e3917 100644
  .field public static final menu_restore:I = 0x7f1315d0
  
  .field public static final menu_save:I = 0x7f1315d1
-@@ -10410,6 +10414,40 @@
+@@ -10410,6 +10414,42 @@
  
  .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132b60
  
@@ -374,17 +376,19 @@ index 91fbf763..d13e3917 100644
 +
 +.field public static final unica_pif_error:I = 0x7f1333aa
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f1333ab
++.field public static final unica_pif_no_root:I = 0x7f1333ab
 +
-+.field public static final unica_pif_updated:I = 0x7f1333ac
++.field public static final unica_pif_up_to_date:I = 0x7f1333ac
 +
-+.field public static final unica_pif_version_title:I = 0x7f1333ad
++.field public static final unica_pif_updated:I = 0x7f1333ad
 +
-+.field public static final unica_rom_version_title:I = 0x7f1333ae
++.field public static final unica_pif_version_title:I = 0x7f1333ae
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1333af
++.field public static final unica_rom_version_title:I = 0x7f1333af
 +
-+.field public static final unica_settings_title:I = 0x7f1333b0
++.field public static final unica_secure_ss_title:I = 0x7f1333b0
++
++.field public static final unica_settings_title:I = 0x7f1333b1
 +
  .field public static final uninstall:I = 0x7f132b64
  
@@ -943,10 +947,10 @@ index 00000000..07ba1d77
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..9f2e3986
+index 00000000..a2ff859a
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
-@@ -0,0 +1,418 @@
+@@ -0,0 +1,455 @@
 +.class public Lio/mesalabs/unica/pif/PIFUtils;
 +.super Ljava/lang/Object;
 +.source "PIFUtils.java"
@@ -956,6 +960,8 @@ index 00000000..9f2e3986
 +.field private static final STATUS_CHECKING:I = 0x0
 +
 +.field private static final STATUS_ERROR:I = 0x3
++
++.field private static final STATUS_NO_ROOT:I = 0x4
 +
 +.field private static final STATUS_UPDATED:I = 0x1
 +
@@ -1062,6 +1068,24 @@ index 00000000..9f2e3986
 +    :cond_2
 +    :goto_1
 +    throw v2
++.end method
++
++.method public static isPIFInstallable()Z
++    .locals 2
++
++    const-string v0, "ro.boot.verifiedbootstate"
++
++    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "green"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    return v0
 +.end method
 +
 +.method static synthetic lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
@@ -1297,21 +1321,26 @@ index 00000000..9f2e3986
 +    return-void
 +
 +    :pswitch_0
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_error:I
++    sget v0, Lcom/android/settings/R$string;->unica_pif_no_root:I
 +
 +    goto :goto_0
 +
 +    :pswitch_1
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_up_to_date:I
++    sget v0, Lcom/android/settings/R$string;->unica_pif_error:I
 +
 +    goto :goto_0
 +
 +    :pswitch_2
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_updated:I
++    sget v0, Lcom/android/settings/R$string;->unica_pif_up_to_date:I
 +
 +    goto :goto_0
 +
 +    :pswitch_3
++    sget v0, Lcom/android/settings/R$string;->unica_pif_updated:I
++
++    goto :goto_0
++
++    :pswitch_4
 +    sget v0, Lcom/android/settings/R$string;->unica_pif_checking:I
 +
 +    nop
@@ -1327,10 +1356,9 @@ index 00000000..9f2e3986
 +
 +    return-void
 +
-+    nop
-+
 +    :pswitch_data_0
 +    .packed-switch 0x0
++        :pswitch_4
 +        :pswitch_3
 +        :pswitch_2
 +        :pswitch_1
@@ -1341,6 +1369,19 @@ index 00000000..9f2e3986
 +.method public static updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
 +    .locals 3
 +
++    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->isPIFInstallable()Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
++    const/4 v0, 0x4
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++
++    return-void
++
++    :cond_0
 +    const/4 v0, 0x0
 +
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
@@ -2298,10 +2339,10 @@ index 00000000..b3a60101
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..c489b897
+index 00000000..626340fd
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
-@@ -0,0 +1,226 @@
+@@ -0,0 +1,235 @@
 +.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "PIFVersionPreferenceController.java"
@@ -2319,10 +2360,19 @@ index 00000000..c489b897
 +
 +# virtual methods
 +.method public getAvailabilityStatus()I
-+    .locals 0
++    .locals 1
 +
 +    const/4 p0, 0x0
 +
++    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->isPIFInstallable()Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
++    const/4 p0, 0x5
++
++    :cond_0
 +    return p0
 +.end method
 +
