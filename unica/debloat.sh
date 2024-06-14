@@ -362,6 +362,7 @@ system/app/FactoryAirCommandManager
 system/app/FactoryCameraFB
 system/app/FBAppManager_NS
 system/app/HMT
+system/app/MoccaMobile
 system/app/PlayAutoInstallConfig
 system/app/SamsungCalendar
 system/app/SamsungPassAutofill_v1
