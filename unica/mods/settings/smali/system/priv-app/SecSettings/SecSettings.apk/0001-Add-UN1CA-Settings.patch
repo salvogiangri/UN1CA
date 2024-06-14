@@ -1,4 +1,4 @@
-From 15f98bce814259b302975f28897983cbb143f0c7 Mon Sep 17 00:00:00 2001
+From 7df1e9175a6731ef31528f036a2af21cfee8f71c Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -30,11 +30,11 @@ Subject: [PATCH] Add UN1CA Settings
  .../DeviceNamePreferenceController.smali      | 211 ++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 306 ++++++++++++
+ .../LiveBlurPreferenceController.smali        | 314 ++++++++++++
  .../PIFVersionPreferenceController.smali      | 235 +++++++++
  .../ROMVersionPreferenceController.smali      | 238 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 +++++++
- 30 files changed, 2657 insertions(+)
+ 30 files changed, 2665 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -2027,10 +2027,10 @@ index 00000000..dc46c7ae
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..b3a60101
+index 00000000..5dd084fb
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
-@@ -0,0 +1,306 @@
+@@ -0,0 +1,314 @@
 +.class public Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "LiveBlurPreferenceController.java"
@@ -2271,7 +2271,23 @@ index 00000000..b3a60101
 +.end method
 +
 +.method synthetic lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
-+    .locals 2
++    .locals 3
++
++    iget-boolean v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
++
++    const-string v1, "persist.sys.unica.nativeblur"
++
++    invoke-static {v1, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    xor-int/lit8 v2, v0, 0x1
++
++    invoke-static {v2}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v1, v2}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
 +
 +    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 +
@@ -2311,21 +2327,13 @@ index 00000000..b3a60101
 +.end method
 +
 +.method public setChecked(Z)Z
-+    .locals 2
-+
-+    const-string v0, "persist.sys.unica.nativeblur"
-+
-+    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    .locals 0
 +
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->showRebootAlertDialog()V
 +
-+    const/4 v0, 0x1
++    const/4 p0, 0x0
 +
-+    return v0
++    return p0
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z
