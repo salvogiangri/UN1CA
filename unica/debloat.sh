@@ -28,6 +28,11 @@ VENDOR_DEBLOAT+="
 etc/dpolicy
 "
 
+# mAFPC
+SYSTEM_DEBLOAT="
+system/bin/mafpc_write
+"
+
 # .odex files
 SYSTEM_DEBLOAT+="
 system/app/AllShareAware/oat
@@ -350,8 +355,13 @@ priv-app/Messages
 priv-app/SearchSelector
 "
 SYSTEM_DEBLOAT+="
+system/app/AutomationTest_FB
+system/app/DRParser
 system/app/DictDiotekForSec
+system/app/FactoryAirCommandManager
+system/app/FactoryCameraFB
 system/app/FBAppManager_NS
+system/app/HMT
 system/app/PlayAutoInstallConfig
 system/app/SamsungCalendar
 system/app/SamsungPassAutofill_v1
@@ -369,18 +379,29 @@ system/app/SamsungTTSVoice_pt_BR_f00
 system/app/SamsungTTSVoice_ru_RU_f00
 system/app/SamsungTTSVoice_th_TH_f00
 system/app/SamsungTTSVoice_vi_VN_f00
+system/app/SecFactoryPhoneTest
+system/app/SilentLog
 system/app/SmartReminder
 system/app/WebManual
+system/app/WlanTest
 system/etc/init/samsung_pass_authenticator_service.rc
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.app.kfa.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.authfw.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.carkey.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.cidmanager.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.game.gamehome.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.providers.factory.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
+system/etc/permissions/privapp-permissions-com.sec.android.app.factorykeystring.xml
+system/etc/permissions/privapp-permissions-com.sec.android.app.servicemodeapp.xml
 system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
+system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
+system/etc/permissions/privapp-permissions-com.sec.epdgtestapp.xml
+system/etc/permissions/privapp-permissions-com.sec.facatfunction.xml
+system/etc/permissions/privapp-permissions-com.sem.factoryapp.xml
 system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
 system/etc/permissions/privapp-permissions-de.axelspringer.yana.zeropage.xml
 system/etc/permissions/privapp-permissions-meta.xml
@@ -391,18 +412,28 @@ system/etc/sysconfig/preinstalled-packages-com.samsung.android.spayfw.xml
 system/etc/sysconfig/samsungauthframework.xml
 system/etc/sysconfig/samsungpassapp.xml
 system/hidden/SmartTutor
+system/lib64/librildump_jni.so
 system/preload
 system/priv-app/AuthFramework
+system/priv-app/BCService
+system/priv-app/CIDManager
+system/priv-app/DeviceKeystring
 system/priv-app/DiagMonAgent91
 system/priv-app/DigitalKey
 system/priv-app/FBInstaller_NS
 system/priv-app/FBServices
+system/priv-app/FacAtFunction
+system/priv-app/FactoryTestProvider
 system/priv-app/FotaAgent
 system/priv-app/GameHome
+system/priv-app/ModemServiceMode
 system/priv-app/OneDrive_Samsung_v3
 system/priv-app/PaymentFramework
+system/priv-app/SEMFactoryApp
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
+system/priv-app/SmartEpdgTestApp
+system/priv-app/serviceModeApp_FB
 system/priv-app/Upday
 "
 
