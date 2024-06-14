@@ -28,6 +28,7 @@ system/app/WifiRROverlayAppWifiLock
 "
 PRODUCT_DEBLOAT+="
 overlay/SoftapOverlay6GHz
+overlay/SoftapOverlayDualAp
 overlay/SoftapOverlayOWE
 "
 
@@ -49,45 +50,15 @@ SYSTEM_DEBLOAT+="
 system/app/ApexService
 system/bin/apexserver
 system/etc/init/apexserver.qcom.rc
+system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
 system/etc/permissions/cameraservice.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
 system/framework/scamera_sep.jar
-system/lib/libamex.so
-system/lib/libppvdis_core.so
-system/lib/libsume_climgp.plugin.so
-system/lib/libsume_climgp.plugin.impl.so
 system/lib64/libamex.so
-system/lib64/libppvdis_core.so
-system/lib64/libsume_climgp.plugin.so
-system/lib64/libsume_climgp.plugin.impl.so
+system/lib64/libppvdis_wrapper.so
+system/priv-app/GlobalPostProcMgr
+system/priv-app/PetService
 system/priv-app/SCameraSDKService
-"
-
-# Mocca
-SYSTEM_DEBLOAT+="
-system/app/MoccaMobile
-"
-
-# eSE
-SYSTEM_DEBLOAT+="
-system/app/ESEServiceAgent
-system/bin/esecos_daemon
-system/bin/sem_daemon
-system/etc/init/esecos.rc
-system/etc/init/sem.rc
-system/etc/permissions/privapp-permissions-com.sec.factoryapp.xml
-system/lib/libsec_sem.so
-system/lib/libsec_semHal.so
-system/lib/libsec_semRil.so
-system/lib/libsec_semTlc.so
-system/lib/libspictrl.so
-system/lib/vendor.samsung.hardware.security.sem@1.0.so
-system/lib64/libsec_sem.so
-system/lib64/libsec_semHal.so
-system/lib64/libsec_semRil.so
-system/lib64/libsec_semTlc.so
-system/lib64/libspictrl.so
-system/lib64/vendor.samsung.hardware.security.sem@1.0.so
-system/priv-app/SEMFactoryApp
 "
 
 # Apps debloat
@@ -105,26 +76,13 @@ system/etc/permissions/org.carconnectivity.android.digitalkey.secureelement.xml
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
+etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc
 etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
 etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
 framework/org.carconnectivity.android.digitalkey.rangingintent.jar
 framework/org.carconnectivity.android.digitalkey.secureelement.jar
-framework/oat/arm/com.qti.location.sdk.art
-framework/oat/arm/com.qti.location.sdk.odex
-framework/oat/arm/com.qti.location.sdk.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm/org.carconnectivity.android.digitalkey.secureelement.vdex
-framework/oat/arm64/com.qti.location.sdk.art
-framework/oat/arm64/com.qti.location.sdk.odex
-framework/oat/arm64/com.qti.location.sdk.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.rangingintent.vdex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.odex
-framework/oat/arm64/org.carconnectivity.android.digitalkey.secureelement.vdex
 lib/libqcc.so
 lib/libqcc_file_agent_sys.so
 lib/libqccdme.so

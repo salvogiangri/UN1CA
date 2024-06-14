@@ -1,13 +1,22 @@
 SKIPUNZIP=1
 
 # [
-ASCENDIA_IMG="https://downloads.simon1511.de/s/SHzASGR4nYTbjQ4/download/Ascendia_1.0_Vanilla_OneUI_a52q_boot.img"
+ASCENDIA_ZIP="https://github.com/RisenID/kernel_samsung_ascendia_sm7125/releases/download/v3.2/Ascendia_3.2_Vanilla_a572q.zip"
 
 REPLACE_KERNEL_BINARIES()
 {
+    [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
+    mkdir -p "$TMP_DIR"
+
+    echo "Downloading $(basename "$ASCENDIA_ZIP")"
+    curl -L -s -o "$TMP_DIR/ascendia.zip" "$ASCENDIA_ZIP"
+
+    echo "Extracting kernel binaries"
     [ -f "$WORK_DIR/kernel/boot.img" ] && rm -rf "$WORK_DIR/kernel/boot.img"
-    echo "Downloading $(basename "$ASCENDIA_IMG")"
-    curl -L -s -o "$WORK_DIR/kernel/boot.img" "$ASCENDIA_IMG"
+    unzip -q -j "$TMP_DIR/ascendia.zip" "ascendia/a52/oneui.img" -d "$WORK_DIR/kernel"
+    mv "$WORK_DIR/kernel/oneui.img" "$WORK_DIR/kernel/boot.img"
+
+    rm -rf "$TMP_DIR"
 }
 # ]
 
