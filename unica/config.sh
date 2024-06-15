@@ -16,15 +16,15 @@
 #
 
 # UN1CA configuration file
-ROM_VERSION="1.1.6"
+ROM_VERSION="2.0.0"
 ROM_VERSION+="-$(git rev-parse --short HEAD)"
-ROM_CODENAME="Diamond"
+ROM_CODENAME="Eureka"
 
 # Source ROM firmware
 case "$TARGET_SINGLE_SYSTEM_IMAGE" in
     # Qualcomm
     "qssi")
-        # Galaxy S23, S24 Ultra (One UI 6.1)
+        # Galaxy S23 (One UI 6.1)
         SOURCE_FIRMWARE="SM-S911B/EUX/352404911234563"
         SOURCE_EXTRA_FIRMWARES=("SM-S9210/CHC/356724910402671")
         SOURCE_API_LEVEL=34

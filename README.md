@@ -22,29 +22,32 @@
 - [Build UN1CA](https://unica.mesalabs.io/expert/build/)
 
 # What is UN1CA?
-UN1CA is an open source project which allows you to create a custom One UI-based ROM by automatically downloading/extracting the firmware, applying the required patches and generating a flashable zip/tar package.
-It also includes additional features and tweaks to ensure the best possible experience out of the box.
+UN1CA is a work-in-progress custom firmware for Samsung Galaxy devices. It's based on the latest and greatest iteration of Samsung's UX and it also includes additional features and tweaks to ensure the best possible experience out of the box.
+Its build system allows to automatically download/extract the firmware, apply the required patches and generates a flashable zip/tar package for the specified device.
+
+Since UN1CA is open source, everyone can contribute to the project or port this ROM to another device, please check out the official documentation to find out more: https://unica.mesalabs.io/expert
 
 # Features
-- Based on the latest high-end Samsung devices firmware:
-  - Galaxy S23 for Qualcomm devices
-  - Galaxy S23 FE for Exynos devices
+- Based on the latest stable Galaxy S23 firmware
+- Galaxy AI support
 - High end animations
-- AOD clock transition support
 - Native/live blur support
+- AOD clock transition support
+- AOD wallpaper support
+- Adaptive color tone support
+- Adaptive refresh rate support
 - Picture remaster support
 - Object, shadow and reflection eraser support
 - Image clipper support
 - Samsung DeX support
 - Camera privacy toggle support
-- Slight debloat
-- Enabled ADB at boot
+- Debloated from useless system services/additional apps
 - Play Integrity Fix included **(root required)**
 - [BluetoothLibraryPatcher](https://github.com/3arthur6/BluetoothLibraryPatcher) included
 - [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) implemented in system frameworks
 - China Device Care app included
 - [Patched GoodLock](https://github.com/corsicanu/goodlock_dump) app included
-- Extra mods (Allow secure screenshot, FPS Unlock, Allow app downgrade)
+- Extra mods (Enable live blur, Allow secure screenshot, FPS Unlock, Allow app downgrade)
 - Extra CSC features (Call recording, Hiya, Network speed in status bar, Quick switch to Secure Folder)
 
 # Licensing
@@ -54,6 +57,7 @@ This project is licensed under the terms of the [GNU General Public License v3.0
 - [erofs-utils](https://github.com/sekaiacg/erofs-utils/), dual license ([GPL-2.0](https://github.com/sekaiacg/erofs-utils/blob/dev/LICENSES/GPL-2.0), [Apache-2.0](https://github.com/sekaiacg/erofs-utils/blob/dev/LICENSES/Apache-2.0))
 - [img2sdat](https://github.com/xpirt/img2sdat), licensed under the [MIT License](https://github.com/xpirt/img2sdat/blob/master/LICENSE)
 - [platform_build](https://android.googlesource.com/platform/build/) (ext4_utils, f2fs_utils, signapk), licensed under the [Apache License 2.0](https://source.android.com/docs/setup/about/licenses)
+- [smali](https://github.com/google/smali), [multiple licenses](https://github.com/google/smali/blob/main/third_party/NOTICE)
 
 # Credits
 A big thanks goes to the following for their invaluable contributions in no particular order:
@@ -63,6 +67,7 @@ A big thanks goes to the following for their invaluable contributions in no part
 - **[Simon1511](https://github.com/Simon1511)** for his support and some of the device-specific patches
 - **[ananjaser1211](https://github.com/ananjaser1211)** for troubleshooting and his time
 - **[iDrinkCoffee](https://github.com/iDrinkCoffee-TG)** and **[RisenID](https://github.com/RisenID)** for documentation revisioning
+- **[alex41370](https://github.com/alex41370)** for his help and support
 - *All the UN1CA project contributors and testers ❤️*
 
 # Stargazers over time
