@@ -1,4 +1,4 @@
-From 61544a88b20cb8cfe27d7fdcb6de6f77f3e190c2 Mon Sep 17 00:00:00 2001
+From 2e91a1f3113c0b191a03049ade69be1f14921686 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -20,21 +20,21 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$string.smali       |  40 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         | 141 ++++++
+ .../unica/UnicaSettingsFragment.smali         | 139 ++++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
  .../io/mesalabs/unica/pif/PIFUtils.smali      | 455 ++++++++++++++++++
  .../AppDowngradePreferenceController.smali    | 183 +++++++
- .../DeviceNamePreferenceController.smali      | 211 ++++++++
+ .../DeviceNamePreferenceController.smali      | 193 ++++++++
  .../GamesPropsPreferenceController.smali      | 167 +++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 314 ++++++++++++
- .../PIFVersionPreferenceController.smali      | 235 +++++++++
+ .../LiveBlurPreferenceController.smali        | 322 +++++++++++++
+ .../PIFVersionPreferenceController.smali      | 238 +++++++++
  .../ROMVersionPreferenceController.smali      | 238 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 +++++++
- 30 files changed, 2665 insertions(+)
+ 30 files changed, 2656 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -427,10 +427,10 @@ index 00000000..18621dd0
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
 new file mode 100644
-index 00000000..5fb0327e
+index 00000000..c7522b68
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,139 @@
 +.class public Lio/mesalabs/unica/UnicaSettingsFragment;
 +.super Lcom/android/settings/dashboard/DashboardFragment;
 +.source "UnicaSettingsFragment.java"
@@ -464,41 +464,39 @@ index 00000000..5fb0327e
 +.end method
 +
 +.method private setWallpaperasLogoBg(Landroidx/preference/Preference;)V
-+    .locals 4
++    .locals 1
 +
 +    instance-of v0, p1, Lcom/android/settingslib/widget/LayoutPreference;
 +
 +    if-eqz v0, :cond_0
 +
-+    move-object v0, p1
++    check-cast p1, Lcom/android/settingslib/widget/LayoutPreference;
 +
-+    check-cast v0, Lcom/android/settingslib/widget/LayoutPreference;
++    sget v0, Lcom/android/settings/R$id;->unica_logo_wp:I
 +
-+    sget v1, Lcom/android/settings/R$id;->unica_logo_wp:I
++    invoke-virtual {p1, v0}, Lcom/android/settingslib/widget/LayoutPreference;->findViewById(I)Landroid/view/View;
 +
-+    invoke-virtual {v0, v1}, Lcom/android/settingslib/widget/LayoutPreference;->findViewById(I)Landroid/view/View;
++    move-result-object p1
 +
-+    move-result-object v1
++    check-cast p1, Landroidx/appcompat/widget/AppCompatImageView;
 +
-+    check-cast v1, Landroidx/appcompat/widget/AppCompatImageView;
-+
-+    if-eqz v1, :cond_0
++    if-eqz p1, :cond_0
 +
 +    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
 +
-+    move-result-object v2
++    move-result-object p0
 +
-+    invoke-static {v2}, Landroid/app/WallpaperManager;->getInstance(Landroid/content/Context;)Landroid/app/WallpaperManager;
++    invoke-static {p0}, Landroid/app/WallpaperManager;->getInstance(Landroid/content/Context;)Landroid/app/WallpaperManager;
 +
-+    move-result-object v2
++    move-result-object p0
 +
-+    const/4 v3, 0x1
++    const/4 v0, 0x1
 +
-+    invoke-virtual {v2, v3}, Landroid/app/WallpaperManager;->getDrawable(I)Landroid/graphics/drawable/Drawable;
++    invoke-virtual {p0, v0}, Landroid/app/WallpaperManager;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 +
-+    move-result-object v3
++    move-result-object p0
 +
-+    invoke-virtual {v1, v3}, Landroidx/appcompat/widget/AppCompatImageView;->setImageDrawable(Landroid/graphics/drawable/Drawable;)V
++    invoke-virtual {p1, p0}, Landroidx/appcompat/widget/AppCompatImageView;->setImageDrawable(Landroid/graphics/drawable/Drawable;)V
 +
 +    :cond_0
 +    return-void
@@ -535,39 +533,39 @@ index 00000000..5fb0327e
 +
 +    invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
 +
-+    const-string v0, "unica_logo"
++    const-string p1, "unica_logo"
 +
-+    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++    invoke-virtual {p0, p1}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
 +
-+    move-result-object v0
++    move-result-object p1
 +
-+    invoke-direct {p0, v0}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
 +
-+    const-string/jumbo v0, "persist.sys.pif.version"
++    const-string p1, "persist.sys.pif.version"
 +
-+    const-string v1, ""
++    const-string v0, ""
 +
-+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {p1, v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
-+    move-result-object v0
++    move-result-object p1
 +
-+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
++    invoke-static {p1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 +
-+    move-result v0
++    move-result p1
 +
-+    if-eqz v0, :cond_0
++    if-eqz p1, :cond_0
 +
 +    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
 +
-+    move-result-object v0
++    move-result-object p1
 +
-+    const-string v1, "unica_pif_version"
++    const-string v0, "unica_pif_version"
 +
-+    invoke-virtual {p0, v1}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-static {v0, v1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
++    invoke-static {p1, p0}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
 +
 +    :cond_0
 +    return-void
@@ -803,7 +801,7 @@ index 00000000..00e24add
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
 new file mode 100644
-index 00000000..1359aa12
+index 00000000..a5004556
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
 @@ -0,0 +1,46 @@
@@ -841,21 +839,21 @@ index 00000000..1359aa12
 +
 +# virtual methods
 +.method public final run()V
-+    .locals 3
++    .locals 2
 +
 +    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$0:Landroid/content/Context;
 +
 +    iget-object v1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$1:Lorg/json/JSONObject;
 +
-+    iget-object v2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$2:Landroidx/preference/Preference;
++    iget-object p0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0;->f$2:Landroidx/preference/Preference;
 +
-+    invoke-static {v0, v1, v2}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
++    invoke-static {v0, v1, p0}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
 +
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
 new file mode 100644
-index 00000000..96dc69e3
+index 00000000..8d24ecea
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
 @@ -0,0 +1,34 @@
@@ -885,17 +883,17 @@ index 00000000..96dc69e3
 +
 +# virtual methods
 +.method public final run()V
-+    .locals 1
++    .locals 0
 +
-+    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;->f$0:Landroid/content/Context;
++    iget-object p0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;->f$0:Landroid/content/Context;
 +
-+    invoke-static {v0}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$1(Landroid/content/Context;)V
++    invoke-static {p0}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$1(Landroid/content/Context;)V
 +
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali
 new file mode 100644
-index 00000000..07ba1d77
+index 00000000..47e09f7d
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2.smali
 @@ -0,0 +1,46 @@
@@ -933,21 +931,21 @@ index 00000000..07ba1d77
 +
 +# virtual methods
 +.method public final run()V
-+    .locals 3
++    .locals 2
 +
 +    iget-object v0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$0:Landroid/os/Handler;
 +
 +    iget-object v1, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$1:Landroid/content/Context;
 +
-+    iget-object v2, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$2:Landroidx/preference/Preference;
++    iget-object p0, p0, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda2;->f$2:Landroidx/preference/Preference;
 +
-+    invoke-static {v0, v1, v2}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$2(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
++    invoke-static {v0, v1, p0}, Lio/mesalabs/unica/pif/PIFUtils;->lambda$updatePIF$2(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
 +
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..223e42aa
+index 00000000..a98913fd
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 @@ -0,0 +1,455 @@
@@ -982,7 +980,7 @@ index 00000000..223e42aa
 +.end method
 +
 +.method private static getJson()Lorg/json/JSONObject;
-+    .locals 8
++    .locals 5
 +    .annotation system Ldalvik/annotation/Throws;
 +        value = {
 +            Ljava/io/IOException;,
@@ -998,76 +996,74 @@ index 00000000..223e42aa
 +
 +    invoke-virtual {v0}, Ljava/net/URL;->openStream()Ljava/io/InputStream;
 +
-+    move-result-object v1
++    move-result-object v0
 +
 +    :try_start_0
-+    new-instance v2, Ljava/io/InputStreamReader;
++    new-instance v1, Ljava/io/InputStreamReader;
 +
-+    invoke-direct {v2, v1}, Ljava/io/InputStreamReader;-><init>(Ljava/io/InputStream;)V
++    invoke-direct {v1, v0}, Ljava/io/InputStreamReader;-><init>(Ljava/io/InputStream;)V
 +
-+    new-instance v3, Ljava/io/BufferedReader;
++    new-instance v2, Ljava/io/BufferedReader;
 +
-+    invoke-direct {v3, v2}, Ljava/io/BufferedReader;-><init>(Ljava/io/Reader;)V
++    invoke-direct {v2, v1}, Ljava/io/BufferedReader;-><init>(Ljava/io/Reader;)V
 +
-+    new-instance v4, Ljava/lang/StringBuilder;
++    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
 +
 +    :goto_0
-+    invoke-virtual {v3}, Ljava/io/BufferedReader;->read()I
++    invoke-virtual {v2}, Ljava/io/BufferedReader;->read()I
 +
-+    move-result v5
++    move-result v3
 +
-+    move v6, v5
++    const/4 v4, -0x1
 +
-+    const/4 v7, -0x1
++    if-eq v3, v4, :cond_0
 +
-+    if-eq v5, v7, :cond_0
++    int-to-char v3, v3
 +
-+    int-to-char v5, v6
-+
-+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
++    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 +
 +    goto :goto_0
 +
 +    :cond_0
-+    new-instance v5, Lorg/json/JSONObject;
++    new-instance v2, Lorg/json/JSONObject;
 +
-+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v7
++    move-result-object v1
 +
-+    invoke-direct {v5, v7}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
++    invoke-direct {v2, v1}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
 +    :try_end_0
 +    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 +
-+    if-eqz v1, :cond_1
++    if-eqz v0, :cond_1
 +
-+    invoke-virtual {v1}, Ljava/io/InputStream;->close()V
++    invoke-virtual {v0}, Ljava/io/InputStream;->close()V
 +
 +    :cond_1
-+    return-object v5
++    return-object v2
 +
 +    :catchall_0
-+    move-exception v2
++    move-exception v1
 +
-+    if-eqz v1, :cond_2
++    if-eqz v0, :cond_2
 +
 +    :try_start_1
-+    invoke-virtual {v1}, Ljava/io/InputStream;->close()V
++    invoke-virtual {v0}, Ljava/io/InputStream;->close()V
 +    :try_end_1
 +    .catchall {:try_start_1 .. :try_end_1} :catchall_1
 +
 +    goto :goto_1
 +
 +    :catchall_1
-+    move-exception v3
++    move-exception v0
 +
-+    invoke-virtual {v2, v3}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++    invoke-virtual {v1, v0}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
 +
 +    :cond_2
 +    :goto_1
-+    throw v2
++    throw v1
 +.end method
 +
 +.method public static isPIFInstallable()Z
@@ -1089,19 +1085,19 @@ index 00000000..223e42aa
 +.end method
 +
 +.method static synthetic lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
-+    .locals 2
++    .locals 0
 +
 +    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->setPIFConfig(Landroid/content/Context;Lorg/json/JSONObject;)V
 +
-+    const-string v0, "persist.sys.pif.version"
++    const-string p0, "persist.sys.pif.version"
 +
-+    const-string v1, "Unknown"
++    const-string p1, "Unknown"
 +
-+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {p0, p1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
-+    move-result-object v0
++    move-result-object p0
 +
-+    invoke-virtual {p2, v0}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
++    invoke-virtual {p2, p0}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
 +
 +    return-void
 +.end method
@@ -1117,7 +1113,7 @@ index 00000000..223e42aa
 +.end method
 +
 +.method static synthetic lambda$updatePIF$2(Landroid/os/Handler;Landroid/content/Context;Landroidx/preference/Preference;)V
-+    .locals 3
++    .locals 2
 +
 +    :try_start_0
 +    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->getJson()Lorg/json/JSONObject;
@@ -1133,24 +1129,22 @@ index 00000000..223e42aa
 +    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
 +    .catch Lorg/json/JSONException; {:try_start_0 .. :try_end_0} :catch_0
 +
-+    nop
-+
 +    goto :goto_0
 +
 +    :catch_0
-+    move-exception v0
++    move-exception p2
 +
-+    const-string v1, "PIFUtils"
++    const-string v0, "PIFUtils"
 +
-+    const-string v2, "Exception: "
++    const-string v1, "Exception: "
 +
-+    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    invoke-static {v0, v1, p2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 +
-+    new-instance v1, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;
++    new-instance p2, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;
 +
-+    invoke-direct {v1, p1}, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;-><init>(Landroid/content/Context;)V
++    invoke-direct {p2, p1}, Lio/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1;-><init>(Landroid/content/Context;)V
 +
-+    invoke-virtual {p0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++    invoke-virtual {p0, p2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
 +
 +    :goto_0
 +    return-void
@@ -1276,94 +1270,98 @@ index 00000000..223e42aa
 +
 +    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object p1
 +
-+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v0, p1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
 +
-+    const/4 v0, 0x1
++    const/4 p1, 0x1
 +
-+    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
 +
 +    goto :goto_0
 +
 +    :cond_0
-+    const/4 v0, 0x2
++    const/4 p1, 0x2
 +
-+    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
 +    :try_end_0
 +    .catch Lorg/json/JSONException; {:try_start_0 .. :try_end_0} :catch_0
 +
-+    :goto_0
-+    goto :goto_1
++    goto :goto_0
 +
 +    :catch_0
-+    move-exception v0
++    move-exception p1
 +
-+    const-string v1, "PIFUtils"
++    const-string v0, "PIFUtils"
 +
-+    const-string v2, "Exception: "
++    const-string v1, "Exception: "
 +
-+    invoke-static {v1, v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    invoke-static {v0, v1, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 +
-+    const/4 v1, 0x3
++    const/4 p1, 0x3
 +
-+    invoke-static {p0, v1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
 +
-+    :goto_1
++    :goto_0
 +    return-void
 +.end method
 +
 +.method private static showToast(Landroid/content/Context;I)V
-+    .locals 2
++    .locals 1
 +
-+    packed-switch p1, :pswitch_data_0
++    if-eqz p1, :cond_4
++
++    const/4 v0, 0x1
++
++    if-eq p1, v0, :cond_3
++
++    const/4 v0, 0x2
++
++    if-eq p1, v0, :cond_2
++
++    const/4 v0, 0x3
++
++    if-eq p1, v0, :cond_1
++
++    const/4 v0, 0x4
++
++    if-eq p1, v0, :cond_0
 +
 +    return-void
 +
-+    :pswitch_0
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_no_root:I
++    :cond_0
++    sget p1, Lcom/android/settings/R$string;->unica_pif_no_root:I
 +
 +    goto :goto_0
 +
-+    :pswitch_1
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_error:I
++    :cond_1
++    sget p1, Lcom/android/settings/R$string;->unica_pif_error:I
 +
 +    goto :goto_0
 +
-+    :pswitch_2
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_up_to_date:I
++    :cond_2
++    sget p1, Lcom/android/settings/R$string;->unica_pif_up_to_date:I
 +
 +    goto :goto_0
 +
-+    :pswitch_3
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_updated:I
++    :cond_3
++    sget p1, Lcom/android/settings/R$string;->unica_pif_updated:I
 +
 +    goto :goto_0
 +
-+    :pswitch_4
-+    sget v0, Lcom/android/settings/R$string;->unica_pif_checking:I
-+
-+    nop
++    :cond_4
++    sget p1, Lcom/android/settings/R$string;->unica_pif_checking:I
 +
 +    :goto_0
-+    const/4 v1, 0x0
++    const/4 v0, 0x0
 +
-+    invoke-static {p0, v0, v1}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
++    invoke-static {p0, p1, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;II)Landroid/widget/Toast;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1}, Landroid/widget/Toast;->show()V
++    invoke-virtual {p0}, Landroid/widget/Toast;->show()V
 +
 +    return-void
-+
-+    :pswitch_data_0
-+    .packed-switch 0x0
-+        :pswitch_4
-+        :pswitch_3
-+        :pswitch_2
-+        :pswitch_1
-+        :pswitch_0
-+    .end packed-switch
 +.end method
 +
 +.method public static updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
@@ -1375,9 +1373,9 @@ index 00000000..223e42aa
 +
 +    if-nez v0, :cond_0
 +
-+    const/4 v0, 0x4
++    const/4 p1, 0x4
 +
-+    invoke-static {p0, v0}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->showToast(Landroid/content/Context;I)V
 +
 +    return-void
 +
@@ -1597,10 +1595,10 @@ index 00000000..079c6187
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
 new file mode 100644
-index 00000000..b5736042
+index 00000000..80db5477
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
-@@ -0,0 +1,211 @@
+@@ -0,0 +1,193 @@
 +.class public Lio/mesalabs/unica/settings/DeviceNamePreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "DeviceNamePreferenceController.java"
@@ -1686,33 +1684,15 @@ index 00000000..b5736042
 +.end method
 +
 +.method public getSummary()Ljava/lang/CharSequence;
-+    .locals 2
++    .locals 0
 +
-+    invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 +
-+    move-result-object v0
++    invoke-static {p0}, Lcom/samsung/android/settings/deviceinfo/SecDeviceInfoUtils;->getDefaultDeviceName(Landroid/content/Context;)Ljava/lang/String;
 +
-+    const-string v1, "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_BRAND_NAME"
++    move-result-object p0
 +
-+    invoke-virtual {v0, v1}, Lcom/samsung/android/feature/SemFloatingFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
-+
-+    move-result v1
-+
-+    if-nez v1, :cond_0
-+
-+    move-object v1, v0
-+
-+    goto :goto_0
-+
-+    :cond_0
-+    const-string v1, "Unknown"
-+
-+    :goto_0
-+    return-object v1
++    return-object p0
 +.end method
 +
 +.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
@@ -1987,7 +1967,7 @@ index 00000000..66a58f0c
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
 new file mode 100644
-index 00000000..dc46c7ae
+index 00000000..e08624b2
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
 @@ -0,0 +1,34 @@
@@ -2017,20 +1997,20 @@ index 00000000..dc46c7ae
 +
 +# virtual methods
 +.method public final onClick(Landroid/content/DialogInterface;I)V
-+    .locals 1
++    .locals 0
 +
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;->f$0:Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
++    iget-object p0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0;->f$0:Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
 +
-+    invoke-virtual {v0, p1, p2}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
++    invoke-static {p0, p1, p2}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->$r8$lambda$AaMRnzLV1nNPtxvU3q2yudHGCQo(Lio/mesalabs/unica/settings/LiveBlurPreferenceController;Landroid/content/DialogInterface;I)V
 +
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..5dd084fb
+index 00000000..f13e793f
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
-@@ -0,0 +1,314 @@
+@@ -0,0 +1,322 @@
 +.class public Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "LiveBlurPreferenceController.java"
@@ -2041,12 +2021,20 @@ index 00000000..5dd084fb
 +
 +
 +# instance fields
-+.field private mDefaultValue:Z
++.field private final mDefaultValue:Z
 +
 +.field private mRebootDialog:Landroidx/appcompat/app/AlertDialog;
 +
 +
 +# direct methods
++.method public static synthetic $r8$lambda$AaMRnzLV1nNPtxvU3q2yudHGCQo(Lio/mesalabs/unica/settings/LiveBlurPreferenceController;Landroid/content/DialogInterface;I)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
++
 +.method static constructor <clinit>()V
 +    .locals 3
 +
@@ -2078,31 +2066,67 @@ index 00000000..5dd084fb
 +.end method
 +
 +.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
-+    .locals 2
++    .locals 3
 +
 +    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 +
-+    const-string v0, "ro.product.vendor.device"
++    sget-object v0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->DEFAULT_DISABLED_DEVICES:[Ljava/lang/String;
 +
-+    const-string v1, ""
-+
-+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v0}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
 +    move-result-object v0
 +
-+    sget-object v1, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->DEFAULT_DISABLED_DEVICES:[Ljava/lang/String;
++    const-string v1, "ro.product.vendor.device"
 +
-+    invoke-static {v1}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    const-string v2, ""
++
++    invoke-static {v1, v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v1
 +
-+    invoke-interface {v1, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++    invoke-interface {v0, v1}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
 +
-+    move-result v1
++    move-result v0
 +
-+    xor-int/lit8 v1, v1, 0x1
++    xor-int/lit8 v0, v0, 0x1
 +
-+    iput-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
++    iput-boolean v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
++
++    return-void
++.end method
++
++.method private synthetic lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
++    .locals 0
++
++    iget-boolean p1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
++
++    const-string p2, "persist.sys.unica.nativeblur"
++
++    invoke-static {p2, p1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result p1
++
++    xor-int/lit8 p1, p1, 0x1
++
++    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-static {p2, p1}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    iget-object p0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mContext:Landroid/content/Context;
++
++    const-string p1, "power"
++
++    invoke-virtual {p0, p1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/os/PowerManager;
++
++    const/4 p1, 0x0
++
++    invoke-virtual {p0, p1}, Landroid/os/PowerManager;->reboot(Ljava/lang/String;)V
 +
 +    return-void
 +.end method
@@ -2116,11 +2140,11 @@ index 00000000..5dd084fb
 +
 +    new-instance v0, Landroidx/appcompat/app/AlertDialog$Builder;
 +
-+    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++    iget-object v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mContext:Landroid/content/Context;
 +
 +    invoke-direct {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
 +
-+    sget v1, Lcom/android/settings/R$string;->unica_native_blur_dialog_title:I
++    sget v1, Lcom/android/settings/R$string;->unica_native_blur_title:I
 +
 +    invoke-virtual {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;->setTitle(I)Landroidx/appcompat/app/AlertDialog$Builder;
 +
@@ -2150,14 +2174,14 @@ index 00000000..5dd084fb
 +
 +    invoke-virtual {v0}, Landroidx/appcompat/app/AlertDialog$Builder;->create()Landroidx/appcompat/app/AlertDialog;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    iput-object v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++    iput-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
 +
 +    :cond_0
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
++    iget-object p0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mRebootDialog:Landroidx/appcompat/app/AlertDialog;
 +
-+    invoke-virtual {v0}, Landroidx/appcompat/app/AlertDialog;->show()V
++    invoke-virtual {p0}, Landroidx/appcompat/app/AlertDialog;->show()V
 +
 +    return-void
 +.end method
@@ -2249,17 +2273,17 @@ index 00000000..5dd084fb
 +.end method
 +
 +.method public isChecked()Z
-+    .locals 2
++    .locals 1
 +
 +    const-string v0, "persist.sys.unica.nativeblur"
 +
-+    iget-boolean v1, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
++    iget-boolean p0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
 +
-+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    invoke-static {v0, p0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
-+    move-result v0
++    move-result p0
 +
-+    return v0
++    return p0
 +.end method
 +
 +.method public isControllable()Z
@@ -2268,42 +2292,6 @@ index 00000000..5dd084fb
 +    const/4 p0, 0x1
 +
 +    return p0
-+.end method
-+
-+.method synthetic lambda$showRebootAlertDialog$0(Landroid/content/DialogInterface;I)V
-+    .locals 3
-+
-+    iget-boolean v0, p0, Lio/mesalabs/unica/settings/LiveBlurPreferenceController;->mDefaultValue:Z
-+
-+    const-string v1, "persist.sys.unica.nativeblur"
-+
-+    invoke-static {v1, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
-+
-+    move-result v0
-+
-+    xor-int/lit8 v2, v0, 0x1
-+
-+    invoke-static {v2}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
-+
-+    move-result-object v2
-+
-+    invoke-static {v1, v2}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+
-+    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
-+
-+    const-string v1, "power"
-+
-+    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
-+
-+    move-result-object v0
-+
-+    check-cast v0, Landroid/os/PowerManager;
-+
-+    const/4 v1, 0x0
-+
-+    invoke-virtual {v0, v1}, Landroid/os/PowerManager;->reboot(Ljava/lang/String;)V
-+
-+    return-void
 +.end method
 +
 +.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
@@ -2347,10 +2335,10 @@ index 00000000..5dd084fb
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..626340fd
+index 00000000..3f92816d
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
-@@ -0,0 +1,235 @@
+@@ -0,0 +1,238 @@
 +.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "PIFVersionPreferenceController.java"
@@ -2368,19 +2356,22 @@ index 00000000..626340fd
 +
 +# virtual methods
 +.method public getAvailabilityStatus()I
-+    .locals 1
-+
-+    const/4 p0, 0x0
++    .locals 0
 +
 +    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->isPIFInstallable()Z
 +
-+    move-result v0
++    move-result p0
 +
-+    if-nez v0, :cond_0
++    if-eqz p0, :cond_0
 +
-+    const/4 p0, 0x5
++    const/4 p0, 0x0
++
++    goto :goto_0
 +
 +    :cond_0
++    const/4 p0, 0x5
++
++    :goto_0
 +    return p0
 +.end method
 +
@@ -2445,17 +2436,17 @@ index 00000000..626340fd
 +.end method
 +
 +.method public getSummary()Ljava/lang/CharSequence;
-+    .locals 2
++    .locals 1
 +
-+    const-string/jumbo v0, "persist.sys.pif.version"
++    const-string p0, "persist.sys.pif.version"
 +
-+    const-string v1, "Not installed"
++    const-string v0, "Not installed"
 +
-+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {p0, v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
-+    move-result-object v0
++    move-result-object p0
 +
-+    return-object v0
++    return-object p0
 +.end method
 +
 +.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
@@ -2483,20 +2474,20 @@ index 00000000..626340fd
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_0
++    if-eqz v0, :cond_0
 +
-+    const/4 v0, 0x0
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 +
-+    return v0
++    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
++
++    const/4 p0, 0x1
++
++    return p0
 +
 +    :cond_0
-+    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++    const/4 p0, 0x0
 +
-+    invoke-static {v0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
-+
-+    const/4 v0, 0x1
-+
-+    return v0
++    return p0
 +.end method
 +
 +.method public bridge synthetic hasAsyncUpdate()Z
@@ -2588,7 +2579,7 @@ index 00000000..626340fd
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
 new file mode 100644
-index 00000000..691ca09e
+index 00000000..edcca271
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
 @@ -0,0 +1,238 @@
@@ -2677,60 +2668,60 @@ index 00000000..691ca09e
 +.end method
 +
 +.method public getSummary()Ljava/lang/CharSequence;
-+    .locals 4
++    .locals 2
 +
-+    const-string v0, "ro.unica.version"
++    const-string p0, "ro.unica.version"
 +
-+    const-string v1, "Unknown"
++    const-string v0, "Unknown"
++
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v0, "ro.unica.codename"
++
++    const-string v1, ""
 +
 +    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
-+    const-string v1, "ro.unica.codename"
++    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 +
-+    const-string v2, ""
++    move-result v1
 +
-+    invoke-static {v1, v2}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    if-nez v1, :cond_0
 +
-+    move-result-object v1
++    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-static {v1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
 +
-+    move-result v2
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    if-nez v2, :cond_0
++    move-result-object p0
 +
-+    new-instance v2, Ljava/lang/StringBuilder;
++    const-string v1, " ("
 +
-+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    move-result-object p0
 +
-+    move-result-object v2
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    const-string v3, " ("
++    move-result-object p0
 +
-+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    const-string v0, ")"
 +
-+    move-result-object v2
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    move-result-object p0
 +
-+    move-result-object v2
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    const-string v3, ")"
-+
-+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v0
++    move-result-object p0
 +
 +    :cond_0
-+    return-object v0
++    return-object p0
 +.end method
 +
 +.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
