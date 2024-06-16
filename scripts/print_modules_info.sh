@@ -41,7 +41,7 @@ PRINT_MODULE_INFO()
         echo "File not found: $MODPATH/module.prop"
         exit 1
     elif [ -f "$MODPATH/disable" ]; then
-        exit 0
+        return 0
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
         MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//")"
