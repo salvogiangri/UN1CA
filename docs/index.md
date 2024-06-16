@@ -14,8 +14,7 @@ permalink: /
 
 - [Installation instructions]({% link guide/index.md %})
 - [Supported devices]({% link devices/index.md %})
-- [Developer guides]({% link expert/index.md %})
-- [Troubleshooting]({% link faq/index.md %})
+<- [Troubleshooting]({% link faq/index.md %})>
 
 #### Thank you to the contributors of UN1CA!
 {: .pt-6 }
