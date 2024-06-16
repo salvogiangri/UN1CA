@@ -1,12 +1,12 @@
-From b4b8465b5c31f8a7611c819c3bca1f9b19d93bf5 Mon Sep 17 00:00:00 2001
+From 051fc657d90fc025583954c5d43f1e5ac1927db6 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
  .../android/feature/SemCscFeature.smali       |  98 ++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 380 ++++++++++++++++++
- 2 files changed, 466 insertions(+), 12 deletions(-)
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 341 ++++++++++++++++++
+ 2 files changed, 427 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..a5d6a3d2
+index 00000000..4e94a12f
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,380 @@
+@@ -0,0 +1,341 @@
 +.class public Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -283,7 +283,7 @@ index 00000000..a5d6a3d2
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 3
++    .locals 5
 +
 +    new-instance v0, Ljava/util/HashMap;
 +
@@ -291,117 +291,93 @@ index 00000000..a5d6a3d2
 +
 +    sput-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
 +
-+    new-instance v0, Ljava/util/HashMap;
++    new-instance v1, Ljava/util/HashMap;
 +
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++    invoke-direct {v1}, Ljava/util/HashMap;-><init>()V
 +
-+    sput-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    sput-object v1, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
 +
-+    new-instance v0, Ljava/util/HashMap;
++    new-instance v2, Ljava/util/HashMap;
 +
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++    invoke-direct {v2}, Ljava/util/HashMap;-><init>()V
 +
-+    sput-object v0, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
++    sput-object v2, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    const-string v3, "CscFeature_Common_SupportPrivateMode"
 +
-+    const-string v1, "CscFeature_Common_SupportPrivateMode"
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v3, "CscFeature_Gallery_SupportAliveZoom"
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    const-string v1, "CscFeature_Gallery_SupportAliveZoom"
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    const-string v3, "CscFeature_Setting_EnableHwVersionDisplay"
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v1, "CscFeature_Setting_EnableHwVersionDisplay"
++    const-string v3, "CscFeature_Setting_SupportMenuSmartTutor"
 +
-+    sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    sget-object v4, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    const-string v3, "CscFeature_Wifi_SupportBlockSkipForSetupWizard"
 +
-+    const-string v1, "CscFeature_Setting_SupportMenuSmartTutor"
++    sget-object v4, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
 +
-+    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v3, "CscFeature_Wifi_SupportNetworkConnectionsRequired"
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    sget-object v4, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
 +
-+    const-string v1, "CscFeature_Wifi_SupportBlockSkipForSetupWizard"
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++    const-string v0, "CscFeature_Common_ConfigSvcProviderForUnknownNumber"
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v3, "whitepages,whitepages,off"
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v1, "CscFeature_Wifi_SupportNetworkConnectionsRequired"
++    const-string v0, "CscFeature_Common_ConfigYuva"
 +
-+    sget-object v2, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++    const-string v3, ""
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    const-string v0, "CscFeature_SmartManager_ConfigSubFeatures"
 +
-+    const-string v1, "CscFeature_Common_ConfigSvcProviderForUnknownNumber"
++    const-string v3, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
 +
-+    const-string v2, "whitepages,whitepages,off"
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v0, "CscFeature_VoiceCall_ConfigCallButton"
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    const-string v3, "ShowVoiceFocus"
 +
-+    const-string v1, "CscFeature_Common_ConfigYuva"
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v2, ""
++    const-string v0, "CscFeature_VoiceCall_ConfigRecording"
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v3, "RecordingAllowed"
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v1, v0, v3}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v1, "CscFeature_SmartManager_ConfigSubFeatures"
++    const/4 v0, 0x0
 +
-+    const-string v2, "appdatacleaner|trafficmanager_auto|fake_base_station|badappnoti|trafficmanager|applock|riskcontrol|newdataplan"
++    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 +
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    move-result-object v0
 +
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    const-string v1, "CscFeature_Setting_ConfigTypeHelp"
 +
-+    const-string v1, "CscFeature_VoiceCall_ConfigCallButton"
-+
-+    const-string v2, "ShowVoiceFocus"
-+
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
-+
-+    const-string v1, "CscFeature_VoiceCall_ConfigRecording"
-+
-+    const-string v2, "RecordingAllowed"
-+
-+    invoke-virtual {v0, v1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
-+
-+    const/4 v1, 0x0
-+
-+    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-+
-+    move-result-object v1
-+
-+    const-string v2, "CscFeature_Setting_ConfigTypeHelp"
-+
-+    invoke-virtual {v0, v2, v1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v2, v1, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-void
 +.end method
@@ -423,64 +399,59 @@ index 00000000..a5d6a3d2
 +.method public static blacklist onGetBooleanHook(Ljava/lang/String;)Ljava/lang/Boolean;
 +    .locals 3
 +
-+    const/4 v0, 0x0
++    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
-+
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
 +    if-eqz v1, :cond_0
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->BOOLEAN_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    move-result-object v1
-+
-+    move-object v0, v1
++    move-result-object v0
 +
 +    check-cast v0, Ljava/lang/Boolean;
 +
++    goto :goto_0
++
 +    :cond_0
++    const/4 v0, 0x0
++
++    :goto_0
 +    if-eqz v0, :cond_1
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-+
 +    const-string v2, "Spoofing \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v1
++    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 +
 +    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\" to \""
++    const-string v1, "\" to \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\""
++    const-string v1, "\""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {p0}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
 +
 +    :cond_1
 +    return-object v0
@@ -489,64 +460,59 @@ index 00000000..a5d6a3d2
 +.method public static blacklist onGetIntHook(Ljava/lang/String;)Ljava/lang/Integer;
 +    .locals 3
 +
-+    const/4 v0, 0x0
++    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
-+
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
 +    if-eqz v1, :cond_0
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    move-result-object v1
-+
-+    move-object v0, v1
++    move-result-object v0
 +
 +    check-cast v0, Ljava/lang/Integer;
 +
++    goto :goto_0
++
 +    :cond_0
++    const/4 v0, 0x0
++
++    :goto_0
 +    if-eqz v0, :cond_1
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-+
 +    const-string v2, "Spoofing \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v1
++    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 +
 +    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\" to \""
++    const-string v1, "\" to \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\""
++    const-string v1, "\""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {p0}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
 +
 +    :cond_1
 +    return-object v0
@@ -555,64 +521,59 @@ index 00000000..a5d6a3d2
 +.method public static blacklist onGetStringHook(Ljava/lang/String;)Ljava/lang/String;
 +    .locals 3
 +
-+    const/4 v0, 0x0
++    sget-object v0, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
-+
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
 +    if-eqz v1, :cond_0
 +
-+    sget-object v1, Lio/mesalabs/unica/CscFeatureHooks;->STRING_FEATURES:Ljava/util/HashMap;
++    invoke-virtual {v0, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-virtual {v1, p0}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    move-result-object v1
-+
-+    move-object v0, v1
++    move-result-object v0
 +
 +    check-cast v0, Ljava/lang/String;
 +
++    goto :goto_0
++
 +    :cond_0
++    const/4 v0, 0x0
++
++    :goto_0
 +    if-eqz v0, :cond_1
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-+
 +    const-string v2, "Spoofing \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v1
++    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 +
 +    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\" to \""
++    const-string v1, "\" to \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\""
++    const-string v1, "\""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {p0}, Lio/mesalabs/unica/CscFeatureHooks;->dlog(Ljava/lang/String;)V
 +
 +    :cond_1
 +    return-object v0

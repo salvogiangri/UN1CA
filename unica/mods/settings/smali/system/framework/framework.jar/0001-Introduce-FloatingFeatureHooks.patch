@@ -1,12 +1,12 @@
-From fdecaec0775adc450db920666eb94abe381e397e Mon Sep 17 00:00:00 2001
+From d7d2009afc56207c0d1cd5e09ec17a0aed0fe17c Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 10:14:20 +0200
 Subject: [PATCH] Introduce FloatingFeatureHooks
 
 ---
  .../android/feature/SemFloatingFeature.smali  |  34 ++++-
- .../mesalabs/unica/FloatingFeatureHooks.smali | 143 ++++++++++++++++++
- 2 files changed, 173 insertions(+), 4 deletions(-)
+ .../mesalabs/unica/FloatingFeatureHooks.smali | 142 ++++++++++++++++++
+ 2 files changed, 172 insertions(+), 4 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemFloatingFeature.smali b/smali_classes5/com/samsung/android/feature/SemFloatingFeature.smali
@@ -85,10 +85,10 @@ index 8a5dc15b..ca22ef2d 100644
      move-result v1
 diff --git a/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 new file mode 100644
-index 00000000..450d6a7e
+index 00000000..63b8b9a9
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
-@@ -0,0 +1,143 @@
+@@ -0,0 +1,142 @@
 +.class public Lio/mesalabs/unica/FloatingFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "FloatingFeatureHooks.java"
@@ -148,86 +148,85 @@ index 00000000..450d6a7e
 +.end method
 +
 +.method public static blacklist onGetBooleanHook(Ljava/lang/String;)Ljava/lang/Boolean;
-+    .locals 4
++    .locals 3
 +
-+    const/4 v0, 0x0
++    const-string v0, "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_3D_SURFACE_TRANSITION_FLAG"
 +
-+    const-string v1, "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_3D_SURFACE_TRANSITION_FLAG"
++    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
-+    invoke-virtual {p0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v0
 +
-+    move-result v1
++    if-eqz v0, :cond_0
 +
-+    if-eqz v1, :cond_0
++    const-string v0, "ro.product.vendor.device"
 +
-+    const-string v1, "ro.product.vendor.device"
++    const-string v1, ""
 +
-+    const-string v2, ""
-+
-+    invoke-static {v1, v2}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    sget-object v2, Lio/mesalabs/unica/FloatingFeatureHooks;->DISABLED_LIVE_BLUR_DEVICES:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v1}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    xor-int/lit8 v2, v2, 0x1
-+
-+    const-string v3, "persist.sys.unica.nativeblur"
-+
-+    invoke-static {v3, v2}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
-+
-+    move-result v2
-+
-+    invoke-static {v2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
++    sget-object v1, Lio/mesalabs/unica/FloatingFeatureHooks;->DISABLED_LIVE_BLUR_DEVICES:[Ljava/lang/String;
++
++    invoke-static {v1}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v1
++
++    invoke-interface {v1, v0}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    xor-int/lit8 v0, v0, 0x1
++
++    const-string v1, "persist.sys.unica.nativeblur"
++
++    invoke-static {v1, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
++
++    move-result-object v0
++
++    goto :goto_0
++
 +    :cond_0
++    const/4 v0, 0x0
++
++    :goto_0
 +    if-eqz v0, :cond_1
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-+
 +    const-string v2, "Spoofing \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v1
++    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 +
 +    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\" to \""
++    const-string v1, "\" to \""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    const-string v2, "\""
++    const-string v1, "\""
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object p0
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/FloatingFeatureHooks;->dlog(Ljava/lang/String;)V
++    invoke-static {p0}, Lio/mesalabs/unica/FloatingFeatureHooks;->dlog(Ljava/lang/String;)V
 +
 +    :cond_1
 +    return-object v0
