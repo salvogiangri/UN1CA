@@ -1,0 +1,142 @@
+From 9b3fbef29a96cdff9ab04bfe71582391386bf9ad Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 17 Jun 2024 18:11:59 +0200
+Subject: [PATCH] Add switchable FOD animation
+
+---
+ .../vi/VisualEffectContainer.smali            | 101 +++++++++++++-----
+ 1 file changed, 73 insertions(+), 28 deletions(-)
+
+diff --git a/smali/com/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer.smali b/smali/com/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer.smali
+index 3fa9e0f..2ce49e5 100644
+--- a/smali/com/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer.smali
++++ b/smali/com/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer.smali
+@@ -379,6 +379,71 @@
+     return-void
+ .end method
+ 
++.method private getFODAnimationType(Landroid/content/Context;Ljava/lang/String;)I
++    .locals 3
++
++    sget-boolean p0, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_SENSOR_IS_OPTICAL:Z
++
++    const/4 v0, 0x0
++
++    if-eqz p0, :cond_1
++
++    const/4 p0, 0x2
++
++    if-eqz p2, :cond_0
++
++    invoke-virtual {p2}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    const/4 v2, 0x6
++
++    if-lt v1, v2, :cond_0
++
++    invoke-virtual {p2, v0}, Ljava/lang/String;->charAt(I)C
++
++    move-result v1
++
++    invoke-virtual {p2, p0}, Ljava/lang/String;->charAt(I)C
++
++    move-result v2
++
++    if-ne v1, v2, :cond_0
++
++    invoke-virtual {p2, v0}, Ljava/lang/String;->charAt(I)C
++
++    move-result v0
++
++    const/4 v1, 0x4
++
++    invoke-virtual {p2, v1}, Ljava/lang/String;->charAt(I)C
++
++    move-result p2
++
++    if-ne v0, p2, :cond_0
++
++    const/4 v0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    move v0, p0
++
++    :cond_1
++    :goto_0
++    invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string p1, "unica_fod_anim_type"
++
++    invoke-static {p0, p1, v0}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    return p0
++.end method
++
+ .method private stopVI()V
+     .locals 2
+ 
+@@ -817,45 +882,25 @@
+     goto :goto_6
+ 
+     :cond_5
+-    sget-boolean v0, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_SENSOR_IS_OPTICAL:Z
+-
+-    if-eqz v0, :cond_7
++    iget-object v0, p0, Lcom/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer;->mContext:Landroid/content/Context;
+ 
+     invoke-virtual {p1}, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsInfo;->getLightColor()Ljava/lang/String;
+ 
+     move-result-object p1
+ 
+-    if-eqz p1, :cond_6
+-
+-    invoke-virtual {p1}, Ljava/lang/String;->length()I
+-
+-    move-result v0
+-
+-    const/4 v3, 0x6
+-
+-    if-lt v0, v3, :cond_6
+-
+-    invoke-virtual {p1, p2}, Ljava/lang/String;->charAt(I)C
+-
+-    move-result v0
+-
+-    const/4 v3, 0x2
+-
+-    invoke-virtual {p1, v3}, Ljava/lang/String;->charAt(I)C
++    invoke-direct {p0, v0, p1}, Lcom/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer;->getFODAnimationType(Landroid/content/Context;Ljava/lang/String;)I
+ 
+-    move-result v3
+-
+-    if-ne v0, v3, :cond_6
++    move-result p1
+ 
+-    invoke-virtual {p1, p2}, Ljava/lang/String;->charAt(I)C
++    if-eqz p1, :cond_7
+ 
+-    move-result v0
++    const/4 v0, 0x1
+ 
+-    invoke-virtual {p1, v1}, Ljava/lang/String;->charAt(I)C
++    if-ne v0, p1, :cond_6
+ 
+-    move-result p1
++    const/4 v0, 0x2
+ 
+-    if-ne v0, p1, :cond_6
++    if-eq v0, p1, :cond_6
+ 
+     iget-object p1, p0, Lcom/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer;->mEffectAnimationView:Lcom/airbnb/lottie/LottieAnimationView;
+ 
+-- 
+2.45.2
+
