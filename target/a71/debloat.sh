@@ -72,6 +72,10 @@ system/priv-app/EarphoneTypeC
 system/priv-app/IntelligentDynamicFpsService
 system/priv-app/SohService
 "
+PRODUCT_DEBLOAT+="
+priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON
+priv-app/HotwordEnrollmentXGoogleEx4HEXAGON
+"
 
 # system_ext clean-up
 SYSTEM_DEBLOAT+="
