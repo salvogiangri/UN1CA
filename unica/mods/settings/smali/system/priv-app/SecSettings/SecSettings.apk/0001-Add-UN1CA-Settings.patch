@@ -1,4 +1,4 @@
-From 2e91a1f3113c0b191a03049ade69be1f14921686 Mon Sep 17 00:00:00 2001
+From 657bee5763f0768bda38242090f27f4ef992f341 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 14:28:06 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -20,7 +20,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$string.smali       |  40 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         | 139 ++++++
+ .../unica/UnicaSettingsFragment.smali         | 155 ++++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
@@ -34,7 +34,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 +++++++++
  .../ROMVersionPreferenceController.smali      | 238 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 +++++++
- 30 files changed, 2656 insertions(+)
+ 30 files changed, 2672 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -427,10 +427,10 @@ index 00000000..18621dd0
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
 new file mode 100644
-index 00000000..c7522b68
+index 00000000..fef1a3c3
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,155 @@
 +.class public Lio/mesalabs/unica/UnicaSettingsFragment;
 +.super Lcom/android/settings/dashboard/DashboardFragment;
 +.source "UnicaSettingsFragment.java"
@@ -568,6 +568,22 @@ index 00000000..c7522b68
 +    invoke-static {p1, p0}, Lio/mesalabs/unica/pif/PIFUtils;->updatePIF(Landroid/content/Context;Landroidx/preference/Preference;)V
 +
 +    :cond_0
++    return-void
++.end method
++
++.method public onResume()V
++    .locals 1
++
++    invoke-super {p0}, Lcom/android/settings/dashboard/DashboardFragment;->onResume()V
++
++    const-string v0, "unica_logo"
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++
++    move-result-object v0
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
++
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
@@ -2007,7 +2023,7 @@ index 00000000..e08624b2
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..f13e793f
+index 00000000..5e577f37
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 @@ -0,0 +1,322 @@
@@ -2144,7 +2160,7 @@ index 00000000..f13e793f
 +
 +    invoke-direct {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
 +
-+    sget v1, Lcom/android/settings/R$string;->unica_native_blur_title:I
++    sget v1, Lcom/android/settings/R$string;->unica_native_blur_dialog_title:I
 +
 +    invoke-virtual {v0, v1}, Landroidx/appcompat/app/AlertDialog$Builder;->setTitle(I)Landroidx/appcompat/app/AlertDialog$Builder;
 +
