@@ -49,6 +49,9 @@ echo "Disable OEM unlock toggle"
 SET_PROP "ro.oem_unlock_supported" "0" "$WORK_DIR/vendor/default.prop"
 
 echo "Enable adaptive FPS"
+sed -i \
+    "/use_content_detection/i ro.surface_flinger.enable_frame_rate_override=false" \
+    "$WORK_DIR/vendor/default.prop"
 SET_PROP "ro.surface_flinger.use_content_detection_for_refresh_rate" "true" "$WORK_DIR/vendor/default.prop"
 sed -i \
     "/use_content_detection/a ro.surface_flinger.set_idle_timer_ms=250\nro.surface_flinger.set_touch_timer_ms=300\nro.surface_flinger.set_display_power_timer_ms=300" \

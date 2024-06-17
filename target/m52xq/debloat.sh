@@ -55,6 +55,12 @@ system/priv-app/PetService
 system/priv-app/SCameraSDKService
 "
 
+# Apps debloat
+SYSTEM_DEBLOAT+="
+system/etc/permissions/privapp-permissions-com.samsung.android.app.earphonetypec.xml
+system/priv-app/EarphoneTypeC
+"
+
 # system_ext clean-up
 SYSTEM_DEBLOAT+="
 system/etc/permissions/org.carconnectivity.android.digitalkey.rangingintent.xml
