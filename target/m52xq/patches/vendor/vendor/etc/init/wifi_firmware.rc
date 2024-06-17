@@ -79,6 +79,18 @@ on fs && property:ro.boot.rp=4 && property:ro.boot.em.model=SM-M526BR
     mount none /vendor/firmware/wlan/m526br/rev4/wpss.b07 /vendor/firmware/wpss.b07 bind
     mount none /vendor/firmware/wlan/m526br/rev4/wpss.mdt /vendor/firmware/wpss.mdt bind
 
+# bootloader revision 5, M526B (america)
+on fs && property:ro.boot.rp=5 && property:ro.boot.em.model=SM-M526B
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b00 /vendor/firmware/wpss.b00 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b01 /vendor/firmware/wpss.b01 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b02 /vendor/firmware/wpss.b02 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b03 /vendor/firmware/wpss.b03 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b04 /vendor/firmware/wpss.b04 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b05 /vendor/firmware/wpss.b05 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b06 /vendor/firmware/wpss.b06 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.b07 /vendor/firmware/wpss.b07 bind
+    mount none /vendor/firmware/wlan/m526b/rev5/wpss.mdt /vendor/firmware/wpss.mdt bind
+
 # bootloader revision 5, M526BR (international)
 on fs && property:ro.boot.rp=5 && property:ro.boot.em.model=SM-M526BR
     mount none /vendor/firmware/wlan/m526br/rev5/wpss.b00 /vendor/firmware/wpss.b00 bind
