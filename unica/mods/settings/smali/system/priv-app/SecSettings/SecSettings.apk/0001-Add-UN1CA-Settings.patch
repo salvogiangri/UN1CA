@@ -1,6 +1,6 @@
-From 657bee5763f0768bda38242090f27f4ef992f341 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 2 Jun 2024 14:28:06 +0200
+From e069661f04fdc4758f9889fe7a4f0381c4cbd748 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
 
 ---
@@ -124,7 +124,7 @@ index 4fd038f8..d3a6d0f7 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 23eb925b..2dd645ec 100644
+index 2a447db6..ff9c8eb6 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5125,6 +5125,7 @@
@@ -135,24 +135,24 @@ index 23eb925b..2dd645ec 100644
      <public type="color" name="vswl_bottom_buttons_area_background_color" id="0x7f060982" />
      <public type="color" name="dialog_body_text_color" id="0x7f060132" />
      <public type="color" name="homepage_status_bar_color" id="0x7f06018a" />
-@@ -11957,6 +11958,7 @@
-     <public type="drawable" name="wifi_friction" id="0x7f080b97" />
-     <public type="drawable" name="wifi_signal" id="0x7f080b98" />
-     <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b99" />
-+    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080b9e" />
+@@ -11958,6 +11959,7 @@
+     <public type="drawable" name="wifi_friction" id="0x7f080b98" />
+     <public type="drawable" name="wifi_signal" id="0x7f080b99" />
+     <public type="drawable" name="work_challenge_emergency_button_background" id="0x7f080b9a" />
++    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080b9f" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__0" id="0x7f080016" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture__1" id="0x7f080017" />
      <public type="drawable" name="$accessibility_shortcut_type_software_gesture_talkback__0" id="0x7f080018" />
-@@ -12586,6 +12588,8 @@
-     <public type="drawable" name="ws_ic_2step_02" id="0x7f080b9b" />
-     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b9c" />
-     <public type="drawable" name="ws_ic_system_lock" id="0x7f080b9d" />
-+    <public type="drawable" name="unica_logo_bg" id="0x7f080b9f" />
-+    <public type="drawable" name="unica_logo_fg" id="0x7f080ba0" />
+@@ -12587,6 +12589,8 @@
+     <public type="drawable" name="ws_ic_2step_02" id="0x7f080b9c" />
+     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080b9d" />
+     <public type="drawable" name="ws_ic_system_lock" id="0x7f080b9e" />
++    <public type="drawable" name="unica_logo_bg" id="0x7f080ba0" />
++    <public type="drawable" name="unica_logo_fg" id="0x7f080ba1" />
      <public type="fraction" name="battery_button_height_fraction" id="0x7f090000" />
      <public type="fraction" name="battery_subpixel_smoothing_left" id="0x7f090001" />
      <public type="fraction" name="battery_subpixel_smoothing_right" id="0x7f090002" />
-@@ -16587,6 +16591,7 @@
+@@ -16588,6 +16592,7 @@
      <public type="id" name="zen_radio_buttons" id="0x7f0a0f90" />
      <public type="id" name="zen_radio_buttons_content" id="0x7f0a0f91" />
      <public type="id" name="zoom_layer" id="0x7f0a0f92" />
@@ -160,7 +160,7 @@ index 23eb925b..2dd645ec 100644
      <public type="integer" name="app_bar_elevation_anim_duration" id="0x7f0b0000" />
      <public type="integer" name="as_no_item_bottom_weight" id="0x7f0b0001" />
      <public type="integer" name="as_no_item_top_weight" id="0x7f0b0002" />
-@@ -18437,6 +18442,7 @@
+@@ -18438,6 +18443,7 @@
      <public type="layout" name="zen_rule_type" id="0x7f0d0625" />
      <public type="layout" name="zen_rule_type_selection" id="0x7f0d0626" />
      <public type="layout" name="zen_schedule_rule_day" id="0x7f0d0627" />
@@ -168,7 +168,7 @@ index 23eb925b..2dd645ec 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
-@@ -31911,6 +31917,26 @@
+@@ -31912,6 +31918,26 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
@@ -195,7 +195,7 @@ index 23eb925b..2dd645ec 100644
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34627,4 +34653,5 @@
+@@ -34628,4 +34654,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
@@ -258,14 +258,14 @@ index e79896f6..a16c39b5 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..2537bc21
+index 00000000..a1296737
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
 @@ -0,0 +1,15 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
-+    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:key="unica_logo" android:selectable="false" />
++    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" android:key="unica_logo" />
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
@@ -279,29 +279,29 @@ index 00000000..2537bc21
 +</PreferenceScreen>
 \ No newline at end of file
 diff --git a/smali_classes2/com/android/settings/R$drawable.smali b/smali_classes2/com/android/settings/R$drawable.smali
-index ff840b57..f01b44e3 100644
+index 187e4d1f..3309bb3f 100644
 --- a/smali_classes2/com/android/settings/R$drawable.smali
 +++ b/smali_classes2/com/android/settings/R$drawable.smali
 @@ -670,6 +670,8 @@
  
- .field public static final sec_ic_settings_tips:I = 0x7f080794
+ .field public static final sec_ic_settings_tips:I = 0x7f080795
  
-+.field public static final sec_ic_settings_unica:I = 0x7f080b9e
++.field public static final sec_ic_settings_unica:I = 0x7f080b9f
 +
- .field public static final sec_ic_settings_user_manual:I = 0x7f080795
+ .field public static final sec_ic_settings_user_manual:I = 0x7f080796
  
- .field public static final sec_ic_smart_things:I = 0x7f080798
+ .field public static final sec_ic_smart_things:I = 0x7f080799
 @@ -1064,6 +1066,10 @@
  
- .field public static final udfps_enroll_checkmark:I = 0x7f080b7d
+ .field public static final udfps_enroll_checkmark:I = 0x7f080b7e
  
-+.field public static final unica_logo_bg:I = 0x7f080b9f
++.field public static final unica_logo_bg:I = 0x7f080ba0
 +
-+.field public static final unica_logo_fg:I = 0x7f080ba0
++.field public static final unica_logo_fg:I = 0x7f080ba1
 +
- .field public static final use_accessibility_button:I = 0x7f080b7f
+ .field public static final use_accessibility_button:I = 0x7f080b80
  
- .field public static final use_accessibility_button_floating:I = 0x7f080b80
+ .field public static final use_accessibility_button_floating:I = 0x7f080b81
 diff --git a/smali_classes2/com/android/settings/R$id.smali b/smali_classes2/com/android/settings/R$id.smali
 index e316f715..097157d6 100644
 --- a/smali_classes2/com/android/settings/R$id.smali
