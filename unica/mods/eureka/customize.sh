@@ -78,34 +78,6 @@ REMOVE_FROM_WORK_DIR()
         sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
-
-SET_CONFIG()
-{
-    local CONFIG="$1"
-    local VALUE="$2"
-    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
-
-    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
-        CONFIG="$(echo -n "$CONFIG" | sed 's/=//g')"
-        if grep -Fq "$CONFIG" "$FILE"; then
-            echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
-            sed -i "/$CONFIG/d" "$FILE"
-        fi
-    else
-        if grep -Fq "<$CONFIG>" "$FILE"; then
-            echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
-        else
-            echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
-            if ! grep -q "Added by unica" "$FILE"; then
-                echo "    <!-- Added by unica/patches/floating_feature/customize.sh -->" >> "$FILE"
-            fi
-            echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
-            echo "</SecFloatingFeatureSet>" >> "$FILE"
-        fi
-    fi
-}
 # ]
 
 if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-S92"* ]]; then
@@ -127,8 +99,6 @@ ADD_TO_WORK_DIR "system" "system/etc/ringtones_count_list.txt" 0 0 644 "u:object
 ADD_TO_WORK_DIR "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/priv-app/wallpaper-res/wallpaper-res.apk" 0 0 644 "u:object_r:system_file:s0"
-
-SET_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_FULLSCREEN" "1"
 
 echo "- Processing \"Custom boot animation\" by @BlackMesa123"
 bash "$SRC_DIR/unica/mods/bootanim/customize.sh"
