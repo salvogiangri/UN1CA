@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="config_Extra_Brightness_Display_Solution_Brightness_Value">
+        <item>1.4</item>
+    </string-array>
     <integer-array name="config_HysteresisBrightInputLux">
         <item>0</item>
         <item>10</item>
