@@ -194,5 +194,8 @@ do
     ADD_TO_WORK_DIR "system" "$blob" 0 0 644 "u:object_r:system_lib_file:s0"
 done
 
+echo "Fix AI Photo Editor"
+sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
+
 echo "Fix MIDAS model detection"
 sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"

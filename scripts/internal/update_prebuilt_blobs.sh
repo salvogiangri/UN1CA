@@ -49,11 +49,6 @@ case "$1" in
         FW="SM-A736B/INS/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
         ;;
-    "unica/patches/photoeditor")
-        MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/photoeditor/system" -type f | sed "s.$SRC_DIR/unica/patches/photoeditor.system.")"
-        ;;
     "unica/patches/product_feature/fingerprint/optical_fod")
         MODULE="$1"
         FW="SM-X716B/EUX/353439961234567"
