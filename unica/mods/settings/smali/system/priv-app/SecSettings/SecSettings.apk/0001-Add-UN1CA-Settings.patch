@@ -1,4 +1,4 @@
-From 01797655e99d382d6063126a0af1dc580c64b59b Mon Sep 17 00:00:00 2001
+From 43274d836fa2e0836116acb360cbd5869b97288e Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -9,15 +9,15 @@ Subject: [PATCH] Add UN1CA Settings
  res/layout/unica_settings_logo_layout.xml     |   7 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
- res/values/public.xml                         |  31 ++
- res/values/strings.xml                        |  24 +
+ res/values/public.xml                         |  33 ++
+ res/values/strings.xml                        |  26 +
  res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   1 +
- res/xml/unica_settings.xml                    |  16 +
+ res/xml/unica_settings.xml                    |  19 +
  .../com/android/settings/R$drawable.smali     |   6 +
  .../com/android/settings/R$id.smali           |   2 +
  .../com/android/settings/R$layout.smali       |   2 +
- .../com/android/settings/R$string.smali       |  48 ++
+ .../com/android/settings/R$string.smali       |  52 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         | 155 ++++++
@@ -28,14 +28,15 @@ Subject: [PATCH] Add UN1CA Settings
  .../io/mesalabs/unica/pif/PIFUtils.smali      | 455 +++++++++++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++
  .../DeviceNamePreferenceController.smali      | 193 +++++++
- .../settings/FODAnimationTypeController.smali | 525 ++++++++++++++++++
+ ...FODAnimationTypePreferenceController.smali | 525 ++++++++++++++++++
+ ...ceMaxRefreshRatePreferenceController.smali | 240 ++++++++
  .../GamesPropsPreferenceController.smali      | 167 ++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
  .../LiveBlurPreferenceController.smali        | 322 +++++++++++
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 31 files changed, 3214 insertions(+)
+ 32 files changed, 3465 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -48,7 +49,8 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
- create mode 100644 smali_classes4/io/mesalabs/unica/settings/FODAnimationTypeController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
@@ -126,7 +128,7 @@ index 4fd038f8..d3a6d0f7 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 2a447db6..04c32eba 100644
+index 2a447db6..eb0cbbc0 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5125,6 +5125,7 @@
@@ -170,7 +172,7 @@ index 2a447db6..04c32eba 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d0588" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014c" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02a7" />
-@@ -31912,6 +31918,30 @@
+@@ -31912,6 +31918,32 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13339b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13339c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13339d" />
@@ -184,24 +186,26 @@ index 2a447db6..04c32eba 100644
 +    <public type="string" name="unica_fod_anim_type_ultrasonic" id="0x7f1333a5" />
 +    <public type="string" name="unica_fod_anim_type_title" id="0x7f1333a6" />
 +    <public type="string" name="unica_games_spoof_title" id="0x7f1333a7" />
-+    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f1333a8" />
-+    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f1333a9" />
-+    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f1333aa" />
-+    <public type="string" name="unica_native_blur_dialog_title" id="0x7f1333ab" />
-+    <public type="string" name="unica_native_blur_title" id="0x7f1333ac" />
-+    <public type="string" name="unica_pif_checking" id="0x7f1333ad" />
-+    <public type="string" name="unica_pif_error" id="0x7f1333ae" />
-+    <public type="string" name="unica_pif_no_root" id="0x7f1333af" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f1333b0" />
-+    <public type="string" name="unica_pif_updated" id="0x7f1333b1" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f1333b2" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f1333b3" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f1333b4" />
-+    <public type="string" name="unica_settings_title" id="0x7f1333b5" />
++    <public type="string" name="unica_max_refresh_rate_title" id="0x7f1333a8" />
++    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f1333a9" />
++    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f1333aa" />
++    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f1333ab" />
++    <public type="string" name="unica_native_blur_dialog_title" id="0x7f1333ac" />
++    <public type="string" name="unica_native_blur_title" id="0x7f1333ad" />
++    <public type="string" name="unica_pif_checking" id="0x7f1333ae" />
++    <public type="string" name="unica_pif_error" id="0x7f1333af" />
++    <public type="string" name="unica_pif_no_root" id="0x7f1333b0" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f1333b1" />
++    <public type="string" name="unica_pif_updated" id="0x7f1333b2" />
++    <public type="string" name="unica_pif_version_title" id="0x7f1333b3" />
++    <public type="string" name="unica_rom_version_title" id="0x7f1333b4" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f1333b5" />
++    <public type="string" name="unica_settings_title" id="0x7f1333b6" />
++    <public type="string" name="unica_ui_settings_title" id="0x7f1333b7" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -34628,4 +34658,5 @@
+@@ -34628,4 +34660,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026a" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026c" />
@@ -209,10 +213,10 @@ index 2a447db6..04c32eba 100644
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 486d035b..389e6afd 100644
+index 486d035b..56338313 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -13851,4 +13851,28 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -13851,4 +13851,30 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -226,6 +230,7 @@ index 486d035b..389e6afd 100644
 +    <string name="unica_fod_anim_type_ultrasonic">Ultrasonic sensor</string>
 +    <string name="unica_fod_anim_type_title">Fingerprint unlock animation style</string>
 +    <string name="unica_games_spoof_title">Unlock higher FPS in games</string>
++    <string name="unica_max_refresh_rate_title">Force peak refresh rate</string>
 +    <string name="unica_native_blur_dialog_msg">To apply the changes, a restart is required.</string>
 +    <string name="unica_native_blur_dialog_negative">Not now</string>
 +    <string name="unica_native_blur_dialog_positive">Restart</string>
@@ -240,6 +245,7 @@ index 486d035b..389e6afd 100644
 +    <string name="unica_rom_version_title">ROM version</string>
 +    <string name="unica_secure_ss_title">Allow secure screenshot</string>
 +    <string name="unica_settings_title">UN1CA Settings</string>
++    <string name="unica_ui_settings_title">UI settings</string>
  </resources>
 diff --git a/res/xml/meta_009_settings.xml b/res/xml/meta_009_settings.xml
 index cc8b212b..18db5fe3 100644
@@ -268,10 +274,10 @@ index e79896f6..a16c39b5 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..76220975
+index 00000000..3cb5d33b
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,19 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -280,9 +286,12 @@ index 00000000..76220975
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
 +    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
++    <SecPreferenceCategory android:title="@string/unica_ui_settings_title">
++      <SecSwitchPreference android:title="@string/unica_native_blur_title" android:key="unica_native_blur" settings:controller="io.mesalabs.unica.settings.LiveBlurPreferenceController" />
++      <SecDropDownPreference android:title="@string/unica_fod_anim_type_title" android:key="unica_fod_anim_type" settings:controller="io.mesalabs.unica.settings.FODAnimationTypePreferenceController" settings:useSimpleSummaryProvider="true" />
++      <SecSwitchPreference android:title="@string/unica_max_refresh_rate_title" android:key="unica_max_refresh_rate" settings:controller="io.mesalabs.unica.settings.ForceMaxRefreshRatePreferenceController" />
++    </SecPreferenceCategory>
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
-+        <SecSwitchPreference android:title="@string/unica_native_blur_title" android:key="unica_native_blur" settings:controller="io.mesalabs.unica.settings.LiveBlurPreferenceController" />
-+        <SecDropDownPreference android:title="@string/unica_fod_anim_type_title" android:key="unica_fod_anim_type" settings:controller="io.mesalabs.unica.settings.FODAnimationTypeController" settings:useSimpleSummaryProvider="true" />
 +        <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.GamesPropsPreferenceController" />
@@ -340,7 +349,7 @@ index 10435a45..5e2d71d4 100644
  
  .field public static final user_credential:I = 0x7f0d05e4
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 91fbf763..67d25e6f 100644
+index 91fbf763..0aee68fd 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4086,6 +4086,8 @@
@@ -361,7 +370,7 @@ index 91fbf763..67d25e6f 100644
  .field public static final menu_restore:I = 0x7f1315d0
  
  .field public static final menu_save:I = 0x7f1315d1
-@@ -10410,6 +10414,50 @@
+@@ -10410,6 +10414,54 @@
  
  .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132b60
  
@@ -381,33 +390,37 @@ index 91fbf763..67d25e6f 100644
 +
 +.field public static final unica_games_spoof_title:I = 0x7f1333a7
 +
-+.field public static final unica_native_blur_dialog_msg:I = 0x7f1333a8
++.field public static final unica_max_refresh_rate_title:I = 0x7f1333a8
 +
-+.field public static final unica_native_blur_dialog_negative:I = 0x7f1333a9
++.field public static final unica_native_blur_dialog_msg:I = 0x7f1333a9
 +
-+.field public static final unica_native_blur_dialog_positive:I = 0x7f1333aa
++.field public static final unica_native_blur_dialog_negative:I = 0x7f1333aa
 +
-+.field public static final unica_native_blur_dialog_title:I = 0x7f1333ab
++.field public static final unica_native_blur_dialog_positive:I = 0x7f1333ab
 +
-+.field public static final unica_native_blur_title:I = 0x7f1333ac
++.field public static final unica_native_blur_dialog_title:I = 0x7f1333ac
 +
-+.field public static final unica_pif_checking:I = 0x7f1333ad
++.field public static final unica_native_blur_title:I = 0x7f1333ad
 +
-+.field public static final unica_pif_error:I = 0x7f1333ae
++.field public static final unica_pif_checking:I = 0x7f1333ae
 +
-+.field public static final unica_pif_no_root:I = 0x7f1333af
++.field public static final unica_pif_error:I = 0x7f1333af
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f1333b0
++.field public static final unica_pif_no_root:I = 0x7f1333b0
 +
-+.field public static final unica_pif_updated:I = 0x7f1333b1
++.field public static final unica_pif_up_to_date:I = 0x7f1333b1
 +
-+.field public static final unica_pif_version_title:I = 0x7f1333b2
++.field public static final unica_pif_updated:I = 0x7f1333b2
 +
-+.field public static final unica_rom_version_title:I = 0x7f1333b3
++.field public static final unica_pif_version_title:I = 0x7f1333b3
 +
-+.field public static final unica_secure_ss_title:I = 0x7f1333b4
++.field public static final unica_rom_version_title:I = 0x7f1333b4
 +
-+.field public static final unica_settings_title:I = 0x7f1333b5
++.field public static final unica_secure_ss_title:I = 0x7f1333b5
++
++.field public static final unica_settings_title:I = 0x7f1333b6
++
++.field public static final unica_ui_settings_title:I = 0x7f1333b7
 +
  .field public static final uninstall:I = 0x7f132b64
  
@@ -1827,15 +1840,15 @@ index 00000000..80db5477
 +
 +    return p0
 +.end method
-diff --git a/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypeController.smali b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypeController.smali
+diff --git a/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali
 new file mode 100644
-index 00000000..1a8e7cdc
+index 00000000..03ef5629
 --- /dev/null
-+++ b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypeController.smali
++++ b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali
 @@ -0,0 +1,525 @@
-+.class public Lio/mesalabs/unica/settings/FODAnimationTypeController;
++.class public Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
-+.source "FODAnimationTypeController.java"
++.source "FODAnimationTypePreferenceController.java"
 +
 +# interfaces
 +.implements Landroidx/preference/Preference$OnPreferenceChangeListener;
@@ -1863,7 +1876,7 @@ index 00000000..1a8e7cdc
 +
 +    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 +
-+    iput-object p2, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreferenceKey:Ljava/lang/String;
++    iput-object p2, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreferenceKey:Ljava/lang/String;
 +
 +    invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
@@ -1882,12 +1895,12 @@ index 00000000..1a8e7cdc
 +    goto :goto_0
 +
 +    :cond_0
-+    invoke-direct {p0}, Lio/mesalabs/unica/settings/FODAnimationTypeController;->getDefaultFODAnimationType()I
++    invoke-direct {p0}, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->getDefaultFODAnimationType()I
 +
 +    move-result p1
 +
 +    :goto_0
-+    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mCurrentFODAnimType:I
++    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mCurrentFODAnimType:I
 +
 +    return-void
 +.end method
@@ -1940,7 +1953,7 @@ index 00000000..1a8e7cdc
 +
 +    invoke-super {p0, p1}, Lcom/android/settings/core/BasePreferenceController;->displayPreference(Landroidx/preference/PreferenceScreen;)V
 +
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreferenceKey:Ljava/lang/String;
++    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreferenceKey:Ljava/lang/String;
 +
 +    invoke-virtual {p1, v0}, Landroidx/preference/PreferenceScreen;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
 +
@@ -1952,10 +1965,10 @@ index 00000000..1a8e7cdc
 +
 +    check-cast p1, Landroidx/preference/DropDownPreference;
 +
-+    iput-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iput-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    :cond_0
-+    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    if-eqz p1, :cond_1
 +
@@ -2001,7 +2014,7 @@ index 00000000..1a8e7cdc
 +
 +    invoke-virtual {p1, v1}, Landroidx/preference/DropDownPreference;->setEntries([Ljava/lang/CharSequence;)V
 +
-+    iget-object p0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object p0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    new-array p1, v0, [Ljava/lang/CharSequence;
 +
@@ -2043,9 +2056,9 @@ index 00000000..1a8e7cdc
 +    return p0
 +
 +    :cond_0
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mContext:Landroid/content/Context;
++    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mContext:Landroid/content/Context;
 +
-+    iget-object p0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mContext:Landroid/content/Context;
++    iget-object p0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mContext:Landroid/content/Context;
 +
 +    invoke-virtual {p0}, Landroid/content/Context;->getUserId()I
 +
@@ -2131,7 +2144,7 @@ index 00000000..1a8e7cdc
 +.method public getSummary()Ljava/lang/CharSequence;
 +    .locals 2
 +
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    instance-of v1, v0, Landroidx/preference/SecDropDownPreference;
 +
@@ -2228,7 +2241,7 @@ index 00000000..1a8e7cdc
 +
 +    move-result p1
 +
-+    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mCurrentFODAnimType:I
++    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mCurrentFODAnimType:I
 +
 +    iget-object p1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 +
@@ -2238,7 +2251,7 @@ index 00000000..1a8e7cdc
 +
 +    const-string p2, "unica_fod_anim_type"
 +
-+    iget v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mCurrentFODAnimType:I
++    iget v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mCurrentFODAnimType:I
 +
 +    invoke-static {p1, p2, v0}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
@@ -2256,7 +2269,7 @@ index 00000000..1a8e7cdc
 +
 +    invoke-virtual {p1, p2}, Landroid/app/ActivityManager;->forceStopPackage(Ljava/lang/String;)V
 +
-+    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    if-eqz p1, :cond_0
 +
@@ -2301,15 +2314,15 @@ index 00000000..1a8e7cdc
 +
 +    const-string v0, "unica_fod_anim_type"
 +
-+    iget v1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mCurrentFODAnimType:I
++    iget v1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mCurrentFODAnimType:I
 +
 +    invoke-static {p1, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
 +
 +    move-result p1
 +
-+    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mCurrentFODAnimType:I
++    iput p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mCurrentFODAnimType:I
 +
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    if-eqz v0, :cond_3
 +
@@ -2341,12 +2354,258 @@ index 00000000..1a8e7cdc
 +    invoke-virtual {v0, v1}, Landroidx/preference/DropDownPreference;->setValueIndex(I)V
 +
 +    :goto_0
-+    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypeController;->mPreference:Landroidx/preference/DropDownPreference;
++    iget-object p1, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreference:Landroidx/preference/DropDownPreference;
 +
 +    invoke-virtual {p0, p1}, Lcom/android/settingslib/core/AbstractPreferenceController;->refreshSummary(Landroidx/preference/Preference;)V
 +
 +    :cond_3
 +    return-void
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali
+new file mode 100644
+index 00000000..dc7e70e3
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali
+@@ -0,0 +1,240 @@
++.class public Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "ForceMaxRefreshRatePreferenceController.java"
++
++
++# instance fields
++.field private final mMaxRefreshRate:F
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    const/4 p2, 0x0
++
++    invoke-static {p1, p2}, Lcom/samsung/android/settings/display/SecDisplayUtils;->getHighRefreshRateMaxValue(Landroid/content/Context;I)I
++
++    move-result p1
++
++    int-to-float p1, p1
++
++    iput p1, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mMaxRefreshRate:F
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 2
++
++    iget v0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mMaxRefreshRate:F
++
++    const/high16 v1, 0x42700000    # 60.0f
++
++    cmpl-float v0, v0, v1
++
++    if-lez v0, :cond_1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {p0}, Lcom/android/settings/Utils;->isMediumPowerSavingModeEnabled(Landroid/content/Context;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_0
++
++    const/4 p0, 0x0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x5
++
++    :goto_0
++    return p0
++
++    :cond_1
++    const/4 p0, 0x3
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 3
++
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "min_refresh_rate"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getFloat(Landroid/content/ContentResolver;Ljava/lang/String;F)F
++
++    move-result v0
++
++    iget p0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mMaxRefreshRate:F
++
++    cmpl-float p0, v0, p0
++
++    if-ltz p0, :cond_0
++
++    const/4 p0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x0
++
++    :goto_0
++    return p0
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    if-eqz p1, :cond_0
++
++    iget p0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mMaxRefreshRate:F
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x0
++
++    :goto_0
++    const-string p1, "min_refresh_rate"
++
++    invoke-static {v0, p1, p0}, Landroid/provider/Settings$System;->putFloat(Landroid/content/ContentResolver;Ljava/lang/String;F)Z
++
++    move-result p0
++
++    return p0
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z
