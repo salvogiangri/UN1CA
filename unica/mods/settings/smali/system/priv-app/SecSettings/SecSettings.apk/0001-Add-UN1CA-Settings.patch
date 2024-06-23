@@ -1,4 +1,4 @@
-From 43274d836fa2e0836116acb360cbd5869b97288e Mon Sep 17 00:00:00 2001
+From e0a374802fb1e8410217bc82363ea83fadba9018 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -20,23 +20,23 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$string.smali       |  52 ++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
- .../unica/UnicaSettingsFragment.smali         | 155 ++++++
- .../UnicaSettingsPreferenceController.smali   | 223 ++++++++
+ .../unica/UnicaSettingsFragment.smali         | 155 +++++
+ .../UnicaSettingsPreferenceController.smali   | 223 +++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
  .../io/mesalabs/unica/pif/PIFUtils.smali      | 455 +++++++++++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++
- .../DeviceNamePreferenceController.smali      | 193 +++++++
- ...FODAnimationTypePreferenceController.smali | 525 ++++++++++++++++++
- ...ceMaxRefreshRatePreferenceController.smali | 240 ++++++++
+ .../DeviceNamePreferenceController.smali      | 193 ++++++
+ ...FODAnimationTypePreferenceController.smali | 550 ++++++++++++++++++
+ ...ceMaxRefreshRatePreferenceController.smali | 266 +++++++++
  .../GamesPropsPreferenceController.smali      | 167 ++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 322 +++++++++++
+ .../LiveBlurPreferenceController.smali        | 322 ++++++++++
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 32 files changed, 3465 insertions(+)
+ 32 files changed, 3516 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
@@ -1842,10 +1842,10 @@ index 00000000..80db5477
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali
 new file mode 100644
-index 00000000..03ef5629
+index 00000000..8da5c1b4
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/FODAnimationTypePreferenceController.smali
-@@ -0,0 +1,525 @@
+@@ -0,0 +1,550 @@
 +.class public Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "FODAnimationTypePreferenceController.java"
@@ -1865,6 +1865,8 @@ index 00000000..03ef5629
 +# instance fields
 +.field private mCurrentFODAnimType:I
 +
++.field private mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
++
 +.field private mPreference:Landroidx/preference/DropDownPreference;
 +
 +.field private mPreferenceKey:Ljava/lang/String;
@@ -1875,6 +1877,12 @@ index 00000000..03ef5629
 +    .locals 1
 +
 +    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    new-instance v0, Lcom/android/internal/widget/LockPatternUtils;
++
++    invoke-direct {v0, p1}, Lcom/android/internal/widget/LockPatternUtils;-><init>(Landroid/content/Context;)V
++
++    iput-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mPreferenceKey:Ljava/lang/String;
 +
@@ -2043,41 +2051,58 @@ index 00000000..03ef5629
 +.end method
 +
 +.method public getAvailabilityStatus()I
-+    .locals 1
++    .locals 3
 +
 +    invoke-static {}, Lcom/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils;->isDisplaySensor()Z
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_0
++    if-eqz v0, :cond_1
 +
-+    const/4 p0, 0x3
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getUserId()I
++
++    move-result v0
++
++    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    iget-object v2, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
++
++    invoke-static {v1, v2, v0}, Lcom/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils;->getFingerprintUnlockEnabled(Landroid/content/Context;Lcom/android/internal/widget/LockPatternUtils;I)Z
++
++    move-result v1
++
++    iget-object v2, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {v2, v0}, Lcom/samsung/android/settings/security/SecurityUtils;->isFingerprintDisabled(Landroid/content/Context;I)Z
++
++    move-result v2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {p0, v0}, Lcom/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils;->getFingerprintEffectValue(Landroid/content/Context;I)Z
++
++    move-result p0
++
++    if-eqz v1, :cond_0
++
++    if-nez v2, :cond_0
++
++    if-eqz p0, :cond_0
++
++    const/4 p0, 0x0
 +
 +    return p0
 +
 +    :cond_0
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mContext:Landroid/content/Context;
-+
-+    iget-object p0, p0, Lio/mesalabs/unica/settings/FODAnimationTypePreferenceController;->mContext:Landroid/content/Context;
-+
-+    invoke-virtual {p0}, Landroid/content/Context;->getUserId()I
-+
-+    move-result p0
-+
-+    invoke-static {v0, p0}, Lcom/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils;->getFingerprintEffectValue(Landroid/content/Context;I)Z
-+
-+    move-result p0
-+
-+    if-eqz p0, :cond_1
-+
-+    const/4 p0, 0x0
-+
-+    goto :goto_0
-+
-+    :cond_1
 +    const/4 p0, 0x5
 +
-+    :goto_0
++    return p0
++
++    :cond_1
++    const/4 p0, 0x3
++
 +    return p0
 +.end method
 +
@@ -2373,26 +2398,40 @@ index 00000000..03ef5629
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali
 new file mode 100644
-index 00000000..dc7e70e3
+index 00000000..fa7fe4a8
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController.smali
-@@ -0,0 +1,240 @@
+@@ -0,0 +1,266 @@
 +.class public Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "ForceMaxRefreshRatePreferenceController.java"
 +
 +
++# static fields
++.field private static final TYPE_SEAMLESS:I = 0x2
++
++.field private static final TYPE_SEAMLESS_PLUS:I = 0x3
++
++
 +# instance fields
 +.field private final mMaxRefreshRate:F
++
++.field private final mRefreshRateType:I
 +
 +
 +# direct methods
 +.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
-+    .locals 0
++    .locals 1
 +
 +    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 +
 +    const/4 p2, 0x0
++
++    invoke-static {p1, p2}, Lcom/samsung/android/settings/display/SecDisplayUtils;->getHighRefreshRateSeamlessType(Landroid/content/Context;I)I
++
++    move-result v0
++
++    iput v0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mRefreshRateType:I
 +
 +    invoke-static {p1, p2}, Lcom/samsung/android/settings/display/SecDisplayUtils;->getHighRefreshRateMaxValue(Landroid/content/Context;I)I
 +
@@ -2410,13 +2449,30 @@ index 00000000..dc7e70e3
 +.method public getAvailabilityStatus()I
 +    .locals 2
 +
-+    iget v0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mMaxRefreshRate:F
++    iget v0, p0, Lio/mesalabs/unica/settings/ForceMaxRefreshRatePreferenceController;->mRefreshRateType:I
 +
-+    const/high16 v1, 0x42700000    # 60.0f
++    const/4 v1, 0x2
 +
-+    cmpl-float v0, v0, v1
++    if-eq v0, v1, :cond_1
 +
-+    if-lez v0, :cond_1
++    const/4 v1, 0x3
++
++    if-ne v0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    return v1
++
++    :cond_1
++    :goto_0
++    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    const/4 v1, 0x0
++
++    invoke-static {v0, v1}, Lcom/samsung/android/settings/display/SecDisplayUtils;->getIntRefreshRate(Landroid/content/Context;I)I
++
++    move-result v0
 +
 +    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 +
@@ -2424,22 +2480,17 @@ index 00000000..dc7e70e3
 +
 +    move-result p0
 +
-+    if-nez p0, :cond_0
++    if-nez p0, :cond_2
 +
-+    const/4 p0, 0x0
++    if-lez v0, :cond_2
 +
-+    goto :goto_0
++    goto :goto_1
 +
-+    :cond_0
-+    const/4 p0, 0x5
++    :cond_2
++    const/4 v1, 0x5
 +
-+    :goto_0
-+    return p0
-+
-+    :cond_1
-+    const/4 p0, 0x3
-+
-+    return p0
++    :goto_1
++    return v1
 +.end method
 +
 +.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
