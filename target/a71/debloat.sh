@@ -86,9 +86,11 @@ SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
 etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc
+etc/permissions/com.android.hotwordenrollment.common.util.xml
 etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
 etc/permissions/privapp-permissions-com.qualcomm.location.xml
+framework/com.android.hotwordenrollment.common.util.jar
 framework/com.qti.location.sdk.jar
 framework/org.carconnectivity.android.digitalkey.rangingintent.jar
 framework/org.carconnectivity.android.digitalkey.secureelement.jar
