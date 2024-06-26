@@ -197,7 +197,9 @@ DO_RECOMPILE()
         smali a -a $API -o "$APKTOOL_DIR$IN_DIR/$DEX_FILE" "$f"
     done
 
-    apktool -q b -c -p "$FRAMEWORK_DIR" -srp "$APKTOOL_DIR$IN_DIR"
+    mkdir -p "$APKTOOL_DIR$IN_DIR/build/apk"
+    cp -a --preserve=all "$APKTOOL_DIR$IN_DIR/original/META-INF" "$APKTOOL_DIR$IN_DIR/build/apk/META-INF"
+    apktool -q b -p "$FRAMEWORK_DIR" -srp "$APKTOOL_DIR$IN_DIR"
     [[ -f "$APKTOOL_DIR$IN_DIR/classes.dex" ]] && rm "$APKTOOL_DIR$IN_DIR/"*.dex
 
     if [[ "$APK_PATH" == *".apk" ]]; then
