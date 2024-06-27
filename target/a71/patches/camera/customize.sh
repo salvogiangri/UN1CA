@@ -91,6 +91,10 @@ REMOVE_FROM_WORK_DIR()
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
+sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/file_context-system"
+sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/fs_config-system"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
+
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
     cat "$SRC_DIR/target/a71/patches/camera/ueventd" >> "$WORK_DIR/vendor/ueventd.rc"
@@ -193,4 +197,21 @@ do
 done
 
 echo "Fix AI Photo Editor"
-sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
+cp -a --preserve=all \
+    "$SRC_DIR/target/a71/patches/camera/system/cameradata/portrait_data/single_bokeh_feature.json" \
+    "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
+if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/cameradata/portrait_data/unica_bokeh_feature\.json u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/cameradata/portrait_data/unica_bokeh_feature.json 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" \
+    "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
+sed -i \
+    's/system\/cameradata\/portrait_data\/single_bokeh_feature.json/system\/cameradata\/portrait_data\/unica_bokeh_feature.json\x00/g' \
+    "$WORK_DIR/system/system/lib64/libPortraitSolution.camera.samsung.so"

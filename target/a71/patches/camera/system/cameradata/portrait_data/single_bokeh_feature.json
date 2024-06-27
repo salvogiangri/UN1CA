@@ -1,0 +1,67 @@
+{
+    "deviceName": "default_lowtier",
+
+    "HumanAwareEngine": {
+        "Perf_mode_preview": "PERFMODE_HIGH",
+        "Perf_mode_capture": "PERFMODE_HIGH",
+        "Perf_mode_SDK": "PERFMODE_HIGH",
+        "bloom_ev_tuning": "false"
+    },
+
+    "BeautyEngine": {
+        "mode_preview": "BEAUTY_SINGLEBLUR_FD",
+        "mode_capture": "BEAUTY_SINGLEBLUR_FD"
+    },
+
+    "RelightingEngine": {
+        "mode_preview": null,
+        "mode_capture": null
+    },
+
+    "LD_FD_engine": {
+        "mode_preview": null,
+        "mode_capture": "default"
+    },
+    
+    "capture_segmentation": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_BanetLite_FP16_V400.snf",
+        "Version": "400",
+        "ComputeUnit": "COMPUTE_GPU",
+        "ExecutionDataType": "FLOAT16",
+        "ModelType": "MODEL_TYPE_INSTANCE_CAPTURE",
+        "ModelFormat": "SNF",
+        "Encryption": "false",
+        "input_size": [[384, 384], [384, 384], [384, 384], [384, 384]]
+    },
+    "capture_depth": {
+        "Weightfile": null,
+        "Version": null,
+        "ComputeUnit": null,
+        "ExecutionDataType": null,
+        "ModelType": null,
+        "ModelFormat": null,
+        "Encryption": null,
+        "input_size": null
+    },
+    "capture_matting": {
+        "Weightfile": null,
+        "Version": null,
+        "ComputeUnit": null,
+        "ExecutionDataType": null,
+        "ModelType": null,
+        "ModelFormat": null,
+        "Encryption": null,
+        "input_size": null
+    },
+    "preview_1st_segmentation": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_HumanSegLite_INT8_V004.snf",
+        "Version": "004",
+        "ComputeUnit": "COMPUTE_GPU",
+        "ExecutionDataType": "QASYMM8",
+        "ModelType": "MODEL_TYPE_SEG_LIVE",
+        "ModelFormat": "SNF",
+        "Encryption": "false",
+        "input_size": [[224, 224], [224, 224], [224, 224], [224, 224]],
+        "effects_supported": [0, 1, 2, 6, 10, 11, 12, 13, 14, 15]
+    }
+}

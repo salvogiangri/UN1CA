@@ -195,7 +195,24 @@ do
 done
 
 echo "Fix AI Photo Editor"
-sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
+cp -a --preserve=all \
+    "$FW_DIR/${MODEL}_${REGION}/system/system/cameradata/portrait_data/single_bokeh_feature.json" \
+    "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
+if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/cameradata/portrait_data/unica_bokeh_feature\.json u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/cameradata/portrait_data/unica_bokeh_feature.json 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" \
+    "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
+sed -i \
+    's/system\/cameradata\/portrait_data\/single_bokeh_feature.json/system\/cameradata\/portrait_data\/unica_bokeh_feature.json\x00/g' \
+    "$WORK_DIR/system/system/lib64/libPortraitSolution.camera.samsung.so"
 
 echo "Fix MIDAS model detection"
 sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
