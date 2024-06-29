@@ -106,6 +106,32 @@ ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.minisview
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nsflp_level_600.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level40.xml" 0 0 644 "u:object_r:system_file:s0"
 
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
+echo "Add stock WFD blobs"
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/lib/libhdcp2\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplay_wfd\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libremotedisplayservice\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libsecuibc\.so u:object_r:system_lib_file:s0"
+        echo "/system/lib/libstagefright_hdcp\.so u:object_r:system_lib_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
+fi
+if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/lib/libhdcp2.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplay_wfd.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libremotedisplayservice.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libsecuibc.so 0 0 644 capabilities=0x0"
+        echo "system/lib/libstagefright_hdcp.so 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi
+
 echo "Add HIDL fingerprint biometrics libs"
 ADD_TO_WORK_DIR "system" "system/lib/android.hardware.biometrics.fingerprint@2.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib/vendor.samsung.hardware.biometrics.fingerprint@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
