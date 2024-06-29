@@ -39,6 +39,10 @@ jobs:
             path: "target/m52xq/patches/stock_blobs"
           - module: "(m52xq) /vendor proprietary blobs"
             path: "target/m52xq/patches/vendor"
+          - module: "(r8q) OS proprietary blobs"
+            path: "target/r8q/patches/stock_blobs"
+          - module: "(r8q) /vendor proprietary blobs"
+            path: "target/r8q/patches/vendor"
 
     steps:
       - name: Checkout repo

@@ -112,6 +112,24 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/target/m52xq/patches/vendor/vendor" -type f \
             -not -path "*/firmware/*" ! -name "*wifi_firmware.rc" | sed "s.$SRC_DIR/target/m52xq/patches/vendor/..")"
         ;;
+    "target/r8q/patches/stock_blobs")
+        MODULE="$1"
+        FW="SM-A525F/SER/352938771234569"
+        BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/product" -type f \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/product..")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
+        ;;
+    "target/r8q/patches/vendor")
+        MODULE="$1"
+        FW="SM-G990B/EUX/353718681234563"
+        BLOBS="$(find "$SRC_DIR/target/r8q/patches/vendor/system" -type f \
+            | sed "s.$SRC_DIR/target/r8q/patches/vendor.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/r8q/patches/vendor/vendor" -type f -printf "\n%p" \
+            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/r8q/patches/vendor/..")"
+        ;;
     *)
         echo "Unsupported path: $1"
         exit 1
