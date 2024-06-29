@@ -154,6 +154,7 @@ done
 
 echo "Add stock camera libs"
 BLOBS_LIST="
+system/etc/public.libraries-arcsoft.txt
 system/lib64/libAiSolution_wrapper_v1.camera.samsung.so
 system/lib64/libBright_core.camera.samsung.so
 system/lib64/libFacePreProcessing.camera.samsung.so
