@@ -263,6 +263,7 @@ GENERATE_UPDATER_SCRIPT()
     local HAS_VENDOR_DLKM=false
     local HAS_ODM_DLKM=false
     local HAS_SYSTEM_DLKM=false
+    local HAS_POST_INSTALL=false
 
     [ -f "$TMP_DIR/boot.img" ] && HAS_BOOT=true
     [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
@@ -277,6 +278,7 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$TMP_DIR/vendor_dlkm.new.dat.br" ] && HAS_VENDOR_DLKM=true
     [ -f "$TMP_DIR/odm_dlkm.new.dat.br" ] && HAS_ODM_DLKM=true
     [ -f "$TMP_DIR/system_dlkm.new.dat.br" ] && HAS_SYSTEM_DLKM=true
+    [ -f "$SRC_DIR/target/$TARGET_CODENAME/postinstall.edify" ] && HAS_POST_INSTALL=true
 
     [ -f "$SCRIPT_FILE" ] && rm -f "$SCRIPT_FILE"
     touch "$SCRIPT_FILE"
@@ -382,6 +384,10 @@ GENERATE_UPDATER_SCRIPT()
             echo -n 'package_extract_file("boot.img", "'
             echo -n "$TARGET_BOOT_DEVICE_PATH"
             echo    '/boot");'
+        fi
+
+        if $HAS_POST_INSTALL; then
+            cat "$SRC_DIR/target/$TARGET_CODENAME/postinstall.edify"
         fi
 
         echo    'ui_print("****************************************");'
