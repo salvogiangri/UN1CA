@@ -10,7 +10,9 @@
     <dimen name="cover_clear_view_top">0.0dip</dimen>
     <dimen name="physical_power_button_center_screen_location_y">975.0px</dimen>
     <dimen name="rounded_corner_radius_bottom">28.0dip</dimen>
+    <dimen name="rounded_corner_radius_bottom_adjustment">0.0px</dimen>
     <dimen name="rounded_corner_radius_top">28.0dip</dimen>
+    <dimen name="rounded_corner_radius_top_adjustment">0.0px</dimen>
     <dimen name="status_bar_camera_side_padding">36.0px</dimen>
     <dimen name="status_bar_camera_top_margin">33.0px</dimen>
     <dimen name="status_bar_height_portrait">87.0px</dimen>

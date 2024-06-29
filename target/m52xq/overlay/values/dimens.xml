@@ -6,7 +6,9 @@
     <item type="dimen" name="config_screenBrightnessSettingMinimumFloat">0.0</item>
     <dimen name="physical_power_button_center_screen_location_y">265.0px</dimen>
     <dimen name="rounded_corner_radius_bottom">27.0dip</dimen>
+    <dimen name="rounded_corner_radius_bottom_adjustment">0.0px</dimen>
     <dimen name="rounded_corner_radius_top">27.0dip</dimen>
+    <dimen name="rounded_corner_radius_top_adjustment">0.0px</dimen>
     <dimen name="status_bar_camera_side_padding">29.0px</dimen>
     <dimen name="status_bar_camera_top_margin">22.0px</dimen>
     <dimen name="status_bar_height_portrait">5.5739746mm</dimen>
