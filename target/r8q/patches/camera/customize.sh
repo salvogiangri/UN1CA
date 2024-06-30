@@ -96,6 +96,18 @@ if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     cat "$SRC_DIR/target/r8q/patches/camera/ueventd" >> "$WORK_DIR/vendor/ueventd.rc"
 fi
 
+# Fix vendor camera libs
+echo "Fix vendor camera libs"
+sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib/libDualCamBokehCapture.camera.samsung.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib/liblivefocus_capture_engine.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib/liblivefocus_preview_engine.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib/unihal_main@2.1.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib64/libDualCamBokehCapture.camera.samsung.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib64/liblivefocus_capture_engine.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib64/liblivefocus_preview_engine.so" && \
+    sed -i "s/ro.product.name/ro.unica.camera/g" "$WORK_DIR/vendor/lib64/unihal_main@2.1.so"
+echo -e "\nro.unica.camera u:object_r:build_prop:s0 exact string" >> "$WORK_DIR/system/system/etc/selinux/plat_property_contexts"
+
 # Fix system camera libs
 BLOBS_LIST="
 system/lib/FrcMcWrapper.so
@@ -152,7 +164,7 @@ do
     REMOVE_FROM_WORK_DIR "$WORK_DIR/system/$blob"
 done
 
-echo "Add stock camera libs"
+echo "Add stock system camera libs"
 BLOBS_LIST="
 system/etc/public.libraries-arcsoft.txt
 system/lib64/libAiSolution_wrapper_v1.camera.samsung.so
