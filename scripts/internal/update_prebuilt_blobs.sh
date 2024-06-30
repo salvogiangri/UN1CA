@@ -121,8 +121,6 @@ case "$1" in
         FW="SM-G990B/EUX/353718681234563"
         BLOBS="$(find "$SRC_DIR/target/r8q/patches/vendor/system" -type f \
             | sed "s.$SRC_DIR/target/r8q/patches/vendor.system.")"
-        BLOBS+="$(find "$SRC_DIR/target/r8q/patches/vendor/vendor" -type f -printf "\n%p" \
-            -not -path "*/etc/*" | sed "s.$SRC_DIR/target/r8q/patches/vendor/..")"
         ;;
     *)
         echo "Unsupported path: $1"
