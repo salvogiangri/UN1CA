@@ -106,12 +106,6 @@ case "$1" in
         BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
             | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs.system.")"
         ;;
-    "target/m52xq/patches/vendor")
-        MODULE="$1"
-        FW="SM-A528B/BTU/352599501234566"
-        BLOBS="$(find "$SRC_DIR/target/m52xq/patches/vendor/vendor" -type f \
-            -not -path "*/firmware/*" ! -name "*wifi_firmware.rc" | sed "s.$SRC_DIR/target/m52xq/patches/vendor/..")"
-        ;;
     "target/r8q/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A525F/SER/352938771234569"
