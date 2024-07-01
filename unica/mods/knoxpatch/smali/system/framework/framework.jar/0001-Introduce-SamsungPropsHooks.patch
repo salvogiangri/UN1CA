@@ -1,4 +1,4 @@
-From 0cbad1d48c3f02b72ff5a576df7e5118431a7dbd Mon Sep 17 00:00:00 2001
+From 63cd259058123752fada90037afc90c54638d0a3 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:46:34 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -6,8 +6,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
 ---
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 518 ++++++++++++++++++
- 3 files changed, 536 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 534 ++++++++++++++++++
+ 3 files changed, 552 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -74,10 +74,10 @@ index 25fa7c61..5ea40e7f 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..d882f5d3
+index 00000000..699c6907
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,518 @@
+@@ -0,0 +1,534 @@
 +.class public Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -248,6 +248,22 @@ index 00000000..d882f5d3
 +    sput-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKnox:Z
 +
 +    if-eqz p0, :cond_2
++
++    const-string p0, "com.sec"
++
++    invoke-virtual {v1, p0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_2
++
++    const-string p0, "com.samsung"
++
++    invoke-virtual {v1, p0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_2
 +
 +    const-string p0, "ro.boot.em.model"
 +
