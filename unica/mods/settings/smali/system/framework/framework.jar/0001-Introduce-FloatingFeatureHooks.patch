@@ -1,4 +1,4 @@
-From 367807d405d143c825f1f8dde25376a898a0becc Mon Sep 17 00:00:00 2001
+From 14c1a72c6d93db620dd2e3bdb4cff0c306709aed Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 10:14:20 +0200
 Subject: [PATCH] Introduce FloatingFeatureHooks
@@ -147,7 +147,7 @@ index 8a5dc15b..a6ce5287 100644
      :goto_0
 diff --git a/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 new file mode 100644
-index 00000000..cc1e9b67
+index 00000000..0271bbc0
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 @@ -0,0 +1,298 @@
@@ -230,13 +230,13 @@ index 00000000..cc1e9b67
 +
 +    const-string v5, ""
 +
-+    invoke-static {v4, v5}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v4, v5}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v4
 +
 +    const-string v6, "ro.boot.em.model"
 +
-+    invoke-static {v6, v5}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v6, v5}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v5
 +
@@ -252,7 +252,7 @@ index 00000000..cc1e9b67
 +
 +    const-string v2, "persist.sys.unica.nativeblur"
 +
-+    invoke-static {v2, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    invoke-static {v2, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
 +    move-result v0
 +
