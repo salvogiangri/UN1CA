@@ -150,6 +150,7 @@ system/lib64/libhigh_dynamic_range_bokeh.so
 system/lib64/libhybridHDR_wrapper.camera.samsung.so
 system/lib64/libhybrid_high_dynamic_range.arcsoft.so
 system/lib64/libmcaimegpu.samsung.so
+system/lib64/libscalenetpkg.so
 system/lib64/libstartrail.camera.samsung.so
 system/lib64/libsuperresolution_raw.arcsoft.so
 system/lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so

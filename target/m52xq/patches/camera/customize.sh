@@ -120,6 +120,7 @@ system/lib64/libDocShadowRemoval.arcsoft.so
 system/lib64/libDualCamBokehCapture.camera.samsung.so
 system/lib64/libFaceRecognition.arcsoft.so
 system/lib64/libFaceRestoration.camera.samsung.so
+system/lib64/libFrucPSVTLib.so
 system/lib64/libHIDTSnapJNI.camera.samsung.so
 system/lib64/libImageSegmenter_v1.camera.samsung.so
 system/lib64/libLocalTM_pcc.camera.samsung.so
@@ -155,6 +156,7 @@ system/lib64/libhigh_dynamic_range_bokeh.so
 system/lib64/libhybridHDR_wrapper.camera.samsung.so
 system/lib64/libhybrid_high_dynamic_range.arcsoft.so
 system/lib64/libmcaimegpu.samsung.so
+system/lib64/libscalenetpkg.so
 system/lib64/libstartrail.camera.samsung.so
 system/lib64/libsuperresolution_raw.arcsoft.so
 system/lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so
