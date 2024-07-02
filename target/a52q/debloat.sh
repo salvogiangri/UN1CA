@@ -51,8 +51,10 @@ system/app/ApexService
 system/bin/apexserver
 system/etc/init/apexserver.qcom.rc
 system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
+system/etc/default-permissions/default-permissions-com.samsung.petservice.xml
 system/etc/permissions/cameraservice.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
+system/etc/permissions/privapp-permissions-com.samsung.petservice.xml
 system/framework/scamera_sep.jar
 system/lib64/libamex.so
 system/lib64/libppvdis_wrapper.so

@@ -48,8 +48,10 @@ system/priv-app/GameDriver-SM8550
 # Camera SDK
 SYSTEM_DEBLOAT+="
 system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
+system/etc/default-permissions/default-permissions-com.samsung.petservice.xml
 system/etc/permissions/cameraservice.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
+system/etc/permissions/privapp-permissions-com.samsung.petservice.xml
 system/etc/permissions/sec_camerax_impl.xml
 system/etc/permissions/sec_camerax_service.xml
 system/framework/sec_camerax_impl.jar
