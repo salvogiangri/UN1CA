@@ -26,6 +26,7 @@ system/app/WifiRROverlayAppQC
 "
 PRODUCT_DEBLOAT+="
 overlay/SoftapOverlay6GHz
+overlay/SoftapOverlayDualAp
 overlay/SoftapOverlayOWE
 overlay/SoftapOverlayQC
 "
@@ -35,31 +36,20 @@ SYSTEM_DEBLOAT+="
 system/priv-app/GameDriver-SM8550
 "
 
-# Mocca
+# Camera SDK
 SYSTEM_DEBLOAT+="
-system/app/MoccaMobile
-"
-
-# eSE
-SYSTEM_DEBLOAT+="
-system/bin/esecos_daemon
-system/etc/init/esecos.rc
+system/priv-app/PetService
 "
 
 # system_ext clean-up
 SYSTEM_EXT_DEBLOAT+="
 app/QCC
 bin/qccsyshal@1.2-service
+etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc
 etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
 etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
-framework/oat/arm/com.qti.location.sdk.art
-framework/oat/arm/com.qti.location.sdk.odex
-framework/oat/arm/com.qti.location.sdk.vdex
-framework/oat/arm64/com.qti.location.sdk.art
-framework/oat/arm64/com.qti.location.sdk.odex
-framework/oat/arm64/com.qti.location.sdk.vdex
 lib/libqcc.so
 lib/libqcc_file_agent_sys.so
 lib/libqccdme.so

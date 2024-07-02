@@ -4,7 +4,7 @@ sed -i \
     "$(sed -n "/ro.adb.secure/=" "$WORK_DIR/vendor/default.prop") cro.adb.secure=0" \
     "$WORK_DIR/vendor/default.prop"
 sed -i \
-    "$(sed -n "/persist.sys.usb.config/=" "$WORK_DIR/vendor/default.prop") cpersist.sys.usb.config=mtp,adb" \
+    "$(sed -n "/persist.sys.usb.config/=" "$WORK_DIR/vendor/default.prop") cpersist.sys.usb.config=mtp,conn_gadget,adb" \
     "$WORK_DIR/vendor/default.prop"
 
 if ! grep -q "persist.vendor.radio.port_index" "$WORK_DIR/vendor/etc/init/hw/init.target.rc"; then

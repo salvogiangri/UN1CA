@@ -1,19 +1,19 @@
-From ecf3acfa2218ec9fb37fe2228aeaefe84d87f9ac Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Tue, 30 Jan 2024 23:36:58 +0100
+From df7d4c0b8f15cfc50058cfdca6902b73bbc5f8c5 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 2 Jul 2024 16:51:14 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
- .../android/wifitrackerlib/WifiEntry.smali    | 29 ++-----------------
- .../FingerprintSettingsUtils.smali            |  6 ++--
- .../settings/display/SecDisplayUtils.smali    |  8 ++---
- 3 files changed, 9 insertions(+), 34 deletions(-)
+ .../android/wifitrackerlib/WifiEntry.smali    | 27 ++-----------------
+ .../WifiLabsWeeklyReportPreference.smali      | 26 +++++++++++++-----
+ .../mobileap/utils/WifiApFeatureUtils.smali   | 12 ---------
+ 3 files changed, 22 insertions(+), 43 deletions(-)
 
 diff --git a/smali/com/android/wifitrackerlib/WifiEntry.smali b/smali/com/android/wifitrackerlib/WifiEntry.smali
-index 7ad977c2..e483089a 100644
+index 7a740b38..a56cbcaf 100644
 --- a/smali/com/android/wifitrackerlib/WifiEntry.smali
 +++ b/smali/com/android/wifitrackerlib/WifiEntry.smali
-@@ -2785,34 +2785,9 @@
+@@ -2801,32 +2801,9 @@
  .end method
  
  .method public semIsWifi6ENetwork()Z
@@ -25,15 +25,13 @@ index 7ad977c2..e483089a 100644
 -
 -    invoke-virtual {v0}, Landroid/net/wifi/WifiInfo;->getFrequency()I
 -
--    move-result v0
--
--    iget-object v1, p0, Lcom/android/wifitrackerlib/WifiEntry;->mWifiInfo:Landroid/net/wifi/WifiInfo;
--
--    invoke-virtual {v1}, Landroid/net/wifi/WifiInfo;->getWifiStandard()I
--
 -    move-result v1
 -
--    invoke-virtual {p0, v0, v1}, Lcom/android/wifitrackerlib/WifiEntry;->checkWifi6EStandard(II)Z
+-    invoke-virtual {v0}, Landroid/net/wifi/WifiInfo;->getWifiStandard()I
+-
+-    move-result v0
+-
+-    invoke-virtual {p0, v1, v0}, Lcom/android/wifitrackerlib/WifiEntry;->checkWifi6EStandard(II)Z
 -
 -    move-result p0
 -
@@ -50,77 +48,83 @@ index 7ad977c2..e483089a 100644
  
      return p0
  .end method
-diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-index 27e7f97f..0cd1a558 100644
---- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-+++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-@@ -848,7 +848,7 @@
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali b/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
+index 706609ba..754830d3 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
+@@ -933,19 +933,33 @@
  
-     const-string v0, ","
+     invoke-virtual {v0, v2}, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->getDPfromPixel(I)I
  
--    const-string v1, "google_touch_display_ultrasonic"
-+    const-string v1, "google_touch_display_optical,settings=3"
++    move-result v3
++
++    iput v3, v1, Landroid/widget/LinearLayout$LayoutParams;->bottomMargin:I
++
++    iget-object v3, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
++
++    invoke-virtual {v3, v1}, Landroid/widget/RelativeLayout;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
++
++    iget-object v3, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifiMultiLinkBandLayout:Landroid/widget/RelativeLayout;
++
++    const/16 v4, 0x8
++
++    invoke-virtual {v3, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++
++    invoke-virtual {v0, v2}, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->getDPfromPixel(I)I
++
+     move-result v2
  
-     invoke-virtual {v1, v0}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
+     iput v2, v1, Landroid/widget/LinearLayout$LayoutParams;->bottomMargin:I
  
-@@ -1129,7 +1129,7 @@
+-    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
++    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi5BandLayout:Landroid/widget/RelativeLayout;
  
-     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     invoke-virtual {v2, v1}, Landroid/widget/RelativeLayout;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
  
--    const-string v2, "google_touch_display_ultrasonic"
-+    const-string v2, "google_touch_display_optical,settings=3"
+-    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifiMultiLinkBandLayout:Landroid/widget/RelativeLayout;
+-
+-    const/16 v3, 0x8
++    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
  
-     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-    invoke-virtual {v2, v3}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++    invoke-virtual {v2, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
  
-@@ -1189,7 +1189,7 @@
- .method public static isOpticalSensor()Z
-     .locals 1
+     const/16 v2, 0x11
  
--    const/4 v0, 0x0
-+    const/4 v0, 0x1
+@@ -961,7 +975,7 @@
  
-     return v0
+     iget-object v0, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi7StandardLayout:Landroid/widget/RelativeLayout;
+ 
+-    invoke-virtual {v0, v3}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++    invoke-virtual {v0, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
+ 
+     return-void
  .end method
-diff --git a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-index 20e66c57..f9fb3cb1 100644
---- a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-+++ b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-@@ -2712,7 +2712,7 @@
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+index 4fb68093..5f90f0e1 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+@@ -87,20 +87,8 @@
+ .method public static isDualBand2GhzAnd5GhzSupported(Landroid/content/Context;)Z
+     .locals 0
  
-     if-eq p1, v0, :cond_0
+-    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->is5GhzBandSupported(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_0
+     const/4 p0, 0x0
  
--    const-string p0, "2"
-+    const-string p0, "1"
- 
-     invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
- 
-@@ -2754,7 +2754,7 @@
- 
-     if-eq p1, v0, :cond_0
- 
--    const-string p0, "24,10,30,48,60,96,120"
-+    const-string p0, "60,120"
- 
-     invoke-virtual {p0, v1}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
- 
-@@ -2897,7 +2897,7 @@
- .method public static getMinSupportedRefreshRate()I
-     .locals 2
- 
--    const-string v0, "24,10,30,48,60,96,120"
-+    const-string v0, "60,120"
- 
-     invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
- 
-@@ -6896,7 +6896,7 @@
- 
-     if-eq p1, v3, :cond_1
- 
--    const-string p0, "2"
-+    const-string p0, "1"
- 
-     invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+-    :goto_0
+     return p0
+ .end method
  
 -- 
-2.34.1
+2.45.2
 
