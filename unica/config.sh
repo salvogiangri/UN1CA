@@ -16,7 +16,7 @@
 #
 
 # UN1CA configuration file
-ROM_VERSION="2.0.1"
+ROM_VERSION="2.1.0"
 ROM_VERSION+="-$(git rev-parse --short HEAD)"
 ROM_CODENAME="Eureka"
 

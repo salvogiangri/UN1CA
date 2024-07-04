@@ -2,11 +2,11 @@
   <img loading="lazy" src="readme-res/banner.png"/>
 </h1>
 <p align="center">
-  <a href="https://github.com/BlackMesa123/UN1CA/blob/fourteen/LICENSE"><img loading="lazy" src="https://img.shields.io/github/license/BlackMesa123/UN1CA?style=for-the-badge&logo=github"/></a>
-  <a href="https://github.com/BlackMesa123/UN1CA/commits/fourteen"><img loading="lazy" src="https://img.shields.io/github/last-commit/BlackMesa123/UN1CA/fourteen?style=for-the-badge"/></a>
-  <a href="https://github.com/BlackMesa123/UN1CA/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/BlackMesa123/UN1CA?style=for-the-badge"/></a>
-  <a href="https://github.com/BlackMesa123/UN1CA/graphs/contributors"><img loading="lazy" src="https://img.shields.io/github/contributors/BlackMesa123/UN1CA?style=for-the-badge"/></a>
-  <a href="https://github.com/BlackMesa123/UN1CA/actions/workflows/build.yml"><img loading="lazy" src="https://img.shields.io/github/actions/workflow/status/BlackMesa123/UN1CA/build.yml?style=for-the-badge"/></a>
+  <a href="https://github.com/salvogiangri/UN1CA/blob/fourteen/LICENSE"><img loading="lazy" src="https://img.shields.io/github/license/salvogiangri/UN1CA?style=for-the-badge&logo=github"/></a>
+  <a href="https://github.com/salvogiangri/UN1CA/commits/fourteen"><img loading="lazy" src="https://img.shields.io/github/last-commit/salvogiangri/UN1CA/fourteen?style=for-the-badge"/></a>
+  <a href="https://github.com/salvogiangri/UN1CA/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/salvogiangri/UN1CA?style=for-the-badge"/></a>
+  <a href="https://github.com/salvogiangri/UN1CA/graphs/contributors"><img loading="lazy" src="https://img.shields.io/github/contributors/salvogiangri/UN1CA?style=for-the-badge"/></a>
+  <a href="https://github.com/salvogiangri/UN1CA/actions/workflows/build.yml"><img loading="lazy" src="https://img.shields.io/github/actions/workflow/status/salvogiangri/UN1CA/build.yml?style=for-the-badge"/></a>
 </p>
 <p align="center">UN1CA <i>(/ˈu.ni.ka/)</i> is a work-in-progress custom firmware for Samsung Galaxy devices.</p>
 
@@ -33,9 +33,9 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - High end animations
 - Native/live blur support
 - AOD clock transition support
-- AOD wallpaper support
 - Adaptive color tone support
 - Adaptive refresh rate support
+- Extra brightness support
 - Picture remaster support
 - Object, shadow and reflection eraser support
 - Image clipper support
@@ -44,10 +44,10 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - Debloated from useless system services/additional apps
 - Play Integrity Fix included **(root required)**
 - [BluetoothLibraryPatcher](https://github.com/3arthur6/BluetoothLibraryPatcher) included
-- [KnoxPatch](https://github.com/BlackMesa123/KnoxPatch) implemented in system frameworks
+- [KnoxPatch](https://github.com/salvogiangri/KnoxPatch) implemented in system frameworks
 - China Device Care app included
 - [Patched GoodLock](https://github.com/corsicanu/goodlock_dump) app included
-- Extra mods (Enable live blur, Allow secure screenshot, FPS Unlock, Allow app downgrade)
+- Extra mods (Enable live blur, FOD animation, Force max refresh rate, Allow secure screenshot, FPS Unlock, Allow app downgrade)
 - Extra CSC features (Call recording, Hiya, Network speed in status bar, Quick switch to Secure Folder)
 
 # Licensing
@@ -71,4 +71,4 @@ A big thanks goes to the following for their invaluable contributions in no part
 - *All the UN1CA project contributors and testers ❤️*
 
 # Stargazers over time
-[![Stargazers over time](https://starchart.cc/BlackMesa123/UN1CA.svg)](https://starchart.cc/BlackMesa123/UN1CA)
+[![Stargazers over time](https://starchart.cc/salvogiangri/UN1CA.svg)](https://starchart.cc/salvogiangri/UN1CA)
