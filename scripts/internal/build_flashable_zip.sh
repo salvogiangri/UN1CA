@@ -316,9 +316,9 @@ GENERATE_UPDATER_SCRIPT()
         if $HAS_SYSTEM; then
             echo -e "\n# Patch partition system\n"
             echo    'ui_print("Patching system image unconditionally...");'
-            echo -n 'show_progress('
-            LC_NUMERIC=C printf "%.6f" "$(echo "0.9 - ($PARTITION_COUNT * 0.1)" | bc -l)"
-            echo    ', 0);'
+            echo -n 'show_progress(0.'
+            echo "9 - $PARTITION_COUNT" | bc -l | tr -d "\n"
+            echo    '00000, 0);'
             echo    'block_image_update(map_partition("system"), package_extract_file("system.transfer.list"), "system.new.dat.br", "system.patch.dat") ||'
             echo    '  abort("E1001: Failed to update system image.");'
         fi
