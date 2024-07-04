@@ -1,4 +1,4 @@
-From e0a374802fb1e8410217bc82363ea83fadba9018 Mon Sep 17 00:00:00 2001
+From 9707b68012572b4fbbfa6381c0f2b2e8c75d1091 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -6,6 +6,7 @@ Subject: [PATCH] Add UN1CA Settings
 ---
  AndroidManifest.xml                           |   8 +
  res/drawable/sec_ic_settings_unica.xml        |   9 +
+ .../unica_settings_logo_layout.xml            |   7 +
  res/layout/unica_settings_logo_layout.xml     |   7 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
@@ -36,8 +37,9 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 32 files changed, 3516 insertions(+)
+ 33 files changed, 3523 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
+ create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
@@ -93,16 +95,30 @@ index 00000000..0fba1952
 +    <path android:fillColor="@color/sec_dashboard_layer_color" android:pathData="M24.856,3.144C23.13,1.522 20.774,0.601 18.174,0.257C15.691,-0.072 14,0.009 14,0.009C14,0.009 12.309,-0.072 9.826,0.257C7.226,0.601 4.87,1.522 3.144,3.144C1.521,4.87 0.601,7.226 0.257,9.826C-0.072,12.309 0.009,14 0.009,14C0.009,14 -0.072,15.691 0.257,18.174C0.601,20.774 1.521,23.13 3.144,24.856C4.87,26.478 7.226,27.399 9.826,27.743C12.309,28.072 14,27.991 14,27.991C14,27.991 15.691,28.072 18.174,27.743C20.774,27.399 23.13,26.478 24.856,24.856C26.479,23.13 27.399,20.774 27.743,18.174C28.072,15.691 27.991,14 27.991,14C27.991,14 28.072,12.309 27.743,9.826C27.399,7.226 26.479,4.87 24.856,3.144Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
 +</vector>
 \ No newline at end of file
+diff --git a/res/layout-night/unica_settings_logo_layout.xml b/res/layout-night/unica_settings_logo_layout.xml
+new file mode 100644
+index 00000000..ecd901fe
+--- /dev/null
++++ b/res/layout-night/unica_settings_logo_layout.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout android:background="?roundedCornerColor" android:layout_width="fill_parent" android:layout_height="wrap_content"
++  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
++    <androidx.appcompat.widget.AppCompatImageView android:id="@id/unica_logo_wp" android:layout_width="fill_parent" android:layout_height="150.0dip" android:scaleType="centerCrop" android:alpha="0.8" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
++    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
++</FrameLayout>
+\ No newline at end of file
 diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..b3e881b4
+index 00000000..3f8b037f
 --- /dev/null
 +++ b/res/layout/unica_settings_logo_layout.xml
 @@ -0,0 +1,7 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-+    <androidx.appcompat.widget.AppCompatImageView android:id="@id/unica_logo_wp" android:layout_width="fill_parent" android:layout_height="150.0dip" android:scaleType="centerCrop" />
++    <androidx.appcompat.widget.AppCompatImageView android:id="@id/unica_logo_wp" android:layout_width="fill_parent" android:layout_height="150.0dip" android:scaleType="centerCrop" android:alpha="0.8" />
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
