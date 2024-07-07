@@ -1,12 +1,12 @@
-From 14c1a72c6d93db620dd2e3bdb4cff0c306709aed Mon Sep 17 00:00:00 2001
+From aacd56183efaae177c8993be66940885cf553a3b Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 10:14:20 +0200
 Subject: [PATCH] Introduce FloatingFeatureHooks
 
 ---
  .../android/feature/SemFloatingFeature.smali  |  60 +++-
- .../mesalabs/unica/FloatingFeatureHooks.smali | 298 ++++++++++++++++++
- 2 files changed, 350 insertions(+), 8 deletions(-)
+ .../mesalabs/unica/FloatingFeatureHooks.smali | 272 ++++++++++++++++++
+ 2 files changed, 324 insertions(+), 8 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemFloatingFeature.smali b/smali_classes5/com/samsung/android/feature/SemFloatingFeature.smali
@@ -147,10 +147,10 @@ index 8a5dc15b..a6ce5287 100644
      :goto_0
 diff --git a/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
 new file mode 100644
-index 00000000..0271bbc0
+index 00000000..fe431298
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali
-@@ -0,0 +1,298 @@
+@@ -0,0 +1,272 @@
 +.class public Lio/mesalabs/unica/FloatingFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "FloatingFeatureHooks.java"
@@ -264,53 +264,27 @@ index 00000000..0271bbc0
 +
 +    invoke-virtual {v1, v2, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v0, "SM-G78"
++    const-string v0, "SM-G781"
 +
 +    invoke-virtual {v5, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_2
++    if-eqz v0, :cond_0
 +
-+    const-string v0, "SM-G781B"
-+
-+    invoke-virtual {v5, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v1
-+
-+    if-eqz v1, :cond_0
++    const-string v0, "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_BRAND_NAME"
 +
 +    const-string v1, "Galaxy S20 FE 5G"
 +
-+    goto :goto_0
++    invoke-virtual {v3, v0, v1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v0, "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_FCC_ID"
++
++    const-string v1, "A3LSMG781B"
++
++    invoke-virtual {v3, v0, v1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    :cond_0
-+    const-string v1, "Galaxy S20 FE"
-+
-+    :goto_0
-+    const-string v2, "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_BRAND_NAME"
-+
-+    invoke-virtual {v3, v2, v1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-virtual {v5, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_1
-+
-+    const-string v0, "A3LSMG781B"
-+
-+    goto :goto_1
-+
-+    :cond_1
-+    const-string v0, "A3LSMG780G,9_A3LSMG780G1"
-+
-+    :goto_1
-+    const-string v1, "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_FCC_ID"
-+
-+    invoke-virtual {v3, v1, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    :cond_2
 +    return-void
 +.end method
 +

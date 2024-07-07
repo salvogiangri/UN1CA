@@ -1,4 +1,4 @@
-From 6e1b5b154a85abcdc185a3441105a8a42477e0b6 Mon Sep 17 00:00:00 2001
+From 4dce9f208c346db0e436de29c1d5b01b393c195b Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:50:22 +0200
 Subject: [PATCH] Introduce GamesPropsUtils
@@ -33,7 +33,7 @@ index 236e3ab4..e29afd3b 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..3364e5bc
+index 00000000..881884d2
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 @@ -0,0 +1,1005 @@
@@ -927,7 +927,7 @@ index 00000000..3364e5bc
 +    :cond_0
 +    const-string v0, "persist.sys.pixelprops.games"
 +
-+    const/4 v1, 0x0
++    const/4 v1, 0x1
 +
 +    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
