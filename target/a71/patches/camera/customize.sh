@@ -124,7 +124,6 @@ system/lib64/libDocShadowRemoval.arcsoft.so
 system/lib64/libDualCamBokehCapture.camera.samsung.so
 system/lib64/libFaceRecognition.arcsoft.so
 system/lib64/libFrucPSVTLib.so
-system/lib64/libHIDTSnapJNI.camera.samsung.so
 system/lib64/libImageSegmenter_v1.camera.samsung.so
 system/lib64/libLocalTM_pcc.camera.samsung.so
 system/lib64/libLttEngine.camera.samsung.so
