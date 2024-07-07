@@ -1,4 +1,4 @@
-From 328bdcdf0adab4b4df55458354333da1c0f993b2 Mon Sep 17 00:00:00 2001
+From d0c82cc099d9a3f5644b8498c0281a959c5cae60 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 16:47:17 +0200
 Subject: [PATCH] Replace source SPF with target values
@@ -6,14 +6,15 @@ Subject: [PATCH] Replace source SPF with target values
 ---
  .../server/wifi/SemFrameworkFacade.smali      |  10 +-
  .../server/wifi/SemWifiCoexManager.smali      | 529 +++++--------
- .../wifi/ap/SemSettingsSoftResetHandler.smali |  10 -
+ .../server/wifi/SemWifiManagerProxy.smali     |   2 +-
+ .../wifi/ap/SemSettingsSoftResetHandler.smali |  32 +-
  .../wifi/ap/SemSoftApConfiguration$13.smali   |  36 +
  .../wifi/ap/SemSoftApConfiguration$4.smali    |  38 +
  .../wifi/ap/SemSoftApConfiguration$9.smali    |  36 +
  .../wifi/ap/SemSoftApConfiguration.smali      | 720 ++++++++----------
  .../server/wifi/ap/SemSoftApManager$1.smali   | 275 +------
  .../server/wifi/ap/SemSoftApManager.smali     | 284 +------
- .../wifi/ap/SemWifiApBroadcastReceiver.smali  |  26 +-
+ .../wifi/ap/SemWifiApBroadcastReceiver.smali  |  94 +--
  .../server/wifi/ap/SemWifiApConfigStore.smali |  45 +-
  ...emWifiApPowerSaveImpl$SoftApCallback.smali | 180 +----
  .../wifi/ap/SemWifiApPowerSaveImpl.smali      |  84 +-
@@ -29,7 +30,7 @@ Subject: [PATCH] Replace source SPF with target values
  .../SemWifiApSmartGattServer.smali            |   8 -
  .../smarttethering/SemWifiApSmartUtil.smali   |  35 +-
  .../wifi/b2b/WifiB2bPolicyManager.smali       |  31 +-
- 25 files changed, 1121 insertions(+), 2253 deletions(-)
+ 26 files changed, 1127 insertions(+), 2339 deletions(-)
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$13.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$4.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$9.smali
@@ -1033,11 +1034,67 @@ index ac8c376..c75c8f3 100644
 -    return v0
 +    return v1
  .end method
+diff --git a/smali/com/samsung/android/server/wifi/SemWifiManagerProxy.smali b/smali/com/samsung/android/server/wifi/SemWifiManagerProxy.smali
+index af3182a..4175947 100644
+--- a/smali/com/samsung/android/server/wifi/SemWifiManagerProxy.smali
++++ b/smali/com/samsung/android/server/wifi/SemWifiManagerProxy.smali
+@@ -3933,7 +3933,7 @@
+ .method public isWifiApSmartPrioritySupported()Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
-index 2adba58..f49bef6 100644
+index 2adba58..bd41871 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
-@@ -226,16 +226,6 @@
+@@ -125,24 +125,6 @@
+ .method public resetHotspotSettings()V
+     .locals 5
+ 
+-    const-string v0, "disabling traffic priority"
+-
+-    const-string v1, "SemSettingsSoftResetHandler"
+-
+-    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->mContext:Landroid/content/Context;
+-
+-    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v0
+-
+-    const-string v2, "wifi_ap_smart_priority_enable"
+-
+-    const/4 v3, 0x0
+-
+-    invoke-static {v0, v2, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+-
+     sget-object v0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->CONFIGOPBRANDINGFORMOBILEAP:Ljava/lang/String;
+ 
+     const-string v2, "TMO"
+@@ -164,6 +146,8 @@
+     :cond_0
+     const-string v0, "disabling autohotspot"
+ 
++    const-string v1, "SemSettingsSoftResetHandler"
++
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->mContext:Landroid/content/Context;
+@@ -174,6 +158,8 @@
+ 
+     const-string v2, "wifi_ap_smart_tethering_settings"
+ 
++    const/4 v3, 0x0
++
+     invoke-static {v0, v2, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+ 
+     :cond_1
+@@ -226,16 +212,6 @@
  
      invoke-static {v0, v1, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
  
@@ -3287,7 +3344,7 @@ index ca64ead..e51ecbe 100644
      return-object p0
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
-index bf79396..f383682 100644
+index bf79396..1e35af2 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
 @@ -1300,28 +1300,6 @@
@@ -3319,7 +3376,82 @@ index bf79396..f383682 100644
      iget-object v11, v0, Lcom/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver;->mWifiApServiceImpl:Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;
  
      invoke-virtual {v11}, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->getSoftApConfiguration()Landroid/net/wifi/SoftApConfiguration;
-@@ -1895,12 +1873,10 @@
+@@ -1724,73 +1702,7 @@
+ 
+     move-result-object v5
+ 
+-    invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getSemWifiApTrafficPriority()Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;->getmIsPriorityFeatureEnableDuringSession()Z
+-
+-    move-result v12
+-
+-    if-eqz v12, :cond_1c
+-
+-    invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getSemWifiApTrafficPriority()Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;->getNRTTrafficEnable()Z
+-
+-    move-result v12
+-
+-    if-eqz v12, :cond_1b
+-
+-    invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getSemWifiApTrafficPriority()Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;
+-
+-    move-result-object v12
+-
+-    invoke-virtual {v12}, Lcom/samsung/android/server/wifi/ap/smartprio/SemWifiApTrafficPriority;->getRTTrafficEnable()Z
+-
+-    move-result v12
+-
+-    if-eqz v12, :cond_1a
+-
+-    const-string v12, "tp_rt"
+-
+-    goto :goto_11
+-
+-    :cond_1a
+-    const-string v12, "tp_nrt"
+-
+-    goto :goto_11
+-
+-    :cond_1b
+-    const-string v12, "tp_on_below_cutoff"
+-
+-    goto :goto_11
+-
+-    :cond_1c
+-    const-string v12, "tp_off"
+-
+-    :goto_11
+-    const-string v14, "handleWifiApState: "
+-
+-    invoke-virtual {v14, v12}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v14
+-
+-    invoke-static {v3, v14}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    const-string v12, "not_support"
+ 
+     new-instance v3, Ljava/lang/StringBuilder;
+ 
+@@ -1895,12 +1807,10 @@
  
      invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
