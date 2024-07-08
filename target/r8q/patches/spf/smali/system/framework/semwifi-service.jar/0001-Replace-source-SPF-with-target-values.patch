@@ -1,4 +1,4 @@
-From d0c82cc099d9a3f5644b8498c0281a959c5cae60 Mon Sep 17 00:00:00 2001
+From 6aab32db4d1f3fcaa320d863bf8a8e1478b326db Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 16:47:17 +0200
 Subject: [PATCH] Replace source SPF with target values
@@ -7,7 +7,7 @@ Subject: [PATCH] Replace source SPF with target values
  .../server/wifi/SemFrameworkFacade.smali      |  10 +-
  .../server/wifi/SemWifiCoexManager.smali      | 529 +++++--------
  .../server/wifi/SemWifiManagerProxy.smali     |   2 +-
- .../wifi/ap/SemSettingsSoftResetHandler.smali |  32 +-
+ .../wifi/ap/SemSettingsSoftResetHandler.smali |  28 +-
  .../wifi/ap/SemSoftApConfiguration$13.smali   |  36 +
  .../wifi/ap/SemSoftApConfiguration$4.smali    |  38 +
  .../wifi/ap/SemSoftApConfiguration$9.smali    |  36 +
@@ -30,7 +30,7 @@ Subject: [PATCH] Replace source SPF with target values
  .../SemWifiApSmartGattServer.smali            |   8 -
  .../smarttethering/SemWifiApSmartUtil.smali   |  35 +-
  .../wifi/b2b/WifiB2bPolicyManager.smali       |  31 +-
- 26 files changed, 1127 insertions(+), 2339 deletions(-)
+ 26 files changed, 1125 insertions(+), 2337 deletions(-)
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$13.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$4.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$9.smali
@@ -1048,17 +1048,18 @@ index af3182a..4175947 100644
      return p0
  .end method
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
-index 2adba58..bd41871 100644
+index 2adba58..48be871 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
-@@ -125,24 +125,6 @@
+@@ -125,28 +125,14 @@
  .method public resetHotspotSettings()V
      .locals 5
  
 -    const-string v0, "disabling traffic priority"
--
--    const-string v1, "SemSettingsSoftResetHandler"
--
++    sget-object v0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->CONFIGOPBRANDINGFORMOBILEAP:Ljava/lang/String;
+ 
+     const-string v1, "SemSettingsSoftResetHandler"
+ 
 -    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 -
 -    iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->mContext:Landroid/content/Context;
@@ -1068,32 +1069,19 @@ index 2adba58..bd41871 100644
 -    move-result-object v0
 -
 -    const-string v2, "wifi_ap_smart_priority_enable"
--
--    const/4 v3, 0x0
--
++    const-string v2, "TMO"
+ 
+     const/4 v3, 0x0
+ 
 -    invoke-static {v0, v2, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 -
-     sget-object v0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->CONFIGOPBRANDINGFORMOBILEAP:Ljava/lang/String;
+-    sget-object v0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->CONFIGOPBRANDINGFORMOBILEAP:Ljava/lang/String;
+-
+-    const-string v2, "TMO"
+-
+     invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-     const-string v2, "TMO"
-@@ -164,6 +146,8 @@
-     :cond_0
-     const-string v0, "disabling autohotspot"
- 
-+    const-string v1, "SemSettingsSoftResetHandler"
-+
-     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
-     iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler;->mContext:Landroid/content/Context;
-@@ -174,6 +158,8 @@
- 
-     const-string v2, "wifi_ap_smart_tethering_settings"
- 
-+    const/4 v3, 0x0
-+
-     invoke-static {v0, v2, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
- 
-     :cond_1
+     move-result v2
 @@ -226,16 +212,6 @@
  
      invoke-static {v0, v1, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
