@@ -95,8 +95,6 @@ case "$1" in
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
-        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/vendor" -type f -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/vendor..")"
         ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
