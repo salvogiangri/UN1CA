@@ -1,4 +1,4 @@
-From b28d90656596059db12cb1dab4568bdd42f786ef Mon Sep 17 00:00:00 2001
+From 0c44ab004c4d67a24d3d9425146a1913b9c93c21 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 16:51:46 +0200
 Subject: [PATCH] Replace source SPF with target values
@@ -9,14 +9,14 @@ Subject: [PATCH] Replace source SPF with target values
  .../ConnectionInfoAnalyzer.smali              | 2377 ++++++-----------
  .../mobileap/WifiApCloudBackupRestore.smali   |   89 -
  .../WifiApSmartSwitchBackupRestore.smali      |   52 +-
- .../mobileap/utils/WifiApFeatureUtils.smali   |   14 +-
- 6 files changed, 884 insertions(+), 1758 deletions(-)
+ .../mobileap/utils/WifiApFeatureUtils.smali   |   16 +-
+ 6 files changed, 885 insertions(+), 1759 deletions(-)
 
 diff --git a/smali/com/android/wifitrackerlib/WifiEntry.smali b/smali/com/android/wifitrackerlib/WifiEntry.smali
-index 328e315c..40c6a3d4 100644
+index 7a740b38..8f7c6e7f 100644
 --- a/smali/com/android/wifitrackerlib/WifiEntry.smali
 +++ b/smali/com/android/wifitrackerlib/WifiEntry.smali
-@@ -2793,79 +2793,19 @@
+@@ -2801,79 +2801,19 @@
  .end method
  
  .method public semIsWifi6ENetwork()Z
@@ -4546,7 +4546,7 @@ index 61634c80..4713d817 100644
      :try_end_6
      .catch Ljava/lang/Exception; {:try_start_6 .. :try_end_6} :catch_2
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
-index 4fb68093..93c1eaf0 100644
+index 4fb68093..6aa23e0f 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 @@ -87,20 +87,8 @@
@@ -4570,6 +4570,15 @@ index 4fb68093..93c1eaf0 100644
      return p0
  .end method
  
+@@ -466,7 +454,7 @@
+ 
+     invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isMobileDataUsageSupported(Landroid/content/Context;)Z
+ 
+-    move-result p0
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
 @@ -521,7 +509,7 @@
  .method public static isWifi6StandardSupported(Landroid/content/Context;)Z
      .locals 0
