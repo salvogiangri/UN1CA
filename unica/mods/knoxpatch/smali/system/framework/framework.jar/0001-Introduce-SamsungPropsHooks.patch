@@ -1,4 +1,4 @@
-From 63cd259058123752fada90037afc90c54638d0a3 Mon Sep 17 00:00:00 2001
+From be3b9d4c596ef4661e4e0a7e511944321837f482 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:46:34 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -6,8 +6,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
 ---
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 534 ++++++++++++++++++
- 3 files changed, 552 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 364 ++++++++++++++++++
+ 3 files changed, 382 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -74,25 +74,21 @@ index 25fa7c61..5ea40e7f 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..699c6907
+index 00000000..03dff2ff
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,534 @@
+@@ -0,0 +1,364 @@
 +.class public Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
 +
 +
 +# static fields
-+.field private static final blacklist AUTO_BLOCKER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.rampart"
-+
 +.field private static final blacklist DEBUG:Z = false
 +
 +.field private static final blacklist FM_RADIO_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.fm"
 +
 +.field private static final blacklist SAMSUNG_HEALTH_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.shealth"
-+
-+.field private static final blacklist SECURE_WIFI_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.fast"
 +
 +.field private static final blacklist SMART_SUGGESTIONS_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartsuggestions"
 +
@@ -102,54 +98,14 @@ index 00000000..699c6907
 +
 +.field private static volatile blacklist sPackageName:Ljava/lang/String;
 +
-+.field private static volatile blacklist sSpoofKeystore:Z
++.field private static volatile blacklist sSpoofKeystoreProp:Z
 +
 +.field private static volatile blacklist sSpoofKnox:Z
 +
-+.field private static volatile blacklist sSpoofProps:Z
-+
-+.field private static volatile blacklist sSpoofVendorDevice:Z
-+
-+.field private static final blacklist sTargetPackages:[Ljava/lang/String;
++.field private static volatile blacklist sSpoofVendorDeviceProp:Z
 +
 +
 +# direct methods
-+.method static constructor blacklist <clinit>()V
-+    .locals 3
-+
-+    const/4 v0, 0x4
-+
-+    new-array v0, v0, [Ljava/lang/String;
-+
-+    const/4 v1, 0x0
-+
-+    const-string v2, "com.samsung.android.rampart"
-+
-+    aput-object v2, v0, v1
-+
-+    const/4 v1, 0x1
-+
-+    const-string v2, "com.sec.android.app.shealth"
-+
-+    aput-object v2, v0, v1
-+
-+    const/4 v1, 0x2
-+
-+    const-string v2, "com.samsung.android.fast"
-+
-+    aput-object v2, v0, v1
-+
-+    const/4 v1, 0x3
-+
-+    const-string v2, "com.samsung.android.smartsuggestions"
-+
-+    aput-object v2, v0, v1
-+
-+    sput-object v0, Lio/mesalabs/unica/SamsungPropsHooks;->sTargetPackages:[Ljava/lang/String;
-+
-+    return-void
-+.end method
-+
 +.method private constructor blacklist <init>()V
 +    .locals 0
 +
@@ -186,25 +142,13 @@ index 00000000..699c6907
 +    :cond_0
 +    sput-object v1, Lio/mesalabs/unica/SamsungPropsHooks;->sPackageName:Ljava/lang/String;
 +
-+    sget-object v2, Lio/mesalabs/unica/SamsungPropsHooks;->sTargetPackages:[Ljava/lang/String;
-+
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
-+
-+    move-result-object v2
-+
-+    invoke-interface {v2, v1}, Ljava/util/List;->contains(Ljava/lang/Object;)Z
-+
-+    move-result v2
-+
-+    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofProps:Z
-+
 +    const-string v2, "com.sec.android.app.shealth"
 +
 +    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v2
 +
-+    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystore:Z
++    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
 +
 +    const-string v2, "com.samsung.android.smartsuggestions"
 +
@@ -212,7 +156,7 @@ index 00000000..699c6907
 +
 +    move-result v2
 +
-+    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDevice:Z
++    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDeviceProp:Z
 +
 +    const/4 v2, 0x0
 +
@@ -366,24 +310,17 @@ index 00000000..699c6907
 +.method public static blacklist onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +    .locals 3
 +
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofProps:Z
-+
-+    if-eqz v0, :cond_5
-+
 +    invoke-virtual {p0}, Ljava/lang/String;->hashCode()I
 +
-+    invoke-virtual {p0}, Ljava/lang/String;->hashCode()I
++    const-string v0, "ro.product.vendor.device"
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
-+    const/4 v1, -0x1
++    if-nez v0, :cond_1
 +
-+    sparse-switch v0, :sswitch_data_0
-+
-+    goto :goto_0
-+
-+    :sswitch_0
-+    const-string v0, "ro.boot.warranty_bit"
++    const-string v0, "ro.security.keystore.keytype"
 +
 +    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -394,116 +331,29 @@ index 00000000..699c6907
 +    goto :goto_0
 +
 +    :cond_0
-+    const/4 v1, 0x4
++    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
 +
-+    goto :goto_0
-+
-+    :sswitch_1
-+    const-string v0, "ro.boot.verifiedbootstate"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_1
-+
-+    goto :goto_0
-+
-+    :cond_1
-+    const/4 v1, 0x3
-+
-+    goto :goto_0
-+
-+    :sswitch_2
-+    const-string v0, "ro.security.keystore.keytype"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_2
-+
-+    goto :goto_0
-+
-+    :cond_2
-+    const/4 v1, 0x2
-+
-+    goto :goto_0
-+
-+    :sswitch_3
-+    const-string v0, "ro.boot.flash.locked"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_3
-+
-+    goto :goto_0
-+
-+    :cond_3
-+    const/4 v1, 0x1
-+
-+    goto :goto_0
-+
-+    :sswitch_4
-+    const-string v0, "ro.product.vendor.device"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_4
-+
-+    goto :goto_0
-+
-+    :cond_4
-+    const/4 v1, 0x0
-+
-+    :goto_0
-+    packed-switch v1, :pswitch_data_0
-+
-+    goto :goto_1
-+
-+    :pswitch_0
-+    const-string v0, "0"
-+
-+    goto :goto_2
-+
-+    :pswitch_1
-+    const-string v0, "green"
-+
-+    goto :goto_2
-+
-+    :pswitch_2
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystore:Z
-+
-+    if-eqz v0, :cond_5
++    if-eqz v0, :cond_2
 +
 +    const-string v0, ""
 +
-+    goto :goto_2
++    goto :goto_1
 +
-+    :pswitch_3
-+    const-string v0, "1"
++    :cond_1
++    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDeviceProp:Z
 +
-+    goto :goto_2
-+
-+    :pswitch_4
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDevice:Z
-+
-+    if-eqz v0, :cond_5
++    if-eqz v0, :cond_2
 +
 +    const-string v0, "dm1q"
 +
-+    goto :goto_2
++    goto :goto_1
 +
-+    :cond_5
-+    :goto_1
++    :cond_2
++    :goto_0
 +    const/4 v0, 0x0
 +
-+    :goto_2
-+    if-eqz v0, :cond_6
++    :goto_1
++    if-eqz v0, :cond_3
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
@@ -537,28 +387,8 @@ index 00000000..699c6907
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/SamsungPropsHooks;->dlog(Ljava/lang/String;)V
 +
-+    :cond_6
++    :cond_3
 +    return-object v0
-+
-+    nop
-+
-+    :sswitch_data_0
-+    .sparse-switch
-+        -0x4c6e0df4 -> :sswitch_4
-+        -0x21fa12d -> :sswitch_3
-+        0xc90c28a -> :sswitch_2
-+        0x17db1dec -> :sswitch_1
-+        0x300d1355 -> :sswitch_0
-+    .end sparse-switch
-+
-+    :pswitch_data_0
-+    .packed-switch 0x0
-+        :pswitch_4
-+        :pswitch_3
-+        :pswitch_2
-+        :pswitch_1
-+        :pswitch_0
-+    .end packed-switch
 +.end method
 +
 +.method private static blacklist setBuildField(Ljava/lang/String;Ljava/lang/String;)V

@@ -26,6 +26,7 @@ CODENAME="$(GET_PROP "ro.product.system.name" "$WORK_DIR/system/system/build.pro
 {
     echo -e "\n"
     echo    "on property:service.bootanim.exit=1"
+    echo    "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.flash.locked 1"
     echo    "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green"
     echo    "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.warranty_bit 0"
     echo    "    exec u:r:init:s0 root root -- /system/bin/rezetprop -d ro.boot.wb.hs"
