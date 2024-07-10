@@ -1,0 +1,9 @@
+on property:persist.sys.unica.bootsound=true && property:service.media.powersnd=1
+    start powersound
+
+service powersound /system/bin/samsungpowersoundplay
+    class main
+    user audioserver
+    group system
+    disabled
+    oneshot
