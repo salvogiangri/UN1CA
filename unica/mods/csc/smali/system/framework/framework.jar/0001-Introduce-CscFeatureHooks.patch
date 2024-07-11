@@ -1,12 +1,12 @@
-From afd2323a8ecaa1dc20aa7f8eddc27caf19d09ccd Mon Sep 17 00:00:00 2001
+From 950d0006b55b09f867cc0cec894d5578320b828a Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
  .../android/feature/SemCscFeature.smali       |  98 ++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 339 ++++++++++++++++++
- 2 files changed, 425 insertions(+), 12 deletions(-)
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 345 ++++++++++++++++++
+ 2 files changed, 431 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..f866538c
+index 00000000..9c3c8c6c
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,339 @@
+@@ -0,0 +1,345 @@
 +.class public Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -324,6 +324,12 @@ index 00000000..f866538c
 +    const-string v3, "CscFeature_Setting_SupportMenuSmartTutor"
 +
 +    sget-object v4, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v3, "CscFeature_SystemUI_SupportPowerOffLock"
++
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
 +    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
