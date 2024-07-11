@@ -42,8 +42,9 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - Samsung DeX support
 - Camera privacy toggle support
 - Debloated from useless system services/additional apps
-- Play Integrity Fix included **(root required)**
+- Play Integrity Fix included
 - [BluetoothLibraryPatcher](https://github.com/3arthur6/BluetoothLibraryPatcher) included
+- [FrameworkPatch](https://github.com/chiteroman/FrameworkPatch) implemented in system frameworks
 - [KnoxPatch](https://github.com/salvogiangri/KnoxPatch) implemented in system frameworks
 - China Device Care app included
 - [Patched GoodLock](https://github.com/corsicanu/goodlock_dump) app included
