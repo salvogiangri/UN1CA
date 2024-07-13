@@ -1,0 +1,678 @@
+From bd51ce0a92bf8830de0f636cef0a40cb8bfde87c Mon Sep 17 00:00:00 2001
+From: David Arsene <80218600+DavidArsene@users.noreply.github.com>
+Date: Sat, 13 Jul 2024 17:57:51 +0200
+Subject: [PATCH] Allow all apps in Dual Messenger
+
+---
+ .../da/daagent/activity/DualAppActivity.smali |  66 +++---
+ .../da/daagent/provider/DualAppProvider.smali |  29 +--
+ .../da/daagent/provider/WhiteListApps.smali   | 190 +++++-------------
+ .../android/da/daagent/utils/DAUtility.smali  |  58 +-----
+ 4 files changed, 112 insertions(+), 231 deletions(-)
+
+diff --git a/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali b/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
+index cc307b4..4e83ce1 100644
+--- a/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
++++ b/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
+@@ -196,6 +196,15 @@
+ 
+     iput-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mAvailableAppOnItemClickListener:Landroid/widget/AdapterView$OnItemClickListener;
+ 
++    invoke-static {}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->refreshWhiteList()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    invoke-static {p0}, Lcom/samsung/android/da/daagent/utils/DAUtility;->updateWhitelistAppsInSystemServer(Landroid/content/Context;)V
++
++    :cond_0
+     return-void
+ .end method
+ 
+@@ -1970,6 +1979,17 @@
+ 
+     invoke-static {v1, v0}, Lcom/samsung/android/da/daagent/fwwrapper/LogWrapper;->d(Ljava/lang/String;Ljava/lang/String;)V
+ 
++    invoke-static {}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->refreshWhiteList()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_5
++
++    iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mContext:Lcom/samsung/android/da/daagent/activity/DualAppActivity;
++
++    invoke-static {v0}, Lcom/samsung/android/da/daagent/utils/DAUtility;->updateWhitelistAppsInSystemServer(Landroid/content/Context;)V
++
++    :cond_5
+     new-instance v0, Ljava/util/ArrayList;
+ 
+     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+@@ -1988,7 +2008,7 @@
+ 
+     const-string v4, "Can not add"
+ 
+-    if-nez v2, :cond_6
++    if-nez v2, :cond_7
+ 
+     invoke-static {}, Lcom/samsung/android/da/daagent/utils/DAUtility;->getDualAppProfileId()I
+ 
+@@ -2003,7 +2023,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_6
++    if-eqz v5, :cond_7
+ 
+     invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+ 
+@@ -2023,9 +2043,9 @@
+ 
+     move-result-object v7
+ 
+-    if-eqz v6, :cond_5
++    if-eqz v6, :cond_6
+ 
+-    if-eqz v7, :cond_5
++    if-eqz v7, :cond_6
+ 
+     new-instance v8, Lcom/samsung/android/da/daagent/activity/DualAppActivity$DualAppList;
+ 
+@@ -2037,7 +2057,7 @@
+ 
+     goto :goto_4
+ 
+-    :cond_5
++    :cond_6
+     iget-object v6, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mDbHelper:Lcom/samsung/android/da/daagent/provider/DualAppDBHelper;
+ 
+     invoke-virtual {v6, v5}, Lcom/samsung/android/da/daagent/provider/DualAppDBHelper;->deleteDaApp(Ljava/lang/String;)V
+@@ -2072,7 +2092,7 @@
+ 
+     goto :goto_4
+ 
+-    :cond_6
++    :cond_7
+     iput-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mInstalledAppList:Ljava/util/ArrayList;
+ 
+     invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+@@ -2083,7 +2103,7 @@
+ 
+     const/16 v2, 0x8
+ 
+-    if-eqz v0, :cond_7
++    if-eqz v0, :cond_8
+ 
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mInstalledAppLayout:Landroid/widget/LinearLayout;
+ 
+@@ -2091,7 +2111,7 @@
+ 
+     goto :goto_5
+ 
+-    :cond_7
++    :cond_8
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mInstalledAppLayout:Landroid/widget/LinearLayout;
+ 
+     invoke-virtual {v0, v1}, Landroid/widget/LinearLayout;->setVisibility(I)V
+@@ -2107,25 +2127,25 @@
+ 
+     move-result-object v5
+ 
+-    if-eqz v5, :cond_a
++    if-eqz v5, :cond_b
+ 
+     invoke-virtual {v5}, Ljava/util/ArrayList;->isEmpty()Z
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_a
++    if-nez v6, :cond_b
+ 
+     invoke-virtual {v5}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+ 
+     move-result-object v5
+ 
+-    :cond_8
++    :cond_9
+     :goto_6
+     invoke-interface {v5}, Ljava/util/Iterator;->hasNext()Z
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_a
++    if-eqz v6, :cond_b
+ 
+     invoke-interface {v5}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+ 
+@@ -2139,7 +2159,7 @@
+ 
+     move-result v7
+ 
+-    if-nez v7, :cond_8
++    if-nez v7, :cond_9
+ 
+     iget-object v7, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mContext:Lcom/samsung/android/da/daagent/activity/DualAppActivity;
+ 
+@@ -2157,9 +2177,9 @@
+ 
+     move-result-object v8
+ 
+-    if-eqz v7, :cond_9
++    if-eqz v7, :cond_a
+ 
+-    if-eqz v8, :cond_9
++    if-eqz v8, :cond_a
+ 
+     new-instance v9, Lcom/samsung/android/da/daagent/activity/DualAppActivity$DualAppList;
+ 
+@@ -2171,7 +2191,7 @@
+ 
+     goto :goto_6
+ 
+-    :cond_9
++    :cond_a
+     new-instance v7, Ljava/lang/StringBuilder;
+ 
+     invoke-direct {v7, v4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+@@ -2190,14 +2210,14 @@
+ 
+     goto :goto_6
+ 
+-    :cond_a
++    :cond_b
+     iput-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mAvailableAppList:Ljava/util/ArrayList;
+ 
+     invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_b
++    if-eqz v0, :cond_c
+ 
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mAvailableAppLayout:Landroid/widget/LinearLayout;
+ 
+@@ -2205,7 +2225,7 @@
+ 
+     goto :goto_7
+ 
+-    :cond_b
++    :cond_c
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mAvailableAppLayout:Landroid/widget/LinearLayout;
+ 
+     invoke-virtual {v0, v1}, Landroid/widget/LinearLayout;->setVisibility(I)V
+@@ -2259,19 +2279,19 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_c
++    if-nez v0, :cond_d
+ 
+     move v0, v11
+ 
+     goto :goto_8
+ 
+-    :cond_c
++    :cond_d
+     move v0, v1
+ 
+     :goto_8
+     iput-boolean v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mState:Z
+ 
+-    if-eqz v0, :cond_d
++    if-eqz v0, :cond_e
+ 
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mContactFilterBtn:Landroidx/appcompat/widget/SwitchCompat;
+ 
+@@ -2283,7 +2303,7 @@
+ 
+     goto :goto_9
+ 
+-    :cond_d
++    :cond_e
+     iget-object v0, p0, Lcom/samsung/android/da/daagent/activity/DualAppActivity;->mContactFilterBtn:Landroidx/appcompat/widget/SwitchCompat;
+ 
+     invoke-virtual {v0, v1}, Landroidx/appcompat/widget/SwitchCompat;->setChecked(Z)V
+diff --git a/smali/com/samsung/android/da/daagent/provider/DualAppProvider.smali b/smali/com/samsung/android/da/daagent/provider/DualAppProvider.smali
+index 6f13d0b..90c597e 100644
+--- a/smali/com/samsung/android/da/daagent/provider/DualAppProvider.smali
++++ b/smali/com/samsung/android/da/daagent/provider/DualAppProvider.smali
+@@ -489,7 +489,7 @@
+ 
+     const/16 p4, 0x11
+ 
+-    if-ne p2, p3, :cond_e
++    if-ne p2, p3, :cond_d
+ 
+     new-instance p0, Landroid/database/MatrixCursor;
+ 
+@@ -497,19 +497,10 @@
+ 
+     sget-object p1, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+ 
+-    invoke-static {}, Lcom/samsung/android/da/daagent/utils/DAUtility;->isChinaModel()Z
+-
+-    move-result p2
+-
+-    if-eqz p2, :cond_c
+-
+-    sget-object p1, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES_FOR_CHINA:[Ljava/lang/String;
+-
+-    :cond_c
+     array-length p2, p1
+ 
+     :goto_5
+-    if-ge v0, p2, :cond_d
++    if-ge v0, p2, :cond_c
+ 
+     aget-object p3, p1, v0
+ 
+@@ -523,13 +514,13 @@
+ 
+     goto :goto_5
+ 
+-    :cond_d
++    :cond_c
+     return-object p0
+ 
+-    :cond_e
++    :cond_d
+     const/4 p3, 0x4
+ 
+-    if-ne p2, p3, :cond_f
++    if-ne p2, p3, :cond_e
+ 
+     invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
+ 
+@@ -557,10 +548,10 @@
+ 
+     return-object p0
+ 
+-    :cond_f
++    :cond_e
+     const/4 p0, 0x5
+ 
+-    if-ne p2, p0, :cond_11
++    if-ne p2, p0, :cond_10
+ 
+     invoke-static {}, Lcom/samsung/android/da/daagent/fwwrapper/UtilsWrapper;->isChinaModel()Z
+ 
+@@ -573,7 +564,7 @@
+     :goto_6
+     const/16 p2, 0x19
+ 
+-    if-ge v0, p2, :cond_10
++    if-ge v0, p2, :cond_f
+ 
+     aget-object p2, p1, v0
+ 
+@@ -587,10 +578,10 @@
+ 
+     goto :goto_6
+ 
+-    :cond_10
++    :cond_f
+     return-object p0
+ 
+-    :cond_11
++    :cond_10
+     return-object p5
+ .end method
+ 
+diff --git a/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali b/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali
+index deffa7c..ff8fe78 100644
+--- a/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali
++++ b/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali
+@@ -4,192 +4,112 @@
+ 
+ 
+ # static fields
+-.field public static final CHINA_SALES_CODES:[Ljava/lang/String;
++.field public static DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+ 
+-.field public static final DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+-
+-.field public static final DUAL_APP_WHITELIST_PACKAGES_FOR_CHINA:[Ljava/lang/String;
++.field private static sAppsListCount:I
+ 
+ 
+ # direct methods
+ .method static constructor <clinit>()V
+-    .locals 22
+-
+-    const-string v0, "Y29tLmZhY2Vib29rLmthdGFuYQ=="
+-
+-    invoke-static {v0}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v1
+-
+-    const-string v0, "Y29tLndoYXRzYXBw"
+-
+-    invoke-static {v0}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v2
+-
+-    const-string v0, "Y29tLmZhY2Vib29rLm9yY2E="
+-
+-    invoke-static {v0}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    const-string v0, "Y29tLnRlbmNlbnQubW9iaWxlcXE="
+-
+-    invoke-static {v0}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    move-object v4, v0
+-
+-    const-string v5, "Y29tLnRlbmNlbnQubW9iaWxlcXFp"
+-
+-    invoke-static {v5}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v5
+-
+-    const-string v6, "Y29tLnRlbmNlbnQubW0="
+-
+-    invoke-static {v6}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v7
+-
+-    move-object v6, v7
+-
+-    const-string v8, "Y29tLnNreXBlLnJhaWRlcg=="
+-
+-    invoke-static {v8}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v8
+-
+-    const-string v9, "Y29tLnZpYmVyLnZvaXA="
+-
+-    invoke-static {v9}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    .locals 0
+ 
+-    move-result-object v9
++    invoke-static {}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->refreshWhiteList()Z
+ 
+-    const-string v10, "anAubmF2ZXIubGluZS5hbmRyb2lk"
+-
+-    invoke-static {v10}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v10
+-
+-    const-string v11, "Y29tLmJibQ=="
+-
+-    invoke-static {v11}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v11
+-
+-    const-string v12, "b3JnLnRlbGVncmFtLm1lc3Nlbmdlcg=="
+-
+-    invoke-static {v12}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v12
+-
+-    const-string v13, "Y29tLmtha2FvLnRhbGs="
+-
+-    invoke-static {v13}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v13
+-
+-    const-string v14, "Y29tLmJzYi5oaWtl"
+-
+-    invoke-static {v14}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    return-void
++.end method
+ 
+-    move-result-object v14
++.method public static refreshWhiteList()Z
++    .locals 5
+ 
+-    const-string v15, "Y29tLmljcS5tb2JpbGUuY2xpZW50"
++    new-instance v0, Ljava/util/ArrayList;
+ 
+-    invoke-static {v15}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+ 
+-    move-result-object v15
++    new-instance v1, Landroid/content/Intent;
+ 
+-    const-string v16, "Y29tLnlhaG9vLm1vYmlsZS5jbGllbnQuYW5kcm9pZC5pbQ=="
++    const-string v2, "android.intent.action.MAIN"
+ 
+-    invoke-static/range {v16 .. v16}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    const/4 v3, 0x0
+ 
+-    move-result-object v16
++    invoke-direct {v1, v2, v3}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+ 
+-    const-string v17, "Y29tLnppbmcuemFsbw=="
++    const-string v2, "android.intent.category.LAUNCHER"
+ 
+-    invoke-static/range {v17 .. v17}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-virtual {v1, v2}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
+ 
+-    move-result-object v17
++    invoke-static {}, Lcom/samsung/android/da/daagent/DualAppApplication;->getDualAppContext()Lcom/samsung/android/da/daagent/DualAppApplication;
+ 
+-    const-string v18, "Y29tLnNuYXBjaGF0LmFuZHJvaWQ="
++    move-result-object v2
+ 
+-    invoke-static/range {v18 .. v18}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-virtual {v2}, Lcom/samsung/android/da/daagent/DualAppApplication;->getPackageManager()Landroid/content/pm/PackageManager;
+ 
+-    move-result-object v18
++    move-result-object v2
+ 
+-    const-string v19, "Y29tLnNpbmEud2VpYm8="
++    const/4 v3, 0x0
+ 
+-    move-object/from16 v20, v0
++    invoke-virtual {v2, v1, v3}, Landroid/content/pm/PackageManager;->queryIntentActivities(Landroid/content/Intent;I)Ljava/util/List;
+ 
+-    invoke-static/range {v19 .. v19}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    move-result-object v1
+ 
+-    move-result-object v0
++    invoke-interface {v1}, Ljava/util/List;->size()I
+ 
+-    move-object/from16 v21, v7
++    move-result v2
+ 
+-    move-object v7, v0
++    sget v4, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->sAppsListCount:I
+ 
+-    const-string v19, "a2lrLmFuZHJvaWQ="
++    if-ne v2, v4, :cond_0
+ 
+-    invoke-static/range {v19 .. v19}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->decodeString(Ljava/lang/String;)Ljava/lang/String;
++    return v3
+ 
+-    move-result-object v19
++    :cond_0
++    sput v2, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->sAppsListCount:I
+ 
+-    filled-new-array/range {v1 .. v19}, [Ljava/lang/String;
++    invoke-interface {v1}, Ljava/util/List;->iterator()Ljava/util/Iterator;
+ 
+     move-result-object v1
+ 
+-    sput-object v1, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+-
+-    move-object/from16 v1, v20
+-
+-    move-object/from16 v2, v21
++    :cond_1
++    :goto_0
++    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
+ 
+-    filled-new-array {v2, v1, v0}, [Ljava/lang/String;
++    move-result v2
+ 
+-    move-result-object v0
++    if-eqz v2, :cond_2
+ 
+-    sput-object v0, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES_FOR_CHINA:[Ljava/lang/String;
++    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+ 
+-    const-string v1, "CHN"
++    move-result-object v2
+ 
+-    const-string v2, "CHM"
++    check-cast v2, Landroid/content/pm/ResolveInfo;
+ 
+-    const-string v3, "CBK"
++    iget-object v2, v2, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+ 
+-    const-string v4, "CTC"
++    iget-object v2, v2, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+ 
+-    const-string v5, "CHU"
++    iget v4, v2, Landroid/content/pm/ApplicationInfo;->flags:I
+ 
+-    const-string v6, "CHC"
++    and-int/lit16 v4, v4, 0x81
+ 
+-    filled-new-array/range {v1 .. v6}, [Ljava/lang/String;
++    if-nez v4, :cond_1
+ 
+-    move-result-object v0
++    iget-object v2, v2, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
+ 
+-    sput-object v0, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->CHINA_SALES_CODES:[Ljava/lang/String;
++    invoke-interface {v0, v2}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+ 
+-    return-void
+-.end method
+-
+-.method private static decodeString(Ljava/lang/String;)Ljava/lang/String;
+-    .locals 2
++    goto :goto_0
+ 
+-    const/4 v0, 0x0
++    :cond_2
++    new-array v1, v3, [Ljava/lang/String;
+ 
+-    invoke-static {p0, v0}, Landroid/util/Base64;->decode(Ljava/lang/String;I)[B
++    invoke-interface {v0, v1}, Ljava/util/List;->toArray([Ljava/lang/Object;)[Ljava/lang/Object;
+ 
+-    move-result-object p0
++    move-result-object v0
+ 
+-    new-instance v0, Ljava/lang/String;
++    check-cast v0, [Ljava/lang/String;
+ 
+-    sget-object v1, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
++    sput-object v0, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+ 
+-    invoke-direct {v0, p0, v1}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
++    const/4 v0, 0x1
+ 
+-    return-object v0
++    return v0
+ .end method
+diff --git a/smali/com/samsung/android/da/daagent/utils/DAUtility.smali b/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
+index 7af8c5e..7e423cb 100644
+--- a/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
++++ b/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
+@@ -707,47 +707,6 @@
+     return-object p0
+ .end method
+ 
+-.method public static isChinaModel()Z
+-    .locals 6
+-
+-    sget-object v0, Lcom/samsung/android/da/daagent/utils/DAUtility;->mSalesCode:Ljava/lang/String;
+-
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_1
+-
+-    sget-object v0, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->CHINA_SALES_CODES:[Ljava/lang/String;
+-
+-    array-length v2, v0
+-
+-    move v3, v1
+-
+-    :goto_0
+-    if-ge v3, v2, :cond_1
+-
+-    aget-object v4, v0, v3
+-
+-    sget-object v5, Lcom/samsung/android/da/daagent/utils/DAUtility;->mSalesCode:Ljava/lang/String;
+-
+-    invoke-virtual {v4, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v4
+-
+-    if-eqz v4, :cond_0
+-
+-    const/4 v0, 0x1
+-
+-    return v0
+-
+-    :cond_0
+-    add-int/lit8 v3, v3, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_1
+-    return v1
+-.end method
+-
+ .method public static isExistDualAppProfile()Z
+     .locals 1
+ 
+@@ -1465,15 +1424,6 @@
+ 
+     sget-object v2, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
+ 
+-    invoke-static {}, Lcom/samsung/android/da/daagent/utils/DAUtility;->isChinaModel()Z
+-
+-    move-result v3
+-
+-    if-eqz v3, :cond_0
+-
+-    sget-object v2, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES_FOR_CHINA:[Ljava/lang/String;
+-
+-    :cond_0
+     array-length v3, v2
+ 
+     const/4 v4, 0x0
+@@ -1483,7 +1433,7 @@
+     :goto_0
+     const-string v6, "DA_DAUtility"
+ 
+-    if-ge v5, v3, :cond_1
++    if-ge v5, v3, :cond_0
+ 
+     aget-object v7, v2, v5
+ 
+@@ -1516,7 +1466,7 @@
+ 
+     goto :goto_0
+ 
+-    :cond_1
++    :cond_0
+     const-string v2, "command"
+ 
+     const-string v3, "updateWhitelistPkgs"
+@@ -1553,7 +1503,7 @@
+ 
+     move-result-object p0
+ 
+-    if-eqz p0, :cond_2
++    if-eqz p0, :cond_1
+ 
+     const-string v0, "result_code"
+ 
+@@ -1587,6 +1537,6 @@
+ 
+     invoke-static {v6, p0}, Lcom/samsung/android/da/daagent/fwwrapper/LogWrapper;->d(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    :cond_2
++    :cond_1
+     return-void
+ .end method
+-- 
+2.45.2
+
