@@ -1,0 +1,76 @@
+From 1bdd082c1444d4ac295849334da3abdb6fc0c370 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 15 Jul 2024 18:30:57 +0200
+Subject: [PATCH] Allow disable screenshot detection
+
+---
+ .../server/wm/WindowManagerService.smali      | 31 ++++++++++++++++---
+ 1 file changed, 27 insertions(+), 4 deletions(-)
+
+diff --git a/smali_classes3/com/android/server/wm/WindowManagerService.smali b/smali_classes3/com/android/server/wm/WindowManagerService.smali
+index a950097b..f042accf 100644
+--- a/smali_classes3/com/android/server/wm/WindowManagerService.smali
++++ b/smali_classes3/com/android/server/wm/WindowManagerService.smali
+@@ -19658,8 +19658,31 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_1
++    if-eqz v0, :cond_2
++
++    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "unica_ss_detection"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
+ 
++    if-eqz v0, :cond_0
++
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++
++    :cond_0
+     iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
+ 
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
+@@ -19673,7 +19696,7 @@
+ 
+     move-result-object p0
+ 
+-    if-nez p0, :cond_0
++    if-nez p0, :cond_1
+ 
+     new-instance p0, Ljava/util/ArrayList;
+ 
+@@ -19687,7 +19710,7 @@
+ 
+     return-object p0
+ 
+-    :cond_0
++    :cond_1
+     :try_start_1
+     new-instance p1, Landroid/util/ArraySet;
+ 
+@@ -19725,7 +19748,7 @@
+ 
+     throw p0
+ 
+-    :cond_1
++    :cond_2
+     new-instance p0, Ljava/lang/SecurityException;
+ 
+     const-string p1, "Requires STATUS_BAR_SERVICE permission"
+-- 
+2.45.2
+
