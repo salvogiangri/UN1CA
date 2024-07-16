@@ -1,4 +1,4 @@
-From 7f4dcf06fea80055aafa6299f086c269515a0e35 Mon Sep 17 00:00:00 2001
+From ead9aa39afd84dedccbe2500739a734e43f8d2d9 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:46:34 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -7,8 +7,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  .../app/ApplicationPackageManager.smali       |   7 +
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 551 ++++++++++++++++++
- 4 files changed, 576 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 557 ++++++++++++++++++
+ 4 files changed, 582 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
@@ -100,10 +100,10 @@ index 25fa7c61..5ea40e7f 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..e906ccfe
+index 00000000..1599a32c
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,551 @@
+@@ -0,0 +1,557 @@
 +.class public Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -141,7 +141,7 @@ index 00000000..e906ccfe
 +.method static constructor blacklist <clinit>()V
 +    .locals 3
 +
-+    const/4 v0, 0x5
++    const/4 v0, 0x6
 +
 +    new-array v0, v0, [Ljava/lang/String;
 +
@@ -159,17 +159,23 @@ index 00000000..e906ccfe
 +
 +    const/4 v1, 0x2
 +
-+    const-string v2, "com.google.android.apps.photos.PIXEL_2016_PRELOAD"
++    const-string v2, "com.google.android.apps.photos.PIXEL_PRELOAD"
 +
 +    aput-object v2, v0, v1
 +
 +    const/4 v1, 0x3
 +
-+    const-string v2, "com.google.android.apps.photos.PIXEL_PRELOAD"
++    const-string v2, "com.google.android.feature.GOOGLE_BUILD"
 +
 +    aput-object v2, v0, v1
 +
 +    const/4 v1, 0x4
++
++    const-string v2, "com.google.android.feature.GOOGLE_EXPERIENCE"
++
++    aput-object v2, v0, v1
++
++    const/4 v1, 0x5
 +
 +    const-string v2, "com.google.android.feature.PIXEL_EXPERIENCE"
 +
