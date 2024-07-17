@@ -36,17 +36,17 @@ fi
 case "$1" in
     "unica/patches/deknox")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/ZTO/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
         ;;
     "unica/patches/mass_cam")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/ZTO/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
         ;;
     "unica/patches/nfc")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/ZTO/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
         ;;
     "unica/patches/product_feature/fingerprint/optical_fod")
@@ -63,7 +63,7 @@ case "$1" in
         ;;
     "unica/patches/vndk/30")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/ZTO/352828291234563"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v30.apex"
         ;;
     "unica/patches/vndk/31")
@@ -81,17 +81,10 @@ case "$1" in
         FW="SM-S911B/EUX/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
         ;;
-    "unica/mods/china")
-        MODULE="$1"
-        FW="SM-C5560/CHC/R8YX406AKSP"
-        BLOBS="$(find "$SRC_DIR/unica/mods/china/system" -type f | sed "s.$SRC_DIR/unica/mods/china.system.")"
-        ;;
     "target/a71/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A525F/SER/352938771234569"
-        BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/product" -type f \
-            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs/product..")"
-        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
+        BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
