@@ -39,6 +39,7 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - Picture remaster support
 - Object, shadow and reflection eraser support
 - Image clipper support
+- Multi user support
 - Samsung DeX support
 - Camera privacy toggle support
 - Debloated from useless system services/additional apps
@@ -48,8 +49,9 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - [KnoxPatch](https://github.com/salvogiangri/KnoxPatch) implemented in system frameworks
 - China Device Care app included
 - [Patched GoodLock](https://github.com/corsicanu/goodlock_dump) app included
-- Extra mods (Enable live blur, FOD animation, Force max refresh rate, Allow secure screenshot, FPS Unlock, Allow app downgrade)
-- Extra CSC features (Call recording, Hiya, Network speed in status bar, Quick switch to Secure Folder)
+- Unlimited backup storage on Google Photos
+- Extra mods (Live blur toggle, FOD animation style, secure screenshot toggle, app downgrade toggle, Dual Messenger on all apps)
+- Extra CSC features (Call recording, Hiya, Network speed in status bar, AltZLife)
 
 # Licensing
 This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE). External dependencies might be distributed under a different license, such as:
