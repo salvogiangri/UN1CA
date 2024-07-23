@@ -1,12 +1,12 @@
-From 4dce9f208c346db0e436de29c1d5b01b393c195b Mon Sep 17 00:00:00 2001
+From 525b6595dd4fe5e78c80db026e27b8036132557a Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:50:22 +0200
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
  smali/android/app/Instrumentation.smali       |    4 +
- .../io/mesalabs/unica/GamesPropsUtils.smali   | 1005 +++++++++++++++++
- 2 files changed, 1009 insertions(+)
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 1047 +++++++++++++++++
+ 2 files changed, 1051 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -33,10 +33,10 @@ index 236e3ab4..e29afd3b 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..881884d2
+index 00000000..6326a546
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
-@@ -0,0 +1,1005 @@
+@@ -0,0 +1,1047 @@
 +.class public Lio/mesalabs/unica/GamesPropsUtils;
 +.super Ljava/lang/Object;
 +.source "GamesPropsUtils.java"
@@ -75,7 +75,7 @@ index 00000000..881884d2
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 13
++    .locals 12
 +
 +    new-instance v0, Ljava/util/HashMap;
 +
@@ -239,59 +239,23 @@ index 00000000..881884d2
 +
 +    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const/16 v5, 0xa
-+
-+    new-array v5, v5, [Ljava/lang/String;
++    new-array v5, v4, [Ljava/lang/String;
 +
 +    const-string v9, "com.netease.lztgglobal"
 +
 +    aput-object v9, v5, v6
 +
-+    const-string v9, "com.pubg.imobile"
++    const-string v9, "com.riotgames.league.wildrift"
 +
 +    aput-object v9, v5, v2
 +
-+    const-string v9, "com.pubg.krmobile"
++    const-string v9, "com.riotgames.league.wildrifttw"
 +
 +    aput-object v9, v5, v8
 +
-+    const-string v9, "com.rekoo.pubgm"
-+
-+    aput-object v9, v5, v3
-+
-+    const-string v9, "com.riotgames.league.wildrift"
-+
-+    aput-object v9, v5, v4
-+
-+    const-string v9, "com.riotgames.league.wildrifttw"
-+
-+    const/4 v10, 0x5
-+
-+    aput-object v9, v5, v10
-+
 +    const-string v9, "com.riotgames.league.wildriftvn"
 +
-+    const/4 v11, 0x6
-+
-+    aput-object v9, v5, v11
-+
-+    const/4 v9, 0x7
-+
-+    const-string v12, "com.tencent.ig"
-+
-+    aput-object v12, v5, v9
-+
-+    const/16 v9, 0x8
-+
-+    const-string v12, "com.tencent.tmgp.pubgmhd"
-+
-+    aput-object v12, v5, v9
-+
-+    const/16 v9, 0x9
-+
-+    const-string v12, "com.vng.pubgmobile"
-+
-+    aput-object v12, v5, v9
++    aput-object v9, v5, v3
 +
 +    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -337,11 +301,11 @@ index 00000000..881884d2
 +
 +    aput-object v9, v5, v6
 +
-+    const-string v9, "com.pearlabyss.blackdesertm"
++    const-string v9, "com.pearlabyss.blackdesertm.gl"
 +
 +    aput-object v9, v5, v2
 +
-+    const-string v9, "com.pearlabyss.blackdesertm.gl"
++    const-string v9, "com.pearlabyss.blackdesertm"
 +
 +    aput-object v9, v5, v8
 +
@@ -355,29 +319,75 @@ index 00000000..881884d2
 +
 +    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v5, v11, [Ljava/lang/String;
++    const/4 v5, 0x7
++
++    new-array v5, v5, [Ljava/lang/String;
 +
 +    const-string v9, "com.activision.callofduty.shooter"
 +
 +    aput-object v9, v5, v6
 +
-+    const-string v9, "com.gameloft.android.ANMP.GloftA9HM"
++    const-string v9, "com.activision.callofduty.warzone"
 +
 +    aput-object v9, v5, v2
 +
-+    const-string v9, "com.madfingergames.legends"
++    const-string v9, "com.gameloft.android.ANMP.GloftA9HM"
 +
 +    aput-object v9, v5, v8
 +
-+    const-string v9, "com.riotgames.league.teamfighttactics"
++    const-string v9, "com.madfingergames.legends"
 +
 +    aput-object v9, v5, v3
 +
-+    const-string v9, "com.riotgames.league.teamfighttacticstw"
++    const-string v9, "com.riotgames.league.teamfighttactics"
 +
 +    aput-object v9, v5, v4
 +
-+    const-string v4, "com.riotgames.league.teamfighttacticsvn"
++    const-string v9, "com.riotgames.league.teamfighttacticstw"
++
++    const/4 v10, 0x5
++
++    aput-object v9, v5, v10
++
++    const-string v9, "com.riotgames.league.teamfighttacticsvn"
++
++    const/4 v11, 0x6
++
++    aput-object v9, v5, v11
++
++    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG8Props()Ljava/util/Map;
++
++    move-result-object v5
++
++    const-string v7, "ROG8"
++
++    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v5, v11, [Ljava/lang/String;
++
++    const-string v9, "com.pubg.imobile"
++
++    aput-object v9, v5, v6
++
++    const-string v9, "com.pubg.krmobile"
++
++    aput-object v9, v5, v2
++
++    const-string v9, "com.rekoo.pubgm"
++
++    aput-object v9, v5, v8
++
++    const-string v9, "com.tencent.ig"
++
++    aput-object v9, v5, v3
++
++    const-string v9, "com.tencent.tmgp.pubgmhd"
++
++    aput-object v9, v5, v4
++
++    const-string v4, "com.vng.pubgmobile"
 +
 +    aput-object v4, v5, v10
 +
@@ -393,11 +403,11 @@ index 00000000..881884d2
 +
 +    new-array v0, v3, [Ljava/lang/String;
 +
-+    const-string v3, "com.tencent.tmgp.kr.codm"
++    const-string v3, "com.garena.game.codm"
 +
 +    aput-object v3, v0, v6
 +
-+    const-string v3, "com.garena.game.codm"
++    const-string v3, "com.tencent.tmgp.kr.codm"
 +
 +    aput-object v3, v0, v2
 +
@@ -749,6 +759,41 @@ index 00000000..881884d2
 +    return-object v0
 +.end method
 +
++.method private static blacklist createROG8Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "asus"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "ASUS_AI2401_A"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
 +.method private static blacklist createXP5Props()Ljava/util/Map;
 +    .locals 3
 +    .annotation system Ldalvik/annotation/Signature;
@@ -914,15 +959,13 @@ index 00000000..881884d2
 +
 +    move-result-object p0
 +
-+    if-eqz p0, :cond_3
-+
-+    invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
++    invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 +
 +    move-result v0
 +
 +    if-eqz v0, :cond_0
 +
-+    goto :goto_1
++    return-void
 +
 +    :cond_0
 +    const-string v0, "persist.sys.pixelprops.games"
@@ -1039,7 +1082,6 @@ index 00000000..881884d2
 +    goto :goto_0
 +
 +    :cond_3
-+    :goto_1
 +    return-void
 +.end method
 -- 
