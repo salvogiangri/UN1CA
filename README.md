@@ -11,15 +11,10 @@
 <p align="center">UN1CA <i>(/ˈu.ni.ka/)</i> is a work-in-progress custom firmware for Samsung Galaxy devices.</p>
 
 <p align="center">
-  <a href="https://unica.mesalabs.io">🌐 Website</a>
+  <a href="https://github.com/salvogiangri/UN1CA/discussions">🚀 Discussions</a>
   •
   <a href="https://t.me/unicarom">💬 Telegram</a>
 </p>
-
-# Quick links
-- [Supported devices](https://unica.mesalabs.io/devices)
-- [Installation instructions](https://unica.mesalabs.io/guide)
-- [Build UN1CA](https://unica.mesalabs.io/expert/build/)
 
 # What is UN1CA?
 UN1CA is a work-in-progress custom firmware for Samsung Galaxy devices. It's based on the latest and greatest iteration of Samsung's UX and it also includes additional features and tweaks to ensure the best possible experience out of the box.
