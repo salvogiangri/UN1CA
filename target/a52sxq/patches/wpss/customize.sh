@@ -83,6 +83,9 @@ if ! grep -q "wlan/a528b" "$WORK_DIR/configs/file_context-vendor"; then
         echo "/vendor/firmware/wlan/a528n/rev4 u:object_r:vendor_firmware_file:s0"
         echo "/vendor/firmware/wlan/a528n/rev4/wpss\.b01 u:object_r:vendor_firmware_file:s0"
         echo "/vendor/firmware/wlan/a528n/rev4/wpss\.mdt u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/a528n/rev5 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/a528n/rev5/wpss\.b01 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/a528n/rev5/wpss\.mdt u:object_r:vendor_firmware_file:s0"
     } >> "$WORK_DIR/configs/file_context-vendor"
 fi
 if ! grep -q "wlan/a528b" "$WORK_DIR/configs/fs_config-vendor"; then
@@ -170,6 +173,9 @@ if ! grep -q "wlan/a528b" "$WORK_DIR/configs/fs_config-vendor"; then
         echo "vendor/firmware/wlan/a528n/rev4 0 2000 755 capabilities=0x0"
         echo "vendor/firmware/wlan/a528n/rev4/wpss.b01 0 0 644 capabilities=0x0"
         echo "vendor/firmware/wlan/a528n/rev4/wpss.mdt 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/a528n/rev5 0 2000 755 capabilities=0x0"
+        echo "vendor/firmware/wlan/a528n/rev5/wpss.b01 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/a528n/rev5/wpss.mdt 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-vendor"
 fi
 if ! grep -q "vendor_firmware_file (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
