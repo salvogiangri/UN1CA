@@ -1,0 +1,53 @@
+From c75b51ad3216654fcd7f86c427a1e389e4dbe6cb Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sat, 3 Aug 2024 12:27:51 +0200
+Subject: [PATCH] Allow disable ASKS
+
+---
+ .../android/server/asks/ASKSManagerService.smali   | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/smali/com/android/server/asks/ASKSManagerService.smali b/smali/com/android/server/asks/ASKSManagerService.smali
+index 9667bd38..eb7c839b 100644
+--- a/smali/com/android/server/asks/ASKSManagerService.smali
++++ b/smali/com/android/server/asks/ASKSManagerService.smali
+@@ -17562,13 +17562,13 @@
+ 
+     invoke-virtual {v3, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+-    const-string/jumbo v2, "ro.build.official.release"
++    const-string/jumbo v2, "persist.sys.unica.asks"
+ 
+-    invoke-static {v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
++    const-string/jumbo v3, "true"
+ 
+-    move-result-object v2
++    invoke-static {v2, v3}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ 
+-    const-string/jumbo v3, "true"
++    move-result-object v2
+ 
+     invoke-virtual {v3, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+@@ -21051,16 +21051,14 @@
+ 
+     invoke-static {v2, v0}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const-string/jumbo v0, "ro.build.official.release"
++    const-string/jumbo v0, "persist.sys.unica.asks"
+ 
+-    const-string v1, "false"
++    const-string/jumbo v1, "true"
+ 
+     invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+-    const-string/jumbo v1, "true"
+-
+     invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+     move-result v0
+-- 
+2.46.0
+
