@@ -1,0 +1,38 @@
+From 79342a82a87d3dee921735557d10aa7cb21a7611 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sat, 3 Aug 2024 12:11:49 +0200
+Subject: [PATCH] Disable battery first date info
+
+---
+ .../com/samsung/android/settings/Rune.smali        | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
+index 014a2b01..c98f17a1 100644
+--- a/smali_classes4/com/samsung/android/settings/Rune.smali
++++ b/smali_classes4/com/samsung/android/settings/Rune.smali
+@@ -1542,19 +1542,9 @@
+ .end method
+ 
+ .method public static isBatteryInfoFirstDateDisable()Z
+-    .locals 2
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "SM-A236B"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
++    .locals 1
+ 
+-    move-result v0
++    const/4 v0, 0x1
+ 
+     return v0
+ .end method
+-- 
+2.46.0
+
