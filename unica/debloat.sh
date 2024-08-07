@@ -33,6 +33,18 @@ SYSTEM_DEBLOAT="
 system/bin/mafpc_write
 "
 
+# Samsung SIM Unlock
+SYSTEM_DEBLOAT="
+system/bin/ssud
+system/etc/init/ssu_dm1qxxx.rc
+system/etc/init/ssu.rc
+system/etc/permissions/privapp-permissions-com.samsung.ssu.xml
+system/etc/sysconfig/samsungsimunlock.xml
+system/lib64/android.security.securekeygeneration-ndk.so
+system/lib64/libssu_keystore2.so
+system/priv-app/SsuService
+"
+
 # .odex files
 SYSTEM_DEBLOAT+="
 system/app/AllShareAware/oat
