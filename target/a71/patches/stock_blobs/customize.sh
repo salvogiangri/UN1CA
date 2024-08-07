@@ -295,6 +295,9 @@ fi
 echo "Add stock /odm/etc/media_profiles_V1_0.xml"
 ADD_TO_WORK_DIR "odm" "etc/media_profiles_V1_0.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
 
+echo "Add stock rscmgr.rc"
+ADD_TO_WORK_DIR "system" "system/etc/init/rscmgr.rc" 0 0 644 "u:object_r:system_file:s0"
+
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.samsung.feature.audio_fast_listenback.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.samsung.feature.audio_listenback.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"

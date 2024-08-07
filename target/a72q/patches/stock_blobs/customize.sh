@@ -125,6 +125,9 @@ ADD_TO_WORK_DIR "system" "system/etc/vintf/manifest.xml" 0 0 644 "u:object_r:sys
 echo "Add stock com.samsung.android.shell.apex"
 ADD_TO_WORK_DIR "system" "system/apex/com.samsung.android.shell.apex" 0 0 644 "u:object_r:system_file:s0"
 
+echo "Add stock rscmgr.rc"
+ADD_TO_WORK_DIR "system" "system/etc/init/rscmgr.rc" 0 0 644 "u:object_r:system_file:s0"
+
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.flip.xml"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
