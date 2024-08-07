@@ -1,4 +1,4 @@
-From d126d6bc54aa88a675ca3d38f496700f9e887ebc Mon Sep 17 00:00:00 2001
+From 2d5e6e391716081e5a12384677ac3a7bf797be31 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -3259,7 +3259,7 @@ index 00000000..fa7fe4a8
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
 new file mode 100644
-index 00000000..66a58f0c
+index 00000000..194b63bb
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
 @@ -0,0 +1,167 @@
@@ -3366,7 +3366,7 @@ index 00000000..66a58f0c
 +.method public isChecked()Z
 +    .locals 1
 +
-+    const-string p0, "persist.sys.pixelprops.games"
++    const-string p0, "persist.sys.unica.gamehooks"
 +
 +    const/4 v0, 0x1
 +
@@ -3408,7 +3408,7 @@ index 00000000..66a58f0c
 +.method public setChecked(Z)Z
 +    .locals 1
 +
-+    const-string p0, "persist.sys.pixelprops.games"
++    const-string p0, "persist.sys.unica.gamehooks"
 +
 +    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
 +
