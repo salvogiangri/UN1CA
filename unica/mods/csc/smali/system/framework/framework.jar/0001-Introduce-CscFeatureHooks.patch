@@ -1,4 +1,4 @@
-From 950d0006b55b09f867cc0cec894d5578320b828a Mon Sep 17 00:00:00 2001
+From 6d1780f17f6654147108aa35cedb02b6d6d4a795 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
@@ -233,11 +233,11 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..9c3c8c6c
+index 00000000..89ac4631
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 @@ -0,0 +1,345 @@
-+.class public Lio/mesalabs/unica/CscFeatureHooks;
++.class public final Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
 +
@@ -583,5 +583,5 @@ index 00000000..9c3c8c6c
 +    return-object v0
 +.end method
 -- 
-2.45.2
+2.46.0
 

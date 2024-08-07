@@ -1,4 +1,4 @@
-From b17aa79cbbee52b6e377b4a9c7fc3fb21d29d916 Mon Sep 17 00:00:00 2001
+From b8780b2815fa691a1d6a067be08fdbaaebc5e1eb Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:46:34 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -121,11 +121,11 @@ index 8d8ed577..95746a63 100644
      invoke-virtual {v0, p0, p1, p2}, Landroid/provider/Settings$NameValueCache;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..f39473b6
+index 00000000..963abe85
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 @@ -0,0 +1,654 @@
-+.class public Lio/mesalabs/unica/SamsungPropsHooks;
++.class public final Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
 +
@@ -780,5 +780,5 @@ index 00000000..f39473b6
 +    return-void
 +.end method
 -- 
-2.45.2
+2.46.0
 
