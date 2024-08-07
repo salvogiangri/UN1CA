@@ -1,12 +1,12 @@
-From 13c57411b7b1c8787f62e24b4fe47ee79388f7d7 Mon Sep 17 00:00:00 2001
+From 00a78dc1e153aea6a0ecce6af5e96ee0711a8a30 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Thu, 5 Apr 2018 10:01:19 +0800
 Subject: [PATCH] Disable vendor mismatch warning
 
 ---
  ...calService$$ExternalSyntheticLambda6.smali |  34 ------
- ...ivityTaskManagerService$LocalService.smali | 115 +-----------------
- 2 files changed, 1 insertion(+), 148 deletions(-)
+ ...ivityTaskManagerService$LocalService.smali | 113 +-----------------
+ 2 files changed, 1 insertion(+), 146 deletions(-)
  delete mode 100644 smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda6.smali
 
 diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda6.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda6.smali
@@ -50,7 +50,7 @@ index 94a66162..00000000
 -    return-void
 -.end method
 diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
-index 6dd2b278..d8b85ade 100644
+index 6dd2b278..be922bcf 100644
 --- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
 +++ b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
 @@ -66,14 +66,6 @@
@@ -168,14 +168,15 @@ index 6dd2b278..d8b85ade 100644
  .method private synthetic lambda$updateTopComponentForFactoryTest$4(Ljava/lang/CharSequence;)V
      .locals 2
  
-@@ -6788,19 +6687,7 @@
+@@ -6788,20 +6687,10 @@
  
      const-string v1, "ActivityTaskManager"
  
 -    const-string v2, "Build fingerprint is not consistent, warning user"
--
--    invoke-static {v1, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
--
++    const-string v2, "Build fingerprint is not consistent"
+ 
+     invoke-static {v1, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
 -    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
 -
 -    iget-object v1, v1, Lcom/android/server/wm/ActivityTaskManagerService;->mUiHandler:Lcom/android/server/wm/ActivityTaskManagerService$UiHandler;
@@ -185,10 +186,10 @@ index 6dd2b278..d8b85ade 100644
 -    invoke-direct {v2, p0}, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda6;-><init>(Lcom/android/server/wm/ActivityTaskManagerService$LocalService;)V
 -
 -    invoke-virtual {v1, v2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
-+    const-string v2, "Build fingerprint is not consistent"
- 
+-
      :cond_1
      monitor-exit v0
+     :try_end_1
 -- 
-2.45.1
+2.46.0
 
