@@ -1,4 +1,4 @@
-From 15b3ade4f8eafa926b8df7eb42076db4bed657d6 Mon Sep 17 00:00:00 2001
+From 518e4aabc1314fbb75ce3e57d7ed633236a69be4 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -8,6 +8,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   7 +
  res/layout/unica_settings_logo_layout.xml     |   7 +
+ res/values-de/strings.xml                     |  29 +
  res/values-it/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
@@ -42,7 +43,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 38 files changed, 4302 insertions(+)
+ 39 files changed, 4331 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -132,6 +133,44 @@ index 00000000..3f8b037f
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
 \ No newline at end of file
+diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
+index 87dde4f1..59241a02 100644
+--- a/res/values-de/strings.xml
++++ b/res/values-de/strings.xml
+@@ -7258,4 +7258,33 @@ In „Kamera“ kannst du die obere Taste verwenden, um Bilder aufzunehmen."</st
+     <string name="zone_menu_by_region">Nach Region auswählen</string>
+     <string name="zone_time_type_dst">Sommerzeit</string>
+     <string name="zone_time_type_standard">Standardzeit</string>
++    <string name="unica_allow_downgrade_title">App Downgrade erlauben</string>
++    <string name="unica_asks_title">ASKS deaktivieren</string>
++    <string name="unica_boot_sound_title">Soundeffekt beim Hochfahren abspielen</string>
++    <string name="unica_device_name_title">Gerätename</string>
++    <string name="unica_extra_settings_title">Weitere Einstellungen</string>
++    <string name="unica_fod_anim_type_optical_g">Optischer Sensor (grün)</string>
++    <string name="unica_fod_anim_type_optical_w">Optischer Sensor (weiß)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ultraschall-Sensor</string>
++    <string name="unica_fod_anim_type_title">Aussehen der Fingerabdruck-Entsperr-Animation</string>
++    <string name="unica_games_spoof_title">Höhere FPS in Spielen entsperren</string>
++    <string name="unica_hide_dev_title">Entwickler-Status vor Apps verbergen</string>
++    <string name="unica_max_refresh_rate_title">Maximale Bildwiederholfrequenz erzwingen</string>
++    <string name="unica_native_blur_dialog_msg">Um die Änderungen anzuwenden wird ein Neustart benötigt.</string>
++    <string name="unica_native_blur_dialog_negative">Später</string>
++    <string name="unica_native_blur_dialog_positive">Neustarten</string>
++    <string name="unica_native_blur_dialog_title">Neustart benötigt</string>
++    <string name="unica_native_blur_title">Live-Blur-Effekt aktivieren</string>
++    <string name="unica_pif_checking">Suche nach Updates…</string>
++    <string name="unica_pif_error">Ein Fehler ist aufgetreten.</string>
++    <string name="unica_pif_no_root">Root wird benötigt, damit Play Integrity Fix funktioniert.</string>
++    <string name="unica_pif_up_to_date">Du hast die aktuellste Version installiert.</string>
++    <string name="unica_pif_updated">Update erfolgreich durchgeführt.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix Version</string>
++    <string name="unica_rom_version_title">ROM Version</string>
++    <string name="unica_secure_ss_title">Sicheren Screenshot erlauben</string>
++    <string name="unica_settings_title">UN1CA-Einstellungen</string>
++    <string name="unica_spoof_settings_title">Spoofing-Einstellungen</string>
++    <string name="unica_ss_detection_title">Screenshot-Erkennung deaktivieren</string>
++    <string name="unica_ui_settings_title">UI-Einstellungen</string>
+ </resources>
 diff --git a/res/values-it/strings.xml b/res/values-it/strings.xml
 index c27cc9e6..a6e1d9ae 100644
 --- a/res/values-it/strings.xml
