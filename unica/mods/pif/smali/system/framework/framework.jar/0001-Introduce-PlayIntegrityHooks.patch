@@ -1,15 +1,15 @@
-From ed9dc985ace5056dd09b7aa251d6b1b55f4a9e41 Mon Sep 17 00:00:00 2001
+From c1fe49f2dc15effe371b59e187f8a99db2201fbb Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:48:49 +0200
 Subject: [PATCH] Introduce PlayIntegrityHooks
 
 ---
- smali/android/app/Instrumentation.smali       |   4 +
- .../keystore2/AndroidKeyStoreSpi.smali        |   2 +
- ...grityHooks$$ExternalSyntheticLambda0.smali |  30 +
- .../mesalabs/unica/PlayIntegrityHooks$1.smali |  79 ++
- .../mesalabs/unica/PlayIntegrityHooks.smali   | 986 ++++++++++++++++++
- 5 files changed, 1101 insertions(+)
+ smali/android/app/Instrumentation.smali       |    4 +
+ .../keystore2/AndroidKeyStoreSpi.smali        |    2 +
+ ...grityHooks$$ExternalSyntheticLambda0.smali |   30 +
+ .../mesalabs/unica/PlayIntegrityHooks$1.smali |   79 ++
+ .../mesalabs/unica/PlayIntegrityHooks.smali   | 1016 +++++++++++++++++
+ 5 files changed, 1131 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
@@ -172,11 +172,11 @@ index 00000000..fe159605
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 new file mode 100644
-index 00000000..879e4b1b
+index 00000000..27847855
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
-@@ -0,0 +1,986 @@
-+.class public Lio/mesalabs/unica/PlayIntegrityHooks;
+@@ -0,0 +1,1016 @@
++.class public final Lio/mesalabs/unica/PlayIntegrityHooks;
 +.super Ljava/lang/Object;
 +.source "PlayIntegrityHooks.java"
 +
@@ -185,8 +185,6 @@ index 00000000..879e4b1b
 +.field private static final blacklist DEBUG:Z = false
 +
 +.field private static final blacklist GMS_ADD_ACCOUNT_ACTIVITY:Landroid/content/ComponentName;
-+
-+.field private static final blacklist PACKAGE_FINSKY:Ljava/lang/String; = "com.android.vending"
 +
 +.field private static final blacklist PACKAGE_GMS:Ljava/lang/String; = "com.google.android.gms"
 +
@@ -200,19 +198,21 @@ index 00000000..879e4b1b
 +
 +.field private static final blacklist PIF_ID:Ljava/lang/String; = "null"
 +
++.field private static final blacklist PIF_INCREMENTAL:Ljava/lang/String; = "null"
++
 +.field private static final blacklist PIF_MANUFACTURER:Ljava/lang/String; = "Google"
 +
 +.field private static final blacklist PIF_MODEL:Ljava/lang/String; = "Pixel 8 Pro"
 +
 +.field private static final blacklist PIF_PRODUCT:Ljava/lang/String; = "husky_beta"
 +
++.field private static final blacklist PIF_RELEASE:Ljava/lang/String; = "null"
++
 +.field private static final blacklist PIF_SECURITY_PATCH:Ljava/lang/String; = "null"
 +
 +.field private static final blacklist PIF_VERSION:Ljava/lang/String; = "20240728"
 +
 +.field private static final blacklist TAG:Ljava/lang/String; = "PlayIntegrityHooks"
-+
-+.field private static volatile blacklist sIsFinsky:Z
 +
 +.field private static volatile blacklist sProcessName:Ljava/lang/String;
 +
@@ -360,10 +360,6 @@ index 00000000..879e4b1b
 +
 +    if-nez v0, :cond_0
 +
-+    sget-boolean v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
-+
-+    if-nez v0, :cond_0
-+
 +    return-void
 +
 +    :cond_0
@@ -485,14 +481,6 @@ index 00000000..879e4b1b
 +
 +    :cond_0
 +    sput-object v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sProcessName:Ljava/lang/String;
-+
-+    const-string v0, "com.android.vending"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    sput-boolean v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sIsFinsky:Z
 +
 +    const-string v0, "com.google.android.gms"
 +
@@ -718,54 +706,30 @@ index 00000000..879e4b1b
 +
 +    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
 +
-+    move-result-object v1
-+
-+    const-string v2, "unstable"
-+
-+    invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-+
-+    move-result v1
-+
-+    const/4 v2, 0x0
-+
-+    if-nez v1, :cond_0
-+
-+    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    const-string v3, "pixelmigrate"
-+
-+    invoke-virtual {v1, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-+
-+    move-result v1
-+
-+    if-nez v1, :cond_0
-+
-+    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
-+
 +    move-result-object v0
 +
-+    const-string v1, "instrumentation"
++    const-string v1, "unstable"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
 +
 +    move-result v0
 +
++    const/4 v1, 0x0
++
 +    if-nez v0, :cond_0
 +
-+    return v2
++    return v1
 +
 +    :cond_0
 +    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isGmsAddAccountActivityOnTop()Z
 +
 +    move-result v0
 +
-+    const/4 v1, 0x1
++    const/4 v2, 0x1
 +
 +    if-nez v0, :cond_1
 +
-+    return v1
++    return v2
 +
 +    :cond_1
 +    const-string v3, "Skip spoofing build for GMS, because GmsAddAccountActivityOnTop!"
@@ -785,18 +749,18 @@ index 00000000..879e4b1b
 +    :try_end_0
 +    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 +
-+    return v2
++    return v1
 +
 +    :catch_0
 +    move-exception v0
 +
-+    const-string v2, "PlayIntegrityHooks"
++    const-string v1, "PlayIntegrityHooks"
 +
 +    const-string v3, "Failed to register task stack listener!"
 +
-+    invoke-static {v2, v3, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    invoke-static {v1, v3, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 +
-+    return v1
++    return v2
 +.end method
 +
 +.method private static blacklist spoofBuildGms()V
@@ -1022,7 +986,7 @@ index 00000000..879e4b1b
 +    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
 +
 +    :cond_5
-+    const-string v0, "persist.sys.pif.id"
++    const-string v0, "persist.sys.pif.release"
 +
 +    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
@@ -1033,6 +997,72 @@ index 00000000..879e4b1b
 +    move-result v2
 +
 +    if-nez v2, :cond_6
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    const-string v3, "RELEASE: "
++
++    invoke-direct {v2, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v2, "RELEASE"
++
++    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
++
++    :cond_6
++    const-string v0, "persist.sys.pif.incremental"
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_7
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    const-string v3, "INCREMENTAL: "
++
++    invoke-direct {v2, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
++
++    const-string v2, "INCREMENTAL"
++
++    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
++
++    :cond_7
++    const-string v0, "persist.sys.pif.id"
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_8
 +
 +    new-instance v2, Ljava/lang/StringBuilder;
 +
@@ -1054,7 +1084,7 @@ index 00000000..879e4b1b
 +
 +    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
 +
-+    :cond_6
++    :cond_8
 +    const-string v0, "persist.sys.pif.fingerprint"
 +
 +    const-string v2, "google/husky_beta/husky:15/AP31.240617.009/12094726:user/release-keys"
@@ -1067,7 +1097,7 @@ index 00000000..879e4b1b
 +
 +    move-result v2
 +
-+    if-nez v2, :cond_7
++    if-nez v2, :cond_9
 +
 +    new-instance v2, Ljava/lang/StringBuilder;
 +
@@ -1089,7 +1119,7 @@ index 00000000..879e4b1b
 +
 +    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setPropValue(Ljava/lang/String;Ljava/lang/Object;)V
 +
-+    :cond_7
++    :cond_9
 +    const-string v0, "persist.sys.pif.security_patch"
 +
 +    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
@@ -1100,7 +1130,7 @@ index 00000000..879e4b1b
 +
 +    move-result v2
 +
-+    if-nez v2, :cond_8
++    if-nez v2, :cond_a
 +
 +    new-instance v2, Ljava/lang/StringBuilder;
 +
@@ -1122,7 +1152,7 @@ index 00000000..879e4b1b
 +
 +    invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
 +
-+    :cond_8
++    :cond_a
 +    const-string v0, "persist.sys.pif.first_api_level"
 +
 +    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
@@ -1133,7 +1163,7 @@ index 00000000..879e4b1b
 +
 +    move-result v1
 +
-+    if-nez v1, :cond_9
++    if-nez v1, :cond_b
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
@@ -1159,7 +1189,7 @@ index 00000000..879e4b1b
 +
 +    invoke-static {v1, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldInt(Ljava/lang/String;I)V
 +
-+    :cond_9
++    :cond_b
 +    return-void
 +.end method
 -- 

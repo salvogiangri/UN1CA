@@ -1,4 +1,4 @@
-From 2d5e6e391716081e5a12384677ac3a7bf797be31 Mon Sep 17 00:00:00 2001
+From 3698fe83e759d1b199c5a775b20980ee40b597f5 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -26,7 +26,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
- .../io/mesalabs/unica/pif/PIFUtils.smali      | 455 +++++++++++++++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 475 +++++++++++++++
  .../settings/ASKSPreferenceController.smali   | 171 ++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++
  .../BootSoundPreferenceController.smali       | 167 ++++++
@@ -41,7 +41,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 37 files changed, 4253 insertions(+)
+ 37 files changed, 4273 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1043,10 +1043,10 @@ index 00000000..47e09f7d
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..a98913fd
+index 00000000..506713db
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
-@@ -0,0 +1,455 @@
+@@ -0,0 +1,475 @@
 +.class public Lio/mesalabs/unica/pif/PIFUtils;
 +.super Ljava/lang/Object;
 +.source "PIFUtils.java"
@@ -1325,6 +1325,26 @@ index 00000000..a98913fd
 +    const-string v0, "persist.sys.pif.model"
 +
 +    const-string v1, "MODEL"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.release"
++
++    const-string v1, "RELEASE"
++
++    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string v0, "persist.sys.pif.incremental"
++
++    const-string v1, "INCREMENTAL"
 +
 +    invoke-virtual {p1, v1}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
 +
