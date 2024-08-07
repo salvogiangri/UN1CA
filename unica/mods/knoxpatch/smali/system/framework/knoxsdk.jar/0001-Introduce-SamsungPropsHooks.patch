@@ -1,19 +1,22 @@
-From 1a1a5c7329cec6733b199f9548e3b8a349e3b231 Mon Sep 17 00:00:00 2001
+From 84b7c079dec32e86bb0580392656962e279c2c81 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:32:56 +0100
 Subject: [PATCH] Introduce SamsungPropsHooks
 
 ---
- .../knox/EnterpriseDeviceManager.smali        | 20 +------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+ .../knox/EnterpriseDeviceManager.smali        | 22 ++-----------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
 
 diff --git a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
-index bad19a5..4768610 100644
+index bad19a5..ec2c9f4 100644
 --- a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
 +++ b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
-@@ -601,27 +601,9 @@
+@@ -599,29 +599,11 @@
+ .end method
+ 
  .method public static greylist getAPILevel()I
-     .locals 2
+-    .locals 2
++    .locals 1
  
 -    :try_start_0
 -    invoke-static {}, Lcom/samsung/android/knox/EdmUtils;->getAPILevelForInternal()I
@@ -41,5 +44,5 @@ index bad19a5..4768610 100644
      return v0
  .end method
 -- 
-2.34.1
+2.46.0
 

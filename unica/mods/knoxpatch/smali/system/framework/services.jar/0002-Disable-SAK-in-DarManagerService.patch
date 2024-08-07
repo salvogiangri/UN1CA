@@ -1,4 +1,4 @@
-From 28111c5cb15795108106931cfd1741ed180f3e1c Mon Sep 17 00:00:00 2001
+From a30811264c6a296b11eb90169dcd38dbfc8d570e Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 28 Nov 2023 22:01:31 +0100
 Subject: [PATCH] Disable SAK in DarManagerService
@@ -8,7 +8,7 @@ Subject: [PATCH] Disable SAK in DarManagerService
  1 file changed, 4 insertions(+), 125 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
-index d3f21189..97648b71 100644
+index 6c6398fa..ed693cfb 100644
 --- a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
 +++ b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
 @@ -481,50 +481,11 @@
@@ -150,16 +150,16 @@ index d3f21189..97648b71 100644
 -
 -    :goto_1
 -    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
-+    .locals 1
++    .locals 0
  
 -    invoke-virtual {p0, v1, v2}, Lcom/android/server/knox/dar/DarManagerService$Injector;->binderRestoreCallingIdentity(J)V
-+    const/4 v0, 0x1
++    const/4 p0, 0x1
  
 -    throw v0
-+    return v0
++    return p0
  .end method
  
  .method public isLicensed()I
 -- 
-2.43.0
+2.46.0
 
