@@ -13,12 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - module: "VNDK 33 apex"
-            path: "unica/patches/vndk/33"
           - module: "(a71) OS proprietary blobs"
             path: "target/a71/patches/stock_blobs"
-          - module: "(m52xq) OS proprietary blobs"
-            path: "target/m52xq/patches/stock_blobs"
           - module: "(r8q) OS proprietary blobs"
             path: "target/r8q/patches/stock_blobs"
 
