@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [a52q, a52sxq, a71, a72q, a73xq, m52xq, r9q, r9q2]
+        target: [a52q, a52sxq, a52xq, a71, a72q, a73xq, m52xq, r8q, r9q, r9q2]
 
     steps:
       - name: Checkout repo
@@ -32,8 +32,8 @@ jobs:
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             attr ccache clang golang libbrotli-dev \
-            libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev \
-            linux-modules-extra-$(uname -r) lld ninja-build protobuf-compiler zipalign
+            libgtest-dev libprotobuf-dev libunwind-dev libzstd-dev linux-modules-extra-$(uname -r) \
+            lld protobuf-compiler zipalign
           sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"

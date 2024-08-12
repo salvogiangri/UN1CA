@@ -13,10 +13,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - module: "Knox'nt blobs"
+            path: "unica/patches/deknox"
+          - module: "Low-end Samsung Camera app"
+            path: "unica/patches/mass_cam"
+          - module: "Non-eSE blobs"
+            path: "unica/patches/nfc"
+          - module: "Optical FOD blobs"
+            path: "unica/patches/product_feature/fingerprint/optical_fod"
+          - module: "Side fingerprint sensor blobs"
+            path: "unica/patches/product_feature/fingerprint/side_fp"
+          - module: "VNDK 30 apex"
+            path: "unica/patches/vndk/30"
+          - module: "VNDK 31 apex"
+            path: "unica/patches/vndk/31"
+          - module: "VNDK 32 apex"
+            path: "unica/patches/vndk/32"
+          - module: "VNDK 33 apex"
+            path: "unica/patches/vndk/33"
           - module: "(a71) OS proprietary blobs"
             path: "target/a71/patches/stock_blobs"
+          - module: "(m52xq) OS proprietary blobs"
+            path: "target/m52xq/patches/stock_blobs"
           - module: "(r8q) OS proprietary blobs"
             path: "target/r8q/patches/stock_blobs"
+          - module: "(r8q) /vendor proprietary blobs"
+            path: "target/r8q/patches/vendor"
 
     steps:
       - name: Checkout repo
@@ -34,8 +56,8 @@ jobs:
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             attr ccache clang golang libbrotli-dev \
-            libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev \
-            linux-modules-extra-$(uname -r) lld ninja-build protobuf-compiler zipalign
+            libgtest-dev libprotobuf-dev libunwind-dev libzstd-dev linux-modules-extra-$(uname -r) \
+            lld protobuf-compiler zipalign
           sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
