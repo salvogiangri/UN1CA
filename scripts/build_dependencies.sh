@@ -44,6 +44,13 @@ BUILD_ANDROID_TOOLS()
     cd "$SRC_DIR/external/android-tools"
     mkdir -p "build" && cd "build"
     cmake \
+        -DCMAKE_SYSTEM_NAME="Linux" \
+        -DCMAKE_SYSTEM_PROCESSOR="x86_64" \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DCMAKE_C_COMPILER_LAUNCHER="ccache" \
+        -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" \
+        -DCMAKE_C_COMPILER="clang" \
+        -DCMAKE_CXX_COMPILER="clang++" \
         -DANDROID_TOOLS_USE_BUNDLED_FMT=ON \
         -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON \
         ..
