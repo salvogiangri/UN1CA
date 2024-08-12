@@ -1,0 +1,975 @@
+From 8e8f90733c3865c36a04e5ff9c70f9b36996475c Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 12 Aug 2024 19:05:28 +0200
+Subject: [PATCH] Allow custom Monotype fonts
+
+---
+ .../settings/display/SecDisplayUtils.smali    | 852 ++----------------
+ 1 file changed, 79 insertions(+), 773 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
+index 6d503585..f87f739c 100644
+--- a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
+@@ -4,10 +4,6 @@
+ 
+ 
+ # static fields
+-.field public static final APK_SYSTEM_FLIPFONT_NAME_LIST:[Ljava/lang/String;
+-
+-.field public static final SIGNATURES:[Landroid/content/pm/Signature;
+-
+ .field public static mListEdgeColorBalanceImages:Ljava/util/ArrayList;
+ 
+ .field public static mPreviewFontFile:Ljava/io/File;
+@@ -19,7 +15,7 @@
+ 
+ # direct methods
+ .method public static constructor <clinit>()V
+-    .locals 18
++    .locals 2
+ 
+     const-string/jumbo v0, "ro.product.device"
+ 
+@@ -39,60 +35,6 @@
+ 
+     sput-object v0, Lcom/samsung/android/settings/display/SecDisplayUtils;->mListEdgeColorBalanceImages:Ljava/util/ArrayList;
+ 
+-    new-instance v0, Landroid/content/pm/Signature;
+-
+-    const-string v1, "308204d4308203bca003020102020900e5eff0a8f66d92b3300d06092a864886f70d01010505003081a2310b3009060355040613024b52311430120603550408130b536f757468204b6f726561311330110603550407130a5375776f6e2043697479311c301a060355040a131353616d73756e6720436f72706f726174696f6e310c300a060355040b1303444d43311530130603550403130c53616d73756e6720436572743125302306092a864886f70d0109011616616e64726f69642e6f734073616d73756e672e636f6d301e170d3131303632323132323531335a170d3338313130373132323531335a3081a2310b3009060355040613024b52311430120603550408130b536f757468204b6f726561311330110603550407130a5375776f6e2043697479311c301a060355040a131353616d73756e6720436f72706f726174696f6e310c300a060355040b1303444d43311530130603550403130c53616d73756e6720436572743125302306092a864886f70d0109011616616e64726f69642e6f734073616d73756e672e636f6d30820120300d06092a864886f70d01010105000382010d00308201080282010100e9f1edb42423201dce62e68f2159ed8ea766b43a43d348754841b72e9678ce6b03d06d31532d88f2ef2d5ba39a028de0857983cd321f5b7786c2d3699df4c0b40c8d856f147c5dc54b9d1d671d1a51b5c5364da36fc5b0fe825afb513ec7a2db862c48a6046c43c3b71a1e275155f6c30aed2a68326ac327f60160d427cf55b617230907a84edbff21cc256c628a16f15d55d49138cdf2606504e1591196ed0bdc25b7cc4f67b33fb29ec4dbb13dbe6f3467a0871a49e620067755e6f095c3bd84f8b7d1e66a8c6d1e5150f7fa9d95475dc7061a321aaf9c686b09be23ccc59b35011c6823ffd5874d8fa2a1e5d276ee5aa381187e26112c7d5562703b36210b020103a382010b30820107301d0603551d0e041604145b115b23db35655f9f77f78756961006eebe3a9e3081d70603551d230481cf3081cc80145b115b23db35655f9f77f78756961006eebe3a9ea181a8a481a53081a2310b3009060355040613024b52311430120603550408130b536f757468204b6f726561311330110603550407130a5375776f6e2043697479311c301a060355040a131353616d73756e6720436f72706f726174696f6e310c300a060355040b1303444d43311530130603550403130c53616d73756e6720436572743125302306092a864886f70d0109011616616e64726f69642e6f734073616d73756e672e636f6d820900e5eff0a8f66d92b3300c0603551d13040530030101ff300d06092a864886f70d0101050500038201010039c91877eb09c2c84445443673c77a1219c5c02e6552fa2fbad0d736bc5ab6ebaf0375e520fe9799403ecb71659b23afda1475a34ef4b2e1ffcba8d7ff385c21cb6482540bce3837e6234fd4f7dd576d7fcfe9cfa925509f772c494e1569fe44e6fcd4122e483c2caa2c639566dbcfe85ed7818d5431e73154ad453289fb56b607643919cf534fbeefbdc2009c7fcb5f9b1fa97490462363fa4bedc5e0b9d157e448e6d0e7cfa31f1a2faa9378d03c8d1163d3803bc69bf24ec77ce7d559abcaf8d345494abf0e3276f0ebd2aa08e4f4f6f5aaea4bc523d8cc8e2c9200ba551dd3d4e15d5921303ca9333f42f992ddb70c2958e776c12d7e3b7bd74222eb5c7a"
+-
+-    invoke-direct {v0, v1}, Landroid/content/pm/Signature;-><init>(Ljava/lang/String;)V
+-
+-    filled-new-array {v0}, [Landroid/content/pm/Signature;
+-
+-    move-result-object v0
+-
+-    sput-object v0, Lcom/samsung/android/settings/display/SecDisplayUtils;->SIGNATURES:[Landroid/content/pm/Signature;
+-
+-    const-string v1, ""
+-
+-    const-string v2, "com.monotype.android.font.chococooky"
+-
+-    const-string v3, "com.monotype.android.font.cooljazz"
+-
+-    const-string v4, "com.monotype.android.font.helvneuelt"
+-
+-    const-string v5, "com.monotype.android.font.samsungsans"
+-
+-    const-string v6, "com.monotype.android.font.rosemary"
+-
+-    const-string v7, "com.monotype.android.font.applemint"
+-
+-    const-string v8, "com.monotype.android.font.tinkerbell"
+-
+-    const-string v9, "com.monotype.android.font.udrgothic"
+-
+-    const-string v10, "com.monotype.android.font.udmincho"
+-
+-    const-string v11, "com.monotype.android.font.arjpopb"
+-
+-    const-string v12, "com.monotype.android.font.kaiti"
+-
+-    const-string v13, "com.monotype.android.font.shaonv"
+-
+-    const-string v14, "com.monotype.android.font.miao"
+-
+-    const-string v15, "com.monotype.android.font.samsungone"
+-
+-    const-string v16, "com.monotype.android.font.foundation"
+-
+-    const-string v17, "com.monotype.android.font.roboto"
+-
+-    filled-new-array/range {v1 .. v17}, [Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    sput-object v0, Lcom/samsung/android/settings/display/SecDisplayUtils;->APK_SYSTEM_FLIPFONT_NAME_LIST:[Ljava/lang/String;
+-
+-    const/4 v0, 0x0
+-
+     sput-boolean v0, Lcom/samsung/android/settings/display/SecDisplayUtils;->mWhiteBalanceVisible:Z
+ 
+     return-void
+@@ -6065,799 +6007,163 @@
+ .end method
+ 
+ .method public static isInvalidFont(Landroid/content/Context;Ljava/lang/String;)Z
+-    .locals 11
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++    .locals 0
+ 
+-    const-string v1, "checkFont - "
++    const/4 p0, 0x0
+ 
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    return p0
++.end method
+ 
+-    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++.method public static isMultiPaneMode(Landroid/app/Activity;)Z
++    .locals 1
+ 
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-static {p0}, Landroidx/window/embedding/ActivityEmbeddingController;->getInstance(Landroid/content/Context;)Landroidx/window/embedding/ActivityEmbeddingController;
+ 
+     move-result-object v0
+ 
+-    const-string v1, "SecDisplayUtils"
+-
+-    invoke-static {v1, v0}, Landroid/util/secutil/Log;->secD(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const/4 v0, 0x1
+-
+-    if-nez p0, :cond_0
+-
+-    return v0
+-
+-    :cond_0
+-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+-
+-    move-result-object v2
+-
+-    if-nez v2, :cond_1
+-
+-    return v0
+-
+-    :cond_1
+-    sget-object v3, Lcom/samsung/android/settings/display/SecDisplayUtils;->APK_SYSTEM_FLIPFONT_NAME_LIST:[Ljava/lang/String;
+-
+-    array-length v4, v3
+-
+-    const/4 v5, 0x0
+-
+-    move v6, v5
+-
+-    :goto_0
+-    if-ge v6, v4, :cond_6
+-
+-    aget-object v7, v3, v6
+-
+-    if-eqz p1, :cond_5
+-
+-    invoke-virtual {p1, v7}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v8
+-
+-    if-eqz v8, :cond_5
+-
+-    const-string v8, "android"
+-
+-    invoke-virtual {v2, v8, v7}, Landroid/content/pm/PackageManager;->checkSignatures(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    move-result v8
+-
+-    if-nez v8, :cond_2
+-
+-    move v8, v0
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    move v8, v5
+-
+-    :goto_1
+-    invoke-static {p0, v7}, Lcom/samsung/android/settings/display/SecDisplayUtils;->isSignatureMatch(Landroid/content/Context;Ljava/lang/String;)Z
+-
+-    move-result v7
+-
+-    new-instance v9, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v10, "apkname : "
+-
+-    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v9, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    const-string v10, ", isCheckPlatformSignatures : "
+-
+-    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v9, v8}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    const-string v10, ", isCheckReleaseSignatures : "
+-
+-    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v9, v7}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v9
+-
+-    invoke-static {v1, v9}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    if-nez v8, :cond_4
+-
+-    if-eqz v7, :cond_3
+-
+-    invoke-static {v2, p1}, Lcom/samsung/android/settings/display/SecDisplayUtils;->isSharedFont(Landroid/content/pm/PackageManager;Ljava/lang/String;)Z
++    invoke-virtual {v0, p0}, Landroidx/window/embedding/ActivityEmbeddingController;->isActivityEmbedded(Landroid/app/Activity;)Z
+ 
+-    move-result v7
++    move-result p0
+ 
+-    if-eqz v7, :cond_4
++    return p0
++.end method
+ 
+-    :cond_3
+-    invoke-virtual {p1}, Ljava/lang/String;->isEmpty()Z
++.method public static isMultiWindowMode(Landroid/content/Context;)Z
++    .locals 0
+ 
+-    move-result v7
++    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+-    if-eqz v7, :cond_5
++    move-result-object p0
+ 
+-    :cond_4
+-    return v5
++    invoke-virtual {p0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+ 
+-    :cond_5
+-    add-int/lit8 v6, v6, 0x1
++    move-result-object p0
+ 
+-    goto :goto_0
++    iget-object p0, p0, Landroid/content/res/Configuration;->windowConfiguration:Landroid/app/WindowConfiguration;
+ 
+-    :cond_6
+-    const-string p0, "checkFont - check if valid certificate"
++    invoke-virtual {p0}, Landroid/app/WindowConfiguration;->getWindowingMode()I
+ 
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    move-result p0
+ 
+-    invoke-static {v2, p1}, Lcom/samsung/android/settings/display/SecDisplayUtils;->isSharedFont(Landroid/content/pm/PackageManager;Ljava/lang/String;)Z
++    invoke-static {p0}, Landroid/app/WindowConfiguration;->inMultiWindowMode(I)Z
+ 
+     move-result p0
+ 
+-    if-eqz p0, :cond_7
+-
+-    return v0
++    return p0
++.end method
+ 
+-    :cond_7
+-    const/16 p0, 0x40
++.method public static isPortrait(Landroid/content/Context;)Z
++    .locals 3
+ 
+-    const/4 v3, 0x0
++    const/4 v0, 0x0
+ 
+     :try_start_0
+-    invoke-virtual {v2, p1, p0}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
++    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+     move-result-object p0
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    goto :goto_2
+-
+-    :catch_0
+-    move-object p0, v3
+ 
+-    :goto_2
+-    if-eqz p0, :cond_b
++    invoke-virtual {p0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+ 
+-    iget-object p0, p0, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;
++    move-result-object p0
+ 
+-    aget-object v2, p0, v5
++    iget p0, p0, Landroid/content/res/Configuration;->orientation:I
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    invoke-virtual {v2}, Landroid/content/pm/Signature;->toByteArray()[B
++    const/4 v1, 0x1
+ 
+-    move-result-object v2
++    if-ne p0, v1, :cond_0
+ 
+-    :try_start_1
+-    const-string v4, "SHA-256"
++    move v0, v1
+ 
+-    invoke-static {v4}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
++    :cond_0
++    return v0
+ 
+-    move-result-object v4
++    :catch_0
++    move-exception p0
+ 
+-    aget-object p0, p0, v5
++    new-instance v1, Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {p0}, Landroid/content/pm/Signature;->toByteArray()[B
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    move-result-object p0
++    const-string v2, "Checking orientation port is failed."
+ 
+-    invoke-virtual {v4, p0}, Ljava/security/MessageDigest;->update([B)V
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v4}, Ljava/security/MessageDigest;->digest()[B
++    invoke-virtual {p0}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+ 
+     move-result-object p0
+ 
+-    invoke-static {p0, v5}, Landroid/util/Base64;->encodeToString([BI)Ljava/lang/String;
+-
+-    move-result-object p0
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {p0}, Ljava/lang/String;->trim()Ljava/lang/String;
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+     move-result-object p0
+ 
+-    const-string v4, "cf80JTE6tM1K+wQqq8r4Js7yneGrnaKmuJl1biThDSA="
+-
+-    invoke-virtual {v4, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_8
+-
+-    const-string p0, "**Signature is correct**"
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v5
+-
+-    :cond_8
+-    const-string p0, "**Signature is incorrect**"
++    const-string v1, "SecDisplayUtils"
+ 
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_1
+-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
++    invoke-static {v1, p0}, Landroid/util/Log;->secE(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     return v0
++.end method
+ 
+-    :catch_1
+-    move-exception p0
+-
+-    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
+-
+-    new-instance p0, Ljava/io/ByteArrayInputStream;
+-
+-    invoke-direct {p0, v2}, Ljava/io/ByteArrayInputStream;-><init>([B)V
+-
+-    :try_start_2
+-    const-string v2, "X509"
+-
+-    invoke-static {v2}, Ljava/security/cert/CertificateFactory;->getInstance(Ljava/lang/String;)Ljava/security/cert/CertificateFactory;
+-
+-    move-result-object v2
+-    :try_end_2
+-    .catch Ljava/security/cert/CertificateException; {:try_start_2 .. :try_end_2} :catch_2
+-
+-    goto :goto_3
+-
+-    :catch_2
+-    move-exception v2
+-
+-    invoke-virtual {v2}, Ljava/security/cert/CertificateException;->printStackTrace()V
+-
+-    move-object v2, v3
+-
+-    :goto_3
+-    if-eqz v2, :cond_9
++.method public static isScreenSaverEnabled(Landroid/content/Context;)Z
++    .locals 1
+ 
+-    :try_start_3
+-    invoke-virtual {v2, p0}, Ljava/security/cert/CertificateFactory;->generateCertificate(Ljava/io/InputStream;)Ljava/security/cert/Certificate;
++    :try_start_0
++    invoke-static {p0}, Lcom/android/settingslib/dream/DreamBackend;->getInstance(Landroid/content/Context;)Lcom/android/settingslib/dream/DreamBackend;
+ 
+     move-result-object p0
+ 
+-    check-cast p0, Ljava/security/cert/X509Certificate;
+-    :try_end_3
+-    .catch Ljava/security/cert/CertificateException; {:try_start_3 .. :try_end_3} :catch_3
+-    .catch Ljava/lang/NullPointerException; {:try_start_3 .. :try_end_3} :catch_3
+-
+-    move-object v3, p0
++    invoke-virtual {p0}, Lcom/android/settingslib/dream/DreamBackend;->isEnabled()Z
+ 
+-    goto :goto_4
++    move-result p0
++    :try_end_0
++    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    :catch_3
+-    move-exception p0
++    goto :goto_0
+ 
+-    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
++    :catch_0
++    const-string p0, "SecDisplayUtils"
+ 
+-    :cond_9
+-    :goto_4
+-    new-instance p0, Ljava/lang/StringBuilder;
++    const-string v0, " isScreenSaverEnabled security exception"
+ 
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-static {p0, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const-string v2, "APK name: "
++    const/4 p0, 0x0
+ 
+-    invoke-virtual {p0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    :goto_0
++    return p0
++.end method
+ 
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++.method public static isSemAvailable(Landroid/content/Context;)Z
++    .locals 1
+ 
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+ 
+     move-result-object p0
+ 
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    if-eqz v3, :cond_a
++    if-eqz p0, :cond_0
+ 
+-    new-instance p0, Ljava/lang/StringBuilder;
++    const-string v0, "com.samsung.feature.samsung_experience_mobile"
+ 
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-virtual {p0, v0}, Landroid/content/pm/PackageManager;->hasSystemFeature(Ljava/lang/String;)Z
+ 
+-    const-string p1, "Certificate for: "
++    move-result p0
+ 
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    if-eqz p0, :cond_0
+ 
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getSubjectDN()Ljava/security/Principal;
++    const/4 p0, 0x1
+ 
+-    move-result-object p1
++    goto :goto_0
+ 
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string p1, "Certificate issued by: "
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getIssuerDN()Ljava/security/Principal;
+-
+-    move-result-object p1
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string p1, "The certificate is valid from "
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getNotBefore()Ljava/util/Date;
+-
+-    move-result-object p1
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    const-string p1, " to "
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getNotAfter()Ljava/util/Date;
+-
+-    move-result-object p1
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string p1, "Certificate SN# "
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getSerialNumber()Ljava/math/BigInteger;
+-
+-    move-result-object p1
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string p1, "Generated with "
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getSigAlgName()Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    :cond_a
+-    if-eqz v3, :cond_b
+-
+-    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getIssuerDN()Ljava/security/Principal;
+-
+-    move-result-object p0
+-
+-    invoke-interface {p0}, Ljava/security/Principal;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    const-string p1, "CN=Ed Platz, OU=Display Imaging, O=Monotype Imanging Inc., L=Woburn, ST=MA, C=US"
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_b
+-
+-    const-string p0, "**Certificate data is correct**"
+-
+-    invoke-static {v1, p0}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v5
+-
+-    :cond_b
+-    return v0
+-.end method
+-
+-.method public static isMultiPaneMode(Landroid/app/Activity;)Z
+-    .locals 1
+-
+-    invoke-static {p0}, Landroidx/window/embedding/ActivityEmbeddingController;->getInstance(Landroid/content/Context;)Landroidx/window/embedding/ActivityEmbeddingController;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p0}, Landroidx/window/embedding/ActivityEmbeddingController;->isActivityEmbedded(Landroid/app/Activity;)Z
+-
+-    move-result p0
+-
+-    return p0
+-.end method
+-
+-.method public static isMultiWindowMode(Landroid/content/Context;)Z
+-    .locals 0
+-
+-    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+-
+-    move-result-object p0
+-
+-    iget-object p0, p0, Landroid/content/res/Configuration;->windowConfiguration:Landroid/app/WindowConfiguration;
+-
+-    invoke-virtual {p0}, Landroid/app/WindowConfiguration;->getWindowingMode()I
+-
+-    move-result p0
+-
+-    invoke-static {p0}, Landroid/app/WindowConfiguration;->inMultiWindowMode(I)Z
+-
+-    move-result p0
+-
+-    return p0
+-.end method
+-
+-.method public static isPortrait(Landroid/content/Context;)Z
+-    .locals 3
+-
+-    const/4 v0, 0x0
+-
+-    :try_start_0
+-    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+-
+-    move-result-object p0
+-
+-    iget p0, p0, Landroid/content/res/Configuration;->orientation:I
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    const/4 v1, 0x1
+-
+-    if-ne p0, v1, :cond_0
+-
+-    move v0, v1
+-
+-    :cond_0
+-    return v0
+-
+-    :catch_0
+-    move-exception p0
+-
+-    new-instance v1, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v2, "Checking orientation port is failed."
+-
+-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    const-string v1, "SecDisplayUtils"
+-
+-    invoke-static {v1, p0}, Landroid/util/Log;->secE(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v0
+-.end method
+-
+-.method public static isScreenSaverEnabled(Landroid/content/Context;)Z
+-    .locals 1
+-
+-    :try_start_0
+-    invoke-static {p0}, Lcom/android/settingslib/dream/DreamBackend;->getInstance(Landroid/content/Context;)Lcom/android/settingslib/dream/DreamBackend;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Lcom/android/settingslib/dream/DreamBackend;->isEnabled()Z
+-
+-    move-result p0
+-    :try_end_0
+-    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    goto :goto_0
+-
+-    :catch_0
+-    const-string p0, "SecDisplayUtils"
+-
+-    const-string v0, " isScreenSaverEnabled security exception"
+-
+-    invoke-static {p0, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const/4 p0, 0x0
++    :cond_0
++    const/4 p0, 0x0
+ 
+     :goto_0
+     return p0
+ .end method
+ 
+-.method public static isSemAvailable(Landroid/content/Context;)Z
+-    .locals 1
+-
+-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+-
+-    move-result-object p0
+-
+-    if-eqz p0, :cond_0
+-
+-    const-string v0, "com.samsung.feature.samsung_experience_mobile"
+-
+-    invoke-virtual {p0, v0}, Landroid/content/pm/PackageManager;->hasSystemFeature(Ljava/lang/String;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    const/4 p0, 0x0
+-
+-    :goto_0
+-    return p0
+-.end method
+-
+-.method public static isSharedFont(Landroid/content/pm/PackageManager;Ljava/lang/String;)Z
+-    .locals 4
+-
+-    invoke-static {p1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result v0
+-
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    const/4 v0, 0x0
+-
+-    if-eqz p0, :cond_1
+-
+-    const/16 v2, 0x80
+-
+-    :try_start_0
+-    invoke-virtual {p0, p1, v2}, Landroid/content/pm/PackageManager;->getApplicationInfo(Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;
+-
+-    move-result-object v0
+-    :try_end_0
+-    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    goto :goto_0
+-
+-    :catch_0
+-    move-exception v2
+-
+-    invoke-virtual {v2}, Landroid/content/pm/PackageManager$NameNotFoundException;->printStackTrace()V
+-
+-    :cond_1
+-    :goto_0
+-    if-eqz v0, :cond_5
+-
+-    invoke-virtual {p0, p1}, Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    iget p1, v0, Landroid/content/pm/ApplicationInfo;->flags:I
+-
+-    const/4 v0, 0x1
+-
+-    and-int/2addr p1, v0
+-
+-    if-eqz p1, :cond_2
+-
+-    move p1, v0
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    move p1, v1
+-
+-    :goto_1
+-    if-eqz p0, :cond_4
+-
+-    const-string/jumbo v2, "packageinstaller"
+-
+-    invoke-virtual {p0, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_3
+-
+-    goto :goto_2
+-
+-    :cond_3
+-    move p0, v1
+-
+-    goto :goto_3
+-
+-    :cond_4
+-    :goto_2
+-    move p0, v0
+-
+-    :goto_3
+-    new-instance v2, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v3, "Flip font is preload : "
+-
+-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    const-string v3, " , isSharedFont : "
+-
+-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v2, p0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v2
+-
+-    const-string v3, "SecDisplayUtils"
+-
+-    invoke-static {v3, v2}, Landroid/util/secutil/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    if-nez p1, :cond_5
+-
+-    if-eqz p0, :cond_5
+-
+-    return v0
+-
+-    :cond_5
+-    return v1
+-.end method
+-
+-.method public static isSignatureMatch(Landroid/content/Context;Ljava/lang/String;)Z
+-    .locals 8
+-
+-    const/4 v0, 0x0
+-
+-    :try_start_0
+-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+-
+-    move-result-object p0
+-
+-    const/16 v1, 0x40
+-
+-    invoke-virtual {p0, p1, v1}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
+-
+-    move-result-object p0
+-
+-    iget-object p0, p0, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;
+-
+-    if-eqz p0, :cond_3
+-
+-    array-length p1, p0
+-
+-    move v1, v0
+-
+-    move v2, v1
+-
+-    :goto_0
+-    if-ge v1, p1, :cond_2
+-
+-    aget-object v3, p0, v1
+-
+-    sget-object v4, Lcom/samsung/android/settings/display/SecDisplayUtils;->SIGNATURES:[Landroid/content/pm/Signature;
+-
+-    array-length v5, v4
+-
+-    move v6, v0
+-
+-    :goto_1
+-    if-ge v6, v5, :cond_1
+-
+-    aget-object v7, v4, v6
+-
+-    invoke-virtual {v7, v3}, Landroid/content/pm/Signature;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v7
+-    :try_end_0
+-    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    if-eqz v7, :cond_0
+-
+-    const/4 v2, 0x1
+-
+-    goto :goto_2
+-
+-    :cond_0
+-    add-int/lit8 v6, v6, 0x1
+-
+-    goto :goto_1
+-
+-    :cond_1
+-    :goto_2
+-    add-int/lit8 v1, v1, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    move v0, v2
+-
+-    goto :goto_3
+-
+-    :catch_0
+-    move-exception p0
+-
+-    new-instance p1, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v1, "Can\'t find my package "
+-
+-    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Landroid/content/pm/PackageManager$NameNotFoundException;->getMessage()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    const-string p1, "SecDisplayUtils"
+-
+-    invoke-static {p1, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    :cond_3
+-    :goto_3
+-    return v0
+-.end method
+-
+ .method public static isSupportCoverHighRefreshRate()Z
+     .locals 1
+ 
+-- 
+2.46.0
+
