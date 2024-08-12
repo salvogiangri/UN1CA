@@ -13,8 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - module: "Optical FOD blobs"
-            path: "unica/patches/product_feature/fingerprint/optical_fod"
+          - module: "(a71) OS proprietary blobs"
+            path: "target/a71/patches/stock_blobs"
+          - module: "(r8q) OS proprietary blobs"
+            path: "target/r8q/patches/stock_blobs"
 
     steps:
       - name: Checkout repo
