@@ -1,4 +1,4 @@
-From bd3d6e1075abba10752554274c72e8f7a0f1db30 Mon Sep 17 00:00:00 2001
+From 0c6681c64f44ac016eefe18110c4dd88f1139cb7 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -2187,7 +2187,7 @@ index 00000000..506713db
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/ASKSPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ASKSPreferenceController.smali
 new file mode 100644
-index 00000000..124a5437
+index 00000000..cbb3374c
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/ASKSPreferenceController.smali
 @@ -0,0 +1,171 @@
@@ -2298,7 +2298,7 @@ index 00000000..124a5437
 +
 +    const/4 v0, 0x1
 +
-+    invoke-static {p0, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
 +    move-result p0
 +
@@ -2348,7 +2348,7 @@ index 00000000..124a5437
 +
 +    const-string v0, "persist.sys.unica.asks"
 +
-+    invoke-static {v0, p1}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v0, p1}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
 +
 +    return p0
 +.end method
@@ -3942,7 +3942,7 @@ index 00000000..fa7fe4a8
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
 new file mode 100644
-index 00000000..194b63bb
+index 00000000..db1c034c
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/GamesPropsPreferenceController.smali
 @@ -0,0 +1,167 @@
@@ -4053,7 +4053,7 @@ index 00000000..194b63bb
 +
 +    const/4 v0, 0x1
 +
-+    invoke-static {p0, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
 +    move-result p0
 +
@@ -4097,7 +4097,7 @@ index 00000000..194b63bb
 +
 +    move-result-object v0
 +
-+    invoke-static {p0, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
 +
 +    const/4 p0, 0x1
 +
