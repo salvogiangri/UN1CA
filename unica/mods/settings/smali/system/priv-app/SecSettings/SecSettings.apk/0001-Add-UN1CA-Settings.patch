@@ -1,4 +1,4 @@
-From e33a314352d8d3eeb38c767439f7ccab78f2ae6a Mon Sep 17 00:00:00 2001
+From 314cd6f8e3526a70682c9644701c0d7026406dbd Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -35,6 +35,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-sq-rAL/strings.xml                 |  29 +
  res/values-sq/strings.xml                     |  29 +
  res/values-tr/strings.xml                     |  29 +
+ res/values-uk/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
  res/values/public.xml                         |  38 ++
@@ -69,7 +70,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 65 files changed, 5066 insertions(+)
+ 66 files changed, 5095 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1184,6 +1185,44 @@ index ef5566c5..9b8f623e 100644
 +    <string name="unica_spoof_settings_title">Sistem aldatma ayarları</string>
 +    <string name="unica_ss_detection_title">Ekran görüntüsü tespitini devre dışı bırak</string>
 +    <string name="unica_ui_settings_title">Arayüz Ayarları</string>
+ </resources>
+diff --git a/res/values-uk/strings.xml b/res/values-uk/strings.xml
+index 89c49399..bda3adcd 100644
+--- a/res/values-uk/strings.xml
++++ b/res/values-uk/strings.xml
+@@ -7256,4 +7256,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+     <string name="zone_menu_by_region">Вибрати за регіоном</string>
+     <string name="zone_time_type_dst">Літній час</string>
+     <string name="zone_time_type_standard">Стандартний час</string>
++    <string name="unica_allow_downgrade_title">Дозволити понижати версію додатків</string>
++    <string name="unica_asks_title">Вимкнути ASKS</string>
++    <string name="unica_boot_sound_title">Звук увімкнення телефону</string>
++    <string name="unica_device_name_title">Назва пристрою</string>
++    <string name="unica_extra_settings_title">Додаткові налаштування</string>
++    <string name="unica_fod_anim_type_optical_g">Оптичний датчик (зелений)</string>
++    <string name="unica_fod_anim_type_optical_w">Оптичний датчик (білий)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ультразвуковий датчик</string>
++    <string name="unica_fod_anim_type_title">Стиль анімації розблокування відбитком пальця</string>
++    <string name="unica_games_spoof_title">Вищий FPS в іграх</string>
++    <string name="unica_hide_dev_title">Приховати статус розробника від програм</string>
++    <string name="unica_max_refresh_rate_title">Примусова пікова частота оновлення екрану</string>
++    <string name="unica_native_blur_dialog_msg">Для застосування змін, потрібне перезавантаження.</string>
++    <string name="unica_native_blur_dialog_negative">Не зараз</string>
++    <string name="unica_native_blur_dialog_positive">Перезавантаження</string>
++    <string name="unica_native_blur_dialog_title">Потрібне перезавантаження</string>
++    <string name="unica_native_blur_title">Увімкнути ефект живого розмиття</string>
++    <string name="unica_pif_checking">Пошук оновлень…</string>
++    <string name="unica_pif_error">Сталася помилка.</string>
++    <string name="unica_pif_no_root">Для роботи Play Integrity Fix потрібен root доступ.</string>
++    <string name="unica_pif_up_to_date">Ви використовуєте останню версію.</string>
++    <string name="unica_pif_updated">Оновлення успішно завершено.</string>
++    <string name="unica_pif_version_title">Версія Play Integrity Fix</string>
++    <string name="unica_rom_version_title">Версія ПЗ</string>
++    <string name="unica_secure_ss_title">Вимкнути заборону скріншота в додатках</string>
++    <string name="unica_settings_title">Налаштування UN1CA</string>
++    <string name="unica_spoof_settings_title">Налаштування виявлення</string>
++    <string name="unica_ss_detection_title">Вимкнути виявлення знімків екрана</string>
++    <string name="unica_ui_settings_title">Налаштування інтерфейсу користувача</string>
  </resources>
 diff --git a/res/values/colors.xml b/res/values/colors.xml
 index a576c7ea..cf1ff26f 100644
