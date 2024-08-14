@@ -1,4 +1,4 @@
-From a6578741eab43f7f4ce3f0b75052f348e349d92b Mon Sep 17 00:00:00 2001
+From 33e1a9e0396c49386727d54ac475c154ca23098d Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -8,6 +8,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/drawable/sec_ic_settings_unica.xml        |   9 +
  .../unica_settings_logo_layout.xml            |   7 +
  res/layout/unica_settings_logo_layout.xml     |   7 +
+ res/values-ar/strings.xml                     |  29 +
  res/values-de/strings.xml                     |  29 +
  res/values-en-rAU/strings.xml                 |  29 +
  res/values-en-rCA/strings.xml                 |  29 +
@@ -61,7 +62,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 57 files changed, 4853 insertions(+)
+ 58 files changed, 4882 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -151,6 +152,44 @@ index 00000000..3f8b037f
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
 \ No newline at end of file
+diff --git a/res/values-ar/strings.xml b/res/values-ar/strings.xml
+index cb490dfc..70d12f7a 100644
+--- a/res/values-ar/strings.xml
++++ b/res/values-ar/strings.xml
+@@ -7256,4 +7256,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+     <string name="zone_menu_by_region">تحديد حسب المنطقة</string>
+     <string name="zone_time_type_dst">توقيت الصيفي</string>
+     <string name="zone_time_type_standard">الوقت العادي</string>
++    <string name="unica_allow_downgrade_title">السماح بتخفيض مستوى التطبيق</string>
++    <string name="unica_asks_title">تعطيل ASKS</string>
++    <string name="unica_boot_sound_title">تشغيل موسيقى التمهيد عندما يكون الهاتف قيد التشغيل</string>
++    <string name="unica_device_name_title">اسم الجهاز</string>
++    <string name="unica_extra_settings_title">إعدادات إضافية</string>
++    <string name="unica_fod_anim_type_optical_g">مستشعر بصري (أخضر)</string>
++    <string name="unica_fod_anim_type_optical_w">مستشعر بصري (أبيض)</string>
++    <string name="unica_fod_anim_type_ultrasonic">مستشعر الموجات فوق الصوتية</string>
++    <string name="unica_fod_anim_type_title">نمط الرسوم لفتح قفل بصمة الإصبع</string>
++    <string name="unica_games_spoof_title">فتح معدل FPS أعلى في الألعاب</string>
++    <string name="unica_hide_dev_title">إخفاء حالة المطور من التطبيقات</string>
++    <string name="unica_max_refresh_rate_title">فرض الحد الأقصى لمعدل تحديث الشاشة</string>
++    <string name="unica_native_blur_dialog_msg">لتطبيق التغييرات، يلزم إعادة تشغيل الهاتف</string>
++    <string name="unica_native_blur_dialog_negative">ليس الآن</string>
++    <string name="unica_native_blur_dialog_positive">أعد تشغيل الهاتف</string>
++    <string name="unica_native_blur_dialog_title">مطلوب إعادة تشغيل الهاتف</string>
++    <string name="unica_native_blur_title">تفعيل تأثير الضباب المباشر</string>
++    <string name="unica_pif_checking">جاري التحقق من التحديثات…</string>
++    <string name="unica_pif_error">حدث خطأ ما.</string>
++    <string name="unica_pif_no_root">يجب أن يكون لديك  صلاحيات روت حتى يعمل Play Integrity Fix.</string>
++    <string name="unica_pif_up_to_date">أنت تقوم بتشغيل الإصدار الأحدث.</string>
++    <string name="unica_pif_updated">تم التحديث بنجاح.</string>
++    <string name="unica_pif_version_title">إصدار Play Integrity Fix</string>
++    <string name="unica_rom_version_title">نسخة الروم</string>
++    <string name="unica_secure_ss_title">السماح بالتقاط لقطة شاشة آمنة</string>
++    <string name="unica_settings_title">إعدادات UN1CA</string>
++    <string name="unica_spoof_settings_title">إعدادات التضليل</string>
++    <string name="unica_ss_detection_title">تعطيل اكتشاف لقطة الشاشة</string>
++    <string name="unica_ui_settings_title">إعدادات واجهة المستخدم</string>
+ </resources>
 diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
 index 87dde4f1..59241a02 100644
 --- a/res/values-de/strings.xml
