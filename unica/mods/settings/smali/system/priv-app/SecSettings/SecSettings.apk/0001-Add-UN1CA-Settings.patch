@@ -1,4 +1,4 @@
-From d4859adf1e29694bf9e6e1a7f2bde5830b59042c Mon Sep 17 00:00:00 2001
+From e33a314352d8d3eeb38c767439f7ccab78f2ae6a Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -32,6 +32,8 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-pt-rPT/strings.xml                 |  29 +
  res/values-pt/strings.xml                     |  29 +
  res/values-ro/strings.xml                     |  29 +
+ res/values-sq-rAL/strings.xml                 |  29 +
+ res/values-sq/strings.xml                     |  29 +
  res/values-tr/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
@@ -67,7 +69,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 63 files changed, 5008 insertions(+)
+ 65 files changed, 5066 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1068,6 +1070,82 @@ index 3f8028eb..801f9605 100644
 +    <string name="unica_spoof_settings_title">Falsificarea setărilor</string>
 +    <string name="unica_ss_detection_title">Dezactivare detectarea capturii a ecranului</string>
 +    <string name="unica_ui_settings_title">Setări UI</string>
+ </resources>
+diff --git a/res/values-sq-rAL/strings.xml b/res/values-sq-rAL/strings.xml
+index 57a5022e..9bda9d58 100644
+--- a/res/values-sq-rAL/strings.xml
++++ b/res/values-sq-rAL/strings.xml
+@@ -6474,4 +6474,33 @@ Te Kamera, mund ta përdorësh Butonin Krye për të nxjerrë foto."</string>
+     <string name="zone_menu_by_region">Sipas rajonit</string>
+     <string name="zone_time_type_dst">Ora verore</string>
+     <string name="zone_time_type_standard">Ora standard</string>
++    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-ve</string>
++    <string name="unica_asks_title">Çaktivizo ASKS</string>
++    <string name="unica_boot_sound_title">Luaj zërin e ndezjes</string>
++    <string name="unica_device_name_title">Emri i paisjes</string>
++    <string name="unica_extra_settings_title">Cilësimet ekstra</string>
++    <string name="unica_fod_anim_type_optical_g">Sensori optikal (gjelbërt)</string>
++    <string name="unica_fod_anim_type_optical_w">Sensori optikal (bardhë)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Sensori ultrasonik</string>
++    <string name="unica_fod_anim_type_title">Stili i animacionit te hapjes me shenjë gishti</string>
++    <string name="unica_games_spoof_title">Aktivizo FPS të lartë në lojra</string>
++    <string name="unica_hide_dev_title">Mshef statusin e zhvilluesit nga app-et</string>
++    <string name="unica_max_refresh_rate_title">Forco rrjedhshmërin maksimale</string>
++    <string name="unica_native_blur_dialog_msg">Që të aplikohen ndryshimet, një rinisje kërkohet.</string>
++    <string name="unica_native_blur_dialog_negative">Jo tani</string>
++    <string name="unica_native_blur_dialog_positive">Rinisje</string>
++    <string name="unica_native_blur_dialog_title">Rinisja kërkohet</string>
++    <string name="unica_native_blur_title">Aktivizo efektin e turbullimit në kohë reale </string>
++    <string name="unica_pif_checking">Duke kontrolluar për përditsime…</string>
++    <string name="unica_pif_error">Ndodhi një gabim.</string>
++    <string name="unica_pif_no_root">Root është i nevojshëm që Play Integrity Fix të funksionojë.</string>
++    <string name="unica_pif_up_to_date">Ti je duke përdorur versionin më te ri.</string>
++    <string name="unica_pif_updated">Përditësimi u krye me sukses.</string>
++    <string name="unica_pif_version_title">Versioni i Play Integrity Fix</string>
++    <string name="unica_rom_version_title">Versioni i ROM</string>
++    <string name="unica_secure_ss_title">Lejo pamjen e çastit të sigurt</string>
++    <string name="unica_settings_title">Cilësimet e UN1CA</string>
++    <string name="unica_spoof_settings_title">Cilësimet e maskimit</string>
++    <string name="unica_ss_detection_title">Çaktivizo zbulimin e pamjes së çastit</string>
++    <string name="unica_ui_settings_title">Cilësimet e UI</string>
+ </resources>
+diff --git a/res/values-sq/strings.xml b/res/values-sq/strings.xml
+index 24805135..c64c7aa4 100644
+--- a/res/values-sq/strings.xml
++++ b/res/values-sq/strings.xml
+@@ -915,4 +915,33 @@ Kur shton një përdorues të ri, ai person duhet të konfigurojë hapësirën e
+     <string name="zen_mode_forever">Derisa ta çaktivizosh</string>
+     <string name="zen_mode_settings_summary_off">Asnjëherë</string>
+     <string name="zen_mode_settings_turn_on_dialog_title">Aktivizo \"Mos shqetëso\"</string>
++    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-ve</string>
++    <string name="unica_asks_title">Çaktivizo ASKS</string>
++    <string name="unica_boot_sound_title">Luaj zërin e ndezjes</string>
++    <string name="unica_device_name_title">Emri i paisjes</string>
++    <string name="unica_extra_settings_title">Cilësimet ekstra</string>
++    <string name="unica_fod_anim_type_optical_g">Sensori optikal (gjelbërt)</string>
++    <string name="unica_fod_anim_type_optical_w">Sensori optikal (bardhë)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Sensori ultrasonik</string>
++    <string name="unica_fod_anim_type_title">Stili i animacionit te hapjes me shenjë gishti</string>
++    <string name="unica_games_spoof_title">Aktivizo FPS të lartë në lojra</string>
++    <string name="unica_hide_dev_title">Mshef statusin e zhvilluesit nga app-et</string>
++    <string name="unica_max_refresh_rate_title">Forco rrjedhshmërin maksimale</string>
++    <string name="unica_native_blur_dialog_msg">Që të aplikohen ndryshimet, një rinisje kërkohet.</string>
++    <string name="unica_native_blur_dialog_negative">Jo tani</string>
++    <string name="unica_native_blur_dialog_positive">Rinisje</string>
++    <string name="unica_native_blur_dialog_title">Rinisja kërkohet</string>
++    <string name="unica_native_blur_title">Aktivizo efektin e turbullimit në kohë reale </string>
++    <string name="unica_pif_checking">Duke kontrolluar për përditsime…</string>
++    <string name="unica_pif_error">Ndodhi një gabim.</string>
++    <string name="unica_pif_no_root">Root është i nevojshëm që Play Integrity Fix të funksionojë.</string>
++    <string name="unica_pif_up_to_date">Ti je duke përdorur versionin më te ri.</string>
++    <string name="unica_pif_updated">Përditësimi u krye me sukses.</string>
++    <string name="unica_pif_version_title">Versioni i Play Integrity Fix</string>
++    <string name="unica_rom_version_title">Versioni i ROM</string>
++    <string name="unica_secure_ss_title">Lejo pamjen e çastit të sigurt</string>
++    <string name="unica_settings_title">Cilësimet e UN1CA</string>
++    <string name="unica_spoof_settings_title">Cilësimet e maskimit</string>
++    <string name="unica_ss_detection_title">Çaktivizo zbulimin e pamjes së çastit</string>
++    <string name="unica_ui_settings_title">Cilësimet e UI</string>
  </resources>
 diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
 index ef5566c5..9b8f623e 100644
