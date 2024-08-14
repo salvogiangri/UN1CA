@@ -1,4 +1,4 @@
-From 0c6681c64f44ac016eefe18110c4dd88f1139cb7 Mon Sep 17 00:00:00 2001
+From cf89b5fb05aec590505b58a7a592f9f3fd2cc8cd Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -25,6 +25,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-pt-rPT/strings.xml                 |  29 +
  res/values-pt/strings.xml                     |  29 +
  res/values-ro/strings.xml                     |  29 +
+ res/values-tr/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
  res/values/public.xml                         |  38 ++
@@ -58,7 +59,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 54 files changed, 4766 insertions(+)
+ 55 files changed, 4795 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -793,6 +794,44 @@ index 3f8028eb..801f9605 100644
 +    <string name="unica_spoof_settings_title">Falsificarea setărilor</string>
 +    <string name="unica_ss_detection_title">Dezactivare detectarea capturii a ecranului</string>
 +    <string name="unica_ui_settings_title">Setări UI</string>
+ </resources>
+diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
+index ef5566c5..6566e1c2 100644
+--- a/res/values-tr/strings.xml
++++ b/res/values-tr/strings.xml
+@@ -7256,4 +7256,33 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
+     <string name="zone_menu_by_region">Bölgeye göre seç</string>
+     <string name="zone_time_type_dst">Gün ışığından yararlanma</string>
+     <string name="zone_time_type_standard">Standart saat</string>
++    <string name="unica_allow_downgrade_title">Sistem uygulamalarının sürümünü düşürmeye izin ver</string>
++    <string name="unica_asks_title">"ASKS'yi devre dışı bırak"</string>
++    <string name="unica_boot_sound_title">Cihaz açılış sesini etkinleştir</string>
++    <string name="unica_device_name_title">Cihaz İsmi</string>
++    <string name="unica_extra_settings_title">Ekstra Ayarlar</string>
++    <string name="unica_fod_anim_type_optical_g">Optik sensör (yeşil)</string>
++    <string name="unica_fod_anim_type_optical_w">Optik sensör (beyaz)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ultrasonik sensör</string>
++    <string name="unica_fod_anim_type_title">Parmak izi kilit açma animasyonu</string>
++    <string name="unica_games_spoof_title">"Oyunlarda daha yüksek FPS'in kilidini aç"</string>
++    <string name="unica_hide_dev_title">Geliştirici seçeneklerini diğer uygulamalardan gizle</string>
++    <string name="unica_max_refresh_rate_title">Oyunlardaki FPS limitini yükselt</string>
++    <string name="unica_native_blur_dialog_msg">Değişikliklerin uygulanabilmesi için cihazın yeniden başlatılması gerekiyor.</string>
++    <string name="unica_native_blur_dialog_negative">Şimdi değil</string>
++    <string name="unica_native_blur_dialog_positive">Yeniden başlat</string>
++    <string name="unica_native_blur_dialog_title">Yeniden başlatma gerekli</string>
++    <string name="unica_native_blur_title">Canlı bulanıklık efektini etkinleştir</string>
++    <string name="unica_pif_checking">Güncellemeler kontrol ediliyor...</string>
++    <string name="unica_pif_error">Bir hata oluştu.</string>
++    <string name="unica_pif_no_root">"Play Integrity Fix'in çalışabilmesi için root gereklidir."</string>
++    <string name="unica_pif_up_to_date">Son sürüme sahipsiniz.</string>
++    <string name="unica_pif_updated">Güncelleme başarıyla tamamlandı.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix sürümü</string>
++    <string name="unica_rom_version_title">ROM sürümü</string>
++    <string name="unica_secure_ss_title">Güvenli uygulamalarda ekran görüntülerine izin ver</string>
++    <string name="unica_settings_title">UN1CA Ayarları</string>
++    <string name="unica_spoof_settings_title">Sistem aldatma ayarları</string>
++    <string name="unica_ss_detection_title">Ekran görüntüsü tespitini devre dışı bırak</string>
++    <string name="unica_ui_settings_title">Arayüz Ayarları</string>
  </resources>
 diff --git a/res/values/colors.xml b/res/values/colors.xml
 index a576c7ea..cf1ff26f 100644
