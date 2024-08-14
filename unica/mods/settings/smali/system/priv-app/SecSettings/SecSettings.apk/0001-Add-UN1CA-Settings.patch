@@ -1,4 +1,4 @@
-From f735d341adfe4a76f1a59bc16010261869d4a935 Mon Sep 17 00:00:00 2001
+From d4859adf1e29694bf9e6e1a7f2bde5830b59042c Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -804,7 +804,7 @@ index 311495e6..59084821 100644
 +    <string name="unica_ui_settings_title">"Paramètres de l'interface utilisateur"</string>
  </resources>
 diff --git a/res/values-it/strings.xml b/res/values-it/strings.xml
-index c27cc9e6..a6e1d9ae 100644
+index c27cc9e6..58d8a623 100644
 --- a/res/values-it/strings.xml
 +++ b/res/values-it/strings.xml
 @@ -7264,4 +7264,33 @@ In Camera potete utilizzare il pulsante Alto per scattare foto."</string>
@@ -819,10 +819,10 @@ index c27cc9e6..a6e1d9ae 100644
 +    <string name="unica_fod_anim_type_optical_g">Sensore ottico (verde)</string>
 +    <string name="unica_fod_anim_type_optical_w">Sensore ottico (bianco)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Sensore ultrasonico</string>
-+    <string name="unica_fod_anim_type_title">Animazione di sblocco impronta digitale</string>
++    <string name="unica_fod_anim_type_title">Animazione di sblocco con impronta digitale</string>
 +    <string name="unica_games_spoof_title">Sblocca opzioni grafiche extra per giochi</string>
 +    <string name="unica_hide_dev_title">Nascondi opzioni sviluppatore alle app</string>
-+    <string name="unica_max_refresh_rate_title">Forza frequenza di aggiornamento max</string>
++    <string name="unica_max_refresh_rate_title">Forza frequenza di aggiornamento massima</string>
 +    <string name="unica_native_blur_dialog_msg">Per applicare le impostazioni, riavvia il dispositivo.</string>
 +    <string name="unica_native_blur_dialog_negative">Più tardi</string>
 +    <string name="unica_native_blur_dialog_positive">Riavvia</string>
@@ -839,10 +839,10 @@ index c27cc9e6..a6e1d9ae 100644
 +    <string name="unica_settings_title">Impostazioni UN1CA</string>
 +    <string name="unica_spoof_settings_title">Opzioni spoofing</string>
 +    <string name="unica_ss_detection_title">Disattiva rilevamento screenshot</string>
-+    <string name="unica_ui_settings_title">Opzioni UI</string>
++    <string name="unica_ui_settings_title">Opzioni interfaccia</string>
  </resources>
 diff --git a/res/values-pl-rSP/strings.xml b/res/values-pl-rSP/strings.xml
-index fdaca30e..dd3d71ca 100644
+index fdaca30e..2d858f4a 100644
 --- a/res/values-pl-rSP/strings.xml
 +++ b/res/values-pl-rSP/strings.xml
 @@ -6426,4 +6426,33 @@ W aplikacji Aparat możesz używać górnego przycisku do robienia zdjęć."</st
@@ -858,9 +858,9 @@ index fdaca30e..dd3d71ca 100644
 +    <string name="unica_fod_anim_type_optical_w">Sensor optyczny (biały)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasoniczny</string>
 +    <string name="unica_fod_anim_type_title">Styl animacji odblokowywania odciskiem palca</string>
-+    <string name="unica_games_spoof_title">Odblokuj wyższy FPS w grach</string>
++    <string name="unica_games_spoof_title">Odblokuj więcej FPS w grach</string>
 +    <string name="unica_hide_dev_title">Ukryj status dewelopera dla aplikacji</string>
-+    <string name="unica_max_refresh_rate_title">Wymuś maksymalną częstotliwość odświeżania</string>
++    <string name="unica_max_refresh_rate_title">Wymuś maksymalną płynność ruchu</string>
 +    <string name="unica_native_blur_dialog_msg">Aby zastosować zmiany, wymagane jest ponowne uruchomienie.</string>
 +    <string name="unica_native_blur_dialog_negative">Nie teraz</string>
 +    <string name="unica_native_blur_dialog_positive">Uruchom ponownie</string>
@@ -880,7 +880,7 @@ index fdaca30e..dd3d71ca 100644
 +    <string name="unica_ui_settings_title">Ustawienia interfejsu</string>
  </resources>
 diff --git a/res/values-pl/strings.xml b/res/values-pl/strings.xml
-index 40dac0a2..57eb8e1b 100644
+index 40dac0a2..f08262b6 100644
 --- a/res/values-pl/strings.xml
 +++ b/res/values-pl/strings.xml
 @@ -7256,4 +7256,33 @@ W aplikacji Aparat możesz używać górnego przycisku do robienia zdjęć."</st
@@ -896,9 +896,9 @@ index 40dac0a2..57eb8e1b 100644
 +    <string name="unica_fod_anim_type_optical_w">Sensor optyczny (biały)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasoniczny</string>
 +    <string name="unica_fod_anim_type_title">Styl animacji odblokowywania odciskiem palca</string>
-+    <string name="unica_games_spoof_title">Odblokuj wyższy FPS w grach</string>
++    <string name="unica_games_spoof_title">Odblokuj więcej FPS w grach</string>
 +    <string name="unica_hide_dev_title">Ukryj status dewelopera dla aplikacji</string>
-+    <string name="unica_max_refresh_rate_title">Wymuś maksymalną częstotliwość odświeżania</string>
++    <string name="unica_max_refresh_rate_title">Wymuś maksymalną płynność ruchu</string>
 +    <string name="unica_native_blur_dialog_msg">Aby zastosować zmiany, wymagane jest ponowne uruchomienie.</string>
 +    <string name="unica_native_blur_dialog_negative">Nie teraz</string>
 +    <string name="unica_native_blur_dialog_positive">Uruchom ponownie</string>
