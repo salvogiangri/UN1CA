@@ -1,4 +1,4 @@
-From 2b06048e20bb15413be464cde6b870c36efcffce Mon Sep 17 00:00:00 2001
+From f735d341adfe4a76f1a59bc16010261869d4a935 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -9,6 +9,8 @@ Subject: [PATCH] Add UN1CA Settings
  .../unica_settings_logo_layout.xml            |   7 +
  res/layout/unica_settings_logo_layout.xml     |   7 +
  res/values-ar/strings.xml                     |  29 +
+ res/values-az-rAZ/strings.xml                 |  29 +
+ res/values-az/strings.xml                     |  29 +
  res/values-de/strings.xml                     |  29 +
  res/values-en-rAU/strings.xml                 |  29 +
  res/values-en-rCA/strings.xml                 |  29 +
@@ -65,7 +67,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 61 files changed, 4950 insertions(+)
+ 63 files changed, 5008 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -192,6 +194,82 @@ index cb490dfc..70d12f7a 100644
 +    <string name="unica_spoof_settings_title">إعدادات التضليل</string>
 +    <string name="unica_ss_detection_title">تعطيل اكتشاف لقطة الشاشة</string>
 +    <string name="unica_ui_settings_title">إعدادات واجهة المستخدم</string>
+ </resources>
+diff --git a/res/values-az-rAZ/strings.xml b/res/values-az-rAZ/strings.xml
+index 15d43b07..454a5022 100644
+--- a/res/values-az-rAZ/strings.xml
++++ b/res/values-az-rAZ/strings.xml
+@@ -6446,4 +6446,33 @@ Kamera proqramında Yuxarı düymədən şəkil çəkmək üçün istifadə edə
+     <string name="zone_menu_by_region">Regiona görə seç</string>
+     <string name="zone_time_type_dst">Gündüz işığa qənaət vaxtı</string>
+     <string name="zone_time_type_standard">Standart vaxt</string>
++    <string name="unica_allow_downgrade_title">Tətbiq versiyasının aşağı salınmasına icazə ver</string>
++    <string name="unica_asks_title">ASKS-i deaktiv et</string>
++    <string name="unica_boot_sound_title">Telefonu başladarkən səs effektini çal</string>
++    <string name="unica_device_name_title">Cihaz adı</string>
++    <string name="unica_extra_settings_title">Əlavə parametrlər</string>
++    <string name="unica_fod_anim_type_optical_g">Optik sensor (yaşıl)</string>
++    <string name="unica_fod_anim_type_optical_w">Optik sensor (ağ)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ultrasonik sensor</string>
++    <string name="unica_fod_anim_type_title">Barmaq izi kilidi açma animasiya stili</string>
++    <string name="unica_games_spoof_title">Oyunlarda daha yüksək FPS kilidini aç</string>
++    <string name="unica_hide_dev_title">Tərtibatçı statusunu proqramlardan gizlət</string>
++    <string name="unica_max_refresh_rate_title">Ən yüksək yeniləmə tezliyinə məcbur et</string>
++    <string name="unica_native_blur_dialog_msg">Dəyişiklikləri tətbiq etmək üçün yenidən başlatma tələb olunur.</string>
++    <string name="unica_native_blur_dialog_negative">İndi yox</string>
++    <string name="unica_native_blur_dialog_positive">Yenidən başlat</string>
++    <string name="unica_native_blur_dialog_title">Yenidən başlatma tələb olunur</string>
++    <string name="unica_native_blur_title">Canlı blur effektini aktivləşdir</string>
++    <string name="unica_pif_checking">Yeniləmələr yoxlanılır…</string>
++    <string name="unica_pif_error">Xəta baş verdi.</string>
++    <string name="unica_pif_no_root">Play Integrity Fix-in işləməsi üçün root tələb olunur.</string>
++    <string name="unica_pif_up_to_date">Ən son versiyanı işlədirsiniz.</string>
++    <string name="unica_pif_updated">Yeniləmə uğurla tamamlandı.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix versiyası</string>
++    <string name="unica_rom_version_title">Sistem versiyası</string>
++    <string name="unica_secure_ss_title">Təhlükəsiz ekran görüntüsünə icazə ver</string>
++    <string name="unica_settings_title">UN1CA Parametrləri</string>
++    <string name="unica_spoof_settings_title">Saxtakarlıq parametrləri</string>
++    <string name="unica_ss_detection_title">Ekran görüntüsünün aşkarlanmasını deaktiv et</string>
++    <string name="unica_ui_settings_title">İstifadəçi interfeysi parametrləri</string>
+ </resources>
+diff --git a/res/values-az/strings.xml b/res/values-az/strings.xml
+index 15f7172a..3c460865 100644
+--- a/res/values-az/strings.xml
++++ b/res/values-az/strings.xml
+@@ -915,4 +915,33 @@ Yeni istifadəçi əlavə etdiyiniz zaman həmin istifadəçi öz məkanını ay
+     <string name="zen_mode_forever">Deaktiv edilənə qədər</string>
+     <string name="zen_mode_settings_summary_off">Heç vaxt</string>
+     <string name="zen_mode_settings_turn_on_dialog_title">\"Narahat Etməyin\" rejimini aktiv edin</string>
++    <string name="unica_allow_downgrade_title">Tətbiq versiyasının aşağı salınmasına icazə ver</string>
++    <string name="unica_asks_title">ASKS-i deaktiv et</string>
++    <string name="unica_boot_sound_title">Telefonu başladarkən səs effektini çal</string>
++    <string name="unica_device_name_title">Cihaz adı</string>
++    <string name="unica_extra_settings_title">Əlavə parametrlər</string>
++    <string name="unica_fod_anim_type_optical_g">Optik sensor (yaşıl)</string>
++    <string name="unica_fod_anim_type_optical_w">Optik sensor (ağ)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ultrasonik sensor</string>
++    <string name="unica_fod_anim_type_title">Barmaq izi kilidi açma animasiya stili</string>
++    <string name="unica_games_spoof_title">Oyunlarda daha yüksək FPS kilidini aç</string>
++    <string name="unica_hide_dev_title">Tərtibatçı statusunu proqramlardan gizlət</string>
++    <string name="unica_max_refresh_rate_title">Ən yüksək yeniləmə tezliyinə məcbur et</string>
++    <string name="unica_native_blur_dialog_msg">Dəyişiklikləri tətbiq etmək üçün yenidən başlatma tələb olunur.</string>
++    <string name="unica_native_blur_dialog_negative">İndi yox</string>
++    <string name="unica_native_blur_dialog_positive">Yenidən başlat</string>
++    <string name="unica_native_blur_dialog_title">Yenidən başlatma tələb olunur</string>
++    <string name="unica_native_blur_title">Canlı blur effektini aktivləşdir</string>
++    <string name="unica_pif_checking">Yeniləmələr yoxlanılır…</string>
++    <string name="unica_pif_error">Xəta baş verdi.</string>
++    <string name="unica_pif_no_root">Play Integrity Fix-in işləməsi üçün root tələb olunur.</string>
++    <string name="unica_pif_up_to_date">Ən son versiyanı işlədirsiniz.</string>
++    <string name="unica_pif_updated">Yeniləmə uğurla tamamlandı.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix versiyası</string>
++    <string name="unica_rom_version_title">Sistem versiyası</string>
++    <string name="unica_secure_ss_title">Təhlükəsiz ekran görüntüsünə icazə ver</string>
++    <string name="unica_settings_title">UN1CA Parametrləri</string>
++    <string name="unica_spoof_settings_title">Saxtakarlıq parametrləri</string>
++    <string name="unica_ss_detection_title">Ekran görüntüsünün aşkarlanmasını deaktiv et</string>
++    <string name="unica_ui_settings_title">İstifadəçi interfeysi parametrləri</string>
  </resources>
 diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
 index 87dde4f1..59241a02 100644
