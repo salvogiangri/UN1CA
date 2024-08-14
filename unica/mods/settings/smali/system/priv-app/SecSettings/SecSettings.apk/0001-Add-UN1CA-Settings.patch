@@ -1,4 +1,4 @@
-From 33e1a9e0396c49386727d54ac475c154ca23098d Mon Sep 17 00:00:00 2001
+From 756c0216356df4a73916040f28701a87ed90294c Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -41,6 +41,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$layout.smali       |   2 +
  .../com/android/settings/R$string.smali       |  62 ++
  .../com/android/settings/R$xml.smali          |   2 +
+ .../search/SearchIndexableResourcesBase.smali |  10 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         | 155 +++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++
@@ -62,7 +63,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 238 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 58 files changed, 4882 insertions(+)
+ 59 files changed, 4892 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -913,7 +914,7 @@ index 3f8028eb..801f9605 100644
 +    <string name="unica_ui_settings_title">Setări UI</string>
  </resources>
 diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
-index ef5566c5..6566e1c2 100644
+index ef5566c5..9b8f623e 100644
 --- a/res/values-tr/strings.xml
 +++ b/res/values-tr/strings.xml
 @@ -7256,4 +7256,33 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
@@ -929,9 +930,9 @@ index ef5566c5..6566e1c2 100644
 +    <string name="unica_fod_anim_type_optical_w">Optik sensör (beyaz)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Ultrasonik sensör</string>
 +    <string name="unica_fod_anim_type_title">Parmak izi kilit açma animasyonu</string>
-+    <string name="unica_games_spoof_title">"Oyunlarda daha yüksek FPS'in kilidini aç"</string>
++    <string name="unica_games_spoof_title">Oyunlardaki FPS limitini yükselt</string>
 +    <string name="unica_hide_dev_title">Geliştirici seçeneklerini diğer uygulamalardan gizle</string>
-+    <string name="unica_max_refresh_rate_title">Oyunlardaki FPS limitini yükselt</string>
++    <string name="unica_max_refresh_rate_title">Ekranı yüksek yenileme hızına zorla</string>
 +    <string name="unica_native_blur_dialog_msg">Değişikliklerin uygulanabilmesi için cihazın yeniden başlatılması gerekiyor.</string>
 +    <string name="unica_native_blur_dialog_negative">Şimdi değil</string>
 +    <string name="unica_native_blur_dialog_positive">Yeniden başlat</string>
@@ -1307,6 +1308,27 @@ index 4d5b41c4..a0289763 100644
  .field public static final unrestricted_data_access_settings:I = 0x7f16023a
  
  .field public static final usb_default_fragment:I = 0x7f16023b
+diff --git a/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali b/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali
+index b31afbd4..66c54a37 100644
+--- a/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali
++++ b/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali
+@@ -1402,6 +1402,16 @@
+ 
+     invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
+ 
++    new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
++
++    const-class v1, Lio/mesalabs/unica/UnicaSettingsFragment;
++
++    sget-object v2, Lio/mesalabs/unica/UnicaSettingsFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
++
++    invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
++
+     return-void
+ .end method
+ 
 diff --git a/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali b/smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
 new file mode 100644
 index 00000000..18621dd0
