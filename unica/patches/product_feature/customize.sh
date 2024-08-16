@@ -88,6 +88,18 @@ if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]];
     done
 fi
 
+if $SOURCE_AUDIO_SUPPORT_ACH_RINGTONE; then
+    if ! $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
+        echo "Applying ACH ringtone patches"
+        APPLY_PATCH "system/framework/framework.jar" "audio/ach/framework.jar/0001-Disable-ACH-ringtone-support.patch"
+    fi
+else
+    if $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
+        # TODO: won't be necessary anyway
+        true
+    fi
+fi
+
 if $SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER; then
     if ! $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER; then
         echo "Applying dual speaker patches"

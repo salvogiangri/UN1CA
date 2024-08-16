@@ -1,13 +1,13 @@
-From d6f93dc915eef246a7adf5ff0ef84384f05e03d9 Mon Sep 17 00:00:00 2001
+From 1a9d9e3cd037795d8811155195c0201da1ee1bd1 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 15:23:28 +0200
 Subject: [PATCH] Disable virtual vibration support
 
 ---
- .../os/VibrationAttributes$Builder.smali      | 17 +------------
- .../com/samsung/android/audio/Rune.smali      |  8 ++++---
- .../samsung/android/vibrator/VibRune.smali    | 24 +++++++++----------
- 3 files changed, 18 insertions(+), 31 deletions(-)
+ .../os/VibrationAttributes$Builder.smali        | 17 +----------------
+ .../com/samsung/android/audio/Rune.smali        |  2 +-
+ .../com/samsung/android/vibrator/VibRune.smali  |  2 +-
+ 3 files changed, 3 insertions(+), 18 deletions(-)
 
 diff --git a/smali_classes3/android/os/VibrationAttributes$Builder.smali b/smali_classes3/android/os/VibrationAttributes$Builder.smali
 index 3c940f32..a7badfc4 100644
@@ -45,7 +45,7 @@ index 3c940f32..a7badfc4 100644
  .end method
  
 diff --git a/smali_classes5/com/samsung/android/audio/Rune.smali b/smali_classes5/com/samsung/android/audio/Rune.smali
-index 706cd7f7..8c756901 100644
+index 706cd7f7..e05a7dc5 100644
 --- a/smali_classes5/com/samsung/android/audio/Rune.smali
 +++ b/smali_classes5/com/samsung/android/audio/Rune.smali
 @@ -270,7 +270,7 @@
@@ -57,22 +57,8 @@ index 706cd7f7..8c756901 100644
  
  .field public static final blacklist SEC_AUDIO_SUPPORT_VOIP_ANTI_HOWLING:Z
  
-@@ -433,9 +433,11 @@
- 
-     sput-boolean v2, Lcom/samsung/android/audio/Rune;->SEC_AUDIO_SUPPORT_SOUND_THEME:Z
- 
--    const-string v0, "ACH"
-+    const-string v0, ""
- 
--    invoke-virtual {v0, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-+    const-string v3, "ACH"
-+
-+    invoke-virtual {v0, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
- 
-     move-result v0
- 
 diff --git a/smali_classes5/com/samsung/android/vibrator/VibRune.smali b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
-index 90dc188f..f190f9f0 100644
+index 90dc188f..61bc181e 100644
 --- a/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 +++ b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 @@ -60,7 +60,7 @@
@@ -84,63 +70,6 @@ index 90dc188f..f190f9f0 100644
  
  .field public static final blacklist TO_DO:Z = false
  
-@@ -81,7 +81,9 @@
- 
-     const-string v1, "ACH"
- 
--    invoke-virtual {v1, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-+    const-string v2, ""
-+
-+    invoke-virtual {v2, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
- 
-     move-result v1
- 
-@@ -91,9 +93,9 @@
- 
-     move-result-object v1
- 
--    const-string v2, "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_DC_MOTOR_HAPTIC_FEEDBACK"
-+    const-string v3, "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_DC_MOTOR_HAPTIC_FEEDBACK"
- 
--    invoke-virtual {v1, v2}, Lcom/samsung/android/feature/SemFloatingFeature;->getBoolean(Ljava/lang/String;)Z
-+    invoke-virtual {v1, v3}, Lcom/samsung/android/feature/SemFloatingFeature;->getBoolean(Ljava/lang/String;)Z
- 
-     move-result v1
- 
-@@ -103,15 +105,15 @@
- 
-     move-result-object v1
- 
--    const-string v2, "CountryISO"
-+    const-string v3, "CountryISO"
- 
--    invoke-virtual {v1, v2}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
-+    invoke-virtual {v1, v3}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v1
- 
--    const-string v2, "JP"
-+    const-string v3, "JP"
- 
--    invoke-virtual {v2, v1}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
-+    invoke-virtual {v3, v1}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
- 
-     move-result v1
- 
-@@ -121,11 +123,9 @@
- 
-     move-result-object v1
- 
--    const-string v2, "CscFeature_SystemUI_ConfigDndExceptionPackage"
--
--    const-string v3, ""
-+    const-string v3, "CscFeature_SystemUI_ConfigDndExceptionPackage"
- 
--    invoke-virtual {v1, v2, v3}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-virtual {v1, v3, v2}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v1
- 
 -- 
-2.45.2
+2.46.0
 
