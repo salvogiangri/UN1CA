@@ -1,4 +1,4 @@
-From 91c5d316d2c89d1b845974090776beeedf9fb301 Mon Sep 17 00:00:00 2001
+From 5cd5d987e69fe288d6c237baa0286a9c7c90c6e7 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -731,16 +731,16 @@ index 181c51b5..aa51a229 100644
 +    <string name="unica_ui_settings_title">Ajustes de la interfaz de usuario</string>
  </resources>
 diff --git a/res/values-fr-rCA/strings.xml b/res/values-fr-rCA/strings.xml
-index cc494cda..331920f3 100644
+index cc494cda..86d36340 100644
 --- a/res/values-fr-rCA/strings.xml
 +++ b/res/values-fr-rCA/strings.xml
 @@ -7255,4 +7255,33 @@ Dans l'application Appareil photo, vous pouvez utiliser le bouton du haut pour p
      <string name="zone_menu_by_region">Sélectionner par région</string>
      <string name="zone_time_type_dst">"Heure d'été"</string>
      <string name="zone_time_type_standard">Heure standard</string>
-+    <string name="unica_allow_downgrade_title">"Autoriser la rétrogradation de l'application"</string>
++    <string name="unica_allow_downgrade_title">"Autoriser la rétrogradation d'application"</string>
 +    <string name="unica_asks_title">Désactiver ASKS</string>
-+    <string name="unica_boot_sound_title">"Jouer sur l'effet sonore au démarrage"</string>
++    <string name="unica_boot_sound_title">"Jouer l'effet sonore au démarrage"</string>
 +    <string name="unica_device_name_title">"Nom de l'appareil"</string>
 +    <string name="unica_extra_settings_title">Paramètres supplémentaires</string>
 +    <string name="unica_fod_anim_type_optical_g">Capteur optique (vert)</string>
@@ -750,15 +750,15 @@ index cc494cda..331920f3 100644
 +    <string name="unica_games_spoof_title">Débloquez des FPS plus élevés dans les jeux</string>
 +    <string name="unica_hide_dev_title">Masquer le statut de développeur dans les applications</string>
 +    <string name="unica_max_refresh_rate_title">Forcer le taux de rafraîchissement maximal</string>
-+    <string name="unica_native_blur_dialog_msg">Pour appliquer les modifications, un redémarrage du téléphone est nécessaire.</string>
++    <string name="unica_native_blur_dialog_msg">"Pour appliquer les modifications, un redémarrage de l'appareil est requis."</string>
 +    <string name="unica_native_blur_dialog_negative">Pas maintenant</string>
 +    <string name="unica_native_blur_dialog_positive">Redémarrage</string>
 +    <string name="unica_native_blur_dialog_title">Redémarrage requis</string>
 +    <string name="unica_native_blur_title">"Activer l'effet de flou en direct"</string>
 +    <string name="unica_pif_checking">Vérification des mises à jour…</string>
 +    <string name="unica_pif_error">"Une erreur s'est produite."</string>
-+    <string name="unica_pif_no_root">ROOT est requis pour que Play Integrity Fix fonctionne.</string>
-+    <string name="unica_pif_up_to_date">Vous utilisez la dernière version.</string>
++    <string name="unica_pif_no_root">Root est requis pour que Play Integrity Fix fonctionne.</string>
++    <string name="unica_pif_up_to_date">Vous utilisez déjà la dernière version.</string>
 +    <string name="unica_pif_updated">Mise à jour terminée avec succès.</string>
 +    <string name="unica_pif_version_title">Version de Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Version de la ROM</string>
@@ -769,16 +769,16 @@ index cc494cda..331920f3 100644
 +    <string name="unica_ui_settings_title">"Paramètres de l'interface utilisateur"</string>
  </resources>
 diff --git a/res/values-fr/strings.xml b/res/values-fr/strings.xml
-index 311495e6..59084821 100644
+index 311495e6..3525a441 100644
 --- a/res/values-fr/strings.xml
 +++ b/res/values-fr/strings.xml
 @@ -7256,4 +7256,33 @@ Dans l'application Appareil photo, vous pouvez utiliser la touche du haut pour p
      <string name="zone_menu_by_region">Sélectionner par région</string>
      <string name="zone_time_type_dst">"Heure d'été"</string>
      <string name="zone_time_type_standard">Heure standard</string>
-+    <string name="unica_allow_downgrade_title">"Autoriser la rétrogradation de l'application"</string>
++    <string name="unica_allow_downgrade_title">"Autoriser la rétrogradation d'application"</string>
 +    <string name="unica_asks_title">Désactiver ASKS</string>
-+    <string name="unica_boot_sound_title">"Jouer sur l'effet sonore au démarrage"</string>
++    <string name="unica_boot_sound_title">"Jouer l'effet sonore au démarrage"</string>
 +    <string name="unica_device_name_title">"Nom de l'appareil"</string>
 +    <string name="unica_extra_settings_title">Paramètres supplémentaires</string>
 +    <string name="unica_fod_anim_type_optical_g">Capteur optique (vert)</string>
@@ -788,15 +788,15 @@ index 311495e6..59084821 100644
 +    <string name="unica_games_spoof_title">Débloquez des FPS plus élevés dans les jeux</string>
 +    <string name="unica_hide_dev_title">Masquer le statut de développeur dans les applications</string>
 +    <string name="unica_max_refresh_rate_title">Forcer le taux de rafraîchissement maximal</string>
-+    <string name="unica_native_blur_dialog_msg">Pour appliquer les modifications, un redémarrage du téléphone est nécessaire.</string>
++    <string name="unica_native_blur_dialog_msg">"Pour appliquer les modifications, un redémarrage de l'appareil est requis."</string>
 +    <string name="unica_native_blur_dialog_negative">Pas maintenant</string>
 +    <string name="unica_native_blur_dialog_positive">Redémarrage</string>
 +    <string name="unica_native_blur_dialog_title">Redémarrage requis</string>
 +    <string name="unica_native_blur_title">"Activer l'effet de flou en direct"</string>
 +    <string name="unica_pif_checking">Vérification des mises à jour…</string>
 +    <string name="unica_pif_error">"Une erreur s'est produite."</string>
-+    <string name="unica_pif_no_root">ROOT est requis pour que Play Integrity Fix fonctionne.</string>
-+    <string name="unica_pif_up_to_date">Vous utilisez la dernière version.</string>
++    <string name="unica_pif_no_root">Root est requis pour que Play Integrity Fix fonctionne.</string>
++    <string name="unica_pif_up_to_date">Vous utilisez déjà la dernière version.</string>
 +    <string name="unica_pif_updated">Mise à jour terminée avec succès.</string>
 +    <string name="unica_pif_version_title">Version de Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Version de la ROM</string>
@@ -1035,7 +1035,7 @@ index 287bff5c..60d38fd1 100644
 +    <string name="unica_ui_settings_title">Configurações da interface</string>
  </resources>
 diff --git a/res/values-ro/strings.xml b/res/values-ro/strings.xml
-index 3f8028eb..801f9605 100644
+index 3f8028eb..fd7b33dc 100644
 --- a/res/values-ro/strings.xml
 +++ b/res/values-ro/strings.xml
 @@ -7256,4 +7256,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
@@ -1050,7 +1050,7 @@ index 3f8028eb..801f9605 100644
 +    <string name="unica_fod_anim_type_optical_g">Senzor Optic (verde)</string>
 +    <string name="unica_fod_anim_type_optical_w">Senzor Optic (alb)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Senzor Ultrasonic</string>
-+    <string name="unica_fod_anim_type_title">Stil animație deblocare cu aprenta</string>
++    <string name="unica_fod_anim_type_title">Stil animație deblocare cu amprenta</string>
 +    <string name="unica_games_spoof_title">Deblochează mai multe FPS-uri in jocuri</string>
 +    <string name="unica_hide_dev_title">Ascunde status dezvoltator pentru aplicații</string>
 +    <string name="unica_max_refresh_rate_title">Forțați rata de reîmprospătare maximă</string>
@@ -1149,7 +1149,7 @@ index 24805135..7068f7ba 100644
 +    <string name="unica_ui_settings_title">Cilësimet e UI</string>
  </resources>
 diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
-index ef5566c5..9b8f623e 100644
+index ef5566c5..115defcb 100644
 --- a/res/values-tr/strings.xml
 +++ b/res/values-tr/strings.xml
 @@ -7256,4 +7256,33 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
@@ -1165,7 +1165,7 @@ index ef5566c5..9b8f623e 100644
 +    <string name="unica_fod_anim_type_optical_w">Optik sensör (beyaz)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Ultrasonik sensör</string>
 +    <string name="unica_fod_anim_type_title">Parmak izi kilit açma animasyonu</string>
-+    <string name="unica_games_spoof_title">Oyunlardaki FPS limitini yükselt</string>
++    <string name="unica_games_spoof_title">Oyunlardaki kilitli grafik ayarlarını aç</string>
 +    <string name="unica_hide_dev_title">Geliştirici seçeneklerini diğer uygulamalardan gizle</string>
 +    <string name="unica_max_refresh_rate_title">Ekranı yüksek yenileme hızına zorla</string>
 +    <string name="unica_native_blur_dialog_msg">Değişikliklerin uygulanabilmesi için cihazın yeniden başlatılması gerekiyor.</string>
@@ -1187,14 +1187,14 @@ index ef5566c5..9b8f623e 100644
 +    <string name="unica_ui_settings_title">Arayüz Ayarları</string>
  </resources>
 diff --git a/res/values-uk/strings.xml b/res/values-uk/strings.xml
-index 89c49399..bda3adcd 100644
+index 89c49399..c065c009 100644
 --- a/res/values-uk/strings.xml
 +++ b/res/values-uk/strings.xml
 @@ -7256,4 +7256,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Вибрати за регіоном</string>
      <string name="zone_time_type_dst">Літній час</string>
      <string name="zone_time_type_standard">Стандартний час</string>
-+    <string name="unica_allow_downgrade_title">Дозволити понижати версію додатків</string>
++    <string name="unica_allow_downgrade_title">Дозволити знижувати версію додатків</string>
 +    <string name="unica_asks_title">Вимкнути ASKS</string>
 +    <string name="unica_boot_sound_title">Звук увімкнення телефону</string>
 +    <string name="unica_device_name_title">Назва пристрою</string>
@@ -1203,9 +1203,9 @@ index 89c49399..bda3adcd 100644
 +    <string name="unica_fod_anim_type_optical_w">Оптичний датчик (білий)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Ультразвуковий датчик</string>
 +    <string name="unica_fod_anim_type_title">Стиль анімації розблокування відбитком пальця</string>
-+    <string name="unica_games_spoof_title">Вищий FPS в іграх</string>
++    <string name="unica_games_spoof_title">Розблокувати високий FPS в іграх</string>
 +    <string name="unica_hide_dev_title">Приховати статус розробника від програм</string>
-+    <string name="unica_max_refresh_rate_title">Примусова пікова частота оновлення екрану</string>
++    <string name="unica_max_refresh_rate_title">Примусова максимальна частота оновлення екрану</string>
 +    <string name="unica_native_blur_dialog_msg">Для застосування змін, потрібне перезавантаження.</string>
 +    <string name="unica_native_blur_dialog_negative">Не зараз</string>
 +    <string name="unica_native_blur_dialog_positive">Перезавантаження</string>
@@ -1217,12 +1217,12 @@ index 89c49399..bda3adcd 100644
 +    <string name="unica_pif_up_to_date">Ви використовуєте останню версію.</string>
 +    <string name="unica_pif_updated">Оновлення успішно завершено.</string>
 +    <string name="unica_pif_version_title">Версія Play Integrity Fix</string>
-+    <string name="unica_rom_version_title">Версія ПЗ</string>
++    <string name="unica_rom_version_title">Версія UN1CA</string>
 +    <string name="unica_secure_ss_title">Вимкнути заборону скріншота в додатках</string>
 +    <string name="unica_settings_title">Налаштування UN1CA</string>
 +    <string name="unica_spoof_settings_title">Налаштування виявлення</string>
-+    <string name="unica_ss_detection_title">Вимкнути виявлення знімків екрана</string>
-+    <string name="unica_ui_settings_title">Налаштування інтерфейсу користувача</string>
++    <string name="unica_ss_detection_title">Вимкнути виявлення скріншотів</string>
++    <string name="unica_ui_settings_title">Налаштування інтерфейсу</string>
  </resources>
 diff --git a/res/values/colors.xml b/res/values/colors.xml
 index a576c7ea..cf1ff26f 100644
