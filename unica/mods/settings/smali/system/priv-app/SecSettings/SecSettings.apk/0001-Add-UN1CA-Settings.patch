@@ -1,4 +1,4 @@
-From 6e0c45dcbe95b715e5e247aa31251e447851bee4 Mon Sep 17 00:00:00 2001
+From 91c5d316d2c89d1b845974090776beeedf9fb301 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -1073,14 +1073,14 @@ index 3f8028eb..801f9605 100644
 +    <string name="unica_ui_settings_title">Setări UI</string>
  </resources>
 diff --git a/res/values-sq-rAL/strings.xml b/res/values-sq-rAL/strings.xml
-index 57a5022e..9bda9d58 100644
+index 57a5022e..2e6af83a 100644
 --- a/res/values-sq-rAL/strings.xml
 +++ b/res/values-sq-rAL/strings.xml
 @@ -6474,4 +6474,33 @@ Te Kamera, mund ta përdorësh Butonin Krye për të nxjerrë foto."</string>
      <string name="zone_menu_by_region">Sipas rajonit</string>
      <string name="zone_time_type_dst">Ora verore</string>
      <string name="zone_time_type_standard">Ora standard</string>
-+    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-ve</string>
++    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-eve</string>
 +    <string name="unica_asks_title">Çaktivizo ASKS</string>
 +    <string name="unica_boot_sound_title">Luaj zërin e ndezjes</string>
 +    <string name="unica_device_name_title">Emri i paisjes</string>
@@ -1111,14 +1111,14 @@ index 57a5022e..9bda9d58 100644
 +    <string name="unica_ui_settings_title">Cilësimet e UI</string>
  </resources>
 diff --git a/res/values-sq/strings.xml b/res/values-sq/strings.xml
-index 24805135..c64c7aa4 100644
+index 24805135..7068f7ba 100644
 --- a/res/values-sq/strings.xml
 +++ b/res/values-sq/strings.xml
 @@ -915,4 +915,33 @@ Kur shton një përdorues të ri, ai person duhet të konfigurojë hapësirën e
      <string name="zen_mode_forever">Derisa ta çaktivizosh</string>
      <string name="zen_mode_settings_summary_off">Asnjëherë</string>
      <string name="zen_mode_settings_turn_on_dialog_title">Aktivizo \"Mos shqetëso\"</string>
-+    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-ve</string>
++    <string name="unica_allow_downgrade_title">Lejo instalimi e versioneve të vjetra të app-eve</string>
 +    <string name="unica_asks_title">Çaktivizo ASKS</string>
 +    <string name="unica_boot_sound_title">Luaj zërin e ndezjes</string>
 +    <string name="unica_device_name_title">Emri i paisjes</string>
