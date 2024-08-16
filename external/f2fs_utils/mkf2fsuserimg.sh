@@ -9,7 +9,7 @@ ${0##*/} OUTPUT_FILE SIZE
          [-S] [-C FS_CONFIG] [-f SRC_DIR] [-D PRODUCT_OUT]
          [-s FILE_CONTEXTS] [-t MOUNT_POINT] [-T TIMESTAMP] [-B block_map]
          [-L LABEL] [--prjquota] [--casefold] [--compression] [--readonly]
-         [--sldc <num> [sload compression sub-options]]
+         [--sldc <num> [sload compression sub-options]] [-b <block_size>]
 <num>: number of the sload compression args, e.g.  -a LZ4 counts as 2
        when sload compression args are not given, <num> must be 0,
        and the default flags will be used.
@@ -128,6 +128,19 @@ if [[ "$1" == "--sldc" ]]; then
     shift
     (( SLDC_NUM_ARGS-- ))
   done
+fi
+
+if [[ "$1" == "-b" ]]; then
+  shift
+  BLOCKSIZE=$1
+  case $BLOCKSIZE in
+    ''|*[!0-9]*)
+      echo "-b needs a number"
+      exit 3 ;;
+  esac
+  shift
+  MKFS_OPTS+=" -b $BLOCKSIZE"
+  MKFS_OPTS+=" -w $BLOCKSIZE"
 fi
 
 if [ -z $SIZE ]; then
