@@ -1,4 +1,4 @@
-From 0455dbbc3e210cfcf1d676f33229d4033cc9f986 Mon Sep 17 00:00:00 2001
+From 5b5cca188d93c591b46b2362aa31b7ac21cd1390 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -68,10 +68,10 @@ Subject: [PATCH] Add UN1CA Settings
  ...eDeveloperStatusPreferenceController.smali | 183 ++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
  .../LiveBlurPreferenceController.smali        | 322 ++++++++++
- .../PIFVersionPreferenceController.smali      | 238 ++++++++
+ .../PIFVersionPreferenceController.smali      | 281 +++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 67 files changed, 5124 insertions(+)
+ 67 files changed, 5167 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -5162,10 +5162,10 @@ index 00000000..8214ab94
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..3f92816d
+index 00000000..0540bb19
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
-@@ -0,0 +1,238 @@
+@@ -0,0 +1,281 @@
 +.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "PIFVersionPreferenceController.java"
@@ -5263,16 +5263,59 @@ index 00000000..3f92816d
 +.end method
 +
 +.method public getSummary()Ljava/lang/CharSequence;
-+    .locals 1
++    .locals 3
 +
 +    const-string p0, "persist.sys.pif.version"
 +
-+    const-string v0, "Not installed"
++    const-string v0, ""
 +
 +    invoke-static {p0, v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object p0
 +
++    invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    const-string p0, "Not installed"
++
++    return-object p0
++
++    :cond_0
++    :try_start_0
++    new-instance v0, Ljava/text/SimpleDateFormat;
++
++    const-string v1, "yyyyMMdd"
++
++    invoke-direct {v0, v1}, Ljava/text/SimpleDateFormat;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v0, p0}, Ljava/text/SimpleDateFormat;->parse(Ljava/lang/String;)Ljava/util/Date;
++
++    move-result-object v0
++
++    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
++
++    move-result-object v1
++
++    const-string v2, "dMMMMyyyy"
++
++    invoke-static {v1, v2}, Landroid/text/format/DateFormat;->getBestDateTimePattern(Ljava/util/Locale;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v1, v0}, Landroid/text/format/DateFormat;->format(Ljava/lang/CharSequence;Ljava/util/Date;)Ljava/lang/CharSequence;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/Object;->toString()Ljava/lang/String;
++
++    move-result-object p0
++    :try_end_0
++    .catch Ljava/text/ParseException; {:try_start_0 .. :try_end_0} :catch_0
++
++    :catch_0
 +    return-object p0
 +.end method
 +
