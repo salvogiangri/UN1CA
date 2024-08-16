@@ -1,4 +1,4 @@
-From 314cd6f8e3526a70682c9644701c0d7026406dbd Mon Sep 17 00:00:00 2001
+From 6e0c45dcbe95b715e5e247aa31251e447851bee4 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -617,118 +617,118 @@ index 5feb840d..4c11d29d 100644
 +    <string name="unica_ui_settings_title">UI settings</string>
  </resources>
 diff --git a/res/values-es-rES/strings.xml b/res/values-es-rES/strings.xml
-index 4c9e0f43..0fa8eb92 100644
+index 4c9e0f43..51428b3c 100644
 --- a/res/values-es-rES/strings.xml
 +++ b/res/values-es-rES/strings.xml
 @@ -6444,4 +6444,33 @@ En la aplicación Cámara, puedes usar este botón para sacar fotos."</string>
      <string name="zone_menu_by_region">Seleccionar por región</string>
      <string name="zone_time_type_dst">Horario de verano</string>
      <string name="zone_time_type_standard">Hora estándar</string>
-+    <string name="unica_allow_downgrade_title">Permitir downgrade de aplicaciones</string>
++    <string name="unica_allow_downgrade_title">Permitir desactualización de aplicaciones</string>
 +    <string name="unica_asks_title">Deshabilitar ASKS</string>
-+    <string name="unica_boot_sound_title">Reproducir efecto de sonido al encender</string>
-+    <string name="unica_device_name_title">Nombre de dispositivo</string>
++    <string name="unica_boot_sound_title">Reproducir tono al encender el teléfono</string>
++    <string name="unica_device_name_title">Nombre del dispositivo</string>
 +    <string name="unica_extra_settings_title">Ajustes adicionales</string>
 +    <string name="unica_fod_anim_type_optical_g">Sensor óptico (verde)</string>
 +    <string name="unica_fod_anim_type_optical_w">Sensor óptico (blanco)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasónico</string>
-+    <string name="unica_fod_anim_type_title">Estilo de animación de desbloqueo con huella</string>
-+    <string name="unica_games_spoof_title">Desbloquear más FPS en juegos</string>
-+    <string name="unica_hide_dev_title">Ocultar el estado de desarrollador de las aplicaciones</string>
-+    <string name="unica_max_refresh_rate_title">Forzar frecuencia de actualización máxima</string>
-+    <string name="unica_native_blur_dialog_msg">Para aplicar los cambios es necesario reiniciar.</string>
++    <string name="unica_fod_anim_type_title">Estilo de animación del desbloqueo con huella</string>
++    <string name="unica_games_spoof_title">Desbloquear ajustes gráficos adicionales en juegos</string>
++    <string name="unica_hide_dev_title">Ocultar detección de opciones de desarrollador en aplicaciones</string>
++    <string name="unica_max_refresh_rate_title">Forzar frecuencia máxima de actualización de pantalla</string>
++    <string name="unica_native_blur_dialog_msg">Para poder aplicar los cambios, es necesario reiniciar el teléfono.</string>
 +    <string name="unica_native_blur_dialog_negative">Ahora no</string>
 +    <string name="unica_native_blur_dialog_positive">Reiniciar</string>
-+    <string name="unica_native_blur_dialog_title">Reinicio requerido</string>
-+    <string name="unica_native_blur_title">Habilitar efecto de enfoque en vivo</string>
-+    <string name="unica_pif_checking">Buscando actualizaciones…</string>
-+    <string name="unica_pif_error">Ha ocurrido un error.</string>
-+    <string name="unica_pif_no_root">Se requiere root para que funcione Play Integrity Fix.</string>
-+    <string name="unica_pif_up_to_date">Estás usando la última versión.</string>
-+    <string name="unica_pif_updated">Actualización completada exitosamente.</string>
++    <string name="unica_native_blur_dialog_title">Se requiere reiniciar</string>
++    <string name="unica_native_blur_title">Habilitar efecto de desenfoque en tiempo real</string>
++    <string name="unica_pif_checking">Comprobando actualizaciones…</string>
++    <string name="unica_pif_error">Se produjo un error.</string>
++    <string name="unica_pif_no_root">Play Integrity Fix no funcionará si el dispositivo no está rooteado.</string>
++    <string name="unica_pif_up_to_date">La versión más reciente ya está instalada.</string>
++    <string name="unica_pif_updated">La actualización se instaló correctamente.</string>
 +    <string name="unica_pif_version_title">Versión de Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Versión de ROM</string>
-+    <string name="unica_secure_ss_title">Permitir captura de pantalla segura</string>
++    <string name="unica_secure_ss_title">Permitir capturas de pantalla en cualquier aplicación</string>
 +    <string name="unica_settings_title">Ajustes de UN1CA</string>
 +    <string name="unica_spoof_settings_title">Ajustes de suplantación</string>
-+    <string name="unica_ss_detection_title">Deshabilitar detección de captura de pantalla</string>
-+    <string name="unica_ui_settings_title">Ajustes de la IU</string>
++    <string name="unica_ss_detection_title">Deshabilitar detección de capturas de pantalla en aplicaciones</string>
++    <string name="unica_ui_settings_title">Ajustes de la interfaz de usuario</string>
  </resources>
 diff --git a/res/values-es-rUS/strings.xml b/res/values-es-rUS/strings.xml
-index 6460d668..d0111b8a 100644
+index 6460d668..cb4fb115 100644
 --- a/res/values-es-rUS/strings.xml
 +++ b/res/values-es-rUS/strings.xml
 @@ -7255,4 +7255,33 @@ En Cámara, puede usar el botón Superior para capturar imágenes."</string>
      <string name="zone_menu_by_region">Seleccionar por región</string>
      <string name="zone_time_type_dst">Horario de verano</string>
      <string name="zone_time_type_standard">Hora estándar</string>
-+    <string name="unica_allow_downgrade_title">Permitir downgrade de aplicaciones</string>
++    <string name="unica_allow_downgrade_title">Permitir desactualización de aplicaciones</string>
 +    <string name="unica_asks_title">Deshabilitar ASKS</string>
-+    <string name="unica_boot_sound_title">Efecto de sonido de encendido</string>
-+    <string name="unica_device_name_title">Nombre de dispositivo</string>
++    <string name="unica_boot_sound_title">Reproducir tono al encender el teléfono</string>
++    <string name="unica_device_name_title">Nombre del dispositivo</string>
 +    <string name="unica_extra_settings_title">Ajustes adicionales</string>
-+    <string name="unica_fod_anim_type_optical_g">Sensor optico (verde)</string>
-+    <string name="unica_fod_anim_type_optical_w">Sensor optico (blanco)</string>
-+    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasonico</string>
-+    <string name="unica_fod_anim_type_title">Estilo de animación de desbloqueo con huella</string>
-+    <string name="unica_games_spoof_title">Desbloquea mas FPS en juegos</string>
-+    <string name="unica_hide_dev_title">Ocultar el estado de desarrollador de las aplicaciones</string>
-+    <string name="unica_max_refresh_rate_title">Forzar frecuencia de actualización máxima</string>
-+    <string name="unica_native_blur_dialog_msg">Para aplicar los cambios es necesario reiniciar.</string>
++    <string name="unica_fod_anim_type_optical_g">Sensor óptico (verde)</string>
++    <string name="unica_fod_anim_type_optical_w">Sensor óptico (blanco)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasónico</string>
++    <string name="unica_fod_anim_type_title">Estilo de animación del desbloqueo con huella</string>
++    <string name="unica_games_spoof_title">Desbloquear ajustes gráficos adicionales en juegos</string>
++    <string name="unica_hide_dev_title">Ocultar detección de opciones de desarrollador en aplicaciones</string>
++    <string name="unica_max_refresh_rate_title">Forzar frecuencia máxima de actualización de pantalla</string>
++    <string name="unica_native_blur_dialog_msg">Para poder aplicar los cambios, es necesario reiniciar el teléfono.</string>
 +    <string name="unica_native_blur_dialog_negative">Ahora no</string>
 +    <string name="unica_native_blur_dialog_positive">Reiniciar</string>
-+    <string name="unica_native_blur_dialog_title">Reinicio requerido</string>
-+    <string name="unica_native_blur_title">Habilitar efecto de enfoque en vivo</string>
-+    <string name="unica_pif_checking">Revisando por actualizaciones…</string>
-+    <string name="unica_pif_error">Ha ocurrido un error.</string>
-+    <string name="unica_pif_no_root">Root es requerido para que funcione Play Integrity Fix.</string>
-+    <string name="unica_pif_up_to_date">Estas en la ultima version.</string>
-+    <string name="unica_pif_updated">Actualizacion completada exitosamente.</string>
-+    <string name="unica_pif_version_title">Version de Play Integrity Fix</string>
-+    <string name="unica_rom_version_title">Version de ROM</string>
-+    <string name="unica_secure_ss_title">Permitir captura de pantalla segura</string>
++    <string name="unica_native_blur_dialog_title">Se requiere reiniciar</string>
++    <string name="unica_native_blur_title">Habilitar efecto de desenfoque en tiempo real</string>
++    <string name="unica_pif_checking">Comprobando actualizaciones…</string>
++    <string name="unica_pif_error">Se produjo un error.</string>
++    <string name="unica_pif_no_root">Play Integrity Fix no funcionará si el dispositivo no está rooteado.</string>
++    <string name="unica_pif_up_to_date">La versión más reciente ya está instalada.</string>
++    <string name="unica_pif_updated">La actualización se instaló correctamente.</string>
++    <string name="unica_pif_version_title">Versión de Play Integrity Fix</string>
++    <string name="unica_rom_version_title">Versión de ROM</string>
++    <string name="unica_secure_ss_title">Permitir capturas de pantalla en cualquier aplicación</string>
 +    <string name="unica_settings_title">Ajustes de UN1CA</string>
-+    <string name="unica_spoof_settings_title">Ajustes de suplantacion</string>
-+    <string name="unica_ss_detection_title">Deshabilitar deteccion de captura de pantalla</string>
-+    <string name="unica_ui_settings_title">Ajustes de la interfaz</string>
++    <string name="unica_spoof_settings_title">Ajustes de suplantación</string>
++    <string name="unica_ss_detection_title">Deshabilitar detección de capturas de pantalla en aplicaciones</string>
++    <string name="unica_ui_settings_title">Ajustes de la interfaz de usuario</string>
  </resources>
 diff --git a/res/values-es/strings.xml b/res/values-es/strings.xml
-index 181c51b5..5448a6bb 100644
+index 181c51b5..aa51a229 100644
 --- a/res/values-es/strings.xml
 +++ b/res/values-es/strings.xml
 @@ -924,4 +924,33 @@ Cualquier usuario puede actualizar las aplicaciones del resto de usuarios."</str
      <string name="zen_mode_forever">Hasta que lo desactives</string>
      <string name="zen_mode_settings_summary_off">Nunca</string>
      <string name="zen_mode_settings_turn_on_dialog_title">Activar el modo No molestar</string>
-+    <string name="unica_allow_downgrade_title">Permitir downgrade de aplicaciones</string>
++    <string name="unica_allow_downgrade_title">Permitir desactualización de aplicaciones</string>
 +    <string name="unica_asks_title">Deshabilitar ASKS</string>
-+    <string name="unica_boot_sound_title">Reproducir efecto de sonido al encender</string>
-+    <string name="unica_device_name_title">Nombre de dispositivo</string>
++    <string name="unica_boot_sound_title">Reproducir tono al encender el teléfono</string>
++    <string name="unica_device_name_title">Nombre del dispositivo</string>
 +    <string name="unica_extra_settings_title">Ajustes adicionales</string>
 +    <string name="unica_fod_anim_type_optical_g">Sensor óptico (verde)</string>
 +    <string name="unica_fod_anim_type_optical_w">Sensor óptico (blanco)</string>
 +    <string name="unica_fod_anim_type_ultrasonic">Sensor ultrasónico</string>
-+    <string name="unica_fod_anim_type_title">Estilo de animación de desbloqueo con huella</string>
-+    <string name="unica_games_spoof_title">Desbloquear más FPS en juegos</string>
-+    <string name="unica_hide_dev_title">Ocultar el estado de desarrollador de las aplicaciones</string>
-+    <string name="unica_max_refresh_rate_title">Forzar frecuencia de actualización máxima</string>
-+    <string name="unica_native_blur_dialog_msg">Para aplicar los cambios es necesario reiniciar.</string>
++    <string name="unica_fod_anim_type_title">Estilo de animación del desbloqueo con huella</string>
++    <string name="unica_games_spoof_title">Desbloquear ajustes gráficos adicionales en juegos</string>
++    <string name="unica_hide_dev_title">Ocultar detección de opciones de desarrollador en aplicaciones</string>
++    <string name="unica_max_refresh_rate_title">Forzar frecuencia máxima de actualización de pantalla</string>
++    <string name="unica_native_blur_dialog_msg">Para poder aplicar los cambios, es necesario reiniciar el teléfono.</string>
 +    <string name="unica_native_blur_dialog_negative">Ahora no</string>
 +    <string name="unica_native_blur_dialog_positive">Reiniciar</string>
-+    <string name="unica_native_blur_dialog_title">Reinicio requerido</string>
-+    <string name="unica_native_blur_title">Habilitar efecto de enfoque en vivo</string>
-+    <string name="unica_pif_checking">Buscando actualizaciones…</string>
-+    <string name="unica_pif_error">Ha ocurrido un error.</string>
-+    <string name="unica_pif_no_root">Se requiere root para que funcione Play Integrity Fix.</string>
-+    <string name="unica_pif_up_to_date">Estás usando la última versión.</string>
-+    <string name="unica_pif_updated">Actualización completada exitosamente.</string>
++    <string name="unica_native_blur_dialog_title">Se requiere reiniciar</string>
++    <string name="unica_native_blur_title">Habilitar efecto de desenfoque en tiempo real</string>
++    <string name="unica_pif_checking">Comprobando actualizaciones…</string>
++    <string name="unica_pif_error">Se produjo un error.</string>
++    <string name="unica_pif_no_root">Play Integrity Fix no funcionará si el dispositivo no está rooteado.</string>
++    <string name="unica_pif_up_to_date">La versión más reciente ya está instalada.</string>
++    <string name="unica_pif_updated">La actualización se instaló correctamente.</string>
 +    <string name="unica_pif_version_title">Versión de Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Versión de ROM</string>
-+    <string name="unica_secure_ss_title">Permitir captura de pantalla segura</string>
++    <string name="unica_secure_ss_title">Permitir capturas de pantalla en cualquier aplicación</string>
 +    <string name="unica_settings_title">Ajustes de UN1CA</string>
 +    <string name="unica_spoof_settings_title">Ajustes de suplantación</string>
-+    <string name="unica_ss_detection_title">Deshabilitar detección de captura de pantalla</string>
-+    <string name="unica_ui_settings_title">Ajustes de la IU</string>
++    <string name="unica_ss_detection_title">Deshabilitar detección de capturas de pantalla en aplicaciones</string>
++    <string name="unica_ui_settings_title">Ajustes de la interfaz de usuario</string>
  </resources>
 diff --git a/res/values-fr-rCA/strings.xml b/res/values-fr-rCA/strings.xml
 index cc494cda..331920f3 100644
