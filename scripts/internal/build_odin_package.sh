@@ -114,8 +114,8 @@ while read -r i; do
     [ -f "$WORK_DIR/$PARTITION.img" ] && rm -f "$WORK_DIR/$PARTITION.img"
 
     echo "Building $PARTITION.img"
-    { bash -e "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM" "$WORK_DIR/$PARTITION" \
-        "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" > /dev/null; } 2>&1
+    bash "$SRC_DIR/scripts/build_fs_image.sh" "$TARGET_OS_FILE_SYSTEM" "$WORK_DIR/$PARTITION" \
+        "$WORK_DIR/configs/file_context-$PARTITION" "$WORK_DIR/configs/fs_config-$PARTITION" > /dev/null 2>&1
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
 done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
