@@ -1,4 +1,4 @@
-From 5b5cca188d93c591b46b2362aa31b7ac21cd1390 Mon Sep 17 00:00:00 2001
+From 3bddc2d6db40b9d98929b4bbf7c35ade047f56c0 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -56,7 +56,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
  .../PIFUtils$$ExternalSyntheticLambda2.smali  |  46 ++
- .../io/mesalabs/unica/pif/PIFUtils.smali      | 475 +++++++++++++++
+ .../io/mesalabs/unica/pif/PIFUtils.smali      | 548 +++++++++++++++++
  .../settings/ASKSPreferenceController.smali   | 171 ++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++
  .../BootSoundPreferenceController.smali       | 167 ++++++
@@ -68,10 +68,10 @@ Subject: [PATCH] Add UN1CA Settings
  ...eDeveloperStatusPreferenceController.smali | 183 ++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
  .../LiveBlurPreferenceController.smali        | 322 ++++++++++
- .../PIFVersionPreferenceController.smali      | 281 +++++++++
+ .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 67 files changed, 5167 insertions(+)
+ 67 files changed, 5193 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1440,7 +1440,7 @@ index e79896f6..a16c39b5 100644
          <intent android:targetPackage="@string/config_sec_toplevel_digitalwellbeing_package" android:targetClass="@string/config_sec_toplevel_digitalwellbeing_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..9cc649fc
+index 00000000..a55eff2e
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
 @@ -0,0 +1,25 @@
@@ -1450,7 +1450,7 @@ index 00000000..9cc649fc
 +    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" android:key="unica_logo" />
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
 +    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
-+    <Preference android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
++    <SecSwitchPreferenceScreen android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
 +    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_ui_settings_title">
 +        <SecSwitchPreference android:title="@string/unica_boot_sound_title" android:key="unica_boot_sound" settings:controller="io.mesalabs.unica.settings.BootSoundPreferenceController" />
@@ -2196,10 +2196,10 @@ index 00000000..47e09f7d
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
 new file mode 100644
-index 00000000..506713db
+index 00000000..56509920
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
-@@ -0,0 +1,475 @@
+@@ -0,0 +1,548 @@
 +.class public Lio/mesalabs/unica/pif/PIFUtils;
 +.super Ljava/lang/Object;
 +.source "PIFUtils.java"
@@ -2228,6 +2228,63 @@ index 00000000..506713db
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
 +    return-void
++.end method
++
++.method public static getFormattedPIFVersion()Ljava/lang/CharSequence;
++    .locals 4
++
++    const-string v0, "persist.sys.pif.version"
++
++    const-string v1, ""
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const-string v0, "Not installed"
++
++    return-object v0
++
++    :cond_0
++    :try_start_0
++    new-instance v1, Ljava/text/SimpleDateFormat;
++
++    const-string v2, "yyyyMMdd"
++
++    invoke-direct {v1, v2}, Ljava/text/SimpleDateFormat;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v1, v0}, Ljava/text/SimpleDateFormat;->parse(Ljava/lang/String;)Ljava/util/Date;
++
++    move-result-object v1
++
++    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
++
++    move-result-object v2
++
++    const-string v3, "dMMMMyyyy"
++
++    invoke-static {v2, v3}, Landroid/text/format/DateFormat;->getBestDateTimePattern(Ljava/util/Locale;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {v2, v1}, Landroid/text/format/DateFormat;->format(Ljava/lang/CharSequence;Ljava/util/Date;)Ljava/lang/CharSequence;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/Object;->toString()Ljava/lang/String;
++
++    move-result-object v0
++    :try_end_0
++    .catch Ljava/text/ParseException; {:try_start_0 .. :try_end_0} :catch_0
++
++    :catch_0
++    return-object v0
 +.end method
 +
 +.method private static getJson()Lorg/json/JSONObject;
@@ -2335,16 +2392,32 @@ index 00000000..506713db
 +    return v0
 +.end method
 +
++.method public static killGMS(Landroid/content/Context;)V
++    .locals 1
++
++    const-string v0, "activity"
++
++    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/app/ActivityManager;
++
++    const-string v0, "com.google.android.gms"
++
++    invoke-virtual {p0, v0}, Landroid/app/ActivityManager;->forceStopPackage(Ljava/lang/String;)V
++
++    return-void
++.end method
++
 +.method static synthetic lambda$updatePIF$0(Landroid/content/Context;Lorg/json/JSONObject;Landroidx/preference/Preference;)V
 +    .locals 0
 +
 +    invoke-static {p0, p1}, Lio/mesalabs/unica/pif/PIFUtils;->setPIFConfig(Landroid/content/Context;Lorg/json/JSONObject;)V
 +
-+    const-string p0, "persist.sys.pif.version"
++    invoke-static {p0}, Lio/mesalabs/unica/pif/PIFUtils;->killGMS(Landroid/content/Context;)V
 +
-+    const-string p1, "Unknown"
-+
-+    invoke-static {p0, p1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->getFormattedPIFVersion()Ljava/lang/CharSequence;
 +
 +    move-result-object p0
 +
@@ -5162,12 +5235,12 @@ index 00000000..8214ab94
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
 new file mode 100644
-index 00000000..0540bb19
+index 00000000..cc21ee6d
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
-@@ -0,0 +1,281 @@
+@@ -0,0 +1,234 @@
 +.class public Lio/mesalabs/unica/settings/PIFVersionPreferenceController;
-+.super Lcom/android/settings/core/BasePreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "PIFVersionPreferenceController.java"
 +
 +
@@ -5175,7 +5248,7 @@ index 00000000..0540bb19
 +.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
 +    .locals 0
 +
-+    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 +
 +    return-void
 +.end method
@@ -5242,12 +5315,10 @@ index 00000000..0540bb19
 +    return-object p0
 +.end method
 +
-+.method public bridge synthetic getSliceHighlightMenuRes()I
++.method public getSliceHighlightMenuRes()I
 +    .locals 0
 +
-+    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getSliceHighlightMenuRes()I
-+
-+    move-result p0
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
 +
 +    return p0
 +.end method
@@ -5263,66 +5334,9 @@ index 00000000..0540bb19
 +.end method
 +
 +.method public getSummary()Ljava/lang/CharSequence;
-+    .locals 3
-+
-+    const-string p0, "persist.sys.pif.version"
-+
-+    const-string v0, ""
-+
-+    invoke-static {p0, v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+
-+    move-result-object p0
-+
-+    invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_0
-+
-+    const-string p0, "Not installed"
-+
-+    return-object p0
-+
-+    :cond_0
-+    :try_start_0
-+    new-instance v0, Ljava/text/SimpleDateFormat;
-+
-+    const-string v1, "yyyyMMdd"
-+
-+    invoke-direct {v0, v1}, Ljava/text/SimpleDateFormat;-><init>(Ljava/lang/String;)V
-+
-+    invoke-virtual {v0, p0}, Ljava/text/SimpleDateFormat;->parse(Ljava/lang/String;)Ljava/util/Date;
-+
-+    move-result-object v0
-+
-+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
-+
-+    move-result-object v1
-+
-+    const-string v2, "dMMMMyyyy"
-+
-+    invoke-static {v1, v2}, Landroid/text/format/DateFormat;->getBestDateTimePattern(Ljava/util/Locale;Ljava/lang/String;)Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    invoke-static {v1, v0}, Landroid/text/format/DateFormat;->format(Ljava/lang/CharSequence;Ljava/util/Date;)Ljava/lang/CharSequence;
-+
-+    move-result-object v0
-+
-+    invoke-virtual {v0}, Ljava/lang/Object;->toString()Ljava/lang/String;
-+
-+    move-result-object p0
-+    :try_end_0
-+    .catch Ljava/text/ParseException; {:try_start_0 .. :try_end_0} :catch_0
-+
-+    :catch_0
-+    return-object p0
-+.end method
-+
-+.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
 +    .locals 0
 +
-+    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getValue()Lcom/samsung/android/settings/cube/ControlValue;
++    invoke-static {}, Lio/mesalabs/unica/pif/PIFUtils;->getFormattedPIFVersion()Ljava/lang/CharSequence;
 +
 +    move-result-object p0
 +
@@ -5378,32 +5392,24 @@ index 00000000..0540bb19
 +    return-void
 +.end method
 +
-+.method public bridge synthetic isControllable()Z
-+    .locals 0
++.method public isChecked()Z
++    .locals 1
 +
-+    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->isControllable()Z
++    const-string p0, "persist.sys.unica.pif"
 +
-+    move-result p0
++    const/4 v0, 0x1
 +
-+    return p0
-+.end method
-+
-+.method public bridge synthetic isPublicSlice()Z
-+    .locals 0
-+
-+    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isPublicSlice()Z
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 +
 +    move-result p0
 +
 +    return p0
 +.end method
 +
-+.method public bridge synthetic isSliceable()Z
++.method public isControllable()Z
 +    .locals 0
 +
-+    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isSliceable()Z
-+
-+    move-result p0
++    const/4 p0, 0x1
 +
 +    return p0
 +.end method
@@ -5428,14 +5434,34 @@ index 00000000..0540bb19
 +    return p0
 +.end method
 +
-+.method public bridge synthetic setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++.method public setChecked(Z)Z
++    .locals 1
++
++    const-string v0, "persist.sys.unica.pif"
++
++    invoke-static {p1}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-static {v0, p1}, Landroid/os/SemSystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-static {p0}, Lio/mesalabs/unica/pif/PIFUtils;->killGMS(Landroid/content/Context;)V
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public updateState(Landroidx/preference/Preference;)V
 +    .locals 0
 +
-+    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++    invoke-super {p0, p1}, Lcom/android/settings/core/TogglePreferenceController;->updateState(Landroidx/preference/Preference;)V
 +
-+    move-result-object p0
++    invoke-virtual {p0, p1}, Lcom/android/settingslib/core/AbstractPreferenceController;->refreshSummary(Landroidx/preference/Preference;)V
 +
-+    return-object p0
++    return-void
 +.end method
 +
 +.method public bridge synthetic useDynamicSliceSummary()Z
