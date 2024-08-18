@@ -1,0 +1,204 @@
+From f295a9beb3280f8aa9977c2d48f8478af18da717 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sun, 18 Aug 2024 16:39:08 +0200
+Subject: [PATCH] Allow custom PackageBlockListPolicy
+
+---
+ .../pm/install/PackageBlockListPolicy.smali   | 90 ++-----------------
+ .../server/pm/lifecycle/PmLifecycleImpl.smali | 18 +---
+ .../server/pm/InstallPackageHelper.smali      |  4 +-
+ .../android/server/pm/ScanPackageUtils.smali  |  2 +-
+ 4 files changed, 9 insertions(+), 105 deletions(-)
+
+diff --git a/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali b/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali
+index 4f5ee328..1ac6fae3 100644
+--- a/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali
++++ b/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali
+@@ -4,38 +4,14 @@
+ 
+ 
+ # static fields
+-.field public static final sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-.field public static sLduBlocklist:Ljava/util/HashSet;
++.field public static sBlocklist:Ljava/util/HashSet;
+ 
+ 
+ # direct methods
+-.method public static bridge synthetic -$$Nest$sfgetsIsRduDevice()Ljava/util/concurrent/atomic/AtomicBoolean;
+-    .locals 1
+-
+-    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    return-object v0
+-.end method
+-
+-.method public static constructor <clinit>()V
+-    .locals 2
+-
+-    new-instance v0, Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    const/4 v1, 0x0
+-
+-    invoke-direct {v0, v1}, Ljava/util/concurrent/atomic/AtomicBoolean;-><init>(Z)V
+-
+-    sput-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    return-void
+-.end method
+-
+ .method public static isBlocked(Ljava/lang/String;)Z
+     .locals 2
+ 
+-    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sLduBlocklist:Ljava/util/HashSet;
++    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sBlocklist:Ljava/util/HashSet;
+ 
+     if-nez v0, :cond_0
+ 
+@@ -43,7 +19,7 @@
+ 
+     invoke-direct {v0}, Lcom/samsung/android/server/pm/install/PmConfigParser;-><init>()V
+ 
+-    const-string v1, "/system/etc/ldu_blocklist.xml"
++    const-string v1, "/system/etc/unica_blocklist.xml"
+ 
+     invoke-virtual {v0, v1}, Lcom/samsung/android/server/pm/install/PmConfigParser;->parsePackages(Ljava/lang/String;)Ljava/util/List;
+ 
+@@ -53,10 +29,10 @@
+ 
+     invoke-direct {v1, v0}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
+ 
+-    sput-object v1, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sLduBlocklist:Ljava/util/HashSet;
++    sput-object v1, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sBlocklist:Ljava/util/HashSet;
+ 
+     :cond_0
+-    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sLduBlocklist:Ljava/util/HashSet;
++    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sBlocklist:Ljava/util/HashSet;
+ 
+     invoke-virtual {v0, p0}, Ljava/util/HashSet;->contains(Ljava/lang/Object;)Z
+ 
+@@ -64,59 +40,3 @@
+ 
+     return p0
+ .end method
+-
+-.method public static isRdu()Z
+-    .locals 1
+-
+-    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    invoke-virtual {v0}, Ljava/util/concurrent/atomic/AtomicBoolean;->get()Z
+-
+-    move-result v0
+-
+-    return v0
+-.end method
+-
+-.method public static registerContentObserverForRdu(Landroid/content/Context;Landroid/os/Handler;)V
+-    .locals 5
+-
+-    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object p0
+-
+-    sget-object v0, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    const-string/jumbo v1, "shopdemo"
+-
+-    const/4 v2, 0x0
+-
+-    invoke-static {p0, v1, v2}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-
+-    move-result v3
+-
+-    const/4 v4, 0x1
+-
+-    if-ne v3, v4, :cond_0
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    move v4, v2
+-
+-    :goto_0
+-    invoke-virtual {v0, v4}, Ljava/util/concurrent/atomic/AtomicBoolean;->set(Z)V
+-
+-    invoke-static {v1}, Landroid/provider/Settings$Secure;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
+-
+-    move-result-object v0
+-
+-    new-instance v1, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy$1;
+-
+-    invoke-direct {v1, p1, p0}, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy$1;-><init>(Landroid/os/Handler;Landroid/content/ContentResolver;)V
+-
+-    const/4 p1, -0x1
+-
+-    invoke-virtual {p0, v0, v2, v1, p1}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;I)V
+-
+-    return-void
+-.end method
+diff --git a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali b/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
+index bf5fbc28..f8f75f0f 100644
+--- a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
++++ b/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
+@@ -686,27 +686,13 @@
+ 
+     invoke-direct {v0}, Lcom/samsung/android/server/pm/role/RoleLogger;-><init>()V
+ 
+-    iget-object v1, p0, Lcom/samsung/android/server/pm/lifecycle/PmLifecycleImpl;->mInjector:Lcom/android/server/pm/PackageManagerServiceInjector;
+-
+-    invoke-virtual {v1}, Lcom/android/server/pm/PackageManagerServiceInjector;->getContext()Landroid/content/Context;
+-
+-    move-result-object v1
+-
+-    invoke-virtual {v0, v1}, Lcom/samsung/android/server/pm/role/RoleLogger;->onSystemReady(Landroid/content/Context;)V
+-
+-    iget-object v0, p0, Lcom/samsung/android/server/pm/lifecycle/PmLifecycleImpl;->mInjector:Lcom/android/server/pm/PackageManagerServiceInjector;
+-
+-    invoke-virtual {v0}, Lcom/android/server/pm/PackageManagerServiceInjector;->getContext()Landroid/content/Context;
+-
+-    move-result-object v0
+-
+     iget-object p0, p0, Lcom/samsung/android/server/pm/lifecycle/PmLifecycleImpl;->mInjector:Lcom/android/server/pm/PackageManagerServiceInjector;
+ 
+-    invoke-virtual {p0}, Lcom/android/server/pm/PackageManagerServiceInjector;->getHandler()Landroid/os/Handler;
++    invoke-virtual {p0}, Lcom/android/server/pm/PackageManagerServiceInjector;->getContext()Landroid/content/Context;
+ 
+     move-result-object p0
+ 
+-    invoke-static {v0, p0}, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->registerContentObserverForRdu(Landroid/content/Context;Landroid/os/Handler;)V
++    invoke-virtual {v0, p0}, Lcom/samsung/android/server/pm/role/RoleLogger;->onSystemReady(Landroid/content/Context;)V
+ 
+     return-void
+ 
+diff --git a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
+index 561b04ab..51478754 100644
+--- a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
++++ b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
+@@ -12635,9 +12635,7 @@
+     const/4 v8, 0x0
+ 
+     :try_start_8
+-    invoke-static {}, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->isRdu()Z
+-
+-    move-result v1
++    const/4 v1, 0x1
+ 
+     if-eqz v1, :cond_b
+ 
+diff --git a/smali_classes3/com/android/server/pm/ScanPackageUtils.smali b/smali_classes3/com/android/server/pm/ScanPackageUtils.smali
+index b794bd23..6c281f22 100644
+--- a/smali_classes3/com/android/server/pm/ScanPackageUtils.smali
++++ b/smali_classes3/com/android/server/pm/ScanPackageUtils.smali
+@@ -1879,7 +1879,7 @@
+ 
+     iget-boolean v11, v1, Lcom/android/server/pm/ScanRequest;->mIsPlatformPackage:Z
+ 
+-    sget-boolean v16, Lcom/samsung/android/rune/PMRune;->PM_LDU:Z
++    const/16 v16, 0x1
+ 
+     const-string v2, "PackageManager"
+ 
+-- 
+2.46.0
+
