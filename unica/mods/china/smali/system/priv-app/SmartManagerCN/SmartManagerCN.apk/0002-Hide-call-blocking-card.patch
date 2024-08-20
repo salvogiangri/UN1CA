@@ -1,0 +1,25 @@
+From d7a9b61046e5e2d91095571f8a895005dd15e740 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 20 Aug 2024 18:13:24 +0200
+Subject: [PATCH] Hide call blocking card
+
+---
+ smali_classes2/gd/j.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali_classes2/gd/j.smali b/smali_classes2/gd/j.smali
+index 7f92919e..ea3efa3b 100644
+--- a/smali_classes2/gd/j.smali
++++ b/smali_classes2/gd/j.smali
+@@ -112,7 +112,7 @@
+ .method public B()Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+-- 
+2.46.0
+

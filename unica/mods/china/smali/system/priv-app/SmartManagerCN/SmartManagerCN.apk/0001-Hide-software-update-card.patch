@@ -1,0 +1,46 @@
+From c4a7994c41d5ee9458da885e9497978adc3572a9 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 20 Aug 2024 18:13:09 +0200
+Subject: [PATCH] Hide software update card
+
+---
+ smali_classes2/gd/d0.smali | 19 +------------------
+ 1 file changed, 1 insertion(+), 18 deletions(-)
+
+diff --git a/smali_classes2/gd/d0.smali b/smali_classes2/gd/d0.smali
+index e3e0a172..4d9d7dcb 100644
+--- a/smali_classes2/gd/d0.smali
++++ b/smali_classes2/gd/d0.smali
+@@ -85,28 +85,11 @@
+ 
+ # virtual methods
+ .method public B()Z
+-    .locals 1
+-
+-    iget-object v0, p0, Lgd/n;->m:Landroid/content/Context;
+-
+-    invoke-virtual {p0, v0}, Lgd/d0;->P(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
++    .locals 0
+ 
+     const/4 p0, 0x0
+ 
+     return p0
+-
+-    :cond_0
+-    const-string p0, "user.owner"
+-
+-    invoke-static {p0}, Lq9/c;->e(Ljava/lang/String;)Z
+-
+-    move-result p0
+-
+-    return p0
+ .end method
+ 
+ .method public E()V
+-- 
+2.46.0
+
