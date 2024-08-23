@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -32,8 +32,8 @@ jobs:
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             attr ccache clang golang libbrotli-dev \
-            libgtest-dev libprotobuf-dev libunwind-dev libzstd-dev linux-modules-extra-$(uname -r) \
-            lld protobuf-compiler zipalign
+            libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev libzstd-dev \
+            linux-modules-extra-$(uname -r) lld protobuf-compiler zipalign
           sudo modprobe erofs f2fs
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
