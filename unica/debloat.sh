@@ -29,12 +29,12 @@ etc/dpolicy
 "
 
 # mAFPC
-SYSTEM_DEBLOAT="
+SYSTEM_DEBLOAT+="
 system/bin/mafpc_write
 "
 
 # Samsung SIM Unlock
-SYSTEM_DEBLOAT="
+SYSTEM_DEBLOAT+="
 system/bin/ssud
 system/etc/init/ssu_dm1qxxx.rc
 system/etc/init/ssu.rc
