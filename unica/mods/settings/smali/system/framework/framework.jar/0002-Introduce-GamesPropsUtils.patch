@@ -1,12 +1,12 @@
-From 10b87b8731420c2bf80c52380dcb45d4d5420a2d Mon Sep 17 00:00:00 2001
+From de98bf477fa22a58055ebdbcaa9a215eef85a976 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:50:22 +0200
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
  smali/android/app/Instrumentation.smali       |    4 +
- .../io/mesalabs/unica/GamesPropsUtils.smali   | 1041 +++++++++++++++++
- 2 files changed, 1045 insertions(+)
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 1045 +++++++++++++++++
+ 2 files changed, 1049 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -33,10 +33,10 @@ index 236e3ab4..e29afd3b 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..98c33d19
+index 00000000..7b521682
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
-@@ -0,0 +1,1041 @@
+@@ -0,0 +1,1045 @@
 +.class public final Lio/mesalabs/unica/GamesPropsUtils;
 +.super Ljava/lang/Object;
 +.source "GamesPropsUtils.java"
@@ -75,7 +75,7 @@ index 00000000..98c33d19
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 12
++    .locals 11
 +
 +    new-instance v0, Ljava/util/HashMap;
 +
@@ -175,181 +175,179 @@ index 00000000..98c33d19
 +
 +    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v5, v4, [Ljava/lang/String;
-+
-+    const-string v9, "com.ea.gp.apexlegendsmobilefps"
-+
-+    aput-object v9, v5, v6
-+
-+    const-string v9, "com.levelinfinite.hotta.gp"
-+
-+    aput-object v9, v5, v2
-+
-+    const-string v9, "com.supercell.clashofclans"
-+
-+    aput-object v9, v5, v8
-+
-+    const-string v9, "com.vng.mlbbvn"
-+
-+    aput-object v9, v5, v3
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI13PProps()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "MI13P"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v5, v8, [Ljava/lang/String;
-+
-+    const-string v9, "com.levelinfinite.sgameGlobal"
-+
-+    aput-object v9, v5, v6
-+
-+    const-string v9, "com.tencent.tmgp.sgame"
-+
-+    aput-object v9, v5, v2
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createNX729JProps()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "NX729J"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v5, v2, [Ljava/lang/String;
-+
-+    const-string v9, "com.YoStar.AetherGazer"
-+
-+    aput-object v9, v5, v6
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP8PProps()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "OP8P"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v5, v4, [Ljava/lang/String;
-+
-+    const-string v9, "com.netease.lztgglobal"
-+
-+    aput-object v9, v5, v6
-+
-+    const-string v9, "com.riotgames.league.wildrift"
-+
-+    aput-object v9, v5, v2
-+
-+    const-string v9, "com.riotgames.league.wildrifttw"
-+
-+    aput-object v9, v5, v8
-+
-+    const-string v9, "com.riotgames.league.wildriftvn"
-+
-+    aput-object v9, v5, v3
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP9PProps()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "OP9P"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v5, v4, [Ljava/lang/String;
-+
-+    const-string v9, "com.epicgames.fortnite"
-+
-+    aput-object v9, v5, v6
-+
-+    const-string v9, "com.epicgames.portal"
-+
-+    aput-object v9, v5, v2
-+
-+    const-string v9, "com.tencent.lolm"
-+
-+    aput-object v9, v5, v8
-+
-+    const-string v9, "jp.konami.pesam"
-+
-+    aput-object v9, v5, v3
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG3Props()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "ROG3"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v5, v3, [Ljava/lang/String;
-+
-+    const-string v9, "com.ea.gp.fifamobile"
-+
-+    aput-object v9, v5, v6
-+
-+    const-string v9, "com.pearlabyss.blackdesertm.gl"
-+
-+    aput-object v9, v5, v2
-+
-+    const-string v9, "com.pearlabyss.blackdesertm"
-+
-+    aput-object v9, v5, v8
-+
-+    invoke-interface {v1, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG6Props()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "ROG6"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const/4 v5, 0x6
++    const/4 v5, 0x5
 +
 +    new-array v9, v5, [Ljava/lang/String;
 +
-+    const-string v10, "com.activision.callofduty.shooter"
++    const-string v10, "com.ea.gp.apexlegendsmobilefps"
 +
 +    aput-object v10, v9, v6
 +
-+    const-string v10, "com.gameloft.android.ANMP.GloftA9HM"
++    const-string v10, "com.levelinfinite.hotta.gp"
 +
 +    aput-object v10, v9, v2
 +
-+    const-string v10, "com.madfingergames.legends"
++    const-string v10, "com.supercell.brawlstars"
 +
 +    aput-object v10, v9, v8
 +
-+    const-string v10, "com.riotgames.league.teamfighttactics"
++    const-string v10, "com.supercell.clashofclans"
 +
 +    aput-object v10, v9, v3
 +
-+    const-string v10, "com.riotgames.league.teamfighttacticstw"
++    const-string v10, "com.vng.mlbbvn"
 +
 +    aput-object v10, v9, v4
 +
++    invoke-interface {v1, v7, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI13PProps()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "MI13P"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v8, [Ljava/lang/String;
++
++    const-string v10, "com.levelinfinite.sgameGlobal"
++
++    aput-object v10, v7, v6
++
++    const-string v10, "com.tencent.tmgp.sgame"
++
++    aput-object v10, v7, v2
++
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createNX729JProps()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "NX729J"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v2, [Ljava/lang/String;
++
++    const-string v10, "com.YoStar.AetherGazer"
++
++    aput-object v10, v7, v6
++
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP8PProps()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "OP8P"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v4, [Ljava/lang/String;
++
++    const-string v10, "com.netease.lztgglobal"
++
++    aput-object v10, v7, v6
++
++    const-string v10, "com.riotgames.league.wildrift"
++
++    aput-object v10, v7, v2
++
++    const-string v10, "com.riotgames.league.wildrifttw"
++
++    aput-object v10, v7, v8
++
++    const-string v10, "com.riotgames.league.wildriftvn"
++
++    aput-object v10, v7, v3
++
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP9PProps()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "OP9P"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v4, [Ljava/lang/String;
++
++    const-string v10, "com.epicgames.fortnite"
++
++    aput-object v10, v7, v6
++
++    const-string v10, "com.epicgames.portal"
++
++    aput-object v10, v7, v2
++
++    const-string v10, "com.tencent.lolm"
++
++    aput-object v10, v7, v8
++
++    const-string v10, "jp.konami.pesam"
++
++    aput-object v10, v7, v3
++
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG3Props()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "ROG3"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v3, [Ljava/lang/String;
++
++    const-string v10, "com.ea.gp.fifamobile"
++
++    aput-object v10, v7, v6
++
++    const-string v10, "com.pearlabyss.blackdesertm.gl"
++
++    aput-object v10, v7, v2
++
++    const-string v10, "com.pearlabyss.blackdesertm"
++
++    aput-object v10, v7, v8
++
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG6Props()Ljava/util/Map;
++
++    move-result-object v7
++
++    const-string v9, "ROG6"
++
++    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v7, v5, [Ljava/lang/String;
++
++    const-string v10, "com.gameloft.android.ANMP.GloftA9HM"
++
++    aput-object v10, v7, v6
++
++    const-string v10, "com.madfingergames.legends"
++
++    aput-object v10, v7, v2
++
++    const-string v10, "com.riotgames.league.teamfighttactics"
++
++    aput-object v10, v7, v8
++
++    const-string v10, "com.riotgames.league.teamfighttacticstw"
++
++    aput-object v10, v7, v3
++
 +    const-string v10, "com.riotgames.league.teamfighttacticsvn"
 +
-+    const/4 v11, 0x5
++    aput-object v10, v7, v4
 +
-+    aput-object v10, v9, v11
-+
-+    invoke-interface {v1, v7, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG8Props()Ljava/util/Map;
 +
@@ -359,57 +357,63 @@ index 00000000..98c33d19
 +
 +    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v5, v5, [Ljava/lang/String;
++    const/4 v7, 0x6
 +
-+    const-string v7, "com.pubg.imobile"
++    new-array v7, v7, [Ljava/lang/String;
 +
-+    aput-object v7, v5, v6
++    const-string v10, "com.pubg.imobile"
 +
-+    const-string v7, "com.pubg.krmobile"
++    aput-object v10, v7, v6
 +
-+    aput-object v7, v5, v2
++    const-string v10, "com.pubg.krmobile"
 +
-+    const-string v7, "com.rekoo.pubgm"
++    aput-object v10, v7, v2
 +
-+    aput-object v7, v5, v8
++    const-string v10, "com.rekoo.pubgm"
 +
-+    const-string v7, "com.tencent.ig"
++    aput-object v10, v7, v8
 +
-+    aput-object v7, v5, v3
++    const-string v10, "com.tencent.ig"
 +
-+    const-string v7, "com.tencent.tmgp.pubgmhd"
++    aput-object v10, v7, v3
 +
-+    aput-object v7, v5, v4
++    const-string v10, "com.tencent.tmgp.pubgmhd"
 +
-+    const-string v4, "com.vng.pubgmobile"
++    aput-object v10, v7, v4
 +
-+    aput-object v4, v5, v11
++    const-string v10, "com.vng.pubgmobile"
 +
-+    invoke-interface {v1, v9, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    aput-object v10, v7, v5
 +
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createXP5Props()Ljava/util/Map;
++    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    move-result-object v4
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createLenovoY700Props()Ljava/util/Map;
 +
-+    const-string v5, "XP5"
++    move-result-object v5
 +
-+    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v7, "LenovoY700"
 +
-+    new-array v0, v3, [Ljava/lang/String;
++    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v3, "com.garena.game.codm"
++    new-array v0, v4, [Ljava/lang/String;
 +
-+    aput-object v3, v0, v6
++    const-string v4, "com.activision.callofduty.shooter"
 +
-+    const-string v3, "com.tencent.tmgp.kr.codm"
++    aput-object v4, v0, v6
 +
-+    aput-object v3, v0, v2
++    const-string v4, "com.garena.game.codm"
 +
-+    const-string v2, "com.vng.codmvn"
++    aput-object v4, v0, v2
++
++    const-string v2, "com.tencent.tmgp.kr.codm"
 +
 +    aput-object v2, v0, v8
 +
-+    invoke-interface {v1, v5, v0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    const-string v2, "com.vng.codmvn"
++
++    aput-object v2, v0, v3
++
++    invoke-interface {v1, v7, v0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-void
 +.end method
@@ -486,6 +490,41 @@ index 00000000..98c33d19
 +    const-string v1, "MODEL"
 +
 +    const-string v2, "23049PCD8G"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createLenovoY700Props()Ljava/util/Map;
++    .locals 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Lenovo"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "Lenovo TB-9707F"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -782,41 +821,6 @@ index 00000000..98c33d19
 +    const-string v1, "MODEL"
 +
 +    const-string v2, "ASUS_AI2401_A"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    return-object v0
-+.end method
-+
-+.method private static blacklist createXP5Props()Ljava/util/Map;
-+    .locals 3
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "()",
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+
-+    new-instance v0, Ljava/util/HashMap;
-+
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
-+
-+    const-string v1, "BRAND"
-+
-+    const-string v2, "Sony"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MANUFACTURER"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MODEL"
-+
-+    const-string v2, "SO-52A"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
