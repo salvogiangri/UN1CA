@@ -187,6 +187,10 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
     fi
 fi
 
+if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
+    echo "Applying Face HIDL patches"
+    APPLY_PATCH "system/framework/services.jar" "face/services.jar/0001-Fallback-to-Face-HIDL-2.0.patch"
+fi
 
 if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
     [[ "$SOURCE_MDNIE_WEAKNESS_SOLUTION_FUNCTION" != "$TARGET_MDNIE_WEAKNESS_SOLUTION_FUNCTION" ]]; then
