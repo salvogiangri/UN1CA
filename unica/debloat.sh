@@ -410,7 +410,6 @@ system/etc/permissions/privapp-permissions-com.samsung.android.providers.factory
 system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
 system/etc/permissions/privapp-permissions-com.sec.android.app.factorykeystring.xml
-system/etc/permissions/privapp-permissions-com.sec.android.app.servicemodeapp.xml
 system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
 system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
 system/etc/permissions/privapp-permissions-com.sec.epdgtestapp.xml
@@ -447,7 +446,6 @@ system/priv-app/SEMFactoryApp
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
 system/priv-app/SmartEpdgTestApp
-system/priv-app/serviceModeApp_FB
 system/priv-app/Upday
 "
 
