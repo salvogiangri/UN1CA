@@ -1,4 +1,4 @@
-From 653dffb7ccb86a556059674af98050a68a6ba24b Mon Sep 17 00:00:00 2001
+From aaac54e020a66ce6ba691b0ebc0a37c41e4af161 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -26,6 +26,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-es/strings.xml                     |  29 +
  res/values-fr-rCA/strings.xml                 |  29 +
  res/values-fr/strings.xml                     |  29 +
+ res/values-hu/strings.xml                     |  29 +
  res/values-it/strings.xml                     |  29 +
  res/values-pl-rSP/strings.xml                 |  29 +
  res/values-pl/strings.xml                     |  29 +
@@ -72,7 +73,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 68 files changed, 5222 insertions(+)
+ 69 files changed, 5251 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -845,6 +846,44 @@ index 311495e6..3525a441 100644
 +    <string name="unica_spoof_settings_title">"Paramètres d'usurpation"</string>
 +    <string name="unica_ss_detection_title">"Désactiver la détection de capture d'écran"</string>
 +    <string name="unica_ui_settings_title">"Paramètres de l'interface utilisateur"</string>
+ </resources>
+diff --git a/res/values-hu/strings.xml b/res/values-hu/strings.xml
+index a1f2d550..002c3001 100644
+--- a/res/values-hu/strings.xml
++++ b/res/values-hu/strings.xml
+@@ -7256,4 +7256,33 @@ A Kamera alkalmazásban a Felső gomb megnyomásával fényképezhet."</string>
+     <string name="zone_menu_by_region">Kiválasztás régió szerint</string>
+     <string name="zone_time_type_dst">Nyári időszámítás</string>
+     <string name="zone_time_type_standard">Normál idő</string>
++    <string name="unica_allow_downgrade_title">Alkalmazás visszaminősítésének engedélyezése</string>
++    <string name="unica_asks_title">ASKS letiltása</string>
++    <string name="unica_boot_sound_title">Hangeffekt lejátszása bekapcsoláskor</string>
++    <string name="unica_device_name_title">Eszköz neve</string>
++    <string name="unica_extra_settings_title">Extra beállítások</string>
++    <string name="unica_fod_anim_type_optical_g">Optikai szenzor (zöld)</string>
++    <string name="unica_fod_anim_type_optical_w">Optikai szenzor (fehér)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ultrahangos szenzor</string>
++    <string name="unica_fod_anim_type_title">Ujjlenyomat-olvasó animációjának stílusa</string>
++    <string name="unica_games_spoof_title">Magasabb FPS feloldása a játékokban</string>
++    <string name="unica_hide_dev_title">Fejlesztői státusz elrejtése az applikációkban</string>
++    <string name="unica_max_refresh_rate_title">Nem adaptív képfrissítés kényszerítése</string>
++    <string name="unica_native_blur_dialog_msg">A módosítások alkalmazásához újraindítás szükséges.</string>
++    <string name="unica_native_blur_dialog_negative">Nem most</string>
++    <string name="unica_native_blur_dialog_positive">Újraindítás</string>
++    <string name="unica_native_blur_dialog_title">Újraindítás szükséges</string>
++    <string name="unica_native_blur_title">Élő blur effekt engedélyezése</string>
++    <string name="unica_pif_checking">Frissítések keresése…</string>
++    <string name="unica_pif_error">Hiba történt.</string>
++    <string name="unica_pif_no_root">A Play Integrify Fix működéséhez root szükséges.</string>
++    <string name="unica_pif_up_to_date">Ön a legfrissebb verziót futtatja.</string>
++    <string name="unica_pif_updated">A frissítés sikeresen befejeződött.</string>
++    <string name="unica_pif_version_title">Play Integrity Fix verziója</string>
++    <string name="unica_rom_version_title">ROM verziója</string>
++    <string name="unica_secure_ss_title">Biztonságos képernyőfotó engedélyezése</string>
++    <string name="unica_settings_title">UN1CA Beállítások</string>
++    <string name="unica_spoof_settings_title">Spoof beállítások</string>
++    <string name="unica_ss_detection_title">Képernyőkép észlelésének letiltása</string>
++    <string name="unica_ui_settings_title">UI beállítások</string>
  </resources>
 diff --git a/res/values-it/strings.xml b/res/values-it/strings.xml
 index c27cc9e6..58d8a623 100644
