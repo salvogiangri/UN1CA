@@ -1,4 +1,4 @@
-From 3bddc2d6db40b9d98929b4bbf7c35ade047f56c0 Mon Sep 17 00:00:00 2001
+From 653dffb7ccb86a556059674af98050a68a6ba24b Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -11,6 +11,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-ar/strings.xml                     |  29 +
  res/values-az-rAZ/strings.xml                 |  29 +
  res/values-az/strings.xml                     |  29 +
+ res/values-bg/strings.xml                     |  29 +
  res/values-de/strings.xml                     |  29 +
  res/values-en-rAU/strings.xml                 |  29 +
  res/values-en-rCA/strings.xml                 |  29 +
@@ -71,7 +72,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 67 files changed, 5193 insertions(+)
+ 68 files changed, 5222 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -274,6 +275,44 @@ index 15f7172a..3c460865 100644
 +    <string name="unica_spoof_settings_title">Saxtakarlıq parametrləri</string>
 +    <string name="unica_ss_detection_title">Ekran görüntüsünün aşkarlanmasını deaktiv et</string>
 +    <string name="unica_ui_settings_title">İstifadəçi interfeysi parametrləri</string>
+ </resources>
+diff --git a/res/values-bg/strings.xml b/res/values-bg/strings.xml
+index 96e9b44b..60d3efd8 100644
+--- a/res/values-bg/strings.xml
++++ b/res/values-bg/strings.xml
+@@ -7256,4 +7256,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+     <string name="zone_menu_by_region">Избор по регион</string>
+     <string name="zone_time_type_dst">Лятно часово време</string>
+     <string name="zone_time_type_standard">Стандартно време</string>
++    <string name="unica_allow_downgrade_title">Позволяване на даунгрейд на приложения</string>
++    <string name="unica_asks_title">Изключване на ASKS</string>
++    <string name="unica_boot_sound_title">Пускане на звуков ефект при включване</string>
++    <string name="unica_device_name_title">Име на устройството</string>
++    <string name="unica_extra_settings_title">Допълнителни настройки</string>
++    <string name="unica_fod_anim_type_optical_g">Оптичен сензор (зелено)</string>
++    <string name="unica_fod_anim_type_optical_w">Оптичен сензор (бяло)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Ултразвуков сензор</string>
++    <string name="unica_fod_anim_type_title">Стил на анимацията за пръстовия отпечатък</string>
++    <string name="unica_games_spoof_title">Отключване на по-висок FPS в игри</string>
++    <string name="unica_hide_dev_title">Скриване на режима за разработчици от приложения</string>
++    <string name="unica_max_refresh_rate_title">Заключване на най-високата честота на опресняване</string>
++    <string name="unica_native_blur_dialog_msg">За запазване на промените е нужен рестарт</string>
++    <string name="unica_native_blur_dialog_negative">Не сега</string>
++    <string name="unica_native_blur_dialog_positive">Рестартиране</string>
++    <string name="unica_native_blur_dialog_title">Нужен е рестарт</string>
++    <string name="unica_native_blur_title">Включване на blur ефект</string>
++    <string name="unica_pif_checking">Проверка за актуализации…</string>
++    <string name="unica_pif_error">Настъпи грешка.</string>
++    <string name="unica_pif_no_root">Нужен е руут за да работи Play Integrity Fix.</string>
++    <string name="unica_pif_up_to_date">Вие използвате най-новата версия.</string>
++    <string name="unica_pif_updated">Актуализацията премина успешно.</string>
++    <string name="unica_pif_version_title">Версия на Play Integrity Fix</string>
++    <string name="unica_rom_version_title">ROM версия</string>
++    <string name="unica_secure_ss_title">Позволяване на скрийншот в защитени приложения</string>
++    <string name="unica_settings_title">UN1CA Настройки</string>
++    <string name="unica_spoof_settings_title">Spoof настройки</string>
++    <string name="unica_ss_detection_title">Изключване на детекция на скрийншоти</string>
++    <string name="unica_ui_settings_title">UI настройки</string>
  </resources>
 diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
 index 87dde4f1..59241a02 100644
