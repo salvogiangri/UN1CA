@@ -1,4 +1,4 @@
-From aaac54e020a66ce6ba691b0ebc0a37c41e4af161 Mon Sep 17 00:00:00 2001
+From 4eace2625ec326c56ae2312aa2b881afa15bbb45 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -1266,14 +1266,14 @@ index 24805135..7068f7ba 100644
 +    <string name="unica_ui_settings_title">Cilësimet e UI</string>
  </resources>
 diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
-index ef5566c5..115defcb 100644
+index ef5566c5..5777bd4a 100644
 --- a/res/values-tr/strings.xml
 +++ b/res/values-tr/strings.xml
 @@ -7256,4 +7256,33 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
      <string name="zone_menu_by_region">Bölgeye göre seç</string>
      <string name="zone_time_type_dst">Gün ışığından yararlanma</string>
      <string name="zone_time_type_standard">Standart saat</string>
-+    <string name="unica_allow_downgrade_title">Sistem uygulamalarının sürümünü düşürmeye izin ver</string>
++    <string name="unica_allow_downgrade_title">Uygulamaların sürümünü düşürmeye izin ver</string>
 +    <string name="unica_asks_title">"ASKS'yi devre dışı bırak"</string>
 +    <string name="unica_boot_sound_title">Cihaz açılış sesini etkinleştir</string>
 +    <string name="unica_device_name_title">Cihaz İsmi</string>
