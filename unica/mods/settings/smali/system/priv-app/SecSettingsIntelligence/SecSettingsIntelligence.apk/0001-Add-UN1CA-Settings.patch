@@ -1,0 +1,36 @@
+From 623f67c6aedff9ddd2874344a9ee5f56b5e66549 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sat, 31 Aug 2024 09:36:28 +0200
+Subject: [PATCH] Add UN1CA Settings
+
+---
+ .../search/categorizing/TopLevelKeysCollector.smali         | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali b/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
+index 286ba58..e307c33 100644
+--- a/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
++++ b/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
+@@ -45,7 +45,7 @@
+ .end method
+ 
+ .method public constructor <init>(Landroid/content/Context;)V
+-    .locals 33
++    .locals 34
+ 
+     move-object/from16 v0, p0
+ 
+@@ -115,7 +115,9 @@
+ 
+     const-string v32, "development_prefs_screen"
+ 
+-    filled-new-array/range {v1 .. v32}, [Ljava/lang/String;
++    const-string v33, "top_level_unica"
++
++    filled-new-array/range {v1 .. v33}, [Ljava/lang/String;
+ 
+     move-result-object v1
+ 
+-- 
+2.46.0
+
