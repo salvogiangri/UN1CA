@@ -1,4 +1,4 @@
-From 253117ac9b77bc1931bc278c3eacae3401893b2d Mon Sep 17 00:00:00 2001
+From 2501068069cbd6f9585d4f736b26abc746015312 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -54,6 +54,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$layout.smali       |   2 +
  .../com/android/settings/R$string.smali       |  62 ++
  .../com/android/settings/R$xml.smali          |   2 +
+ .../core/gateway/SettingsGateway.smali        |   4 +-
  .../search/SearchIndexableResourcesBase.smali |  10 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../unica/UnicaSettingsFragment.smali         | 155 +++++
@@ -76,7 +77,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 72 files changed, 5338 insertions(+)
+ 73 files changed, 5341 insertions(+), 1 deletion(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1815,6 +1816,21 @@ index 4d5b41c4..a0289763 100644
  .field public static final unrestricted_data_access_settings:I = 0x7f16023a
  
  .field public static final usb_default_fragment:I = 0x7f16023b
+diff --git a/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali b/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali
+index ba20eae6..b97bbcb9 100644
+--- a/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali
++++ b/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali
+@@ -2149,7 +2149,9 @@
+ 
+     const-string v131, "com.samsung.android.settings.inputmethod.WirelessKeyboardShareFragment"
+ 
+-    filled-new-array/range {v1 .. v131}, [Ljava/lang/String;
++    const-string v132, "io.mesalabs.unica.UnicaSettingsFragment"
++
++    filled-new-array/range {v1 .. v132}, [Ljava/lang/String;
+ 
+     move-result-object v0
+ 
 diff --git a/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali b/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali
 index b31afbd4..66c54a37 100644
 --- a/smali_classes2/com/android/settingslib/search/SearchIndexableResourcesBase.smali
