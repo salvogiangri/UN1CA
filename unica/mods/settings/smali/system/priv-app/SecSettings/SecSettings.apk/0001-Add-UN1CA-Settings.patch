@@ -1,4 +1,4 @@
-From 05e0b9d51b8bbf54615d238efc4059d90c4b4be1 Mon Sep 17 00:00:00 2001
+From 253117ac9b77bc1931bc278c3eacae3401893b2d Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -41,6 +41,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-sr/strings.xml                     |  29 +
  res/values-tr/strings.xml                     |  29 +
  res/values-uk/strings.xml                     |  29 +
+ res/values-vi/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
  res/values/public.xml                         |  38 ++
@@ -75,7 +76,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 71 files changed, 5309 insertions(+)
+ 72 files changed, 5338 insertions(+)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1418,6 +1419,44 @@ index 89c49399..c065c009 100644
 +    <string name="unica_spoof_settings_title">Налаштування виявлення</string>
 +    <string name="unica_ss_detection_title">Вимкнути виявлення скріншотів</string>
 +    <string name="unica_ui_settings_title">Налаштування інтерфейсу</string>
+ </resources>
+diff --git a/res/values-vi/strings.xml b/res/values-vi/strings.xml
+index 70b7e91b..057cdb26 100644
+--- a/res/values-vi/strings.xml
++++ b/res/values-vi/strings.xml
+@@ -7256,4 +7256,33 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
+     <string name="zone_menu_by_region">Chọn theo vùng</string>
+     <string name="zone_time_type_dst">Giờ theo mùa</string>
+     <string name="zone_time_type_standard">Giờ tiêu chuẩn</string>
++    <string name="unica_allow_downgrade_title">Cho phép hạ phiên bản ứng dụng</string>
++    <string name="unica_asks_title">Vô hiệu hóa ASKS</string>
++    <string name="unica_boot_sound_title">Bật tiếng khi khởi động</string>
++    <string name="unica_device_name_title">Tên thiết bị</string>
++    <string name="unica_extra_settings_title">Các cài đặt khác</string>
++    <string name="unica_fod_anim_type_optical_g">Cảm biến quang học (xanh lá)</string>
++    <string name="unica_fod_anim_type_optical_w">Cảm biến quang học (trắng)</string>
++    <string name="unica_fod_anim_type_ultrasonic">Cảm biến siêu âm</string>
++    <string name="unica_fod_anim_type_title">Hiệu ứng mở khóa vân tay</string>
++    <string name="unica_games_spoof_title">Cho phép FPS cao trong các game</string>
++    <string name="unica_hide_dev_title">Ẩn trạng thái nhà phát triển cho các ứng dụng</string>
++    <string name="unica_max_refresh_rate_title">Buộc tốc độ làm mới cao nhất</string>
++    <string name="unica_native_blur_dialog_msg">Để áp dụng các thay đổi, cần phải khởi động lại.</string>
++    <string name="unica_native_blur_dialog_negative">Không phải bây giờ</string>
++    <string name="unica_native_blur_dialog_positive">Khởi động lại</string>
++    <string name="unica_native_blur_dialog_title">Cần phải khởi động lại</string>
++    <string name="unica_native_blur_title">Bật hiệu ứng làm mờ trực tiếp</string>
++    <string name="unica_pif_checking">Đang kiểm tra cập nhật...</string>
++    <string name="unica_pif_error">Đã xảy ra lỗi.</string>
++    <string name="unica_pif_no_root">Cần có root để Play Integrity Fix hoạt động.</string>
++    <string name="unica_pif_up_to_date">Bạn đang chạy phiên bản mới nhất.</string>
++    <string name="unica_pif_updated">Cập nhật đã thành công.</string>
++    <string name="unica_pif_version_title">Phiên bản Play Integrity Fix</string>
++    <string name="unica_rom_version_title">Phiên bản ROM</string>
++    <string name="unica_secure_ss_title">Cho phép chụp ảnh màn hình an toàn</string>
++    <string name="unica_settings_title">Cài đặt UN1CA</string>
++    <string name="unica_spoof_settings_title">Cài đặt giả mạo</string>
++    <string name="unica_ss_detection_title">Vô hiệu hóa phát hiện chụp màn hình</string>
++    <string name="unica_ui_settings_title">Cài đặt UI</string>
  </resources>
 diff --git a/res/values/colors.xml b/res/values/colors.xml
 index a576c7ea..cf1ff26f 100644
