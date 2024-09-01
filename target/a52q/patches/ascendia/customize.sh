@@ -1,7 +1,7 @@
 SKIPUNZIP=1
 
 # [
-ASCENDIA_ZIP="https://github.com/RisenID/kernel_samsung_ascendia_sm7125/releases/download/v3.2/Ascendia_3.2_Vanilla_a572q.zip"
+ASCENDIA_ZIP="https://github.com/RisenID/kernel_samsung_ascendia_sm7125/releases/download/v3.3/Ascendia_3.3_Vanilla_a572q.zip"
 
 REPLACE_KERNEL_BINARIES()
 {
