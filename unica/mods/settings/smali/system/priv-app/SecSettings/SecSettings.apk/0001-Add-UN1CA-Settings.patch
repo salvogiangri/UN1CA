@@ -1,4 +1,4 @@
-From 2501068069cbd6f9585d4f736b26abc746015312 Mon Sep 17 00:00:00 2001
+From 5dbf146c3456279c2eb5025a25c106e4666002cc Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 10:26:45 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -73,11 +73,11 @@ Subject: [PATCH] Add UN1CA Settings
  .../GamesPropsPreferenceController.smali      | 167 ++++++
  ...eDeveloperStatusPreferenceController.smali | 183 ++++++
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
- .../LiveBlurPreferenceController.smali        | 322 ++++++++++
+ .../LiveBlurPreferenceController.smali        | 324 +++++++++++
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 73 files changed, 5341 insertions(+), 1 deletion(-)
+ 73 files changed, 5343 insertions(+), 1 deletion(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -5118,10 +5118,10 @@ index 00000000..e08624b2
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
 new file mode 100644
-index 00000000..8214ab94
+index 00000000..0b266327
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/LiveBlurPreferenceController.smali
-@@ -0,0 +1,322 @@
+@@ -0,0 +1,324 @@
 +.class public Lio/mesalabs/unica/settings/LiveBlurPreferenceController;
 +.super Lcom/android/settings/core/TogglePreferenceController;
 +.source "LiveBlurPreferenceController.java"
@@ -5397,10 +5397,12 @@ index 00000000..8214ab94
 +    return p0
 +.end method
 +
-+.method public isControllable()Z
++.method public bridge synthetic isControllable()Z
 +    .locals 0
 +
-+    const/4 p0, 0x1
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->isControllable()Z
++
++    move-result p0
 +
 +    return p0
 +.end method
