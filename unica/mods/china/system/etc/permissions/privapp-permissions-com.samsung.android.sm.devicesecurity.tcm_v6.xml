@@ -8,6 +8,7 @@
        <permission name="android.permission.UPDATE_APP_OPS_STATS"/>
        <permission name="android.permission.INTERACT_ACROSS_USERS"/>
        <permission name="android.permission.START_ACTIVITIES_FROM_BACKGROUND"/>
+       <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
        <permission name="com.samsung.android.permission.PACKAGE_VERIFICATION_AGENT2"/>
     </privapp-permissions>
 </permissions>
