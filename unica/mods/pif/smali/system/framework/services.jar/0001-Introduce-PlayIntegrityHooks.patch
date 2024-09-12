@@ -1,4 +1,4 @@
-From 85ed898041c5ab583940e42e1c827196752c326e Mon Sep 17 00:00:00 2001
+From a118e4938f6c01ee8da103a50c71e3dd4e2aff0b Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 28 Jan 2024 01:56:23 +0100
 Subject: [PATCH] Introduce PlayIntegrityHooks
@@ -8,10 +8,10 @@ Subject: [PATCH] Introduce PlayIntegrityHooks
  1 file changed, 20 insertions(+), 2 deletions(-)
 
 diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
-index 70926b9a..5eee06eb 100644
+index 8db3367f..1c62775a 100644
 --- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
 +++ b/smali_classes3/com/android/server/wm/ActivityTaskManagerService.smali
-@@ -6894,10 +6894,19 @@
+@@ -7021,10 +7021,19 @@
  .method public getFocusedRootTaskInfo()Landroid/app/ActivityTaskManager$RootTaskInfo;
      .locals 4
  
@@ -31,7 +31,7 @@ index 70926b9a..5eee06eb 100644
      invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
  
      move-result-wide v0
-@@ -6916,7 +6925,7 @@
+@@ -7043,7 +7052,7 @@
  
      move-result-object v3
  
@@ -40,7 +40,7 @@ index 70926b9a..5eee06eb 100644
  
      iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mRootWindowContainer:Lcom/android/server/wm/RootWindowContainer;
  
-@@ -6936,7 +6945,7 @@
+@@ -7063,7 +7072,7 @@
  
      return-object p0
  
@@ -49,7 +49,7 @@ index 70926b9a..5eee06eb 100644
      :try_start_2
      monitor-exit v2
      :try_end_2
-@@ -13391,10 +13400,19 @@
+@@ -13704,10 +13713,19 @@
  .method public registerTaskStackListener(Landroid/app/ITaskStackListener;)V
      .locals 1
  
@@ -70,5 +70,5 @@ index 70926b9a..5eee06eb 100644
  
      invoke-virtual {p0, p1}, Lcom/android/server/wm/TaskChangeNotificationController;->registerTaskStackListener(Landroid/app/ITaskStackListener;)V
 -- 
-2.34.1
+2.46.0
 
