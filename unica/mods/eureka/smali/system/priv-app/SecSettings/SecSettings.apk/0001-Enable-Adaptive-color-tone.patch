@@ -1,4 +1,4 @@
-From 6de377d997a36bb11fa1b24423769e0d361c1572 Mon Sep 17 00:00:00 2001
+From 484cef2be96c3ad95ed3f6752bd45285a8e796ff Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 4 Jun 2024 00:05:52 +0200
 Subject: [PATCH] Enable Adaptive color tone
@@ -8,10 +8,10 @@ Subject: [PATCH] Enable Adaptive color tone
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
-index 014a2b01..ee9d82d1 100644
+index 1aa3ba66..44fb41c4 100644
 --- a/smali_classes4/com/samsung/android/settings/Rune.smali
 +++ b/smali_classes4/com/samsung/android/settings/Rune.smali
-@@ -5693,7 +5693,7 @@
+@@ -5806,7 +5806,7 @@
  .method public static supportEAD()Z
      .locals 1
  
@@ -21,5 +21,5 @@ index 014a2b01..ee9d82d1 100644
      return v0
  .end method
 -- 
-2.45.1
+2.46.0
 

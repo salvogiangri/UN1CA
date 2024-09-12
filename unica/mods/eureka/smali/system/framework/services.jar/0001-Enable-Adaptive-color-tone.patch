@@ -1,4 +1,4 @@
-From 24168f368e6ff23dacbc239fffc974024566eaad Mon Sep 17 00:00:00 2001
+From 2c6cd475e758a740b49625d7f4f902ae9c542e45 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 4 Jun 2024 00:04:52 +0200
 Subject: [PATCH] Enable Adaptive color tone
@@ -10,7 +10,7 @@ Subject: [PATCH] Enable Adaptive color tone
  3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/smali_classes2/com/samsung/android/displaysolution/EyeComfortSolutionService.smali b/smali_classes2/com/samsung/android/displaysolution/EyeComfortSolutionService.smali
-index a92ff5fb..5b7a4827 100644
+index dc493f6e..513f462c 100644
 --- a/smali_classes2/com/samsung/android/displaysolution/EyeComfortSolutionService.smali
 +++ b/smali_classes2/com/samsung/android/displaysolution/EyeComfortSolutionService.smali
 @@ -817,7 +817,7 @@
@@ -23,10 +23,10 @@ index a92ff5fb..5b7a4827 100644
      iput-boolean v4, v0, Lcom/samsung/android/displaysolution/EyeComfortSolutionService;->mGlareReductionSupported:Z
  
 diff --git a/smali_classes2/com/samsung/android/displaysolution/MdnieScenarioControlService.smali b/smali_classes2/com/samsung/android/displaysolution/MdnieScenarioControlService.smali
-index d2feea4e..66dfd0f5 100644
+index db3075bf..f2fedf97 100644
 --- a/smali_classes2/com/samsung/android/displaysolution/MdnieScenarioControlService.smali
 +++ b/smali_classes2/com/samsung/android/displaysolution/MdnieScenarioControlService.smali
-@@ -1940,7 +1940,7 @@
+@@ -1944,7 +1944,7 @@
      invoke-static {v7, v1}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
  
      :cond_3
@@ -36,10 +36,10 @@ index d2feea4e..66dfd0f5 100644
      iput-boolean v2, v0, Lcom/samsung/android/displaysolution/MdnieScenarioControlService;->mGlareReductionSupported:Z
  
 diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-index 125057d9..74b86645 100644
+index 690a37df..9cfda986 100644
 --- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 +++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-@@ -1341,7 +1341,7 @@
+@@ -1359,7 +1359,7 @@
  
      iput-boolean v5, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mMdnieWhiteRGBSupported:Z
  
@@ -49,5 +49,5 @@ index 125057d9..74b86645 100644
      invoke-static {v4}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
  
 -- 
-2.45.1
+2.46.0
 
