@@ -1,69 +1,86 @@
-From a30811264c6a296b11eb90169dcd38dbfc8d570e Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Tue, 28 Nov 2023 22:01:31 +0100
+From 5ef9f545b016a5f60fb4b7e3b42001b393f07807 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 00:46:56 +0200
 Subject: [PATCH] Disable SAK in DarManagerService
 
 ---
- .../server/knox/dar/DarManagerService.smali   | 129 +-----------------
- 1 file changed, 4 insertions(+), 125 deletions(-)
+ .../server/knox/dar/DarManagerService.smali   | 148 +-----------------
+ 1 file changed, 6 insertions(+), 142 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
-index 6c6398fa..ed693cfb 100644
+index 864bf487..946762d7 100644
 --- a/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
 +++ b/smali_classes2/com/android/server/knox/dar/DarManagerService.smali
-@@ -481,50 +481,11 @@
+@@ -481,65 +481,11 @@
  .end method
  
  .method public final checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z
--    .locals 1
+-    .locals 3
 -
--    const/4 p0, 0x0
+-    const/4 v0, 0x0
 -
--    aget-object p1, p1, p0
+-    aget-object p1, p1, v0
 -
 -    check-cast p1, Ljava/security/cert/X509Certificate;
 -
 -    :try_start_0
--    new-instance v0, Lcom/android/server/knox/dar/AttestedCertParser;
+-    new-instance v1, Lcom/android/server/knox/dar/AttestedCertParser;
 -
--    invoke-direct {v0, p1}, Lcom/android/server/knox/dar/AttestedCertParser;-><init>(Ljava/security/cert/X509Certificate;)V
+-    invoke-direct {v1, p1}, Lcom/android/server/knox/dar/AttestedCertParser;-><init>(Ljava/security/cert/X509Certificate;)V
 -
--    invoke-virtual {v0}, Lcom/android/server/knox/dar/AttestedCertParser;->getIntegrityStatus()Lcom/android/server/knox/dar/IntegrityStatus;
+-    invoke-virtual {v1}, Lcom/android/server/knox/dar/AttestedCertParser;->getIntegrityStatus()Lcom/android/server/knox/dar/IntegrityStatus;
 -
 -    move-result-object p1
+-
+-    const/4 v1, 0x1
 -
 -    if-eqz p1, :cond_0
 -
 -    invoke-virtual {p1}, Lcom/android/server/knox/dar/IntegrityStatus;->getWarranty()I
 -
--    move-result v0
+-    move-result v2
 -
--    if-nez v0, :cond_0
+-    if-nez v2, :cond_0
 -
 -    invoke-virtual {p1}, Lcom/android/server/knox/dar/IntegrityStatus;->getTrustBoot()I
 -
 -    move-result p1
+-
+-    if-nez p1, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->isEmTokenAllowed()Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_1
+-
+-    const-string p0, "DarManagerService"
+-
+-    const-string p1, "Failed in device integrity check. But, EM Token is allowed. Continue - "
+-
+-    invoke-static {p0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -    :try_end_0
 -    .catch Ljava/security/cert/CertificateParsingException; {:try_start_0 .. :try_end_0} :catch_0
 -
--    if-nez p1, :cond_0
-+    .locals 0
- 
-     const/4 p0, 0x1
- 
-     return p0
+-    return v1
 -
 -    :catch_0
--    move-exception p1
--
--    invoke-virtual {p1}, Ljava/security/cert/CertificateParsingException;->printStackTrace()V
--
--    :cond_0
--    return p0
+-    move-exception p0
++    .locals 0
+ 
+-    invoke-virtual {p0}, Ljava/security/cert/CertificateParsingException;->printStackTrace()V
++    const/4 p0, 0x1
+ 
+-    :cond_1
+-    return v0
++    return p0
  .end method
  
  .method public final checkSystemPermission()V
-@@ -2320,93 +2281,11 @@
+@@ -2379,93 +2325,11 @@
  .end method
  
  .method public isKnoxKeyInstallable()Z

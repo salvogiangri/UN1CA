@@ -1,4 +1,4 @@
-From b8780b2815fa691a1d6a067be08fdbaaebc5e1eb Mon Sep 17 00:00:00 2001
+From 1b8807c51ed0cded5b787a04974d4e67e1eb309b Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:46:34 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -13,7 +13,7 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
-index 3e901cd0..4aa3d30e 100644
+index 2ed27c53..7d598c2c 100644
 --- a/smali/android/app/ApplicationPackageManager.smali
 +++ b/smali/android/app/ApplicationPackageManager.smali
 @@ -9981,6 +9981,12 @@
@@ -100,10 +100,10 @@ index 25fa7c61..5ea40e7f 100644
  .end method
  
 diff --git a/smali_classes3/android/provider/Settings$Global.smali b/smali_classes3/android/provider/Settings$Global.smali
-index 8d8ed577..95746a63 100644
+index e5f1ff86..f40ba8e1 100644
 --- a/smali_classes3/android/provider/Settings$Global.smali
 +++ b/smali_classes3/android/provider/Settings$Global.smali
-@@ -4274,6 +4274,15 @@
+@@ -4313,6 +4313,15 @@
      return-object v0
  
      :cond_1

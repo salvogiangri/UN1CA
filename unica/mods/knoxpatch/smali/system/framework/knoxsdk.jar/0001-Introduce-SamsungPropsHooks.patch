@@ -1,4 +1,4 @@
-From 84b7c079dec32e86bb0580392656962e279c2c81 Mon Sep 17 00:00:00 2001
+From 2b12318a2ea3db7a91290b56f52820a3d94c18c9 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 16 Jan 2024 20:32:56 +0100
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -8,7 +8,7 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  1 file changed, 2 insertions(+), 20 deletions(-)
 
 diff --git a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
-index bad19a5..ec2c9f4 100644
+index a95b7af..b4a6310 100644
 --- a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
 +++ b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
 @@ -599,29 +599,11 @@
