@@ -1,4 +1,4 @@
-From e4a4c0b394095539c048f91d66e27c2f0ce3a3a4 Mon Sep 17 00:00:00 2001
+From 603b5a1d5e41795c493a3e45f05a85fd1e893b2e Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 26 Aug 2024 03:16:23 +0200
 Subject: [PATCH] Allow custom platform signature
@@ -10,7 +10,7 @@ Based off: https://github.com/TheParasiteProject/frameworks_base/commit/dcedc5be
  2 files changed, 230 insertions(+), 100 deletions(-)
 
 diff --git a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
-index 561b04ab..90b722e3 100644
+index 95b0d88d..d08397d0 100644
 --- a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
 +++ b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
 @@ -22,6 +22,8 @@
@@ -93,7 +93,7 @@ index 561b04ab..90b722e3 100644
  .method public static hasLauncherEntry(Lcom/android/server/pm/parsing/pkg/ParsedPackage;)Z
      .locals 6
  
-@@ -20935,7 +20987,9 @@
+@@ -21010,7 +21062,9 @@
  
      move-result-object v2
  
@@ -104,7 +104,7 @@ index 561b04ab..90b722e3 100644
  
      iget-object v2, v0, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;
  
-@@ -21047,7 +21101,7 @@
+@@ -21122,7 +21176,7 @@
  .end method
  
  .method public final scanSystemPackageLI(Lcom/android/server/pm/parsing/pkg/ParsedPackage;IILandroid/os/UserHandle;)Landroid/util/Pair;
@@ -113,7 +113,7 @@ index 561b04ab..90b722e3 100644
  
      move-object/from16 v0, p0
  
-@@ -21264,11 +21318,13 @@
+@@ -21339,11 +21393,13 @@
  
      move-result-object v1
  
@@ -128,7 +128,7 @@ index 561b04ab..90b722e3 100644
  
      iget-object v1, v0, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;
  
-@@ -21630,7 +21686,7 @@
+@@ -21705,7 +21761,7 @@
      :cond_f
      if-eqz v17, :cond_10
  
@@ -137,7 +137,7 @@ index 561b04ab..90b722e3 100644
  
      goto :goto_c
  
-@@ -21639,12 +21695,12 @@
+@@ -21714,12 +21770,12 @@
  
      move-result v1
  
@@ -152,7 +152,7 @@ index 561b04ab..90b722e3 100644
  
      invoke-virtual/range {p0 .. p1}, Lcom/android/server/pm/InstallPackageHelper;->canSkipForcedPackageVerification(Lcom/android/server/pm/pkg/AndroidPackage;)Z
  
-@@ -21655,32 +21711,48 @@
+@@ -21730,32 +21786,48 @@
      goto :goto_d
  
      :cond_11

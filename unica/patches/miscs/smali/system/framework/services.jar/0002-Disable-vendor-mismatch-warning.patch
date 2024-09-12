@@ -1,4 +1,4 @@
-From 00a78dc1e153aea6a0ecce6af5e96ee0711a8a30 Mon Sep 17 00:00:00 2001
+From f1a1482bdbcbed30584e7f0ff4646fa34419df68 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Thu, 5 Apr 2018 10:01:19 +0800
 Subject: [PATCH] Disable vendor mismatch warning
@@ -50,7 +50,7 @@ index 94a66162..00000000
 -    return-void
 -.end method
 diff --git a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
-index 6dd2b278..be922bcf 100644
+index b0d56bb4..1ac972d4 100644
 --- a/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
 +++ b/smali_classes3/com/android/server/wm/ActivityTaskManagerService$LocalService.smali
 @@ -66,14 +66,6 @@
@@ -68,7 +68,7 @@ index 6dd2b278..be922bcf 100644
  .method public constructor <init>(Lcom/android/server/wm/ActivityTaskManagerService;)V
      .locals 0
  
-@@ -519,99 +511,6 @@
+@@ -510,99 +502,6 @@
      return-void
  .end method
  
@@ -111,7 +111,7 @@ index 6dd2b278..be922bcf 100644
 -
 -    move-result-object v1
 -
--    const v2, 0x10401ae
+-    const v2, 0x10401b0
 -
 -    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
 -
@@ -125,7 +125,7 @@ index 6dd2b278..be922bcf 100644
 -
 -    move-result-object v1
 -
--    const v2, 0x1040e0b
+-    const v2, 0x1040e28
 -
 -    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
 -
@@ -168,7 +168,7 @@ index 6dd2b278..be922bcf 100644
  .method private synthetic lambda$updateTopComponentForFactoryTest$4(Ljava/lang/CharSequence;)V
      .locals 2
  
-@@ -6788,20 +6687,10 @@
+@@ -6829,20 +6728,10 @@
  
      const-string v1, "ActivityTaskManager"
  

@@ -1,17 +1,17 @@
-From 6b7d1cdf42d2da244f5a81add28bdaecd7c4210a Mon Sep 17 00:00:00 2001
+From 35d88d679bde663fea466d37b52ed3ca28142bf5 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Thu, 11 Jul 2024 10:57:40 +0200
+Date: Thu, 12 Sep 2024 23:22:14 +0200
 Subject: [PATCH] Disable RescueParty
 
 ---
- smali/com/android/server/RescueParty.smali | 102 +--------------------
- 1 file changed, 3 insertions(+), 99 deletions(-)
+ smali/com/android/server/RescueParty.smali | 119 +--------------------
+ 1 file changed, 3 insertions(+), 116 deletions(-)
 
 diff --git a/smali/com/android/server/RescueParty.smali b/smali/com/android/server/RescueParty.smali
-index 1317c697..78489e27 100644
+index 73ee03c5..78489e27 100644
 --- a/smali/com/android/server/RescueParty.smali
 +++ b/smali/com/android/server/RescueParty.smali
-@@ -1001,107 +1001,11 @@
+@@ -1001,124 +1001,11 @@
  .end method
  
  .method public static isDisabled()Z
@@ -30,6 +30,23 @@ index 1317c697..78489e27 100644
 -    return v1
 -
 -    :cond_0
+-    const-string/jumbo v0, "ro.boot.debug_level"
+-
+-    const-string v2, "0x4f4c"
+-
+-    invoke-static {v0, v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_1
+-
+-    return v1
+-
+-    :cond_1
 -    const-string/jumbo v0, "persist.device_config.configuration.disable_rescue_party"
 -
 -    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
@@ -40,7 +57,7 @@ index 1317c697..78489e27 100644
 -
 -    const-string v3, "RescueParty"
 -
--    if-eqz v0, :cond_1
+-    if-eqz v0, :cond_2
 -
 -    const-string v0, "Disabled because of DeviceConfig flag"
 -
@@ -48,7 +65,7 @@ index 1317c697..78489e27 100644
 -
 -    return v2
 -
--    :cond_1
+-    :cond_2
 -    const-string/jumbo v0, "persist.sys.emergency_reset"
 -
 -    const-string v4, ""
@@ -63,7 +80,7 @@ index 1317c697..78489e27 100644
 -
 -    move-result v0
 -
--    if-eqz v0, :cond_2
+-    if-eqz v0, :cond_3
 -
 -    const-string v0, "!@ RescueParty last level is already done"
 -
@@ -71,10 +88,10 @@ index 1317c697..78489e27 100644
 -
 -    return v2
 -
--    :cond_2
+-    :cond_3
 -    sget-boolean v0, Landroid/os/Build;->IS_ENG:Z
 -
--    if-eqz v0, :cond_3
+-    if-eqz v0, :cond_4
 -
 -    const-string v0, "Disabled because of eng build"
 -
@@ -82,16 +99,16 @@ index 1317c697..78489e27 100644
 -
 -    return v2
 -
--    :cond_3
+-    :cond_4
 -    sget-boolean v0, Landroid/os/Build;->IS_USERDEBUG:Z
 -
--    if-eqz v0, :cond_4
+-    if-eqz v0, :cond_5
 -
 -    invoke-static {}, Lcom/android/server/RescueParty;->isUsbActive()Z
 -
 -    move-result v0
 -
--    if-eqz v0, :cond_4
+-    if-eqz v0, :cond_5
 -
 -    const-string v0, "Disabled because of active USB connection"
 -
@@ -99,14 +116,14 @@ index 1317c697..78489e27 100644
 -
 -    return v2
 -
--    :cond_4
+-    :cond_5
 -    const-string/jumbo v0, "persist.sys.disable_rescue"
 -
 -    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
 -
 -    move-result v0
 -
--    if-eqz v0, :cond_5
+-    if-eqz v0, :cond_6
 -
 -    const-string v0, "Disabled because of manual property"
 -
@@ -116,12 +133,12 @@ index 1317c697..78489e27 100644
 -    return v2
 +    const/4 v0, 0x1
  
--    :cond_5
+-    :cond_6
 -    return v1
 +    return v0
  .end method
  
  .method public static isFactoryResetPropertySet()Z
 -- 
-2.45.2
+2.46.0
 
