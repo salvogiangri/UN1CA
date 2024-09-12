@@ -1,4 +1,4 @@
-From d6f23021d17d91bd7785e2c428108d9e5a0d803e Mon Sep 17 00:00:00 2001
+From f9ff21ce15de16801838a3150cec68aaafc72797 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 17:42:57 +0200
 Subject: [PATCH] Enable real time network speed in status bar
@@ -8,10 +8,10 @@ Subject: [PATCH] Enable real time network speed in status bar
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/smali/com/android/systemui/BasicRune.smali b/smali/com/android/systemui/BasicRune.smali
-index 66bfc7d0..cd96bbcb 100644
+index 0525a977..a4c137f6 100644
 --- a/smali/com/android/systemui/BasicRune.smali
 +++ b/smali/com/android/systemui/BasicRune.smali
-@@ -443,7 +443,7 @@
+@@ -539,7 +539,7 @@
  
      sput-boolean v4, Lcom/android/systemui/BasicRune;->STATUS_NETWORK_WIFI_DISPLAY_AP_NAME:Z
  
@@ -21,5 +21,5 @@ index 66bfc7d0..cd96bbcb 100644
      sput-boolean v4, Lcom/android/systemui/BasicRune;->STATUS_REAL_TIME_NETWORK_SPEED:Z
  
 -- 
-2.45.1
+2.46.0
 

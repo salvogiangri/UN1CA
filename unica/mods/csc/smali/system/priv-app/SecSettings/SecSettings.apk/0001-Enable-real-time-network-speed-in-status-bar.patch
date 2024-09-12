@@ -1,6 +1,6 @@
-From fc11d33a8a96c0be3fe0e9933dbbb6e358215459 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 2 Jun 2024 17:52:28 +0200
+From 372c77c4748928443b3f994f0e0fefe97b7c2365 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 00:22:03 +0200
 Subject: [PATCH] Enable real time network speed in status bar
 
 ---
@@ -10,13 +10,13 @@ Subject: [PATCH] Enable real time network speed in status bar
  3 files changed, 6 insertions(+), 42 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/eternal/provider/items/NotificationsItem.smali b/smali_classes4/com/samsung/android/settings/eternal/provider/items/NotificationsItem.smali
-index 0f49d537..7acc3f45 100644
+index d2d1b500..2503cc6d 100644
 --- a/smali_classes4/com/samsung/android/settings/eternal/provider/items/NotificationsItem.smali
 +++ b/smali_classes4/com/samsung/android/settings/eternal/provider/items/NotificationsItem.smali
-@@ -1017,15 +1017,7 @@
-     goto/16 :goto_19
+@@ -1073,15 +1073,7 @@
+     goto/16 :goto_1a
  
-     :pswitch_11
+     :pswitch_12
 -    invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
 -
 -    move-result-object p2
@@ -28,12 +28,12 @@ index 0f49d537..7acc3f45 100644
 -    move-result p2
 +    const/4 p2, 0x1
  
-     if-eqz p2, :cond_17
+     if-eqz p2, :cond_18
  
-@@ -1953,15 +1945,7 @@
+@@ -2055,15 +2047,7 @@
      goto/16 :goto_2
  
-     :pswitch_6
+     :pswitch_7
 -    invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
 -
 -    move-result-object p2
@@ -106,5 +106,5 @@ index adde23e2..e3d934dc 100644
      sput-boolean v0, Lcom/samsung/android/settings/notification/StatusBarNetworkSpeedController;->SUPPORT_NETWORK_SPEED:Z
  
 -- 
-2.45.1
+2.46.0
 
