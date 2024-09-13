@@ -1,4 +1,4 @@
-From d7a186291d235aacaa67b796dcf0cea7842aeaf8 Mon Sep 17 00:00:00 2001
+From 92548b4c472150098fc383b8eebe3a7f311ad5ee Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 5 Jun 2024 22:57:32 +0200
 Subject: [PATCH] Disable ACH ringtone support
@@ -9,10 +9,10 @@ Subject: [PATCH] Disable ACH ringtone support
  2 files changed, 15 insertions(+), 13 deletions(-)
 
 diff --git a/smali_classes5/com/samsung/android/audio/Rune.smali b/smali_classes5/com/samsung/android/audio/Rune.smali
-index 706cd7f7..067fa894 100644
+index 7ac9ad91..ba627bea 100644
 --- a/smali_classes5/com/samsung/android/audio/Rune.smali
 +++ b/smali_classes5/com/samsung/android/audio/Rune.smali
-@@ -433,9 +433,11 @@
+@@ -443,9 +443,11 @@
  
      sput-boolean v2, Lcom/samsung/android/audio/Rune;->SEC_AUDIO_SUPPORT_SOUND_THEME:Z
  
@@ -27,7 +27,7 @@ index 706cd7f7..067fa894 100644
      move-result v0
  
 diff --git a/smali_classes5/com/samsung/android/vibrator/VibRune.smali b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
-index 90dc188f..a4604f7b 100644
+index 2db9c622..e828c776 100644
 --- a/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 +++ b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 @@ -81,7 +81,9 @@
@@ -88,5 +88,5 @@ index 90dc188f..a4604f7b 100644
      move-result-object v1
  
 -- 
-2.45.2
+2.46.0
 

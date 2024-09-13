@@ -1,4 +1,4 @@
-From 64243a5a7b84c86ee5f1e45dc8b498df476ef07a Mon Sep 17 00:00:00 2001
+From a45b2426569e715e7f1e2d2bbb02c18359fe07b4 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 15:23:47 +0200
 Subject: [PATCH] Disable virtual vibration support
@@ -173,10 +173,10 @@ index 0cce5f91..7cb45784 100644
 -    return-void
 -.end method
 diff --git a/smali_classes3/com/android/server/vibrator/VibrationCustomSettings.smali b/smali_classes3/com/android/server/vibrator/VibrationCustomSettings.smali
-index 4b1207f7..2acbdb0e 100644
+index 2ae081e9..9600955b 100644
 --- a/smali_classes3/com/android/server/vibrator/VibrationCustomSettings.smali
 +++ b/smali_classes3/com/android/server/vibrator/VibrationCustomSettings.smali
-@@ -424,30 +424,6 @@
+@@ -369,30 +369,6 @@
      return p0
  .end method
  
@@ -207,7 +207,7 @@ index 4b1207f7..2acbdb0e 100644
  .method public initializeVibrationState()V
      .locals 13
  
-@@ -758,27 +734,6 @@
+@@ -703,27 +679,6 @@
      return-void
  .end method
  
@@ -235,7 +235,7 @@ index 4b1207f7..2acbdb0e 100644
  .method public final loadSystemSetting(Ljava/lang/String;I)I
      .locals 1
  
-@@ -978,178 +933,6 @@
+@@ -923,178 +878,6 @@
      return-void
  .end method
  
@@ -414,7 +414,7 @@ index 4b1207f7..2acbdb0e 100644
  .method public updateAmplitudeLevel()V
      .locals 7
  
-@@ -1650,29 +1433,3 @@
+@@ -1595,29 +1378,3 @@
      :cond_0
      return-void
  .end method
@@ -445,10 +445,10 @@ index 4b1207f7..2acbdb0e 100644
 -    return-void
 -.end method
 diff --git a/smali_classes3/com/android/server/vibrator/VibrationSettings.smali b/smali_classes3/com/android/server/vibrator/VibrationSettings.smali
-index 3b7f7341..0072af9e 100644
+index 25861c96..be37ba71 100644
 --- a/smali_classes3/com/android/server/vibrator/VibrationSettings.smali
 +++ b/smali_classes3/com/android/server/vibrator/VibrationSettings.smali
-@@ -894,18 +894,6 @@
+@@ -878,18 +878,6 @@
      return p0
  .end method
  
@@ -467,7 +467,7 @@ index 3b7f7341..0072af9e 100644
  .method public final loadSystemSetting(Ljava/lang/String;I)I
      .locals 1
  
-@@ -1547,18 +1535,6 @@
+@@ -1526,18 +1514,6 @@
      throw p0
  .end method
  
@@ -486,7 +486,7 @@ index 3b7f7341..0072af9e 100644
  .method public final shouldVibrateForRingerModeLocked(I)Z
      .locals 2
  
-@@ -2079,13 +2055,3 @@
+@@ -2058,13 +2034,3 @@
  
      throw v0
  .end method
@@ -1197,7 +1197,7 @@ index 09da69db..8ef25d4a 100644
      return-void
  .end method
 diff --git a/smali_classes3/com/android/server/vibrator/VibratorManagerService.smali b/smali_classes3/com/android/server/vibrator/VibratorManagerService.smali
-index 6521f9d1..93a9e0ed 100644
+index 4482f93d..fee08889 100644
 --- a/smali_classes3/com/android/server/vibrator/VibratorManagerService.smali
 +++ b/smali_classes3/com/android/server/vibrator/VibratorManagerService.smali
 @@ -70,8 +70,6 @@
@@ -1224,7 +1224,7 @@ index 6521f9d1..93a9e0ed 100644
  .method public static bridge synthetic -$$Nest$fputmCurrentExternalVibration(Lcom/android/server/vibrator/VibratorManagerService;Lcom/android/server/vibrator/VibratorManagerService$ExternalVibrationHolder;)V
      .locals 0
  
-@@ -1247,21 +1237,11 @@
+@@ -1187,21 +1177,11 @@
  .end method
  
  .method public final bootCompleteReady()V
@@ -1249,7 +1249,7 @@ index 6521f9d1..93a9e0ed 100644
  
      return-void
  .end method
-@@ -1298,33 +1278,24 @@
+@@ -1238,33 +1218,24 @@
      iput-object v0, p0, Lcom/android/server/vibrator/VibratorManagerService;->mCurrentExternalVibration:Lcom/android/server/vibrator/VibratorManagerService$ExternalVibrationHolder;
  
      :cond_0
@@ -1289,7 +1289,7 @@ index 6521f9d1..93a9e0ed 100644
  
      const-string v0, "cancelVibrate"
  
-@@ -1386,9 +1357,7 @@
+@@ -1326,9 +1297,7 @@
      :cond_0
      iget-object v6, p0, Lcom/android/server/vibrator/VibratorManagerService;->mCurrentVibration:Lcom/android/server/vibrator/VibrationStepConductor;
  
@@ -1300,7 +1300,7 @@ index 6521f9d1..93a9e0ed 100644
  
      if-eqz v6, :cond_1
  
-@@ -1404,27 +1373,20 @@
+@@ -1344,27 +1313,20 @@
  
      iget-object p2, p0, Lcom/android/server/vibrator/VibratorManagerService;->mCurrentVibration:Lcom/android/server/vibrator/VibrationStepConductor;
  
@@ -1335,7 +1335,7 @@ index 6521f9d1..93a9e0ed 100644
  
      move-result p1
  
-@@ -1465,27 +1427,11 @@
+@@ -1405,27 +1367,11 @@
  
      invoke-virtual {p1}, Lcom/android/server/vibrator/VibratorManagerService$ExternalVibrationHolder;->mute()V
  
@@ -1365,7 +1365,7 @@ index 6521f9d1..93a9e0ed 100644
      :try_start_5
      invoke-static {v4, v5}, Landroid/os/Binder;->restoreCallingIdentity(J)V
  
-@@ -4030,18 +3976,6 @@
+@@ -3989,18 +3935,6 @@
  
      invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
  
@@ -1384,7 +1384,7 @@ index 6521f9d1..93a9e0ed 100644
      const-string v1, "com.android.launcher3.quickstep.closeall"
  
      invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
-@@ -4876,7 +4810,7 @@
+@@ -4835,7 +4769,7 @@
  .end method
  
  .method public final startVibrationOnThreadLocked(Lcom/android/server/vibrator/VibrationStepConductor;)Lcom/android/server/vibrator/Vibration$EndInfo;
@@ -1393,7 +1393,7 @@ index 6521f9d1..93a9e0ed 100644
  
      const-string/jumbo v0, "startVibrationThreadLocked"
  
-@@ -4951,25 +4885,25 @@
+@@ -4910,25 +4844,25 @@
  
      :cond_1
      :try_start_2
@@ -1426,7 +1426,7 @@ index 6521f9d1..93a9e0ed 100644
  
      new-instance p0, Lcom/android/server/vibrator/Vibration$EndInfo;
  
-@@ -4984,29 +4918,9 @@
+@@ -4943,29 +4877,9 @@
      return-object p0
  
      :cond_2
@@ -1457,7 +1457,7 @@ index 6521f9d1..93a9e0ed 100644
  
      :catchall_0
      move-exception p0
-@@ -5421,23 +5335,15 @@
+@@ -5380,23 +5294,15 @@
  
      invoke-static {v4, v1}, Landroid/util/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -1486,7 +1486,7 @@ index 6521f9d1..93a9e0ed 100644
  
      :cond_4
      monitor-exit v0
-@@ -5454,16 +5360,6 @@
+@@ -5413,16 +5319,6 @@
      throw p0
  .end method
  
@@ -1503,7 +1503,7 @@ index 6521f9d1..93a9e0ed 100644
  .method public vibrate(IILjava/lang/String;Landroid/os/CombinedVibration;Landroid/os/VibrationAttributes;Ljava/lang/String;Landroid/os/IBinder;)V
      .locals 0
  
-@@ -5937,7 +5833,7 @@
+@@ -5896,7 +5792,7 @@
      move-result-object v0
  
      :cond_8
@@ -1512,7 +1512,7 @@ index 6521f9d1..93a9e0ed 100644
  
      invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
  
-@@ -6036,15 +5932,6 @@
+@@ -5995,15 +5891,6 @@
  
      :cond_b
      :goto_3
@@ -1528,7 +1528,7 @@ index 6521f9d1..93a9e0ed 100644
      invoke-virtual {v1, v2}, Lcom/android/server/vibrator/VibratorManagerService;->startVibrationLocked(Lcom/android/server/vibrator/HalVibration;)Lcom/android/server/vibrator/Vibration$EndInfo;
  
      move-result-object v0
-@@ -6063,15 +5950,15 @@
+@@ -6022,15 +5909,15 @@
  
      throw v0
  
@@ -1860,5 +1860,5 @@ index 40a59b64..00000000
 -    return-void
 -.end method
 -- 
-2.45.2
+2.46.0
 

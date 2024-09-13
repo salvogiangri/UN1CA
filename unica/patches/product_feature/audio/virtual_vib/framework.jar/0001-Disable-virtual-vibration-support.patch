@@ -1,4 +1,4 @@
-From 1a9d9e3cd037795d8811155195c0201da1ee1bd1 Mon Sep 17 00:00:00 2001
+From 6f5422812562bdc5a0c46c3297b8dbee51a39acd Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 15:23:28 +0200
 Subject: [PATCH] Disable virtual vibration support
@@ -45,10 +45,10 @@ index 3c940f32..a7badfc4 100644
  .end method
  
 diff --git a/smali_classes5/com/samsung/android/audio/Rune.smali b/smali_classes5/com/samsung/android/audio/Rune.smali
-index 706cd7f7..e05a7dc5 100644
+index 7ac9ad91..26d7f091 100644
 --- a/smali_classes5/com/samsung/android/audio/Rune.smali
 +++ b/smali_classes5/com/samsung/android/audio/Rune.smali
-@@ -270,7 +270,7 @@
+@@ -276,7 +276,7 @@
  
  .field public static final blacklist SEC_AUDIO_SUPPORT_SOUND_THEME:Z
  
@@ -58,7 +58,7 @@ index 706cd7f7..e05a7dc5 100644
  .field public static final blacklist SEC_AUDIO_SUPPORT_VOIP_ANTI_HOWLING:Z
  
 diff --git a/smali_classes5/com/samsung/android/vibrator/VibRune.smali b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
-index 90dc188f..61bc181e 100644
+index 2db9c622..b83c4c79 100644
 --- a/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 +++ b/smali_classes5/com/samsung/android/vibrator/VibRune.smali
 @@ -60,7 +60,7 @@
