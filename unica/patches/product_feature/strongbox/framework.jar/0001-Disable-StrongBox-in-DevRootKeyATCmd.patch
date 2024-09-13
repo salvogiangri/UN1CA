@@ -1,4 +1,4 @@
-From 95965ddc0f3a7f33d3c4ccd3b04fc0ddf0a4a5c2 Mon Sep 17 00:00:00 2001
+From 7ec950be6045a0663ae107b2cf7abb1fa27bbd98 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 14:16:18 +0200
 Subject: [PATCH] Disable StrongBox in DevRootKeyATCmd
@@ -8,7 +8,7 @@ Subject: [PATCH] Disable StrongBox in DevRootKeyATCmd
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/smali_classes5/com/android/server/DevRootKeyATCmd.smali b/smali_classes5/com/android/server/DevRootKeyATCmd.smali
-index b9686b82..72645a9c 100644
+index e9c2b083..3dd1c14f 100644
 --- a/smali_classes5/com/android/server/DevRootKeyATCmd.smali
 +++ b/smali_classes5/com/android/server/DevRootKeyATCmd.smali
 @@ -239,7 +239,7 @@
@@ -21,5 +21,5 @@ index b9686b82..72645a9c 100644
      const-string/jumbo v3, "ro.factory.factory_binary"
  
 -- 
-2.45.2
+2.46.0
 
