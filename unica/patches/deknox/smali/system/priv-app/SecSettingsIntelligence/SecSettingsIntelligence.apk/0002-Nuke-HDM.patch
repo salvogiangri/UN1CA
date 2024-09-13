@@ -1,4 +1,4 @@
-From 0fbfc3abe277b714b0ecddf56cc7f5afe5f9b9e9 Mon Sep 17 00:00:00 2001
+From 73a4f8c14083f3659e77e85065ca3d6d73dd0d98 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 18 Feb 2024 14:41:13 +0100
 Subject: [PATCH] Nuke HDM
@@ -8,7 +8,7 @@ Subject: [PATCH] Nuke HDM
  1 file changed, 17 insertions(+), 135 deletions(-)
 
 diff --git a/smali/com/samsung/android/knox/hdm/HdmManager.smali b/smali/com/samsung/android/knox/hdm/HdmManager.smali
-index d72e866..326693a 100644
+index e44220d..04d744e 100644
 --- a/smali/com/samsung/android/knox/hdm/HdmManager.smali
 +++ b/smali/com/samsung/android/knox/hdm/HdmManager.smali
 @@ -71,25 +71,7 @@
@@ -27,7 +27,7 @@ index d72e866..326693a 100644
 -
 -    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
--    const-string v1, "115"
+-    const-string v1, "3DD"
 -
 -    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
@@ -124,7 +124,7 @@ index d72e866..326693a 100644
  
      const/4 p0, 0x0
  
-@@ -200,38 +132,13 @@
+@@ -278,38 +210,13 @@
  .end method
  
  .method public setHdmPolicy(Ljava/lang/String;)Ljava/lang/String;
@@ -167,7 +167,7 @@ index d72e866..326693a 100644
  
      const/4 p0, 0x0
  
-@@ -239,38 +146,13 @@
+@@ -317,38 +224,13 @@
  .end method
  
  .method public setHdmTaCmd(I)I
@@ -211,5 +211,5 @@ index d72e866..326693a 100644
      const/4 p0, -0x1
  
 -- 
-2.43.2
+2.46.0
 

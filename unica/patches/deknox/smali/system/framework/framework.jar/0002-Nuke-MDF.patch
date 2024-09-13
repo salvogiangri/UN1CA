@@ -1,4 +1,4 @@
-From 78bfc97307c3d0967928954449b2470fb094b057 Mon Sep 17 00:00:00 2001
+From 3d8e5319cfc9d73cc75ea6317ed1e987acc0e4c1 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 29 Nov 2023 16:51:21 +0100
 Subject: [PATCH] Nuke MDF
@@ -1747,5 +1747,5 @@ index b07b3e4e..36cd72db 100644
 +    return v0
  .end method
 -- 
-2.43.0
+2.46.0
 

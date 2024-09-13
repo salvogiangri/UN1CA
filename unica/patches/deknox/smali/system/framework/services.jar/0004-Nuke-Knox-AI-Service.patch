@@ -1,4 +1,4 @@
-From 57477fc98715ca5ed3adc891727e8a9fd971a89b Mon Sep 17 00:00:00 2001
+From e06931f39a492dd020855c7117364b28daecca22 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 1 Jun 2024 12:38:41 +0200
 Subject: [PATCH] Nuke Knox AI Service
@@ -8,10 +8,10 @@ Subject: [PATCH] Nuke Knox AI Service
  1 file changed, 2 insertions(+), 43 deletions(-)
 
 diff --git a/smali/com/android/server/SystemServer.smali b/smali/com/android/server/SystemServer.smali
-index 3451cc99..1eaaddc3 100644
+index 05c5aaa7..91643a68 100644
 --- a/smali/com/android/server/SystemServer.smali
 +++ b/smali/com/android/server/SystemServer.smali
-@@ -5828,47 +5828,6 @@
+@@ -5806,47 +5806,6 @@
  
      invoke-virtual/range {p1 .. p1}, Landroid/util/TimingsTraceLog;->traceEnd()V
  
@@ -59,7 +59,7 @@ index 3451cc99..1eaaddc3 100644
      const-string v2, "StartInputManager"
  
      invoke-virtual {v14, v2}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
-@@ -5961,8 +5920,8 @@
+@@ -5939,8 +5898,8 @@
      const-string v4, "Hqm Service"
  
      invoke-static {v2, v4}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
@@ -71,5 +71,5 @@ index 3451cc99..1eaaddc3 100644
      :try_start_24
      new-instance v2, Ldalvik/system/PathClassLoader;
 -- 
-2.45.1
+2.46.0
 

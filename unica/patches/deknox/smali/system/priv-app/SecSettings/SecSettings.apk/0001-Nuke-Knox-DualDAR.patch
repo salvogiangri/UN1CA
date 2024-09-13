@@ -1,4 +1,4 @@
-From 1d8510c7328065a668104d11c6760d61f35d7353 Mon Sep 17 00:00:00 2001
+From 7dc81adc5118270a60d9b7fa946e2f7da4910f00 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 29 Nov 2023 01:12:31 +0100
 Subject: [PATCH] Nuke Knox DualDAR
@@ -84,10 +84,10 @@ index 4662fe23..75945e8e 100644
      return v0
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/knox/KnoxUtils.smali b/smali_classes4/com/samsung/android/settings/knox/KnoxUtils.smali
-index e07301fe..8ab424d7 100644
+index 396ad713..d4f38d4c 100644
 --- a/smali_classes4/com/samsung/android/settings/knox/KnoxUtils.smali
 +++ b/smali_classes4/com/samsung/android/settings/knox/KnoxUtils.smali
-@@ -2330,9 +2330,7 @@
+@@ -2628,9 +2628,7 @@
  .method public static isDualDarDoEnabled()Z
      .locals 1
  
@@ -98,7 +98,7 @@ index e07301fe..8ab424d7 100644
  
      return v0
  .end method
-@@ -2391,53 +2389,15 @@
+@@ -2689,53 +2687,15 @@
  .method public static isDualDarEnabled(Landroid/content/Context;)Z
      .locals 2
  
@@ -157,5 +157,5 @@ index e07301fe..8ab424d7 100644
      invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
  
 -- 
-2.43.0
+2.46.0
 

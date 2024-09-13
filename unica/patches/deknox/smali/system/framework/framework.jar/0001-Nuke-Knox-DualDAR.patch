@@ -1,4 +1,4 @@
-From 5cdef19244388e18285bd0f8166465b84260834a Mon Sep 17 00:00:00 2001
+From 36bfa65a0b0eb29cd2b134d4e79a8a3eefc27588 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 29 May 2024 19:35:43 +0200
 Subject: [PATCH] Nuke Knox DualDAR
@@ -531,7 +531,7 @@ index 96f324b7..b3879383 100644
  
      :catch_0
 diff --git a/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali b/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
-index fe6824b8..00ea9c7d 100644
+index 9bc00c11..9bba0baf 100644
 --- a/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
 +++ b/smali_classes5/com/samsung/android/knox/SemPersonaManager.smali
 @@ -343,7 +343,7 @@
@@ -543,7 +543,7 @@ index fe6824b8..00ea9c7d 100644
  
  .field public static final greylist SEC_PRODUCT_FEATURE_KNOX_SUPPORT_MDM:Z = true
  
-@@ -3752,30 +3752,16 @@
+@@ -3854,30 +3854,16 @@
  .end method
  
  .method public static whitelist isDarDualEncryptionEnabled(I)Z
@@ -577,7 +577,7 @@ index fe6824b8..00ea9c7d 100644
      return v1
  .end method
  
-@@ -3837,58 +3823,30 @@
+@@ -3939,58 +3925,30 @@
  .end method
  
  .method public static greylist isDualDARCustomCrypto(I)Z
@@ -642,7 +642,7 @@ index fe6824b8..00ea9c7d 100644
      return v1
  .end method
  
-@@ -6329,7 +6287,7 @@
+@@ -6431,7 +6389,7 @@
  .end method
  
  .method public greylist getDualDARProfile()Landroid/os/Bundle;
@@ -651,7 +651,7 @@ index fe6824b8..00ea9c7d 100644
  
      sget-object v0, Lcom/samsung/android/knox/SemPersonaManager;->TAG:Ljava/lang/String;
  
-@@ -6337,29 +6295,8 @@
+@@ -6439,29 +6397,8 @@
  
      invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -682,7 +682,7 @@ index fe6824b8..00ea9c7d 100644
      const/4 v0, 0x0
  
      return-object v0
-@@ -8146,29 +8083,8 @@
+@@ -8248,29 +8185,8 @@
  
      invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -773,10 +773,10 @@ index 9f2fcca5..611e6c32 100644
  .end method
  
 diff --git a/smali_classes5/com/samsung/android/rune/CoreRune.smali b/smali_classes5/com/samsung/android/rune/CoreRune.smali
-index 3b6cfcec..3e216cf6 100644
+index cfca9906..c0ae58a2 100644
 --- a/smali_classes5/com/samsung/android/rune/CoreRune.smali
 +++ b/smali_classes5/com/samsung/android/rune/CoreRune.smali
-@@ -1294,9 +1294,9 @@
+@@ -1322,9 +1322,9 @@
  
  .field public static final blacklist KNOX_SUPPORT_DAR:Z = true
  
@@ -789,5 +789,5 @@ index 3b6cfcec..3e216cf6 100644
  .field public static final blacklist KNOX_SUPPORT_DAR_SDP:Z = false
  
 -- 
-2.45.2
+2.46.0
 

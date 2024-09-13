@@ -1,4 +1,4 @@
-From fab33ac9c67df7e1028629651b5d109f62ee5f9f Mon Sep 17 00:00:00 2001
+From 10d0af0218a282cd0f0f417c655fdbab1a48e099 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 18 Feb 2024 14:22:10 +0100
 Subject: [PATCH] Nuke HDM
@@ -8,10 +8,10 @@ Subject: [PATCH] Nuke HDM
  1 file changed, 8 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali b/smali_classes2/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-index 8f35f274..6e7f678d 100644
+index f489f8a7..7195ff55 100644
 --- a/smali_classes2/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
 +++ b/smali_classes2/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-@@ -555,14 +555,6 @@
+@@ -557,14 +557,6 @@
  
      invoke-virtual {p1, v2, v1}, Lcom/android/server/enterprise/EnterpriseDeviceManagerServiceImpl$Injector;->serviceManagerAddService(Ljava/lang/String;Landroid/os/IBinder;)V
  
@@ -27,5 +27,5 @@ index 8f35f274..6e7f678d 100644
  
      invoke-static {v0}, Lcom/android/server/enterprise/scpm/CloudConfigurationManagerService;->addService(Landroid/content/Context;)V
 -- 
-2.43.2
+2.46.0
 

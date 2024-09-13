@@ -1,4 +1,4 @@
-From eeaada85504e8bff061c3b7cfc84a534648ab480 Mon Sep 17 00:00:00 2001
+From c255a4628d768ac9376032b8e3c3695ccab55ff6 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 1 Jun 2024 17:54:56 +0200
 Subject: [PATCH] Disable legacy code in LockSettingsService
@@ -8,10 +8,10 @@ Subject: [PATCH] Disable legacy code in LockSettingsService
  1 file changed, 1 insertion(+), 27 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/locksettings/LockSettingsService.smali b/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
-index 2dfeab44..a3fea769 100644
+index 978c99b5..fdfd45b6 100644
 --- a/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
 +++ b/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
-@@ -8093,34 +8093,8 @@
+@@ -8679,34 +8679,8 @@
  .end method
  
  .method public final isTokenUser(I)Z
@@ -48,5 +48,5 @@ index 2dfeab44..a3fea769 100644
  
      return p0
 -- 
-2.45.1
+2.46.0
 

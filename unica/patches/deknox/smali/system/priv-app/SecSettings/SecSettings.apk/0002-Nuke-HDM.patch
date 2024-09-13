@@ -1,4 +1,4 @@
-From 2a2fd957392e0ba393db4a4baa9e8e7dcfc2dd46 Mon Sep 17 00:00:00 2001
+From 6746a86179026097b1056ef27679d38582befb7c Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 18 Feb 2024 14:37:16 +0100
 Subject: [PATCH] Nuke HDM
@@ -8,7 +8,7 @@ Subject: [PATCH] Nuke HDM
  1 file changed, 17 insertions(+), 135 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/knox/hdm/HdmManager.smali b/smali_classes4/com/samsung/android/knox/hdm/HdmManager.smali
-index 9079bf85..6573f68e 100644
+index ae99ec7b..17eb375f 100644
 --- a/smali_classes4/com/samsung/android/knox/hdm/HdmManager.smali
 +++ b/smali_classes4/com/samsung/android/knox/hdm/HdmManager.smali
 @@ -71,25 +71,7 @@
@@ -27,7 +27,7 @@ index 9079bf85..6573f68e 100644
 -
 -    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
--    const-string v1, "115"
+-    const-string v1, "3DD"
 -
 -    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
@@ -134,7 +134,7 @@ index 9079bf85..6573f68e 100644
  
      const/4 p0, 0x0
  
-@@ -210,43 +142,18 @@
+@@ -298,43 +230,18 @@
  .end method
  
  .method public setHdmPolicy(Ljava/lang/String;)Ljava/lang/String;
@@ -182,7 +182,7 @@ index 9079bf85..6573f68e 100644
  
      const/4 p0, 0x0
  
-@@ -254,43 +161,18 @@
+@@ -342,43 +249,18 @@
  .end method
  
  .method public setHdmTaCmd(I)I
@@ -217,19 +217,19 @@ index 9079bf85..6573f68e 100644
 -    invoke-interface {v0, p0, p1}, Lcom/samsung/android/knox/hdm/IHdmManager;->setHdmTaCmd(Lcom/samsung/android/knox/ContextInfo;I)I
 -
 -    move-result p0
--
--    return p0
 +    sget-object p0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
+ 
+-    return p0
++    const-string/jumbo p1, "setHdmTaCmd() on HdmManager.java"
  
 -    :cond_0
 -    const-string p0, "Fail to call setHdmTaCmd() using HDM Service on HdmManager.java"
-+    const-string/jumbo p1, "setHdmTaCmd() on HdmManager.java"
- 
+-
 -    invoke-static {v0, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 +    invoke-static {p0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
      const/4 p0, -0x1
  
 -- 
-2.43.2
+2.46.0
 
