@@ -1,4 +1,4 @@
-From 67d15aa2cb18085a9575d0557b8ad8d6ab85e90d Mon Sep 17 00:00:00 2001
+From b0a720e3a5f8332c80312df6f27c4bd8bbd05d65 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Wed, 10 Jul 2024 13:59:54 +0200
 Subject: [PATCH] Enable multi user support
@@ -8,7 +8,7 @@ Subject: [PATCH] Enable multi user support
  1 file changed, 1 insertion(+), 23 deletions(-)
 
 diff --git a/smali_classes5/com/samsung/android/core/pm/multiuser/MultiUserSupportsHelper.smali b/smali_classes5/com/samsung/android/core/pm/multiuser/MultiUserSupportsHelper.smali
-index 842aad97..ed5dc5ee 100644
+index 4e26521e..fe6f35f7 100644
 --- a/smali_classes5/com/samsung/android/core/pm/multiuser/MultiUserSupportsHelper.smali
 +++ b/smali_classes5/com/samsung/android/core/pm/multiuser/MultiUserSupportsHelper.smali
 @@ -15,34 +15,12 @@
@@ -48,5 +48,5 @@ index 842aad97..ed5dc5ee 100644
  
      sput-boolean v0, Lcom/samsung/android/core/pm/multiuser/MultiUserSupportsHelper;->DEFAULT_ENABLE_STATUS:Z
 -- 
-2.45.2
+2.46.0
 

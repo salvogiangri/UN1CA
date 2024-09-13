@@ -1,6 +1,6 @@
-From 623f67c6aedff9ddd2874344a9ee5f56b5e66549 Mon Sep 17 00:00:00 2001
+From fed0c0e2b8c301eb30d04015a0c16cbc723b4101 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Sat, 31 Aug 2024 09:36:28 +0200
+Date: Fri, 13 Sep 2024 01:17:24 +0200
 Subject: [PATCH] Add UN1CA Settings
 
 ---
@@ -8,26 +8,26 @@ Subject: [PATCH] Add UN1CA Settings
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali b/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
-index 286ba58..e307c33 100644
+index 82d609b..b242705 100644
 --- a/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
 +++ b/smali/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali
 @@ -45,7 +45,7 @@
  .end method
  
  .method public constructor <init>(Landroid/content/Context;)V
--    .locals 33
-+    .locals 34
+-    .locals 34
++    .locals 35
  
      move-object/from16 v0, p0
  
-@@ -115,7 +115,9 @@
+@@ -117,7 +117,9 @@
  
-     const-string v32, "development_prefs_screen"
+     const-string v33, "development_prefs_screen"
  
--    filled-new-array/range {v1 .. v32}, [Ljava/lang/String;
-+    const-string v33, "top_level_unica"
+-    filled-new-array/range {v1 .. v33}, [Ljava/lang/String;
++    const-string v34, "top_level_unica"
 +
-+    filled-new-array/range {v1 .. v33}, [Ljava/lang/String;
++    filled-new-array/range {v1 .. v34}, [Ljava/lang/String;
  
      move-result-object v1
  

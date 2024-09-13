@@ -1,4 +1,4 @@
-From 93ef512062d3cf7b1066e93a368b04c9b5d97d2f Mon Sep 17 00:00:00 2001
+From 4429c08d5450220113718e630b0f7ae56cd32428 Mon Sep 17 00:00:00 2001
 From: David Arsene <80218600+DavidArsene@users.noreply.github.com>
 Date: Sat, 13 Jul 2024 17:57:51 +0200
 Subject: [PATCH] Allow all apps in Dual Messenger
@@ -11,7 +11,7 @@ Subject: [PATCH] Allow all apps in Dual Messenger
  4 files changed, 133 insertions(+), 214 deletions(-)
 
 diff --git a/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali b/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
-index cc307b4..4e83ce1 100644
+index c31f6fb..2237a98 100644
 --- a/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
 +++ b/smali/com/samsung/android/da/daagent/activity/DualAppActivity.smali
 @@ -196,6 +196,15 @@
@@ -592,7 +592,7 @@ index deffa7c..6985064 100644
 +    return v3
  .end method
 diff --git a/smali/com/samsung/android/da/daagent/utils/DAUtility.smali b/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
-index 7af8c5e..7e423cb 100644
+index dd286ff..ebac289 100644
 --- a/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
 +++ b/smali/com/samsung/android/da/daagent/utils/DAUtility.smali
 @@ -707,47 +707,6 @@
@@ -695,5 +695,5 @@ index 7af8c5e..7e423cb 100644
      return-void
  .end method
 -- 
-2.45.2
+2.46.0
 

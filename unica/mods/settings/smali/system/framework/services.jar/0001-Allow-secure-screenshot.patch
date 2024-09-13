@@ -1,4 +1,4 @@
-From 41a1ab24833d738e5dadedb5f7d67407122d5060 Mon Sep 17 00:00:00 2001
+From ff745b0bfcf9c81d2b19e4457ca1eb1839e4e782 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 27 Dec 2023 13:16:02 +0100
 Subject: [PATCH] Allow secure screenshot
@@ -8,10 +8,10 @@ Subject: [PATCH] Allow secure screenshot
  1 file changed, 28 insertions(+), 7 deletions(-)
 
 diff --git a/smali_classes3/com/android/server/wm/WindowState.smali b/smali_classes3/com/android/server/wm/WindowState.smali
-index be695f48..76304c6f 100644
+index a15fb5c5..f7b85190 100644
 --- a/smali_classes3/com/android/server/wm/WindowState.smali
 +++ b/smali_classes3/com/android/server/wm/WindowState.smali
-@@ -12942,8 +12942,29 @@
+@@ -13204,8 +13204,29 @@
  .end method
  
  .method public isSecureLocked()Z
@@ -42,7 +42,7 @@ index be695f48..76304c6f 100644
      iget-object v0, p0, Lcom/android/server/wm/WindowState;->mAttrs:Landroid/view/WindowManager$LayoutParams;
  
      iget v0, v0, Landroid/view/WindowManager$LayoutParams;->flags:I
-@@ -12952,31 +12973,31 @@
+@@ -13214,31 +13235,31 @@
  
      const/4 v1, 0x1
  
@@ -81,5 +81,5 @@ index be695f48..76304c6f 100644
  
      move-result-object v0
 -- 
-2.43.0
+2.46.0
 

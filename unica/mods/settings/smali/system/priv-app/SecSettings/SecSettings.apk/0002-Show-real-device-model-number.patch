@@ -1,4 +1,4 @@
-From b760e6dcdb9c3b00a9f4852d6279a8074b64bbee Mon Sep 17 00:00:00 2001
+From 14cf0db648f5c8575ac567a16b16862e45336a98 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Fri, 7 Jun 2024 08:15:21 +0200
 Subject: [PATCH] Show real device model number
@@ -21,5 +21,5 @@ index cacdfe70..85627e35 100644
      invoke-static {v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
  
 -- 
-2.45.2
+2.46.0
 

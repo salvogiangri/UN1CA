@@ -1,4 +1,4 @@
-From df222795c20b00a36b902267cd7adb5b719e9861 Mon Sep 17 00:00:00 2001
+From 413164de9db0a214b7e6530bc65390918ea60242 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 17 Dec 2023 17:57:50 +0100
 Subject: [PATCH] Enable Outdoor mode support
@@ -8,10 +8,10 @@ Subject: [PATCH] Enable Outdoor mode support
  1 file changed, 25 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
-index afcca13f..275369ef 100644
+index 1aa3ba66..c8af4f1b 100644
 --- a/smali_classes4/com/samsung/android/settings/Rune.smali
 +++ b/smali_classes4/com/samsung/android/settings/Rune.smali
-@@ -6125,33 +6125,8 @@
+@@ -6649,33 +6649,8 @@
  .method public static supportOutdoorMode(Landroid/content/Context;)Z
      .locals 0
  
@@ -46,5 +46,5 @@ index afcca13f..275369ef 100644
  .end method
  
 -- 
-2.43.0
+2.46.0
 

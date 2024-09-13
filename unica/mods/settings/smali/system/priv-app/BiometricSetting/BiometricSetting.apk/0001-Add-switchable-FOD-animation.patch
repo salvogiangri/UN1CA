@@ -1,4 +1,4 @@
-From 9b3fbef29a96cdff9ab04bfe71582391386bf9ad Mon Sep 17 00:00:00 2001
+From 58600ab92ef59a652053f01d9c2b78ec107db62b Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 17 Jun 2024 18:11:59 +0200
 Subject: [PATCH] Add switchable FOD animation
@@ -138,5 +138,5 @@ index 3fa9e0f..2ce49e5 100644
      iget-object p1, p0, Lcom/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer;->mEffectAnimationView:Lcom/airbnb/lottie/LottieAnimationView;
  
 -- 
-2.45.2
+2.46.0
 

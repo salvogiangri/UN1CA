@@ -1,4 +1,4 @@
-From c75b51ad3216654fcd7f86c427a1e389e4dbe6cb Mon Sep 17 00:00:00 2001
+From 97a0c3eb588ff7ffd89d012bfc9fb866124303a0 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 3 Aug 2024 12:27:51 +0200
 Subject: [PATCH] Allow disable ASKS
@@ -8,7 +8,7 @@ Subject: [PATCH] Allow disable ASKS
  1 file changed, 6 insertions(+), 8 deletions(-)
 
 diff --git a/smali/com/android/server/asks/ASKSManagerService.smali b/smali/com/android/server/asks/ASKSManagerService.smali
-index 9667bd38..eb7c839b 100644
+index 31cadba6..db5f9b67 100644
 --- a/smali/com/android/server/asks/ASKSManagerService.smali
 +++ b/smali/com/android/server/asks/ASKSManagerService.smali
 @@ -17562,13 +17562,13 @@

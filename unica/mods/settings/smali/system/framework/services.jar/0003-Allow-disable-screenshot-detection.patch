@@ -1,4 +1,4 @@
-From 1bdd082c1444d4ac295849334da3abdb6fc0c370 Mon Sep 17 00:00:00 2001
+From 57069ade9ef97f3d866a74d203dd20740bb10a60 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 15 Jul 2024 18:30:57 +0200
 Subject: [PATCH] Allow disable screenshot detection
@@ -8,10 +8,10 @@ Subject: [PATCH] Allow disable screenshot detection
  1 file changed, 27 insertions(+), 4 deletions(-)
 
 diff --git a/smali_classes3/com/android/server/wm/WindowManagerService.smali b/smali_classes3/com/android/server/wm/WindowManagerService.smali
-index a950097b..f042accf 100644
+index d31ce177..47f4001a 100644
 --- a/smali_classes3/com/android/server/wm/WindowManagerService.smali
 +++ b/smali_classes3/com/android/server/wm/WindowManagerService.smali
-@@ -19658,8 +19658,31 @@
+@@ -19810,8 +19810,31 @@
  
      move-result v0
  
@@ -44,7 +44,7 @@ index a950097b..f042accf 100644
      iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
  
      invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
-@@ -19673,7 +19696,7 @@
+@@ -19825,7 +19848,7 @@
  
      move-result-object p0
  
@@ -53,7 +53,7 @@ index a950097b..f042accf 100644
  
      new-instance p0, Ljava/util/ArrayList;
  
-@@ -19687,7 +19710,7 @@
+@@ -19839,7 +19862,7 @@
  
      return-object p0
  
@@ -62,7 +62,7 @@ index a950097b..f042accf 100644
      :try_start_1
      new-instance p1, Landroid/util/ArraySet;
  
-@@ -19725,7 +19748,7 @@
+@@ -19877,7 +19900,7 @@
  
      throw p0
  
@@ -72,5 +72,5 @@ index a950097b..f042accf 100644
  
      const-string p1, "Requires STATUS_BAR_SERVICE permission"
 -- 
-2.45.2
+2.46.0
 

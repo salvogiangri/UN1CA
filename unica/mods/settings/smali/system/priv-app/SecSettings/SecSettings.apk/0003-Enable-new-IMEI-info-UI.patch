@@ -1,4 +1,4 @@
-From 3787833800bc355908083d712201e294af9bd2d0 Mon Sep 17 00:00:00 2001
+From 2c5b440b33d5faf68ff6ff8fc26939e7f2a228a8 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 18:08:07 +0200
 Subject: [PATCH] Enable new IMEI info UI
@@ -8,10 +8,10 @@ Subject: [PATCH] Enable new IMEI info UI
  1 file changed, 2 insertions(+), 42 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader.smali
-index 8ce3d753..faed72eb 100644
+index 1d515f93..44113128 100644
 --- a/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader.smali
 +++ b/smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader.smali
-@@ -930,7 +930,7 @@
+@@ -985,7 +985,7 @@
  
      move-result v1
  
@@ -20,7 +20,7 @@ index 8ce3d753..faed72eb 100644
  
      iget-object v1, p0, Lcom/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader;->mContext:Landroid/content/Context;
  
-@@ -938,19 +938,7 @@
+@@ -993,19 +993,7 @@
  
      move-result v1
  
@@ -41,7 +41,7 @@ index 8ce3d753..faed72eb 100644
  
      invoke-virtual {p0}, Lcom/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader;->getDeviceInfoDynamicImei()Ljava/util/ArrayList;
  
-@@ -958,23 +946,7 @@
+@@ -1013,23 +1001,7 @@
  
      invoke-virtual {v0, p0}, Ljava/util/ArrayList;->addAll(Ljava/util/Collection;)Z
  
@@ -65,7 +65,7 @@ index 8ce3d753..faed72eb 100644
      new-instance p0, Lcom/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader$$ExternalSyntheticLambda0;
  
      invoke-direct {p0}, Lcom/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader$$ExternalSyntheticLambda0;-><init>()V
-@@ -2171,10 +2143,6 @@
+@@ -2413,10 +2385,6 @@
  
      move-result v2
  
@@ -76,7 +76,7 @@ index 8ce3d753..faed72eb 100644
      const/16 v4, 0x8
  
      const/4 v5, 0x0
-@@ -2183,8 +2151,6 @@
+@@ -2425,8 +2393,6 @@
  
      const/4 v7, 0x0
  
@@ -85,7 +85,7 @@ index 8ce3d753..faed72eb 100644
      if-gt v2, v6, :cond_5
  
      :cond_2
-@@ -2425,12 +2391,6 @@
+@@ -2667,12 +2633,6 @@
  
      check-cast v6, Lcom/samsung/android/settings/deviceinfo/aboutphone/DeviceInfoHeader$DeviceInfo;
  
@@ -99,5 +99,5 @@ index 8ce3d753..faed72eb 100644
  
      move-result v8
 -- 
-2.45.1
+2.46.0
 
