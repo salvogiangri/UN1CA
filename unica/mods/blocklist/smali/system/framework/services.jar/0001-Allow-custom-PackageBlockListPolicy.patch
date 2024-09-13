@@ -1,4 +1,4 @@
-From 2cc6f51a93241b37d21e5a79e4bb7486ee189582 Mon Sep 17 00:00:00 2001
+From a2e483214af4af1be4b02015c098d1654961f7f8 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sun, 18 Aug 2024 16:39:08 +0200
 Subject: [PATCH] Allow custom PackageBlockListPolicy
@@ -196,10 +196,10 @@ index 4f5ee328..1ac6fae3 100644
 -    return-void
 -.end method
 diff --git a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali b/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
-index bf5fbc28..f8f75f0f 100644
+index e6d6490e..1b7992d3 100644
 --- a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
 +++ b/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
-@@ -686,27 +686,13 @@
+@@ -722,27 +722,13 @@
  
      invoke-direct {v0}, Lcom/samsung/android/server/pm/role/RoleLogger;-><init>()V
  
@@ -230,10 +230,10 @@ index bf5fbc28..f8f75f0f 100644
      return-void
  
 diff --git a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
-index 561b04ab..51478754 100644
+index 95b0d88d..82b6d179 100644
 --- a/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
 +++ b/smali_classes3/com/android/server/pm/InstallPackageHelper.smali
-@@ -12635,9 +12635,7 @@
+@@ -12687,9 +12687,7 @@
      const/4 v8, 0x0
  
      :try_start_8
