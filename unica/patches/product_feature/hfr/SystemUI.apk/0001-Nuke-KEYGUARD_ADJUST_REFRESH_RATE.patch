@@ -1,0 +1,2252 @@
+From 7ecacf05b6d6612c47362a4a7667aa8a6b4c54c9 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 14:55:06 +0200
+Subject: [PATCH] Nuke KEYGUARD_ADJUST_REFRESH_RATE
+
+---
+ smali/com/android/systemui/LsRune.smali       | 478 +++++++++---------
+ ...cLegacyUnlockAnimationControllerImpl.smali |   7 +-
+ .../systemui/keyguard/KeyguardService$2.smali |  19 +-
+ ...wMediator$$ExternalSyntheticLambda11.smali |  31 +-
+ ...ewMediator$$ExternalSyntheticLambda6.smali | 193 ++++---
+ ...ewMediator$$ExternalSyntheticLambda7.smali |  53 +-
+ .../keyguard/KeyguardViewMediator$4.smali     |  25 +-
+ .../statusbar/phone/CentralSurfacesImpl.smali |  26 +-
+ 8 files changed, 369 insertions(+), 463 deletions(-)
+
+diff --git a/smali/com/android/systemui/LsRune.smali b/smali/com/android/systemui/LsRune.smali
+index 41312aec..5765561a 100644
+--- a/smali/com/android/systemui/LsRune.smali
++++ b/smali/com/android/systemui/LsRune.smali
+@@ -38,8 +38,6 @@
+ 
+ .field public static final COVER_VIRTUAL_DISPLAY:Z
+ 
+-.field public static final KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+ .field public static final KEYGUARD_ALLOW_ROTATION:Z
+ 
+ .field public static final KEYGUARD_DCM_LIVE_UX:Z
+@@ -421,20 +419,6 @@
+ 
+     invoke-static {v15}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+-    move-result v7
+-
+-    if-le v7, v6, :cond_2
+-
+-    move v7, v6
+-
+-    goto :goto_2
+-
+-    :cond_2
+-    const/4 v7, 0x0
+-
+-    :goto_2
+-    sput-boolean v7, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+     move-result-object v7
+@@ -461,35 +445,35 @@
+ 
+     move-result v7
+ 
+-    if-nez v7, :cond_3
++    if-nez v7, :cond_2
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v7
+ 
+-    if-eqz v7, :cond_3
++    if-eqz v7, :cond_2
+ 
+     const/4 v7, 0x1
+ 
+-    goto :goto_3
++    goto :goto_2
+ 
+-    :cond_3
++    :cond_2
+     const/4 v7, 0x0
+ 
+-    :goto_3
++    :goto_2
+     sput-boolean v7, Lcom/android/systemui/LsRune;->KEYGUARD_ALLOW_ROTATION:Z
+ 
+     invoke-virtual {v8, v6}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_5
++    if-nez v6, :cond_4
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_4
++    if-nez v6, :cond_3
+ 
+     const-string v6, "ENABLE_DEFAULT_ROTATION"
+ 
+@@ -497,17 +481,17 @@
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_5
++    if-eqz v6, :cond_4
+ 
+-    :cond_4
++    :cond_3
+     const/4 v6, 0x1
+ 
+-    goto :goto_4
++    goto :goto_3
+ 
+-    :cond_5
++    :cond_4
+     const/4 v6, 0x0
+ 
+-    :goto_4
++    :goto_3
+     sput-boolean v6, Lcom/android/systemui/LsRune;->KEYGUARD_ENABLE_DEFAULT_ROTATION:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -540,7 +524,7 @@
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_7
++    if-nez v6, :cond_6
+ 
+     const-string/jumbo v6, "persist.keyguard.enable_bio_unlock_booster"
+ 
+@@ -550,20 +534,20 @@
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_6
++    if-eqz v6, :cond_5
+ 
+-    goto :goto_5
++    goto :goto_4
+ 
+-    :cond_6
++    :cond_5
+     const/4 v6, 0x0
+ 
+-    goto :goto_6
++    goto :goto_5
+ 
+-    :cond_7
+-    :goto_5
++    :cond_6
++    :goto_4
+     const/4 v6, 0x1
+ 
+-    :goto_6
++    :goto_5
+     sput-boolean v6, Lcom/android/systemui/LsRune;->KEYGUARD_PERFORMANCE_BIO_UNLOCK_BOOSTER:Z
+ 
+     const-string v6, "LARGESCREEN"
+@@ -586,11 +570,11 @@
+ 
+     const-string v15, "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_AOD_ITEM"
+ 
+-    if-nez v9, :cond_8
++    if-nez v9, :cond_7
+ 
+-    if-nez v11, :cond_8
++    if-nez v11, :cond_7
+ 
+-    if-nez v7, :cond_8
++    if-nez v7, :cond_7
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -604,16 +588,16 @@
+ 
+     move-result v7
+ 
+-    if-nez v7, :cond_8
++    if-nez v7, :cond_7
+ 
+     const/4 v7, 0x1
+ 
+-    goto :goto_7
++    goto :goto_6
+ 
+-    :cond_8
++    :cond_7
+     const/4 v7, 0x0
+ 
+-    :goto_7
++    :goto_6
+     sput-boolean v7, Lcom/android/systemui/LsRune;->KEYGUARD_PERFORMANCE_SCREEN_ON:Z
+ 
+     const/4 v7, 0x1
+@@ -634,7 +618,7 @@
+ 
+     const-string v11, "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_CAPTURED_BLUR"
+ 
+-    if-nez v7, :cond_9
++    if-nez v7, :cond_8
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -644,16 +628,16 @@
+ 
+     move-result v7
+ 
+-    if-eqz v7, :cond_9
++    if-eqz v7, :cond_8
+ 
+     const/4 v7, 0x1
+ 
+-    goto :goto_8
++    goto :goto_7
+ 
+-    :cond_9
++    :cond_8
+     const/4 v7, 0x0
+ 
+-    :goto_8
++    :goto_7
+     sput-boolean v7, Lcom/android/systemui/LsRune;->SECURITY_CAPTURED_BLUR:Z
+ 
+     const/16 v16, 0x1
+@@ -692,33 +676,33 @@
+ 
+     sput-boolean v4, Lcom/android/systemui/LsRune;->SECURITY_SUB_DISPLAY_COVER:Z
+ 
+-    if-nez v5, :cond_b
++    if-nez v5, :cond_a
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_a
++    if-eqz v4, :cond_9
+ 
+-    goto :goto_9
++    goto :goto_8
+ 
+-    :cond_a
++    :cond_9
+     const/4 v4, 0x0
+ 
+-    goto :goto_a
++    goto :goto_9
+ 
+-    :cond_b
+-    :goto_9
++    :cond_a
++    :goto_8
+     const/4 v4, 0x1
+ 
+-    :goto_a
++    :goto_9
+     sput-boolean v4, Lcom/android/systemui/LsRune;->SECURITY_ARROW_VIEW:Z
+ 
+     sget v4, Lcom/android/systemui/util/DeviceType;->supportDeadzone:I
+ 
+     const/4 v7, -0x1
+ 
+-    if-ne v4, v7, :cond_c
++    if-ne v4, v7, :cond_b
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -738,39 +722,39 @@
+ 
+     sput v4, Lcom/android/systemui/util/DeviceType;->supportDeadzone:I
+ 
+-    :cond_c
++    :cond_b
+     sget v4, Lcom/android/systemui/util/DeviceType;->supportDeadzone:I
+ 
+     const/4 v7, 0x1
+ 
+-    if-ne v4, v7, :cond_d
++    if-ne v4, v7, :cond_c
+ 
+     const/4 v4, 0x1
+ 
+-    goto :goto_b
++    goto :goto_a
+ 
+-    :cond_d
++    :cond_c
+     const/4 v4, 0x0
+ 
+-    :goto_b
+-    if-eqz v4, :cond_e
++    :goto_a
++    if-eqz v4, :cond_d
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v4
+ 
+-    if-nez v4, :cond_e
++    if-nez v4, :cond_d
+ 
+-    if-nez v5, :cond_e
++    if-nez v5, :cond_d
+ 
+     const/4 v4, 0x1
+ 
+-    goto :goto_c
++    goto :goto_b
+ 
+-    :cond_e
++    :cond_d
+     const/4 v4, 0x0
+ 
+-    :goto_c
++    :goto_b
+     sput-boolean v4, Lcom/android/systemui/LsRune;->SECURITY_DEAD_ZONE:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -789,16 +773,16 @@
+ 
+     const/4 v0, 0x1
+ 
+-    if-ne v4, v0, :cond_f
++    if-ne v4, v0, :cond_e
+ 
+     const/4 v0, 0x1
+ 
+-    goto :goto_d
++    goto :goto_c
+ 
+-    :cond_f
++    :cond_e
+     const/4 v0, 0x0
+ 
+-    :goto_d
++    :goto_c
+     sput-boolean v0, Lcom/android/systemui/LsRune;->SECURITY_DEFAULT_LANDSCAPE:Z
+ 
+     sget-boolean v0, Lcom/android/systemui/BasicRune;->NAVBAR_ENABLED:Z
+@@ -851,26 +835,26 @@
+ 
+     move-result v7
+ 
+-    if-nez v7, :cond_11
++    if-nez v7, :cond_10
+ 
+     invoke-virtual {v8, v4}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_10
++    if-eqz v4, :cond_f
+ 
+-    goto :goto_e
++    goto :goto_d
+ 
+-    :cond_10
++    :cond_f
+     const/4 v4, 0x0
+ 
+-    goto :goto_f
++    goto :goto_e
+ 
+-    :cond_11
+-    :goto_e
++    :cond_10
++    :goto_d
+     const/4 v4, 0x1
+ 
+-    :goto_f
++    :goto_e
+     sput-boolean v4, Lcom/android/systemui/LsRune;->SECURITY_HIDE_EMERGENCY_BUTTON_BY_SIMSTATE:Z
+ 
+     const-string v4, "DirectCall"
+@@ -1019,7 +1003,7 @@
+ 
+     move-result v23
+ 
+-    if-nez v23, :cond_13
++    if-nez v23, :cond_12
+ 
+     move-object/from16 v23, v6
+ 
+@@ -1029,31 +1013,31 @@
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_14
++    if-nez v6, :cond_13
+ 
+-    if-nez v7, :cond_14
++    if-nez v7, :cond_13
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isWiFiOnlyDevice()Z
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_12
++    if-eqz v6, :cond_11
+ 
+-    goto :goto_10
++    goto :goto_f
+ 
+-    :cond_12
++    :cond_11
+     const/4 v6, 0x0
+ 
+-    goto :goto_11
++    goto :goto_10
+ 
+-    :cond_13
++    :cond_12
+     move-object/from16 v23, v6
+ 
+-    :cond_14
+-    :goto_10
++    :cond_13
++    :goto_f
+     const/4 v6, 0x1
+ 
+-    :goto_11
++    :goto_10
+     sput-boolean v6, Lcom/android/systemui/LsRune;->SECURITY_BLOCK_CARRIER_TEXT_WHEN_SIM_NOT_READY:Z
+ 
+     const-string v6, "ClearEmergencyCallWhenNoSim"
+@@ -1062,24 +1046,24 @@
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_16
++    if-nez v6, :cond_15
+ 
+-    if-nez v11, :cond_16
++    if-nez v11, :cond_15
+ 
+-    if-eqz v13, :cond_15
++    if-eqz v13, :cond_14
+ 
+-    goto :goto_12
++    goto :goto_11
+ 
+-    :cond_15
++    :cond_14
+     const/4 v6, 0x0
+ 
+-    goto :goto_13
++    goto :goto_12
+ 
+-    :cond_16
+-    :goto_12
++    :cond_15
++    :goto_11
+     const/4 v6, 0x1
+ 
+-    :goto_13
++    :goto_12
+     sput-boolean v6, Lcom/android/systemui/LsRune;->SECURITY_CLEAR_NO_SIM_DEFAULT_TEXT:Z
+ 
+     const-string v6, "SupportSimPermanentDisable"
+@@ -1122,7 +1106,7 @@
+ 
+     sput-boolean v4, Lcom/android/systemui/LsRune;->SECURITY_FINGERPRINT_GUIDE_POPUP:Z
+ 
+-    if-eqz v5, :cond_17
++    if-eqz v5, :cond_16
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -1130,7 +1114,7 @@
+ 
+     invoke-virtual {v3, v14}, Lcom/samsung/android/feature/SemFloatingFeature;->getBoolean(Ljava/lang/String;)Z
+ 
+-    :cond_17
++    :cond_16
+     invoke-virtual {v1, v8}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     invoke-virtual {v1, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+@@ -1197,7 +1181,7 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_18
++    if-nez v0, :cond_17
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -1209,45 +1193,45 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_19
++    if-eqz v0, :cond_18
+ 
+     const/4 v0, 0x1
+ 
+-    goto :goto_14
++    goto :goto_13
+ 
+-    :cond_18
++    :cond_17
+     move-object/from16 v2, v21
+ 
+-    :cond_19
++    :cond_18
+     const/4 v0, 0x0
+ 
+-    :goto_14
++    :goto_13
+     sput-boolean v0, Lcom/android/systemui/LsRune;->LOCKUI_CAPTURED_BLUR:Z
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_1a
++    if-eqz v0, :cond_19
+ 
+     sget-boolean v0, Lcom/android/systemui/Rune;->SYSUI_MULTI_USER:Z
+ 
+-    if-eqz v0, :cond_1a
++    if-eqz v0, :cond_19
+ 
+     invoke-static {}, Landroid/os/FactoryTest;->isFactoryBinary()Z
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_1a
++    if-nez v0, :cond_19
+ 
+     const/4 v0, 0x1
+ 
+-    goto :goto_15
++    goto :goto_14
+ 
+-    :cond_1a
++    :cond_19
+     const/4 v0, 0x0
+ 
+-    :goto_15
++    :goto_14
+     sput-boolean v0, Lcom/android/systemui/LsRune;->LOCKUI_MULTI_USER:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1290,7 +1274,7 @@
+     :try_start_1
+     invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-eqz v3, :cond_1c
++    if-eqz v3, :cond_1b
+ 
+     invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -1306,20 +1290,20 @@
+ 
+     const/4 v3, 0x2
+ 
+-    if-le v0, v3, :cond_1b
++    if-le v0, v3, :cond_1a
+ 
+     const/4 v0, 0x1
+ 
+-    goto :goto_17
++    goto :goto_16
+ 
+-    :cond_1b
++    :cond_1a
+     const-string v0, "getBrightnessValues not matched!"
+ 
+     invoke-static {v4, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+     :try_end_1
+     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
+ 
+-    goto :goto_16
++    goto :goto_15
+ 
+     :catch_0
+     move-object/from16 v4, v20
+@@ -1329,11 +1313,11 @@
+ 
+     invoke-static {v4, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_1c
+-    :goto_16
++    :cond_1b
++    :goto_15
+     const/4 v0, 0x0
+ 
+-    :goto_17
++    :goto_16
+     sput-boolean v0, Lcom/android/systemui/LsRune;->AOD_BRIGHTNESS_CONTROL:Z
+ 
+     sget-object v0, Lcom/android/systemui/LsRune;->VALUE_SUB_DISPLAY_POLICY:Ljava/lang/String;
+@@ -1346,29 +1330,29 @@
+ 
+     const-string v5, "WATCHFACE"
+ 
+-    if-eqz v3, :cond_1e
++    if-eqz v3, :cond_1d
+ 
+     invoke-virtual {v0, v10}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     move-result v3
+ 
+-    if-nez v3, :cond_1d
++    if-nez v3, :cond_1c
+ 
+     invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_1e
++    if-eqz v3, :cond_1d
+ 
+-    :cond_1d
++    :cond_1c
+     const/4 v3, 0x1
+ 
+-    goto :goto_18
++    goto :goto_17
+ 
+-    :cond_1e
++    :cond_1d
+     const/4 v3, 0x0
+ 
+-    :goto_18
++    :goto_17
+     sput-boolean v3, Lcom/android/systemui/LsRune;->AOD_SUB_DISPLAY_AOD_BY_FOLDER_EVENT:Z
+ 
+     invoke-virtual {v0, v12}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+@@ -1397,7 +1381,7 @@
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_1f
++    if-nez v6, :cond_1e
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -1415,18 +1399,18 @@
+ 
+     move-result v6
+ 
+-    if-nez v6, :cond_1f
++    if-nez v6, :cond_1e
+ 
+-    if-nez v3, :cond_1f
++    if-nez v3, :cond_1e
+ 
+     const/4 v3, 0x1
+ 
+-    goto :goto_19
++    goto :goto_18
+ 
+-    :cond_1f
++    :cond_1e
+     const/4 v3, 0x0
+ 
+-    :goto_19
++    :goto_18
+     sput-boolean v3, Lcom/android/systemui/LsRune;->AOD_DISABLE_CLOCK_TRANSITION:Z
+ 
+     invoke-static {}, Lcom/android/systemui/util/SafeUIState;->isSysUiSafeModeEnabled()Z
+@@ -1435,19 +1419,19 @@
+ 
+     sput-boolean v6, Lcom/android/systemui/LsRune;->AOD_SAFEMODE:Z
+ 
+-    if-nez v3, :cond_23
++    if-nez v3, :cond_22
+ 
+     sget v3, Lcom/android/systemui/util/DeviceType;->supportLightReveal:I
+ 
+     const/4 v6, -0x1
+ 
+-    if-ne v3, v6, :cond_21
++    if-ne v3, v6, :cond_20
+ 
+     invoke-static {}, Landroid/app/ActivityThread;->currentApplication()Landroid/app/Application;
+ 
+     move-result-object v3
+ 
+-    if-eqz v3, :cond_21
++    if-eqz v3, :cond_20
+ 
+     invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -1459,16 +1443,16 @@
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_20
++    if-eqz v6, :cond_1f
+ 
+     const/4 v6, 0x1
+ 
+-    goto :goto_1a
++    goto :goto_19
+ 
+-    :cond_20
++    :cond_1f
+     const/4 v6, 0x0
+ 
+-    :goto_1a
++    :goto_19
+     sput v6, Lcom/android/systemui/util/DeviceType;->supportLightReveal:I
+ 
+     new-instance v6, Ljava/lang/StringBuilder;
+@@ -1493,31 +1477,31 @@
+ 
+     invoke-static {v4, v3}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_21
++    :cond_20
+     sget v3, Lcom/android/systemui/util/DeviceType;->supportLightReveal:I
+ 
+     const/4 v4, 0x1
+ 
+-    if-ne v3, v4, :cond_22
++    if-ne v3, v4, :cond_21
+ 
+     const/4 v3, 0x1
+ 
+-    goto :goto_1b
++    goto :goto_1a
+ 
+-    :cond_22
++    :cond_21
+     const/4 v3, 0x0
+ 
+-    :goto_1b
+-    if-eqz v3, :cond_23
++    :goto_1a
++    if-eqz v3, :cond_22
+ 
+     const/4 v3, 0x1
+ 
+-    goto :goto_1c
++    goto :goto_1b
+ 
+-    :cond_23
++    :cond_22
+     const/4 v3, 0x0
+ 
+-    :goto_1c
++    :goto_1b
+     sput-boolean v3, Lcom/android/systemui/LsRune;->AOD_LIGHT_REVEAL:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1534,16 +1518,16 @@
+ 
+     const/4 v7, 0x1
+ 
+-    if-lt v3, v7, :cond_24
++    if-lt v3, v7, :cond_23
+ 
+     const/4 v7, 0x1
+ 
+-    goto :goto_1d
++    goto :goto_1c
+ 
+-    :cond_24
++    :cond_23
+     const/4 v7, 0x0
+ 
+-    :goto_1d
++    :goto_1c
+     sput-boolean v7, Lcom/android/systemui/LsRune;->AOD_FULLSCREEN:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1556,16 +1540,16 @@
+ 
+     const/4 v4, 0x3
+ 
+-    if-ne v3, v4, :cond_25
++    if-ne v3, v4, :cond_24
+ 
+     const/4 v3, 0x1
+ 
+-    goto :goto_1e
++    goto :goto_1d
+ 
+-    :cond_25
++    :cond_24
+     const/4 v3, 0x0
+ 
+-    :goto_1e
++    :goto_1d
+     sput-boolean v3, Lcom/android/systemui/LsRune;->AOD_SUB_FULLSCREEN:Z
+ 
+     sput-boolean v7, Lcom/android/systemui/LsRune;->AOD_HYSTERESIS_BRIGHTNESS:Z
+@@ -1574,16 +1558,16 @@
+ 
+     const/16 v4, 0x21
+ 
+-    if-lt v3, v4, :cond_26
++    if-lt v3, v4, :cond_25
+ 
+     const/4 v3, 0x1
+ 
+-    goto :goto_1f
++    goto :goto_1e
+ 
+-    :cond_26
++    :cond_25
+     const/4 v3, 0x0
+ 
+-    :goto_1f
++    :goto_1e
+     sput-boolean v3, Lcom/android/systemui/LsRune;->AOD_TSP_CONTROL:Z
+ 
+     const-string/jumbo v3, "persist.enable.self.poke.draw_lock"
+@@ -1616,27 +1600,27 @@
+ 
+     sput-boolean v6, Lcom/android/systemui/LsRune;->COVER_VIRTUAL_DISPLAY:Z
+ 
+-    if-eqz v6, :cond_27
++    if-eqz v6, :cond_26
+ 
+     invoke-static/range {v18 .. v18}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+     move-result v6
+ 
+-    if-lez v6, :cond_27
++    if-lez v6, :cond_26
+ 
+     move v6, v4
+ 
+-    goto :goto_20
++    goto :goto_1f
+ 
+-    :cond_27
++    :cond_26
+     const/4 v6, 0x0
+ 
+-    :goto_20
++    :goto_1f
+     sput-boolean v6, Lcom/android/systemui/LsRune;->COVER_ADJUST_REFRESH_RATE:Z
+ 
+     sget-boolean v6, Landroid/os/Build;->IS_DEBUGGABLE:Z
+ 
+-    if-eqz v6, :cond_28
++    if-eqz v6, :cond_27
+ 
+     const-string v6, "debug.camera_cover_on_side_cover"
+ 
+@@ -1646,16 +1630,16 @@
+ 
+     move-result v6
+ 
+-    if-eqz v6, :cond_28
++    if-eqz v6, :cond_27
+ 
+     move v6, v4
+ 
+-    goto :goto_21
++    goto :goto_20
+ 
+-    :cond_28
++    :cond_27
+     const/4 v6, 0x0
+ 
+-    :goto_21
++    :goto_20
+     sput-boolean v6, Lcom/android/systemui/LsRune;->COVER_DEBUG_CAMERA_COVER_ON_SIDE_COVER:Z
+ 
+     invoke-virtual {v0, v12}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+@@ -1664,25 +1648,25 @@
+ 
+     sput-boolean v6, Lcom/android/systemui/LsRune;->SUBSCREEN_UI:Z
+ 
+-    if-eqz v6, :cond_29
++    if-eqz v6, :cond_28
+ 
+     invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+     move-result v8
+ 
+-    if-eqz v8, :cond_29
++    if-eqz v8, :cond_28
+ 
+     move v8, v4
+ 
+-    goto :goto_22
++    goto :goto_21
+ 
+-    :cond_29
++    :cond_28
+     const/4 v8, 0x0
+ 
+-    :goto_22
++    :goto_21
+     sput-boolean v8, Lcom/android/systemui/LsRune;->SUBSCREEN_WATCHFACE:Z
+ 
+-    if-eqz v6, :cond_2a
++    if-eqz v6, :cond_29
+ 
+     move-object/from16 v6, v17
+ 
+@@ -1690,26 +1674,26 @@
+ 
+     move-result v9
+ 
+-    if-eqz v9, :cond_2b
++    if-eqz v9, :cond_2a
+ 
+     move v9, v4
+ 
+-    goto :goto_23
++    goto :goto_22
+ 
+-    :cond_2a
++    :cond_29
+     move-object/from16 v6, v17
+ 
+-    :cond_2b
++    :cond_2a
+     const/4 v9, 0x0
+ 
+-    :goto_23
++    :goto_22
+     sput-boolean v9, Lcom/android/systemui/LsRune;->SUPPORT_LARGE_FRONT_SUB_DISPLAY:Z
+ 
+-    if-eqz v8, :cond_2c
++    if-eqz v8, :cond_2b
+ 
+     sget-boolean v10, Landroid/os/Build;->IS_DEBUGGABLE:Z
+ 
+-    if-eqz v10, :cond_2c
++    if-eqz v10, :cond_2b
+ 
+     const-string v10, "debug.subscreen_activity_on_main"
+ 
+@@ -1719,21 +1703,21 @@
+ 
+     move-result v10
+ 
+-    if-eqz v10, :cond_2c
++    if-eqz v10, :cond_2b
+ 
+     move v10, v4
+ 
+-    goto :goto_24
++    goto :goto_23
+ 
+-    :cond_2c
++    :cond_2b
+     const/4 v10, 0x0
+ 
+-    :goto_24
++    :goto_23
+     sput-boolean v10, Lcom/android/systemui/LsRune;->SUBSCREEN_DEBUG_ACTIVITY_ON_MAIN:Z
+ 
+-    if-eqz v8, :cond_2d
++    if-eqz v8, :cond_2c
+ 
+-    if-eqz v9, :cond_2d
++    if-eqz v9, :cond_2c
+ 
+     const-string v8, "debug.subscreen_plugin_disconnect_when_unfolding"
+ 
+@@ -1743,16 +1727,16 @@
+ 
+     move-result v8
+ 
+-    if-eqz v8, :cond_2d
++    if-eqz v8, :cond_2c
+ 
+     move v8, v4
+ 
+-    goto :goto_25
++    goto :goto_24
+ 
+-    :cond_2d
++    :cond_2c
+     const/4 v8, 0x0
+ 
+-    :goto_25
++    :goto_24
+     sput-boolean v8, Lcom/android/systemui/LsRune;->SUBSCREEN_PLUGIN_DISCONNECT_WHEN_UNFOLDING:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1795,7 +1779,7 @@
+ 
+     sput-boolean v1, Lcom/android/systemui/LsRune;->WALLPAPER_BLUR:Z
+ 
+-    if-nez v1, :cond_2e
++    if-nez v1, :cond_2d
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+@@ -1805,16 +1789,16 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_2e
++    if-eqz v1, :cond_2d
+ 
+     move v1, v4
+ 
+-    goto :goto_26
++    goto :goto_25
+ 
+-    :cond_2e
++    :cond_2d
+     const/4 v1, 0x0
+ 
+-    :goto_26
++    :goto_25
+     sput-boolean v1, Lcom/android/systemui/LsRune;->WALLPAPER_CAPTURED_BLUR:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1831,26 +1815,26 @@
+ 
+     move-result v1
+ 
+-    if-nez v1, :cond_30
++    if-nez v1, :cond_2f
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceType;->isTablet()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_2f
++    if-eqz v1, :cond_2e
+ 
+-    goto :goto_27
++    goto :goto_26
+ 
+-    :cond_2f
++    :cond_2e
+     const/4 v1, 0x0
+ 
+-    goto :goto_28
++    goto :goto_27
+ 
+-    :cond_30
+-    :goto_27
++    :cond_2f
++    :goto_26
+     move v1, v4
+ 
+-    :goto_28
++    :goto_27
+     sput-boolean v1, Lcom/android/systemui/LsRune;->WALLPAPER_ROTATABLE_WALLPAPER:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -1901,38 +1885,38 @@
+ 
+     move-result v0
+ 
+-    if-eqz v1, :cond_31
++    if-eqz v1, :cond_30
+ 
+-    if-nez v2, :cond_31
++    if-nez v2, :cond_30
+ 
+-    if-nez v3, :cond_31
++    if-nez v3, :cond_30
+ 
+     move v1, v4
+ 
+-    goto :goto_29
++    goto :goto_28
+ 
+-    :cond_31
++    :cond_30
+     const/4 v1, 0x0
+ 
+-    :goto_29
++    :goto_28
+     sput-boolean v1, Lcom/android/systemui/LsRune;->WALLPAPER_CACHED_WALLPAPER:Z
+ 
+-    if-nez v2, :cond_33
++    if-nez v2, :cond_32
+ 
+-    if-eqz v3, :cond_32
++    if-eqz v3, :cond_31
+ 
+-    goto :goto_2a
++    goto :goto_29
+ 
+-    :cond_32
++    :cond_31
+     const/4 v1, 0x0
+ 
+-    goto :goto_2b
++    goto :goto_2a
+ 
+-    :cond_33
+-    :goto_2a
++    :cond_32
++    :goto_29
+     move v1, v4
+ 
+-    :goto_2b
++    :goto_2a
+     sput-boolean v1, Lcom/android/systemui/LsRune;->WALLPAPER_PLAY_GIF:Z
+ 
+     const-string/jumbo v1, "ro.build.version.oneui"
+@@ -1945,34 +1929,34 @@
+ 
+     const v5, 0xc3b4
+ 
+-    if-ge v6, v5, :cond_34
++    if-ge v6, v5, :cond_33
+ 
+     move v5, v4
+ 
+-    goto :goto_2c
++    goto :goto_2b
+ 
+-    :cond_34
++    :cond_33
+     const/4 v5, 0x0
+ 
+-    :goto_2c
++    :goto_2b
+     sput-boolean v5, Lcom/android/systemui/LsRune;->WALLPAPER_DESKTOP_STANDALONE_MODE_WALLPAPER:Z
+ 
+-    if-nez v0, :cond_36
++    if-nez v0, :cond_35
+ 
+-    if-eqz v7, :cond_35
++    if-eqz v7, :cond_34
+ 
+-    goto :goto_2d
++    goto :goto_2c
+ 
+-    :cond_35
++    :cond_34
+     const/4 v7, 0x0
+ 
+-    goto :goto_2e
++    goto :goto_2d
+ 
+-    :cond_36
+-    :goto_2d
++    :cond_35
++    :goto_2c
+     move v7, v4
+ 
+-    :goto_2e
++    :goto_2d
+     sput-boolean v7, Lcom/android/systemui/LsRune;->WALLPAPER_SUPPORT_SUIT_CASE:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
+@@ -2001,34 +1985,34 @@
+ 
+     const v1, 0xeac5
+ 
+-    if-lt v0, v1, :cond_37
++    if-lt v0, v1, :cond_36
+ 
+     move v0, v4
+ 
+-    goto :goto_2f
++    goto :goto_2e
+ 
+-    :cond_37
++    :cond_36
+     move v0, v7
+ 
+-    :goto_2f
++    :goto_2e
+     sput-boolean v0, Lcom/android/systemui/LsRune;->WALLPAPER_SUPPORT_DLS_SNAPSHOT:Z
+ 
+-    if-nez v2, :cond_39
++    if-nez v2, :cond_38
+ 
+-    if-eqz v3, :cond_38
++    if-eqz v3, :cond_37
+ 
+-    goto :goto_30
++    goto :goto_2f
+ 
+-    :cond_38
++    :cond_37
+     move v6, v7
+ 
+-    goto :goto_31
++    goto :goto_30
+ 
+-    :cond_39
+-    :goto_30
++    :cond_38
++    :goto_2f
+     move v6, v4
+ 
+-    :goto_31
++    :goto_30
+     sput-boolean v6, Lcom/android/systemui/LsRune;->PLUGIN_LOCK_MULTIPLE_ACTIVATION:Z
+ 
+     invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
+diff --git a/smali/com/android/systemui/keyguard/KeyguardSecLegacyUnlockAnimationControllerImpl.smali b/smali/com/android/systemui/keyguard/KeyguardSecLegacyUnlockAnimationControllerImpl.smali
+index 69d37039..e2b5763b 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardSecLegacyUnlockAnimationControllerImpl.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardSecLegacyUnlockAnimationControllerImpl.smali
+@@ -608,13 +608,8 @@
+ 
+     iget-object v3, v2, Lcom/android/systemui/keyguard/KeyguardViewMediator;->mHelper:Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;
+ 
+-    sget-boolean v4, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
++    sget-object v4, Lcom/android/systemui/LsRune;->VALUE_CONFIG_CARRIER_TEXT_POLICY:Ljava/lang/String;
+ 
+-    if-eqz v4, :cond_2
+-
+-    invoke-virtual {v3}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->updateRefreshRate()V
+-
+-    :cond_2
+     invoke-virtual {v3}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getViewMediatorProvider()Lcom/android/systemui/keyguard/ViewMediatorProvider;
+ 
+     move-result-object v3
+diff --git a/smali/com/android/systemui/keyguard/KeyguardService$2.smali b/smali/com/android/systemui/keyguard/KeyguardService$2.smali
+index cad10555..65eda8a7 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardService$2.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardService$2.smali
+@@ -312,28 +312,15 @@
+ 
+     invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+ 
+-    sget-boolean v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImplKt;->IS_SAFE_MODE_ENABLED:Z
++    sget-boolean p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImplKt;->IS_SAFE_MODE_ENABLED:Z
+ 
+-    if-eqz v0, :cond_0
++    if-eqz p0, :cond_0
+ 
+     goto :goto_0
+ 
+     :cond_0
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+-    if-eqz v0, :cond_1
+-
+-    invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getHandler()Landroid/os/Handler;
++    sget-object p0, Lcom/android/systemui/LsRune;->VALUE_CONFIG_CARRIER_TEXT_POLICY:Ljava/lang/String;
+ 
+-    move-result-object v0
+-
+-    new-instance v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$onFinishedWakingUp$1;
+-
+-    invoke-direct {v1, p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$onFinishedWakingUp$1;-><init>(Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;)V
+-
+-    invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+-
+-    :cond_1
+     :goto_0
+     invoke-static {}, Landroid/os/Trace;->endSection()V
+ 
+diff --git a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda11.smali b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda11.smali
+index 534bc01b..071796cd 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda11.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda11.smali
+@@ -107,20 +107,15 @@
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediator;->userActivity()V
+ 
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
++    sget-object v0, Lcom/android/systemui/LsRune;->VALUE_CONFIG_CARRIER_TEXT_POLICY:Ljava/lang/String;
+ 
+-    if-eqz v0, :cond_1
+-
+-    invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->updateRefreshRate()V
+-
+-    :cond_1
+-    if-eqz p2, :cond_6
++    if-eqz p2, :cond_5
+ 
+     sget-boolean p2, Lcom/android/systemui/LsRune;->KEYGUARD_SUB_DISPLAY_COVER:Z
+ 
+     iget-object v0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->keyguardDisplayManager:Lcom/android/keyguard/KeyguardDisplayManager;
+ 
+-    if-eqz p2, :cond_2
++    if-eqz p2, :cond_1
+ 
+     iget-object p0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->foldControllerImpl:Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;
+ 
+@@ -128,10 +123,10 @@
+ 
+     move-result p0
+ 
+-    if-eqz p0, :cond_5
++    if-eqz p0, :cond_4
+ 
+-    :cond_2
+-    if-eqz p1, :cond_5
++    :cond_1
++    if-eqz p1, :cond_4
+ 
+     invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+ 
+@@ -145,17 +140,17 @@
+ 
+     iget p1, p0, Lcom/android/systemui/keyguard/KeyguardVisibilityMonitor;->curVisibility:I
+ 
+-    if-nez p1, :cond_3
++    if-nez p1, :cond_2
+ 
+     const/4 p1, 0x1
+ 
+     goto :goto_1
+ 
+-    :cond_3
++    :cond_2
+     const/4 p1, 0x0
+ 
+     :goto_1
+-    if-eqz p1, :cond_4
++    if-eqz p1, :cond_3
+ 
+     iget-object p1, v0, Lcom/android/keyguard/KeyguardDisplayManager;->mVisibilityListener:Lcom/android/keyguard/KeyguardDisplayManager$$ExternalSyntheticLambda0;
+ 
+@@ -163,20 +158,18 @@
+ 
+     goto :goto_2
+ 
+-    :cond_4
++    :cond_3
+     invoke-virtual {v0}, Lcom/android/keyguard/KeyguardDisplayManager;->hide()V
+ 
+     goto :goto_2
+ 
+-    :cond_5
++    :cond_4
+     invoke-virtual {v0}, Lcom/android/keyguard/KeyguardDisplayManager;->show()V
+ 
+-    :cond_6
++    :cond_5
+     :goto_2
+     return-void
+ 
+-    nop
+-
+     :pswitch_data_0
+     .packed-switch 0x0
+         :pswitch_0
+diff --git a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda6.smali b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda6.smali
+index 0a043ddb..cf07b487 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda6.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda6.smali
+@@ -3150,7 +3150,7 @@
+ 
+     sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_FBE:Z
+ 
+-    if-eqz v0, :cond_1e
++    if-eqz v0, :cond_1d
+ 
+     const-string/jumbo v0, "postHandleSystemReady(). check FBE"
+ 
+@@ -3173,7 +3173,7 @@
+ 
+     move-result v8
+ 
+-    if-ne v0, v8, :cond_f
++    if-ne v0, v8, :cond_e
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->delayedDrawnRunnable:Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$delayedDrawnRunnable$1;
+ 
+@@ -3305,13 +3305,6 @@
+     invoke-virtual {v0}, Lcom/android/systemui/util/DesktopManagerImpl;->notifyShowKeyguard()V
+ 
+     :cond_d
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+-    if-eqz v0, :cond_e
+-
+-    invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->updateRefreshRate()V
+-
+-    :cond_e
+     iput-boolean v3, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->disableRemoteUnlockAnimation:Z
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->fixedRotationMonitor:Lcom/android/systemui/keyguard/KeyguardFixedRotationMonitor;
+@@ -3327,7 +3320,7 @@
+ 
+     throw v0
+ 
+-    :cond_f
++    :cond_e
+     iget-object v2, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->NOTIFY_STARTED_WAKING_UP$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v2}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -3340,11 +3333,11 @@
+ 
+     move-result v2
+ 
+-    if-ne v0, v2, :cond_18
++    if-ne v0, v2, :cond_17
+ 
+     sget-boolean v0, Lcom/android/systemui/Rune;->SYSUI_BINDER_CALL_MONITOR:Z
+ 
+-    if-eqz v0, :cond_10
++    if-eqz v0, :cond_f
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->binderCallMonitor:Lcom/android/systemui/uithreadmonitor/BinderCallMonitor;
+ 
+@@ -3366,14 +3359,14 @@
+ 
+     invoke-virtual/range {v10 .. v15}, Lcom/android/systemui/uithreadmonitor/BinderCallMonitorImpl;->startMonitoring(IJJ)Z
+ 
+-    :cond_10
++    :cond_f
+     iget v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->lastWakeReason:I
+ 
+     iget-object v2, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->viewMediatorLazy:Ldagger/Lazy;
+ 
+     const/16 v5, 0xa
+ 
+-    if-eq v0, v5, :cond_11
++    if-eq v0, v5, :cond_10
+ 
+     invoke-interface {v2}, Ldagger/Lazy;->get()Ljava/lang/Object;
+ 
+@@ -3383,7 +3376,7 @@
+ 
+     invoke-virtual {v0, v3}, Lcom/android/systemui/keyguard/KeyguardViewMediator;->setDozing(Z)V
+ 
+-    :cond_11
++    :cond_10
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->isShowing()Z
+ 
+     move-result v0
+@@ -3412,7 +3405,7 @@
+ 
+     iget-object v10, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->updateMonitor:Lcom/android/keyguard/KeyguardUpdateMonitor;
+ 
+-    if-eqz v8, :cond_15
++    if-eqz v8, :cond_14
+ 
+     invoke-interface {v10}, Lcom/android/keyguard/KeyguardSecUpdateMonitor;->getCoverState()Lcom/samsung/android/cover/CoverState;
+ 
+@@ -3424,23 +3417,23 @@
+ 
+     const/16 v13, 0x67
+ 
+-    if-ne v12, v13, :cond_15
++    if-ne v12, v13, :cond_14
+ 
+-    if-eqz v0, :cond_15
++    if-eqz v0, :cond_14
+ 
+-    if-nez v5, :cond_15
++    if-nez v5, :cond_14
+ 
+-    if-eqz v8, :cond_15
++    if-eqz v8, :cond_14
+ 
+     iget-boolean v5, v8, Lcom/samsung/android/cover/CoverState;->attached:Z
+ 
+-    if-eqz v5, :cond_15
++    if-eqz v5, :cond_14
+ 
+     invoke-virtual {v8}, Lcom/samsung/android/cover/CoverState;->getSwitchState()Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_15
++    if-eqz v5, :cond_14
+ 
+     iget-object v5, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->settingsHelper:Lcom/android/systemui/util/SettingsHelper;
+ 
+@@ -3448,16 +3441,16 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_15
++    if-eqz v5, :cond_14
+ 
+-    if-eq v11, v6, :cond_12
++    if-eq v11, v6, :cond_11
+ 
+-    if-nez v2, :cond_13
++    if-nez v2, :cond_12
+ 
+     goto :goto_3
+ 
+-    :cond_12
+-    if-eqz v2, :cond_14
++    :cond_11
++    if-eqz v2, :cond_13
+ 
+     iget-object v2, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->userTracker:Lcom/android/systemui/settings/UserTracker;
+ 
+@@ -3471,16 +3464,16 @@
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_13
++    if-eqz v2, :cond_12
+ 
+     goto :goto_3
+ 
+-    :cond_13
++    :cond_12
+     move v4, v3
+ 
+-    :cond_14
++    :cond_13
+     :goto_3
+-    if-eqz v4, :cond_15
++    if-eqz v4, :cond_14
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getViewMediatorProvider()Lcom/android/systemui/keyguard/ViewMediatorProvider;
+ 
+@@ -3490,29 +3483,29 @@
+ 
+     invoke-interface {v2}, Lkotlin/jvm/functions/Function0;->invoke()Ljava/lang/Object;
+ 
+-    :cond_15
+-    if-nez v0, :cond_16
++    :cond_14
++    if-nez v0, :cond_15
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->hasShowMsg()Z
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_16
++    if-nez v0, :cond_15
+ 
+     invoke-interface {v10}, Lcom/android/keyguard/KeyguardSecUpdateMonitor;->requestSessionClose()V
+ 
+     goto :goto_4
+ 
+-    :cond_16
++    :cond_15
+     invoke-interface {v10}, Lcom/android/keyguard/KeyguardSecUpdateMonitor;->isFingerprintOptionEnabled()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_17
++    if-eqz v0, :cond_16
+ 
+     invoke-virtual {v10, v9}, Lcom/android/keyguard/KeyguardUpdateMonitor;->updateFingerprintListeningState(I)V
+ 
+-    :cond_17
++    :cond_16
+     :goto_4
+     new-instance v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$postHandleNotifyStartedWakingUp$1;
+ 
+@@ -3524,7 +3517,7 @@
+ 
+     goto/16 :goto_5
+ 
+-    :cond_18
++    :cond_17
+     iget-object v2, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->NOTIFY_STARTED_GOING_TO_SLEEP$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v2}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -3537,7 +3530,7 @@
+ 
+     move-result v2
+ 
+-    if-ne v0, v2, :cond_1d
++    if-ne v0, v2, :cond_1c
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getLock()Ljava/lang/Object;
+ 
+@@ -3548,7 +3541,7 @@
+     :try_start_2
+     sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_SUB_DISPLAY_LOCK:Z
+ 
+-    if-eqz v0, :cond_19
++    if-eqz v0, :cond_18
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getHandler()Landroid/os/Handler;
+ 
+@@ -3570,18 +3563,18 @@
+ 
+     move-result v8
+ 
+-    if-nez v8, :cond_1a
++    if-nez v8, :cond_19
+ 
+-    :cond_19
++    :cond_18
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->isKeyguardHiding()Z
+ 
+     move-result v8
+ 
+-    if-eqz v8, :cond_1a
++    if-eqz v8, :cond_19
+ 
+     iget-boolean v8, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->hidingByDisabled:Z
+ 
+-    if-nez v8, :cond_1a
++    if-nez v8, :cond_19
+ 
+     const-string v8, "change mHiding = false"
+ 
+@@ -3597,7 +3590,7 @@
+ 
+     invoke-interface {v8, v9}, Lkotlin/jvm/functions/Function1;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    :cond_1a
++    :cond_19
+     sget-object v8, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+     :try_end_2
+     .catchall {:try_start_2 .. :try_end_2} :catchall_1
+@@ -3608,7 +3601,7 @@
+ 
+     invoke-virtual {v2}, Lcom/android/systemui/keyguard/KeyguardFastBioUnlockController;->reset()V
+ 
+-    if-eqz v0, :cond_1b
++    if-eqz v0, :cond_1a
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->foldControllerImpl:Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;
+ 
+@@ -3616,7 +3609,7 @@
+ 
+     iget v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->lastSleepReason:I
+ 
+-    if-ne v0, v5, :cond_1b
++    if-ne v0, v5, :cond_1a
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->foldControllerImpl:Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;
+ 
+@@ -3624,7 +3617,7 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_1b
++    if-nez v0, :cond_1a
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->shadeWindowControllerHelper$delegate:Lkotlin/Lazy;
+ 
+@@ -3638,10 +3631,10 @@
+ 
+     invoke-virtual {v0, v3}, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl;->resetForceInvisible(Z)V
+ 
+-    :cond_1b
++    :cond_1a
+     iget-boolean v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->isAODShowStateCbRegistered:Z
+ 
+-    if-nez v0, :cond_1c
++    if-nez v0, :cond_1b
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->aodShowStateCallback:Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$aodShowStateCallback$1;
+ 
+@@ -3659,7 +3652,7 @@
+ 
+     invoke-virtual {v5, v0, v2}, Lcom/android/systemui/util/SettingsHelper;->registerCallback(Lcom/android/systemui/util/SettingsHelper$OnChangedCallback;[Landroid/net/Uri;)V
+ 
+-    :cond_1c
++    :cond_1b
+     iput-boolean v4, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->isAODShowStateCbRegistered:Z
+ 
+     iput-boolean v3, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->disableRemoteUnlockAnimation:Z
+@@ -3677,7 +3670,7 @@
+ 
+     throw v0
+ 
+-    :cond_1d
++    :cond_1c
+     iget-object v2, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->KEYGUARD_DONE_PENDING_TIMEOUT$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v2}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -3690,7 +3683,7 @@
+ 
+     move-result v2
+ 
+-    if-ne v0, v2, :cond_1e
++    if-ne v0, v2, :cond_1d
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getViewMediatorProvider()Lcom/android/systemui/keyguard/ViewMediatorProvider;
+ 
+@@ -3722,7 +3715,7 @@
+ 
+     invoke-static {v2}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->logD(Ljava/lang/String;)V
+ 
+-    if-eqz v0, :cond_1e
++    if-eqz v0, :cond_1d
+ 
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->viewMediatorLazy:Ldagger/Lazy;
+ 
+@@ -3738,7 +3731,7 @@
+ 
+     invoke-interface {v0}, Lcom/android/keyguard/ViewMediatorCallback;->readyForKeyguardDone()V
+ 
+-    :cond_1e
++    :cond_1d
+     :goto_5
+     iget v0, v7, Landroid/os/Message;->what:I
+ 
+@@ -3776,7 +3769,7 @@
+ 
+     iget v7, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->handleMsgLogKey:I
+ 
+-    if-eq v7, v6, :cond_1f
++    if-eq v7, v6, :cond_1e
+ 
+     iget v5, v1, Landroid/os/Message;->what:I
+ 
+@@ -3796,7 +3789,7 @@
+ 
+     iput v6, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->handleMsgLogKey:I
+ 
+-    :cond_1f
++    :cond_1e
+     iget v5, v1, Landroid/os/Message;->what:I
+ 
+     invoke-static {v6}, Lcom/android/systemui/util/LogUtil;->startTime(I)I
+@@ -3823,7 +3816,7 @@
+ 
+     const/16 v5, 0x3ec
+ 
+-    if-ne v1, v5, :cond_21
++    if-ne v1, v5, :cond_20
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getHandler()Landroid/os/Handler;
+ 
+@@ -3845,7 +3838,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_2e
++    if-eqz v1, :cond_2d
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getHandler()Landroid/os/Handler;
+ 
+@@ -3869,7 +3862,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_20
++    if-eqz v1, :cond_1f
+ 
+     iget-object v1, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->userTracker:Lcom/android/systemui/settings/UserTracker;
+ 
+@@ -3883,7 +3876,7 @@
+ 
+     invoke-virtual {v2, v1}, Lcom/android/keyguard/KeyguardUpdateMonitor;->getUserCanSkipBouncer(I)Z
+ 
+-    :cond_20
++    :cond_1f
+     iput-boolean v4, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->disableRemoteUnlockAnimation:Z
+ 
+     const-string v0, "cancel CANCEL_KEYGUARD_EXIT_ANIM"
+@@ -3892,16 +3885,16 @@
+ 
+     goto/16 :goto_c
+ 
+-    :cond_21
++    :cond_20
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getSHOW()I
+ 
+     move-result v5
+ 
+-    if-ne v1, v5, :cond_22
++    if-ne v1, v5, :cond_21
+ 
+     goto :goto_6
+ 
+-    :cond_22
++    :cond_21
+     iget-object v5, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->NOTIFY_STARTED_GOING_TO_SLEEP$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v5}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -3914,18 +3907,18 @@
+ 
+     move-result v5
+ 
+-    if-ne v1, v5, :cond_23
++    if-ne v1, v5, :cond_22
+ 
+     :goto_6
+     move v5, v4
+ 
+     goto :goto_7
+ 
+-    :cond_23
++    :cond_22
+     move v5, v3
+ 
+     :goto_7
+-    if-eqz v5, :cond_28
++    if-eqz v5, :cond_27
+ 
+     iget-object v1, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->surfaceControllerLazy:Ldagger/Lazy;
+ 
+@@ -3939,24 +3932,24 @@
+ 
+     iget-object v5, v5, Lcom/android/systemui/keyguard/KeyguardSurfaceControllerImpl;->lastKeyguardSurfaceParams:Landroid/view/SyncRtSurfaceTransactionApplier$SurfaceParams;
+ 
+-    if-nez v5, :cond_24
++    if-nez v5, :cond_23
+ 
+     goto :goto_8
+ 
+-    :cond_24
++    :cond_23
+     iget-object v5, v5, Landroid/view/SyncRtSurfaceTransactionApplier$SurfaceParams;->surface:Landroid/view/SurfaceControl;
+ 
+-    if-eqz v5, :cond_25
++    if-eqz v5, :cond_24
+ 
+     invoke-virtual {v5}, Landroid/view/SurfaceControl;->isValid()Z
+ 
+     move-result v3
+ 
+-    :cond_25
++    :cond_24
+     xor-int/2addr v4, v3
+ 
+     :goto_8
+-    if-nez v4, :cond_26
++    if-nez v4, :cond_25
+ 
+     invoke-interface {v1}, Ldagger/Lazy;->get()Ljava/lang/Object;
+ 
+@@ -3968,7 +3961,7 @@
+ 
+     invoke-virtual {v1}, Lcom/android/systemui/keyguard/KeyguardSurfaceControllerImpl;->restoreKeyguardSurface()V
+ 
+-    :cond_26
++    :cond_25
+     iget-object v1, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->sysDumpTrigger:Lcom/android/systemui/keyguard/KeyguardSysDumpTrigger;
+ 
+     monitor-enter v1
+@@ -3976,7 +3969,7 @@
+     :try_start_3
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardSysDumpTrigger;->cancelExecToken:Lcom/android/systemui/util/concurrency/ExecutorImpl$ExecutionToken;
+ 
+-    if-eqz v0, :cond_27
++    if-eqz v0, :cond_26
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/util/concurrency/ExecutorImpl$ExecutionToken;->run()V
+ 
+@@ -3990,7 +3983,7 @@
+     :try_end_3
+     .catchall {:try_start_3 .. :try_end_3} :catchall_2
+ 
+-    :cond_27
++    :cond_26
+     monitor-exit v1
+ 
+     goto :goto_c
+@@ -4002,7 +3995,7 @@
+ 
+     throw v0
+ 
+-    :cond_28
++    :cond_27
+     iget-object v5, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->CANCEL_KEYGUARD_EXIT_ANIM$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v5}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -4015,11 +4008,11 @@
+ 
+     move-result v5
+ 
+-    if-ne v1, v5, :cond_29
++    if-ne v1, v5, :cond_28
+ 
+     goto :goto_9
+ 
+-    :cond_29
++    :cond_28
+     iget-object v5, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->START_KEYGUARD_EXIT_ANIM$delegate:Lkotlin/Lazy;
+ 
+     invoke-interface {v5}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+@@ -4032,33 +4025,33 @@
+ 
+     move-result v5
+ 
+-    if-ne v1, v5, :cond_2a
++    if-ne v1, v5, :cond_29
+ 
+     :goto_9
+     move v5, v4
+ 
+     goto :goto_a
+ 
+-    :cond_2a
++    :cond_29
+     move v5, v3
+ 
+     :goto_a
+-    if-eqz v5, :cond_2b
++    if-eqz v5, :cond_2a
+ 
+     goto :goto_b
+ 
+-    :cond_2b
++    :cond_2a
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getSET_OCCLUDED()I
+ 
+     move-result v5
+ 
+-    if-ne v1, v5, :cond_2c
++    if-ne v1, v5, :cond_2b
+ 
+     :goto_b
+     move v3, v4
+ 
+-    :cond_2c
+-    if-eqz v3, :cond_2e
++    :cond_2b
++    if-eqz v3, :cond_2d
+ 
+     iget-object v1, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->sysDumpTrigger:Lcom/android/systemui/keyguard/KeyguardSysDumpTrigger;
+ 
+@@ -4067,7 +4060,7 @@
+     :try_start_4
+     iget-object v0, v1, Lcom/android/systemui/keyguard/KeyguardSysDumpTrigger;->cancelExecToken:Lcom/android/systemui/util/concurrency/ExecutorImpl$ExecutionToken;
+ 
+-    if-eqz v0, :cond_2d
++    if-eqz v0, :cond_2c
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/util/concurrency/ExecutorImpl$ExecutionToken;->run()V
+ 
+@@ -4081,7 +4074,7 @@
+     :try_end_4
+     .catchall {:try_start_4 .. :try_end_4} :catchall_3
+ 
+-    :cond_2d
++    :cond_2c
+     monitor-exit v1
+ 
+     goto :goto_c
+@@ -4093,7 +4086,7 @@
+ 
+     throw v0
+ 
+-    :cond_2e
++    :cond_2d
+     :goto_c
+     return-void
+ 
+@@ -4125,7 +4118,7 @@
+ 
+     iget-object v2, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->extraUserPresentIntent:Landroid/content/Intent;
+ 
+-    if-nez v2, :cond_2f
++    if-nez v2, :cond_2e
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getViewMediatorProvider()Lcom/android/systemui/keyguard/ViewMediatorProvider;
+ 
+@@ -4147,16 +4140,16 @@
+ 
+     iput-object v2, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->extraUserPresentIntent:Landroid/content/Intent;
+ 
+-    :cond_2f
++    :cond_2e
+     iget-object v2, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->extraUserPresentIntent:Landroid/content/Intent;
+ 
+-    if-eqz v2, :cond_31
++    if-eqz v2, :cond_30
+ 
+     sget-boolean v3, Lcom/android/systemui/LsRune;->KEYGUARD_EXTRA_USER_PRESENT:Z
+ 
+     iget-object v0, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->context:Landroid/content/Context;
+ 
+-    if-eqz v3, :cond_30
++    if-eqz v3, :cond_2f
+ 
+     const-string v3, "com.verizon.mips.services"
+ 
+@@ -4168,7 +4161,7 @@
+ 
+     invoke-virtual {v0, v2, v3}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+ 
+-    :cond_30
++    :cond_2f
+     const-string v3, "com.sec.android.daemonapp"
+ 
+     invoke-virtual {v2, v3}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+@@ -4183,7 +4176,7 @@
+ 
+     invoke-virtual {v0, v2, v1}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+ 
+-    :cond_31
++    :cond_30
+     return-void
+ 
+     :pswitch_8
+@@ -4216,7 +4209,7 @@
+ 
+     sget-boolean v1, Lcom/android/systemui/LsRune;->AOD_FULLSCREEN:Z
+ 
+-    if-eqz v1, :cond_32
++    if-eqz v1, :cond_31
+ 
+     iget-object v1, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->aodAmbientWallpaperHelper:Lcom/android/systemui/aod/AODAmbientWallpaperHelper;
+ 
+@@ -4224,7 +4217,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_32
++    if-eqz v1, :cond_31
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->getHandler()Landroid/os/Handler;
+ 
+@@ -4236,7 +4229,7 @@
+ 
+     invoke-virtual {v1, v2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+ 
+-    :cond_32
++    :cond_31
+     return-void
+ 
+     :pswitch_a
+@@ -4256,13 +4249,13 @@
+ 
+     sget-boolean v1, Lcom/android/systemui/LsRune;->KEYGUARD_SUB_DISPLAY_LOCK:Z
+ 
+-    if-eqz v1, :cond_33
++    if-eqz v1, :cond_32
+ 
+     iget-object v0, v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->foldControllerImpl:Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;
+ 
+     iput v15, v0, Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;->wakeReason:I
+ 
+-    :cond_33
++    :cond_32
+     const/4 v10, 0x3
+ 
+     const/4 v14, 0x1
+@@ -4296,6 +4289,8 @@
+ 
+     return-void
+ 
++    nop
++
+     :pswitch_data_0
+     .packed-switch 0x0
+         :pswitch_a
+diff --git a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda7.smali b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda7.smali
+index 2fb66e70..e5cb78b6 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda7.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardViewMediator$$ExternalSyntheticLambda7.smali
+@@ -361,22 +361,15 @@
+     invoke-virtual {v0, v2}, Lcom/android/systemui/keyguard/KeyguardFoldControllerImpl;->resetFoldOpenState(Z)V
+ 
+     :cond_9
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+-    if-eqz v0, :cond_a
+-
+-    invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->updateRefreshRate()V
+-
+-    :cond_a
+     invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->isSecure()Z
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_b
++    if-nez v0, :cond_a
+ 
+     goto :goto_3
+ 
+-    :cond_b
++    :cond_a
+     new-instance v0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$onSecurityPropertyUpdated$1;
+ 
+     invoke-direct {v0, p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl$onSecurityPropertyUpdated$1;-><init>(Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;)V
+@@ -392,23 +385,23 @@
+ 
+     iget-boolean v1, v0, Lcom/android/systemui/keyguard/KeyguardFixedRotationMonitor;->isMonitorStarted:Z
+ 
+-    if-eqz v1, :cond_c
++    if-eqz v1, :cond_b
+ 
+     iget-boolean v1, v0, Lcom/android/systemui/keyguard/KeyguardFixedRotationMonitor;->isFixedRotated:Z
+ 
+-    if-eqz v1, :cond_c
++    if-eqz v1, :cond_b
+ 
+     move v2, v3
+ 
+-    :cond_c
+-    if-nez v2, :cond_d
++    :cond_b
++    if-nez v2, :cond_c
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/keyguard/KeyguardFixedRotationMonitor;->cancel()V
+ 
+-    :cond_d
++    :cond_c
+     sget-boolean v0, Lcom/android/systemui/LsRune;->AOD_FULLSCREEN:Z
+ 
+-    if-eqz v0, :cond_e
++    if-eqz v0, :cond_d
+ 
+     iget-object p0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->centralSurfacesLazy:Ldagger/Lazy;
+ 
+@@ -426,7 +419,7 @@
+ 
+     invoke-virtual {p0, v0}, Lcom/android/systemui/statusbar/LightRevealScrim;->setRevealAmount(F)V
+ 
+-    :cond_e
++    :cond_d
+     return-void
+ 
+     :pswitch_a
+@@ -456,13 +449,13 @@
+ 
+     const/16 v7, 0x67
+ 
+-    if-ne v6, v7, :cond_12
++    if-ne v6, v7, :cond_11
+ 
+-    if-eqz v1, :cond_12
++    if-eqz v1, :cond_11
+ 
+     iget-boolean v1, v1, Lcom/samsung/android/cover/CoverState;->attached:Z
+ 
+-    if-eqz v1, :cond_12
++    if-eqz v1, :cond_11
+ 
+     iget-object v1, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->settingsHelper:Lcom/android/systemui/util/SettingsHelper;
+ 
+@@ -470,18 +463,18 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_12
++    if-eqz v1, :cond_11
+ 
+     const/4 v1, -0x1
+ 
+-    if-eq v5, v1, :cond_f
++    if-eq v5, v1, :cond_e
+ 
+-    if-nez v4, :cond_11
++    if-nez v4, :cond_10
+ 
+     goto :goto_4
+ 
+-    :cond_f
+-    if-eqz v4, :cond_10
++    :cond_e
++    if-eqz v4, :cond_f
+ 
+     iget-object v1, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->userTracker:Lcom/android/systemui/settings/UserTracker;
+ 
+@@ -495,18 +488,18 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_11
++    if-eqz v0, :cond_10
+ 
+-    :cond_10
++    :cond_f
+     :goto_4
+     move v2, v3
+ 
+-    :cond_11
+-    if-eqz v2, :cond_12
++    :cond_10
++    if-eqz v2, :cond_11
+ 
+     invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->removeShowMsg()V
+ 
+-    :cond_12
++    :cond_11
+     return-void
+ 
+     :goto_5
+@@ -516,8 +509,6 @@
+ 
+     return-void
+ 
+-    nop
+-
+     :pswitch_data_0
+     .packed-switch 0x0
+         :pswitch_a
+diff --git a/smali/com/android/systemui/keyguard/KeyguardViewMediator$4.smali b/smali/com/android/systemui/keyguard/KeyguardViewMediator$4.smali
+index 335f822d..d856910e 100644
+--- a/smali/com/android/systemui/keyguard/KeyguardViewMediator$4.smali
++++ b/smali/com/android/systemui/keyguard/KeyguardViewMediator$4.smali
+@@ -614,33 +614,12 @@
+ .end method
+ 
+ .method public final userActivity()V
+-    .locals 4
++    .locals 1
+ 
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
++    sget-object v0, Lcom/android/systemui/LsRune;->VALUE_CONFIG_CARRIER_TEXT_POLICY:Ljava/lang/String;
+ 
+     iget-object p0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediator$4;->this$0:Lcom/android/systemui/keyguard/KeyguardViewMediator;
+ 
+-    if-eqz v0, :cond_0
+-
+-    iget-object p0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediator;->mHelper:Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
+-
+-    move-result-wide v0
+-
+-    const/4 v2, 0x0
+-
+-    iget-object p0, p0, Lcom/android/systemui/keyguard/KeyguardViewMediatorHelperImpl;->pm:Landroid/os/PowerManager;
+-
+-    const/4 v3, 0x2
+-
+-    invoke-virtual {p0, v0, v1, v3, v2}, Landroid/os/PowerManager;->userActivity(JII)V
+-
+-    return-void
+-
+-    :cond_0
+     invoke-virtual {p0}, Lcom/android/systemui/keyguard/KeyguardViewMediator;->userActivity()V
+ 
+     return-void
+diff --git a/smali_classes2/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali b/smali_classes2/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
+index 146bca1f..262e94bf 100644
+--- a/smali_classes2/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
++++ b/smali_classes2/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
+@@ -12357,39 +12357,21 @@
+ .end method
+ 
+ .method public final userActivity()V
+-    .locals 4
++    .locals 2
+ 
+     iget v0, p0, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mState:I
+ 
+     const/4 v1, 0x1
+ 
+-    if-ne v0, v1, :cond_1
+-
+-    sget-boolean v0, Lcom/android/systemui/LsRune;->KEYGUARD_ADJUST_REFRESH_RATE:Z
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
+-
+-    move-result-wide v0
+-
+-    const/4 v2, 0x2
+-
+-    const/4 v3, 0x0
+-
+-    iget-object p0, p0, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mPowerManager:Landroid/os/PowerManager;
+-
+-    invoke-virtual {p0, v0, v1, v2, v3}, Landroid/os/PowerManager;->userActivity(JII)V
++    if-ne v0, v1, :cond_0
+ 
+-    goto :goto_0
++    sget-object v0, Lcom/android/systemui/LsRune;->VALUE_CONFIG_CARRIER_TEXT_POLICY:Ljava/lang/String;
+ 
+-    :cond_0
+     iget-object p0, p0, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mKeyguardViewMediatorCallback:Lcom/android/keyguard/ViewMediatorCallback;
+ 
+     invoke-interface {p0}, Lcom/android/keyguard/ViewMediatorCallback;->userActivity()V
+ 
+-    :cond_1
+-    :goto_0
++    :cond_0
+     return-void
+ .end method
+ 
+-- 
+2.46.0
+
