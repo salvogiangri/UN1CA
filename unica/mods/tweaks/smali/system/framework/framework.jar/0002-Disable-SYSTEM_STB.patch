@@ -1,4 +1,4 @@
-From 4b2e2bf9dccfb1f9e822b3e2d9171633a312cd46 Mon Sep 17 00:00:00 2001
+From 6db8c3299102ca1b806bf0d2f3e8dbe49a180bd2 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 13:59:55 +0200
 Subject: [PATCH] Disable SYSTEM_STB
@@ -14,10 +14,10 @@ Subject: [PATCH] Disable SYSTEM_STB
  7 files changed, 200 insertions(+), 479 deletions(-)
 
 diff --git a/smali/android/graphics/HardwareRenderer.smali b/smali/android/graphics/HardwareRenderer.smali
-index 6ddfb52b..6d8f2664 100644
+index 6b4d3dc5..2434c897 100644
 --- a/smali/android/graphics/HardwareRenderer.smali
 +++ b/smali/android/graphics/HardwareRenderer.smali
-@@ -1628,8 +1628,6 @@
+@@ -1650,8 +1650,6 @@
  .method public blacklist syncAndDrawFrame(Landroid/graphics/FrameInfo;)I
      .locals 4
  
@@ -120,7 +120,7 @@ index c4ff6276..7e49227f 100644
      return-void
  .end method
 diff --git a/smali_classes4/android/view/Choreographer.smali b/smali_classes4/android/view/Choreographer.smali
-index 3b4efca2..f8abebc3 100644
+index 9016c9ea..ec4a10fb 100644
 --- a/smali_classes4/android/view/Choreographer.smali
 +++ b/smali_classes4/android/view/Choreographer.smali
 @@ -191,14 +191,6 @@
@@ -295,7 +295,7 @@ index 3b4efca2..f8abebc3 100644
  .end method
  
  .method synthetic constructor blacklist <init>(Landroid/os/Looper;ILandroid/view/Choreographer-IA;)V
-@@ -1498,14 +1448,6 @@
+@@ -1496,14 +1446,6 @@
  
      const/4 v2, 0x0
  
@@ -311,10 +311,10 @@ index 3b4efca2..f8abebc3 100644
  
      :try_start_0
 diff --git a/smali_classes4/android/view/WindowManagerGlobal.smali b/smali_classes4/android/view/WindowManagerGlobal.smali
-index f01e9ab2..aa7fef14 100644
+index 36eb1029..fe11c0e9 100644
 --- a/smali_classes4/android/view/WindowManagerGlobal.smali
 +++ b/smali_classes4/android/view/WindowManagerGlobal.smali
-@@ -1741,26 +1741,24 @@
+@@ -1756,26 +1756,24 @@
  
      move-object/from16 v2, p1
  
@@ -347,7 +347,7 @@ index f01e9ab2..aa7fef14 100644
  
      :try_start_1
      iget-object v0, v1, Landroid/view/WindowManagerGlobal;->mViews:Ljava/util/ArrayList;
-@@ -1769,91 +1767,103 @@
+@@ -1784,91 +1782,103 @@
  
      move-result v0
  
@@ -489,7 +489,7 @@ index f01e9ab2..aa7fef14 100644
  
      move-result-object v14
  
-@@ -1863,228 +1873,167 @@
+@@ -1878,228 +1888,167 @@
  
      move-result-object v15
  
@@ -792,7 +792,7 @@ index f01e9ab2..aa7fef14 100644
  
      nop
  
-@@ -2093,20 +2042,36 @@
+@@ -2108,20 +2057,36 @@
      :catchall_0
      move-exception v0
  
@@ -1118,5 +1118,5 @@ index 5466ad80..b783f307 100644
  .field private static final blacklist TAG:Ljava/lang/String; = "ViewRune"
  
 -- 
-2.45.2
+2.46.0
 
