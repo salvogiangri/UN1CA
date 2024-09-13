@@ -1,6 +1,6 @@
-From 59c721275ae35b379f38a5068a24c656a6f7e0b4 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sat, 8 Jun 2024 16:17:12 +0200
+From a4e498d0a09eec0f28a63b85ce14ef11cf89bbbc Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 12:55:57 +0200
 Subject: [PATCH] Disable HDR Settings
 
 ---
@@ -8,13 +8,13 @@ Subject: [PATCH] Disable HDR Settings
  1 file changed, 10 deletions(-)
 
 diff --git a/smali/com/android/providers/settings/DatabaseHelper.smali b/smali/com/android/providers/settings/DatabaseHelper.smali
-index 4d04240..39004aa 100644
+index 859a5a6..134eb4c 100644
 --- a/smali/com/android/providers/settings/DatabaseHelper.smali
 +++ b/smali/com/android/providers/settings/DatabaseHelper.smali
-@@ -4555,16 +4555,6 @@
+@@ -4543,16 +4543,6 @@
      invoke-direct {v1, v5, v6, v8}, Lcom/android/providers/settings/DatabaseHelper;->loadSetting(Landroid/database/sqlite/SQLiteStatement;Ljava/lang/String;Ljava/lang/Object;)V
  
-     :goto_17
+     :goto_18
 -    const-string v6, "hdr_effect"
 -
 -    const/4 v7, 0x0
@@ -29,5 +29,5 @@ index 4d04240..39004aa 100644
  
      move-result v6
 -- 
-2.45.2
+2.46.0
 
