@@ -1,6 +1,6 @@
-From 1b8807c51ed0cded5b787a04974d4e67e1eb309b Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Wed, 12 Jun 2024 16:46:34 +0200
+From bfd5c3ca5a1d55920195370d1050b0e10bbba952 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 11:09:04 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
 
 ---
@@ -8,8 +8,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
  .../android/provider/Settings$Global.smali    |   9 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 654 ++++++++++++++++++
- 5 files changed, 688 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 619 ++++++++++++++++++
+ 5 files changed, 653 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
@@ -38,7 +38,7 @@ index 2ed27c53..7d598c2c 100644
  
      invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
-index 86460ff3..fd6534b0 100644
+index a0f4bf02..236e3ab4 100644
 --- a/smali/android/app/Instrumentation.smali
 +++ b/smali/android/app/Instrumentation.smali
 @@ -632,6 +632,8 @@
@@ -47,18 +47,18 @@ index 86460ff3..fd6534b0 100644
  
 +    invoke-static {p1}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
 +
-     return-object v0
- .end method
+     invoke-static {p1}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
  
-@@ -3842,6 +3844,8 @@
+     return-object v0
+@@ -3844,6 +3846,8 @@
  
      invoke-virtual {v0, p3}, Landroid/app/Application;->attach(Landroid/content/Context;)V
  
 +    invoke-static {p3}, Lio/mesalabs/unica/SamsungPropsHooks;->init(Landroid/content/Context;)V
 +
-     return-object v0
- .end method
+     invoke-static {p3}, Lio/mesalabs/unica/PlayIntegrityHooks;->setProps(Landroid/content/Context;)V
  
+     return-object v0
 diff --git a/smali_classes3/android/os/SystemProperties.smali b/smali_classes3/android/os/SystemProperties.smali
 index 25fa7c61..5ea40e7f 100644
 --- a/smali_classes3/android/os/SystemProperties.smali
@@ -121,10 +121,10 @@ index e5f1ff86..f40ba8e1 100644
      invoke-virtual {v0, p0, p1, p2}, Landroid/provider/Settings$NameValueCache;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..963abe85
+index 00000000..fb5240ae
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,654 @@
+@@ -0,0 +1,619 @@
 +.class public final Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -141,8 +141,6 @@ index 00000000..963abe85
 +
 +.field private static final blacklist SAMSUNG_HEALTH_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.shealth"
 +
-+.field private static final blacklist SMART_SUGGESTIONS_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartsuggestions"
-+
 +.field private static final blacklist SMART_VIEW_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartmirroring"
 +
 +.field private static final blacklist TAG:Ljava/lang/String; = "SamsungPropsHooks"
@@ -154,8 +152,6 @@ index 00000000..963abe85
 +.field private static volatile blacklist sSpoofKeystoreProp:Z
 +
 +.field private static volatile blacklist sSpoofPixelXL:Z
-+
-+.field private static volatile blacklist sSpoofVendorDeviceProp:Z
 +
 +
 +# direct methods
@@ -309,14 +305,6 @@ index 00000000..963abe85
 +    move-result p0
 +
 +    sput-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
-+
-+    const-string p0, "com.samsung.android.smartsuggestions"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result p0
-+
-+    sput-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDeviceProp:Z
 +
 +    const-string p0, "com.sec.android.app.fm"
 +
@@ -615,50 +603,27 @@ index 00000000..963abe85
 +.method public static blacklist onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +    .locals 3
 +
-+    invoke-virtual {p0}, Ljava/lang/String;->hashCode()I
-+
-+    const-string v0, "ro.product.vendor.device"
-+
-+    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_1
-+
 +    const-string v0, "ro.security.keystore.keytype"
 +
 +    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_0
++    if-eqz v0, :cond_0
++
++    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
++
++    if-eqz v0, :cond_0
++
++    const-string v0, ""
 +
 +    goto :goto_0
 +
 +    :cond_0
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
-+
-+    if-eqz v0, :cond_2
-+
-+    const-string v0, ""
-+
-+    goto :goto_1
-+
-+    :cond_1
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofVendorDeviceProp:Z
-+
-+    if-eqz v0, :cond_2
-+
-+    const-string v0, "dm1q"
-+
-+    goto :goto_1
-+
-+    :cond_2
-+    :goto_0
 +    const/4 v0, 0x0
 +
-+    :goto_1
-+    if-eqz v0, :cond_3
++    :goto_0
++    if-eqz v0, :cond_1
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
@@ -692,7 +657,7 @@ index 00000000..963abe85
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/SamsungPropsHooks;->dlog(Ljava/lang/String;)V
 +
-+    :cond_3
++    :cond_1
 +    return-object v0
 +.end method
 +
