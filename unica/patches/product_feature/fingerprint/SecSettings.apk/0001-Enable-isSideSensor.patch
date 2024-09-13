@@ -1,4 +1,4 @@
-From f6ccd5df6bf14f70325bb413095fcc1b49e8d739 Mon Sep 17 00:00:00 2001
+From ab4841829be0f19b9ea3d0d0e2cc33189265a969 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Fri, 7 Jun 2024 07:09:36 +0200
 Subject: [PATCH] Enable isSideSensor
@@ -8,7 +8,7 @@ Subject: [PATCH] Enable isSideSensor
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
-index 90f8e223..b070d672 100644
+index 7624d955..9c07aebe 100644
 --- a/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
 +++ b/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
 @@ -971,7 +971,7 @@
@@ -30,5 +30,5 @@ index 90f8e223..b070d672 100644
      return v0
  .end method
 -- 
-2.45.2
+2.46.0
 

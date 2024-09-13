@@ -1,6 +1,6 @@
-From 4d979aad8efe41cce78610d92e942aa9ac91113a Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Fri, 29 Dec 2023 15:42:57 +0100
+From 517f52646b9a4d8f07916d16736cbd7b3633d9d7 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 13 Sep 2024 13:09:06 +0200
 Subject: [PATCH] Enable FP_FEATURE_NO_DELAY_IN_SCREEN_OFF
 
 ---
@@ -9,19 +9,19 @@ Subject: [PATCH] Enable FP_FEATURE_NO_DELAY_IN_SCREEN_OFF
  2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali b/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
-index f4685a1..15fe63b 100644
+index 7aeb2e2..d80dca4 100644
 --- a/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
 +++ b/smali/com/samsung/android/biometrics/app/setting/Utils$Config.smali
-@@ -45,6 +45,8 @@
+@@ -49,6 +49,8 @@
  
- .field public static final FP_FEATURE_HW_LIGHT_SOURCE:Z
+ .field public static final FP_FEATURE_LOCAL_HBM:Z
  
 +.field public static final FP_FEATURE_NO_DELAY_IN_SCREEN_OFF:Z
 +
  .field public static final FP_FEATURE_SENSOR_IS_IN_DISPLAY_TYPE:Z
  
  .field public static final FP_FEATURE_SENSOR_IS_OPTICAL:Z
-@@ -222,6 +224,8 @@
+@@ -226,6 +228,8 @@
      :goto_3
      sput-boolean v3, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_HW_LIGHT_SOURCE:Z
  
@@ -31,10 +31,10 @@ index f4685a1..15fe63b 100644
  
      sput-boolean v1, Lcom/samsung/android/biometrics/app/setting/Utils$Config;->FP_FEATURE_ENROLL_FRAME_MOVING_UX:Z
 diff --git a/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali b/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
-index 5db49ce..bdd8658 100644
+index 66d7be5..4a13208 100644
 --- a/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
 +++ b/smali/com/samsung/android/biometrics/app/setting/fingerprint/OpticalController.smali
-@@ -679,7 +679,9 @@
+@@ -695,7 +695,9 @@
  
      if-eqz p1, :cond_0
  
@@ -46,5 +46,5 @@ index 5db49ce..bdd8658 100644
      invoke-virtual {p0}, Lcom/samsung/android/biometrics/app/setting/fingerprint/OpticalController;->removeKeyguardMaskClientIfExist()V
  
 -- 
-2.43.0
+2.46.0
 
