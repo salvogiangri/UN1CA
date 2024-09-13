@@ -1,24 +1,24 @@
-From bfd5c3ca5a1d55920195370d1050b0e10bbba952 Mon Sep 17 00:00:00 2001
+From cb47d5d9bbbc1a0257b839d60aa95aa72546e04d Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 11:09:04 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
 
 ---
- .../app/ApplicationPackageManager.smali       |   7 +
+ .../app/ApplicationPackageManager.smali       |   6 +
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
  .../android/provider/Settings$Global.smali    |   9 +
  .../io/mesalabs/unica/SamsungPropsHooks.smali | 619 ++++++++++++++++++
- 5 files changed, 653 insertions(+)
+ 5 files changed, 652 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
-index 2ed27c53..7d598c2c 100644
+index 1c25e7d0..b078d59c 100644
 --- a/smali/android/app/ApplicationPackageManager.smali
 +++ b/smali/android/app/ApplicationPackageManager.smali
-@@ -9981,6 +9981,12 @@
- .method public whitelist hasSystemFeature(Ljava/lang/String;I)Z
-     .locals 2
+@@ -9987,6 +9987,12 @@
+ 
+     if-nez v0, :cond_1
  
 +    invoke-static {p1}, Lio/mesalabs/unica/SamsungPropsHooks;->onAPMHasSystemFeatureHook(Ljava/lang/String;)Ljava/lang/Boolean;
 +
@@ -29,14 +29,6 @@ index 2ed27c53..7d598c2c 100644
      invoke-static {p1}, Lcom/samsung/android/core/pm/mm/MaintenanceModeUtils;->isMaintenanceModeFeature(Ljava/lang/String;)Z
  
      move-result v0
-@@ -10004,6 +10010,7 @@
- 
-     move-result-object v0
- 
-+    :cond_1
-     check-cast v0, Ljava/lang/Boolean;
- 
-     invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
 index a0f4bf02..236e3ab4 100644
 --- a/smali/android/app/Instrumentation.smali
