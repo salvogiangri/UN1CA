@@ -1,4 +1,4 @@
-From f50b4ed88c648511e4afbb6e32dddf49fab59186 Mon Sep 17 00:00:00 2001
+From 28300405d92063990d0c8d10df606ff86342b6bf Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 2 Jun 2024 12:15:27 +0200
 Subject: [PATCH] Remove brightness threshold values
@@ -56,5 +56,5 @@ index e8a85d79..db168112 100644
      const-string v2, "2"
  
 -- 
-2.45.1
+2.46.0
 

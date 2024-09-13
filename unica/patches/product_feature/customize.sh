@@ -244,10 +244,6 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
     DECOMPILE "system_ext/priv-app/SystemUI/SystemUI.apk"
 
-    if [[ "$TARGET_HFR_MODE" -le "1" ]]; then
-        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "hfr/SystemUI.apk/0001-Disable-seamless-HFR-code.patch"
-    fi
-
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
     system/framework/framework.jar/smali_classes5/com/samsung/android/rune/CoreRune.smali
