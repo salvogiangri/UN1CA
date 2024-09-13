@@ -1,4 +1,4 @@
-From 9802ec6de1868e5e4d15ba01c9ea6d02e7d26852 Mon Sep 17 00:00:00 2001
+From 5c7c110438967edf17a619e2e9d5e556e55cf635 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sun, 9 Jun 2024 01:24:50 +0200
 Subject: [PATCH] Disable SemService
@@ -10,10 +10,10 @@ Subject: [PATCH] Disable SemService
  3 files changed, 81 insertions(+), 107 deletions(-)
 
 diff --git a/smali/com/android/server/SystemConfig.smali b/smali/com/android/server/SystemConfig.smali
-index 33c41859..50f207b7 100644
+index ca92a06e..cb0fc5d0 100644
 --- a/smali/com/android/server/SystemConfig.smali
 +++ b/smali/com/android/server/SystemConfig.smali
-@@ -1026,127 +1026,124 @@
+@@ -1040,127 +1040,124 @@
  
      invoke-static {}, Landroid/os/SemSystemProperties;->getCountryCode()Ljava/lang/String;
  
@@ -185,7 +185,7 @@ index 33c41859..50f207b7 100644
      :goto_2
      move v6, v4
  
-@@ -1159,43 +1156,43 @@
+@@ -1173,43 +1170,43 @@
  
      invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
@@ -245,7 +245,7 @@ index 33c41859..50f207b7 100644
      :goto_4
      new-instance v0, Ljava/lang/StringBuilder;
  
-@@ -1215,7 +1212,7 @@
+@@ -1229,7 +1226,7 @@
  
      const-string v0, "android.hardware.se.omapi.ese"
  
@@ -254,7 +254,7 @@ index 33c41859..50f207b7 100644
  
      invoke-virtual {p0, v0, v5}, Lcom/android/server/SystemConfig;->addFeature(Ljava/lang/String;I)V
  
-@@ -1225,7 +1222,7 @@
+@@ -1239,7 +1236,7 @@
  
      goto :goto_5
  
@@ -264,7 +264,7 @@ index 33c41859..50f207b7 100644
  
      const-string/jumbo p0, "removed eSE secure element feature: not support se"
 diff --git a/smali/com/android/server/SystemServer.smali b/smali/com/android/server/SystemServer.smali
-index 26ab0097..66175cdd 100644
+index 05c5aaa7..2f47dd00 100644
 --- a/smali/com/android/server/SystemServer.smali
 +++ b/smali/com/android/server/SystemServer.smali
 @@ -912,34 +912,11 @@
@@ -391,10 +391,10 @@ index 26ab0097..66175cdd 100644
  
      :cond_0
 diff --git a/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali b/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
-index fb25d542..037d4f7e 100644
+index d37ed381..0ad12a5f 100644
 --- a/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
 +++ b/smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali
-@@ -23531,7 +23531,7 @@
+@@ -23560,7 +23560,7 @@
      :cond_6
      const-string v2, "applet_ese_chip_vendor"
  
@@ -404,5 +404,5 @@ index fb25d542..037d4f7e 100644
      invoke-virtual {v3, v2, v4}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
  
 -- 
-2.45.2
+2.46.0
 
