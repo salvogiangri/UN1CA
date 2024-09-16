@@ -181,8 +181,6 @@ system/lib64/libImageCropper.camera.samsung.so
 system/lib64/libImageTagger.camera.samsung.so
 system/lib64/libMyFilter.camera.samsung.so
 system/lib64/libPortraitDistortionCorrection.arcsoft.so
-system/lib64/libStride.camera.samsung.so
-system/lib64/libStrideTensorflowLite.camera.samsung.so
 system/lib64/libhigh_dynamic_range.arcsoft.so
 system/lib64/libhumantracking_util.camera.samsung.so
 system/lib64/libhumantracking.arcsoft.so

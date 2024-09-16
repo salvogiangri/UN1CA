@@ -174,8 +174,6 @@ system/lib64/libMultiFrameProcessing30Tuning.camera.samsung.so
 system/lib64/libMyFilter.camera.samsung.so
 system/lib64/libPortraitDistortionCorrection.arcsoft.so
 system/lib64/libPortraitDistortionCorrectionCali.arcsoft.so
-system/lib64/libStride.camera.samsung.so
-system/lib64/libStrideTensorflowLite.camera.samsung.so
 system/lib64/libUltraWideDistortionCorrection.camera.samsung.so
 system/lib64/libWideDistortionCorrection.camera.samsung.so
 system/lib64/libhigh_dynamic_range.arcsoft.so
