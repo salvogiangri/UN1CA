@@ -41,7 +41,7 @@ case "$1" in
         ;;
     "unica/patches/mass_cam")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-S711B/EUX/358615311234564"
         BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
         ;;
     "unica/patches/nfc")
