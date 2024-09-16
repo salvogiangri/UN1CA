@@ -117,7 +117,6 @@ system/app/SamsungTTSVoice_ru_RU_f00/oat
 system/app/SamsungTTSVoice_th_TH_f00/oat
 system/app/SamsungTTSVoice_vi_VN_f00/oat
 system/app/SamsungWeather/oat
-system/app/SecFactoryPhoneTest/oat
 system/app/SecHTMLViewer/oat
 system/app/SetupWizardLegalProvider/oat
 system/app/SilentLog/oat
@@ -164,7 +163,7 @@ system/framework/boot-UxPerformance.vdex
 system/framework/boot.vdex
 system/framework/boot-voip-common.vdex
 system/priv-app/Accessibility/oat
-system/priv-app/AdaptSound_U/oat
+system/priv-app/AdaptSound_U2/oat
 system/priv-app/AppsEdgePanel_v3.2/oat
 system/priv-app/AppUpdateCenter/oat
 system/priv-app/AREmojiEditor/oat
@@ -291,7 +290,7 @@ system/priv-app/SmartThingsKit/oat
 system/priv-app/SmartTouchCall/oat
 system/priv-app/SOAgent7/oat
 system/priv-app/SohService/oat
-system/priv-app/SoundAlive_U/oat
+system/priv-app/SoundAlive_U2/oat
 system/priv-app/SPPPushClient/oat
 system/priv-app/SsuService/oat
 system/priv-app/StickerFaceARAvatar/oat
@@ -393,11 +392,11 @@ system/app/SamsungTTSVoice_pt_BR_f00
 system/app/SamsungTTSVoice_ru_RU_f00
 system/app/SamsungTTSVoice_th_TH_f00
 system/app/SamsungTTSVoice_vi_VN_f00
-system/app/SecFactoryPhoneTest
 system/app/SilentLog
 system/app/SmartReminder
 system/app/WebManual
 system/app/WlanTest
+system/etc/init/digitalkey_init_nfc_tss2.rc
 system/etc/init/samsung_pass_authenticator_service.rc
 system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.app.kfa.xml
@@ -445,6 +444,7 @@ system/priv-app/PaymentFramework
 system/priv-app/SEMFactoryApp
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
+system/priv-app/SecFactoryPhoneTest
 system/priv-app/SmartEpdgTestApp
 system/priv-app/Upday
 "
