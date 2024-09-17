@@ -68,7 +68,7 @@ case "$1" in
         ;;
     "unica/patches/vndk/31")
         MODULE="$1"
-        FW="SM-S901B/BTE/350330051234562"
+        FW="SM-S901E/ZTO/350999641234561"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v31.apex"
         ;;
     "unica/patches/vndk/32")
