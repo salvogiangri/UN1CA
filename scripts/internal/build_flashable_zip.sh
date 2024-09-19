@@ -409,7 +409,25 @@ GENERATE_UPDATER_SCRIPT()
     true
 }
 
+GENERATE_BUILD_INFO()
+{
+    local BUILD_INFO_FILE="$TMP_DIR/build_info.txt"
+
+    [ -f "$BUILD_INFO_FILE" ] && rm -f "$BUILD_INFO_FILE"
+    touch "$BUILD_INFO_FILE"
+    {
+        echo "device=$TARGET_CODENAME"
+        echo "version=$ROM_VERSION"
+        echo "timestamp=$ROM_BUILD_TIMESTAMP"
+        echo "security_patch_version=$(GET_PROP "ro.build.version.security_patch" "$WORK_DIR/system/system/build.prop")"
+    } >> "$BUILD_INFO_FILE"
+
+    true
+}
+
 FILE_NAME="UN1CA_${ROM_VERSION}_$(date +%Y%m%d)_${TARGET_CODENAME}"
+CERT_NAME="aosp_testkey"
+$ROM_IS_OFFICIAL && [ -f "$SRC_DIR/unica/security/unica_ota.pk8" ] && CERT_NAME="unica_ota"
 # ]
 
 echo "Set up tmp dir"
@@ -469,6 +487,9 @@ done <<< "$(find "$WORK_DIR/kernel" -mindepth 1 -maxdepth 1 -type f -name "*.img
 echo "Generating updater-script"
 GENERATE_UPDATER_SCRIPT
 
+echo "Generate build_info.txt"
+GENERATE_BUILD_INFO
+
 echo "Creating zip"
 [ -f "$OUT_DIR/rom.zip" ] && rm -f "$OUT_DIR/rom.zip"
 cd "$TMP_DIR" ; zip -rq ../rom.zip ./* ; cd - &> /dev/null
@@ -476,7 +497,7 @@ cd "$TMP_DIR" ; zip -rq ../rom.zip ./* ; cd - &> /dev/null
 echo "Signing zip"
 [ -f "$OUT_DIR/$FILE_NAME-sign.zip" ] && rm -f "$OUT_DIR/$FILE_NAME-sign.zip"
 signapk -w \
-    "$SRC_DIR/unica/security/aosp_testkey.x509.pem" "$SRC_DIR/unica/security/aosp_testkey.pk8" \
+    "$SRC_DIR/unica/security/$CERT_NAME.x509.pem" "$SRC_DIR/unica/security/$CERT_NAME.pk8" \
     "$OUT_DIR/rom.zip" "$OUT_DIR/$FILE_NAME-sign.zip" \
     && rm -f "$OUT_DIR/rom.zip"
 

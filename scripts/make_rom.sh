@@ -21,7 +21,7 @@ START=$SECONDS
 
 # [
 COMMIT_HASH="$(git rev-parse HEAD)"
-CONFIG_HASH="$(sha1sum "$OUT_DIR/config.sh" | cut -d " " -f 1)"
+CONFIG_HASH="$(sed '/ROM_BUILD_TIMESTAMP/d' "$OUT_DIR/config.sh" | sha1sum | cut -d " " -f 1)"
 WORK_DIR_HASH="$(echo -n "$COMMIT_HASH$CONFIG_HASH" | sha1sum | cut -d " " -f 1)"
 # ]
 
