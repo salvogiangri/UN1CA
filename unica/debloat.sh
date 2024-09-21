@@ -410,6 +410,7 @@ system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
 system/etc/permissions/privapp-permissions-com.sec.android.app.factorykeystring.xml
 system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
+system/etc/permissions/privapp-permissions-com.sec.android.soagent.xml
 system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
 system/etc/permissions/privapp-permissions-com.sec.epdgtestapp.xml
 system/etc/permissions/privapp-permissions-com.sec.facatfunction.xml
@@ -442,6 +443,7 @@ system/priv-app/ModemServiceMode
 system/priv-app/OneDrive_Samsung_v3
 system/priv-app/PaymentFramework
 system/priv-app/SEMFactoryApp
+system/priv-app/SOAgent7
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
 system/priv-app/SecFactoryPhoneTest
