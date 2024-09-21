@@ -65,6 +65,14 @@ system/priv-app/sec_camerax_service
 system/priv-app/VideoScan
 "
 
+# Gallery AI Semantic Search
+SYSTEM_DEBLOAT+="
+system/etc/default-permissions/default-permissions-com.samsung.mediasearch.xml
+system/etc/mediasearch
+system/etc/permissions/privapp-permissions-com.samsung.mediasearch.xml
+system/priv-app/MediaSearch
+"
+
 # Apps debloat
 SYSTEM_DEBLOAT+="
 system/etc/default-permissions/default-permissions-com.sec.android.mimage.avatarstickers.xml
