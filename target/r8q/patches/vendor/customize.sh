@@ -31,8 +31,10 @@ REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsecuibc.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/wfd_log.so"
 
 if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
     {

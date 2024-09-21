@@ -116,6 +116,7 @@ ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level
 
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/wfd_log.so"
 echo "Add stock WFD blobs"
 ADD_TO_WORK_DIR "system" "system/bin/insthk" 0 2000 755 "u:object_r:insthk_exec:s0"
 ADD_TO_WORK_DIR "system" "system/bin/remotedisplay" 0 2000 755 "u:object_r:remotedisplay_exec:s0"
