@@ -151,6 +151,7 @@ system/lib64/libaifrcInterface.camera.samsung.so
 system/lib64/libarcsoft_dualcam_portraitlighting.so
 system/lib64/libarcsoft_single_cam_glasses_seg.so
 system/lib64/libdualcam_refocus_image.so
+system/lib64/libdvs.camera.samsung.so
 system/lib64/libfacialrestoration.arcsoft.so
 system/lib64/libfrtracking_engine.arcsoft.so
 system/lib64/libgpuss_wrapper.so
