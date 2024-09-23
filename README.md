@@ -24,7 +24,7 @@ UN1CA is a work-in-progress custom firmware for Samsung Galaxy devices. It's bas
 - Picture remaster support
 - Object, shadow and reflection eraser support
 - Image clipper support
-- Smart suggestions widget
+- Smart Suggestions widget
 - Multi user support
 - Samsung DeX support
 - Camera privacy toggle support
