@@ -31,6 +31,11 @@ overlay/SoftapOverlayDualAp
 overlay/SoftapOverlayOWE
 "
 
+# mAFPC
+SYSTEM_DEBLOAT+="
+system/bin/mafpc_write
+"
+
 # HDCP
 SYSTEM_DEBLOAT+="
 system/bin/dhkprov

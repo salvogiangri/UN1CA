@@ -28,11 +28,6 @@ VENDOR_DEBLOAT+="
 etc/dpolicy
 "
 
-# mAFPC
-SYSTEM_DEBLOAT+="
-system/bin/mafpc_write
-"
-
 # Samsung SIM Unlock
 SYSTEM_DEBLOAT+="
 system/bin/ssud
