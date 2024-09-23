@@ -1,7 +1,2 @@
 # Disable OEM unlock toggle
 ro.oem_unlock_supported=0
-
-# Disable MDF
-ro.security.fips.ux=Disabled
-ro.security.fips_skc.ver=
-ro.security.fips_scrypto.ver=
