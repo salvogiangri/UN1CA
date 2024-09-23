@@ -1,0 +1,74 @@
+From 7361b05d7af0aac22a1a486fc99840c33158382b Mon Sep 17 00:00:00 2001
+From: Ruchit <risenid@duck.com>
+Date: Mon, 23 Sep 2024 10:34:58 +0200
+Subject: [PATCH] Nuke SSRM Warning dialog
+
+---
+ smali/N1/Q.smali | 50 +-----------------------------------------------
+ 1 file changed, 1 insertion(+), 49 deletions(-)
+
+diff --git a/smali/N1/Q.smali b/smali/N1/Q.smali
+index 393f7e4..a94eee5 100644
+--- a/smali/N1/Q.smali
++++ b/smali/N1/Q.smali
+@@ -113,56 +113,8 @@
+ .end method
+ 
+ .method public static C(Landroid/content/Context;Ljava/lang/String;)V
+-    .locals 1
+-
+-    if-eqz p0, :cond_0
+-
+-    new-instance v0, Landroid/app/AlertDialog$Builder;
+-
+-    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
+-
+-    const/4 p0, 0x0
+-
+-    invoke-virtual {v0, p0}, Landroid/app/AlertDialog$Builder;->setCancelable(Z)Landroid/app/AlertDialog$Builder;
+-
+-    const-string p0, "SSRM Warning"
+-
+-    invoke-virtual {v0, p0}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+-
+-    invoke-virtual {v0, p1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+-
+-    new-instance p0, LN1/M;
+-
+-    invoke-direct {p0}, LN1/M;-><init>()V
+-
+-    const-string p1, "I got it"
+-
+-    invoke-virtual {v0, p1, p0}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+-
+-    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->create()Landroid/app/AlertDialog;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Landroid/app/AlertDialog;->getWindow()Landroid/view/Window;
+-
+-    move-result-object p1
+-
+-    const/16 v0, 0x7d9
+-
+-    invoke-virtual {p1, v0}, Landroid/view/Window;->setType(I)V
+-
+-    invoke-virtual {p0}, Landroid/app/AlertDialog;->show()V
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    sget-object p0, LN1/Q;->a:Ljava/lang/String;
+-
+-    const-string p1, "showAlert - context is null"
+-
+-    invoke-static {p0, p1}, LN1/C;->b(Ljava/lang/String;Ljava/lang/String;)V
++    .locals 0
+ 
+-    :goto_0
+     return-void
+ .end method
+ 
+-- 
+2.46.1
+
