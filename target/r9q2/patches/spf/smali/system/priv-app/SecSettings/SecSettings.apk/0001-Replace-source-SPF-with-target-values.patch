@@ -1,18 +1,32 @@
-From df7d4c0b8f15cfc50058cfdca6902b73bbc5f8c5 Mon Sep 17 00:00:00 2001
+From 517057a71ebf4b0613cf68da688bb455682cca9e Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Tue, 2 Jul 2024 16:51:14 +0200
+Date: Mon, 23 Sep 2024 15:29:05 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
+ .../com/android/settings/Utils.smali          |  2 +-
  .../android/wifitrackerlib/WifiEntry.smali    | 27 ++-----------------
  .../WifiLabsWeeklyReportPreference.smali      | 26 +++++++++++++-----
  .../mobileap/utils/WifiApFeatureUtils.smali   | 12 ---------
- 3 files changed, 22 insertions(+), 43 deletions(-)
+ 4 files changed, 23 insertions(+), 44 deletions(-)
 
-diff --git a/smali/com/android/wifitrackerlib/WifiEntry.smali b/smali/com/android/wifitrackerlib/WifiEntry.smali
-index 7a740b38..a56cbcaf 100644
---- a/smali/com/android/wifitrackerlib/WifiEntry.smali
-+++ b/smali/com/android/wifitrackerlib/WifiEntry.smali
+diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
+index bebdb36b..abf8210c 100644
+--- a/smali_classes2/com/android/settings/Utils.smali
++++ b/smali_classes2/com/android/settings/Utils.smali
+@@ -139,7 +139,7 @@
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualPassword:Z
+ 
+-    sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++    sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhancedLite:Z
+ 
+diff --git a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
+index f87b3755..6d298119 100644
+--- a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
++++ b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
 @@ -2801,32 +2801,9 @@
  .end method
  
@@ -101,7 +115,7 @@ index 706609ba..754830d3 100644
      return-void
  .end method
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
-index 4fb68093..5f90f0e1 100644
+index 227d4132..59b0b4dd 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 @@ -87,20 +87,8 @@
@@ -126,5 +140,5 @@ index 4fb68093..5f90f0e1 100644
  .end method
  
 -- 
-2.45.2
+2.46.1
 

@@ -1,14 +1,28 @@
-From a41382ccb9dbb7131dbaa6a4f0b8476d7dc2a4c0 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 9 Jun 2024 16:51:46 +0200
+From bee0f8e03ff3a5bc22dbed09ba6f6edc5bebdae3 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 23 Sep 2024 15:29:05 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
+ smali_classes2/com/android/settings/Utils.smali      |  2 +-
  .../wifi/mobileap/utils/WifiApFeatureUtils.smali     | 12 ------------
- 1 file changed, 12 deletions(-)
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
+diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
+index bebdb36b..abf8210c 100644
+--- a/smali_classes2/com/android/settings/Utils.smali
++++ b/smali_classes2/com/android/settings/Utils.smali
+@@ -139,7 +139,7 @@
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualPassword:Z
+ 
+-    sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++    sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhancedLite:Z
+ 
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
-index 4fb68093..5f90f0e1 100644
+index 227d4132..59b0b4dd 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 @@ -87,20 +87,8 @@
@@ -33,5 +47,5 @@ index 4fb68093..5f90f0e1 100644
  .end method
  
 -- 
-2.45.2
+2.46.1
 

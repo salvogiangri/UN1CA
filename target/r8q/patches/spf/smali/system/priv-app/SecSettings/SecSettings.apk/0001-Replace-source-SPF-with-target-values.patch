@@ -1,21 +1,35 @@
-From 0c44ab004c4d67a24d3d9425146a1913b9c93c21 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 9 Jun 2024 16:51:46 +0200
+From 2967da442158d61ec789e06ee4595b895bbbd1d7 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 23 Sep 2024 15:29:05 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
+ .../com/android/settings/Utils.smali          |    2 +-
  .../android/wifitrackerlib/WifiEntry.smali    |   70 +-
  .../WifiLabsWeeklyReportPreference.smali      |   40 +-
  .../ConnectionInfoAnalyzer.smali              | 2377 ++++++-----------
- .../mobileap/WifiApCloudBackupRestore.smali   |   89 -
+ .../mobileap/WifiApCloudBackupRestore.smali   |  125 +-
  .../WifiApSmartSwitchBackupRestore.smali      |   52 +-
  .../mobileap/utils/WifiApFeatureUtils.smali   |   16 +-
- 6 files changed, 885 insertions(+), 1759 deletions(-)
+ 7 files changed, 904 insertions(+), 1778 deletions(-)
 
-diff --git a/smali/com/android/wifitrackerlib/WifiEntry.smali b/smali/com/android/wifitrackerlib/WifiEntry.smali
-index 7a740b38..8f7c6e7f 100644
---- a/smali/com/android/wifitrackerlib/WifiEntry.smali
-+++ b/smali/com/android/wifitrackerlib/WifiEntry.smali
+diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
+index bebdb36b..abf8210c 100644
+--- a/smali_classes2/com/android/settings/Utils.smali
++++ b/smali_classes2/com/android/settings/Utils.smali
+@@ -139,7 +139,7 @@
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualPassword:Z
+ 
+-    sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++    sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhancedLite:Z
+ 
+diff --git a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
+index f87b3755..e1c87f2e 100644
+--- a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
++++ b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
 @@ -2801,79 +2801,19 @@
  .end method
  
@@ -4353,7 +4367,7 @@ index f9a2cbf2..265d9963 100644
      .end sparse-switch
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
-index 7069c5c5..7657ee61 100644
+index 7069c5c5..e26ab449 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
 @@ -819,14 +819,6 @@
@@ -4414,6 +4428,15 @@ index 7069c5c5..7657ee61 100644
  .method public getDescription(Landroid/content/Context;)Ljava/lang/String;
      .locals 0
  
+@@ -1520,7 +1476,7 @@
+ 
+     move-result-object v3
+ 
+-    if-eqz v3, :cond_2e
++    if-eqz v3, :cond_2d
+ 
+     :try_start_3
+     new-instance v5, Lorg/json/JSONObject;
 @@ -2486,19 +2442,6 @@
  
      invoke-virtual {v3, v5}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
@@ -4434,6 +4457,146 @@ index 7069c5c5..7657ee61 100644
      invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
  
      move-result-object v5
+@@ -2529,7 +2472,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_29
++    if-eqz v5, :cond_28
+ 
+     const-string v5, "clientsDataUsageSettings"
+ 
+@@ -2537,7 +2480,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_28
++    if-eqz v5, :cond_27
+ 
+     const-string v5, "clientsDataUsageSettings"
+ 
+@@ -2553,14 +2496,14 @@
+ 
+     invoke-static {v5, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_28
++    :cond_27
+     const-string v5, "dailyHotspotDataLimit"
+ 
+     invoke-virtual {v3, v5}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_29
++    if-eqz v5, :cond_28
+ 
+     const-string v5, "dailyHotspotDataLimit"
+ 
+@@ -2576,12 +2519,12 @@
+ 
+     invoke-static {v5, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_29
++    :cond_28
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isOneTimePasswordSupported(Landroid/content/Context;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2b
++    if-eqz v5, :cond_2a
+ 
+     const-string v5, "isOneTimePasswordEnabled"
+ 
+@@ -2589,7 +2532,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2b
++    if-eqz v5, :cond_2a
+ 
+     const-string v5, "isOneTimePasswordEnabled"
+ 
+@@ -2599,24 +2542,24 @@
+ 
+     const/4 v6, 0x1
+ 
+-    if-ne v5, v6, :cond_2a
++    if-ne v5, v6, :cond_29
+ 
+     move v13, v6
+ 
+     goto :goto_f
+ 
+-    :cond_2a
++    :cond_29
+     const/4 v13, 0x0
+ 
+     :goto_f
+     invoke-static {v2, v13}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->setOtpPasswordEnabled(Landroid/content/Context;Z)V
+ 
+-    :cond_2b
++    :cond_2a
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isPrioritizeRealTimeTrafficSupported(Landroid/content/Context;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2c
++    if-eqz v5, :cond_2b
+ 
+     const-string v5, "key_cloud_prioritize_real_time_traffic_state"
+ 
+@@ -2624,7 +2567,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2c
++    if-eqz v5, :cond_2b
+ 
+     const-string v5, "key_cloud_prioritize_real_time_traffic_state"
+ 
+@@ -2634,14 +2577,14 @@
+ 
+     invoke-static {v2, v5}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->setPrioritizeRealTimeTrafficDB(Landroid/content/Context;Z)V
+ 
+-    :cond_2c
++    :cond_2b
+     const-string v2, "auto_connect_settings"
+ 
+     invoke-virtual {v3, v2}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_2d
++    if-eqz v2, :cond_2c
+ 
+     const-string v2, "auto_connect_settings"
+ 
+@@ -2669,14 +2612,14 @@
+ 
+     invoke-virtual {v4, v2}, Lcom/samsung/android/wifi/SemWifiManager;->setAdvancedAutohotspotConnectSettings(I)V
+ 
+-    :cond_2d
++    :cond_2c
+     const-string v2, "auto_connect_lcd_off_settings"
+ 
+     invoke-virtual {v3, v2}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_2e
++    if-eqz v2, :cond_2d
+ 
+     const-string v2, "auto_connect_lcd_off_settings"
+ 
+@@ -2757,7 +2700,7 @@
+ 
+     invoke-static {v1, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_2e
++    :cond_2d
+     :goto_10
+     return-void
+ 
 @@ -2818,38 +2761,6 @@
      return-void
  .end method
@@ -4474,7 +4637,7 @@ index 7069c5c5..7657ee61 100644
      .locals 2
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
-index 61634c80..4713d817 100644
+index 41382649..bed6b449 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
 @@ -3331,25 +3331,9 @@
@@ -4504,7 +4667,7 @@ index 61634c80..4713d817 100644
  
      goto/16 :goto_8
  
-@@ -6500,40 +6484,6 @@
+@@ -6501,40 +6485,6 @@
  
      invoke-virtual {v12, v10}, Ljava/io/FileWriter;->write(Ljava/lang/String;)V
  
@@ -4546,7 +4709,7 @@ index 61634c80..4713d817 100644
      :try_end_6
      .catch Ljava/lang/Exception; {:try_start_6 .. :try_end_6} :catch_2
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
-index 4fb68093..6aa23e0f 100644
+index 227d4132..c8e9096f 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
 @@ -87,20 +87,8 @@
@@ -4589,5 +4752,5 @@ index 4fb68093..6aa23e0f 100644
      return p0
  .end method
 -- 
-2.45.2
+2.46.1
 

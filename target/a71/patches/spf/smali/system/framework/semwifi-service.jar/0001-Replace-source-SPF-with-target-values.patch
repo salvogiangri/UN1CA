@@ -1,46 +1,46 @@
-From 2d5a797a209a2b781c10753463437aa5f88032cd Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 9 Jun 2024 16:47:17 +0200
+From 32c0eebad2bda90ba2f02665659e7d3bb2df23ad Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 23 Sep 2024 14:57:19 +0200
 Subject: [PATCH] Replace source SPF with target values
 
 ---
  .../server/wifi/SemFrameworkFacade.smali      |   8 +-
- .../server/wifi/SemWifiCoexManager.smali      | 529 +++++--------
+ .../server/wifi/SemWifiCoexManager.smali      | 529 ++++++---------
  .../server/wifi/SemWifiServiceImpl.smali      |   2 +-
  .../wifi/ap/SemSettingsSoftResetHandler.smali |  10 -
  .../wifi/ap/SemSoftApConfiguration$13.smali   |  36 +
- .../wifi/ap/SemSoftApConfiguration$4.smali    |  38 +
+ .../wifi/ap/SemSoftApConfiguration$4.smali    |  38 ++
  .../wifi/ap/SemSoftApConfiguration$9.smali    |  36 +
- .../wifi/ap/SemSoftApConfiguration.smali      | 720 ++++++++----------
- .../server/wifi/ap/SemSoftApManager$1.smali   | 275 +------
- .../server/wifi/ap/SemSoftApManager.smali     | 284 +------
+ .../wifi/ap/SemSoftApConfiguration.smali      | 617 +++++++++---------
+ .../server/wifi/ap/SemSoftApManager$1.smali   | 161 +----
+ .../server/wifi/ap/SemSoftApManager.smali     | 284 +-------
  .../wifi/ap/SemWifiApBroadcastReceiver.smali  |  26 +-
  .../server/wifi/ap/SemWifiApChipInfo.smali    |   6 +
  .../server/wifi/ap/SemWifiApConfigStore.smali |  45 +-
  ...emWifiApPowerSaveImpl$SoftApCallback.smali | 180 +----
- .../wifi/ap/SemWifiApPowerSaveImpl.smali      |  84 +-
- .../server/wifi/ap/SemWifiApServiceImpl.smali | 111 ++-
- ...er$SemWifiApTrafficPollerWorkHandler.smali | 273 +++----
+ .../wifi/ap/SemWifiApPowerSaveImpl.smali      |  84 +--
+ .../server/wifi/ap/SemWifiApServiceImpl.smali | 111 ++--
+ ...er$SemWifiApTrafficPollerWorkHandler.smali | 273 +++-----
  .../wifi/ap/SemWifiApTrafficPoller.smali      |  62 +-
  .../wifi/ap/datausage/SemWifiApEbpf.smali     |  27 +-
  .../wifi/ap/mcf/SemWifiApContinuityUtil.smali |  39 +-
  .../SemWifiApSmartGattClient$2.smali          | 103 ++-
  .../SemWifiApSmartGattClient.smali            |  47 +-
  .../SemWifiApSmartGattServer$2.smali          |   2 +-
- ...WifiApSmartGattServer$BleWorkHandler.smali | 363 ++++-----
+ ...WifiApSmartGattServer$BleWorkHandler.smali | 361 ++++------
  .../SemWifiApSmartGattServer.smali            |   8 -
  .../smarttethering/SemWifiApSmartUtil.smali   |  35 +-
- .../wifi/b2b/WifiB2bPolicyManager.smali       |  31 +-
- 27 files changed, 1126 insertions(+), 2254 deletions(-)
+ .../wifi/b2b/WifiB2bPolicyManager.smali       |  25 +-
+ 27 files changed, 1074 insertions(+), 2081 deletions(-)
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$13.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$4.smali
  create mode 100644 smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration$9.smali
 
 diff --git a/smali/com/samsung/android/server/wifi/SemFrameworkFacade.smali b/smali/com/samsung/android/server/wifi/SemFrameworkFacade.smali
-index 9c0d796..14212ae 100644
+index 5e388a8..4d2dd0a 100644
 --- a/smali/com/samsung/android/server/wifi/SemFrameworkFacade.smali
 +++ b/smali/com/samsung/android/server/wifi/SemFrameworkFacade.smali
-@@ -827,7 +827,7 @@
+@@ -865,7 +865,7 @@
  .method public isMBOSupported()Z
      .locals 0
  
@@ -49,7 +49,7 @@ index 9c0d796..14212ae 100644
  
      return p0
  .end method
-@@ -1074,7 +1074,7 @@
+@@ -1112,7 +1112,7 @@
  .method public isSupportMobileAp6G()Z
      .locals 0
  
@@ -58,7 +58,7 @@ index 9c0d796..14212ae 100644
  
      return p0
  .end method
-@@ -1118,7 +1118,7 @@
+@@ -1156,7 +1156,7 @@
  .method public isSupported6Ghz()Z
      .locals 0
  
@@ -67,7 +67,7 @@ index 9c0d796..14212ae 100644
  
      return p0
  .end method
-@@ -1289,7 +1289,7 @@
+@@ -1327,7 +1327,7 @@
  .method public isWifiToCellularSupported()Z
      .locals 0
  
@@ -77,7 +77,7 @@ index 9c0d796..14212ae 100644
      return p0
  .end method
 diff --git a/smali/com/samsung/android/server/wifi/SemWifiCoexManager.smali b/smali/com/samsung/android/server/wifi/SemWifiCoexManager.smali
-index ac8c376..c75c8f3 100644
+index 12969ba..83c7e79 100644
 --- a/smali/com/samsung/android/server/wifi/SemWifiCoexManager.smali
 +++ b/smali/com/samsung/android/server/wifi/SemWifiCoexManager.smali
 @@ -13,7 +13,7 @@
@@ -720,8 +720,8 @@ index ac8c376..c75c8f3 100644
 -    iget v3, p0, Lcom/samsung/android/server/wifi/SemWifiCoexManager;->uwbCxEnd5gCh:I
 +    iget v0, p0, Lcom/samsung/android/server/wifi/SemWifiCoexManager;->uwbCxEnd5gCh:I
  
--    invoke-static {p4, v3, v1}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
-+    invoke-static {p4, v0, v2}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
+-    invoke-static {p4, v3, v1}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
++    invoke-static {p4, v0, v2}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
  
      goto :goto_4
  
@@ -806,8 +806,8 @@ index ac8c376..c75c8f3 100644
 -    iget v3, p0, Lcom/samsung/android/server/wifi/SemWifiCoexManager;->uwb1TxCxEnd5gCh:I
 +    iget v0, p0, Lcom/samsung/android/server/wifi/SemWifiCoexManager;->uwb1TxCxEnd5gCh:I
  
--    invoke-static {p4, v3, v1}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
-+    invoke-static {p4, v0, v2}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
+-    invoke-static {p4, v3, v1}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
++    invoke-static {p4, v0, v2}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
  
      :cond_8
      :goto_4
@@ -860,7 +860,7 @@ index ac8c376..c75c8f3 100644
 -
 -    const-string v1, "SemWifiCoexManager"
 -
--    invoke-static {v0, p0, v1}, Lcom/samsung/android/server/wifi/SemClientModeManager$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+-    invoke-static {v0, p0, v1}, Lcom/samsung/android/server/wifi/SemClientModeImpl$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 -
 -    goto :goto_0
 +    .locals 0
@@ -1018,7 +1018,7 @@ index ac8c376..c75c8f3 100644
 -
 -    const-string p1, "SemWifiCoexManager"
 -
--    invoke-static {p2, v2, p1}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
+-    invoke-static {p2, v2, p1}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
 -
 -    move v0, v2
 -
@@ -1034,10 +1034,10 @@ index ac8c376..c75c8f3 100644
 +    return v1
  .end method
 diff --git a/smali/com/samsung/android/server/wifi/SemWifiServiceImpl.smali b/smali/com/samsung/android/server/wifi/SemWifiServiceImpl.smali
-index 1518e32..246024d 100644
+index 865a14d..00f16d3 100644
 --- a/smali/com/samsung/android/server/wifi/SemWifiServiceImpl.smali
 +++ b/smali/com/samsung/android/server/wifi/SemWifiServiceImpl.smali
-@@ -4287,7 +4287,7 @@
+@@ -4293,7 +4293,7 @@
  .method public getNumOfWifiAnt()I
      .locals 0
  
@@ -1047,7 +1047,7 @@ index 1518e32..246024d 100644
      return p0
  .end method
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
-index 2adba58..f49bef6 100644
+index c2b46bd..b21ebf4 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSettingsSoftResetHandler.smali
 @@ -226,16 +226,6 @@
@@ -1196,10 +1196,10 @@ index 0000000..87ab53d
 +    return-void
 +.end method
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration.smali b/smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration.smali
-index f50d026..7917ad7 100644
+index f9a63e3..1a0dc07 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration.smali
-@@ -2751,53 +2751,17 @@
+@@ -2840,53 +2840,17 @@
  .end method
  
  .method public isWifiApEnabledWithDualBand()Z
@@ -1259,1074 +1259,940 @@ index f50d026..7917ad7 100644
  .end method
  
  .method public isWifiApGuestModeEnabled()Z
-@@ -3189,76 +3153,78 @@
+@@ -3475,27 +3439,8 @@
  
-     move-result-object v12
+     invoke-static {v11, v7}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
  
--    const-string v14, "wifi_ap_disable_random_mac"
-+    const-string v13, "wifi_ap_disable_random_mac"
+-    iget-object v15, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
+-
+-    invoke-virtual {v15}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v15
+-
+-    move-object/from16 p1, v9
+-
+-    const/4 v9, 0x0
+-
+-    invoke-static {v15, v12, v9}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-
+-    move-result v9
+-
+-    const/4 v12, 0x1
++    move/from16 p1, v3
  
--    invoke-static {v12, v14, v9}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
-+    invoke-static {v12, v13, v9}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-    if-ne v9, v12, :cond_d
+-
+-    invoke-static {v11, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    :cond_d
+     if-nez v10, :cond_e
+ 
+     if-nez v14, :cond_e
+@@ -3511,38 +3456,51 @@
+     goto/16 :goto_b
+ 
+     :cond_e
+-    if-eqz v2, :cond_15
++    if-eqz v2, :cond_16
+ 
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+-    const/4 v9, 0x0
++    move-result v3
+ 
+-    invoke-virtual {v2, v9}, Landroid/util/SparseIntArray;->keyAt(I)I
++    const/4 v12, 0x1
+ 
+-    move-result v9
++    if-le v3, v12, :cond_f
+ 
+-    and-int/lit8 v9, v9, 0x4
++    const-string v2, " SPF dualAp is not enabled"
+ 
+-    if-nez v9, :cond_f
++    invoke-static {v5, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
++    new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$4;
+ 
+-    move-result v9
++    invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$4;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
+ 
+-    const/4 v12, 0x1
++    :cond_f
++    const/4 v3, 0x0
+ 
+-    if-le v9, v12, :cond_10
++    invoke-virtual {v2, v3}, Landroid/util/SparseIntArray;->keyAt(I)I
++
++    move-result v3
++
++    and-int/lit8 v3, v3, 0x4
++
++    if-nez v3, :cond_10
++
++    invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
++
++    move-result v3
++
++    if-le v3, v12, :cond_11
+ 
+     invoke-virtual {v2, v12}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+-    move-result v9
++    move-result v3
+ 
+-    and-int/lit8 v9, v9, 0x4
++    and-int/lit8 v3, v3, 0x4
+ 
+-    if-eqz v9, :cond_10
++    if-eqz v3, :cond_11
+ 
+-    :cond_f
+-    if-nez v14, :cond_10
++    :cond_10
++    if-nez v14, :cond_11
+ 
+     const-string v2, "supportWifiAp6GBasedOnCountry is false"
+ 
+@@ -3552,35 +3510,35 @@
+ 
+     invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$5;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
+ 
+-    :cond_10
+-    const/4 v9, 0x0
++    :cond_11
++    const/4 v3, 0x0
+ 
+-    invoke-virtual {v2, v9}, Landroid/util/SparseIntArray;->keyAt(I)I
++    invoke-virtual {v2, v3}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+-    move-result v9
++    move-result v3
+ 
+-    and-int/lit8 v9, v9, 0x2
++    and-int/lit8 v3, v3, 0x2
+ 
+-    if-nez v9, :cond_11
++    if-nez v3, :cond_12
+ 
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+-    move-result v9
++    move-result v3
+ 
+     const/4 v12, 0x1
+ 
+-    if-le v9, v12, :cond_12
++    if-le v3, v12, :cond_13
+ 
+     invoke-virtual {v2, v12}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+-    move-result v9
++    move-result v3
+ 
+-    and-int/lit8 v9, v9, 0x2
++    and-int/lit8 v3, v3, 0x2
+ 
+-    if-eqz v9, :cond_12
++    if-eqz v3, :cond_13
+ 
+-    :cond_11
+-    if-nez v10, :cond_12
++    :cond_12
++    if-nez v10, :cond_13
+ 
+     const-string v2, "supportWifiAp5GBasedOnCountry is false"
+ 
+@@ -3590,24 +3548,24 @@
+ 
+     invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$6;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
+ 
+-    :cond_12
++    :cond_13
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+-    move-result v9
++    move-result v3
+ 
+     const/4 v10, 0x1
+ 
+-    if-ne v9, v10, :cond_14
++    if-ne v3, v10, :cond_15
+ 
+-    const/4 v9, 0x0
++    const/4 v3, 0x0
+ 
+-    invoke-virtual {v2, v9}, Landroid/util/SparseIntArray;->keyAt(I)I
++    invoke-virtual {v2, v3}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+     move-result v10
+ 
+     const/4 v12, 0x3
+ 
+-    if-ne v10, v12, :cond_13
++    if-ne v10, v12, :cond_14
+ 
+     const-string v2, "2.4 and 5 set in  single band"
+ 
+@@ -3619,14 +3577,14 @@
+ 
+     goto :goto_b
+ 
+-    :cond_13
+-    invoke-virtual {v2, v9}, Landroid/util/SparseIntArray;->keyAt(I)I
++    :cond_14
++    invoke-virtual {v2, v3}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+-    move-result v9
++    move-result v3
+ 
+     const/4 v10, 0x5
+ 
+-    if-ne v9, v10, :cond_16
++    if-ne v3, v10, :cond_17
+ 
+     const-string v2, "2.4 and 6 set in single band "
+ 
+@@ -3638,31 +3596,31 @@
+ 
+     goto :goto_b
+ 
+-    :cond_14
++    :cond_15
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+-    move-result v9
++    move-result v3
+ 
+     const/4 v10, 0x2
+ 
+-    if-ne v9, v10, :cond_16
++    if-ne v3, v10, :cond_17
+ 
+     sget-object v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDualAp5GHzChannels:Landroid/util/SparseIntArray;
+ 
+     goto :goto_b
+ 
+-    :cond_15
+-    const-string v9, "mChannels is null"
++    :cond_16
++    const-string v3, "mChannels is null"
+ 
+-    invoke-static {v5, v9}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v5, v3}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_16
++    :cond_17
+     :goto_b
+-    const-string v9, "vendor.wifiap.owe_security"
++    const-string v3, "vendor.wifiap.owe_security"
+ 
+-    invoke-static {v9, v7}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v3, v7}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    if-eqz v8, :cond_17
++    if-eqz v8, :cond_1a
+ 
+     invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
+ 
+@@ -3670,39 +3628,96 @@
+ 
+     const/4 v12, 0x5
+ 
+-    if-ne v10, v12, :cond_17
++    if-ne v10, v12, :cond_1a
+ 
+-    invoke-static {v9, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    const-string v10, "OWE is set but OWE SPF not enabled"
+ 
+-    :cond_17
+-    const-string v10, "vendor.wifiap.11acmode"
+-
+-    invoke-static {v10, v7}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v5, v10}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     if-eqz v2, :cond_19
+ 
++    const/4 v10, 0x0
++
++    invoke-virtual {v2, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
++
++    move-result v10
++
++    and-int/lit8 v10, v10, 0x4
++
++    if-nez v10, :cond_18
++
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+-    move-result v12
++    move-result v10
+ 
+-    const/4 v14, 0x1
++    const/4 v12, 0x1
++
++    if-le v10, v12, :cond_19
++
++    invoke-virtual {v2, v12}, Landroid/util/SparseIntArray;->keyAt(I)I
++
++    move-result v10
++
++    and-int/lit8 v10, v10, 0x4
++
++    if-eqz v10, :cond_19
++
++    :cond_18
++    const-string v2, "OWE is set but OWE is not supported, and 6GHz selected error"
++
++    invoke-static {v5, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
++
++    new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$9;
++
++    invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$9;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
++
++    const/4 v10, 0x0
++
++    const/4 v12, 0x0
+ 
+-    if-ne v12, v14, :cond_18
++    invoke-virtual {v9, v10, v12}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
++    goto :goto_c
++
++    :cond_19
++    const/4 v10, 0x0
++
++    const/4 v12, 0x0
++
++    invoke-virtual {v9, v10, v12}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
++
++    goto :goto_c
++
++    :cond_1a
+     const/4 v12, 0x0
+ 
++    :goto_c
++    const-string v10, "vendor.wifiap.11acmode"
++
++    invoke-static {v10, v7}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
++    if-eqz v2, :cond_1c
++
++    invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
++
++    move-result v14
++
++    const/4 v15, 0x1
++
++    if-ne v14, v15, :cond_1b
++
+     invoke-virtual {v2, v12}, Landroid/util/SparseIntArray;->keyAt(I)I
  
      move-result v12
  
-     if-ne v12, v10, :cond_8
+     and-int/lit8 v12, v12, 0x1
  
-+    move v12, v10
-+
-     goto :goto_6
+-    if-nez v12, :cond_19
++    if-nez v12, :cond_1c
  
-     :cond_8
--    move v10, v9
-+    move v12, v9
+-    :cond_18
++    :cond_1b
+     invoke-static {v10, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
  
-     :goto_6
--    iput-boolean v10, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
-+    iput-boolean v12, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
+-    :cond_19
++    :cond_1c
+     const-string v12, "SemSoftApConfiguration country:"
  
--    iget-object v10, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
-+    iget-object v12, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
+     const-string v14, " powersave:"
+@@ -3759,51 +3774,51 @@
  
--    invoke-virtual {v10}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-+    invoke-virtual {v12}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+     invoke-virtual {v4, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    move-result-object v10
-+    move-result-object v12
+-    invoke-static {v9, v7}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v3, v7}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  
--    const-string v12, "wifi_ap_last_2g_channel"
-+    const-string v13, "wifi_ap_last_2g_channel"
+-    move-result-object v9
++    move-result-object v3
  
--    invoke-static {v10, v12, v9}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
-+    invoke-static {v12, v13, v9}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-    invoke-virtual {v4, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    move-result v10
-+    move-result v12
+-    const-string v9, " 11acmode:"
++    const-string v3, " 11acmode:"
  
--    iput v10, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->channel2G:I
-+    iput v12, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->channel2G:I
+-    invoke-virtual {v4, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    if-gez v10, :cond_9
-+    if-gez v12, :cond_9
+     invoke-static {v10, v7}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  
-     iput v9, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->channel2G:I
+-    move-result-object v9
++    move-result-object v3
  
-     :cond_9
--    new-instance v10, Ljava/lang/StringBuilder;
-+    new-instance v12, Ljava/lang/StringBuilder;
+-    invoke-virtual {v4, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    const-string v12, "setSoftApConfiguration() mDisableRandomMac: "
-+    const-string v13, "setSoftApConfiguration() mDisableRandomMac: "
+-    const-string v9, " axmode:"
++    const-string v3, " axmode:"
  
--    invoke-direct {v10, v12}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-+    invoke-direct {v12, v13}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-    invoke-virtual {v4, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    iget-boolean v12, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
-+    iget-boolean v13, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
+     invoke-static {v11, v7}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  
--    invoke-virtual {v10, v12}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-    move-result-object v9
++    move-result-object v3
  
--    const-string v12, " mChannel "
-+    const-string v13, " mChannel "
+-    invoke-virtual {v4, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    invoke-virtual {v10, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
  
--    invoke-virtual {v10, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-    move-result-object v4
++    move-result-object v3
  
--    const-string v12, " mMAXClients "
-+    const-string v13, " mMAXClients "
+-    invoke-virtual {v1, v4}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->addMHSDumpLog(Ljava/lang/String;)V
++    invoke-virtual {v1, v3}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->addMHSDumpLog(Ljava/lang/String;)V
  
--    invoke-virtual {v10, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-    const-string v4, "SPRINT"
++    const-string v3, "SPRINT"
  
--    invoke-virtual {v10, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
- 
--    const-string v12, " mIs11Ax "
-+    const-string v13, " mIs11Ax "
- 
--    invoke-virtual {v10, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    iget-boolean v12, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mIs11Ax:Z
-+    iget-boolean v13, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mIs11Ax:Z
- 
--    invoke-static {v10, v12, v3}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ZLjava/lang/String;)V
-+    invoke-static {v12, v13, v3}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ZLjava/lang/String;)V
- 
--    const-string v10, "vendor.wifiap.pmf"
-+    const-string v12, "vendor.wifiap.pmf"
- 
--    const-string v12, "0"
-+    const-string v13, "0"
- 
--    invoke-static {v10, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v12, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     iget-object v14, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
- 
-@@ -3274,41 +3240,18 @@
- 
-     const-string v14, "1"
- 
--    const/4 v15, 0x1
-+    if-ne v9, v10, :cond_a
- 
--    if-ne v9, v15, :cond_a
--
--    invoke-static {v10, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v12, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     :cond_a
-     const-string v9, "vendor.wifiap.axmode"
- 
--    invoke-static {v9, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
--
--    iget-object v15, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
-+    invoke-static {v9, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
--    invoke-virtual {v15}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-+    if-nez v8, :cond_b
- 
--    move-result-object v15
--
--    move-object/from16 p1, v7
--
--    const/4 v7, 0x0
--
--    invoke-static {v15, v13, v7}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
--
--    move-result v7
--
--    const/4 v13, 0x1
--
--    if-ne v7, v13, :cond_b
--
--    invoke-static {v9, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
--
--    :cond_b
--    if-nez v8, :cond_c
--
--    if-nez v11, :cond_c
-+    if-nez v11, :cond_b
- 
-     const-string v4, " only 2G supported countries"
- 
-@@ -3320,36 +3263,47 @@
- 
-     goto/16 :goto_7
- 
--    :cond_c
-+    :cond_b
-     if-eqz v4, :cond_13
- 
-     invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
--    const/4 v7, 0x0
-+    move-result v15
- 
--    invoke-virtual {v4, v7}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    if-le v15, v10, :cond_c
- 
--    move-result v7
-+    const-string v4, " SPF dualAp is not enabled"
- 
--    and-int/lit8 v7, v7, 0x4
-+    invoke-static {v3, v4}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
- 
--    if-nez v7, :cond_d
-+    new-instance v4, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$4;
- 
--    invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
-+    invoke-direct {v4, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$4;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
- 
--    move-result v7
-+    :cond_c
-+    const/4 v15, 0x0
- 
--    const/4 v13, 0x1
-+    invoke-virtual {v4, v15}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    if-le v7, v13, :cond_e
-+    move-result v15
- 
--    invoke-virtual {v4, v13}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    and-int/lit8 v15, v15, 0x4
- 
--    move-result v7
-+    if-nez v15, :cond_d
-+
-+    invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
-+
-+    move-result v15
-+
-+    if-le v15, v10, :cond_e
- 
--    and-int/lit8 v7, v7, 0x4
-+    invoke-virtual {v4, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    if-eqz v7, :cond_e
-+    move-result v15
-+
-+    and-int/lit8 v15, v15, 0x4
-+
-+    if-eqz v15, :cond_e
- 
-     :cond_d
-     if-nez v11, :cond_e
-@@ -3363,31 +3317,29 @@
-     invoke-direct {v4, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$5;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
- 
-     :cond_e
--    const/4 v7, 0x0
-+    const/4 v11, 0x0
- 
--    invoke-virtual {v4, v7}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    invoke-virtual {v4, v11}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    move-result v7
-+    move-result v11
- 
--    and-int/lit8 v7, v7, 0x2
-+    and-int/lit8 v11, v11, 0x2
- 
--    if-nez v7, :cond_f
-+    if-nez v11, :cond_f
- 
-     invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
--    move-result v7
--
--    const/4 v11, 0x1
-+    move-result v11
- 
--    if-le v7, v11, :cond_10
-+    if-le v11, v10, :cond_10
- 
--    invoke-virtual {v4, v11}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    invoke-virtual {v4, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    move-result v7
-+    move-result v11
- 
--    and-int/lit8 v7, v7, 0x2
-+    and-int/lit8 v11, v11, 0x2
- 
--    if-eqz v7, :cond_10
-+    if-eqz v11, :cond_10
- 
-     :cond_f
-     if-nez v8, :cond_10
-@@ -3403,21 +3355,19 @@
-     :cond_10
-     invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
--    move-result v7
--
--    const/4 v8, 0x1
-+    move-result v8
- 
--    if-ne v7, v8, :cond_12
-+    if-ne v8, v10, :cond_12
- 
--    const/4 v7, 0x0
-+    const/4 v8, 0x0
- 
--    invoke-virtual {v4, v7}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    invoke-virtual {v4, v8}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    move-result v8
-+    move-result v11
- 
--    const/4 v11, 0x3
-+    const/4 v15, 0x3
- 
--    if-ne v8, v11, :cond_11
-+    if-ne v11, v15, :cond_11
- 
-     const-string v4, "2.4 and 5 set in  single band"
- 
-@@ -3430,13 +3380,13 @@
-     goto :goto_7
- 
-     :cond_11
--    invoke-virtual {v4, v7}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    invoke-virtual {v4, v8}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
--    move-result v7
-+    move-result v8
- 
--    const/4 v8, 0x5
-+    const/4 v11, 0x5
- 
--    if-ne v7, v8, :cond_14
-+    if-ne v8, v11, :cond_14
- 
-     const-string v4, "2.4 and 6 set in single band "
- 
-@@ -3451,125 +3401,180 @@
-     :cond_12
-     invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
--    move-result v7
-+    move-result v8
- 
--    const/4 v8, 0x2
-+    const/4 v11, 0x2
- 
--    if-ne v7, v8, :cond_14
-+    if-ne v8, v11, :cond_14
- 
-     sget-object v4, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDualAp5GHzChannels:Landroid/util/SparseIntArray;
- 
-     goto :goto_7
- 
-     :cond_13
--    const-string v7, "mChannels is null"
-+    const-string v8, "mChannels is null"
- 
--    invoke-static {v3, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-+    invoke-static {v3, v8}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
-     :cond_14
-     :goto_7
--    const-string v7, "vendor.wifiap.owe_security"
-+    const-string v8, "vendor.wifiap.owe_security"
- 
--    invoke-static {v7, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v8, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
--    if-eqz v6, :cond_15
-+    if-eqz v6, :cond_17
- 
-     invoke-virtual {v6}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
- 
--    move-result v8
-+    move-result v11
- 
--    const/4 v11, 0x5
-+    const/4 v15, 0x5
- 
--    if-ne v8, v11, :cond_15
-+    if-ne v11, v15, :cond_17
- 
--    invoke-static {v7, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    const-string v11, "OWE is set but OWE SPF not enabled"
- 
--    :cond_15
--    const-string v8, "vendor.wifiap.11acmode"
-+    invoke-static {v3, v11}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
--    invoke-static {v8, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    if-eqz v4, :cond_16
- 
--    if-eqz v4, :cond_17
-+    const/4 v11, 0x0
- 
--    invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
-+    invoke-virtual {v4, v11}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
-     move-result v11
- 
--    const/4 v13, 0x1
-+    and-int/lit8 v11, v11, 0x4
- 
--    if-ne v11, v13, :cond_16
-+    if-nez v11, :cond_15
- 
--    const/4 v11, 0x0
-+    invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
--    invoke-virtual {v4, v11}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    move-result v11
-+
-+    if-le v11, v10, :cond_16
-+
-+    invoke-virtual {v4, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
-     move-result v11
- 
--    and-int/lit8 v11, v11, 0x1
-+    and-int/lit8 v11, v11, 0x4
-+
-+    if-eqz v11, :cond_16
-+
-+    :cond_15
-+    const-string v4, "OWE is set but OWE is not supported, and 6GHz selected error"
-+
-+    invoke-static {v3, v4}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
-+
-+    new-instance v4, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$9;
-+
-+    invoke-direct {v4, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$9;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
-+
-+    const/4 v11, 0x0
-+
-+    const/4 v15, 0x0
- 
--    if-nez v11, :cond_17
-+    invoke-virtual {v7, v11, v15}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+
-+    goto :goto_8
- 
-     :cond_16
--    invoke-static {v8, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    const/4 v11, 0x0
-+
-+    const/4 v15, 0x0
-+
-+    invoke-virtual {v7, v11, v15}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+
-+    goto :goto_8
- 
-     :cond_17
--    const-string v11, "SemSoftApConfiguration country:"
-+    const/4 v15, 0x0
-+
-+    :goto_8
-+    const-string v11, "vendor.wifiap.11acmode"
-+
-+    invoke-static {v11, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+
-+    move-object/from16 p1, v7
-+
-+    if-eqz v4, :cond_19
- 
--    const-string v13, " powersave:"
-+    invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
-+
-+    move-result v7
- 
--    invoke-static {v11, v2, v13}, Lcom/google/gson/ToNumberPolicy$3$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    if-ne v7, v10, :cond_18
-+
-+    invoke-virtual {v4, v15}, Landroid/util/SparseIntArray;->keyAt(I)I
-+
-+    move-result v7
-+
-+    and-int/2addr v7, v10
-+
-+    if-nez v7, :cond_19
-+
-+    :cond_18
-+    invoke-static {v11, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+
-+    :cond_19
-+    const-string v7, "SemSoftApConfiguration country:"
-+
-+    const-string v15, " powersave:"
-+
-+    invoke-static {v7, v2, v15}, Lcom/google/gson/ToNumberPolicy$3$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
-     move-result-object v2
- 
--    iget-boolean v11, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mPowerSaveChecked:Z
-+    iget-boolean v7, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mPowerSaveChecked:Z
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
- 
--    const-string v11, " mDisableRandomMac:"
-+    const-string v7, " mDisableRandomMac:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    iget-boolean v11, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
-+    iget-boolean v7, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
- 
--    const-string v11, " config_channels:"
-+    const-string v7, " config_channels:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
-     invoke-virtual {v2, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
- 
--    const-string v11, " mIs11Ax:"
-+    const-string v7, " mIs11Ax:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    iget-boolean v11, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mIs11Ax:Z
-+    iget-boolean v7, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mIs11Ax:Z
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
- 
--    const-string v11, " last2Gch:"
-+    const-string v7, " last2Gch:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    iget v11, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->channel2G:I
-+    iget v7, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->channel2G:I
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
- 
--    const-string v11, " requirePMF:"
-+    const-string v7, " requirePMF:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-static {v10, v12}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-static {v12, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
--    move-result-object v11
-+    move-result-object v7
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    const-string v11, " owe_security:"
-+    const-string v7, " owe_security:"
- 
--    invoke-virtual {v2, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-static {v7, v12}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-static {v8, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v7
- 
-@@ -3579,7 +3584,7 @@
- 
-     invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-static {v8, v12}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-static {v11, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v7
- 
-@@ -3589,7 +3594,7 @@
- 
-     invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-static {v9, v12}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-static {v9, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v7
- 
-@@ -3607,7 +3612,7 @@
+-    invoke-virtual {v4, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    invoke-virtual {v3, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
      move-result v0
  
--    if-eqz v0, :cond_19
-+    if-eqz v0, :cond_1b
+-    if-eqz v0, :cond_1b
++    if-eqz v0, :cond_1f
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mContext:Landroid/content/Context;
  
-@@ -3623,9 +3628,7 @@
+-    const-string v4, "phone"
++    const-string v3, "phone"
  
-     move-result v2
+-    invoke-virtual {v0, v4}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-virtual {v0, v3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
  
--    const/4 v7, 0x1
--
--    if-eq v7, v2, :cond_18
-+    if-eq v10, v2, :cond_1a
+     move-result-object v0
+ 
+@@ -3811,63 +3826,72 @@
  
      invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getNetworkType()I
  
-@@ -3633,7 +3636,7 @@
+-    move-result v4
++    move-result v3
  
-     const/4 v7, 0x2
+-    const/4 v9, 0x1
++    const/4 v4, 0x1
  
--    if-eq v7, v2, :cond_18
-+    if-eq v7, v2, :cond_1a
+-    if-eq v9, v4, :cond_1a
++    if-eq v4, v3, :cond_1e
  
-     const/16 v2, 0x10
+     invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getNetworkType()I
  
-@@ -3641,20 +3644,20 @@
+-    move-result v4
++    move-result v3
  
-     move-result v7
+-    const/4 v9, 0x2
++    const/4 v4, 0x2
  
--    if-eq v2, v7, :cond_18
-+    if-eq v2, v7, :cond_1a
+-    if-eq v9, v4, :cond_1a
++    if-eq v4, v3, :cond_1e
+ 
+-    const/16 v4, 0x10
++    const/16 v3, 0x10
+ 
+     invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getNetworkType()I
+ 
+-    move-result v9
++    move-result v4
+ 
+-    if-eq v4, v9, :cond_1a
++    if-eq v3, v4, :cond_1e
  
      invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getNetworkType()I
  
      move-result v0
  
--    if-nez v0, :cond_1a
-+    if-nez v0, :cond_1c
+-    if-nez v0, :cond_1c
++    if-nez v0, :cond_1d
  
--    :cond_18
--    const/4 v5, 0x1
-+    :cond_1a
-+    move v5, v10
+-    :cond_1a
++    goto :goto_d
++
++    :cond_1d
++    move/from16 v3, p1
++
++    goto :goto_e
++
++    :cond_1e
++    :goto_d
+     const/4 v3, 0x1
  
--    goto :goto_8
-+    goto :goto_9
+-    goto :goto_c
++    goto :goto_e
  
--    :cond_19
-+    :cond_1b
+-    :cond_1b
++    :cond_1f
      invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
  
      move-result-object v0
-@@ -3669,15 +3672,15 @@
  
-     move-result v5
+-    const-string v4, "CscFeature_Wifi_MaxClient4MobileApNetExtension"
++    const-string v3, "CscFeature_Wifi_MaxClient4MobileApNetExtension"
  
--    :cond_1a
--    :goto_8
-+    :cond_1c
-+    :goto_9
+-    invoke-virtual {v0, v4}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-virtual {v0, v3}, Lcom/samsung/android/feature/SemCscFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
++    move/from16 v3, p1
++
+     invoke-direct {v1, v0, v3}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->setLocalConfigMaxClient(Ljava/lang/String;I)I
+ 
+     move-result v3
+ 
+-    :cond_1c
+-    :goto_c
++    :goto_e
      const-string v0, "maxClient = "
  
-     invoke-static {v0, v5, v3}, Lcom/samsung/android/server/wifi/SemClientModeManager$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ILjava/lang/String;)V
+     invoke-static {v0, v3, v5}, Lcom/samsung/android/server/wifi/SemClientModeManager$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ILjava/lang/String;)V
  
      sget-boolean v0, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->MHSDBG:Z
  
--    if-eqz v0, :cond_1e
-+    if-eqz v0, :cond_20
+-    if-eqz v0, :cond_20
++    if-eqz v0, :cond_23
  
-     const-string v2, "vendor.wifiap.debug.channel"
+     const-string v4, "vendor.wifiap.debug.channel"
  
-@@ -3693,13 +3696,13 @@
+@@ -3875,21 +3899,21 @@
  
-     const-string v8, ""
+     move-result-object v4
  
--    if-eqz v2, :cond_1d
-+    if-eqz v2, :cond_1f
+-    const-string v9, "vendor.wifiap.debug.maxclient"
++    const-string v10, "vendor.wifiap.debug.maxclient"
  
-     invoke-virtual {v2, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-    invoke-static {v9}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v10}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
  
-     move-result v11
+-    move-result-object v9
++    move-result-object v10
  
--    if-nez v11, :cond_1d
-+    if-nez v11, :cond_1f
+-    const-string v10, ""
++    const-string v12, ""
  
-     invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+-    if-eqz v4, :cond_1f
++    if-eqz v4, :cond_22
  
-@@ -3707,31 +3710,31 @@
+-    invoke-virtual {v4, v10}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    invoke-virtual {v4, v12}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+-    move-result v12
++    move-result v14
+ 
+-    if-nez v12, :cond_1f
++    if-nez v14, :cond_22
+ 
+     invoke-static {v4}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+ 
+@@ -3897,42 +3921,42 @@
  
      const/16 v4, 0x3e7
  
--    if-ne v2, v4, :cond_1b
-+    if-ne v2, v4, :cond_1d
+-    if-ne v2, v4, :cond_1d
++    if-ne v2, v4, :cond_20
  
      new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$10;
  
      invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$10;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
  
--    goto :goto_9
-+    goto :goto_a
+-    goto :goto_d
++    goto :goto_f
  
--    :cond_1b
-+    :cond_1d
+-    :cond_1d
++    :cond_20
      const/16 v4, 0x95
  
--    if-ne v2, v4, :cond_1c
-+    if-ne v2, v4, :cond_1e
+-    if-ne v2, v4, :cond_1e
++    if-ne v2, v4, :cond_21
  
      new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$11;
  
      invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$11;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
  
--    goto :goto_9
-+    goto :goto_a
+-    goto :goto_d
++    goto :goto_f
  
--    :cond_1c
-+    :cond_1e
+-    :cond_1e
++    :cond_21
      new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$12;
  
      invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$12;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
  
--    :goto_9
-+    :goto_a
+-    :goto_d
++    :goto_f
      new-instance v4, Ljava/lang/StringBuilder;
  
-     const-string v11, "channel is changed "
-@@ -3752,14 +3755,14 @@
+-    const-string v12, "channel is changed "
++    const-string v14, "channel is changed "
  
-     move-object v4, v2
+-    invoke-direct {v4, v12}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v4, v14}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
  
--    :cond_1d
--    if-eqz v7, :cond_1e
-+    :cond_1f
-+    if-eqz v7, :cond_20
+     invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
  
-     invoke-virtual {v7, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-    const-string v12, " apBand(1:2g , 2:5g , 4:6g, -1:any) :"
++    const-string v14, " apBand(1:2g , 2:5g , 4:6g, -1:any) :"
  
-     move-result v2
+-    invoke-virtual {v4, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v4, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    if-nez v2, :cond_1e
-+    if-nez v2, :cond_20
+     invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
  
-     invoke-static {v7}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+@@ -3940,24 +3964,24 @@
  
-@@ -3779,16 +3782,16 @@
+     invoke-static {v5, v4}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
  
-     invoke-static {v3, v2}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
- 
--    :cond_1e
-+    :cond_20
-     iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mWifiApServiceImpl:Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;
- 
--    if-eqz v2, :cond_21
-+    if-eqz v2, :cond_23
- 
-     invoke-virtual {v2}, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->supportWifiAp6GBasedOnCountry()Z
- 
-     move-result v2
- 
--    if-eqz v2, :cond_21
-+    if-eqz v2, :cond_23
- 
-     const/4 v2, 0x0
- 
-@@ -3798,41 +3801,34 @@
- 
-     and-int/lit8 v2, v2, 0x4
- 
--    if-nez v2, :cond_1f
-+    if-nez v2, :cond_21
- 
-     invoke-virtual {v4}, Landroid/util/SparseIntArray;->size()I
- 
-     move-result v2
- 
--    const/4 v7, 0x1
--
--    if-le v2, v7, :cond_21
-+    if-le v2, v10, :cond_23
- 
--    invoke-virtual {v4, v7}, Landroid/util/SparseIntArray;->keyAt(I)I
-+    invoke-virtual {v4, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
- 
-     move-result v2
- 
-     and-int/lit8 v2, v2, 0x4
- 
--    if-eqz v2, :cond_21
-+    if-eqz v2, :cond_23
- 
--    goto :goto_a
--
 -    :cond_1f
--    const/4 v7, 0x1
--
--    :goto_a
-+    :cond_21
-     invoke-static {v9, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+-    if-eqz v9, :cond_20
++    :cond_22
++    if-eqz v10, :cond_23
  
--    invoke-static {v10, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v12, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+-    invoke-virtual {v9, v10}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    invoke-virtual {v10, v12}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
--    if-eqz v6, :cond_20
-+    if-eqz v6, :cond_22
+     move-result v4
  
-     invoke-virtual {v6}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
+-    if-nez v4, :cond_20
++    if-nez v4, :cond_23
  
-     move-result v2
+-    invoke-static {v9}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++    invoke-static {v10}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
--    if-ne v2, v7, :cond_20
-+    if-ne v2, v10, :cond_22
+     move-result v3
  
-     const-string v2, "6GHz selected, but WPA2 is set, error"
+     new-instance v4, Ljava/lang/StringBuilder;
  
-@@ -3850,33 +3846,31 @@
+-    const-string v9, "maxclient is changed "
++    const-string v10, "maxclient is changed "
  
-     goto :goto_b
+-    invoke-direct {v4, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v4, v10}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+ 
+     invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+@@ -3967,16 +3991,16 @@
+ 
+     invoke-static {v5, v4}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
  
 -    :cond_20
-+    :cond_22
-     move-object/from16 v7, p1
++    :cond_23
+     iget-object v4, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mWifiApServiceImpl:Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;
  
--    if-eqz v6, :cond_22
-+    if-eqz v6, :cond_24
+-    if-eqz v4, :cond_23
++    if-eqz v4, :cond_26
  
-     invoke-virtual {v6}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
+     invoke-virtual {v4}, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->supportWifiAp6GBasedOnCountry()Z
  
-     move-result v2
+     move-result v4
  
--    if-nez v2, :cond_22
-+    if-nez v2, :cond_24
+-    if-eqz v4, :cond_23
++    if-eqz v4, :cond_26
  
-     const-string v2, "6GHz selected, but OPEN type is set, error"
+     const/4 v4, 0x0
  
-     invoke-static {v3, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+@@ -3986,41 +4010,41 @@
  
--    const/4 v2, 0x5
-+    new-instance v4, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$13;
+     and-int/lit8 v4, v4, 0x4
+ 
+-    if-nez v4, :cond_21
++    if-nez v4, :cond_24
+ 
+     invoke-virtual {v2}, Landroid/util/SparseIntArray;->size()I
+ 
+     move-result v4
+ 
+-    const/4 v9, 0x1
++    const/4 v10, 0x1
+ 
+-    if-le v4, v9, :cond_23
++    if-le v4, v10, :cond_26
+ 
+-    invoke-virtual {v2, v9}, Landroid/util/SparseIntArray;->keyAt(I)I
++    invoke-virtual {v2, v10}, Landroid/util/SparseIntArray;->keyAt(I)I
+ 
+     move-result v4
+ 
+     and-int/lit8 v4, v4, 0x4
+ 
+-    if-eqz v4, :cond_23
++    if-eqz v4, :cond_26
+ 
+-    goto :goto_e
++    goto :goto_10
+ 
+-    :cond_21
+-    const/4 v9, 0x1
++    :cond_24
++    const/4 v10, 0x1
+ 
+-    :goto_e
++    :goto_10
+     invoke-static {v11, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+ 
+     invoke-static {v6, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    if-eqz v8, :cond_22
++    if-eqz v8, :cond_25
+ 
+     invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
+ 
+     move-result v4
+ 
+-    if-ne v4, v9, :cond_22
++    if-ne v4, v10, :cond_25
+ 
+     const-string v4, "6GHz selected, but WPA2 is set, error"
+ 
+@@ -4032,40 +4056,29 @@
+ 
+     const/4 v6, 0x3
+ 
+-    move-object/from16 v9, p1
+-
+     invoke-virtual {v9, v4, v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    goto :goto_f
+-
+-    :cond_22
+-    move-object/from16 v9, p1
++    goto :goto_11
+ 
+-    if-eqz v8, :cond_24
++    :cond_25
++    if-eqz v8, :cond_26
+ 
+     invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration;->getSecurityType()I
+ 
+     move-result v4
+ 
+-    if-nez v4, :cond_24
++    if-nez v4, :cond_26
+ 
+-    const-string v4, "6GHz selected, but OPEN type is set, error"
++    const-string v2, "6GHz selected, but OPEN type is set, error"
+ 
+-    invoke-static {v5, v4}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v5, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const/4 v4, 0x5
++    new-instance v2, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$13;
  
 -    const/4 v6, 0x0
 -
--    invoke-virtual {v7, v6, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+    invoke-direct {v4, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$13;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
+-    invoke-virtual {v9, v6, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+-
+-    goto :goto_f
+-
+-    :cond_23
+-    move-object/from16 v9, p1
++    invoke-direct {v2, v1}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration$13;-><init>(Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;)V
  
-     goto :goto_b
+-    :cond_24
+-    :goto_f
++    :cond_26
++    :goto_11
+     const-string v4, "vendor.wifiap.maxclient"
  
--    :cond_21
-+    :cond_23
-     move-object/from16 v7, p1
- 
--    :cond_22
-+    :cond_24
-     :goto_b
-     const-string v2, "vendor.wifiap.maxclient"
- 
-@@ -3912,7 +3906,7 @@
+     invoke-static {v3}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+@@ -4100,7 +4113,7 @@
  
      move-result v6
  
--    if-nez v6, :cond_23
-+    if-nez v6, :cond_25
+-    if-nez v6, :cond_25
++    if-nez v6, :cond_27
  
      const-string v6, "Add Vendor specific IE DD040000F0FE"
  
-@@ -3932,7 +3926,7 @@
+@@ -4120,7 +4133,7 @@
  
-     move-result-object v2
- 
--    :cond_23
-+    :cond_25
-     const-string v6, "DD080050F21102000000"
- 
-     invoke-static {v2, v6}, Lcom/samsung/android/server/wifi/SemClientModeImpl$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-@@ -3945,7 +3939,7 @@
- 
-     const-string v6, "vendor.wifiap.5gindoor"
- 
--    invoke-static {v6, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v6, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     const/4 v8, 0x2
- 
-@@ -3955,7 +3949,7 @@
- 
-     const/4 v9, -0x1
- 
--    if-le v8, v9, :cond_24
-+    if-le v8, v9, :cond_26
- 
-     iget-object v8, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
- 
-@@ -3963,20 +3957,20 @@
- 
-     move-result v8
- 
--    if-eqz v8, :cond_24
-+    if-eqz v8, :cond_26
- 
-     invoke-static {v6, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
--    :cond_24
-+    :cond_26
-     invoke-virtual {v7, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
-     const-string v4, "2"
- 
--    if-eqz v0, :cond_26
-+    if-eqz v0, :cond_28
- 
-     const-string v0, "vendor.wifiap.debug.dualap"
- 
--    invoke-static {v0, v12}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-+    invoke-static {v0, v13}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
- 
-     move-result-object v0
- 
-@@ -3984,7 +3978,7 @@
- 
-     move-result v6
- 
--    if-eqz v6, :cond_25
-+    if-eqz v6, :cond_27
- 
-     const-string v6, "Enabling in  2.4+ 5GHz  DualApMode"
- 
-@@ -3994,12 +3988,12 @@
- 
-     invoke-virtual {v7, v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+     move-result-object v4
  
 -    :cond_25
 +    :cond_27
-     invoke-virtual {v0, v4}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+     const-string v6, "DD080050F21102000000"
  
-     move-result v0
+     invoke-static {v4, v6}, Lcom/samsung/android/server/wifi/SemClientModeImpl$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+@@ -4143,7 +4156,7 @@
  
--    if-eqz v0, :cond_26
-+    if-eqz v0, :cond_28
+     const/4 v10, -0x1
  
-     const-string v0, "Enabling in 2.4+ 6GHz DualApMode"
+-    if-le v8, v10, :cond_26
++    if-le v8, v10, :cond_28
  
-@@ -4009,18 +4003,16 @@
+     iget-object v8, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+@@ -4151,16 +4164,16 @@
+ 
+     move-result v8
+ 
+-    if-eqz v8, :cond_26
++    if-eqz v8, :cond_28
+ 
+     invoke-static {v6, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
  
 -    :cond_26
 +    :cond_28
-     iget-boolean v0, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
+     invoke-virtual {v9, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    if-nez v0, :cond_27
-+    if-nez v0, :cond_29
+     const-string v2, "2"
  
-     const-string v0, "setSoftApConfiguration() setBssid(null). randomMac will be set in WifiApConfigStore randomizeBssidIfUnset()"
+-    if-eqz v0, :cond_28
++    if-eqz v0, :cond_2a
  
-     invoke-static {v3, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+     const-string v0, "vendor.wifiap.debug.dualap"
  
--    const/4 v0, 0x1
--
--    invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+    invoke-virtual {v7, v10}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
+@@ -4172,7 +4185,7 @@
  
-     const/4 v0, 0x0
+     move-result v6
  
-@@ -4028,9 +4020,9 @@
+-    if-eqz v6, :cond_27
++    if-eqz v6, :cond_29
  
-     const/4 v0, 0x0
+     const-string v6, "Enabling in  2.4+ 5GHz  DualApMode"
  
--    goto/16 :goto_10
-+    goto/16 :goto_f
+@@ -4182,12 +4195,12 @@
+ 
+     invoke-virtual {v9, v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
  
 -    :cond_27
 +    :cond_29
-     invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
+     invoke-virtual {v0, v2}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
  
-     move-result-object v0
-@@ -4045,7 +4037,7 @@
+     move-result v0
  
-     array-length v6, v0
+-    if-eqz v0, :cond_28
++    if-eqz v0, :cond_2a
  
--    if-lez v6, :cond_28
-+    if-lez v6, :cond_2a
+     const-string v0, "Enabling in 2.4+ 6GHz DualApMode"
  
-     const/4 v6, 0x0
+@@ -4197,10 +4210,10 @@
  
-@@ -4057,15 +4049,15 @@
- 
-     move-result v9
- 
--    if-nez v9, :cond_29
-+    if-nez v9, :cond_2b
- 
-     invoke-virtual {v0}, Ljava/lang/String;->length()I
- 
-     move-result v9
- 
--    const/16 v10, 0xc
-+    const/16 v11, 0xc
- 
--    if-ne v9, v10, :cond_29
-+    if-ne v9, v11, :cond_2b
- 
-     const/4 v9, 0x2
- 
-@@ -4103,9 +4095,7 @@
- 
-     const/16 v6, 0xa
- 
--    const/16 v9, 0xc
--
--    invoke-virtual {v0, v6, v9}, Ljava/lang/String;->subSequence(II)Ljava/lang/CharSequence;
-+    invoke-virtual {v0, v6, v11}, Ljava/lang/String;->subSequence(II)Ljava/lang/CharSequence;
- 
-     move-result-object v20
- 
-@@ -4123,14 +4113,14 @@
- 
-     goto :goto_c
+     invoke-virtual {v9, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
  
 -    :cond_28
 +    :cond_2a
+     iget-boolean v0, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mDisableRandomMac:Z
+ 
+-    if-nez v0, :cond_29
++    if-nez v0, :cond_2b
+ 
+     const-string v0, "setSoftApConfiguration() setBssid(null). randomMac will be set in WifiApConfigStore randomizeBssidIfUnset()"
+ 
+@@ -4216,9 +4229,9 @@
+ 
      const/4 v0, 0x0
+ 
+-    goto/16 :goto_13
++    goto/16 :goto_14
  
 -    :cond_29
 +    :cond_2b
-     :goto_c
+     invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
+ 
+     move-result-object v0
+@@ -4233,7 +4246,7 @@
+ 
+     array-length v6, v0
+ 
+-    if-lez v6, :cond_2a
++    if-lez v6, :cond_2c
+ 
+     const/4 v6, 0x0
+ 
+@@ -4245,7 +4258,7 @@
+ 
+     move-result v10
+ 
+-    if-nez v10, :cond_2b
++    if-nez v10, :cond_2d
+ 
+     invoke-virtual {v0}, Ljava/lang/String;->length()I
+ 
+@@ -4253,7 +4266,7 @@
+ 
+     const/16 v11, 0xc
+ 
+-    if-ne v10, v11, :cond_2b
++    if-ne v10, v11, :cond_2d
+ 
+     const/4 v10, 0x2
+ 
+@@ -4305,16 +4318,16 @@
+ 
+     move-result-object v0
+ 
+-    goto :goto_10
++    goto :goto_12
+ 
+-    :cond_2a
++    :cond_2c
+     const/4 v0, 0x0
+ 
+-    :cond_2b
+-    :goto_10
++    :cond_2d
++    :goto_12
      iget-boolean v6, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->isJDMDevice:Z
  
--    if-eqz v6, :cond_2a
-+    if-eqz v6, :cond_2c
+-    if-eqz v6, :cond_2c
++    if-eqz v6, :cond_2e
  
      invoke-static {}, Lcom/samsung/android/wifi/SemWifiApMacInfo;->getInstance()Lcom/samsung/android/wifi/SemWifiApMacInfo;
  
-@@ -4152,16 +4142,16 @@
+@@ -4336,16 +4349,16 @@
  
-     invoke-static {v6, v8, v3}, Lcom/samsung/android/mcf/continuity/common/DLog$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+     invoke-static {v6, v8, v5}, Lcom/samsung/android/mcf/continuity/common/DLog$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
  
--    :cond_2a
--    if-eqz v0, :cond_2b
-+    :cond_2c
-+    if-eqz v0, :cond_2d
+-    :cond_2c
+-    if-eqz v0, :cond_2d
++    :cond_2e
++    if-eqz v0, :cond_2f
  
      invoke-virtual {v0}, Ljava/lang/String;->length()I
  
      move-result v6
  
--    if-gtz v6, :cond_2c
-+    if-gtz v6, :cond_2e
+-    if-gtz v6, :cond_2e
++    if-gtz v6, :cond_30
  
--    :cond_2b
-+    :cond_2d
+-    :cond_2d
++    :cond_2f
      invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
  
      move-result-object v0
-@@ -4178,8 +4168,8 @@
+@@ -4362,8 +4375,8 @@
  
-     invoke-static {v6, v0, v3}, Lcom/samsung/android/server/wifi/SemClientModeManager$$ExternalSyntheticOutline0;->m$1(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+     invoke-static {v6, v0, v5}, Lcom/samsung/android/server/wifi/SemClientModeManager$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  
--    :cond_2c
+-    :cond_2e
 -    if-eqz v0, :cond_32
-+    :cond_2e
++    :cond_30
 +    if-eqz v0, :cond_33
  
      invoke-virtual {v0}, Ljava/lang/String;->length()I
  
-@@ -4187,16 +4177,16 @@
+@@ -4371,33 +4384,13 @@
  
      const/16 v8, 0x11
  
--    if-eq v6, v8, :cond_2d
-+    if-eq v6, v8, :cond_2f
- 
--    goto/16 :goto_e
-+    goto/16 :goto_d
- 
--    :cond_2d
-+    :cond_2f
-     iget-boolean v6, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->isJDMDevice:Z
- 
-     const-string v8, ", apMac: "
- 
--    if-eqz v6, :cond_2e
-+    if-eqz v6, :cond_30
- 
-     new-instance v6, Ljava/lang/StringBuilder;
- 
-@@ -4234,10 +4224,10 @@
- 
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
--    goto/16 :goto_10
-+    goto/16 :goto_f
- 
--    :cond_2e
--    if-eqz v6, :cond_2f
-+    :cond_30
-+    if-eqz v6, :cond_31
- 
-     new-instance v6, Ljava/lang/StringBuilder;
- 
-@@ -4279,31 +4269,11 @@
- 
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
--    goto :goto_10
+-    if-eq v6, v8, :cond_2f
+-
+-    goto :goto_12
 -
 -    :cond_2f
--    invoke-virtual {v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+-    invoke-virtual {v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
 -
 -    move-result-object v6
 -
@@ -2336,100 +2202,69 @@ index f50d026..7917ad7 100644
 -
 -    array-length v6, v6
 -
--    const/4 v9, 0x1
+-    const/4 v8, 0x1
 -
--    if-le v6, v9, :cond_30
+-    if-le v6, v8, :cond_30
 -
 -    const/4 v6, 0x1
--
--    goto :goto_d
-+    goto :goto_f
++    if-eq v6, v8, :cond_31
+ 
+-    goto :goto_11
++    goto :goto_13
  
 -    :cond_30
 +    :cond_31
      const/4 v6, 0x0
  
--    :goto_d
+-    :goto_11
      invoke-direct {v1, v0, v6}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->convertApMac(Ljava/lang/String;Z)Ljava/lang/String;
  
      move-result-object v6
-@@ -4312,13 +4282,13 @@
+@@ -4406,7 +4399,7 @@
  
-     move-result v9
+     move-result v8
  
--    if-nez v9, :cond_31
-+    if-nez v9, :cond_32
+-    if-nez v8, :cond_31
++    if-nez v8, :cond_32
  
-     new-instance v9, Ljava/lang/StringBuilder;
+     new-instance v8, Ljava/lang/StringBuilder;
  
--    const-string v10, "setSoftApConfiguration() staMac: "
-+    const-string v11, "setSoftApConfiguration() staMac: "
+@@ -4450,9 +4443,9 @@
  
--    invoke-direct {v9, v10}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-+    invoke-direct {v9, v11}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+     invoke-virtual {v9, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
-     invoke-direct {v1, v0}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->getTruncatedMAC(Ljava/lang/String;)Ljava/lang/String;
- 
-@@ -4354,46 +4324,42 @@
- 
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
--    goto :goto_10
-+    goto :goto_f
+-    goto :goto_13
++    goto :goto_14
  
 -    :cond_31
 +    :cond_32
      const/4 v0, 0x0
  
      const/4 v6, 0x0
+@@ -4463,10 +4456,10 @@
  
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBssid(Landroid/net/MacAddress;)Landroid/net/wifi/SoftApConfiguration$Builder;
+     invoke-virtual {v9, v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    const/4 v0, 0x1
-+    invoke-virtual {v7, v10}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
+-    goto :goto_13
++    goto :goto_14
  
--    invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+    goto :goto_e
- 
--    goto :goto_f
--
 -    :cond_32
--    :goto_e
+-    :goto_12
 +    :cond_33
-+    :goto_d
++    :goto_13
      const/4 v0, 0x0
  
      const/4 v6, 0x0
+@@ -4481,7 +4474,7 @@
  
--    const/4 v8, 0x1
-+    const-string v8, "setSoftApConfiguration() SemWifiChipInfo.getMacAddress is invalid, randomMac will be set in WifiApConfigStore randomizeBssidIfUnset()"
+     invoke-virtual {v9, v8}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    const-string v9, "setSoftApConfiguration() SemWifiChipInfo.getMacAddress is invalid, randomMac will be set in WifiApConfigStore randomizeBssidIfUnset()"
--
--    invoke-static {v3, v9}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-+    invoke-static {v3, v8}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
- 
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBssid(Landroid/net/MacAddress;)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
--    invoke-virtual {v7, v8}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+    invoke-virtual {v7, v10}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
--    :goto_f
-+    :goto_e
-     move v0, v6
- 
--    :goto_10
-+    :goto_f
-     invoke-virtual {v7, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMaxNumberOfClients(I)Landroid/net/wifi/SoftApConfiguration$Builder;
+-    :goto_13
++    :goto_14
+     invoke-virtual {v9, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMaxNumberOfClients(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
      const-string v0, "vendor.wifiap.MacAclMode"
- 
--    invoke-static {v0, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v0, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     iget-object v6, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
- 
-@@ -4401,7 +4367,7 @@
+@@ -4494,7 +4487,7 @@
  
      move-result v6
  
@@ -2438,7 +2273,7 @@ index f50d026..7917ad7 100644
  
      invoke-static {}, Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;->getInstance()Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;
  
-@@ -4411,7 +4377,7 @@
+@@ -4504,7 +4497,7 @@
  
      move-result v6
  
@@ -2447,323 +2282,131 @@ index f50d026..7917ad7 100644
  
      invoke-static {}, Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;->getInstance()Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;
  
-@@ -4421,17 +4387,15 @@
+@@ -4516,15 +4509,15 @@
  
-     move-result v6
+     const/4 v8, 0x1
  
--    const/4 v8, 0x1
--
 -    if-ne v6, v8, :cond_33
-+    if-ne v6, v10, :cond_34
++    if-ne v6, v8, :cond_34
  
-     invoke-static {v0, v14}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+     invoke-static {v0, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
  
--    const/4 v0, 0x1
-+    move v8, v10
+     const/4 v0, 0x1
  
--    goto :goto_11
-+    goto :goto_10
+-    goto :goto_14
++    goto :goto_15
  
 -    :cond_33
 +    :cond_34
      invoke-static {}, Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;->getInstance()Lcom/samsung/android/server/wifi/ap/SemWifiApMacAclList;
  
      move-result-object v6
-@@ -4442,81 +4406,55 @@
+@@ -4535,81 +4528,57 @@
  
      const/4 v8, 0x2
  
 -    if-ne v6, v8, :cond_34
 +    if-ne v6, v8, :cond_35
  
-     invoke-static {v0, v4}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+     invoke-static {v0, v2}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
  
--    move v0, v8
--
--    goto :goto_11
+     move v0, v8
+ 
+-    goto :goto_14
 -
 -    :cond_34
 -    const/4 v0, 0x0
 -
--    :goto_11
--    invoke-virtual {v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+-    :goto_14
+-    invoke-virtual {v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
 -
--    move-result-object v4
+-    move-result-object v2
 -
--    invoke-virtual {v4}, Landroid/net/wifi/SoftApConfiguration;->getBands()[I
+-    invoke-virtual {v2}, Landroid/net/wifi/SoftApConfiguration;->getBands()[I
 -
--    move-result-object v4
+-    move-result-object v2
 -
--    array-length v4, v4
+-    array-length v2, v2
 -
 -    const/4 v6, 0x1
 -
--    if-le v4, v6, :cond_35
+-    if-le v2, v6, :cond_35
 -
--    const/4 v4, 0x1
+-    const/4 v2, 0x1
 -
--    goto :goto_12
-+    goto :goto_10
+     goto :goto_15
  
      :cond_35
--    const/4 v4, 0x0
-+    const/4 v8, 0x0
+-    const/4 v2, 0x0
++    const/4 v0, 0x0
  
--    :goto_12
+     :goto_15
 -    new-instance v6, Ljava/lang/StringBuilder;
-+    :goto_10
-+    new-instance v0, Ljava/lang/StringBuilder;
++    new-instance v2, Ljava/lang/StringBuilder;
  
 -    const-string v8, "SemSoftApConfiguration softap "
-+    const-string v4, "SemSoftApConfiguration softap "
++    const-string v6, "SemSoftApConfiguration softap "
  
 -    invoke-direct {v6, v8}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-+    invoke-direct {v0, v4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v2, v6}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
  
-     invoke-virtual {v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+     invoke-virtual {v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
  
 -    move-result-object v8
-+    move-result-object v4
++    move-result-object v6
  
 -    invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration;->toString()Ljava/lang/String;
-+    invoke-virtual {v4}, Landroid/net/wifi/SoftApConfiguration;->toString()Ljava/lang/String;
++    invoke-virtual {v6}, Landroid/net/wifi/SoftApConfiguration;->toString()Ljava/lang/String;
  
 -    move-result-object v8
--
++    move-result-object v6
+ 
 -    invoke-virtual {v6, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    move-result-object v4
++    invoke-virtual {v2, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    const-string v8, "\nmMAXClients:"
-+    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    const-string v6, "\nmMAXClients:"
  
 -    invoke-virtual {v6, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    const-string v4, "\nmMAXClients:"
++    invoke-virtual {v2, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
--    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-+    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-    invoke-virtual {v6, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
  
--    const-string v5, ",mMacAclMode:"
-+    invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+     const-string v3, ",mMacAclMode:"
  
--    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    const-string v4, ",mMacAclMode:"
+-    invoke-virtual {v6, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-+    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
  
--    const-string v0, "\nvendorIE "
-+    invoke-virtual {v0, v8}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+     const-string v0, "\nvendorIE "
  
 -    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    const-string v4, "\nvendorIE "
- 
--    invoke-virtual {v6, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    const-string v0, " isDualAp"
-+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    const-string v2, " isDualApfalse"
++    const-string v0, " isDualApfalse"
  
--    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-    invoke-virtual {v6, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
  
 -    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
  
      move-result-object v0
  
-@@ -4524,11 +4462,11 @@
- 
-     const-string v0, "vendor.wifiap.guest_mode_enabled"
- 
--    invoke-static {v0, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v0, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     const-string v0, "vendor.wifiap.guest_mode_isolation"
- 
--    invoke-static {v0, v12}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {v0, v13}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
- 
-     invoke-static {}, Lcom/samsung/android/server/wifi/SemWifiInjector;->getInstance()Lcom/samsung/android/server/wifi/SemWifiInjector;
- 
-@@ -4552,9 +4490,7 @@
- 
-     move-result v0
- 
--    const/4 v2, 0x1
--
--    if-ne v0, v2, :cond_37
-+    if-ne v0, v10, :cond_37
- 
-     invoke-virtual/range {p0 .. p0}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->isWifiApGuestModeEnabled()Z
- 
-@@ -4570,14 +4506,14 @@
- 
-     invoke-virtual {v1, v0}, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->setWifiApGuestPassword(Ljava/lang/String;)V
- 
--    goto :goto_13
-+    goto :goto_11
- 
-     :cond_36
-     const-string v0, "Dont reset OTP when resetConfiguration is called"
- 
-     invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
--    :goto_13
-+    :goto_11
-     const/4 v0, 0x0
- 
-     iput-boolean v0, v1, Lcom/samsung/android/server/wifi/ap/SemSoftApConfiguration;->isResetSoftApCalled:Z
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSoftApManager$1.smali b/smali/com/samsung/android/server/wifi/ap/SemSoftApManager$1.smali
-index f6c9397..865bb15 100644
+index 083a237..2713e0e 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSoftApManager$1.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSoftApManager$1.smali
-@@ -550,7 +550,7 @@
- .end method
- 
- .method public onConnectedClientsChanged(Landroid/net/wifi/SoftApInfo;Ljava/util/List;)V
--    .locals 3
-+    .locals 1
-     .annotation system Ldalvik/annotation/Signature;
-         value = {
-             "(",
-@@ -561,129 +561,41 @@
-         }
-     .end annotation
- 
--    const-string v0, "SemSoftApManager"
--
--    new-instance v1, Ljava/lang/StringBuilder;
-+    new-instance p0, Ljava/lang/StringBuilder;
- 
--    const-string v2, "onConnectedClientsChanged:"
-+    const-string v0, "onConnectedClientsChanged:"
- 
--    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-+    invoke-direct {p0, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
- 
-     invoke-virtual {p1}, Landroid/net/wifi/SoftApInfo;->getApInstanceIdentifier()Ljava/lang/String;
- 
--    move-result-object v2
-+    move-result-object p1
- 
--    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    const-string v2, ",:clients size,"
-+    const-string p1, ",:clients size,"
- 
--    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
-     invoke-interface {p2}, Ljava/util/List;->size()I
- 
--    move-result v2
--
--    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSoftApManager$1;->this$0:Lcom/samsung/android/server/wifi/ap/SemSoftApManager;
--
--    iget-object v0, v0, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->mWifiManager:Landroid/net/wifi/WifiManager;
--
--    invoke-virtual {v0}, Landroid/net/wifi/WifiManager;->getSoftApConfiguration()Landroid/net/wifi/SoftApConfiguration;
--
--    move-result-object v0
--
--    invoke-virtual {v0}, Landroid/net/wifi/SoftApConfiguration;->getBands()[I
--
--    move-result-object v0
--
--    array-length v0, v0
--
--    const/4 v1, 0x1
--
--    if-le v0, v1, :cond_1
--
--    iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSoftApManager$1;->this$0:Lcom/samsung/android/server/wifi/ap/SemSoftApManager;
--
--    invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->-$$Nest$fgetmAospClientsHashMap(Lcom/samsung/android/server/wifi/ap/SemSoftApManager;)Ljava/util/concurrent/ConcurrentHashMap;
--
--    move-result-object v0
--
--    monitor-enter v0
--
--    :try_start_0
--    new-instance v1, Ljava/util/ArrayList;
--
--    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
--
--    invoke-interface {p2}, Ljava/util/List;->iterator()Ljava/util/Iterator;
--
--    move-result-object p2
--
--    :goto_0
--    invoke-interface {p2}, Ljava/util/Iterator;->hasNext()Z
--
--    move-result v2
--
--    if-eqz v2, :cond_0
--
--    invoke-interface {p2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
--
--    move-result-object v2
--
--    check-cast v2, Landroid/net/wifi/WifiClient;
--
--    invoke-virtual {v2}, Landroid/net/wifi/WifiClient;->getMacAddress()Landroid/net/MacAddress;
--
--    move-result-object v2
--
--    invoke-virtual {v2}, Landroid/net/MacAddress;->toString()Ljava/lang/String;
--
--    move-result-object v2
--
--    invoke-virtual {v1, v2}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
--
--    goto :goto_0
-+    move-result p1
- 
--    :cond_0
--    iget-object p0, p0, Lcom/samsung/android/server/wifi/ap/SemSoftApManager$1;->this$0:Lcom/samsung/android/server/wifi/ap/SemSoftApManager;
-+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
- 
--    invoke-static {p0}, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->-$$Nest$fgetmAospClientsHashMap(Lcom/samsung/android/server/wifi/ap/SemSoftApManager;)Ljava/util/concurrent/ConcurrentHashMap;
-+    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
- 
-     move-result-object p0
- 
--    invoke-virtual {p1}, Landroid/net/wifi/SoftApInfo;->getApInstanceIdentifier()Ljava/lang/String;
-+    const-string p1, "SemSoftApManager"
- 
--    move-result-object p1
-+    invoke-static {p1, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
- 
--    invoke-virtual {p0, p1, v1}, Ljava/util/concurrent/ConcurrentHashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
--
--    monitor-exit v0
--
--    goto :goto_1
--
--    :catchall_0
--    move-exception p0
--
--    monitor-exit v0
--    :try_end_0
--    .catchall {:try_start_0 .. :try_end_0} :catchall_0
--
--    throw p0
--
--    :cond_1
--    :goto_1
-     return-void
+@@ -661,7 +661,7 @@
  .end method
  
  .method public onInfoChanged(Ljava/util/List;)V
@@ -2772,7 +2415,7 @@ index f6c9397..865bb15 100644
      .annotation system Ldalvik/annotation/Signature;
          value = {
              "(",
-@@ -695,77 +607,36 @@
+@@ -673,77 +673,36 @@
  
      invoke-static {}, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->-$$Nest$sfgetMHSDBG()Z
  
@@ -2797,8 +2440,7 @@ index f6c9397..865bb15 100644
 -    invoke-interface {p1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 -
 -    move-result-object v0
-+    invoke-interface {p0}, Ljava/util/Iterator;->hasNext()Z
- 
+-
 -    check-cast v0, Landroid/net/wifi/SoftApInfo;
 -
 -    const-string v1, "SemSoftApManager"
@@ -2825,7 +2467,8 @@ index f6c9397..865bb15 100644
 -    const-string v0, "onInfoChanged:swlan0:"
 -
 -    invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
++    invoke-interface {p0}, Ljava/util/Iterator;->hasNext()Z
+ 
 -    iget-object v0, p0, Lcom/samsung/android/server/wifi/ap/SemSoftApManager$1;->this$0:Lcom/samsung/android/server/wifi/ap/SemSoftApManager;
 -
 -    const-string v1, "swlan0"
@@ -2864,7 +2507,7 @@ index f6c9397..865bb15 100644
  
      move-result-object p1
  
-@@ -773,95 +644,9 @@
+@@ -751,95 +710,9 @@
  
      invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -2963,7 +2606,7 @@ index f6c9397..865bb15 100644
  .end method
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemSoftApManager.smali b/smali/com/samsung/android/server/wifi/ap/SemSoftApManager.smali
-index ca64ead..e51ecbe 100644
+index 7eece51..e8f1724 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemSoftApManager.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemSoftApManager.smali
 @@ -28,7 +28,7 @@
@@ -3300,7 +2943,7 @@ index ca64ead..e51ecbe 100644
      return-object p0
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
-index bf79396..f383682 100644
+index f965946..74dde15 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver.smali
 @@ -1300,28 +1300,6 @@
@@ -3332,20 +2975,18 @@ index bf79396..f383682 100644
      iget-object v11, v0, Lcom/samsung/android/server/wifi/ap/SemWifiApBroadcastReceiver;->mWifiApServiceImpl:Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;
  
      invoke-virtual {v11}, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->getSoftApConfiguration()Landroid/net/wifi/SoftApConfiguration;
-@@ -1895,12 +1873,10 @@
- 
-     invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+    const-string v9, " not_support "
- 
-     invoke-virtual {v3, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
- 
--    invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
-     invoke-virtual {v3, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+@@ -1897,9 +1875,9 @@
  
      invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    const-string v9, " not_support "
+ 
+-    invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v3, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {v3, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApChipInfo.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApChipInfo.smali
 index 716e3a5..8ed9644 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApChipInfo.smali
@@ -3364,10 +3005,10 @@ index 716e3a5..8ed9644 100644
  
      const-string v3, "146"
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
-index 0bf1780..b52d6e0 100644
+index 24e2d22..d03bb67 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
-@@ -7253,8 +7253,6 @@
+@@ -7328,8 +7328,6 @@
  
      move-result v7
  
@@ -3376,7 +3017,7 @@ index 0bf1780..b52d6e0 100644
      if-nez v7, :cond_6
  
      if-nez p1, :cond_6
-@@ -7286,7 +7284,9 @@
+@@ -7361,7 +7359,9 @@
  
      iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->configBuilder:Landroid/net/wifi/SoftApConfiguration$Builder;
  
@@ -3387,7 +3028,7 @@ index 0bf1780..b52d6e0 100644
      :try_end_1
      .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
      .catchall {:try_start_1 .. :try_end_1} :catchall_0
-@@ -7522,22 +7522,45 @@
+@@ -7597,22 +7597,45 @@
  
      invoke-direct {p0, p1, v5}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->dumpToLogFile(Ljava/lang/String;Z)V
  
@@ -3439,7 +3080,7 @@ index 0bf1780..b52d6e0 100644
      new-instance p1, Ljava/lang/StringBuilder;
  
      invoke-direct {p1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-@@ -7571,8 +7594,8 @@
+@@ -7646,8 +7669,8 @@
      iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->mWifiApConfig:Landroid/net/wifi/SoftApConfiguration;
  
      invoke-direct {p0, p1}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->setAndSaveWifiApConfiguration(Landroid/net/wifi/SoftApConfiguration;)V
@@ -3451,7 +3092,7 @@ index 0bf1780..b52d6e0 100644
      monitor-exit p0
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl$SoftApCallback.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl$SoftApCallback.smali
-index 03f75e8..43f3a6f 100644
+index 5eb36ce..c7cdbd0 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl$SoftApCallback.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl$SoftApCallback.smali
 @@ -125,7 +125,7 @@
@@ -3673,7 +3314,7 @@ index 03f75e8..43f3a6f 100644
  .end method
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl.smali
-index c356ff4..f3be79e 100644
+index 9bc8c36..91c1aa8 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApPowerSaveImpl.smali
 @@ -670,7 +670,7 @@
@@ -3850,10 +3491,10 @@ index c356ff4..f3be79e 100644
  
      invoke-static {v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApServiceImpl.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApServiceImpl.smali
-index 7caff8f..fa14877 100644
+index f8d6f08..f741f79 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApServiceImpl.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApServiceImpl.smali
-@@ -9692,7 +9692,7 @@
+@@ -9618,7 +9618,7 @@
  
      const-string v7, "wifiap_persistent_state"
  
@@ -3862,7 +3503,7 @@ index 7caff8f..fa14877 100644
  
      :try_start_0
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mWifiManagerProxy:Lcom/samsung/android/server/wifi/SemWifiManagerProxy;
-@@ -9746,7 +9746,7 @@
+@@ -9672,7 +9672,7 @@
      :cond_4
      const/16 v8, 0xd
  
@@ -3871,7 +3512,7 @@ index 7caff8f..fa14877 100644
  
      const/16 v8, 0xc
  
-@@ -9929,36 +9929,11 @@
+@@ -9855,36 +9855,11 @@
      move-result-object p1
  
      :goto_1
@@ -3909,7 +3550,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -9968,13 +9943,13 @@
+@@ -9894,13 +9869,13 @@
  
      move-result p2
  
@@ -3925,7 +3566,7 @@ index 7caff8f..fa14877 100644
  
      const-string p2, "Wifi is connected to indoor channel, so discconnect wifi"
  
-@@ -10010,11 +9985,11 @@
+@@ -9936,11 +9911,11 @@
  
      invoke-virtual {p2}, Ljava/lang/InterruptedException;->printStackTrace()V
  
@@ -3939,7 +3580,7 @@ index 7caff8f..fa14877 100644
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mContext:Landroid/content/Context;
  
      const-string v1, "hotspot_enabled_history"
-@@ -10029,15 +10004,15 @@
+@@ -9955,15 +9930,15 @@
  
      move-result p2
  
@@ -3958,7 +3599,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10047,14 +10022,14 @@
+@@ -9973,14 +9948,14 @@
  
      invoke-virtual {p2, v1, v8}, Lcom/samsung/android/server/wifi/SemFrameworkFacade;->setSystemProperties(Ljava/lang/String;Ljava/lang/String;)V
  
@@ -3976,7 +3617,7 @@ index 7caff8f..fa14877 100644
  
      invoke-virtual {p1}, Landroid/net/wifi/SoftApConfiguration;->getBand()I
  
-@@ -10062,11 +10037,11 @@
+@@ -9988,11 +9963,11 @@
  
      and-int/lit8 p2, p2, 0x4
  
@@ -3990,7 +3631,7 @@ index 7caff8f..fa14877 100644
      invoke-virtual {p0}, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->getSoftApConfiguration()Landroid/net/wifi/SoftApConfiguration;
  
      move-result-object p2
-@@ -10077,18 +10052,18 @@
+@@ -10003,18 +9978,18 @@
  
      and-int/lit8 p2, p2, 0x4
  
@@ -4012,7 +3653,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mWifiManagerProxy:Lcom/samsung/android/server/wifi/SemWifiManagerProxy;
  
-@@ -10096,7 +10071,7 @@
+@@ -10022,7 +9997,7 @@
  
      move-result-object p2
  
@@ -4021,7 +3662,7 @@ index 7caff8f..fa14877 100644
  
      invoke-virtual {p2}, Landroid/net/wifi/WifiInfo;->getNetworkId()I
  
-@@ -10104,7 +10079,7 @@
+@@ -10030,7 +10005,7 @@
  
      const/4 v8, -0x1
  
@@ -4030,7 +3671,7 @@ index 7caff8f..fa14877 100644
  
      invoke-virtual {p2}, Landroid/net/wifi/WifiInfo;->getFrequency()I
  
-@@ -10130,7 +10105,7 @@
+@@ -10056,7 +10031,7 @@
  
      move-result-object v8
  
@@ -4039,7 +3680,7 @@ index 7caff8f..fa14877 100644
  
      const-string v9, "JP"
  
-@@ -10138,7 +10113,7 @@
+@@ -10064,7 +10039,7 @@
  
      move-result v9
  
@@ -4048,7 +3689,7 @@ index 7caff8f..fa14877 100644
  
      iget-object v1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mContext:Landroid/content/Context;
  
-@@ -10152,7 +10127,7 @@
+@@ -10078,7 +10053,7 @@
  
      move-result-object v1
  
@@ -4057,7 +3698,7 @@ index 7caff8f..fa14877 100644
      new-instance v9, Ljava/lang/StringBuilder;
  
      invoke-direct {v9, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-@@ -10173,11 +10148,11 @@
+@@ -10099,11 +10074,11 @@
  
      const/16 v0, 0x141e
  
@@ -4071,7 +3712,7 @@ index 7caff8f..fa14877 100644
  
      new-instance p2, Landroid/os/Handler;
  
-@@ -10193,14 +10168,14 @@
+@@ -10119,14 +10094,14 @@
  
      invoke-virtual {p2, v0}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
  
@@ -4088,7 +3729,7 @@ index 7caff8f..fa14877 100644
  
      const-string p2, "Mainline Softap is not enabled"
  
-@@ -10210,7 +10185,7 @@
+@@ -10136,7 +10111,7 @@
  
      move-result p2
  
@@ -4097,7 +3738,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10220,20 +10195,20 @@
+@@ -10146,20 +10121,20 @@
  
      move-result p2
  
@@ -4121,7 +3762,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p2, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10243,13 +10218,13 @@
+@@ -10169,13 +10144,13 @@
      :try_end_8
      .catchall {:try_start_8 .. :try_end_8} :catchall_0
  
@@ -4137,7 +3778,7 @@ index 7caff8f..fa14877 100644
      :goto_6
      :try_start_9
      new-instance p0, Ljava/lang/StringBuilder;
-@@ -10270,7 +10245,7 @@
+@@ -10196,7 +10171,7 @@
  
      return v4
  
@@ -4146,7 +3787,7 @@ index 7caff8f..fa14877 100644
      :try_start_a
      iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10280,18 +10255,18 @@
+@@ -10206,18 +10181,18 @@
  
      move-result p1
  
@@ -4168,7 +3809,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10299,12 +10274,12 @@
+@@ -10225,12 +10200,12 @@
  
      invoke-virtual {p1, p2, v7, v6}, Lcom/samsung/android/server/wifi/SemFrameworkFacade;->setSecureIntegerSetting(Landroid/content/Context;Ljava/lang/String;I)Z
  
@@ -4183,7 +3824,7 @@ index 7caff8f..fa14877 100644
  
      iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApServiceImpl;->mFacade:Lcom/samsung/android/server/wifi/SemFrameworkFacade;
  
-@@ -10314,18 +10289,18 @@
+@@ -10240,18 +10215,18 @@
  
      move-result p1
  
@@ -4749,7 +4390,7 @@ index 47cb245..62ff4a8 100644
      .packed-switch 0x1
          :pswitch_5
 diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApTrafficPoller.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApTrafficPoller.smali
-index 4f7aa48..a0a90f1 100644
+index ba2f522..5459264 100644
 --- a/smali/com/samsung/android/server/wifi/ap/SemWifiApTrafficPoller.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApTrafficPoller.smali
 @@ -40,7 +40,7 @@
@@ -4972,7 +4613,7 @@ index d8058f4..f404ffa 100644
  .end method
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/mcf/SemWifiApContinuityUtil.smali b/smali/com/samsung/android/server/wifi/ap/mcf/SemWifiApContinuityUtil.smali
-index 1228680..1b1b2ca 100644
+index 70ff104..597971c 100644
 --- a/smali/com/samsung/android/server/wifi/ap/mcf/SemWifiApContinuityUtil.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/mcf/SemWifiApContinuityUtil.smali
 @@ -324,7 +324,7 @@
@@ -5042,7 +4683,7 @@ index 1228680..1b1b2ca 100644
  
  .method public hasSamsungAccount()Z
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2.smali
-index 48c1e02..efdaae1 100644
+index 47fcf7f..4463f47 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2.smali
 @@ -790,7 +790,7 @@
@@ -5054,7 +4695,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_1
      const-string v0, "SemWifiApSmartGattClient"
-@@ -891,7 +891,7 @@
+@@ -897,7 +897,7 @@
  
      invoke-static {v0, v1}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->-$$Nest$fputmBluetoothDevice(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;Landroid/bluetooth/BluetoothDevice;)V
  
@@ -5063,7 +4704,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_2
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -912,7 +912,7 @@
+@@ -918,7 +918,7 @@
  
      invoke-virtual {v0, v10}, Landroid/bluetooth/BluetoothDevice;->createBond(I)Z
  
@@ -5072,7 +4713,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_3
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -933,7 +933,7 @@
+@@ -939,7 +939,7 @@
  
      invoke-virtual {v2, v0}, Landroid/bluetooth/BluetoothGatt;->readCharacteristic(Landroid/bluetooth/BluetoothGattCharacteristic;)Z
  
@@ -5081,7 +4722,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_4
      iget-object v9, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -1028,7 +1028,7 @@
+@@ -1034,7 +1034,7 @@
  
      invoke-virtual {v2, v0}, Landroid/bluetooth/BluetoothGatt;->writeCharacteristic(Landroid/bluetooth/BluetoothGattCharacteristic;)Z
  
@@ -5090,7 +4731,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_5
      const/16 v3, 0x12
-@@ -1071,7 +1071,7 @@
+@@ -1077,7 +1077,7 @@
  
      invoke-virtual {v2, v0}, Landroid/bluetooth/BluetoothGatt;->readCharacteristic(Landroid/bluetooth/BluetoothGattCharacteristic;)Z
  
@@ -5099,7 +4740,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_6
      invoke-virtual/range {p1 .. p1}, Landroid/bluetooth/BluetoothGatt;->getDevice()Landroid/bluetooth/BluetoothDevice;
-@@ -1125,7 +1125,7 @@
+@@ -1131,7 +1131,7 @@
  
      invoke-virtual {v0, v13}, Landroid/os/Handler;->sendEmptyMessage(I)Z
  
@@ -5108,7 +4749,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_8
      iget-object v9, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -1628,7 +1628,7 @@
+@@ -1640,7 +1640,7 @@
  
      invoke-virtual {v2, v0}, Landroid/bluetooth/BluetoothGatt;->readCharacteristic(Landroid/bluetooth/BluetoothGattCharacteristic;)Z
  
@@ -5117,7 +4758,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_11
      if-nez v6, :cond_35
-@@ -1679,7 +1679,7 @@
+@@ -1691,7 +1691,7 @@
  
      invoke-virtual {v2, v0}, Landroid/bluetooth/BluetoothGatt;->readCharacteristic(Landroid/bluetooth/BluetoothGattCharacteristic;)Z
  
@@ -5126,7 +4767,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_12
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -1952,7 +1952,7 @@
+@@ -1964,7 +1964,7 @@
  
      invoke-virtual {v1, v0}, Landroid/content/Context;->sendBroadcast(Landroid/content/Intent;)V
  
@@ -5135,7 +4776,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_19
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
-@@ -2492,7 +2492,7 @@
+@@ -2504,7 +2504,7 @@
  
      invoke-virtual {v0, v1}, Landroid/os/Handler;->sendEmptyMessage(I)Z
  
@@ -5144,7 +4785,7 @@ index 48c1e02..efdaae1 100644
  
      :cond_23
      :goto_8
-@@ -2858,36 +2858,19 @@
+@@ -2870,36 +2870,19 @@
  
      invoke-virtual {v13, v14}, Landroid/net/wifi/nl80211/WifiNl80211Manager;->getChannelsMhzForBand(I)[I
  
@@ -5182,7 +4823,7 @@ index 48c1e02..efdaae1 100644
      iget-object v13, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient$2;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;
  
      invoke-static {v13}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->-$$Nest$fgetmNl80211Manager(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;)Landroid/net/wifi/nl80211/WifiNl80211Manager;
-@@ -2901,35 +2884,37 @@
+@@ -2913,35 +2896,37 @@
      move-result-object v13
  
      array-length v13, v13
@@ -5230,7 +4871,7 @@ index 48c1e02..efdaae1 100644
      const-string v14, "SemWifiApSmartGattClient"
  
      new-instance v15, Ljava/lang/StringBuilder;
-@@ -3009,26 +2994,26 @@
+@@ -3021,26 +3006,26 @@
      move-result-object v6
  
      invoke-virtual {v6, v4}, Landroid/os/Handler;->sendMessage(Landroid/os/Message;)Z
@@ -5265,7 +4906,7 @@ index 48c1e02..efdaae1 100644
      const-string v4, "SemWifiApSmartGattClient"
  
      const-string v6, "No Preshared key"
-@@ -3037,7 +3022,7 @@
+@@ -3049,7 +3034,7 @@
  
      const/4 v4, 0x0
  
@@ -5274,7 +4915,7 @@ index 48c1e02..efdaae1 100644
      invoke-static {}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->-$$Nest$sfgetMHSDBG()Z
  
      move-result v6
-@@ -3141,8 +3126,8 @@
+@@ -3153,8 +3138,8 @@
      const/4 v4, 0x0
  
      invoke-static {v4, v0, v3}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->-$$Nest$msetConnectionState(ILcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;Ljava/lang/String;)V
@@ -5285,7 +4926,7 @@ index 48c1e02..efdaae1 100644
  
      return-void
  
-@@ -3151,35 +3136,35 @@
+@@ -3163,35 +3148,35 @@
  
      move v3, v13
  
@@ -5328,7 +4969,7 @@ index 48c1e02..efdaae1 100644
      if-eqz v5, :cond_33
  
      const-string v0, "SemWifiApSmartGattClient"
-@@ -3242,9 +3227,11 @@
+@@ -3254,9 +3239,11 @@
      invoke-static {v0, v2}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->-$$Nest$msendAuthInformation(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;Landroid/bluetooth/BluetoothGatt;)V
  
      :cond_35
@@ -5342,7 +4983,7 @@ index 48c1e02..efdaae1 100644
      .array-data 1
          0x1t
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient.smali
-index a9b1c6e..0571b3e 100644
+index 6113a14..0dbbca2 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient.smali
 @@ -4926,7 +4926,7 @@
@@ -5399,7 +5040,7 @@ index a9b1c6e..0571b3e 100644
      iput-boolean v1, v0, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattClient;->mNeedRetry:Z
 @@ -5268,30 +5249,30 @@
  
-     invoke-static {v2, v3, v1}, Lcom/samsung/android/server/wifi/SemCellularStateManager$1$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
+     invoke-static {v2, v3, v1}, Lcom/samsung/android/server/wifi/PasspointLogger$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
  
 -    if-eqz v10, :cond_13
 +    if-eqz v10, :cond_12
@@ -5434,7 +5075,7 @@ index a9b1c6e..0571b3e 100644
  
      const-string v1, "SemWifiApSmartGattClient"
  
-@@ -5333,7 +5314,7 @@
+@@ -5339,7 +5320,7 @@
  
      goto :goto_3
  
@@ -5443,7 +5084,7 @@ index a9b1c6e..0571b3e 100644
      const-string v1, "SemWifiApSmartGattClient"
  
      new-instance v2, Ljava/lang/StringBuilder;
-@@ -5384,14 +5365,14 @@
+@@ -5390,14 +5371,14 @@
  
      goto :goto_3
  
@@ -5460,7 +5101,7 @@ index a9b1c6e..0571b3e 100644
  
      const/4 v1, -0x7
  
-@@ -5405,7 +5386,7 @@
+@@ -5411,7 +5392,7 @@
  
      invoke-virtual {v0, v1}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
  
@@ -5469,7 +5110,7 @@ index a9b1c6e..0571b3e 100644
      :goto_3
      return v11
  
-@@ -5429,7 +5410,7 @@
+@@ -5435,7 +5416,7 @@
  
      throw v0
  
@@ -5479,7 +5120,7 @@ index a9b1c6e..0571b3e 100644
      const-string v0, "SemWifiApSmartGattClient"
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$2.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$2.smali
-index ed4f336..ec27a28 100644
+index d813f37..9bf2c49 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$2.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$2.smali
 @@ -1529,7 +1529,7 @@
@@ -5492,15 +5133,15 @@ index ed4f336..ec27a28 100644
      invoke-virtual {v2, v3}, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->sendHostapdCommand(Ljava/lang/String;)Ljava/lang/String;
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler.smali
-index f2cdf07..9b7340c 100644
+index de8c7ab..6d5dff1 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler.smali
 @@ -124,7 +124,7 @@
  
      invoke-static {v3, v2, v4}, Lcom/samsung/android/server/wifi/SemIWCMonitor$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
  
--    if-ne v0, v13, :cond_45
-+    if-ne v0, v13, :cond_42
+-    if-ne v0, v13, :cond_46
++    if-ne v0, v13, :cond_43
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
@@ -5508,11 +5149,11 @@ index f2cdf07..9b7340c 100644
  
      move-result v0
  
--    if-eqz v0, :cond_45
-+    if-eqz v0, :cond_42
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
  
--    if-nez v2, :cond_45
-+    if-nez v2, :cond_42
+-    if-nez v2, :cond_46
++    if-nez v2, :cond_43
  
      const-string v0, "Disabling Smart MHS after client disconnected 30secs"
  
@@ -5520,8 +5161,8 @@ index f2cdf07..9b7340c 100644
  
      move-result v0
  
--    if-lez v0, :cond_45
-+    if-lez v0, :cond_42
+-    if-lez v0, :cond_46
++    if-lez v0, :cond_43
  
      const-string v0, "TRY_TO_GET_AES AES key is not matched startSmartTetheringApk"
  
@@ -5529,8 +5170,8 @@ index f2cdf07..9b7340c 100644
  
      move-result-object v0
  
--    if-eqz v0, :cond_45
-+    if-eqz v0, :cond_42
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
@@ -5538,8 +5179,8 @@ index f2cdf07..9b7340c 100644
  
      invoke-static {v4, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
--    if-ne v0, v13, :cond_45
-+    if-ne v0, v13, :cond_42
+-    if-ne v0, v13, :cond_46
++    if-ne v0, v13, :cond_43
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
@@ -5547,8 +5188,8 @@ index f2cdf07..9b7340c 100644
  
      move-result v0
  
--    if-eqz v0, :cond_45
-+    if-eqz v0, :cond_42
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
  
      const-string v0, "Disabling Smart MHS"
  
@@ -5556,8 +5197,8 @@ index f2cdf07..9b7340c 100644
  
      move-result v2
  
--    if-eqz v2, :cond_45
-+    if-eqz v2, :cond_42
+-    if-eqz v2, :cond_46
++    if-eqz v2, :cond_43
  
      iget-object v1, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
@@ -5565,21 +5206,21 @@ index f2cdf07..9b7340c 100644
  
      check-cast v0, Ljava/lang/String;
  
--    if-eqz v0, :cond_45
-+    if-eqz v0, :cond_42
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
  
      new-instance v2, Ljava/lang/StringBuilder;
  
-@@ -1641,7 +1641,7 @@
+@@ -1666,7 +1666,7 @@
  
      move-result-object v0
  
--    if-eqz v0, :cond_45
-+    if-eqz v0, :cond_42
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
-@@ -1737,7 +1737,7 @@
+@@ -1762,7 +1762,7 @@
  
      move-result-object v0
  
@@ -5588,32 +5229,32 @@ index f2cdf07..9b7340c 100644
  
      invoke-virtual {v0, v2}, Lcom/samsung/android/server/wifi/ap/SemSoftApManager;->sendHostapdCommand(Ljava/lang/String;)Ljava/lang/String;
  
-@@ -1950,7 +1950,7 @@
+@@ -1975,7 +1975,7 @@
  
      and-int/lit8 v0, v17, 0x2
  
--    if-eqz v0, :cond_37
-+    if-eqz v0, :cond_35
+-    if-eqz v0, :cond_38
++    if-eqz v0, :cond_36
  
-     :cond_2a
+     :cond_2b
      const-string v0, "not able to fetch band info from hostapd, so set 2GHz"
-@@ -1970,7 +1970,7 @@
+@@ -1995,7 +1995,7 @@
  
      and-int/2addr v0, v3
  
--    if-eqz v0, :cond_30
-+    if-eqz v0, :cond_2f
+-    if-eqz v0, :cond_31
++    if-eqz v0, :cond_30
  
      and-int/lit8 v0, v2, 0x4
  
-@@ -2026,42 +2026,9 @@
+@@ -2051,42 +2051,9 @@
  
      invoke-virtual {v6, v0, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannel(II)Landroid/net/wifi/SoftApConfiguration$Builder;
  
 -    goto/16 :goto_12
 +    goto :goto_12
  
-     :cond_2e
+     :cond_2f
 -    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 -
 -    invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmWifiManagerProxy(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)Lcom/samsung/android/server/wifi/SemWifiManagerProxy;
@@ -5624,15 +5265,15 @@ index f2cdf07..9b7340c 100644
 -
 -    move-result v0
 -
--    if-nez v0, :cond_2f
+-    if-nez v0, :cond_30
 -
 -    and-int/lit8 v0, v17, 0x2
 -
--    if-eqz v0, :cond_2f
+-    if-eqz v0, :cond_30
 -
 -    and-int/lit8 v0, v17, 0x1
 -
--    if-eqz v0, :cond_2f
+-    if-eqz v0, :cond_30
 -
 -    const-string v0, "client supports 6GHz, MHS is enabled in 2.4 GHz and supports dualband,so set dual  Band"
 -
@@ -5646,62 +5287,62 @@ index f2cdf07..9b7340c 100644
 -
 -    goto/16 :goto_13
 -
--    :cond_2f
+-    :cond_30
      const-string v0, "client supports 6GHz, MHS is enabled in 2.4 GHz ,so set same Band"
  
      invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -2070,9 +2037,9 @@
+@@ -2095,9 +2062,9 @@
  
      invoke-virtual {v6, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBand(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
 -    goto/16 :goto_12
 +    goto :goto_12
  
--    :cond_30
-+    :cond_2f
+-    :cond_31
++    :cond_30
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
      invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmGetBandFromClient(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)I
-@@ -2081,15 +2048,15 @@
+@@ -2106,15 +2073,15 @@
  
      and-int/lit8 v0, v0, 0x2
  
--    if-eqz v0, :cond_36
-+    if-eqz v0, :cond_34
+-    if-eqz v0, :cond_37
++    if-eqz v0, :cond_35
  
      and-int/lit8 v0, v2, 0x2
  
--    if-eqz v0, :cond_31
-+    if-eqz v0, :cond_30
+-    if-eqz v0, :cond_32
++    if-eqz v0, :cond_31
  
      and-int/lit8 v3, v2, 0x1
  
--    if-eqz v3, :cond_31
-+    if-eqz v3, :cond_30
+-    if-eqz v3, :cond_32
++    if-eqz v3, :cond_31
  
      new-instance v0, Ljava/lang/StringBuilder;
  
-@@ -2111,8 +2078,8 @@
- 
-     goto :goto_12
- 
--    :cond_31
--    if-eqz v0, :cond_32
-+    :cond_30
-+    if-eqz v0, :cond_31
- 
-     const-string v0, "client supports 5Ghz, MHS is enabled in 5 GHz ,so set same Band"
- 
-@@ -2126,83 +2093,48 @@
+@@ -2136,8 +2103,8 @@
  
      goto :goto_12
  
 -    :cond_32
+-    if-eqz v0, :cond_33
++    :cond_31
++    if-eqz v0, :cond_32
+ 
+     const-string v0, "client supports 5Ghz, MHS is enabled in 5 GHz ,so set same Band"
+ 
+@@ -2151,83 +2118,48 @@
+ 
+     goto :goto_12
+ 
+-    :cond_33
 -    const/4 v0, 0x1
 -
 -    and-int/2addr v2, v0
 -
--    if-eqz v2, :cond_34
+-    if-eqz v2, :cond_35
 -
 -    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 -
@@ -5713,20 +5354,20 @@ index f2cdf07..9b7340c 100644
 -
 -    move-result v0
 -
--    if-nez v0, :cond_33
+-    if-nez v0, :cond_34
 -
 -    and-int/lit8 v0, v17, 0x2
 -
--    if-eqz v0, :cond_33
+-    if-eqz v0, :cond_34
 -
 -    and-int/lit8 v0, v17, 0x1
 -
--    if-eqz v0, :cond_33
+-    if-eqz v0, :cond_34
 -
 -    const-string v0, "client supports 5GHz, MHS is enabled in 2.4 GHz and supports dualband,so set dual  Band"
 -
 -    invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-+    :cond_31
++    :cond_32
 +    const/16 v0, 0x95
  
 -    invoke-static {}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$sfgetmDualAp5GHzChannels()Landroid/util/SparseIntArray;
@@ -5739,9 +5380,9 @@ index f2cdf07..9b7340c 100644
 +    and-int/2addr v2, v5
  
 -    goto :goto_13
-+    if-eqz v2, :cond_32
++    if-eqz v2, :cond_33
  
--    :cond_33
+-    :cond_34
      const-string v0, "client supports 5GHz, MHS is enabled in 2.4 GHz ,so set same Band"
  
      invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
@@ -5753,23 +5394,23 @@ index f2cdf07..9b7340c 100644
  
      goto :goto_12
  
--    :cond_34
--    if-eqz v15, :cond_35
+-    :cond_35
+-    if-eqz v15, :cond_36
 -
 -    const/16 v2, 0x95
 -
 -    const/4 v3, 0x2
-+    :cond_32
-+    if-eqz v15, :cond_33
++    :cond_33
++    if-eqz v15, :cond_34
  
 -    invoke-virtual {v6, v2, v3}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannel(II)Landroid/net/wifi/SoftApConfiguration$Builder;
 +    invoke-virtual {v6, v0, v3}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannel(II)Landroid/net/wifi/SoftApConfiguration$Builder;
  
      goto :goto_11
  
--    :cond_35
+-    :cond_36
 -    invoke-virtual {v6, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBand(I)Landroid/net/wifi/SoftApConfiguration$Builder;
-+    :cond_33
++    :cond_34
 +    invoke-virtual {v6, v5}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBand(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
      :goto_11
@@ -5781,30 +5422,30 @@ index f2cdf07..9b7340c 100644
  
      goto :goto_14
  
--    :cond_36
-+    :cond_34
+-    :cond_37
++    :cond_35
      const/4 v0, 0x1
  
      and-int/2addr v2, v0
  
--    if-eqz v2, :cond_38
-+    if-eqz v2, :cond_36
+-    if-eqz v2, :cond_39
++    if-eqz v2, :cond_37
  
      const-string v2, "client only supports 2.4GHz,MHS is enabled in 2.4 GHz ,so set same Band"
  
-@@ -2210,83 +2142,48 @@
+@@ -2235,83 +2167,48 @@
  
      invoke-virtual {v6, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBand(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    :cond_37
-+    :cond_35
+-    :cond_38
++    :cond_36
      :goto_12
 -    const/4 v0, 0x0
 +    const/4 v5, 0x0
  
      goto :goto_14
  
--    :cond_38
+-    :cond_39
 -    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 -
 -    invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmWifiManagerProxy(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)Lcom/samsung/android/server/wifi/SemWifiManagerProxy;
@@ -5815,15 +5456,15 @@ index f2cdf07..9b7340c 100644
 -
 -    move-result v0
 -
--    if-nez v0, :cond_39
+-    if-nez v0, :cond_3a
 -
 -    and-int/lit8 v0, v17, 0x2
 -
--    if-eqz v0, :cond_39
+-    if-eqz v0, :cond_3a
 -
 -    and-int/lit8 v0, v17, 0x1
 -
--    if-eqz v0, :cond_39
+-    if-eqz v0, :cond_3a
 -
 -    const-string v0, "client supports 2.4GHz, MHS is enabled in 5/6 GHz and supports dualband,so set dual  Band"
 -
@@ -5837,11 +5478,11 @@ index f2cdf07..9b7340c 100644
 -
 -    goto :goto_13
 -
--    :cond_39
+-    :cond_3a
 -    const-string v0, "MHS is enabled in 5 or 6 GHz but client supports only 2.4"
 -
 -    invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-+    :cond_36
++    :cond_37
 +    const-string v2, "MHS is enabled in 5 or 6 GHz but client supports only 2.4"
  
 -    const/4 v0, 0x1
@@ -5863,14 +5504,14 @@ index f2cdf07..9b7340c 100644
 -    move-result v2
 +    move-result v0
  
--    if-nez v2, :cond_3c
-+    if-nez v0, :cond_39
+-    if-nez v2, :cond_3d
++    if-nez v0, :cond_3a
  
 -    const/4 v2, 0x4
 +    const/4 v0, 0x4
  
--    if-ne v13, v2, :cond_3c
-+    if-ne v13, v0, :cond_39
+-    if-ne v13, v2, :cond_3d
++    if-ne v13, v0, :cond_3a
  
      invoke-virtual {v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
  
@@ -5885,78 +5526,44 @@ index f2cdf07..9b7340c 100644
  
      and-int/2addr v0, v2
  
--    if-eqz v0, :cond_3b
-+    if-eqz v0, :cond_38
+-    if-eqz v0, :cond_3c
++    if-eqz v0, :cond_39
  
--    if-eqz v15, :cond_3a
-+    if-eqz v15, :cond_37
+-    if-eqz v15, :cond_3b
++    if-eqz v15, :cond_38
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
-@@ -2298,7 +2195,7 @@
+@@ -2323,7 +2220,7 @@
  
      and-int/2addr v0, v2
  
--    if-eqz v0, :cond_3a
-+    if-eqz v0, :cond_37
+-    if-eqz v0, :cond_3b
++    if-eqz v0, :cond_38
  
      const-string v0, "MHS is enabled in 6GHz and OWE but client wont support OWE,so enable in 5GHz"
  
-@@ -2310,7 +2207,7 @@
+@@ -2335,7 +2232,7 @@
  
      goto :goto_15
  
--    :cond_3a
-+    :cond_37
+-    :cond_3b
++    :cond_38
      const-string v0, "MHS is enabled in 6GHz and OWE but client wont support OWE,so enable in 2GHz"
  
      invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -2319,7 +2216,7 @@
+@@ -2344,7 +2241,7 @@
  
      invoke-virtual {v6, v0}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBand(I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    :cond_3b
-+    :cond_38
+-    :cond_3c
++    :cond_39
      :goto_15
      const-string v0, "MHS is enabled in OWE but client does not support so enable in Open"
  
-@@ -2333,20 +2230,20 @@
+@@ -2358,20 +2255,20 @@
  
      goto :goto_16
- 
--    :cond_3c
--    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
-+    :cond_39
-+    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
- 
--    invoke-static {v2}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmGetSecurityFromClient(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)I
-+    invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmGetSecurityFromClient(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)I
- 
--    move-result v2
-+    move-result v0
- 
--    const/4 v3, 0x1
-+    const/4 v2, 0x1
- 
--    if-ne v2, v3, :cond_3d
-+    if-ne v0, v2, :cond_3a
- 
--    const/4 v2, 0x3
-+    const/4 v0, 0x3
- 
--    if-ne v13, v2, :cond_3d
-+    if-ne v13, v0, :cond_3a
- 
-     const-string v0, "MHS is enabled in WPA3 but client supports only WPA2, so apply WPA3/2"
- 
-@@ -2365,128 +2262,128 @@
-     invoke-virtual {v6, v0, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
- 
-     :goto_16
--    const/4 v0, 0x1
-+    const/4 v5, 0x1
- 
-     goto :goto_17
  
 -    :cond_3d
 -    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
@@ -5969,23 +5576,57 @@ index f2cdf07..9b7340c 100644
 -    move-result v2
 +    move-result v0
  
--    if-nez v2, :cond_3f
-+    if-nez v0, :cond_3c
+-    const/4 v3, 0x1
++    const/4 v2, 0x1
+ 
+-    if-ne v2, v3, :cond_3e
++    if-ne v0, v2, :cond_3b
+ 
+-    const/4 v2, 0x3
++    const/4 v0, 0x3
+ 
+-    if-ne v13, v2, :cond_3e
++    if-ne v13, v0, :cond_3b
+ 
+     const-string v0, "MHS is enabled in WPA3 but client supports only WPA2, so apply WPA3/2"
+ 
+@@ -2390,128 +2287,128 @@
+     invoke-virtual {v6, v0, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     :goto_16
+-    const/4 v0, 0x1
++    const/4 v5, 0x1
+ 
+     goto :goto_17
+ 
+-    :cond_3e
+-    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
++    :cond_3b
++    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
+ 
+-    invoke-static {v2}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmGetSecurityFromClient(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)I
++    invoke-static {v0}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$fgetmGetSecurityFromClient(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;)I
+ 
+-    move-result v2
++    move-result v0
+ 
+-    if-nez v2, :cond_40
++    if-nez v0, :cond_3d
  
 -    const/4 v2, 0x1
 +    const/4 v0, 0x1
  
--    if-eq v13, v2, :cond_3f
-+    if-eq v13, v0, :cond_3c
+-    if-eq v13, v2, :cond_40
++    if-eq v13, v0, :cond_3d
  
--    if-eqz v13, :cond_3f
-+    if-eqz v13, :cond_3c
+-    if-eqz v13, :cond_40
++    if-eqz v13, :cond_3d
  
 -    const/4 v3, 0x4
 +    const/4 v2, 0x4
  
--    if-eq v13, v3, :cond_3f
-+    if-eq v13, v2, :cond_3c
+-    if-eq v13, v3, :cond_40
++    if-eq v13, v2, :cond_3d
  
 -    iget-object v3, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 +    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
@@ -6002,15 +5643,15 @@ index f2cdf07..9b7340c 100644
 -    const/4 v2, 0x2
 +    const/4 v0, 0x2
  
--    if-eq v13, v2, :cond_3e
-+    if-eq v13, v0, :cond_3b
+-    if-eq v13, v2, :cond_3f
++    if-eq v13, v0, :cond_3c
  
 -    const/4 v0, 0x1
 +    const/4 v5, 0x1
  
--    :cond_3e
+-    :cond_3f
 -    iget-object v3, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
-+    :cond_3b
++    :cond_3c
 +    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
 -    iget-object v3, v3, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->mSoftApConfiguration:Landroid/net/wifi/SoftApConfiguration;
@@ -6027,9 +5668,9 @@ index f2cdf07..9b7340c 100644
  
      goto :goto_17
  
--    :cond_3f
+-    :cond_40
 -    new-instance v2, Ljava/lang/StringBuilder;
-+    :cond_3c
++    :cond_3d
 +    new-instance v0, Ljava/lang/StringBuilder;
  
 -    const-string v3, "MHS is enabled in hostapd_security :"
@@ -6059,14 +5700,14 @@ index f2cdf07..9b7340c 100644
 -    const/4 v2, 0x1
 +    const/4 v0, 0x1
  
--    if-lt v13, v2, :cond_40
-+    if-lt v13, v0, :cond_3d
+-    if-lt v13, v2, :cond_41
++    if-lt v13, v0, :cond_3e
  
 -    const/4 v2, 0x3
 +    const/4 v0, 0x3
  
--    if-gt v13, v2, :cond_40
-+    if-gt v13, v0, :cond_3d
+-    if-gt v13, v2, :cond_41
++    if-gt v13, v0, :cond_3e
  
 -    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 +    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
@@ -6085,10 +5726,10 @@ index f2cdf07..9b7340c 100644
  
      goto :goto_17
  
--    :cond_40
--    if-nez v13, :cond_41
-+    :cond_3d
-+    if-nez v13, :cond_3e
+-    :cond_41
+-    if-nez v13, :cond_42
++    :cond_3e
++    if-nez v13, :cond_3f
  
 -    const/4 v2, 0x0
 +    const/4 v0, 0x0
@@ -6101,16 +5742,16 @@ index f2cdf07..9b7340c 100644
  
      goto :goto_17
  
--    :cond_41
+-    :cond_42
 -    const/4 v2, 0x0
-+    :cond_3e
++    :cond_3f
 +    const/4 v0, 0x0
  
 -    const/4 v3, 0x4
 +    const/4 v2, 0x4
  
--    if-ne v13, v3, :cond_42
-+    if-ne v13, v2, :cond_3f
+-    if-ne v13, v3, :cond_43
++    if-ne v13, v2, :cond_40
  
 -    const/4 v3, 0x5
 +    const/4 v2, 0x5
@@ -6118,8 +5759,8 @@ index f2cdf07..9b7340c 100644
 -    invoke-virtual {v6, v2, v3}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
 +    invoke-virtual {v6, v0, v2}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
  
--    :cond_42
-+    :cond_3f
+-    :cond_43
++    :cond_40
      :goto_17
 -    iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
 +    iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
@@ -6132,66 +5773,61 @@ index f2cdf07..9b7340c 100644
 -    iput-object v3, v2, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->mSoftApConfiguration:Landroid/net/wifi/SoftApConfiguration;
 +    iput-object v2, v0, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->mSoftApConfiguration:Landroid/net/wifi/SoftApConfiguration;
  
--    if-nez v0, :cond_43
-+    if-nez v5, :cond_40
+-    if-nez v0, :cond_44
++    if-nez v5, :cond_41
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
-@@ -2508,7 +2405,7 @@
+@@ -2533,7 +2430,7 @@
  
      goto :goto_18
  
--    :cond_43
-+    :cond_40
+-    :cond_44
++    :cond_41
      const/4 v0, 0x0
  
      iget-object v2, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
-@@ -2527,7 +2424,7 @@
+@@ -2552,7 +2449,7 @@
  
      move-result-object v0
- 
--    if-eqz v0, :cond_44
-+    if-eqz v0, :cond_41
- 
-     iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
- 
-@@ -2541,7 +2438,7 @@
- 
-     invoke-virtual {v0, v2, v5, v6}, Landroid/os/Handler;->sendEmptyMessageDelayed(IJ)Z
- 
--    :cond_44
-+    :cond_41
-     const-string v0, "restart MHS"
- 
-     invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -2599,7 +2496,7 @@
- 
-     move-result v0
  
 -    if-eqz v0, :cond_45
 +    if-eqz v0, :cond_42
  
      iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
  
-@@ -2613,10 +2510,12 @@
+@@ -2566,7 +2463,7 @@
  
-     invoke-static {v0, v1, v2}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$mnotifyConnectedDevices(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;Ljava/util/UUID;I)V
+     invoke-virtual {v0, v2, v5, v6}, Landroid/os/Handler;->sendEmptyMessageDelayed(IJ)Z
  
 -    :cond_45
 +    :cond_42
+     const-string v0, "restart MHS"
+ 
+     invoke-static {v4, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+@@ -2630,7 +2527,7 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_46
++    if-eqz v0, :cond_43
+ 
+     iget-object v0, v1, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer$BleWorkHandler;->this$0:Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;
+ 
+@@ -2644,7 +2541,7 @@
+ 
+     invoke-static {v0, v1, v2}, Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;->-$$Nest$mnotifyConnectedDevices(Lcom/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer;Ljava/util/UUID;I)V
+ 
+-    :cond_46
++    :cond_43
      :goto_18
      return-void
  
-+    nop
-+
-     :pswitch_data_0
-     .packed-switch 0x1
-         :pswitch_d
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer.smali
-index 9d187bb..557c927 100644
+index 7191486..f429ba2 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartGattServer.smali
-@@ -717,14 +717,6 @@
+@@ -737,14 +737,6 @@
      return v0
  .end method
  
@@ -6207,7 +5843,7 @@ index 9d187bb..557c927 100644
      .locals 2
  
 diff --git a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartUtil.smali b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartUtil.smali
-index 1a8216c..01527f0 100644
+index 00ed3b6..e35c493 100644
 --- a/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartUtil.smali
 +++ b/smali/com/samsung/android/server/wifi/ap/smarttethering/SemWifiApSmartUtil.smali
 @@ -5172,46 +5172,17 @@
@@ -6261,31 +5897,10 @@ index 1a8216c..01527f0 100644
  
  .method getlegacyPassword()Ljava/lang/String;
 diff --git a/smali/com/samsung/android/server/wifi/b2b/WifiB2bPolicyManager.smali b/smali/com/samsung/android/server/wifi/b2b/WifiB2bPolicyManager.smali
-index 52ed3c9..9c29f44 100644
+index 88c0fa2..9965def 100644
 --- a/smali/com/samsung/android/server/wifi/b2b/WifiB2bPolicyManager.smali
 +++ b/smali/com/samsung/android/server/wifi/b2b/WifiB2bPolicyManager.smali
-@@ -169,7 +169,7 @@
- .end method
- 
- .method public constructor <init>(Landroid/content/Context;Landroid/os/Looper;Lcom/samsung/android/server/wifi/b2b/NativeB2bRoamCommand;Lcom/samsung/android/server/wifi/SemWifiManagerProxy;)V
--    .locals 1
-+    .locals 2
- 
-     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
- 
-@@ -221,9 +221,9 @@
- 
-     iput-boolean v0, p0, Lcom/samsung/android/server/wifi/b2b/WifiB2bPolicyManager;->isRoamBandSupportedByDriver:Z
- 
--    const/4 v0, 0x3
-+    const/4 v1, 0x3
- 
--    iput v0, p0, Lcom/samsung/android/server/wifi/b2b/WifiB2bPolicyManager;->setbandDefaultValue:I
-+    iput v1, p0, Lcom/samsung/android/server/wifi/b2b/WifiB2bPolicyManager;->setbandDefaultValue:I
- 
-     iput-object p1, p0, Lcom/samsung/android/server/wifi/b2b/WifiB2bPolicyManager;->context:Landroid/content/Context;
- 
-@@ -239,9 +239,16 @@
+@@ -241,9 +241,16 @@
  
      iput p1, p0, Lcom/samsung/android/server/wifi/b2b/WifiB2bPolicyManager;->supportedBand:I
  
@@ -6303,7 +5918,7 @@ index 52ed3c9..9c29f44 100644
  
      invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
  
-@@ -1595,31 +1602,21 @@
+@@ -1564,31 +1571,21 @@
  .end method
  
  .method public setRoamBand(Ljava/lang/String;I)Z
@@ -6339,5 +5954,5 @@ index 52ed3c9..9c29f44 100644
  
      invoke-interface {p0, p1, p2}, Lcom/samsung/android/server/wifi/b2b/NativeB2bRoamCommand;->setRoamBand(Ljava/lang/String;I)Z
 -- 
-2.45.2
+2.46.1
 
