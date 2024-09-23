@@ -1,0 +1,71 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <p align="center">
+          <picture>
+            <img loading="lazy" width="50%" src="https://github.com/user-attachments/assets/c57b23ca-14ad-4de3-892a-d7d2588c60ca"/>
+          </picture>
+        </p>
+
+        Thank you for your interest in the project. To make it easier for us to help you, please fill any required information below.
+        Make sure not to submit a duplicate bug report, search for existing bug reports [here](https://github.com/salvogiangri/UN1CA/discussions/categories/bug-reports).
+  - type: input
+    attributes:
+      label: "UN1CA version:"
+      placeholder: 2.0.0-07d0046
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Device name:"
+      placeholder: Galaxy A52s 5G
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Device model number:"
+      placeholder: SM-A528B
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Magisk/KernelSU version:"
+      description: Please also specify if any modules are installed in your device.
+      placeholder: |
+        KernelSU v1.0.0 with the following modules installed:
+        - ZygiskNext
+        - LSPosed
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Steps to reproduce:"
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Expected behaviour:"
+      placeholder: Describe what should happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Actual behaviour:"
+      placeholder: Describe what happens instead.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Logs:"
+      description: Please provide logs obtained via [logcat](https://developer.android.com/tools/logcat) or your /proc/last_kmsg file in case of kernel panics.
+      placeholder: Upload logs by clicking the bar on the bottom. Please avoid uploading logs to other websites or using external links.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Additional context:"
