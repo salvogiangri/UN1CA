@@ -1,4 +1,4 @@
-From 596f92bc0b73a577be72d7e9468350ec7640702a Mon Sep 17 00:00:00 2001
+From be1f9dedce8141a1329ab95ec8794ba41412e4f8 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Wed, 28 Aug 2024 23:01:14 +0200
 Subject: [PATCH] Disable screen lock backup support
@@ -8,10 +8,10 @@ Subject: [PATCH] Disable screen lock backup support
  1 file changed, 1 insertion(+), 29 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/locksettings/LockSettingsService.smali b/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
-index 1eeb5871..b7021c57 100644
+index 978c99b5..a0b98740 100644
 --- a/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
 +++ b/smali_classes2/com/android/server/locksettings/LockSettingsService.smali
-@@ -8578,38 +8578,10 @@
+@@ -8605,38 +8605,10 @@
  .end method
  
  .method public final isSupportForgotPassword()Z
@@ -52,5 +52,5 @@ index 1eeb5871..b7021c57 100644
  .end method
  
 -- 
-2.46.0
+2.46.1
 
