@@ -1,0 +1,59 @@
+From 88b5090966d5511c9477b70a684e0d14f4efcda3 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 23 Sep 2024 12:24:11 +0200
+Subject: [PATCH] Enable app compaction
+
+---
+ smali/com/android/server/am/CachedAppOptimizer.smali | 6 +++---
+ smali/com/android/server/am/DynamicHiddenApp.smali   | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/smali/com/android/server/am/CachedAppOptimizer.smali b/smali/com/android/server/am/CachedAppOptimizer.smali
+index 3362e42a..05f50c60 100644
+--- a/smali/com/android/server/am/CachedAppOptimizer.smali
++++ b/smali/com/android/server/am/CachedAppOptimizer.smali
+@@ -42,7 +42,7 @@
+ 
+ .field static final DEFAULT_STATSD_SAMPLE_RATE:F = 0.1f
+ 
+-.field static final DEFAULT_USE_COMPACTION:Z = false
++.field static final DEFAULT_USE_COMPACTION:Z = true
+ 
+ .field static final DEFAULT_USE_FREEZER:Z = true
+ 
+@@ -593,7 +593,7 @@
+ 
+     iput-wide v5, p0, Lcom/android/server/am/CachedAppOptimizer;->mCompactThrottleMaxOomAdj:J
+ 
+-    iput-boolean v1, p0, Lcom/android/server/am/CachedAppOptimizer;->mUseCompaction:Z
++    iput-boolean v2, p0, Lcom/android/server/am/CachedAppOptimizer;->mUseCompaction:Z
+ 
+     iput-boolean v1, p0, Lcom/android/server/am/CachedAppOptimizer;->mUseFreezer:Z
+ 
+@@ -5278,7 +5278,7 @@
+ 
+     const-string/jumbo v0, "use_compaction"
+ 
+-    const/4 v1, 0x0
++    const/4 v1, 0x1
+ 
+     const-string v2, "activity_manager"
+ 
+diff --git a/smali/com/android/server/am/DynamicHiddenApp.smali b/smali/com/android/server/am/DynamicHiddenApp.smali
+index dc252c18..3a04f5a5 100644
+--- a/smali/com/android/server/am/DynamicHiddenApp.smali
++++ b/smali/com/android/server/am/DynamicHiddenApp.smali
+@@ -1872,7 +1872,9 @@
+ 
+     iget-object p0, p0, Lcom/android/server/am/OomAdjuster;->mCachedAppOptimizer:Lcom/android/server/am/CachedAppOptimizer;
+ 
+-    const/4 p0, 0x0
++    iget-boolean p0, p0, Lcom/android/server/am/CachedAppOptimizer;->isDebugable:Z
++
++    xor-int/lit8 p0, p0, 0x1
+ 
+     invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+-- 
+2.46.1
+
