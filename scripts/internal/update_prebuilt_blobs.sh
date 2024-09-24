@@ -68,13 +68,8 @@ case "$1" in
         ;;
     "unica/patches/vndk/31")
         MODULE="$1"
-        FW="SM-S901E/ZTO/350999641234561"
-        BLOBS="system/system/system_ext/apex/com.android.vndk.v31.apex"
-        ;;
-    "unica/patches/vndk/32")
-        MODULE="$1"
-        FW="SM-F936B/INS/352334701234566"
-        BLOBS="system_ext/apex/com.android.vndk.v32.apex"
+        FW="SM-S901E/INS/350999641234561"
+        BLOBS="system_ext/apex/com.android.vndk.v31.apex"
         ;;
     "unica/patches/vndk/33")
         MODULE="$1"
@@ -153,13 +148,13 @@ for i in $BLOBS; do
 
     if [[ "$i" == "system/system/system_ext/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/system_ext/.system_ext/.")"
+            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/system_ext/.system_ext/.")" || true
     elif [[ "$i" == "system/system/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/.system/.")"
+            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/.system/.")" || true
     elif [[ "$i" == "product/"* ]] || [[ "$i" == "vendor/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$i"
+            "$SRC_DIR/$MODULE/$i" || true
     fi
 done
 

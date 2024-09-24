@@ -27,8 +27,6 @@ jobs:
             path: "unica/patches/vndk/30"
           - module: "VNDK 31 apex"
             path: "unica/patches/vndk/31"
-          - module: "VNDK 32 apex"
-            path: "unica/patches/vndk/32"
           - module: "VNDK 33 apex"
             path: "unica/patches/vndk/33"
           - module: "(a71) OS proprietary blobs"
