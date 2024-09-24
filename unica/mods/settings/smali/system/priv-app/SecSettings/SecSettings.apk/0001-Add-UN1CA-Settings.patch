@@ -1,4 +1,4 @@
-From a2693d436cae10524d069060320b24311a5cf4a5 Mon Sep 17 00:00:00 2001
+From b5067b976f600cce9aafca1b87147706a75e5223 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -14,14 +14,14 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-b+sr+Latn/strings.xml              |  29 +
  res/values-bg/strings.xml                     |  29 +
  res/values-de/strings.xml                     |  29 +
- res/values-en-rAU/strings.xml                 |  29 +
- res/values-en-rCA/strings.xml                 |  29 +
- res/values-en-rGB/strings.xml                 |  29 +
- res/values-en-rIN/strings.xml                 |  29 +
- res/values-en-rPH/strings.xml                 |  29 +
- res/values-en-rUS/strings.xml                 |  29 +
- res/values-en-rZG/strings.xml                 |  29 +
- res/values-en/strings.xml                     |  29 +
+ res/values-en-rAU/strings.xml                 |  30 +
+ res/values-en-rCA/strings.xml                 |  30 +
+ res/values-en-rGB/strings.xml                 |  30 +
+ res/values-en-rIN/strings.xml                 |  30 +
+ res/values-en-rPH/strings.xml                 |  30 +
+ res/values-en-rUS/strings.xml                 |  30 +
+ res/values-en-rZG/strings.xml                 |  30 +
+ res/values-en/strings.xml                     |  30 +
  res/values-es-rES/strings.xml                 |  29 +
  res/values-es-rUS/strings.xml                 |  29 +
  res/values-es/strings.xml                     |  29 +
@@ -44,8 +44,8 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-vi/strings.xml                     |  29 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
- res/values/public.xml                         |  39 ++
- res/values/strings.xml                        |  32 +
+ res/values/public.xml                         |  40 ++
+ res/values/strings.xml                        |  33 ++
  res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   6 +
  res/xml/unica_settings.xml                    |  25 +
@@ -53,13 +53,14 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$drawable.smali     |   6 +
  .../com/android/settings/R$id.smali           |   2 +
  .../com/android/settings/R$layout.smali       |   2 +
- .../com/android/settings/R$string.smali       |  64 ++
+ .../com/android/settings/R$string.smali       |  66 +++
  .../com/android/settings/R$xml.smali          |   2 +
  .../core/gateway/SettingsGateway.smali        |   4 +-
  .../search/SearchIndexableResourcesBase.smali |  10 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
+ .../privacy/SecurityDashboardUtils.smali      |  15 +-
  .../ChoiDujourPreferenceController.smali      | 258 ++++++++
- .../unica/UnicaSettingsFragment.smali         | 155 +++++
+ .../unica/UnicaSettingsFragment.smali         | 241 ++++++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
@@ -79,7 +80,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 75 files changed, 5612 insertions(+), 1 deletion(-)
+ 76 files changed, 5711 insertions(+), 15 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -399,10 +400,10 @@ index 5b68d3a1..139d4b56 100644
 +    <string name="unica_ui_settings_title">UI-Einstellungen</string>
  </resources>
 diff --git a/res/values-en-rAU/strings.xml b/res/values-en-rAU/strings.xml
-index b5bf6623..8a29507e 100644
+index b5bf6623..b935aa67 100644
 --- a/res/values-en-rAU/strings.xml
 +++ b/res/values-en-rAU/strings.xml
-@@ -831,4 +831,33 @@ Any user can update apps for all other users."</string>
+@@ -831,4 +831,34 @@ Any user can update apps for all other users."</string>
      <string name="zen_mode_forever">Until you turn off</string>
      <string name="zen_mode_settings_summary_off">Never</string>
      <string name="zen_mode_settings_turn_on_dialog_title">Turn on Do Not Disturb</string>
@@ -435,12 +436,13 @@ index b5bf6623..8a29507e 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rCA/strings.xml b/res/values-en-rCA/strings.xml
-index 73208dfe..4bd12cfd 100644
+index 73208dfe..a4965ad4 100644
 --- a/res/values-en-rCA/strings.xml
 +++ b/res/values-en-rCA/strings.xml
-@@ -7357,4 +7357,33 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -7357,4 +7357,34 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -473,12 +475,13 @@ index 73208dfe..4bd12cfd 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rGB/strings.xml b/res/values-en-rGB/strings.xml
-index 72c56aac..7439165c 100644
+index 72c56aac..09c67213 100644
 --- a/res/values-en-rGB/strings.xml
 +++ b/res/values-en-rGB/strings.xml
-@@ -906,4 +906,33 @@ Any user can accept updated app permissions on behalf of all other users."</stri
+@@ -906,4 +906,34 @@ Any user can accept updated app permissions on behalf of all other users."</stri
      <string name="zen_mode_forever">Until you turn off</string>
      <string name="zen_mode_settings_summary_off">Never</string>
      <string name="zen_mode_settings_turn_on_dialog_title">Turn on Do not disturb for how long?</string>
@@ -511,12 +514,13 @@ index 72c56aac..7439165c 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rIN/strings.xml b/res/values-en-rIN/strings.xml
-index 4a76e1b7..7788af5f 100644
+index 4a76e1b7..f19a7cf8 100644
 --- a/res/values-en-rIN/strings.xml
 +++ b/res/values-en-rIN/strings.xml
-@@ -831,4 +831,33 @@ Any user can update apps for all other users."</string>
+@@ -831,4 +831,34 @@ Any user can update apps for all other users."</string>
      <string name="zen_mode_forever">Until you turn off</string>
      <string name="zen_mode_settings_summary_off">Never</string>
      <string name="zen_mode_settings_turn_on_dialog_title">Turn on Do Not Disturb</string>
@@ -549,12 +553,13 @@ index 4a76e1b7..7788af5f 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rPH/strings.xml b/res/values-en-rPH/strings.xml
-index 7212c9a7..4bdf1426 100644
+index 7212c9a7..84a65825 100644
 --- a/res/values-en-rPH/strings.xml
 +++ b/res/values-en-rPH/strings.xml
-@@ -6612,4 +6612,33 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6612,4 +6612,34 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -587,12 +592,13 @@ index 7212c9a7..4bdf1426 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rUS/strings.xml b/res/values-en-rUS/strings.xml
-index cfef2e61..8da16dd8 100644
+index cfef2e61..b3c32c6d 100644
 --- a/res/values-en-rUS/strings.xml
 +++ b/res/values-en-rUS/strings.xml
-@@ -6614,4 +6614,33 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6614,4 +6614,34 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -625,12 +631,13 @@ index cfef2e61..8da16dd8 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rZG/strings.xml b/res/values-en-rZG/strings.xml
-index 80bfdd9d..af1fdf19 100644
+index 80bfdd9d..e86bd658 100644
 --- a/res/values-en-rZG/strings.xml
 +++ b/res/values-en-rZG/strings.xml
-@@ -6483,4 +6483,33 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6483,4 +6483,34 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -663,12 +670,13 @@ index 80bfdd9d..af1fdf19 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en/strings.xml b/res/values-en/strings.xml
-index ca0e1e71..18ff4257 100644
+index ca0e1e71..b6ab8c8c 100644
 --- a/res/values-en/strings.xml
 +++ b/res/values-en/strings.xml
-@@ -6612,4 +6612,33 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6612,4 +6612,34 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -701,6 +709,7 @@ index ca0e1e71..18ff4257 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-es-rES/strings.xml b/res/values-es-rES/strings.xml
 index f96fa747..4fc9048b 100644
@@ -1483,7 +1492,7 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 8640687d..f59777f3 100644
+index 8640687d..a37b28a0 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5157,6 +5157,7 @@
@@ -1527,7 +1536,7 @@ index 8640687d..f59777f3 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d059c" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014d" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02ac" />
-@@ -32353,6 +32359,38 @@
+@@ -32353,6 +32359,39 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13343b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13343c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13343d" />
@@ -1563,10 +1572,11 @@ index 8640687d..f59777f3 100644
 +    <public type="string" name="unica_spoof_settings_title" id="0x7f13345b" />
 +    <public type="string" name="unica_ss_detection_title" id="0x7f13345c" />
 +    <public type="string" name="unica_ui_settings_title" id="0x7f13345d" />
++    <public type="string" name="unica_updates_title" id="0x7f13345e" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -35073,4 +35111,5 @@
+@@ -35073,4 +35112,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026c" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026d" />
@@ -1574,10 +1584,10 @@ index 8640687d..f59777f3 100644
  </resources>
 \ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 2a67ac19..376ba9cd 100644
+index 2a67ac19..c5893677 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -14018,4 +14018,36 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -14018,4 +14018,37 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -1613,6 +1623,7 @@ index 2a67ac19..376ba9cd 100644
 +    <string name="unica_spoof_settings_title">Spoof settings</string>
 +    <string name="unica_ss_detection_title">Disable screenshot detection</string>
 +    <string name="unica_ui_settings_title">UI settings</string>
++    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/xml/meta_009_settings.xml b/res/xml/meta_009_settings.xml
 index 09189066..d15cfde6 100644
@@ -1746,7 +1757,7 @@ index 5279deab..211ba597 100644
  
  .field public static final user_credential:I = 0x7f0d05f8
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 0c218c74..08a2ae02 100644
+index 0c218c74..c61f27ec 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4154,6 +4154,8 @@
@@ -1776,7 +1787,7 @@ index 0c218c74..08a2ae02 100644
  .field public static final menu_restore:I = 0x7f1315fe
  
  .field public static final menu_save:I = 0x7f1315ff
-@@ -10660,6 +10666,64 @@
+@@ -10660,6 +10666,66 @@
  
  .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132c00
  
@@ -1837,6 +1848,8 @@ index 0c218c74..08a2ae02 100644
 +.field public static final unica_ss_detection_title:I = 0x7f13345c
 +
 +.field public static final unica_ui_settings_title:I = 0x7f13345d
++
++.field public static final unica_updates_title:I = 0x7f13345e
 +
  .field public static final uninstall:I = 0x7f132c04
  
@@ -1909,6 +1922,33 @@ index 00000000..18621dd0
 +
 +    return-void
 +.end method
+diff --git a/smali_classes4/com/samsung/android/settings/privacy/SecurityDashboardUtils.smali b/smali_classes4/com/samsung/android/settings/privacy/SecurityDashboardUtils.smali
+index 4e0d4642..15b13507 100644
+--- a/smali_classes4/com/samsung/android/settings/privacy/SecurityDashboardUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/privacy/SecurityDashboardUtils.smali
+@@ -1503,21 +1503,8 @@
+ .end method
+ 
+ .method public static isSecurityUpdateSupported(Landroid/content/Context;)Z
+-    .locals 1
+-
+-    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    invoke-static {p0}, Lcom/samsung/android/settings/softwareupdate/SoftwareUpdateUtils;->isOTAUpgradeAllowed(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    return p0
++    .locals 0
+ 
+-    :cond_0
+     const/4 p0, 0x0
+ 
+     return p0
 diff --git a/smali_classes4/io/mesalabs/unica/ChoiDujourPreferenceController.smali b/smali_classes4/io/mesalabs/unica/ChoiDujourPreferenceController.smali
 new file mode 100644
 index 00000000..1f93aaec
@@ -2175,10 +2215,10 @@ index 00000000..1f93aaec
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
 new file mode 100644
-index 00000000..fef1a3c3
+index 00000000..f45ce0e5
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
-@@ -0,0 +1,155 @@
+@@ -0,0 +1,241 @@
 +.class public Lio/mesalabs/unica/UnicaSettingsFragment;
 +.super Lcom/android/settings/dashboard/DashboardFragment;
 +.source "UnicaSettingsFragment.java"
@@ -2186,6 +2226,10 @@ index 00000000..fef1a3c3
 +
 +# static fields
 +.field public static final SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++
++# instance fields
++.field public mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
 +
 +
 +# direct methods
@@ -2281,14 +2325,6 @@ index 00000000..fef1a3c3
 +
 +    invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
 +
-+    const-string p1, "unica_logo"
-+
-+    invoke-virtual {p0, p1}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
-+
-+    move-result-object p1
-+
-+    invoke-direct {p0, p1}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
-+
 +    const-string p1, "persist.sys.pif.version"
 +
 +    const-string v0, ""
@@ -2324,6 +2360,8 @@ index 00000000..fef1a3c3
 +
 +    invoke-super {p0}, Lcom/android/settings/dashboard/DashboardFragment;->onResume()V
 +
++    invoke-virtual {p0}, Lio/mesalabs/unica/UnicaSettingsFragment;->setLinkedDataView()V
++
 +    const-string v0, "unica_logo"
 +
 +    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
@@ -2332,6 +2370,94 @@ index 00000000..fef1a3c3
 +
 +    invoke-direct {p0, v0}, Lio/mesalabs/unica/UnicaSettingsFragment;->setWallpaperasLogoBg(Landroidx/preference/Preference;)V
 +
++    return-void
++.end method
++
++.method public final setLinkedDataView()V
++    .locals 5
++
++    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++
++    move-result-object v0
++
++    invoke-static {v0}, Lcom/samsung/android/settings/Rune;->supportRelativeLink(Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1
++
++    iget-object v0, p0, Lio/mesalabs/unica/UnicaSettingsFragment;->mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    if-nez v0, :cond_1
++
++    new-instance v0, Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++
++    move-result-object v1
++
++    invoke-direct {v0, v1}, Lcom/samsung/android/settings/widget/SecRelativeLinkView;-><init>(Landroid/content/Context;)V
++
++    iput-object v0, p0, Lio/mesalabs/unica/UnicaSettingsFragment;->mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    const-string v1, "io.mesalabs.choidujour"
++
++    invoke-static {v0, v1}, Lcom/samsung/android/settings/PkgUtils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    new-instance v0, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;
++
++    invoke-direct {v0}, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;-><init>()V
++
++    sget v1, Lcom/android/settings/R$string;->unica_updates_title:I
++
++    iput v1, v0, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;->titleRes:I
++
++    new-instance v1, Landroid/content/Intent;
++
++    invoke-direct {v1}, Landroid/content/Intent;-><init>()V
++
++    new-instance v2, Landroid/content/ComponentName;
++
++    const-string v3, "io.mesalabs.choidujour"
++
++    const-string v4, "io.mesalabs.choidujour.activity.HomeActivity"
++
++    invoke-direct {v2, v3, v4}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
++
++    invoke-virtual {v1, v2}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
++
++    iput-object v1, v0, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;->intent:Landroid/content/Intent;
++
++    const-string v1, "sec_top_level_settings"
++
++    iput-object v1, v0, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;->topLevelKey:Ljava/lang/String;
++
++    iget-object v1, p0, Lio/mesalabs/unica/UnicaSettingsFragment;->mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    invoke-virtual {v1, v0}, Lcom/samsung/android/settings/widget/SecRelativeLinkView;->pushLinkData(Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;)Landroid/view/View;
++
++    :cond_0
++    iget-object v0, p0, Lio/mesalabs/unica/UnicaSettingsFragment;->mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    invoke-virtual {v0}, Lcom/samsung/android/settings/widget/SecRelativeLinkView;->isValid()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1
++
++    iget-object v0, p0, Lio/mesalabs/unica/UnicaSettingsFragment;->mRelativeLinkView:Lcom/samsung/android/settings/widget/SecRelativeLinkView;
++
++    invoke-virtual {v0, p0}, Lcom/samsung/android/settings/widget/SecRelativeLinkView;->create(Ljava/lang/Object;)V
++
++    :cond_1
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
@@ -6422,5 +6548,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.46.0
+2.46.1
 
