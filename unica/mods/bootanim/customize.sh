@@ -1,6 +1,6 @@
 SKIPUNZIP=1
 
-TWOTHREE_TARGETS="r0q"
+TWOTHREE_TARGETS="g0q r0q"
 TWOFOUR_TARGETS="a52q a52xq a52sxq a71 a72q a73xq m52xq r8q r9q r9q2"
 
 if echo "$TWOTHREE_TARGETS" | grep -q -w "$TARGET_CODENAME"; then
