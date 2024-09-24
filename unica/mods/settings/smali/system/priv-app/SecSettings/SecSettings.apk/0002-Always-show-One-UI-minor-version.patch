@@ -1,22 +1,20 @@
-From 9b49531cbf510d2ca15866ec1f7892a14c6af191 Mon Sep 17 00:00:00 2001
+From 3e6b99dec00bdd49fd6db3e56bb5d67230d6cfc2 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:21:44 +0200
 Subject: [PATCH] Always show One UI minor version
 
 ---
- .../OneUIVersionPreferenceController.smali           | 12 ------------
- 1 file changed, 12 deletions(-)
+ .../OneUIVersionPreferenceController.smali             | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
-index b88774a3..b04b8332 100644
+index b88774a3..5929ea08 100644
 --- a/smali_classes4/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
-@@ -291,20 +291,8 @@
- .method public isDeviceWithMicroVersion()Z
-     .locals 0
+@@ -293,18 +293,8 @@
  
--    invoke-static {}, Lcom/android/settings/Utils;->isTablet()Z
--
+     invoke-static {}, Lcom/android/settings/Utils;->isTablet()Z
+ 
 -    move-result p0
 -
 -    if-nez p0, :cond_0
@@ -33,5 +31,5 @@ index b88774a3..b04b8332 100644
  .end method
  
 -- 
-2.46.0
+2.46.1
 
