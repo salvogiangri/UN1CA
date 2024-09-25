@@ -61,6 +61,12 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system" -type f \
             | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp.system.")"
         ;;
+    "unica/patches/uwb")
+        MODULE="$1"
+        FW="SM-S918B/EUX/350196551234562"
+        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb.system.")"
+        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/..")"
+        ;;
     "unica/patches/vndk/30")
         MODULE="$1"
         FW="SM-A736B/INS/352828291234563"
@@ -152,7 +158,7 @@ for i in $BLOBS; do
     elif [[ "$i" == "system/system/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
             "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/.system/.")" || true
-    elif [[ "$i" == "product/"* ]] || [[ "$i" == "vendor/"* ]]; then
+    elif [[ "$i" == "product/"* ]] || [[ "$i" == "vendor/"* ]] || [[ "$i" == "system_ext/"* ]]; then
         cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
             "$SRC_DIR/$MODULE/$i" || true
     fi

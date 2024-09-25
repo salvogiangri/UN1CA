@@ -23,6 +23,8 @@ jobs:
             path: "unica/patches/product_feature/fingerprint/optical_fod"
           - module: "Side fingerprint sensor blobs"
             path: "unica/patches/product_feature/fingerprint/side_fp"
+          - module: "UWB blobs"
+            path: "unica/patches/uwb"
           - module: "VNDK 30 apex"
             path: "unica/patches/vndk/30"
           - module: "VNDK 31 apex"
