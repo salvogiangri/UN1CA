@@ -63,6 +63,10 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 SOURCE_FIRMWARE_PATH=$(echo -n "$SOURCE_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)
 
 if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libuwb-cal.conf" ]; then
+    if ! grep -q "uwbcountrycode" "$WORK_DIR/product/etc/build.prop"; then
+        sed -i "/usb.config/a ro.boot.uwbcountrycode=ff" "$WORK_DIR/product/etc/build.prop"
+    fi
+
     ADD_TO_WORK_DIR "system" "system/etc/libuwb-cal.conf" 0 0 644 "u:object_r:system_file:s0"
     ADD_TO_WORK_DIR "system" "system/etc/pp_model.tflite" 0 0 644 "u:object_r:system_file:s0"
 
