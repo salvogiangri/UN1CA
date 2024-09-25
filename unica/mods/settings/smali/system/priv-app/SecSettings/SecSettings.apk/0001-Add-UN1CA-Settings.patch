@@ -1,4 +1,4 @@
-From 6ac4f8d4f81696eb0f922b7c7c118c95700a42a6 Mon Sep 17 00:00:00 2001
+From 47b47b08550b1b09f72de8bde31119ccbbaa86e8 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -78,9 +78,9 @@ Subject: [PATCH] Add UN1CA Settings
  ...Controller$$ExternalSyntheticLambda0.smali |  34 ++
  .../LiveBlurPreferenceController.smali        | 324 +++++++++++
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
- .../ROMVersionPreferenceController.smali      | 238 ++++++++
+ .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 76 files changed, 5717 insertions(+), 15 deletions(-)
+ 76 files changed, 5745 insertions(+), 15 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1663,7 +1663,7 @@ index cfbc271c..9bc515d8 100644
          <intent android:targetPackage="@string/config_sec_toplevel_tips_package" android:targetClass="@string/config_sec_toplevel_tips_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..a55eff2e
+index 00000000..4038fda8
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
 @@ -0,0 +1,25 @@
@@ -1672,7 +1672,7 @@ index 00000000..a55eff2e
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
 +    <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" android:key="unica_logo" />
 +    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-+    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
++    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" android:fragment="com.samsung.android.settings.deviceinfo.softwareinfo.SoftwareInfoSettings" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
 +    <SecSwitchPreferenceScreen android:title="@string/unica_pif_version_title" android:key="unica_pif_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.PIFVersionPreferenceController" />
 +    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_ui_settings_title">
@@ -6122,10 +6122,10 @@ index 00000000..cc21ee6d
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
 new file mode 100644
-index 00000000..edcca271
+index 00000000..18465d47
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
-@@ -0,0 +1,238 @@
+@@ -0,0 +1,266 @@
 +.class public Lio/mesalabs/unica/settings/ROMVersionPreferenceController;
 +.super Lcom/android/settings/core/BasePreferenceController;
 +.source "ROMVersionPreferenceController.java"
@@ -6180,10 +6180,38 @@ index 00000000..edcca271
 +    return-object p0
 +.end method
 +
-+.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
-+    .locals 0
++.method public getLaunchIntent()Landroid/content/Intent;
++    .locals 1
 +
-+    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++    new-instance v0, Lcom/android/settings/core/SubSettingLauncher;
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-direct {v0, p0}, Lcom/android/settings/core/SubSettingLauncher;-><init>(Landroid/content/Context;)V
++
++    const-class p0, Lcom/samsung/android/settings/deviceinfo/softwareinfo/SoftwareInfoSettings;
++
++    invoke-virtual {p0}, Ljava/lang/Class;->getName()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Lcom/android/settings/core/SubSettingLauncher;->setDestination(Ljava/lang/String;)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    sget v0, Lcom/android/settings/R$string;->device_info_software_title:I
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/SubSettingLauncher;->setTitleRes(I)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    const v0, 0x10008000
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/SubSettingLauncher;->addFlags(I)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Lcom/android/settings/core/SubSettingLauncher;->toIntent()Landroid/content/Intent;
 +
 +    move-result-object p0
 +
