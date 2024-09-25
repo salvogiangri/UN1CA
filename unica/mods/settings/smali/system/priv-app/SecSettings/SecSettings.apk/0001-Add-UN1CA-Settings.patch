@@ -1,4 +1,4 @@
-From b5067b976f600cce9aafca1b87147706a75e5223 Mon Sep 17 00:00:00 2001
+From 6ac4f8d4f81696eb0f922b7c7c118c95700a42a6 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -60,7 +60,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../Settings$UnicaSettingsActivity.smali      |  13 +
  .../privacy/SecurityDashboardUtils.smali      |  15 +-
  .../ChoiDujourPreferenceController.smali      | 258 ++++++++
- .../unica/UnicaSettingsFragment.smali         | 241 ++++++++
+ .../unica/UnicaSettingsFragment.smali         | 247 ++++++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
@@ -80,7 +80,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 238 ++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 76 files changed, 5711 insertions(+), 15 deletions(-)
+ 76 files changed, 5717 insertions(+), 15 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -2215,10 +2215,10 @@ index 00000000..1f93aaec
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
 new file mode 100644
-index 00000000..f45ce0e5
+index 00000000..f3324de4
 --- /dev/null
 +++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
-@@ -0,0 +1,241 @@
+@@ -0,0 +1,247 @@
 +.class public Lio/mesalabs/unica/UnicaSettingsFragment;
 +.super Lcom/android/settings/dashboard/DashboardFragment;
 +.source "UnicaSettingsFragment.java"
@@ -2433,6 +2433,12 @@ index 00000000..f45ce0e5
 +    invoke-direct {v2, v3, v4}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
 +
 +    invoke-virtual {v1, v2}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
++
++    const-string v2, "from_settings"
++
++    const/4 v3, 0x1
++
++    invoke-virtual {v1, v2, v3}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
 +
 +    iput-object v1, v0, Lcom/samsung/android/settings/SettingsPreferenceFragmentLinkData;->intent:Landroid/content/Intent;
 +
