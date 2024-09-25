@@ -90,6 +90,11 @@ case "$1" in
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
         ;;
+    "target/b0q/patches/ultra")
+        MODULE="$1"
+        FW="SM-S918B/EUX/350196551234562"
+        BLOBS="$(find "$SRC_DIR/target/b0q/patches/ultra/system" -type f | sed "s.$SRC_DIR/target/b0q/patches/ultra.system.")"
+        ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A528B/BTU/352599501234566"
