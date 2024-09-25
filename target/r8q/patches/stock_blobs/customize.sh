@@ -83,9 +83,11 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.keymint-V2-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.secureclock-V1-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libcallaudio.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdk_native_keymint.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/android.hardware.security.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libcallaudio.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdk_native_keymint.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsecaudiomonomix.so"
 REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
