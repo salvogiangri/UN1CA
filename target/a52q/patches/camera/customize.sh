@@ -120,7 +120,6 @@ system/lib64/libFaceRecognition.arcsoft.so
 system/lib64/libFrucPSVTLib.so
 system/lib64/libImageSegmenter_v1.camera.samsung.so
 system/lib64/libLocalTM_pcc.camera.samsung.so
-system/lib64/libLttEngine.camera.samsung.so
 system/lib64/libMPISingleRGB40.camera.samsung.so
 system/lib64/libMPISingleRGB40Tuning.camera.samsung.so
 system/lib64/libMultiFrameProcessing30.camera.samsung.so
@@ -194,7 +193,10 @@ for blob in $BLOBS_LIST
 do
     ADD_TO_WORK_DIR "system" "$blob" 0 0 644 "u:object_r:system_lib_file:s0"
 done
-echo "libHIDTSnapJNI.camera.samsung.so" >> "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+{
+    echo "libLttEngine.camera.samsung.so"
+    echo "libHIDTSnapJNI.camera.samsung.so"
+} >> "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
 
 echo "Fix AI Photo Editor"
 cp -a --preserve=all \
