@@ -1,13 +1,13 @@
-From 5c7c110438967edf17a619e2e9d5e556e55cf635 Mon Sep 17 00:00:00 2001
-From: BlackMesa123 <giangrecosalvo9@gmail.com>
-Date: Sun, 9 Jun 2024 01:24:50 +0200
+From 1b5ec38c7bd321ea98f2edaddff4ef9392f9bbe3 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 27 Sep 2024 21:36:23 +0200
 Subject: [PATCH] Disable SemService
 
 ---
  smali/com/android/server/SystemConfig.smali   | 127 +++++++++---------
- smali/com/android/server/SystemServer.smali   |  59 +++-----
+ smali/com/android/server/SystemServer.smali   |  47 ++-----
  .../ucmservice/CredentialManagerService.smali |   2 +-
- 3 files changed, 81 insertions(+), 107 deletions(-)
+ 3 files changed, 75 insertions(+), 101 deletions(-)
 
 diff --git a/smali/com/android/server/SystemConfig.smali b/smali/com/android/server/SystemConfig.smali
 index ca92a06e..cb0fc5d0 100644
@@ -264,10 +264,10 @@ index ca92a06e..cb0fc5d0 100644
  
      const-string/jumbo p0, "removed eSE secure element feature: not support se"
 diff --git a/smali/com/android/server/SystemServer.smali b/smali/com/android/server/SystemServer.smali
-index 05c5aaa7..2f47dd00 100644
+index 3db364bf..672547ef 100644
 --- a/smali/com/android/server/SystemServer.smali
 +++ b/smali/com/android/server/SystemServer.smali
-@@ -912,34 +912,11 @@
+@@ -912,29 +912,6 @@
      :goto_1
      invoke-virtual {v1}, Landroid/util/TimingsTraceLog;->traceEnd()V
  
@@ -294,19 +294,20 @@ index 05c5aaa7..2f47dd00 100644
 -    :goto_2
 -    invoke-virtual {v1}, Landroid/util/TimingsTraceLog;->traceEnd()V
 -
-     const-string v2, "Blockchain Service"
+     const/4 v2, 0x0
+ 
+     const/4 v3, 0x1
+@@ -945,25 +922,25 @@
  
      invoke-virtual {v1, v2}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
  
 -    :try_start_3
 +    :try_start_2
-     invoke-static {v0, v2}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
+     const-string v2, "SemVideoTranscodingService"
  
-     const-string v2, "blockchain"
-@@ -949,19 +926,19 @@
-     invoke-direct {v3, p0}, Lcom/android/server/SystemServer$8;-><init>(Lcom/android/server/SystemServer;)V
+     const-class v3, Lcom/samsung/android/media/codec/VideoTranscodingService;
  
-     invoke-static {v2, v3}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Landroid/os/IServiceCreator;)V
+     invoke-static {v2, v3}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Ljava/lang/Class;)V
 -    :try_end_3
 -    .catchall {:try_start_3 .. :try_end_3} :catchall_3
 +    :try_end_2
@@ -319,7 +320,7 @@ index 05c5aaa7..2f47dd00 100644
 +    :catchall_2
      move-exception v2
  
-     const-string v3, "Failure starting Blockchain TZ Service"
+     const-string v3, "Failed to start VideoTranscodingService "
  
      invoke-static {v0, v3, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
  
@@ -327,18 +328,18 @@ index 05c5aaa7..2f47dd00 100644
 +    :goto_2
      invoke-virtual {v1}, Landroid/util/TimingsTraceLog;->traceEnd()V
  
-     const/4 v2, 0x0
-@@ -974,25 +951,25 @@
+     if-nez p1, :cond_0
+@@ -972,23 +949,23 @@
  
-     invoke-virtual {v1, v2}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
+     invoke-virtual {v1, p1}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
  
 -    :try_start_4
 +    :try_start_3
-     const-string v2, "SemVideoTranscodingService"
+     const-string v0, "dsms"
  
-     const-class v3, Lcom/samsung/android/media/codec/VideoTranscodingService;
+     const-class v2, Lcom/samsung/android/jdsms/DsmsService;
  
-     invoke-static {v2, v3}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Ljava/lang/Class;)V
+     invoke-static {v0, v2}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Ljava/lang/Class;)V
 -    :try_end_4
 -    .catchall {:try_start_4 .. :try_end_4} :catchall_4
 +    :try_end_3
@@ -349,44 +350,12 @@ index 05c5aaa7..2f47dd00 100644
  
 -    :catchall_4
 +    :catchall_3
-     move-exception v2
- 
-     const-string v3, "Failed to start VideoTranscodingService "
- 
-     invoke-static {v0, v3, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
- 
--    :goto_4
-+    :goto_3
-     invoke-virtual {v1}, Landroid/util/TimingsTraceLog;->traceEnd()V
- 
-     if-nez p1, :cond_0
-@@ -1001,23 +978,23 @@
- 
-     invoke-virtual {v1, p1}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
- 
--    :try_start_5
-+    :try_start_4
-     const-string v0, "dsms"
- 
-     const-class v2, Lcom/samsung/android/jdsms/DsmsService;
- 
-     invoke-static {v0, v2}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Ljava/lang/Class;)V
--    :try_end_5
--    .catchall {:try_start_5 .. :try_end_5} :catchall_5
-+    :try_end_4
-+    .catchall {:try_start_4 .. :try_end_4} :catchall_4
- 
--    goto :goto_5
-+    goto :goto_4
- 
--    :catchall_5
-+    :catchall_4
      move-exception v0
  
      invoke-virtual {p0, p1, v0}, Lcom/android/server/SystemServer;->reportWtf(Ljava/lang/String;Ljava/lang/Throwable;)V
  
--    :goto_5
-+    :goto_4
+-    :goto_4
++    :goto_3
      invoke-virtual {v1}, Landroid/util/TimingsTraceLog;->traceEnd()V
  
      :cond_0
@@ -404,5 +373,5 @@ index d37ed381..0ad12a5f 100644
      invoke-virtual {v3, v2, v4}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
  
 -- 
-2.46.0
+2.46.2
 
