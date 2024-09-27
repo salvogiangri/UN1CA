@@ -1,4 +1,4 @@
-From 47b47b08550b1b09f72de8bde31119ccbbaa86e8 Mon Sep 17 00:00:00 2001
+From 73369fe427bb8c043743f06ba8eb7ddeb1046066 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -1396,7 +1396,7 @@ index 86380f5b..66e0c6d5 100644
 +    <string name="unica_ui_settings_title">Arayüz Ayarları</string>
  </resources>
 diff --git a/res/values-uk/strings.xml b/res/values-uk/strings.xml
-index 9366a208..5a6bf4c7 100644
+index 9366a208..0dde263e 100644
 --- a/res/values-uk/strings.xml
 +++ b/res/values-uk/strings.xml
 @@ -7423,4 +7423,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
@@ -1425,7 +1425,7 @@ index 9366a208..5a6bf4c7 100644
 +    <string name="unica_pif_no_root">Для роботи Play Integrity Fix потрібен root доступ.</string>
 +    <string name="unica_pif_up_to_date">Ви використовуєте останню версію.</string>
 +    <string name="unica_pif_updated">Оновлення успішно завершено.</string>
-+    <string name="unica_pif_version_title">Версія Play Integrity Fix</string>
++    <string name="unica_pif_version_title">Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Версія UN1CA</string>
 +    <string name="unica_secure_ss_title">Вимкнути заборону скріншота в додатках</string>
 +    <string name="unica_settings_title">Налаштування UN1CA</string>
@@ -6582,5 +6582,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.46.1
+2.46.2
 
