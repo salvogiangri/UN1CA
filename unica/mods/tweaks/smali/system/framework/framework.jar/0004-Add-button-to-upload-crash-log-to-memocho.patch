@@ -1,4 +1,4 @@
-From 123245e98074c0720848584a9e1f08db4f192fea Mon Sep 17 00:00:00 2001
+From 71420e07d13e80632860d58088723aa2b2e51d88 Mon Sep 17 00:00:00 2001
 From: Till Kottmann <deletescape@gmail.com>
 Date: Thu, 3 Oct 2024 09:54:59 +0200
 Subject: [PATCH] Add button to upload crash log to memocho
@@ -908,7 +908,7 @@ index 00000000..3723a8de
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali b/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali
 new file mode 100644
-index 00000000..c1ad4cf0
+index 00000000..3b5ba563
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali
 @@ -0,0 +1,685 @@
@@ -1301,7 +1301,7 @@ index 00000000..c1ad4cf0
 +    goto :goto_1
 +
 +    :pswitch_2
-+    const-string v0, "Kilitlenme g\u00fcnl\u00fc\u011f\u00fc URL\'sini kopyala"
++    const-string v0, "Hata g\u00fcnl\u00fc\u011f\u00fc URL\'sini kopyala"
 +
 +    goto :goto_1
 +
@@ -1341,7 +1341,7 @@ index 00000000..c1ad4cf0
 +    goto :goto_1
 +
 +    :pswitch_a
-+    const-string v0, "Copiar URL del registro de errores"
++    const-string v0, "Copiar URL del registro de error"
 +
 +    goto :goto_1
 +
