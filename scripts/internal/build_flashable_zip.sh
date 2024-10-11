@@ -56,7 +56,7 @@ PRINT_HEADER()
     echo -n 'ui_print("'
     echo -n "UN1CA $ROM_VERSION for $TARGET_NAME"
     echo    '");'
-    echo    'ui_print("Coded by BlackMesa123 @XDAforums");'
+    echo    'ui_print("Coded by salvo_giangri @XDAforums");'
     echo    'ui_print("****************************************");'
     echo -n 'ui_print("'
     echo -n "One UI version: $ONEUI_VERSION"
