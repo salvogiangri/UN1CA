@@ -1,4 +1,4 @@
-From 73369fe427bb8c043743f06ba8eb7ddeb1046066 Mon Sep 17 00:00:00 2001
+From a3757bb9b605f32245d5f2288472ffd242aa88fa Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -109,10 +109,10 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index ee9adef1..503fb219 100644
+index e6f71ea6..24d91f52 100644
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
-@@ -5189,5 +5189,13 @@
+@@ -5190,5 +5190,13 @@
          <provider android:authorities="com.android.settings.CapsuleProvider" android:exported="true" android:name="com.samsung.android.sdk.bixby2.provider.CapsuleProvider"/>
          <meta-data android:name="com.samsung.android.sdk.bixby2.companionApp" android:value="true"/>
          <meta-data android:name="com.samsung.android.sdk.bixby2.version" android:value="@string/sdk_version"/>
@@ -126,7 +126,6 @@ index ee9adef1..503fb219 100644
 +        </activity>
      </application>
  </manifest>
-\ No newline at end of file
 diff --git a/res/drawable/sec_ic_settings_unica.xml b/res/drawable/sec_ic_settings_unica.xml
 new file mode 100644
 index 00000000..0fba1952
@@ -1492,7 +1491,7 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 8640687d..a37b28a0 100644
+index 59e48eb7..5f58b119 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5157,6 +5157,7 @@
@@ -1582,7 +1581,6 @@ index 8640687d..a37b28a0 100644
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026d" />
 +    <public type="xml" name="unica_settings" id="0x7f16026e" />
  </resources>
-\ No newline at end of file
 diff --git a/res/values/strings.xml b/res/values/strings.xml
 index 2a67ac19..c5893677 100644
 --- a/res/values/strings.xml
@@ -1626,7 +1624,7 @@ index 2a67ac19..c5893677 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/xml/meta_009_settings.xml b/res/xml/meta_009_settings.xml
-index 09189066..d15cfde6 100644
+index 8038ef6b..26b58eb0 100644
 --- a/res/xml/meta_009_settings.xml
 +++ b/res/xml/meta_009_settings.xml
 @@ -123,6 +123,7 @@
@@ -1638,7 +1636,7 @@ index 09189066..d15cfde6 100644
          <Property Comment="Permission icon color" DefaultValue="#ff4d4d4d" DestAttribName="permission_icon_color" UID="9-60-5" ValueRef="24-A" ValueType="TintColor" />
          <Property Comment="Permission text color" DefaultValue="#ff252525" DestAttribName="privacy_dashboard_permission_text_color" UID="9-60-6" ValueRef="24-A" ValueType="TextColor" />
 diff --git a/res/xml/sec_top_level_settings.xml b/res/xml/sec_top_level_settings.xml
-index cfbc271c..9bc515d8 100644
+index 94a8f486..456742a0 100644
 --- a/res/xml/sec_top_level_settings.xml
 +++ b/res/xml/sec_top_level_settings.xml
 @@ -62,6 +62,7 @@
@@ -6582,5 +6580,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.46.2
+2.47.0
 

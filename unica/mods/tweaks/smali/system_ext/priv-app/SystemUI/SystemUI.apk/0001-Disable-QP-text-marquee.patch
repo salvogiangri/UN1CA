@@ -1,4 +1,4 @@
-From a855e48d6ccf2f74be56d42bc26c72dc8bd5d402 Mon Sep 17 00:00:00 2001
+From d1a4b0799497711ad6d9a82cf0d206b4913be742 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 07:37:15 +0200
 Subject: [PATCH] Disable QP text marquee
@@ -10,7 +10,7 @@ Subject: [PATCH] Disable QP text marquee
  3 files changed, 3 insertions(+), 17 deletions(-)
 
 diff --git a/res/layout/sec_qs_tile_label.xml b/res/layout/sec_qs_tile_label.xml
-index 8376ce11..925b4f46 100644
+index 631feab3b..70c883ff7 100644
 --- a/res/layout/sec_qs_tile_label.xml
 +++ b/res/layout/sec_qs_tile_label.xml
 @@ -1,6 +1,6 @@
@@ -22,9 +22,8 @@ index 8376ce11..925b4f46 100644
 +    <TextView android:textSize="@dimen/sec_style_qs_tile_text_size" android:textColor="@color/qs_tile_label" android:ellipsize="end" android:gravity="center_horizontal" android:layout_gravity="center" android:id="@id/tile_label" android:padding="@dimen/sec_style_qs_tile_label_padding" android:clickable="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="sec" android:textFontWeight="400" />
 +    <TextView android:textSize="@dimen/sec_style_qs_tile_second_text_size" android:textColor="@color/qs_tile_sub_label" android:ellipsize="end" android:gravity="center_horizontal" android:layout_gravity="center" android:id="@id/app_label" android:padding="@dimen/sec_style_qs_tile_label_padding" android:visibility="gone" android:clickable="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:layout_below="@id/label_group" android:fontFamily="sec" android:layout_alignStart="@id/label_group" android:layout_alignEnd="@id/label_group" android:textFontWeight="400" />
  </LinearLayout>
-\ No newline at end of file
 diff --git a/res/layout/shade_carrier.xml b/res/layout/shade_carrier.xml
-index ab943780..6e781e1b 100644
+index 79acdb29c..7c0a12d54 100644
 --- a/res/layout/shade_carrier.xml
 +++ b/res/layout/shade_carrier.xml
 @@ -1,7 +1,7 @@
@@ -36,9 +35,8 @@ index ab943780..6e781e1b 100644
      <View android:id="@id/spacer" android:visibility="gone" android:layout_width="@dimen/qs_carrier_margin_width" android:layout_height="fill_parent" />
      <include android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/qs_carrier_margin_width" layout="@layout/mobile_signal_group" />
  </com.android.systemui.shade.carrier.ShadeCarrier>
-\ No newline at end of file
 diff --git a/smali_classes2/com/android/systemui/statusbar/phone/SwitchableDoubleShadowTextView.smali b/smali_classes2/com/android/systemui/statusbar/phone/SwitchableDoubleShadowTextView.smali
-index 67aea363..5621e629 100644
+index 3d55ac1e4..0613607b4 100644
 --- a/smali_classes2/com/android/systemui/statusbar/phone/SwitchableDoubleShadowTextView.smali
 +++ b/smali_classes2/com/android/systemui/statusbar/phone/SwitchableDoubleShadowTextView.smali
 @@ -335,19 +335,6 @@
@@ -69,5 +67,5 @@ index 67aea363..5621e629 100644
      return-void
  .end method
 -- 
-2.46.0
+2.47.0
 
