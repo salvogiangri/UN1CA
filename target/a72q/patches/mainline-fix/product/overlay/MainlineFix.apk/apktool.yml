@@ -1,0 +1,19 @@
+apkFileName: MainlineFix.apk
+isFrameworkApk: false
+usesFramework:
+  ids:
+  - 1
+  tag: null
+sdkInfo:
+  minSdkVersion: 34
+  targetSdkVersion: 34
+packageInfo:
+  forcedPackageId: 127
+  renameManifestPackage: null
+versionInfo:
+  versionCode: 1
+  versionName: 1.0
+sharedLibrary: false
+sparseResources: false
+doNotCompress:
+- arsc
