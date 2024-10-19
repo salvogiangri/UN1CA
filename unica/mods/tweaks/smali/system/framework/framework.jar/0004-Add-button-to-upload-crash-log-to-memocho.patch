@@ -1,4 +1,4 @@
-From 71420e07d13e80632860d58088723aa2b2e51d88 Mon Sep 17 00:00:00 2001
+From efd8c52727853bdd1b8b043620dfa99d19967502 Mon Sep 17 00:00:00 2001
 From: Till Kottmann <deletescape@gmail.com>
 Date: Thu, 3 Oct 2024 09:54:59 +0200
 Subject: [PATCH] Add button to upload crash log to memocho
@@ -6,10 +6,10 @@ Subject: [PATCH] Add button to upload crash log to memocho
 ---
  ...PasteUtils$$ExternalSyntheticLambda0.smali |  40 +
  .../LogPasteUtils$UploadResultCallback.smali  |  22 +
- ...Utils$VectorDrawableCreator$PathData.smali |  48 ++
- .../LogPasteUtils$VectorDrawableCreator.smali | 756 ++++++++++++++++++
- .../io/mesalabs/unica/LogPasteUtils.smali     | 685 ++++++++++++++++
- 5 files changed, 1551 insertions(+)
+ ...Utils$VectorDrawableCreator$PathData.smali |  48 +
+ .../LogPasteUtils$VectorDrawableCreator.smali | 756 ++++++++++++++++
+ .../io/mesalabs/unica/LogPasteUtils.smali     | 827 ++++++++++++++++++
+ 5 files changed, 1693 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/LogPasteUtils$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/LogPasteUtils$UploadResultCallback.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/LogPasteUtils$VectorDrawableCreator$PathData.smali
@@ -908,10 +908,10 @@ index 00000000..3723a8de
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali b/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali
 new file mode 100644
-index 00000000..3b5ba563
+index 00000000..bea01e28
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/LogPasteUtils.smali
-@@ -0,0 +1,685 @@
+@@ -0,0 +1,827 @@
 +.class public final Lio/mesalabs/unica/LogPasteUtils;
 +.super Ljava/lang/Object;
 +.source "LogPasteUtils.java"
@@ -1023,12 +1023,41 @@ index 00000000..3b5ba563
 +.end method
 +
 +.method private static blacklist getDialogButtonTitleText()Ljava/lang/CharSequence;
-+    .locals 3
++    .locals 4
 +
 +    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
 +
 +    move-result-object v0
 +
++    invoke-virtual {v0}, Ljava/util/Locale;->getLanguage()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "sr"
++
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    invoke-virtual {v0}, Ljava/util/Locale;->getScript()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v3, "Latn"
++
++    invoke-virtual {v1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    const-string v0, "Kopiraj URL dnevnik pada"
++
++    return-object v0
++
++    :cond_0
 +    invoke-virtual {v0}, Ljava/util/Locale;->getLanguage()Ljava/lang/String;
 +
 +    move-result-object v0
@@ -1039,7 +1068,7 @@ index 00000000..3b5ba563
 +
 +    move-result v1
 +
-+    const/4 v2, -0x1
++    const/4 v3, -0x1
 +
 +    sparse-switch v1, :sswitch_data_0
 +
@@ -1052,12 +1081,12 @@ index 00000000..3b5ba563
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_0
++    if-nez v0, :cond_1
 +
 +    goto/16 :goto_0
 +
-+    :cond_0
-+    const/16 v2, 0xe
++    :cond_1
++    const/16 v3, 0x13
 +
 +    goto/16 :goto_0
 +
@@ -1068,12 +1097,12 @@ index 00000000..3b5ba563
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_1
++    if-nez v0, :cond_2
 +
 +    goto/16 :goto_0
 +
-+    :cond_1
-+    const/16 v2, 0xd
++    :cond_2
++    const/16 v3, 0x12
 +
 +    goto/16 :goto_0
 +
@@ -1084,33 +1113,17 @@ index 00000000..3b5ba563
 +
 +    move-result v0
 +
-+    if-nez v0, :cond_2
-+
-+    goto/16 :goto_0
-+
-+    :cond_2
-+    const/16 v2, 0xc
-+
-+    goto/16 :goto_0
-+
-+    :sswitch_3
-+    const-string v1, "ru"
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
 +    if-nez v0, :cond_3
 +
 +    goto/16 :goto_0
 +
 +    :cond_3
-+    const/16 v2, 0xb
++    const/16 v3, 0x11
 +
 +    goto/16 :goto_0
 +
-+    :sswitch_4
-+    const-string v1, "ro"
++    :sswitch_3
++    const-string v1, "th"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1121,14 +1134,12 @@ index 00000000..3b5ba563
 +    goto/16 :goto_0
 +
 +    :cond_4
-+    const/16 v2, 0xa
++    const/16 v3, 0x10
 +
 +    goto/16 :goto_0
 +
-+    :sswitch_5
-+    const-string v1, "pt"
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    :sswitch_4
++    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
@@ -1137,12 +1148,12 @@ index 00000000..3b5ba563
 +    goto/16 :goto_0
 +
 +    :cond_5
-+    const/16 v2, 0x9
++    const/16 v3, 0xf
 +
 +    goto/16 :goto_0
 +
-+    :sswitch_6
-+    const-string v1, "pl"
++    :sswitch_5
++    const-string v1, "sq"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1153,12 +1164,12 @@ index 00000000..3b5ba563
 +    goto/16 :goto_0
 +
 +    :cond_6
-+    const/16 v2, 0x8
++    const/16 v3, 0xe
 +
 +    goto/16 :goto_0
 +
-+    :sswitch_7
-+    const-string v1, "it"
++    :sswitch_6
++    const-string v1, "ru"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1166,15 +1177,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_7
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_7
-+    const/4 v2, 0x7
++    const/16 v3, 0xd
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_8
-+    const-string v1, "hu"
++    :sswitch_7
++    const-string v1, "ro"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1182,15 +1193,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_8
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_8
-+    const/4 v2, 0x6
++    const/16 v3, 0xc
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_9
-+    const-string v1, "fr"
++    :sswitch_8
++    const-string v1, "pt"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1198,15 +1209,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_9
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_9
-+    const/4 v2, 0x5
++    const/16 v3, 0xb
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_a
-+    const-string v1, "es"
++    :sswitch_9
++    const-string v1, "pl"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1214,15 +1225,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_a
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_a
-+    const/4 v2, 0x4
++    const/16 v3, 0xa
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_b
-+    const-string v1, "de"
++    :sswitch_a
++    const-string v1, "it"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1230,15 +1241,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_b
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_b
-+    const/4 v2, 0x3
++    const/16 v3, 0x9
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_c
-+    const-string v1, "bg"
++    :sswitch_b
++    const-string v1, "in"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1246,15 +1257,15 @@ index 00000000..3b5ba563
 +
 +    if-nez v0, :cond_c
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
 +    :cond_c
-+    const/4 v2, 0x2
++    const/16 v3, 0x8
 +
-+    goto :goto_0
++    goto/16 :goto_0
 +
-+    :sswitch_d
-+    const-string v1, "az"
++    :sswitch_c
++    const-string v1, "hu"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1265,12 +1276,12 @@ index 00000000..3b5ba563
 +    goto :goto_0
 +
 +    :cond_d
-+    const/4 v2, 0x1
++    const/4 v3, 0x7
 +
 +    goto :goto_0
 +
-+    :sswitch_e
-+    const-string v1, "ar"
++    :sswitch_d
++    const-string v1, "fr"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -1281,10 +1292,106 @@ index 00000000..3b5ba563
 +    goto :goto_0
 +
 +    :cond_e
-+    const/4 v2, 0x0
++    const/4 v3, 0x6
++
++    goto :goto_0
++
++    :sswitch_e
++    const-string v1, "fa"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_f
++
++    goto :goto_0
++
++    :cond_f
++    const/4 v3, 0x5
++
++    goto :goto_0
++
++    :sswitch_f
++    const-string v1, "es"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_10
++
++    goto :goto_0
++
++    :cond_10
++    const/4 v3, 0x4
++
++    goto :goto_0
++
++    :sswitch_10
++    const-string v1, "de"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_11
++
++    goto :goto_0
++
++    :cond_11
++    const/4 v3, 0x3
++
++    goto :goto_0
++
++    :sswitch_11
++    const-string v1, "bg"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_12
++
++    goto :goto_0
++
++    :cond_12
++    const/4 v3, 0x2
++
++    goto :goto_0
++
++    :sswitch_12
++    const-string v1, "az"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_13
++
++    goto :goto_0
++
++    :cond_13
++    const/4 v3, 0x1
++
++    goto :goto_0
++
++    :sswitch_13
++    const-string v1, "ar"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_14
++
++    goto :goto_0
++
++    :cond_14
++    const/4 v3, 0x0
 +
 +    :goto_0
-+    packed-switch v2, :pswitch_data_0
++    packed-switch v3, :pswitch_data_0
 +
 +    const-string v0, "Copy crash log URL"
 +
@@ -1306,61 +1413,86 @@ index 00000000..3b5ba563
 +    goto :goto_1
 +
 +    :pswitch_3
-+    const-string v0, "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0443 \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0441\u0431\u043e\u0435\u0432"
++    const-string v0, "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01 URL \u0e02\u0e2d\u0e07\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01\u0e02\u0e49\u0e2d\u0e1c\u0e34\u0e14\u0e1e\u0e25\u0e32\u0e14"
 +
 +    goto :goto_1
 +
 +    :pswitch_4
-+    const-string v0, "Copiaz\u0103 URL-ul jurnalului de eroare"
++    const-string v0, "\u041a\u043e\u043f\u0438\u0440\u0430\u0458\u0442\u0435 URL \u0434\u043d\u0435\u0432\u043d\u0438\u043a\u0430 \u043f\u0430\u0434\u0430"
 +
 +    goto :goto_1
 +
 +    :pswitch_5
-+    const-string v0, "Copie o URL do registro de falhas"
++    const-string v0, "Kopjo URL-n\u00eb e regjistrit t\u00eb aksidenteve"
 +
 +    goto :goto_1
 +
 +    :pswitch_6
-+    const-string v0, "Skopiuj URL do logu crashu"
++    const-string v0, "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0443 \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0441\u0431\u043e\u0435\u0432"
 +
 +    goto :goto_1
 +
 +    :pswitch_7
-+    const-string v0, "Copia URL registro errori"
++    const-string v0, "Copiaz\u0103 URL-ul jurnalului de eroare"
 +
 +    goto :goto_1
 +
 +    :pswitch_8
-+    const-string v0, "\u00d6sszeoml\u00e1si napl\u00f3 URL m\u00e1sol\u00e1sa"
++    const-string v0, "Copie o URL do registro de falhas"
 +
 +    goto :goto_1
 +
 +    :pswitch_9
-+    const-string v0, "Copier l\'URL du rapport d\'erreur"
++    const-string v0, "Skopiuj adres URL dziennika awarii"
 +
 +    goto :goto_1
 +
 +    :pswitch_a
-+    const-string v0, "Copiar URL del registro de error"
++    const-string v0, "Copia URL registro errori"
 +
 +    goto :goto_1
 +
 +    :pswitch_b
-+    const-string v0, "URL des Absturzberichts kopieren"
++    const-string v0, "Salin URL riwayat kerusakan"
 +
 +    goto :goto_1
 +
 +    :pswitch_c
-+    const-string v0, "\u041a\u043e\u043f\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 URL \u0430\u0434\u0440\u0435\u0441\u0430 \u043d\u0430 \u0440\u0435\u0433\u0438\u0441\u0442\u044a\u0440\u0430 \u0437\u0430 \u0441\u0440\u0438\u0432\u043e\u0432\u0435"
++    const-string v0, "\u00d6sszeoml\u00e1si napl\u00f3 URL m\u00e1sol\u00e1sa"
 +
 +    goto :goto_1
 +
 +    :pswitch_d
-+    const-string v0, "\u00c7\u00f6km\u0259 jurnal URL-sini kopyala"
++    const-string v0, "Copier l\'URL du rapport d\'erreur"
 +
 +    goto :goto_1
 +
 +    :pswitch_e
++    const-string v0, "\u06a9\u067e\u06cc \u06a9\u0631\u062f\u0646 \u0622\u062f\u0631\u0633 \u06a9\u0631\u0634 \u0644\u0627\u06af"
++
++    goto :goto_1
++
++    :pswitch_f
++    const-string v0, "Copiar URL del registro de error"
++
++    goto :goto_1
++
++    :pswitch_10
++    const-string v0, "URL des Absturzberichts kopieren"
++
++    goto :goto_1
++
++    :pswitch_11
++    const-string v0, "\u041a\u043e\u043f\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 URL \u0430\u0434\u0440\u0435\u0441\u0430 \u043d\u0430 \u0440\u0435\u0433\u0438\u0441\u0442\u044a\u0440\u0430 \u0437\u0430 \u0441\u0440\u0438\u0432\u043e\u0432\u0435"
++
++    goto :goto_1
++
++    :pswitch_12
++    const-string v0, "\u00c7\u00f6km\u0259 jurnal URL-sini kopyala"
++
++    goto :goto_1
++
++    :pswitch_13
 +    const-string v0, "\u0627\u0646\u0633\u062e \u0639\u0646\u0648\u0627\u0646 URL \u0644\u0633\u062c\u0644 \u0627\u0644\u0627\u0646\u0647\u064a\u0627\u0631"
 +
 +    :goto_1
@@ -1370,18 +1502,23 @@ index 00000000..3b5ba563
 +
 +    :sswitch_data_0
 +    .sparse-switch
-+        0xc31 -> :sswitch_e
-+        0xc39 -> :sswitch_d
-+        0xc45 -> :sswitch_c
-+        0xc81 -> :sswitch_b
-+        0xcae -> :sswitch_a
-+        0xccc -> :sswitch_9
-+        0xd0d -> :sswitch_8
-+        0xd2b -> :sswitch_7
-+        0xdfc -> :sswitch_6
-+        0xe04 -> :sswitch_5
-+        0xe3d -> :sswitch_4
-+        0xe43 -> :sswitch_3
++        0xc31 -> :sswitch_13
++        0xc39 -> :sswitch_12
++        0xc45 -> :sswitch_11
++        0xc81 -> :sswitch_10
++        0xcae -> :sswitch_f
++        0xcbb -> :sswitch_e
++        0xccc -> :sswitch_d
++        0xd0d -> :sswitch_c
++        0xd25 -> :sswitch_b
++        0xd2b -> :sswitch_a
++        0xdfc -> :sswitch_9
++        0xe04 -> :sswitch_8
++        0xe3d -> :sswitch_7
++        0xe43 -> :sswitch_6
++        0xe5e -> :sswitch_5
++        0xe5f -> :sswitch_4
++        0xe74 -> :sswitch_3
 +        0xe7e -> :sswitch_2
 +        0xe96 -> :sswitch_1
 +        0xeb3 -> :sswitch_0
@@ -1389,6 +1526,11 @@ index 00000000..3b5ba563
 +
 +    :pswitch_data_0
 +    .packed-switch 0x0
++        :pswitch_13
++        :pswitch_12
++        :pswitch_11
++        :pswitch_10
++        :pswitch_f
 +        :pswitch_e
 +        :pswitch_d
 +        :pswitch_c
@@ -1598,5 +1740,5 @@ index 00000000..3b5ba563
 +    return-void
 +.end method
 -- 
-2.46.2
+2.47.0
 
