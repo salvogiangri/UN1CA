@@ -1,4 +1,4 @@
-From 7c63a3fffdcce57258c73ffcfc977555a5da7b9c Mon Sep 17 00:00:00 2001
+From 0de68ff9b68c5a59112d39ce1f65437e48057059 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -11,7 +11,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-ar/strings.xml                     |  30 +
  res/values-az-rAZ/strings.xml                 |  29 +
  res/values-b+sr+Latn/strings.xml              |  30 +
- res/values-bg/strings.xml                     |  29 +
+ res/values-bg/strings.xml                     |  30 +
  res/values-de/strings.xml                     |  30 +
  res/values-en-rCA/strings.xml                 |  30 +
  res/values-en-rPH/strings.xml                 |  30 +
@@ -29,7 +29,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-pt-rBR/strings.xml                 |  30 +
  res/values-pt-rPT/strings.xml                 |  30 +
  res/values-ro/strings.xml                     |  30 +
- res/values-ru/strings.xml                     |  29 +
+ res/values-ru/strings.xml                     |  30 +
  res/values-sq-rAL/strings.xml                 |  30 +
  res/values-sr/strings.xml                     |  29 +
  res/values-th/strings.xml                     |  29 +
@@ -74,7 +74,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 70 files changed, 5584 insertions(+), 15 deletions(-)
+ 70 files changed, 5586 insertions(+), 15 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -281,10 +281,10 @@ index 0a336253..744e715a 100644
 +    <string name="unica_updates_title">UN1CA Ažuriranje</string>
  </resources>
 diff --git a/res/values-bg/strings.xml b/res/values-bg/strings.xml
-index 96620050..10f7290b 100644
+index 96620050..44b6dace 100644
 --- a/res/values-bg/strings.xml
 +++ b/res/values-bg/strings.xml
-@@ -7423,4 +7423,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Избор по регион</string>
      <string name="zone_time_type_dst">Лятно часово време</string>
      <string name="zone_time_type_standard">Стандартно време</string>
@@ -308,7 +308,7 @@ index 96620050..10f7290b 100644
 +    <string name="unica_pif_checking">Проверка за актуализации…</string>
 +    <string name="unica_pif_error">Настъпи грешка.</string>
 +    <string name="unica_pif_no_root">Нужен е руут за да работи Play Integrity Fix.</string>
-+    <string name="unica_pif_up_to_date">Вие използвате най-новата версия.</string>
++    <string name="unica_pif_up_to_date">"Вие използвате най-новата версия."</string>
 +    <string name="unica_pif_updated">Актуализацията премина успешно.</string>
 +    <string name="unica_pif_version_title">Версия на Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">ROM версия</string>
@@ -317,6 +317,7 @@ index 96620050..10f7290b 100644
 +    <string name="unica_spoof_settings_title">Spoof настройки</string>
 +    <string name="unica_ss_detection_title">Изключване на детекция на скрийншоти</string>
 +    <string name="unica_ui_settings_title">UI настройки</string>
++    <string name="unica_updates_title">UN1CA Актуализации</string>
  </resources>
 diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
 index 5b68d3a1..d47e8ec4 100644
@@ -980,10 +981,10 @@ index 2b0bc463..a264aba0 100644
 +    <string name="unica_updates_title">Actualizări UN1CA</string>
  </resources>
 diff --git a/res/values-ru/strings.xml b/res/values-ru/strings.xml
-index 0b421d9f..171d1511 100644
+index 0b421d9f..dfb6fca7 100644
 --- a/res/values-ru/strings.xml
 +++ b/res/values-ru/strings.xml
-@@ -7423,4 +7423,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Выбрать по региону</string>
      <string name="zone_time_type_dst">Летнее время</string>
      <string name="zone_time_type_standard">Стандартное время</string>
@@ -1007,7 +1008,7 @@ index 0b421d9f..171d1511 100644
 +    <string name="unica_pif_checking">Проверка обновлений...</string>
 +    <string name="unica_pif_error">Произошла ошибка.</string>
 +    <string name="unica_pif_no_root">Для работы Play Integrity Fix требуются root права.</string>
-+    <string name="unica_pif_up_to_date">Вы используете последнюю версию.</string>
++    <string name="unica_pif_up_to_date">"Вы используете последнюю версию."</string>
 +    <string name="unica_pif_updated">Обновление успешно завершено.</string>
 +    <string name="unica_pif_version_title">Версия Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Версия прошивки</string>
@@ -1016,6 +1017,7 @@ index 0b421d9f..171d1511 100644
 +    <string name="unica_spoof_settings_title">Настройки подмены</string>
 +    <string name="unica_ss_detection_title">Отключить обнаружение скриншота</string>
 +    <string name="unica_ui_settings_title">Настройки пользовательского интерфейса</string>
++    <string name="unica_updates_title">Обновления UN1CA</string>
  </resources>
 diff --git a/res/values-sq-rAL/strings.xml b/res/values-sq-rAL/strings.xml
 index d5dd7ea0..e708954c 100644
@@ -1211,7 +1213,7 @@ index 9366a208..0eb0cfdd 100644
 +    <string name="unica_updates_title">Оновлення UN1CA</string>
  </resources>
 diff --git a/res/values-vi/strings.xml b/res/values-vi/strings.xml
-index 8462a5aa..a97e0e02 100644
+index 8462a5aa..da83e7fe 100644
 --- a/res/values-vi/strings.xml
 +++ b/res/values-vi/strings.xml
 @@ -7423,4 +7423,34 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
@@ -1242,7 +1244,7 @@ index 8462a5aa..a97e0e02 100644
 +    <string name="unica_pif_updated">Cập nhật thành công.</string>
 +    <string name="unica_pif_version_title">Phiên bản Play Integrity Fix</string>
 +    <string name="unica_rom_version_title">Phiên bản ROM</string>
-+    <string name="unica_secure_ss_title">Cho phép chụp ảnh màn hình ứng dụng bảo mật (FLAG_SECURE)</string>
++    <string name="unica_secure_ss_title">Cho phép chụp ảnh màn hình mọi ứng dụng</string>
 +    <string name="unica_settings_title">Cài đặt UN1CA</string>
 +    <string name="unica_spoof_settings_title">Cài đặt làm giả</string>
 +    <string name="unica_ss_detection_title">Vô hiệu hóa phát hiện chụp màn hình</string>
