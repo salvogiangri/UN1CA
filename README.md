@@ -7,6 +7,7 @@
   <a href="https://github.com/salvogiangri/UN1CA/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/salvogiangri/UN1CA?style=for-the-badge"/></a>
   <a href="https://github.com/salvogiangri/UN1CA/graphs/contributors"><img loading="lazy" src="https://img.shields.io/github/contributors/salvogiangri/UN1CA?style=for-the-badge"/></a>
   <a href="https://github.com/salvogiangri/UN1CA/actions/workflows/build.yml"><img loading="lazy" src="https://img.shields.io/github/actions/workflow/status/salvogiangri/UN1CA/build.yml?style=for-the-badge"/></a>
+  <a href="https://crowdin.com/project/UN1CA"><img loading="lazy" src="https://img.shields.io/badge/Crowdin-263238?style=for-the-badge&logo=crowdin"/></a>
 </p>
 <p align="center">UN1CA <i>(/ˈu.ni.ka/)</i> is a work-in-progress custom firmware for Samsung Galaxy devices.</p>
 
@@ -20,7 +21,7 @@
 UN1CA is a work-in-progress custom firmware for Samsung Galaxy devices. It's based on the latest and greatest iteration of Samsung's UX and it also includes additional features and tweaks to ensure the best possible experience out of the box.
 Its build system allows to automatically download/extract the firmware, apply the required patches and generates a flashable zip/tar package for the specified device.
 
-Since UN1CA is open source, everyone can contribute to the project or port this ROM to another device, please check out the official documentation to find out more: https://unica.mesalabs.io/expert
+Any form of contribution, suggestions, bug report or feature request for the project will be welcome.
 
 # Features
 - Based on the latest stable Galaxy S23 firmware
@@ -34,10 +35,12 @@ Since UN1CA is open source, everyone can contribute to the project or port this 
 - Picture remaster support
 - Object, shadow and reflection eraser support
 - Image clipper support
+- Smart Suggestions widget
 - Multi user support
 - Samsung DeX support
 - Camera privacy toggle support
 - Debloated from useless system services/additional apps
+- Integrated OTA updates app
 - Play Integrity Fix included
 - [BluetoothLibraryPatcher](https://github.com/3arthur6/BluetoothLibraryPatcher) included
 - [FrameworkPatch](https://github.com/chiteroman/FrameworkPatch) implemented in system frameworks
@@ -65,7 +68,7 @@ A big thanks goes to the following for their invaluable contributions in no part
 - **[Simon1511](https://github.com/Simon1511)** for his support and some of the device-specific patches
 - **[ananjaser1211](https://github.com/ananjaser1211)** for troubleshooting and his time
 - **[iDrinkCoffee](https://github.com/iDrinkCoffee-TG)** and **[RisenID](https://github.com/RisenID)** for documentation revisioning
-- **[alex41370](https://github.com/alex41370)** for his help and support
+- **[LineageOS Team](https://www.lineageos.org/)** for their original [OTA updater implementation](https://github.com/LineageOS/android_packages_apps_Updater)
 - *All the UN1CA project contributors and testers ❤️*
 
 # Stargazers over time
