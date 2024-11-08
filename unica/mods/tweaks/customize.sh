@@ -2,8 +2,8 @@ SKIPUNZIP=1
 
 WEBP_RES="2400"
 MP4_RES="1080:-1"
-[[ "$TARGET_CODENAME" == "b0q" ]] && WEBP_RES="3088"
-[[ "$TARGET_CODENAME" == "b0q" ]] && MP4_RES="1440:-1"
+[[ "$TARGET_CODENAME" == "b0q" ]] || [[ "$TARGET_CODENAME" == "dm3q" ]] && WEBP_RES="3088"
+[[ "$TARGET_CODENAME" == "b0q" ]] || [[ "$TARGET_CODENAME" == "dm3q" ]] && MP4_RES="1440:-1"
 
 echo "Resize wallpaper-res.apk"
 if [ ! -d "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk" ]; then
