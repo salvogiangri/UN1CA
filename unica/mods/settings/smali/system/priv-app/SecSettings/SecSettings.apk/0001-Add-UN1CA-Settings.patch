@@ -1,4 +1,4 @@
-From 0de68ff9b68c5a59112d39ce1f65437e48057059 Mon Sep 17 00:00:00 2001
+From d87fb9095f83e75d96df2f30ce2fbbd5465fec75 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -49,6 +49,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../com/android/settings/R$layout.smali       |   2 +
  .../com/android/settings/R$string.smali       |  66 +++
  .../com/android/settings/R$xml.smali          |   2 +
+ .../Settings$FOTASuggestionActivity.smali     |  33 +-
  .../core/gateway/SettingsGateway.smali        |   4 +-
  .../search/SearchIndexableResourcesBase.smali |  10 +
  .../Settings$UnicaSettingsActivity.smali      |  13 +
@@ -74,7 +75,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 70 files changed, 5586 insertions(+), 15 deletions(-)
+ 71 files changed, 5617 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -1646,6 +1647,54 @@ index e0883ec6..8c0606c2 100644
  .field public static final unrestricted_data_access_settings:I = 0x7f16023c
  
  .field public static final usb_default_fragment:I = 0x7f16023d
+diff --git a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali b/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
+index 69a5d014..ee75d2e6 100644
+--- a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
++++ b/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
+@@ -15,12 +15,41 @@
+ 
+ # virtual methods
+ .method public onCreate(Landroid/os/Bundle;)V
+-    .locals 0
++    .locals 4
+ 
+     invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+ 
+-    invoke-static {p0}, Lcom/samsung/android/settings/softwareupdate/SoftwareUpdateUtils;->sendBroadcast(Landroid/content/Context;)V
++    const-string v0, "io.mesalabs.choidujour"
++
++    invoke-static {p0, v0}, Lcom/samsung/android/settings/PkgUtils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    new-instance v0, Landroid/content/Intent;
++
++    invoke-direct {v0}, Landroid/content/Intent;-><init>()V
++
++    new-instance v1, Landroid/content/ComponentName;
++
++    const-string v2, "io.mesalabs.choidujour"
++
++    const-string v3, "io.mesalabs.choidujour.activity.HomeActivity"
++
++    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
++
++    invoke-virtual {v0, v1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
++
++    const-string v1, "from_settings"
++
++    const/4 v2, 0x1
++
++    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
++
++    invoke-virtual {p0, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+ 
++    :cond_0
+     invoke-virtual {p0}, Landroid/app/Activity;->finish()V
+ 
+     return-void
 diff --git a/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali b/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali
 index b109b2d2..cd426914 100644
 --- a/smali_classes2/com/android/settings/core/gateway/SettingsGateway.smali
