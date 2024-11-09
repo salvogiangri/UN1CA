@@ -1,4 +1,4 @@
-From c24832b0bcef066586c2e19bd36b87203c78f092 Mon Sep 17 00:00:00 2001
+From 384a362246513e1bab95634b40a6dcbdbca3c5fe Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 11:09:04 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -8,8 +8,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
  .../android/provider/Settings$Global.smali    |   9 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 648 ++++++++++++++++++
- 5 files changed, 681 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 677 ++++++++++++++++++
+ 5 files changed, 710 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
@@ -113,10 +113,10 @@ index e5f1ff86..f40ba8e1 100644
      invoke-virtual {v0, p0, p1, p2}, Landroid/provider/Settings$NameValueCache;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..3e202e10
+index 00000000..9f51376b
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,648 @@
+@@ -0,0 +1,677 @@
 +.class public final Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -133,6 +133,8 @@ index 00000000..3e202e10
 +
 +.field private static final blacklist ROUTINES_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.app.routines"
 +
++.field private static final blacklist SAMSUNG_CLOUD_PLATFORM_MANAGER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.scpm"
++
 +.field private static final blacklist SAMSUNG_HEALTH_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.shealth"
 +
 +.field private static final blacklist SMART_VIEW_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartmirroring"
@@ -142,6 +144,8 @@ index 00000000..3e202e10
 +.field private static volatile blacklist sIsUserApp:Z
 +
 +.field private static volatile blacklist sPackageName:Ljava/lang/String;
++
++.field private static volatile blacklist sSpoofBuildTypeProp:Z
 +
 +.field private static volatile blacklist sSpoofCountryCodeProp:Z
 +
@@ -294,6 +298,14 @@ index 00000000..3e202e10
 +    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sIsUserApp:Z
 +
 +    :goto_1
++    const-string p0, "com.samsung.android.scpm"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    sput-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofBuildTypeProp:Z
++
 +    const-string p0, "com.samsung.android.app.routines"
 +
 +    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -607,7 +619,7 @@ index 00000000..3e202e10
 +.method public static blacklist onSPGetHook(Ljava/lang/String;)Ljava/lang/String;
 +    .locals 3
 +
-+    const-string v0, "ro.csc.country_code"
++    const-string v0, "ro.build.type"
 +
 +    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -615,16 +627,16 @@ index 00000000..3e202e10
 +
 +    if-eqz v0, :cond_0
 +
-+    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofCountryCodeProp:Z
++    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofBuildTypeProp:Z
 +
-+    if-eqz v0, :cond_1
++    if-eqz v0, :cond_2
 +
-+    const-string v0, "CHINA"
++    const-string v0, "eng"
 +
 +    goto :goto_0
 +
 +    :cond_0
-+    const-string v0, "ro.security.keystore.keytype"
++    const-string v0, "ro.csc.country_code"
 +
 +    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -632,19 +644,36 @@ index 00000000..3e202e10
 +
 +    if-eqz v0, :cond_1
 +
++    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofCountryCodeProp:Z
++
++    if-eqz v0, :cond_2
++
++    const-string v0, "CHINA"
++
++    goto :goto_0
++
++    :cond_1
++    const-string v0, "ro.security.keystore.keytype"
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_2
++
 +    sget-boolean v0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
 +
-+    if-eqz v0, :cond_1
++    if-eqz v0, :cond_2
 +
 +    const-string v0, ""
 +
 +    goto :goto_0
 +
-+    :cond_1
++    :cond_2
 +    const/4 v0, 0x0
 +
 +    :goto_0
-+    if-eqz v0, :cond_2
++    if-eqz v0, :cond_3
 +
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
@@ -678,7 +707,7 @@ index 00000000..3e202e10
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/SamsungPropsHooks;->dlog(Ljava/lang/String;)V
 +
-+    :cond_2
++    :cond_3
 +    return-object v0
 +.end method
 +
@@ -766,5 +795,5 @@ index 00000000..3e202e10
 +    return-void
 +.end method
 -- 
-2.46.1
+2.47.0
 
