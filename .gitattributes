@@ -32,3 +32,5 @@ target/a73xq/patches/wpss/vendor/firmware/** binary
 target/m52xq/patches/vendor/vendor/** binary
 target/r8q/patches/mainline-fix/** binary
 target/r8q/patches/vendor/*/** binary
+target/x1q/patches/mainline-fix/** binary
+target/x1q/patches/vendor/*/** binary

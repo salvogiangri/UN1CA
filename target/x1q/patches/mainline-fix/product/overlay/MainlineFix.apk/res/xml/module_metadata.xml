@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module-metadata
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <module isHidden="true" name="@string/module_adbd" packageName="com.google.android.adbd" />
+    <module isHidden="true" name="@string/module_adservices" packageName="com.google.android.adservices" />
+    <module isHidden="true" name="@string/module_appsearch" packageName="com.google.android.appsearch" />
+    <module isHidden="true" name="@string/module_art" packageName="com.google.android.art" />
+    <module isHidden="true" name="@string/module_bluetooth" packageName="com.google.android.btservices" />
+    <module isHidden="true" name="@string/module_captiveportallogin" packageName="com.google.android.captiveportallogin" />
+    <module isHidden="true" name="@string/module_cellbroadcast" packageName="com.google.android.cellbroadcast" />
+    <module isHidden="true" name="@string/module_configinfrastructure" packageName="com.google.android.configinfrastructure" />
+    <module isHidden="true" name="@string/module_conscrypt" packageName="com.google.android.conscrypt" />
+    <module isHidden="false" name="@string/module_documentsui" packageName="com.google.android.documentsui" />
+    <module isHidden="true" name="@string/module_ext_services" packageName="com.google.android.ext.services" />
+    <module isHidden="true" name="@string/module_ext_services_apex" packageName="com.google.android.extservices" />
+    <module isHidden="true" name="@string/module_healthfitness" packageName="com.google.android.healthfitness" />
+    <module isHidden="true" name="@string/module_ipsec" packageName="com.google.android.ipsec" />
+    <module isHidden="true" name="@string/module_libs" packageName="com.google.mainline.primary.libs" />
+    <module isHidden="true" name="@string/module_media" packageName="com.google.android.media" />
+    <module isHidden="true" name="@string/module_mediaprovider" packageName="com.google.android.mediaprovider" />
+    <module isHidden="true" name="@string/module_media_swcodec" packageName="com.google.android.media.swcodec" />
+    <module isHidden="true" name="@string/module_metadata" packageName="com.google.android.modulemetadata" />
+    <module isHidden="true" name="@string/module_networkstack" packageName="com.google.android.networkstack" />
+    <module isHidden="true" name="@string/module_networkpermissionconfig" packageName="com.google.android.networkstack.permissionconfig" />
+    <module isHidden="true" name="@string/module_neuralnetworks" packageName="com.google.android.neuralnetworks" />
+    <module isHidden="true" name="@string/module_ondevicepersonalization" packageName="com.google.android.ondevicepersonalization" />
+    <module isHidden="true" name="@string/module_os_statsd" packageName="com.google.android.os.statsd" />
+    <module isHidden="true" name="@string/module_permission" packageName="com.google.android.permission" />
+    <module isHidden="false" name="@string/module_permissioncontroller" packageName="com.google.android.permissioncontroller" />
+    <module isHidden="true" name="@string/module_resolv" packageName="com.google.android.resolv" />
+    <module isHidden="true" name="@string/module_rkpd" packageName="com.google.android.rkpd" />
+    <module isHidden="true" name="@string/module_scheduling" packageName="com.google.android.scheduling" />
+    <module isHidden="true" name="@string/module_sdkext" packageName="com.google.android.sdkext" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata2" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata3" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata4" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata5" />
+    <module isHidden="true" name="@string/module_tzdata" packageName="com.google.android.tzdata6" />
+    <module isHidden="true" name="@string/module_uwb" packageName="com.google.android.uwb" />
+    <module isHidden="true" name="@string/module_wifi" packageName="com.google.android.wifi" />
+    <module isHidden="true" name="@string/module_adservices_tvp" packageName="com.google.mainline.adservices" />
+    <module isHidden="true" name="@string/module_libs" packageName="com.google.mainline.primary.libs" />
+    <module isHidden="true" name="@string/module_telemetry" packageName="com.google.mainline.telemetry" />
+</module-metadata>
