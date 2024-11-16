@@ -87,6 +87,11 @@ case "$1" in
         FW="SM-S911B/EUX/352404911234563"
         BLOBS="system_ext/apex/com.android.vndk.v33.apex"
         ;;
+    "unica/mods/china")
+        MODULE="$1"
+        FW="SM-S9210/CHC/356724910402671"
+        BLOBS="$(find "$SRC_DIR/unica/mods/china/system" -type f | sed "s.$SRC_DIR/unica/mods/china.system.")"
+        ;;
     "target/a71/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A525F/SER/352938771234569"

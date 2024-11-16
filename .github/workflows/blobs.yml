@@ -33,6 +33,8 @@ jobs:
             path: "unica/patches/vndk/31"
           - module: "VNDK 33 apex"
             path: "unica/patches/vndk/33"
+          - module: "Samsung China apps"
+            path: "unica/mods/china"
           - module: "(a71) OS proprietary blobs"
             path: "target/a71/patches/stock_blobs"
           - module: "(m52xq) OS proprietary blobs"
