@@ -23,6 +23,8 @@ jobs:
             path: "unica/patches/product_feature/fingerprint/optical_fod"
           - module: "Side fingerprint sensor blobs"
             path: "unica/patches/product_feature/fingerprint/side_fp"
+          - module: "Multi resolution blobs"
+            path: "unica/patches/product_feature/resolution"
           - module: "Ultra device blobs"
             path: "unica/patches/ultra"
           - module: "UWB blobs"

@@ -61,6 +61,12 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system" -type f \
             | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp.system.")"
         ;;
+    "unica/patches/product_feature/resolution")
+        MODULE="$1"
+        FW="SM-S918B/EUX/350196551234562"
+        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/system" -type f \
+            | sed "s.$SRC_DIR/unica/patches/product_feature/resolution.system.")"
+        ;;
     "unica/patches/ultra")
         MODULE="$1"
         FW="SM-S918B/EUX/350196551234562"

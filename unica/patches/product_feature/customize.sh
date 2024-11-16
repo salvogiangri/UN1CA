@@ -368,3 +368,10 @@ if [ ! -f "$FW_DIR/${MODEL}_${REGION}/vendor/etc/permissions/android.hardware.st
     echo "Applying strongbox patches"
     APPLY_PATCH "system/framework/framework.jar" "strongbox/framework.jar/0001-Disable-StrongBox-in-DevRootKeyATCmd.patch"
 fi
+
+if [[ "$SOURCE_HAS_QHD_DISPLAY" != "$TARGET_HAS_QHD_DISPLAY" ]]; then
+    APPLY_PATCH "system/framework/framework.jar" "resolution/multi_res/framework.jar/0001-Enable-dynamic-resolution-control.patch"
+    APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "resolution/multi_res/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
+
+    cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/resolution/system/"* "$WORK_DIR/system/system"
+fi
