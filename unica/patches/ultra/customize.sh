@@ -31,8 +31,6 @@ MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 if [ -d "$FW_DIR/${MODEL}_${REGION}/system/system/media/audio/pensounds" ]; then
-    APPLY_PATCH "system/framework/framework.jar" "multi_res/framework.jar/0001-Enable-dynamic-resolution-control.patch"
-    APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "multi_res/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
 
     cp -a --preserve=all "$SRC_DIR/unica/patches/ultra/system/"* "$WORK_DIR/system/system"
 
