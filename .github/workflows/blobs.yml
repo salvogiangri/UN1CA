@@ -13,8 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - module: "Knox'nt blobs"
-            path: "unica/patches/deknox"
+          - module: "Knox'nt blobs (qssi)"
+            path: "unica/patches/deknox/qssi"
+          - module: "Knox'nt blobs (essi)"
+            path: "unica/patches/deknox/essi"
           - module: "Low-end Samsung Camera app"
             path: "unica/patches/mass_cam"
           - module: "Non-eSE blobs"
