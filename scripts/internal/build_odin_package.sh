@@ -22,7 +22,7 @@ set -Eeuo pipefail
 GENERATE_LPMAKE_OPT()
 {
     local OPT
-    local GROUP_NAME="qti_dynamic_partitions"
+    local GROUP_NAME="$TARGET_SUPER_GROUP_NAME"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false

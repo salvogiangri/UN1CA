@@ -90,7 +90,7 @@ GET_SPARSE_IMG_SIZE()
 GENERATE_OP_LIST()
 {
     local OP_LIST_FILE="$TMP_DIR/dynamic_partitions_op_list"
-    local GROUP_NAME="qti_dynamic_partitions"
+    local GROUP_NAME="$TARGET_SUPER_GROUP_NAME"
     local PART_SIZE=0
     local OCCUPIED_SPACE=0
     local HAS_SYSTEM=false
@@ -195,7 +195,7 @@ GENERATE_OP_LIST()
 GENERATE_LPMAKE_OPT()
 {
     local OPT
-    local GROUP_NAME="qti_dynamic_partitions"
+    local GROUP_NAME="$TARGET_SUPER_GROUP_NAME"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
