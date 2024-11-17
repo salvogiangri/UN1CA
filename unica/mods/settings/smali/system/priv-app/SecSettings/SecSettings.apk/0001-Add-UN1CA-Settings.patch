@@ -1,4 +1,4 @@
-From d87fb9095f83e75d96df2f30ce2fbbd5465fec75 Mon Sep 17 00:00:00 2001
+From e35b6635724a8836a9f70ecf9b224ba5ee7f2e9d Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -9,7 +9,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../unica_settings_logo_layout.xml            |   7 +
  res/layout/unica_settings_logo_layout.xml     |   7 +
  res/values-ar/strings.xml                     |  30 +
- res/values-az-rAZ/strings.xml                 |  29 +
+ res/values-az-rAZ/strings.xml                 |  30 +
  res/values-b+sr+Latn/strings.xml              |  30 +
  res/values-bg/strings.xml                     |  30 +
  res/values-de/strings.xml                     |  30 +
@@ -75,7 +75,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 71 files changed, 5617 insertions(+), 17 deletions(-)
+ 71 files changed, 5618 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -205,10 +205,10 @@ index 61cab530..ae1e7c1a 100644
 +    <string name="unica_updates_title">تحديثات UN1CA</string>
  </resources>
 diff --git a/res/values-az-rAZ/strings.xml b/res/values-az-rAZ/strings.xml
-index ccf90b26..b9294cc2 100644
+index ccf90b26..30106d2a 100644
 --- a/res/values-az-rAZ/strings.xml
 +++ b/res/values-az-rAZ/strings.xml
-@@ -6613,4 +6613,33 @@ Kamera proqramında Yuxarı düymədən şəkil çəkmək üçün istifadə edə
+@@ -6613,4 +6613,34 @@ Kamera proqramında Yuxarı düymədən şəkil çəkmək üçün istifadə edə
      <string name="zone_menu_by_region">Regiona görə seç</string>
      <string name="zone_time_type_dst">Gündüz işığa qənaət vaxtı</string>
      <string name="zone_time_type_standard">Standart vaxt</string>
@@ -232,15 +232,16 @@ index ccf90b26..b9294cc2 100644
 +    <string name="unica_pif_checking">Yeniləmələr yoxlanılır…</string>
 +    <string name="unica_pif_error">Xəta baş verdi.</string>
 +    <string name="unica_pif_no_root">Play Integrity Fix-in işləməsi üçün root tələb olunur.</string>
-+    <string name="unica_pif_up_to_date">Ən son versiyanı işlədirsiniz.</string>
++    <string name="unica_pif_up_to_date">"Ən son versiyanı işlədirsiniz."</string>
 +    <string name="unica_pif_updated">Yeniləmə uğurla tamamlandı.</string>
 +    <string name="unica_pif_version_title">Play Integrity Fix versiyası</string>
-+    <string name="unica_rom_version_title">Sistem versiyası</string>
++    <string name="unica_rom_version_title">ROM versiyası</string>
 +    <string name="unica_secure_ss_title">Təhlükəsiz ekran görüntüsünə icazə ver</string>
 +    <string name="unica_settings_title">UN1CA Parametrləri</string>
 +    <string name="unica_spoof_settings_title">Saxtakarlıq parametrləri</string>
 +    <string name="unica_ss_detection_title">Ekran görüntüsünün aşkarlanmasını deaktiv et</string>
 +    <string name="unica_ui_settings_title">İstifadəçi interfeysi parametrləri</string>
++    <string name="unica_updates_title">UN1CA Yeniləmələri</string>
  </resources>
 diff --git a/res/values-b+sr+Latn/strings.xml b/res/values-b+sr+Latn/strings.xml
 index 0a336253..744e715a 100644
