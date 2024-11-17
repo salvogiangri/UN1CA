@@ -73,8 +73,26 @@ COPY_SOURCE_FIRMWARE()
         fi
     else
         if $TARGET_HAS_SYSTEM_EXT; then
-            # TODO: handle separate system_ext partition
-            true
+            # Create file structure: separate system_ext and create new symlinks in rootdir and systemdir
+            cp -a -r --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/system_ext" "$WORK_DIR"
+            rm -rf "$WORK_DIR/system/system/system_ext"
+            rm "$WORK_DIR/system/system_ext"
+            mkdir "$WORK_DIR/system/system_ext"
+            ln -s "/system_ext" "$WORK_DIR/system/system/system_ext"
+            # Create system_ext filesystem configs file by extracting them from system config
+            cat "$FW_DIR/${MODEL}_${REGION}/fs_config-system" | grep 'system_ext' | sed 's/^system\///' | sed '/system_ext 0 0 644 capabilities/d' | sed '/system_ext 0 0 755 capabilities/d' >> "$WORK_DIR/configs/fs_config-system_ext"
+            cat "$FW_DIR/${MODEL}_${REGION}/file_context-system" | grep 'system_ext' | sed '/system_ext u:object_r:system_file:s0/d' | sed 's/^\/system//' >> "$WORK_DIR/configs/file_context-system_ext"
+            # Remove all old system_ext references in system
+            sed -i '/system_ext/d' "$WORK_DIR/configs/fs_config-system"
+            sed -i '/system_ext/d' "$WORK_DIR/configs/file_context-system"
+            # Add new symlink and folder config in system fs config
+            echo "/system/system_ext u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
+            echo "/system_ext u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
+            echo "system/system_ext 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+            echo "system_ext 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+            # Finish by setting the root configuration of system_ext
+            echo " 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system_ext"
+            echo "/system_ext u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system_ext"
         fi
     fi
 }
