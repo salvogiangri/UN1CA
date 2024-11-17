@@ -38,6 +38,7 @@ TARGET_DVFS_CONFIG_NAME="dvfs_policy_sm7325_xx"
 TARGET_FP_SENSOR_CONFIG="google_touch_display_optical,settings=3,no_delay_in_screen_off,transition_effect_on"
 TARGET_HAS_HW_MDNIE=false
 TARGET_HAS_MASS_CAMERA_APP=true
+TARGET_HAS_QHD_DISPLAY=false
 #TARGET_HFR_MODE="1"
 TARGET_HFR_MODE="2"
 TARGET_HFR_SUPPORTED_REFRESH_RATE="60,120"

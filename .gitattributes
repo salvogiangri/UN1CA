@@ -22,7 +22,7 @@ unica/flashable-zip/updater binary
 unica/mods/pif/system/bin/rezetprop binary
 unica/patches/deknox/system/** binary
 unica/patches/product_feature/fingerprint/optical_fod/system/** binary
-unica/patches/ultra/system/** binary
+unica/patches/product_feature/resolution/system/** binary
 unica/patches/vndk/30/** binary
 
 # Device-specific prebuilt blobs
