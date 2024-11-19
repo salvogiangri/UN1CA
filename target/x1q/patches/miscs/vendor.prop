@@ -1,0 +1,5 @@
+# Disable OEM unlock toggle
+ro.oem_unlock_supported=0
+
+# Enable emulated storage
+ro.crypto.allow_encrypt_override=

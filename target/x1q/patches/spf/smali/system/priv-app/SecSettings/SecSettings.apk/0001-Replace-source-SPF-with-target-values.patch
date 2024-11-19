@@ -1,0 +1,497 @@
+From 1eae5ce8edd5d6416391ef740fdc66a43d0b670c Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sat, 23 Nov 2024 23:10:00 +0300
+Subject: [PATCH] Replace source SPF with target values
+
+---
+ .../com/android/settings/Utils.smali          |   2 +-
+ .../android/wifitrackerlib/WifiEntry.smali    |  27 +---
+ .../WifiLabsWeeklyReportPreference.smali      |  26 +++-
+ .../mobileap/WifiApCloudBackupRestore.smali   | 125 +++---------------
+ .../WifiApSmartSwitchBackupRestore.smali      |  52 +-------
+ .../mobileap/utils/WifiApFeatureUtils.smali   |  14 +-
+ 6 files changed, 43 insertions(+), 203 deletions(-)
+
+diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
+index bebdb36b..abf8210c 100644
+--- a/smali_classes2/com/android/settings/Utils.smali
++++ b/smali_classes2/com/android/settings/Utils.smali
+@@ -139,7 +139,7 @@
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualPassword:Z
+ 
+-    sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++    sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhancedLite:Z
+ 
+diff --git a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
+index f87b3755..6d298119 100644
+--- a/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
++++ b/smali_classes3/com/android/wifitrackerlib/WifiEntry.smali
+@@ -2801,32 +2801,9 @@
+ .end method
+ 
+ .method public semIsWifi6ENetwork()Z
+-    .locals 2
+-
+-    iget-object v0, p0, Lcom/android/wifitrackerlib/WifiEntry;->mWifiInfo:Landroid/net/wifi/WifiInfo;
+-
+-    if-eqz v0, :cond_0
+-
+-    invoke-virtual {v0}, Landroid/net/wifi/WifiInfo;->getFrequency()I
+-
+-    move-result v1
+-
+-    invoke-virtual {v0}, Landroid/net/wifi/WifiInfo;->getWifiStandard()I
+-
+-    move-result v0
+-
+-    invoke-virtual {p0, v1, v0}, Lcom/android/wifitrackerlib/WifiEntry;->checkWifi6EStandard(II)Z
+-
+-    move-result p0
+-
+-    return p0
+-
+-    :cond_0
+-    iget-object p0, p0, Lcom/android/wifitrackerlib/WifiEntry;->mSemFlags:Lcom/samsung/android/wifitrackerlib/SemWifiEntryFlags;
+-
+-    invoke-virtual {p0}, Lcom/samsung/android/wifitrackerlib/SemWifiEntryFlags;->has6EStandard()Z
++    .locals 0
+ 
+-    move-result p0
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali b/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
+index 706609ba..754830d3 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference.smali
+@@ -933,19 +933,33 @@
+ 
+     invoke-virtual {v0, v2}, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->getDPfromPixel(I)I
+ 
++    move-result v3
++
++    iput v3, v1, Landroid/widget/LinearLayout$LayoutParams;->bottomMargin:I
++
++    iget-object v3, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
++
++    invoke-virtual {v3, v1}, Landroid/widget/RelativeLayout;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
++
++    iget-object v3, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifiMultiLinkBandLayout:Landroid/widget/RelativeLayout;
++
++    const/16 v4, 0x8
++
++    invoke-virtual {v3, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++
++    invoke-virtual {v0, v2}, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->getDPfromPixel(I)I
++
+     move-result v2
+ 
+     iput v2, v1, Landroid/widget/LinearLayout$LayoutParams;->bottomMargin:I
+ 
+-    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
++    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi5BandLayout:Landroid/widget/RelativeLayout;
+ 
+     invoke-virtual {v2, v1}, Landroid/widget/RelativeLayout;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+ 
+-    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifiMultiLinkBandLayout:Landroid/widget/RelativeLayout;
+-
+-    const/16 v3, 0x8
++    iget-object v2, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi6BandLayout:Landroid/widget/RelativeLayout;
+ 
+-    invoke-virtual {v2, v3}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++    invoke-virtual {v2, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
+ 
+     const/16 v2, 0x11
+ 
+@@ -961,7 +975,7 @@
+ 
+     iget-object v0, v0, Lcom/samsung/android/settings/wifi/develop/WifiLabsWeeklyReportPreference;->mWifi7StandardLayout:Landroid/widget/RelativeLayout;
+ 
+-    invoke-virtual {v0, v3}, Landroid/widget/RelativeLayout;->setVisibility(I)V
++    invoke-virtual {v0, v4}, Landroid/widget/RelativeLayout;->setVisibility(I)V
+ 
+     return-void
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
+index 7069c5c5..e26ab449 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore.smali
+@@ -819,14 +819,6 @@
+ 
+     invoke-virtual {v7, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+ 
+-    const-string v2, "11axWifi6"
+-
+-    invoke-virtual/range {p0 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore;->get11axWifi6(Landroid/content/Context;)I
+-
+-    move-result v3
+-
+-    invoke-virtual {v7, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+-
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isMobileDataUsageSupported(Landroid/content/Context;)Z
+ 
+     move-result v2
+@@ -971,42 +963,6 @@
+     return-object v0
+ .end method
+ 
+-.method public get11axWifi6(Landroid/content/Context;)I
+-    .locals 2
+-
+-    invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object p1
+-
+-    const-string/jumbo v0, "wifi_ap_11ax_mode_checked"
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {p1, v0, v1}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-
+-    move-result p1
+-
+-    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore;->TAG:Ljava/lang/String;
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v1, " 11axWifi6 "
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {p0, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return p1
+-.end method
+-
+ .method public getDescription(Landroid/content/Context;)Ljava/lang/String;
+     .locals 0
+ 
+@@ -1520,7 +1476,7 @@
+ 
+     move-result-object v3
+ 
+-    if-eqz v3, :cond_2e
++    if-eqz v3, :cond_2d
+ 
+     :try_start_3
+     new-instance v5, Lorg/json/JSONObject;
+@@ -2486,19 +2442,6 @@
+ 
+     invoke-virtual {v3, v5}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+-    move-result v5
+-
+-    if-eqz v5, :cond_27
+-
+-    const-string v5, "11axWifi6"
+-
+-    invoke-virtual {v3, v5}, Lorg/json/JSONObject;->getInt(Ljava/lang/String;)I
+-
+-    move-result v5
+-
+-    invoke-virtual {v1, v5, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore;->set11axWifi6(ILandroid/content/Context;)V
+-
+-    :cond_27
+     invoke-virtual {v8}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+ 
+     move-result-object v5
+@@ -2529,7 +2472,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_29
++    if-eqz v5, :cond_28
+ 
+     const-string v5, "clientsDataUsageSettings"
+ 
+@@ -2537,7 +2480,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_28
++    if-eqz v5, :cond_27
+ 
+     const-string v5, "clientsDataUsageSettings"
+ 
+@@ -2553,14 +2496,14 @@
+ 
+     invoke-static {v5, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_28
++    :cond_27
+     const-string v5, "dailyHotspotDataLimit"
+ 
+     invoke-virtual {v3, v5}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_29
++    if-eqz v5, :cond_28
+ 
+     const-string v5, "dailyHotspotDataLimit"
+ 
+@@ -2576,12 +2519,12 @@
+ 
+     invoke-static {v5, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_29
++    :cond_28
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isOneTimePasswordSupported(Landroid/content/Context;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2b
++    if-eqz v5, :cond_2a
+ 
+     const-string v5, "isOneTimePasswordEnabled"
+ 
+@@ -2589,7 +2532,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2b
++    if-eqz v5, :cond_2a
+ 
+     const-string v5, "isOneTimePasswordEnabled"
+ 
+@@ -2599,24 +2542,24 @@
+ 
+     const/4 v6, 0x1
+ 
+-    if-ne v5, v6, :cond_2a
++    if-ne v5, v6, :cond_29
+ 
+     move v13, v6
+ 
+     goto :goto_f
+ 
+-    :cond_2a
++    :cond_29
+     const/4 v13, 0x0
+ 
+     :goto_f
+     invoke-static {v2, v13}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->setOtpPasswordEnabled(Landroid/content/Context;Z)V
+ 
+-    :cond_2b
++    :cond_2a
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->isPrioritizeRealTimeTrafficSupported(Landroid/content/Context;)Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2c
++    if-eqz v5, :cond_2b
+ 
+     const-string v5, "key_cloud_prioritize_real_time_traffic_state"
+ 
+@@ -2624,7 +2567,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_2c
++    if-eqz v5, :cond_2b
+ 
+     const-string v5, "key_cloud_prioritize_real_time_traffic_state"
+ 
+@@ -2634,14 +2577,14 @@
+ 
+     invoke-static {v2, v5}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->setPrioritizeRealTimeTrafficDB(Landroid/content/Context;Z)V
+ 
+-    :cond_2c
++    :cond_2b
+     const-string v2, "auto_connect_settings"
+ 
+     invoke-virtual {v3, v2}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_2d
++    if-eqz v2, :cond_2c
+ 
+     const-string v2, "auto_connect_settings"
+ 
+@@ -2669,14 +2612,14 @@
+ 
+     invoke-virtual {v4, v2}, Lcom/samsung/android/wifi/SemWifiManager;->setAdvancedAutohotspotConnectSettings(I)V
+ 
+-    :cond_2d
++    :cond_2c
+     const-string v2, "auto_connect_lcd_off_settings"
+ 
+     invoke-virtual {v3, v2}, Lorg/json/JSONObject;->has(Ljava/lang/String;)Z
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_2e
++    if-eqz v2, :cond_2d
+ 
+     const-string v2, "auto_connect_lcd_off_settings"
+ 
+@@ -2757,7 +2700,7 @@
+ 
+     invoke-static {v1, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_2e
++    :cond_2d
+     :goto_10
+     return-void
+ 
+@@ -2818,38 +2761,6 @@
+     return-void
+ .end method
+ 
+-.method public set11axWifi6(ILandroid/content/Context;)V
+-    .locals 2
+-
+-    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApCloudBackupRestore;->TAG:Ljava/lang/String;
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v1, " 11axWifi6 "
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {p0, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-virtual {p2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object p0
+-
+-    const-string/jumbo p2, "wifi_ap_11ax_mode_checked"
+-
+-    invoke-static {p0, p2, p1}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+-
+-    return-void
+-.end method
+-
+ .method public setDisableRandomMac(ILandroid/content/Context;)V
+     .locals 2
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
+index 41382649..bed6b449 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
+@@ -3331,25 +3331,9 @@
+ 
+     invoke-virtual {v12}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+-    move-result-object v12
+-
+-    invoke-static {v10, v12}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v10
+-
+-    const-string/jumbo v12, "wifi_ap_11ax_mode_checked"
+-
+-    invoke-virtual {v6}, Ljava/lang/String;->trim()Ljava/lang/String;
+-
+     move-result-object v6
+ 
+-    invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+-
+-    move-result v6
+-
+-    invoke-static {v10, v12, v6}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {v10, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     goto/16 :goto_8
+ 
+@@ -6501,40 +6485,6 @@
+ 
+     invoke-virtual {v12, v10}, Ljava/io/FileWriter;->write(Ljava/lang/String;)V
+ 
+-    new-instance v3, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    const-string v4, "11axWifi6="
+-
+-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual/range {p1 .. p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v4
+-
+-    const-string/jumbo v5, "wifi_ap_11ax_mode_checked"
+-
+-    const/4 v6, 0x0
+-
+-    invoke-static {v4, v5, v6}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-
+-    move-result v4
+-
+-    invoke-static {v4}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+-
+-    move-result-object v4
+-
+-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    invoke-virtual {v12, v3}, Ljava/io/FileWriter;->write(Ljava/lang/String;)V
+-
+-    invoke-virtual {v12, v10}, Ljava/io/FileWriter;->write(Ljava/lang/String;)V
+-
+     sget-boolean v3, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
+     :try_end_6
+     .catch Ljava/lang/Exception; {:try_start_6 .. :try_end_6} :catch_2
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+index 227d4132..7cc957ad 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils.smali
+@@ -87,20 +87,8 @@
+ .method public static isDualBand2GhzAnd5GhzSupported(Landroid/content/Context;)Z
+     .locals 0
+ 
+-    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFeatureUtils;->is5GhzBandSupported(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_0
+     const/4 p0, 0x0
+ 
+-    :goto_0
+     return p0
+ .end method
+ 
+@@ -521,7 +509,7 @@
+ .method public static isWifi6StandardSupported(Landroid/content/Context;)Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+-- 
+2.39.5
+
