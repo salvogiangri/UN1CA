@@ -1,0 +1,264 @@
+From 3388f8405d23ded5e35c4c430ba85d93a693e2c2 Mon Sep 17 00:00:00 2001
+From: Utkustnr <utkuustuner@proton.me>
+Date: Thu, 21 Nov 2024 01:39:35 +0300
+Subject: [PATCH] Add toggle for app target SDK bypass
+
+---
+ res/values-en/strings.xml                     |   1 +
+ res/values/public.xml                         |   1 +
+ res/values/strings.xml                        |   1 +
+ res/xml/unica_settings.xml                    |   1 +
+ .../com/android/settings/R$string.smali       |   2 +
+ ...pTargetSDKBypassPreferenceController.smali | 183 ++++++++++++++++++
+ 6 files changed, 189 insertions(+)
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
+
+diff --git a/res/values-en/strings.xml b/res/values-en/strings.xml
+index b6ab8c8c..ea1d3a38 100644
+--- a/res/values-en/strings.xml
++++ b/res/values-en/strings.xml
+@@ -6642,4 +6642,5 @@ In Camera, you can use the Top button to take pictures."</string>
+     <string name="unica_ss_detection_title">Disable screenshot detection</string>
+     <string name="unica_ui_settings_title">UI settings</string>
+     <string name="unica_updates_title">UN1CA Updates</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
+ </resources>
+diff --git a/res/values/public.xml b/res/values/public.xml
+index 5f58b119..3a290b3a 100644
+--- a/res/values/public.xml
++++ b/res/values/public.xml
+@@ -32392,6 +32392,7 @@
+     <public type="string" name="unica_ss_detection_title" id="0x7f13345c" />
+     <public type="string" name="unica_ui_settings_title" id="0x7f13345d" />
+     <public type="string" name="unica_updates_title" id="0x7f13345e" />
++    <public type="string" name="unica_allow_sdkbypass_title" id="0x7f13345f" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
+     <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index c5893677..ec6a5729 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -14051,4 +14051,5 @@ In Camera, you can use the Top button to take pictures."</string>
+     <string name="unica_ss_detection_title">Disable screenshot detection</string>
+     <string name="unica_ui_settings_title">UI settings</string>
+     <string name="unica_updates_title">UN1CA Updates</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
+ </resources>
+diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
+index 4038fda8..c33fa6b5 100644
+--- a/res/xml/unica_settings.xml
++++ b/res/xml/unica_settings.xml
+@@ -18,6 +18,7 @@
+     </SecPreferenceCategory>
+     <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
+         <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
++        <SecSwitchPreference android:title="@string/unica_allow_sdkbypass_title" android:key="unica_allow_sdkbypass" settings:controller="io.mesalabs.unica.settings.AppTargetSDKBypassPreferenceController" />
+         <SecSwitchPreference android:title="@string/unica_asks_title" android:key="unica_asks" settings:controller="io.mesalabs.unica.settings.ASKSPreferenceController" />
+         <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
+         <SecSwitchPreference android:title="@string/unica_ss_detection_title" android:key="unica_ss_detection" settings:controller="io.mesalabs.unica.settings.CaptureDetectionPreferenceController" />
+diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
+index c61f27ec..8405dc9e 100644
+--- a/smali_classes2/com/android/settings/R$string.smali
++++ b/smali_classes2/com/android/settings/R$string.smali
+@@ -10726,6 +10726,8 @@
+ 
+ .field public static final unica_updates_title:I = 0x7f13345e
+ 
++.field public static final unica_allow_sdkbypass_title:I = 0x7f13345f
++
+ .field public static final uninstall:I = 0x7f132c04
+ 
+ .field public static final uninstall_all_users_text:I = 0x7f132c05
+diff --git a/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
+new file mode 100644
+index 00000000..a0693ce8
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
+@@ -0,0 +1,183 @@
++.class public Lio/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "AppTargetSDKBypassPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_sdkbypass"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x1
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_sdkbypass"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+-- 
+2.43.0
+
