@@ -50,6 +50,20 @@ run_cmd()
         bash -e "$SRC_DIR/scripts/$CMD.sh" "$@"
     fi
 }
+
+croot()
+{
+    if [ -d "$SRC_DIR" ]; then
+	if [ "$1" ]; then
+	    cd "$SRC_DIR/$1"
+	else
+	    cd "$SRC_DIR"
+	fi
+    else
+        echo "Unable to find source directory. Try setting SRC_DIR"
+        return 1
+    fi
+}
 # ]
 
 TARGETS="$(ls "$SRC_DIR/target")"
