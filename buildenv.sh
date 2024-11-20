@@ -68,6 +68,21 @@ run_cmd()
 }
 
 alias unica=run_cmd
+
+# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#806
+croot()
+{
+    if [ -d "$SRC_DIR" ]; then
+        if [ "$1" ]; then
+            cd "$SRC_DIR/$1"
+        else
+            cd "$SRC_DIR"
+        fi
+    else
+        echo "Couldn't locate the top of the tree. Try setting SRC_DIR."
+        return 1
+    fi
+}
 # ]
 
 SRC_DIR="$(_GET_SRC_DIR)"
