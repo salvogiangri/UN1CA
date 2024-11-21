@@ -342,6 +342,17 @@ priv-app/Turbo/oat
 priv-app/Velvet/oat
 "
 
+# .prof files
+SYSTEM_DEBLOAT+="
+system/app/HoneyBoard/HoneyBoard.apk.prof
+system/priv-app/SamsungContacts/SamsungContacts.apk.prof
+system/priv-app/SamsungDialer/SamsungDialer.apk.prof
+system/priv-app/SamsungGallery2018/SamsungGallery2018.apk.prof
+system/priv-app/SamsungInCallUI/SamsungInCallUI.apk.prof
+system/priv-app/SamsungMessages/SamsungMessages.apk.prof
+system/priv-app/SecMyFiles2020/SecMyFiles2020.apk.prof
+"
+
 # Recovery restoration script
 VENDOR_DEBLOAT+="
 recovery-from-boot.p
