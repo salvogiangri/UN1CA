@@ -1,4 +1,4 @@
-From e35b6635724a8836a9f70ecf9b224ba5ee7f2e9d Mon Sep 17 00:00:00 2001
+From 532ae35e56ce042764ad9a6f84b98f62a1a049cc Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -13,11 +13,11 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-b+sr+Latn/strings.xml              |  30 +
  res/values-bg/strings.xml                     |  30 +
  res/values-de/strings.xml                     |  30 +
- res/values-en-rCA/strings.xml                 |  30 +
- res/values-en-rPH/strings.xml                 |  30 +
- res/values-en-rUS/strings.xml                 |  30 +
- res/values-en-rZG/strings.xml                 |  30 +
- res/values-en/strings.xml                     |  30 +
+ res/values-en-rCA/strings.xml                 |  31 +
+ res/values-en-rPH/strings.xml                 |  31 +
+ res/values-en-rUS/strings.xml                 |  31 +
+ res/values-en-rZG/strings.xml                 |  31 +
+ res/values-en/strings.xml                     |  31 +
  res/values-es-rES/strings.xml                 |  30 +
  res/values-es-rUS/strings.xml                 |  30 +
  res/values-fa/strings.xml                     |  29 +
@@ -38,16 +38,16 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-vi/strings.xml                     |  30 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
- res/values/public.xml                         |  40 ++
- res/values/strings.xml                        |  33 ++
+ res/values/public.xml                         |  41 ++
+ res/values/strings.xml                        |  34 ++
  res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   6 +
- res/xml/unica_settings.xml                    |  25 +
+ res/xml/unica_settings.xml                    |  26 +
  .../com/android/settings/R$color.smali        |   2 +
  .../com/android/settings/R$drawable.smali     |   6 +
  .../com/android/settings/R$id.smali           |   2 +
  .../com/android/settings/R$layout.smali       |   2 +
- .../com/android/settings/R$string.smali       |  66 +++
+ .../com/android/settings/R$string.smali       |  68 +++
  .../com/android/settings/R$xml.smali          |   2 +
  .../Settings$FOTASuggestionActivity.smali     |  33 +-
  .../core/gateway/SettingsGateway.smali        |   4 +-
@@ -63,6 +63,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../io/mesalabs/unica/pif/PIFUtils.smali      | 548 +++++++++++++++++
  .../settings/ASKSPreferenceController.smali   | 171 ++++++
  .../AppDowngradePreferenceController.smali    | 183 ++++++
+ ...pTargetSDKBypassPreferenceController.smali | 183 ++++++
  .../BootSoundPreferenceController.smali       | 167 ++++++
  ...CaptureDetectionPreferenceController.smali | 183 ++++++
  .../DeviceNamePreferenceController.smali      | 193 ++++++
@@ -75,7 +76,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 71 files changed, 5618 insertions(+), 17 deletions(-)
+ 72 files changed, 5811 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -90,6 +91,7 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ASKSPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppDowngradePreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/BootSoundPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/CaptureDetectionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali
@@ -361,14 +363,15 @@ index 5b68d3a1..d47e8ec4 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rCA/strings.xml b/res/values-en-rCA/strings.xml
-index 73208dfe..a4965ad4 100644
+index 73208dfe..599da17f 100644
 --- a/res/values-en-rCA/strings.xml
 +++ b/res/values-en-rCA/strings.xml
-@@ -7357,4 +7357,34 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -7357,4 +7357,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -400,14 +403,15 @@ index 73208dfe..a4965ad4 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rPH/strings.xml b/res/values-en-rPH/strings.xml
-index 7212c9a7..84a65825 100644
+index 7212c9a7..2f5c60aa 100644
 --- a/res/values-en-rPH/strings.xml
 +++ b/res/values-en-rPH/strings.xml
-@@ -6612,4 +6612,34 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -439,14 +443,15 @@ index 7212c9a7..84a65825 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rUS/strings.xml b/res/values-en-rUS/strings.xml
-index cfef2e61..b3c32c6d 100644
+index cfef2e61..f4eb2a40 100644
 --- a/res/values-en-rUS/strings.xml
 +++ b/res/values-en-rUS/strings.xml
-@@ -6614,4 +6614,34 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6614,4 +6614,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -478,14 +483,15 @@ index cfef2e61..b3c32c6d 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rZG/strings.xml b/res/values-en-rZG/strings.xml
-index 80bfdd9d..e86bd658 100644
+index 80bfdd9d..64cc623d 100644
 --- a/res/values-en-rZG/strings.xml
 +++ b/res/values-en-rZG/strings.xml
-@@ -6483,4 +6483,34 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6483,4 +6483,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -517,14 +523,15 @@ index 80bfdd9d..e86bd658 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en/strings.xml b/res/values-en/strings.xml
-index ca0e1e71..b6ab8c8c 100644
+index ca0e1e71..ef14c2c4 100644
 --- a/res/values-en/strings.xml
 +++ b/res/values-en/strings.xml
-@@ -6612,4 +6612,34 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -1274,7 +1281,7 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 59e48eb7..5f58b119 100644
+index 59e48eb7..62220fbc 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5157,6 +5157,7 @@
@@ -1318,7 +1325,7 @@ index 59e48eb7..5f58b119 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d059c" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014d" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02ac" />
-@@ -32353,6 +32359,39 @@
+@@ -32353,6 +32359,40 @@
      <public type="string" name="zone_time_type_standard" id="0x7f13343b" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13343c" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13343d" />
@@ -1326,49 +1333,50 @@ index 59e48eb7..5f58b119 100644
 +    <public type="string" name="menu_key_choidujour" id="0x7f13343f" />
 +    <public type="string" name="menu_key_unica_settings" id="0x7f133440" />
 +    <public type="string" name="unica_allow_downgrade_title" id="0x7f133441" />
-+    <public type="string" name="unica_asks_title" id="0x7f133442" />
-+    <public type="string" name="unica_boot_sound_title" id="0x7f133443" />
-+    <public type="string" name="unica_device_name_title" id="0x7f133444" />
-+    <public type="string" name="unica_extra_settings_title" id="0x7f133445" />
-+    <public type="string" name="unica_fod_anim_type_optical_g" id="0x7f133446" />
-+    <public type="string" name="unica_fod_anim_type_optical_w" id="0x7f133447" />
-+    <public type="string" name="unica_fod_anim_type_title" id="0x7f133448" />
-+    <public type="string" name="unica_fod_anim_type_ultrasonic" id="0x7f133449" />
-+    <public type="string" name="unica_games_spoof_title" id="0x7f13344a" />
-+    <public type="string" name="unica_hide_dev_title" id="0x7f13344b" />
-+    <public type="string" name="unica_max_refresh_rate_title" id="0x7f13344c" />
-+    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f13344d" />
-+    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f13344e" />
-+    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f13344f" />
-+    <public type="string" name="unica_native_blur_dialog_title" id="0x7f133450" />
-+    <public type="string" name="unica_native_blur_title" id="0x7f133451" />
-+    <public type="string" name="unica_pif_checking" id="0x7f133452" />
-+    <public type="string" name="unica_pif_error" id="0x7f133453" />
-+    <public type="string" name="unica_pif_no_root" id="0x7f133454" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f133455" />
-+    <public type="string" name="unica_pif_updated" id="0x7f133456" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f133457" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f133458" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f133459" />
-+    <public type="string" name="unica_settings_title" id="0x7f13345a" />
-+    <public type="string" name="unica_spoof_settings_title" id="0x7f13345b" />
-+    <public type="string" name="unica_ss_detection_title" id="0x7f13345c" />
-+    <public type="string" name="unica_ui_settings_title" id="0x7f13345d" />
-+    <public type="string" name="unica_updates_title" id="0x7f13345e" />
++    <public type="string" name="unica_allow_sdkbypass_title" id="0x7f133442" />
++    <public type="string" name="unica_asks_title" id="0x7f133443" />
++    <public type="string" name="unica_boot_sound_title" id="0x7f133444" />
++    <public type="string" name="unica_device_name_title" id="0x7f133445" />
++    <public type="string" name="unica_extra_settings_title" id="0x7f133446" />
++    <public type="string" name="unica_fod_anim_type_optical_g" id="0x7f133447" />
++    <public type="string" name="unica_fod_anim_type_optical_w" id="0x7f133448" />
++    <public type="string" name="unica_fod_anim_type_title" id="0x7f133449" />
++    <public type="string" name="unica_fod_anim_type_ultrasonic" id="0x7f13344a" />
++    <public type="string" name="unica_games_spoof_title" id="0x7f13344b" />
++    <public type="string" name="unica_hide_dev_title" id="0x7f13344c" />
++    <public type="string" name="unica_max_refresh_rate_title" id="0x7f13344d" />
++    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f13344e" />
++    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f13344f" />
++    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f133450" />
++    <public type="string" name="unica_native_blur_dialog_title" id="0x7f133451" />
++    <public type="string" name="unica_native_blur_title" id="0x7f133452" />
++    <public type="string" name="unica_pif_checking" id="0x7f133453" />
++    <public type="string" name="unica_pif_error" id="0x7f133454" />
++    <public type="string" name="unica_pif_no_root" id="0x7f133455" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f133456" />
++    <public type="string" name="unica_pif_updated" id="0x7f133457" />
++    <public type="string" name="unica_pif_version_title" id="0x7f133458" />
++    <public type="string" name="unica_rom_version_title" id="0x7f133459" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f13345a" />
++    <public type="string" name="unica_settings_title" id="0x7f13345b" />
++    <public type="string" name="unica_spoof_settings_title" id="0x7f13345c" />
++    <public type="string" name="unica_ss_detection_title" id="0x7f13345d" />
++    <public type="string" name="unica_ui_settings_title" id="0x7f13345e" />
++    <public type="string" name="unica_updates_title" id="0x7f13345f" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -35073,4 +35112,5 @@
+@@ -35073,4 +35113,5 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026b" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026c" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026d" />
 +    <public type="xml" name="unica_settings" id="0x7f16026e" />
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 2a67ac19..c5893677 100644
+index 2a67ac19..5a1d2fd3 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -14018,4 +14018,37 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -14018,4 +14018,38 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -1376,6 +1384,7 @@ index 2a67ac19..c5893677 100644
 +    <string name="menu_key_choidujour">top_level_choidujour</string>
 +    <string name="menu_key_unica_settings">top_level_unica</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
++    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -1444,10 +1453,10 @@ index 94a8f486..456742a0 100644
          <intent android:targetPackage="@string/config_sec_toplevel_tips_package" android:targetClass="@string/config_sec_toplevel_tips_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..4038fda8
+index 00000000..c33fa6b5
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,26 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -1468,6 +1477,7 @@ index 00000000..4038fda8
 +    </SecPreferenceCategory>
 +    <SecPreferenceCategory android:title="@string/unica_extra_settings_title">
 +        <SecSwitchPreference android:title="@string/unica_allow_downgrade_title" android:key="unica_allow_downgrade" settings:controller="io.mesalabs.unica.settings.AppDowngradePreferenceController" />
++        <SecSwitchPreference android:title="@string/unica_allow_sdkbypass_title" android:key="unica_allow_sdkbypass" settings:controller="io.mesalabs.unica.settings.AppTargetSDKBypassPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_asks_title" android:key="unica_asks" settings:controller="io.mesalabs.unica.settings.ASKSPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_secure_ss_title" android:key="unica_secure_ss" settings:controller="io.mesalabs.unica.settings.SecureScreenshotPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_ss_detection_title" android:key="unica_ss_detection" settings:controller="io.mesalabs.unica.settings.CaptureDetectionPreferenceController" />
@@ -1538,7 +1548,7 @@ index 5279deab..211ba597 100644
  
  .field public static final user_credential:I = 0x7f0d05f8
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 0c218c74..c61f27ec 100644
+index 0c218c74..38105919 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4154,6 +4154,8 @@
@@ -1568,69 +1578,71 @@ index 0c218c74..c61f27ec 100644
  .field public static final menu_restore:I = 0x7f1315fe
  
  .field public static final menu_save:I = 0x7f1315ff
-@@ -10660,6 +10666,66 @@
+@@ -10660,6 +10666,68 @@
  
  .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132c00
  
 +.field public static final unica_allow_downgrade_title:I = 0x7f133441
 +
-+.field public static final unica_asks_title:I = 0x7f133442
++.field public static final unica_allow_sdkbypass_title:I = 0x7f133442
 +
-+.field public static final unica_boot_sound_title:I = 0x7f133443
++.field public static final unica_asks_title:I = 0x7f133443
 +
-+.field public static final unica_device_name_title:I = 0x7f133444
++.field public static final unica_boot_sound_title:I = 0x7f133444
 +
-+.field public static final unica_extra_settings_title:I = 0x7f133445
++.field public static final unica_device_name_title:I = 0x7f133445
 +
-+.field public static final unica_fod_anim_type_optical_g:I = 0x7f133446
++.field public static final unica_extra_settings_title:I = 0x7f133446
 +
-+.field public static final unica_fod_anim_type_optical_w:I = 0x7f133447
++.field public static final unica_fod_anim_type_optical_g:I = 0x7f133447
 +
-+.field public static final unica_fod_anim_type_title:I = 0x7f133448
++.field public static final unica_fod_anim_type_optical_w:I = 0x7f133448
 +
-+.field public static final unica_fod_anim_type_ultrasonic:I = 0x7f133449
++.field public static final unica_fod_anim_type_title:I = 0x7f133449
 +
-+.field public static final unica_games_spoof_title:I = 0x7f13344a
++.field public static final unica_fod_anim_type_ultrasonic:I = 0x7f13344a
 +
-+.field public static final unica_hide_dev_title:I = 0x7f13344b
++.field public static final unica_games_spoof_title:I = 0x7f13344b
 +
-+.field public static final unica_max_refresh_rate_title:I = 0x7f13344c
++.field public static final unica_hide_dev_title:I = 0x7f13344c
 +
-+.field public static final unica_native_blur_dialog_msg:I = 0x7f13344d
++.field public static final unica_max_refresh_rate_title:I = 0x7f13344d
 +
-+.field public static final unica_native_blur_dialog_negative:I = 0x7f13344e
++.field public static final unica_native_blur_dialog_msg:I = 0x7f13344e
 +
-+.field public static final unica_native_blur_dialog_positive:I = 0x7f13344f
++.field public static final unica_native_blur_dialog_negative:I = 0x7f13344f
 +
-+.field public static final unica_native_blur_dialog_title:I = 0x7f133450
++.field public static final unica_native_blur_dialog_positive:I = 0x7f133450
 +
-+.field public static final unica_native_blur_title:I = 0x7f133451
++.field public static final unica_native_blur_dialog_title:I = 0x7f133451
 +
-+.field public static final unica_pif_checking:I = 0x7f133452
++.field public static final unica_native_blur_title:I = 0x7f133452
 +
-+.field public static final unica_pif_error:I = 0x7f133453
++.field public static final unica_pif_checking:I = 0x7f133453
 +
-+.field public static final unica_pif_no_root:I = 0x7f133454
++.field public static final unica_pif_error:I = 0x7f133454
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f133455
++.field public static final unica_pif_no_root:I = 0x7f133455
 +
-+.field public static final unica_pif_updated:I = 0x7f133456
++.field public static final unica_pif_up_to_date:I = 0x7f133456
 +
-+.field public static final unica_pif_version_title:I = 0x7f133457
++.field public static final unica_pif_updated:I = 0x7f133457
 +
-+.field public static final unica_rom_version_title:I = 0x7f133458
++.field public static final unica_pif_version_title:I = 0x7f133458
 +
-+.field public static final unica_secure_ss_title:I = 0x7f133459
++.field public static final unica_rom_version_title:I = 0x7f133459
 +
-+.field public static final unica_settings_title:I = 0x7f13345a
++.field public static final unica_secure_ss_title:I = 0x7f13345a
 +
-+.field public static final unica_spoof_settings_title:I = 0x7f13345b
++.field public static final unica_settings_title:I = 0x7f13345b
 +
-+.field public static final unica_ss_detection_title:I = 0x7f13345c
++.field public static final unica_spoof_settings_title:I = 0x7f13345c
 +
-+.field public static final unica_ui_settings_title:I = 0x7f13345d
++.field public static final unica_ss_detection_title:I = 0x7f13345d
 +
-+.field public static final unica_updates_title:I = 0x7f13345e
++.field public static final unica_ui_settings_title:I = 0x7f13345e
++
++.field public static final unica_updates_title:I = 0x7f13345f
 +
  .field public static final uninstall:I = 0x7f132c04
  
@@ -3571,6 +3583,195 @@ index 00000000..079c6187
 +    move-result-object p0
 +
 +    const-string v0, "unica_allow_downgrade"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
+new file mode 100644
+index 00000000..a0693ce8
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController.smali
+@@ -0,0 +1,183 @@
++.class public Lio/mesalabs/unica/settings/AppTargetSDKBypassPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "AppTargetSDKBypassPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_sdkbypass"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x1
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_allow_sdkbypass"
 +
 +    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
