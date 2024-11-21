@@ -1,4 +1,4 @@
-From 532ae35e56ce042764ad9a6f84b98f62a1a049cc Mon Sep 17 00:00:00 2001
+From 28b853ef0bcc05a4773c7710b75747b8eeaad281 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -363,7 +363,7 @@ index 5b68d3a1..d47e8ec4 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rCA/strings.xml b/res/values-en-rCA/strings.xml
-index 73208dfe..599da17f 100644
+index 73208dfe..b2f446a2 100644
 --- a/res/values-en-rCA/strings.xml
 +++ b/res/values-en-rCA/strings.xml
 @@ -7357,4 +7357,35 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -371,7 +371,7 @@ index 73208dfe..599da17f 100644
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -403,7 +403,7 @@ index 73208dfe..599da17f 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rPH/strings.xml b/res/values-en-rPH/strings.xml
-index 7212c9a7..2f5c60aa 100644
+index 7212c9a7..daa86c25 100644
 --- a/res/values-en-rPH/strings.xml
 +++ b/res/values-en-rPH/strings.xml
 @@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -411,7 +411,7 @@ index 7212c9a7..2f5c60aa 100644
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -443,7 +443,7 @@ index 7212c9a7..2f5c60aa 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rUS/strings.xml b/res/values-en-rUS/strings.xml
-index cfef2e61..f4eb2a40 100644
+index cfef2e61..f58dd203 100644
 --- a/res/values-en-rUS/strings.xml
 +++ b/res/values-en-rUS/strings.xml
 @@ -6614,4 +6614,35 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -451,7 +451,7 @@ index cfef2e61..f4eb2a40 100644
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -483,7 +483,7 @@ index cfef2e61..f4eb2a40 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rZG/strings.xml b/res/values-en-rZG/strings.xml
-index 80bfdd9d..64cc623d 100644
+index 80bfdd9d..8dc3fff5 100644
 --- a/res/values-en-rZG/strings.xml
 +++ b/res/values-en-rZG/strings.xml
 @@ -6483,4 +6483,35 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -491,7 +491,7 @@ index 80bfdd9d..64cc623d 100644
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -523,7 +523,7 @@ index 80bfdd9d..64cc623d 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en/strings.xml b/res/values-en/strings.xml
-index ca0e1e71..ef14c2c4 100644
+index ca0e1e71..cf0af044 100644
 --- a/res/values-en/strings.xml
 +++ b/res/values-en/strings.xml
 @@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -531,7 +531,7 @@ index ca0e1e71..ef14c2c4 100644
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
@@ -1373,7 +1373,7 @@ index 59e48eb7..62220fbc 100644
 +    <public type="xml" name="unica_settings" id="0x7f16026e" />
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 2a67ac19..5a1d2fd3 100644
+index 2a67ac19..b894d558 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
 @@ -14018,4 +14018,38 @@ In Camera, you can use the Top button to take pictures."</string>
@@ -1384,7 +1384,7 @@ index 2a67ac19..5a1d2fd3 100644
 +    <string name="menu_key_choidujour">top_level_choidujour</string>
 +    <string name="menu_key_unica_settings">top_level_unica</string>
 +    <string name="unica_allow_downgrade_title">Allow application downgrade</string>
-+    <string name="unica_allow_sdkbypass_title">Allow bypassing app SDK target</string>
++    <string name="unica_allow_sdkbypass_title">Disable low target SDK block</string>
 +    <string name="unica_asks_title">Disable ASKS</string>
 +    <string name="unica_boot_sound_title">Play power on sound effect</string>
 +    <string name="unica_device_name_title">Device name</string>
