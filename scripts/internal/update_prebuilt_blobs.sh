@@ -65,17 +65,11 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod/system" -type f \
             -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod.system.")"
         ;;
-    "unica/patches/product_feature/fingerprint/side_fp/qssi")
+    "unica/patches/product_feature/fingerprint/side_fp")
         MODULE="$1"
         FW="SM-F731B/EUX/350929871234569"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/qssi/system" -type f \
-            | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/qssi.system.")"
-        ;;
-    "unica/patches/product_feature/fingerprint/side_fp/essi")
-        MODULE="$1"
-        FW="SM-A166B/EUX/352907210123451"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/essi/system" -type f \
-            | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/essi.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system" -type f \
+            | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp.system.")"
         ;;
     "unica/patches/ultra")
         MODULE="$1"
