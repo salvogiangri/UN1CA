@@ -171,7 +171,11 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
         APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isOpticalSensor.patch"
         APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
     elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
-        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system/"* "$WORK_DIR/system/system"
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi"]]; then
+            cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/qssi/system/"* "$WORK_DIR/system/system"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi"]]; then
+            cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/essi/system/"* "$WORK_DIR/system/system"
+        fi
         APPLY_PATCH "system/framework/services.jar" "fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
         APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
         APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
