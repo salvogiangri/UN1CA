@@ -66,6 +66,16 @@ if ! grep -q "wlan/rev3" "$WORK_DIR/configs/file_context-vendor"; then
         echo "/vendor/firmware/wlan/rev9 u:object_r:vendor_firmware_file:s0"
         echo "/vendor/firmware/wlan/rev9/wpss\.b01 u:object_r:vendor_firmware_file:s0"
         echo "/vendor/firmware/wlan/rev9/wpss\.mdt u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b00 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b01 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b02 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b03 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b04 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b05 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b06 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.b07 u:object_r:vendor_firmware_file:s0"
+        echo "/vendor/firmware/wlan/rev10/wpss\.mdt u:object_r:vendor_firmware_file:s0"
     } >> "$WORK_DIR/configs/file_context-vendor"
 fi
 if ! grep -q "wlan/rev3" "$WORK_DIR/configs/fs_config-vendor"; then
@@ -136,6 +146,16 @@ if ! grep -q "wlan/rev3" "$WORK_DIR/configs/fs_config-vendor"; then
         echo "vendor/firmware/wlan/rev9 0 2000 755 capabilities=0x0"
         echo "vendor/firmware/wlan/rev9/wpss.b01 0 0 644 capabilities=0x0"
         echo "vendor/firmware/wlan/rev9/wpss.mdt 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10 0 2000 755 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b00 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b01 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b02 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b03 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b04 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b05 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b06 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.b07 0 0 644 capabilities=0x0"
+        echo "vendor/firmware/wlan/rev10/wpss.mdt 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-vendor"
 fi
 if ! grep -q "vendor_firmware_file (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
