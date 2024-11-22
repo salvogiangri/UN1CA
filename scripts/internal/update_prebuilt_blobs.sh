@@ -76,11 +76,17 @@ case "$1" in
         FW="SM-S918B/EUX/350196551234562"
         BLOBS="$(find "$SRC_DIR/unica/patches/ultra/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra.system.")"
         ;;
-    "unica/patches/uwb")
+    "unica/patches/uwb/qssi")
         MODULE="$1"
         FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb.system.")"
-        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/..")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb/qssi.system.")"
+        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/qssi/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/qssi/..")"
+        ;;
+    "unica/patches/uwb/essi")
+        MODULE="$1"
+        FW="SM-S908B/EUX/350048581234569"
+        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb/essi.system.")"
+        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/essi/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/essi/..")"
         ;;
     "unica/patches/vndk/30")
         MODULE="$1"
