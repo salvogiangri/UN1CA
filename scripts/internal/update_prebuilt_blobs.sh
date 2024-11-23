@@ -36,7 +36,7 @@ fi
 case "$1" in
     "unica/patches/deknox")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/XME/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
         ;;
     "unica/patches/mass_cam")
@@ -46,7 +46,7 @@ case "$1" in
         ;;
     "unica/patches/nfc")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/XME/352828291234563"
         BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
         ;;
     "unica/patches/product_feature/fingerprint/optical_fod")
@@ -80,7 +80,7 @@ case "$1" in
         ;;
     "unica/patches/vndk/30")
         MODULE="$1"
-        FW="SM-A736B/INS/352828291234563"
+        FW="SM-A736B/XME/352828291234563"
         BLOBS="system/system/system_ext/apex/com.android.vndk.v30.apex"
         ;;
     "unica/patches/vndk/31")
