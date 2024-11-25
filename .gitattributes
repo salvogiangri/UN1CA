@@ -19,6 +19,7 @@
 
 # ROM-specific prebuilt blobs
 unica/flashable-zip/updater binary
+unica/mods/eureka/system/** binary
 unica/mods/pif/system/bin/rezetprop binary
 unica/patches/deknox/system/** binary
 unica/patches/product_feature/fingerprint/optical_fod/system/** binary

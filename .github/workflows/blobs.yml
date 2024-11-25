@@ -37,6 +37,8 @@ jobs:
             path: "unica/patches/vndk/33"
           - module: "Samsung China apps"
             path: "unica/mods/china"
+          - module: "Eureka blobs"
+            path: "unica/mods/eureka"
           - module: "(a71) OS proprietary blobs"
             path: "target/a71/patches/stock_blobs"
           - module: "(m52xq) OS proprietary blobs"

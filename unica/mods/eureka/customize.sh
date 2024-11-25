@@ -1,62 +1,4 @@
-SKIPUNZIP=1
-
 # [
-ADD_TO_WORK_DIR()
-{
-    local PARTITION="$1"
-    local FILE_PATH="$2"
-    local TMP
-
-    case "$PARTITION" in
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FILE_PATH="system_ext/$FILE_PATH"
-            else
-                PARTITION="system"
-                FILE_PATH="system/system/system_ext/$FILE_PATH"
-            fi
-        ;;
-        *)
-            FILE_PATH="$PARTITION/$FILE_PATH"
-            ;;
-    esac
-
-    mkdir -p "$WORK_DIR/$(dirname "$FILE_PATH")"
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$FILE_PATH" "$WORK_DIR/$FILE_PATH"
-
-    TMP="$FILE_PATH"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION"; then
-            if [[ "$TMP" == "$FILE_PATH" ]]; then
-                echo "$TMP $3 $4 $5 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            elif [[ "$PARTITION" == "vendor" ]]; then
-                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            else
-                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            fi
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-
-    TMP="$(echo "$FILE_PATH" | sed 's/\./\\\./g')"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION"; then
-            echo "/$TMP $6" >> "$WORK_DIR/configs/file_context-$PARTITION"
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-}
-
 REMOVE_FROM_WORK_DIR()
 {
     local FILE_PATH="$1"
@@ -80,28 +22,35 @@ REMOVE_FROM_WORK_DIR()
 }
 # ]
 
-if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-S92"* ]]; then
-    exit 1
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_acoustic.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_epic.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_EDM.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_RnB.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_jazz_piano.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Galaxy/ACH_Over_the_Horizon.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_pop_remix.ogg"
+REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_smooth_remix.ogg"
+
+if ! grep -q "EnvironmentAdaptiveDisplay" "$WORK_DIR/configs/file_context-system"; then
+    {
+        echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sead\.xml u:object_r:system_file:s0"
+        echo "/system/etc/permissions/privapp-permissions-com\.samsung\.android\.wallpaper\.live\.xml u:object_r:system_file:s0"
+        echo "/system/media/audio/ringtones/SoundTheme/Galaxy/ACH_Over_the_Horizon_2024\.ogg u:object_r:system_file:s0"
+        echo "/system/priv-app/EnvironmentAdaptiveDisplay u:object_r:system_file:s0"
+        echo "/system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay\.apk u:object_r:system_file:s0"
+        echo "/system/priv-app/SpriteWallpaper u:object_r:system_file:s0"
+        echo "/system/priv-app/SpriteWallpaper/SpriteWallpaper\.apk u:object_r:system_file:s0"
+    } >> "$WORK_DIR/configs/file_context-system"
 fi
-
-IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
-MODEL=$(echo -n "${SOURCE_EXTRA_FIRMWARES[0]}" | cut -d "/" -f 1)
-REGION=$(echo -n "${SOURCE_EXTRA_FIRMWARES[0]}" | cut -d "/" -f 2)
-
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/notifications"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ringtones"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/media/audio/ui"
-
-cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/system/system/media/audio/"* "$WORK_DIR/system/system/media/audio"
-cat "$FW_DIR/${MODEL}_${REGION}/fs_config-system" | grep -F "system/media/audio/" >> "$WORK_DIR/configs/fs_config-system"
-cat "$FW_DIR/${MODEL}_${REGION}/file_context-system" | grep -F "system/media/audio/" >> "$WORK_DIR/configs/file_context-system"
-ADD_TO_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.wallpaper.live.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/etc/ringtones_count_list.txt" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/hidden/INTERNAL_SDCARD/Music/Samsung/Over_the_Horizon.m4a" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/priv-app/wallpaper-res/wallpaper-res.apk" 0 0 644 "u:object_r:system_file:s0"
-
-echo "- Processing \"Custom boot animation\" by @BlackMesa123"
-bash "$SRC_DIR/unica/mods/bootanim/customize.sh"
+if ! grep -q "EnvironmentAdaptiveDisplay" "$WORK_DIR/configs/fs_config-system"; then
+    {
+        echo "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml 0 0 644 capabilities=0x0"
+        echo "system/etc/permissions/privapp-permissions-com.samsung.android.wallpaper.live.xml 0 0 644 capabilities=0x0"
+        echo "system/media/audio/ringtones/SoundTheme/Galaxy/ACH_Over_the_Horizon_2024.ogg 0 0 644 capabilities=0x0"
+        echo "system/priv-app/EnvironmentAdaptiveDisplay 0 0 755 capabilities=0x0"
+        echo "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk 0 0 644 capabilities=0x0"
+        echo "system/priv-app/SpriteWallpaper 0 0 755 capabilities=0x0"
+        echo "system/priv-app/SpriteWallpaper/SpriteWallpaper.apk 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-system"
+fi

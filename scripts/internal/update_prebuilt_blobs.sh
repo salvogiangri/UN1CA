@@ -98,6 +98,11 @@ case "$1" in
         FW="SM-S9210/CHC/356724910402671"
         BLOBS="$(find "$SRC_DIR/unica/mods/china/system" -type f | sed "s.$SRC_DIR/unica/mods/china.system.")"
         ;;
+    "unica/mods/eureka")
+        MODULE="$1"
+        FW="SM-S9210/CHC/356724910402671"
+        BLOBS="$(find "$SRC_DIR/unica/mods/eureka/system" -type f | sed "s.$SRC_DIR/unica/mods/eureka.system.")"
+        ;;
     "target/a71/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A525F/SER/352938771234569"
