@@ -83,10 +83,15 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/essi/system" -type f \
             | sed "s.$SRC_DIR/unica/patches/product_feature/resolution/essi.system.")"
         ;;
-    "unica/patches/ultra")
+    "unica/patches/ultra/qssi")
         MODULE="$1"
         FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra/qssi.system.")"
+        ;;
+    "unica/patches/ultra/essi")
+        MODULE="$1"
+        FW="SM-S908B/EUX/350048581234569"
+        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra/essi.system.")"
         ;;
     "unica/patches/uwb")
         MODULE="$1"
