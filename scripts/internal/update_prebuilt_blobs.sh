@@ -34,10 +34,15 @@ if [ "$#" != 1 ]; then
 fi
 
 case "$1" in
-    "unica/patches/deknox")
+    "unica/patches/deknox/qssi")
         MODULE="$1"
         FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/qssi/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox/qssi.system.")"
+        ;;
+    "unica/patches/deknox/essi")
+        MODULE="$1"
+        FW="SM-X516B/EUX/354136921234567"
+        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/deknox/essi.system.")"
         ;;
     "unica/patches/mass_cam")
         MODULE="$1"

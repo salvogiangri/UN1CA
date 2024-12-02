@@ -1,0 +1,75 @@
+From 83e0b3d9c5cd7f314ab0603020c8d6c5580d2312 Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Sun, 17 Nov 2024 12:09:00 +0100
+Subject: [PATCH] Nuke Knox AI Service
+
+---
+ smali/com/android/server/SystemServer.smali | 45 +--------------------
+ 1 file changed, 2 insertions(+), 43 deletions(-)
+
+diff --git a/smali/com/android/server/SystemServer.smali b/smali/com/android/server/SystemServer.smali
+index b97e5f07..119f682e 100644
+--- a/smali/com/android/server/SystemServer.smali
++++ b/smali/com/android/server/SystemServer.smali
+@@ -5798,47 +5798,6 @@
+ 
+     invoke-virtual/range {p1 .. p1}, Landroid/util/TimingsTraceLog;->traceEnd()V
+ 
+-    const-string v2, "KnoxAiManagerService"
+-
+-    invoke-virtual {v14, v2}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
+-    :try_end_21
+-    .catchall {:try_start_21 .. :try_end_21} :catchall_6c
+-
+-    :try_start_22
+-    const-string/jumbo v2, "knoxai_system_service"
+-
+-    const-class v4, Lcom/android/server/enterprise/knoxai/KnoxAiManagerService;
+-
+-    invoke-static {v2, v4}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Ljava/lang/Class;)V
+-
+-    const-string v2, "SystemServer"
+-
+-    const-string v4, "KnoxAiManagerService - initialization"
+-
+-    invoke-static {v2, v4}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_22
+-    .catch Ljava/lang/Exception; {:try_start_22 .. :try_end_22} :catch_5
+-    .catchall {:try_start_22 .. :try_end_22} :catchall_6c
+-
+-    goto :goto_17
+-
+-    :catch_5
+-    move-exception v0
+-
+-    move-object v2, v0
+-
+-    :try_start_23
+-    const-string v4, "SystemServer"
+-
+-    const-string v9, "KnoxAiManagerService - failed to add it"
+-
+-    invoke-static {v4, v9}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-virtual {v2}, Ljava/lang/Exception;->printStackTrace()V
+-
+-    :goto_17
+-    invoke-virtual/range {p1 .. p1}, Landroid/util/TimingsTraceLog;->traceEnd()V
+-
+     const-string v2, "StartInputManager"
+ 
+     invoke-virtual {v14, v2}, Lcom/android/server/utils/TimingsTraceAndSlog;->traceBegin(Ljava/lang/String;)V
+@@ -5931,8 +5890,8 @@
+     const-string v4, "Hqm Service"
+ 
+     invoke-static {v2, v4}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_23
+-    .catchall {:try_start_23 .. :try_end_23} :catchall_6c
++    :try_end_21
++    .catchall {:try_start_21 .. :try_end_21} :catchall_6c
+ 
+     :try_start_24
+     new-instance v2, Ldalvik/system/PathClassLoader;
+-- 
+2.45.2
+
