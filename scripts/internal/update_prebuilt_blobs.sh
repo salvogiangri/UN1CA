@@ -49,10 +49,15 @@ case "$1" in
         FW="SM-S711B/EUX/358615311234564"
         BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
         ;;
-    "unica/patches/nfc")
+    "unica/patches/nfc/qssi")
         MODULE="$1"
         FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc/qssi.system.")"
+        ;;
+    "unica/patches/nfc/essi")
+        MODULE="$1"
+        FW="SM-A166B/EUX/352907210123451"
+        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc/essi.system.")"
         ;;
     "unica/patches/product_feature/fingerprint/optical_fod")
         MODULE="$1"
