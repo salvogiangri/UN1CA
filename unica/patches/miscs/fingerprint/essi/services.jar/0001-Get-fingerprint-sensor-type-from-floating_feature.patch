@@ -1,0 +1,142 @@
+From 5d6d5dd85dcd1c90af1680775c3ff5991bd8038d Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Sun, 1 Dec 2024 11:14:24 +0100
+Subject: [PATCH] Get fingerprint sensor type from floating_feature
+
+---
+ .../biometrics/SemBiometricFeature.smali      | 72 +++++++++++--------
+ 1 file changed, 42 insertions(+), 30 deletions(-)
+
+diff --git a/smali/com/android/server/biometrics/SemBiometricFeature.smali b/smali/com/android/server/biometrics/SemBiometricFeature.smali
+index 8dd19323..e69b9cae 100644
+--- a/smali/com/android/server/biometrics/SemBiometricFeature.smali
++++ b/smali/com/android/server/biometrics/SemBiometricFeature.smali
+@@ -205,10 +205,6 @@
+     :goto_2
+     sput-boolean v0, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_USE_AOSP_HAL:Z
+ 
+-    sput-boolean v3, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_IN_DISPLAY_TYPE:Z
+-
+-    sput-boolean v3, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_OPTICAL:Z
+-
+     invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+ 
+     move-result-object v0
+@@ -219,48 +215,54 @@
+ 
+     move-result-object v0
+ 
+-    const-string/jumbo v6, "ultrasonic"
++    const-string/jumbo v5, "display"
+ 
+-    invoke-virtual {v0, v6}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++    invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+-    move-result v0
++    move-result v5
+ 
+-    if-eqz v0, :cond_3
++    sput-boolean v5, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_IN_DISPLAY_TYPE:Z
+ 
+-    move v0, v3
++    const-string/jumbo v5, "optical"
+ 
+-    goto :goto_3
++    invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+-    :cond_3
+-    move v0, v4
++    move-result v5
+ 
+-    :goto_3
+-    sput-boolean v0, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_ULTRASONIC:Z
++    sput-boolean v5, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_OPTICAL:Z
+ 
+-    invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
++    const-string/jumbo v5, "ultrasonic"
+ 
+-    move-result-object v0
++    invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+-    invoke-virtual {v0, v5}, Lcom/samsung/android/feature/SemFloatingFeature;->getString(Ljava/lang/String;)Ljava/lang/String;
++    move-result v5
+ 
+-    move-result-object v0
++    sput-boolean v5, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_ULTRASONIC:Z
+ 
+-    const-string/jumbo v5, "side"
++    const-string/jumbo v5, "powerkey"
+ 
+     invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+ 
+-    move-result v0
++    move-result v5
+ 
+-    if-eqz v0, :cond_4
++    if-nez v5, :cond_3
+ 
+-    move v0, v3
++    const-string/jumbo v5, "side"
+ 
+-    goto :goto_4
++    invoke-virtual {v0, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v5
++
++    if-nez v5, :cond_3
+ 
+-    :cond_4
+     move v0, v4
+ 
+-    :goto_4
++    goto :goto_3
++
++    :cond_3
++    move v0, v3
++
++    :goto_3
+     sput-boolean v0, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_IS_SIDE:Z
+ 
+     sput-boolean v4, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_GESTURE_MODE:Z
+@@ -291,23 +293,33 @@
+ 
+     move-result v0
+ 
+-    if-lt v0, v3, :cond_5
++    if-lt v0, v3, :cond_4
+ 
+     move v0, v3
+ 
+-    goto :goto_5
++    goto :goto_4
+ 
+-    :cond_5
++    :cond_4
+     move v0, v4
+ 
+-    :goto_5
++    :goto_4
+     sput-boolean v0, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_HW_LIGHT_SOURCE:Z
+ 
+     sput-boolean v4, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_LIMITATION_WIRELESS_CHARGER:Z
+ 
+     sput-boolean v4, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_SENSOR_LIMITATION_SPEN_CHARGER:Z
+ 
+-    sput-boolean v4, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_FAKE_AOD:Z
++    if-nez v1, :cond_5
++
++    move v0, v3
++
++    goto :goto_5
++
++    :cond_5
++    move v0, v4
++
++    :goto_5
++    sput-boolean v0, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_FAKE_AOD:Z
+ 
+     sput-boolean v2, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_TSP_BLOCK:Z
+ 
+-- 
+2.45.2
+

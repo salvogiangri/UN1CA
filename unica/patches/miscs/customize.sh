@@ -1,6 +1,21 @@
 SKIPUNZIP=1
 
 # [
+APPLY_PATCH()
+{
+    local PATCH
+    local OUT
+
+    DECOMPILE "$1"
+
+    cd "$APKTOOL_DIR/$1"
+    PATCH="$SRC_DIR/unica/patches/miscs/$2"
+    OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
+        || echo "$OUT" | grep -q "Skipping patch" || false
+    patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
+    cd - &> /dev/null
+}
+
 DECOMPILE()
 {
     if [ ! -d "$APKTOOL_DIR/$1" ]; then
@@ -89,4 +104,13 @@ if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION"
     R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"
 
     sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
+fi
+
+#Get fingerprint sensor from floating_feature
+DECOMPILE "system/framework/services.jar"
+
+if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+    APPLY_PATCH "system/framework/services.jar" "fingerprint/qssi/services.jar/0001-Get-fingerprint-sensor-type-from-floating_feature.patch"
+elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+    APPLY_PATCH "system/framework/services.jar" "fingerprint/essi/services.jar/0001-Get-fingerprint-sensor-type-from-floating_feature.patch"
 fi
