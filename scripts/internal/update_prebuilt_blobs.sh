@@ -63,18 +63,18 @@ case "$1" in
         ;;
     "unica/patches/product_feature/resolution")
         MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
+        FW="SM-S918B/BTE/350196551234562"
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/system" -type f \
             | sed "s.$SRC_DIR/unica/patches/product_feature/resolution.system.")"
         ;;
     "unica/patches/ultra")
         MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
+        FW="SM-S918B/BTE/350196551234562"
         BLOBS="$(find "$SRC_DIR/unica/patches/ultra/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra.system.")"
         ;;
     "unica/patches/uwb")
         MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
+        FW="SM-S918B/BTE/350196551234562"
         BLOBS="$(find "$SRC_DIR/unica/patches/uwb/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb.system.")"
         BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/..")"
         ;;
