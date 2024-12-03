@@ -19,7 +19,8 @@
 
 # ROM-specific prebuilt blobs
 unica/flashable-zip/updater binary
-unica/mods/eureka/system/** binary
+unica/mods/eureka/qssi/system/** binary
+unica/mods/eureka/essi/system/** binary
 unica/mods/pif/system/bin/rezetprop binary
 unica/mods/wallpaper/e1q/** binary
 unica/patches/deknox/qssi/system/** binary
