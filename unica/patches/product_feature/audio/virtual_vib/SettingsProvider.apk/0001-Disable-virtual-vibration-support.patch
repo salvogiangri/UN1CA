@@ -1,12 +1,12 @@
-From c0df32639a32601e95b6f8c5a169cff6aea1e61e Mon Sep 17 00:00:00 2001
+From 2c0a227d65d401e8e2c82e6419136b9153aa8f2f Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Sat, 8 Jun 2024 15:46:38 +0200
 Subject: [PATCH] Disable virtual vibration support
 
 ---
  .../providers/settings/DatabaseHelper$1.smali |  12 +-
- .../providers/settings/SettingsProvider.smali | 168 ++----------------
- 2 files changed, 13 insertions(+), 167 deletions(-)
+ .../providers/settings/SettingsProvider.smali | 184 ++----------------
+ 2 files changed, 13 insertions(+), 183 deletions(-)
 
 diff --git a/smali/com/android/providers/settings/DatabaseHelper$1.smali b/smali/com/android/providers/settings/DatabaseHelper$1.smali
 index cff6cd8..dc93d4a 100644
@@ -38,14 +38,14 @@ index cff6cd8..dc93d4a 100644
      invoke-static {v0, v1, v8, p0}, Landroid/provider/Settings$System;->putIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)Z
  
 diff --git a/smali/com/android/providers/settings/SettingsProvider.smali b/smali/com/android/providers/settings/SettingsProvider.smali
-index 573f5ef..b9b1888 100644
+index f71ae8a..b9b1888 100644
 --- a/smali/com/android/providers/settings/SettingsProvider.smali
 +++ b/smali/com/android/providers/settings/SettingsProvider.smali
-@@ -7128,141 +7128,6 @@
+@@ -7128,157 +7128,6 @@
      return p0
  .end method
  
--.method private isValidAudioUri(Ljava/lang/String;Ljava/lang/String;)Z
+-.method private isValidMediaUri(Ljava/lang/String;Ljava/lang/String;)Z
 -    .locals 5
 -
 -    if-eqz p2, :cond_2
@@ -144,6 +144,22 @@ index 573f5ef..b9b1888 100644
 -
 -    if-nez v4, :cond_2
 -
+-    const-string v4, "video/"
+-
+-    invoke-virtual {p0, v4}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+-
+-    move-result v4
+-
+-    if-nez v4, :cond_2
+-
+-    const-string v4, "application/mp4"
+-
+-    invoke-virtual {p0, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v4
+-
+-    if-nez v4, :cond_2
+-
 -    new-instance v4, Ljava/lang/StringBuilder;
 -
 -    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
@@ -156,13 +172,13 @@ index 573f5ef..b9b1888 100644
 -
 -    invoke-virtual {v4, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 -
--    const-string p1, " ignored: associated mimeType: "
+-    const-string p1, " ignored: associated MIME type: "
 -
 -    invoke-virtual {v4, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
 -    invoke-virtual {v4, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
--    const-string p0, " is not an audio type"
+-    const-string p0, " is not a recognized audio or video type"
 -
 -    invoke-virtual {v4, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
@@ -183,13 +199,13 @@ index 573f5ef..b9b1888 100644
  .method private synthetic lambda$onCreate$0()V
      .locals 0
  
-@@ -8297,17 +8162,8 @@
+@@ -8313,17 +8162,8 @@
      const/4 v2, 0x0
  
      :goto_0
 -    if-eqz v2, :cond_9
 -
--    invoke-direct {p0, p1, p2}, Lcom/android/providers/settings/SettingsProvider;->isValidAudioUri(Ljava/lang/String;Ljava/lang/String;)Z
+-    invoke-direct {p0, p1, p2}, Lcom/android/providers/settings/SettingsProvider;->isValidMediaUri(Ljava/lang/String;Ljava/lang/String;)Z
 -
 -    move-result v9
 -
@@ -202,7 +218,7 @@ index 573f5ef..b9b1888 100644
      new-instance v9, Ljava/io/File;
  
      invoke-direct {p0, v6}, Lcom/android/providers/settings/SettingsProvider;->getRingtoneCacheDir(I)Ljava/io/File;
-@@ -8318,20 +8174,20 @@
+@@ -8334,20 +8174,20 @@
  
      invoke-virtual {v9}, Ljava/io/File;->delete()Z
  
@@ -227,7 +243,7 @@ index 573f5ef..b9b1888 100644
  
      :try_start_0
      const-string v0, "SettingsProvider"
-@@ -8356,20 +8212,20 @@
+@@ -8372,20 +8212,20 @@
  
      return v5
  
@@ -251,7 +267,7 @@ index 573f5ef..b9b1888 100644
      iget-object v0, v0, Lcom/android/providers/settings/SettingsProvider;->mSettingsRegistry:Lcom/android/providers/settings/SettingsProvider$SettingsRegistry;
  
      const/4 v1, 0x1
-@@ -8402,7 +8258,7 @@
+@@ -8418,7 +8258,7 @@
  
      return v0
  
@@ -260,7 +276,7 @@ index 573f5ef..b9b1888 100644
      iget-object v0, v0, Lcom/android/providers/settings/SettingsProvider;->mSettingsRegistry:Lcom/android/providers/settings/SettingsProvider$SettingsRegistry;
  
      const/4 v1, 0x1
-@@ -8423,20 +8279,20 @@
+@@ -8439,20 +8279,20 @@
  
      return v0
  
@@ -285,5 +301,5 @@ index 573f5ef..b9b1888 100644
  
      const/4 v1, 0x1
 -- 
-2.46.0
+2.47.1
 
