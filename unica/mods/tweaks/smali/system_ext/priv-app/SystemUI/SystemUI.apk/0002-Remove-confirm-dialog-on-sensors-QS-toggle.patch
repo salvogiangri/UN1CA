@@ -1,4 +1,4 @@
-From 1b654d469193db4f26e3181d7e641252d9389db4 Mon Sep 17 00:00:00 2001
+From 10a5ad159dbc6d7bdaadfaafdbabc5dc5249cac6 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Thu, 24 Oct 2024 23:58:53 +0200
 Subject: [PATCH] Remove confirm dialog on sensors QS toggle
@@ -8,7 +8,7 @@ Subject: [PATCH] Remove confirm dialog on sensors QS toggle
  1 file changed, 8 insertions(+), 134 deletions(-)
 
 diff --git a/smali_classes2/com/android/systemui/qs/tiles/SensorPrivacyToggleTile.smali b/smali_classes2/com/android/systemui/qs/tiles/SensorPrivacyToggleTile.smali
-index 163a1842b..8bc0e730a 100644
+index a4a3d09b..b03eff33 100644
 --- a/smali_classes2/com/android/systemui/qs/tiles/SensorPrivacyToggleTile.smali
 +++ b/smali_classes2/com/android/systemui/qs/tiles/SensorPrivacyToggleTile.smali
 @@ -269,151 +269,25 @@
@@ -82,7 +82,7 @@ index 163a1842b..8bc0e730a 100644
 -
 -    move-result-object v0
 -
--    const v1, 0x7f13119c
+-    const v1, 0x7f13119e
 -
 -    invoke-virtual {v4, v1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -104,7 +104,7 @@ index 163a1842b..8bc0e730a 100644
 -
 -    move-result-object v0
 -
--    const v1, 0x7f13119d
+-    const v1, 0x7f13119f
 -
 -    invoke-virtual {v4, v1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -151,7 +151,7 @@ index 163a1842b..8bc0e730a 100644
 -
 -    invoke-virtual {v2, v0, v3}, Lcom/android/systemui/statusbar/phone/SystemUIDialog;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)V
 -
--    const v0, 0x7f130d42
+-    const v0, 0x7f130d44
 -
 -    invoke-virtual {v2, v0, v5}, Lcom/android/systemui/statusbar/phone/SystemUIDialog;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)V
 -
@@ -172,5 +172,5 @@ index 163a1842b..8bc0e730a 100644
      return-void
  .end method
 -- 
-2.47.0
+2.47.1
 
