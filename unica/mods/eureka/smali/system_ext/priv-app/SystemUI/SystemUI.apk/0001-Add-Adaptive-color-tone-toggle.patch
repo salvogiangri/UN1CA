@@ -1,4 +1,4 @@
-From e3297431af44e7dc1d00ca37334467662ecdb6f4 Mon Sep 17 00:00:00 2001
+From d6f26956e31a335b31b5696fb82e8c1c34ebb696 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 00:38:48 +0200
 Subject: [PATCH] Add Adaptive color tone toggle
@@ -16,13 +16,13 @@ Subject: [PATCH] Add Adaptive color tone toggle
 
 diff --git a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$$ExternalSyntheticLambda0.smali b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$$ExternalSyntheticLambda0.smali
 new file mode 100644
-index 00000000..8b5fbbf7
+index 00000000..e08835f6
 --- /dev/null
 +++ b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$$ExternalSyntheticLambda0.smali
 @@ -0,0 +1,52 @@
 +.class public final synthetic Lcom/android/systemui/settings/brightness/BrightnessDetail$$ExternalSyntheticLambda0;
 +.super Ljava/lang/Object;
-+.source "qb/84887889 05d15b9555c9a1df34d94b119497deacd94d6ef3fa3f47713d109553e149ef8b"
++.source "qb/88426539 59540f9fcca1a65880b19598d2d35eb3a943c25545ce4176de3edd1d0bf28680"
 +
 +# interfaces
 +.implements Landroid/content/DialogInterface$OnDismissListener;
@@ -74,13 +74,13 @@ index 00000000..8b5fbbf7
 +.end method
 diff --git a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda0.smali b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda0.smali
 new file mode 100644
-index 00000000..85b67f42
+index 00000000..3bb864b6
 --- /dev/null
 +++ b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda0.smali
 @@ -0,0 +1,107 @@
 +.class public final synthetic Lcom/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda0;
 +.super Ljava/lang/Object;
-+.source "qb/84887889 05d15b9555c9a1df34d94b119497deacd94d6ef3fa3f47713d109553e149ef8b"
++.source "qb/88426539 59540f9fcca1a65880b19598d2d35eb3a943c25545ce4176de3edd1d0bf28680"
 +
 +# interfaces
 +.implements Landroid/view/View$OnClickListener;
@@ -187,13 +187,13 @@ index 00000000..85b67f42
 +.end method
 diff --git a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda1.smali b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda1.smali
 new file mode 100644
-index 00000000..00cf7bcf
+index 00000000..7cfcaf34
 --- /dev/null
 +++ b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda1.smali
 @@ -0,0 +1,157 @@
 +.class public final synthetic Lcom/android/systemui/settings/brightness/BrightnessDetail$1$$ExternalSyntheticLambda1;
 +.super Ljava/lang/Object;
-+.source "qb/84887889 05d15b9555c9a1df34d94b119497deacd94d6ef3fa3f47713d109553e149ef8b"
++.source "qb/88426539 59540f9fcca1a65880b19598d2d35eb3a943c25545ce4176de3edd1d0bf28680"
 +
 +# interfaces
 +.implements Landroid/widget/CompoundButton$OnCheckedChangeListener;
@@ -286,7 +286,7 @@ index 00000000..00cf7bcf
 +
 +    move-result-object v1
 +
-+    const v2, 0x7f130f3e
++    const v2, 0x7f130f40
 +
 +    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
 +
@@ -332,12 +332,12 @@ index 00000000..00cf7bcf
 +
 +    if-eqz p2, :cond_3
 +
-+    const p2, 0x7f131117
++    const p2, 0x7f131119
 +
 +    goto :goto_0
 +
 +    :cond_3
-+    const p2, 0x7f131116
++    const p2, 0x7f131118
 +
 +    :goto_0
 +    invoke-virtual {p1, p2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -349,7 +349,7 @@ index 00000000..00cf7bcf
 +    return-void
 +.end method
 diff --git a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1.smali b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1.smali
-index 300e02db..81928d2c 100644
+index a2f3342f..4a0594ab 100644
 --- a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1.smali
 +++ b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail$1.smali
 @@ -251,344 +251,378 @@
@@ -417,7 +417,7 @@ index 300e02db..81928d2c 100644
 +    iput-object v8, p2, Lcom/android/systemui/settings/brightness/BrightnessDetail;->mExtraBrightnessContainer:Landroid/widget/LinearLayout;
  
 -    invoke-virtual {v8, v9}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
-+    const v8, 0x7f130f09
++    const v8, 0x7f130f0b
  
 -    move-result v8
 +    invoke-virtual {p1, v8}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -452,7 +452,7 @@ index 300e02db..81928d2c 100644
 +    iput-object v8, p2, Lcom/android/systemui/settings/brightness/BrightnessDetail;->mExtraBrightnessSwitch:Landroidx/appcompat/widget/SwitchCompat;
  
 -    invoke-direct {v10, v11, v8}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
-+    const v8, 0x7f130f0a
++    const v8, 0x7f130f0c
  
 -    iput v9, v10, Landroid/widget/LinearLayout$LayoutParams;->leftMargin:I
 +    invoke-virtual {p1, v8}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -526,7 +526,7 @@ index 300e02db..81928d2c 100644
 -    iput-object v8, p2, Lcom/android/systemui/settings/brightness/BrightnessDetail;->mExtraBrightnessContainer:Landroid/widget/LinearLayout;
 +    invoke-virtual {p2}, Lcom/android/systemui/settings/brightness/BrightnessDetail;->isSwitchChecked()Z
  
--    const v8, 0x7f130f09
+-    const v8, 0x7f130f0b
 +    move-result v9
  
 -    invoke-virtual {p1, v8}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -565,7 +565,7 @@ index 300e02db..81928d2c 100644
 -    iput-object v3, p2, Lcom/android/systemui/settings/brightness/BrightnessDetail;->mExtraBrightnessSwitch:Landroidx/appcompat/widget/SwitchCompat;
 +    invoke-direct {v9, p0}, Lcom/android/systemui/settings/brightness/BrightnessDetail$1$4;-><init>(Lcom/android/systemui/settings/brightness/BrightnessDetail$1;)V
  
--    const v3, 0x7f130f0a
+-    const v3, 0x7f130f0c
 +    invoke-virtual {v8, v9}, Landroid/widget/CompoundButton;->setOnClickListener(Landroid/view/View$OnClickListener;)V
  
 -    invoke-virtual {p1, v3}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -726,7 +726,7 @@ index 300e02db..81928d2c 100644
 +    iget-object v8, p2, Lcom/android/systemui/settings/brightness/BrightnessDetail;->mAutoBrightnessSummary:Landroid/widget/TextView;
  
 -    move-result-object v4
-+    const v10, 0x7f130eeb
++    const v10, 0x7f130eed
  
 -    check-cast v4, Landroid/hardware/SensorManager;
 +    invoke-virtual {p1, v10}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -859,7 +859,7 @@ index 300e02db..81928d2c 100644
 +    :goto_5
 +    invoke-virtual {v3, v4}, Landroidx/appcompat/widget/SwitchCompat;->setChecked(Z)V
  
--    const v2, 0x7f130eeb
+-    const v2, 0x7f130eed
 +    invoke-virtual {v1, v8}, Landroid/view/ViewGroup;->addView(Landroid/view/View;)V
  
 -    invoke-virtual {p1, v2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -907,7 +907,7 @@ index 300e02db..81928d2c 100644
  
      invoke-direct {p2, p0, p1}, Lcom/android/systemui/settings/brightness/BrightnessDetail$1$1;-><init>(Lcom/android/systemui/settings/brightness/BrightnessDetail$1;Landroid/content/Context;)V
 diff --git a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail.smali b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail.smali
-index b5b97d8a..a47ba522 100644
+index 033ed01c..677b0c38 100644
 --- a/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail.smali
 +++ b/smali_classes2/com/android/systemui/settings/brightness/BrightnessDetail.smali
 @@ -22,8 +22,12 @@
@@ -1112,5 +1112,5 @@ index b5b97d8a..a47ba522 100644
      invoke-interface {p1}, Landroid/content/SharedPreferences$Editor;->commit()Z
  
 -- 
-2.46.0
+2.47.1
 
