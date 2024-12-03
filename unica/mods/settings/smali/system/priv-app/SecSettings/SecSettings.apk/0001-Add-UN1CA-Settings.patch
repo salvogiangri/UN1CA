@@ -1,4 +1,4 @@
-From eb44f2819d898f1b78e4fa4f412e47e0eb9ad1ed Mon Sep 17 00:00:00 2001
+From 775b4c25a4a41cf14f0215156ea29011d4b6848f Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -106,10 +106,10 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index e6f71ea6..24d91f52 100644
+index 1857f0a9..86fabbf3 100644
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
-@@ -5190,5 +5190,13 @@
+@@ -5197,5 +5197,13 @@
          <provider android:authorities="com.android.settings.CapsuleProvider" android:exported="true" android:name="com.samsung.android.sdk.bixby2.provider.CapsuleProvider"/>
          <meta-data android:name="com.samsung.android.sdk.bixby2.companionApp" android:value="true"/>
          <meta-data android:name="com.samsung.android.sdk.bixby2.version" android:value="@string/sdk_version"/>
@@ -168,10 +168,10 @@ index 00000000..3f8b037f
 +</FrameLayout>
 \ No newline at end of file
 diff --git a/res/values-ar/strings.xml b/res/values-ar/strings.xml
-index 61cab530..e4ba1c23 100644
+index b08b3a14..24a9bfc7 100644
 --- a/res/values-ar/strings.xml
 +++ b/res/values-ar/strings.xml
-@@ -7423,4 +7423,35 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,35 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">تحديد حسب المنطقة</string>
      <string name="zone_time_type_dst">توقيت الصيفي</string>
      <string name="zone_time_type_standard">الوقت العادي</string>
@@ -208,10 +208,10 @@ index 61cab530..e4ba1c23 100644
 +    <string name="unica_updates_title">تحديثات UN1CA</string>
  </resources>
 diff --git a/res/values-az-rAZ/strings.xml b/res/values-az-rAZ/strings.xml
-index ccf90b26..30106d2a 100644
+index 45ab31ff..6b7922a2 100644
 --- a/res/values-az-rAZ/strings.xml
 +++ b/res/values-az-rAZ/strings.xml
-@@ -6613,4 +6613,34 @@ Kamera proqramında Yuxarı düymədən şəkil çəkmək üçün istifadə edə
+@@ -6618,4 +6618,34 @@ Kamera proqramında Yuxarı düymədən şəkil çəkmək üçün istifadə edə
      <string name="zone_menu_by_region">Regiona görə seç</string>
      <string name="zone_time_type_dst">Gündüz işığa qənaət vaxtı</string>
      <string name="zone_time_type_standard">Standart vaxt</string>
@@ -247,10 +247,10 @@ index ccf90b26..30106d2a 100644
 +    <string name="unica_updates_title">UN1CA Yeniləmələri</string>
  </resources>
 diff --git a/res/values-b+sr+Latn/strings.xml b/res/values-b+sr+Latn/strings.xml
-index 0a336253..0cb4593d 100644
+index 26b12fe0..78e76eea 100644
 --- a/res/values-b+sr+Latn/strings.xml
 +++ b/res/values-b+sr+Latn/strings.xml
-@@ -7287,4 +7287,35 @@ U aplikaciji Kamera možete da koristite gornje dugme da biste snimali slike."</
+@@ -7292,4 +7292,35 @@ U aplikaciji Kamera možete da koristite gornje dugme da biste snimali slike."</
      <string name="zone_menu_by_region">Izaberi prema regionu</string>
      <string name="zone_time_type_dst">Letnje računanje vremena</string>
      <string name="zone_time_type_standard">Standardno vreme</string>
@@ -287,10 +287,10 @@ index 0a336253..0cb4593d 100644
 +    <string name="unica_updates_title">UN1CA Ažuriranje</string>
  </resources>
 diff --git a/res/values-bg/strings.xml b/res/values-bg/strings.xml
-index 96620050..44b6dace 100644
+index 82990166..d051d00a 100644
 --- a/res/values-bg/strings.xml
 +++ b/res/values-bg/strings.xml
-@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Избор по регион</string>
      <string name="zone_time_type_dst">Лятно часово време</string>
      <string name="zone_time_type_standard">Стандартно време</string>
@@ -326,10 +326,10 @@ index 96620050..44b6dace 100644
 +    <string name="unica_updates_title">UN1CA Актуализации</string>
  </resources>
 diff --git a/res/values-de/strings.xml b/res/values-de/strings.xml
-index 5b68d3a1..d47e8ec4 100644
+index 64a6092a..f30db92d 100644
 --- a/res/values-de/strings.xml
 +++ b/res/values-de/strings.xml
-@@ -7424,4 +7424,34 @@ In „Kamera“ kannst du die obere Taste verwenden, um Bilder aufzunehmen."</st
+@@ -7429,4 +7429,34 @@ In „Kamera“ kannst du die obere Taste verwenden, um Bilder aufzunehmen."</st
      <string name="zone_menu_by_region">Nach Region auswählen</string>
      <string name="zone_time_type_dst">Sommerzeit</string>
      <string name="zone_time_type_standard">Standardzeit</string>
@@ -365,10 +365,10 @@ index 5b68d3a1..d47e8ec4 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rCA/strings.xml b/res/values-en-rCA/strings.xml
-index 73208dfe..b2f446a2 100644
+index b4afee22..c02617c8 100644
 --- a/res/values-en-rCA/strings.xml
 +++ b/res/values-en-rCA/strings.xml
-@@ -7357,4 +7357,35 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -7362,4 +7362,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -405,10 +405,10 @@ index 73208dfe..b2f446a2 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rPH/strings.xml b/res/values-en-rPH/strings.xml
-index 7212c9a7..daa86c25 100644
+index 8da9e2ad..dfae4768 100644
 --- a/res/values-en-rPH/strings.xml
 +++ b/res/values-en-rPH/strings.xml
-@@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6617,4 +6617,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -445,10 +445,10 @@ index 7212c9a7..daa86c25 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en-rUS/strings.xml b/res/values-en-rUS/strings.xml
-index cfef2e61..f58dd203 100644
+index 68ef1a28..b81b39f1 100644
 --- a/res/values-en-rUS/strings.xml
 +++ b/res/values-en-rUS/strings.xml
-@@ -6614,4 +6614,35 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6619,4 +6619,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -525,10 +525,10 @@ index 80bfdd9d..8dc3fff5 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-en/strings.xml b/res/values-en/strings.xml
-index ca0e1e71..cf0af044 100644
+index e5700b42..0bb4b243 100644
 --- a/res/values-en/strings.xml
 +++ b/res/values-en/strings.xml
-@@ -6612,4 +6612,35 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -6617,4 +6617,35 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_menu_by_region">Select by region</string>
      <string name="zone_time_type_dst">Daylight saving time</string>
      <string name="zone_time_type_standard">Standard time</string>
@@ -565,10 +565,10 @@ index ca0e1e71..cf0af044 100644
 +    <string name="unica_updates_title">UN1CA Updates</string>
  </resources>
 diff --git a/res/values-es-rES/strings.xml b/res/values-es-rES/strings.xml
-index f96fa747..791efdfa 100644
+index 65c9a2e4..22e29864 100644
 --- a/res/values-es-rES/strings.xml
 +++ b/res/values-es-rES/strings.xml
-@@ -6611,4 +6611,35 @@ En la aplicación Cámara, puedes usar este botón para sacar fotos."</string>
+@@ -6616,4 +6616,35 @@ En la aplicación Cámara, puedes usar este botón para sacar fotos."</string>
      <string name="zone_menu_by_region">Seleccionar por región</string>
      <string name="zone_time_type_dst">Horario de verano</string>
      <string name="zone_time_type_standard">Hora estándar</string>
@@ -605,10 +605,10 @@ index f96fa747..791efdfa 100644
 +    <string name="unica_updates_title">Actualizaciones de UN1CA</string>
  </resources>
 diff --git a/res/values-es-rUS/strings.xml b/res/values-es-rUS/strings.xml
-index 83535541..38329af0 100644
+index d61ea872..6bfbc3d5 100644
 --- a/res/values-es-rUS/strings.xml
 +++ b/res/values-es-rUS/strings.xml
-@@ -7422,4 +7422,35 @@ En Cámara, puede usar el botón Superior para capturar imágenes."</string>
+@@ -7427,4 +7427,35 @@ En Cámara, puede usar el botón Superior para capturar imágenes."</string>
      <string name="zone_menu_by_region">Seleccionar por región</string>
      <string name="zone_time_type_dst">Horario de verano</string>
      <string name="zone_time_type_standard">Hora estándar</string>
@@ -645,10 +645,10 @@ index 83535541..38329af0 100644
 +    <string name="unica_updates_title">Actualizaciones de UN1CA</string>
  </resources>
 diff --git a/res/values-fa/strings.xml b/res/values-fa/strings.xml
-index 3d27663f..a654d628 100644
+index f150b706..d536078a 100644
 --- a/res/values-fa/strings.xml
 +++ b/res/values-fa/strings.xml
-@@ -7422,4 +7422,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7427,4 +7427,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">انتخاب بر اساس منطقه</string>
      <string name="zone_time_type_dst">زمان ساعت تابستانی</string>
      <string name="zone_time_type_standard">زمان استاندارد</string>
@@ -683,10 +683,10 @@ index 3d27663f..a654d628 100644
 +    <string name="unica_updates_title">به‌روزرسانی‌ها UN1CA</string>
  </resources>
 diff --git a/res/values-fr/strings.xml b/res/values-fr/strings.xml
-index e5d829b3..a611a951 100644
+index ac22222c..f1abe0db 100644
 --- a/res/values-fr/strings.xml
 +++ b/res/values-fr/strings.xml
-@@ -7423,4 +7423,34 @@ Dans l'application Appareil photo, vous pouvez utiliser la touche du haut pour p
+@@ -7428,4 +7428,34 @@ Dans l'application Appareil photo, vous pouvez utiliser la touche du haut pour p
      <string name="zone_menu_by_region">Sélectionner par région</string>
      <string name="zone_time_type_dst">"Heure d'été"</string>
      <string name="zone_time_type_standard">Heure standard</string>
@@ -722,10 +722,10 @@ index e5d829b3..a611a951 100644
 +    <string name="unica_updates_title">Mises à jour UN1CA</string>
  </resources>
 diff --git a/res/values-hu/strings.xml b/res/values-hu/strings.xml
-index e7f7986d..f58d8abe 100644
+index bd474085..faaae542 100644
 --- a/res/values-hu/strings.xml
 +++ b/res/values-hu/strings.xml
-@@ -7423,4 +7423,34 @@ A Kamera alkalmazásban a Felső gomb megnyomásával fényképezhet."</string>
+@@ -7428,4 +7428,34 @@ A Kamera alkalmazásban a Felső gomb megnyomásával fényképezhet."</string>
      <string name="zone_menu_by_region">Kiválasztás régió szerint</string>
      <string name="zone_time_type_dst">Nyári időszámítás</string>
      <string name="zone_time_type_standard">Normál idő</string>
@@ -761,10 +761,10 @@ index e7f7986d..f58d8abe 100644
 +    <string name="unica_updates_title">UN1CA Frissítések</string>
  </resources>
 diff --git a/res/values-in/strings.xml b/res/values-in/strings.xml
-index bc56aef3..4d857ba1 100644
+index 7fc82364..8c9dbdf6 100644
 --- a/res/values-in/strings.xml
 +++ b/res/values-in/strings.xml
-@@ -7423,4 +7423,33 @@ Di Kamera, Anda dapat menggunakan Tombol atas untuk mengambil gambar."</string>
+@@ -7428,4 +7428,33 @@ Di Kamera, Anda dapat menggunakan Tombol atas untuk mengambil gambar."</string>
      <string name="zone_menu_by_region">Pilih menurut wilayah</string>
      <string name="zone_time_type_dst">Waktu musim panas</string>
      <string name="zone_time_type_standard">Waktu standar</string>
@@ -799,10 +799,10 @@ index bc56aef3..4d857ba1 100644
 +    <string name="unica_updates_title">Pembaruan UN1CA</string>
  </resources>
 diff --git a/res/values-it/strings.xml b/res/values-it/strings.xml
-index 17ff69f4..791e2afa 100644
+index 177470b2..d00e36f7 100644
 --- a/res/values-it/strings.xml
 +++ b/res/values-it/strings.xml
-@@ -7431,4 +7431,35 @@ In Camera potete utilizzare il pulsante Alto per scattare foto."</string>
+@@ -7436,4 +7436,35 @@ In Camera potete utilizzare il pulsante Alto per scattare foto."</string>
      <string name="zone_menu_by_region">Seleziona per regione</string>
      <string name="zone_time_type_dst">Ora legale</string>
      <string name="zone_time_type_standard">Fuso orario standard</string>
@@ -839,10 +839,10 @@ index 17ff69f4..791e2afa 100644
 +    <string name="unica_updates_title">Aggiornamenti UN1CA</string>
  </resources>
 diff --git a/res/values-pl/strings.xml b/res/values-pl/strings.xml
-index 9c0c98bd..44c8c62b 100644
+index 7121b581..aea92ac9 100644
 --- a/res/values-pl/strings.xml
 +++ b/res/values-pl/strings.xml
-@@ -7423,4 +7423,35 @@ W aplikacji Aparat możesz używać górnego przycisku do robienia zdjęć."</st
+@@ -7428,4 +7428,35 @@ W aplikacji Aparat możesz używać górnego przycisku do robienia zdjęć."</st
      <string name="zone_menu_by_region">Wybierz wg regionu</string>
      <string name="zone_time_type_dst">Zmiana czasu</string>
      <string name="zone_time_type_standard">Czas standardowy</string>
@@ -879,10 +879,10 @@ index 9c0c98bd..44c8c62b 100644
 +    <string name="unica_updates_title">Aktualizacje UN1CA</string>
  </resources>
 diff --git a/res/values-pt-rBR/strings.xml b/res/values-pt-rBR/strings.xml
-index c4258f28..04fde469 100644
+index 8394deb2..227bbdd6 100644
 --- a/res/values-pt-rBR/strings.xml
 +++ b/res/values-pt-rBR/strings.xml
-@@ -7423,4 +7423,35 @@ Na Câmera, use o botão Superior para tirar fotos."</string>
+@@ -7428,4 +7428,35 @@ Na Câmera, use o botão Superior para tirar fotos."</string>
      <string name="zone_menu_by_region">Selecionar por região</string>
      <string name="zone_time_type_dst">Horário de verão</string>
      <string name="zone_time_type_standard">Horário padrão</string>
@@ -919,10 +919,10 @@ index c4258f28..04fde469 100644
 +    <string name="unica_updates_title">Atualizações da UN1CA</string>
  </resources>
 diff --git a/res/values-pt-rPT/strings.xml b/res/values-pt-rPT/strings.xml
-index c95936d0..698aff86 100644
+index 3c19dde4..b8d13e90 100644
 --- a/res/values-pt-rPT/strings.xml
 +++ b/res/values-pt-rPT/strings.xml
-@@ -7423,4 +7423,35 @@ Na Câmara, pode utilizar o Botão superior para tirar fotografias."</string>
+@@ -7428,4 +7428,35 @@ Na Câmara, pode utilizar o Botão superior para tirar fotografias."</string>
      <string name="zone_menu_by_region">Selecionar por região</string>
      <string name="zone_time_type_dst">Horário de Verão</string>
      <string name="zone_time_type_standard">Hora padrão</string>
@@ -959,10 +959,10 @@ index c95936d0..698aff86 100644
 +    <string name="unica_updates_title">Atualizações da UN1CA</string>
  </resources>
 diff --git a/res/values-ro/strings.xml b/res/values-ro/strings.xml
-index 2b0bc463..a264aba0 100644
+index bcdca38f..8acf9a21 100644
 --- a/res/values-ro/strings.xml
 +++ b/res/values-ro/strings.xml
-@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Selectare după regiune</string>
      <string name="zone_time_type_dst">Oră de vară</string>
      <string name="zone_time_type_standard">Oră standard</string>
@@ -998,10 +998,10 @@ index 2b0bc463..a264aba0 100644
 +    <string name="unica_updates_title">Actualizări UN1CA</string>
  </resources>
 diff --git a/res/values-ru/strings.xml b/res/values-ru/strings.xml
-index 0b421d9f..dfb6fca7 100644
+index c80bc88d..47d4dce8 100644
 --- a/res/values-ru/strings.xml
 +++ b/res/values-ru/strings.xml
-@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Выбрать по региону</string>
      <string name="zone_time_type_dst">Летнее время</string>
      <string name="zone_time_type_standard">Стандартное время</string>
@@ -1037,10 +1037,10 @@ index 0b421d9f..dfb6fca7 100644
 +    <string name="unica_updates_title">Обновления UN1CA</string>
  </resources>
 diff --git a/res/values-sq-rAL/strings.xml b/res/values-sq-rAL/strings.xml
-index d5dd7ea0..e708954c 100644
+index a9d4edc4..f0d61596 100644
 --- a/res/values-sq-rAL/strings.xml
 +++ b/res/values-sq-rAL/strings.xml
-@@ -6641,4 +6641,34 @@ Te Kamera, mund ta përdorësh Butonin Krye për të nxjerrë foto."</string>
+@@ -6646,4 +6646,34 @@ Te Kamera, mund ta përdorësh Butonin Krye për të nxjerrë foto."</string>
      <string name="zone_menu_by_region">Sipas rajonit</string>
      <string name="zone_time_type_dst">Ora verore</string>
      <string name="zone_time_type_standard">Ora standard</string>
@@ -1076,10 +1076,10 @@ index d5dd7ea0..e708954c 100644
 +    <string name="unica_updates_title">Përditësimet e UN1CA</string>
  </resources>
 diff --git a/res/values-sr/strings.xml b/res/values-sr/strings.xml
-index 3db4bfc9..dda2a1cd 100644
+index 58f98b43..d1e257a4 100644
 --- a/res/values-sr/strings.xml
 +++ b/res/values-sr/strings.xml
-@@ -7423,4 +7423,35 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,35 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Изабери према региону</string>
      <string name="zone_time_type_dst">Летње рачунање времена</string>
      <string name="zone_time_type_standard">Стандардно време</string>
@@ -1116,10 +1116,10 @@ index 3db4bfc9..dda2a1cd 100644
 +    <string name="unica_updates_title">UN1CA ажурирања</string>
  </resources>
 diff --git a/res/values-th/strings.xml b/res/values-th/strings.xml
-index 37d4aeb7..3676b368 100644
+index a8ba74fd..d9755d11 100644
 --- a/res/values-th/strings.xml
 +++ b/res/values-th/strings.xml
-@@ -7438,4 +7438,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7443,4 +7443,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">เลือกตามภูมิภาค</string>
      <string name="zone_time_type_dst">การชดเชยเวลากลางวัน</string>
      <string name="zone_time_type_standard">เวลามาตรฐาน</string>
@@ -1154,10 +1154,10 @@ index 37d4aeb7..3676b368 100644
 +    <string name="unica_updates_title">อัพเดท UN1CA</string>
  </resources>
 diff --git a/res/values-tr/strings.xml b/res/values-tr/strings.xml
-index 86380f5b..29657bdf 100644
+index 5264a8df..ce2f1100 100644
 --- a/res/values-tr/strings.xml
 +++ b/res/values-tr/strings.xml
-@@ -7423,4 +7423,35 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
+@@ -7428,4 +7428,35 @@ Kamera'da Üst tuşu fotoğraf çekmek için kullanabilirsiniz."</string>
      <string name="zone_menu_by_region">Bölgeye göre seç</string>
      <string name="zone_time_type_dst">Gün ışığından yararlanma</string>
      <string name="zone_time_type_standard">Standart saat</string>
@@ -1194,10 +1194,10 @@ index 86380f5b..29657bdf 100644
 +    <string name="unica_updates_title">UN1CA Güncellemeleri</string>
  </resources>
 diff --git a/res/values-uk/strings.xml b/res/values-uk/strings.xml
-index 9366a208..0eb0cfdd 100644
+index 9cd8ecd0..6ea1a2f9 100644
 --- a/res/values-uk/strings.xml
 +++ b/res/values-uk/strings.xml
-@@ -7423,4 +7423,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Вибрати за регіоном</string>
      <string name="zone_time_type_dst">Літній час</string>
      <string name="zone_time_type_standard">Стандартний час</string>
@@ -1233,10 +1233,10 @@ index 9366a208..0eb0cfdd 100644
 +    <string name="unica_updates_title">Оновлення UN1CA</string>
  </resources>
 diff --git a/res/values-vi/strings.xml b/res/values-vi/strings.xml
-index 8462a5aa..da83e7fe 100644
+index 617c9db6..24ff4339 100644
 --- a/res/values-vi/strings.xml
 +++ b/res/values-vi/strings.xml
-@@ -7423,4 +7423,34 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
+@@ -7428,4 +7428,34 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
      <string name="zone_menu_by_region">Chọn theo vùng</string>
      <string name="zone_time_type_dst">Giờ theo mùa</string>
      <string name="zone_time_type_standard">Giờ tiêu chuẩn</string>
@@ -1292,7 +1292,7 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index 59e48eb7..62220fbc 100644
+index 144b9f5d..4af196ef 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5157,6 +5157,7 @@
@@ -1336,58 +1336,58 @@ index 59e48eb7..62220fbc 100644
      <public type="layout" name="sud_glif_preference_template_card" id="0x7f0d059c" />
      <public type="layout" name="material_clock_period_toggle_land" id="0x7f0d014d" />
      <public type="layout" name="sec_bluetooth_function_settings_content_land" id="0x7f0d02ac" />
-@@ -32353,6 +32359,40 @@
-     <public type="string" name="zone_time_type_standard" id="0x7f13343b" />
-     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f13343c" />
-     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f13343d" />
-+    <public type="string" name="keywords_unica_settings" id="0x7f13343e" />
-+    <public type="string" name="menu_key_choidujour" id="0x7f13343f" />
-+    <public type="string" name="menu_key_unica_settings" id="0x7f133440" />
-+    <public type="string" name="unica_allow_downgrade_title" id="0x7f133441" />
-+    <public type="string" name="unica_allow_sdkbypass_title" id="0x7f133442" />
-+    <public type="string" name="unica_asks_title" id="0x7f133443" />
-+    <public type="string" name="unica_boot_sound_title" id="0x7f133444" />
-+    <public type="string" name="unica_device_name_title" id="0x7f133445" />
-+    <public type="string" name="unica_extra_settings_title" id="0x7f133446" />
-+    <public type="string" name="unica_fod_anim_type_optical_g" id="0x7f133447" />
-+    <public type="string" name="unica_fod_anim_type_optical_w" id="0x7f133448" />
-+    <public type="string" name="unica_fod_anim_type_title" id="0x7f133449" />
-+    <public type="string" name="unica_fod_anim_type_ultrasonic" id="0x7f13344a" />
-+    <public type="string" name="unica_games_spoof_title" id="0x7f13344b" />
-+    <public type="string" name="unica_hide_dev_title" id="0x7f13344c" />
-+    <public type="string" name="unica_max_refresh_rate_title" id="0x7f13344d" />
-+    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f13344e" />
-+    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f13344f" />
-+    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f133450" />
-+    <public type="string" name="unica_native_blur_dialog_title" id="0x7f133451" />
-+    <public type="string" name="unica_native_blur_title" id="0x7f133452" />
-+    <public type="string" name="unica_pif_checking" id="0x7f133453" />
-+    <public type="string" name="unica_pif_error" id="0x7f133454" />
-+    <public type="string" name="unica_pif_no_root" id="0x7f133455" />
-+    <public type="string" name="unica_pif_up_to_date" id="0x7f133456" />
-+    <public type="string" name="unica_pif_updated" id="0x7f133457" />
-+    <public type="string" name="unica_pif_version_title" id="0x7f133458" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f133459" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f13345a" />
-+    <public type="string" name="unica_settings_title" id="0x7f13345b" />
-+    <public type="string" name="unica_spoof_settings_title" id="0x7f13345c" />
-+    <public type="string" name="unica_ss_detection_title" id="0x7f13345d" />
-+    <public type="string" name="unica_ui_settings_title" id="0x7f13345e" />
-+    <public type="string" name="unica_updates_title" id="0x7f13345f" />
+@@ -32380,6 +32386,40 @@
+     <public type="string" name="zone_time_type_standard" id="0x7f133456" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f133457" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f133458" />
++    <public type="string" name="keywords_unica_settings" id="0x7f133459" />
++    <public type="string" name="menu_key_choidujour" id="0x7f13345a" />
++    <public type="string" name="menu_key_unica_settings" id="0x7f13345b" />
++    <public type="string" name="unica_allow_downgrade_title" id="0x7f13345c" />
++    <public type="string" name="unica_allow_sdkbypass_title" id="0x7f13345d" />
++    <public type="string" name="unica_asks_title" id="0x7f13345e" />
++    <public type="string" name="unica_boot_sound_title" id="0x7f13345f" />
++    <public type="string" name="unica_device_name_title" id="0x7f133460" />
++    <public type="string" name="unica_extra_settings_title" id="0x7f133461" />
++    <public type="string" name="unica_fod_anim_type_optical_g" id="0x7f133462" />
++    <public type="string" name="unica_fod_anim_type_optical_w" id="0x7f133463" />
++    <public type="string" name="unica_fod_anim_type_title" id="0x7f133464" />
++    <public type="string" name="unica_fod_anim_type_ultrasonic" id="0x7f133465" />
++    <public type="string" name="unica_games_spoof_title" id="0x7f133466" />
++    <public type="string" name="unica_hide_dev_title" id="0x7f133467" />
++    <public type="string" name="unica_max_refresh_rate_title" id="0x7f133468" />
++    <public type="string" name="unica_native_blur_dialog_msg" id="0x7f133469" />
++    <public type="string" name="unica_native_blur_dialog_negative" id="0x7f13346a" />
++    <public type="string" name="unica_native_blur_dialog_positive" id="0x7f13346b" />
++    <public type="string" name="unica_native_blur_dialog_title" id="0x7f13346c" />
++    <public type="string" name="unica_native_blur_title" id="0x7f13346d" />
++    <public type="string" name="unica_pif_checking" id="0x7f13346e" />
++    <public type="string" name="unica_pif_error" id="0x7f13346f" />
++    <public type="string" name="unica_pif_no_root" id="0x7f133470" />
++    <public type="string" name="unica_pif_up_to_date" id="0x7f133471" />
++    <public type="string" name="unica_pif_updated" id="0x7f133472" />
++    <public type="string" name="unica_pif_version_title" id="0x7f133473" />
++    <public type="string" name="unica_rom_version_title" id="0x7f133474" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f133475" />
++    <public type="string" name="unica_settings_title" id="0x7f133476" />
++    <public type="string" name="unica_spoof_settings_title" id="0x7f133477" />
++    <public type="string" name="unica_ss_detection_title" id="0x7f133478" />
++    <public type="string" name="unica_ui_settings_title" id="0x7f133479" />
++    <public type="string" name="unica_updates_title" id="0x7f13347a" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -35073,4 +35113,5 @@
-     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026b" />
-     <public type="xml" name="zen_mode_settings" id="0x7f16026c" />
-     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026d" />
-+    <public type="xml" name="unica_settings" id="0x7f16026e" />
+@@ -35101,4 +35141,5 @@
+     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026c" />
+     <public type="xml" name="zen_mode_settings" id="0x7f16026d" />
+     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026e" />
++    <public type="xml" name="unica_settings" id="0x7f16026f" />
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 2a67ac19..b894d558 100644
+index baacb818..22f2cc0c 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -14018,4 +14018,38 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -14047,4 +14047,38 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -1559,118 +1559,118 @@ index 5279deab..211ba597 100644
  
  .field public static final user_credential:I = 0x7f0d05f8
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 0c218c74..38105919 100644
+index 43844dd6..88116de6 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4154,6 +4154,8 @@
  
- .field public static final keywords_styles:I = 0x7f1312d7
+ .field public static final keywords_styles:I = 0x7f1312de
  
-+.field public static final keywords_unica_settings:I = 0x7f13343e
++.field public static final keywords_unica_settings:I = 0x7f133459
 +
- .field public static final keywords_wallpaper:I = 0x7f1312f7
+ .field public static final keywords_wallpaper:I = 0x7f1312fe
  
- .field public static final keywords_wifi:I = 0x7f1312f8
+ .field public static final keywords_wifi:I = 0x7f1312ff
 @@ -4844,6 +4846,8 @@
  
- .field public static final menu_key_battery:I = 0x7f1315d2
+ .field public static final menu_key_battery:I = 0x7f1315d9
  
-+.field public static final menu_key_choidujour:I = 0x7f13343f
++.field public static final menu_key_choidujour:I = 0x7f13345a
 +
- .field public static final menu_key_connected_devices:I = 0x7f1315d5
+ .field public static final menu_key_connected_devices:I = 0x7f1315dc
  
- .field public static final menu_key_connections:I = 0x7f1315d6
+ .field public static final menu_key_connections:I = 0x7f1315dd
 @@ -4868,6 +4872,8 @@
  
- .field public static final menu_key_system:I = 0x7f1315f3
+ .field public static final menu_key_system:I = 0x7f1315fa
  
-+.field public static final menu_key_unica_settings:I = 0x7f133440
++.field public static final menu_key_unica_settings:I = 0x7f13345b
 +
- .field public static final menu_restore:I = 0x7f1315fe
+ .field public static final menu_restore:I = 0x7f131605
  
- .field public static final menu_save:I = 0x7f1315ff
-@@ -10660,6 +10666,68 @@
+ .field public static final menu_save:I = 0x7f131606
+@@ -10662,6 +10668,68 @@
  
- .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132c00
+ .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132c1a
  
-+.field public static final unica_allow_downgrade_title:I = 0x7f133441
++.field public static final unica_allow_downgrade_title:I = 0x7f13345c
 +
-+.field public static final unica_allow_sdkbypass_title:I = 0x7f133442
++.field public static final unica_allow_sdkbypass_title:I = 0x7f13345d
 +
-+.field public static final unica_asks_title:I = 0x7f133443
++.field public static final unica_asks_title:I = 0x7f13345e
 +
-+.field public static final unica_boot_sound_title:I = 0x7f133444
++.field public static final unica_boot_sound_title:I = 0x7f13345f
 +
-+.field public static final unica_device_name_title:I = 0x7f133445
++.field public static final unica_device_name_title:I = 0x7f133460
 +
-+.field public static final unica_extra_settings_title:I = 0x7f133446
++.field public static final unica_extra_settings_title:I = 0x7f133461
 +
-+.field public static final unica_fod_anim_type_optical_g:I = 0x7f133447
++.field public static final unica_fod_anim_type_optical_g:I = 0x7f133462
 +
-+.field public static final unica_fod_anim_type_optical_w:I = 0x7f133448
++.field public static final unica_fod_anim_type_optical_w:I = 0x7f133463
 +
-+.field public static final unica_fod_anim_type_title:I = 0x7f133449
++.field public static final unica_fod_anim_type_title:I = 0x7f133464
 +
-+.field public static final unica_fod_anim_type_ultrasonic:I = 0x7f13344a
++.field public static final unica_fod_anim_type_ultrasonic:I = 0x7f133465
 +
-+.field public static final unica_games_spoof_title:I = 0x7f13344b
++.field public static final unica_games_spoof_title:I = 0x7f133466
 +
-+.field public static final unica_hide_dev_title:I = 0x7f13344c
++.field public static final unica_hide_dev_title:I = 0x7f133467
 +
-+.field public static final unica_max_refresh_rate_title:I = 0x7f13344d
++.field public static final unica_max_refresh_rate_title:I = 0x7f133468
 +
-+.field public static final unica_native_blur_dialog_msg:I = 0x7f13344e
++.field public static final unica_native_blur_dialog_msg:I = 0x7f133469
 +
-+.field public static final unica_native_blur_dialog_negative:I = 0x7f13344f
++.field public static final unica_native_blur_dialog_negative:I = 0x7f13346a
 +
-+.field public static final unica_native_blur_dialog_positive:I = 0x7f133450
++.field public static final unica_native_blur_dialog_positive:I = 0x7f13346b
 +
-+.field public static final unica_native_blur_dialog_title:I = 0x7f133451
++.field public static final unica_native_blur_dialog_title:I = 0x7f13346c
 +
-+.field public static final unica_native_blur_title:I = 0x7f133452
++.field public static final unica_native_blur_title:I = 0x7f13346d
 +
-+.field public static final unica_pif_checking:I = 0x7f133453
++.field public static final unica_pif_checking:I = 0x7f13346e
 +
-+.field public static final unica_pif_error:I = 0x7f133454
++.field public static final unica_pif_error:I = 0x7f13346f
 +
-+.field public static final unica_pif_no_root:I = 0x7f133455
++.field public static final unica_pif_no_root:I = 0x7f133470
 +
-+.field public static final unica_pif_up_to_date:I = 0x7f133456
++.field public static final unica_pif_up_to_date:I = 0x7f133471
 +
-+.field public static final unica_pif_updated:I = 0x7f133457
++.field public static final unica_pif_updated:I = 0x7f133472
 +
-+.field public static final unica_pif_version_title:I = 0x7f133458
++.field public static final unica_pif_version_title:I = 0x7f133473
 +
-+.field public static final unica_rom_version_title:I = 0x7f133459
++.field public static final unica_rom_version_title:I = 0x7f133474
 +
-+.field public static final unica_secure_ss_title:I = 0x7f13345a
++.field public static final unica_secure_ss_title:I = 0x7f133475
 +
-+.field public static final unica_settings_title:I = 0x7f13345b
++.field public static final unica_settings_title:I = 0x7f133476
 +
-+.field public static final unica_spoof_settings_title:I = 0x7f13345c
++.field public static final unica_spoof_settings_title:I = 0x7f133477
 +
-+.field public static final unica_ss_detection_title:I = 0x7f13345d
++.field public static final unica_ss_detection_title:I = 0x7f133478
 +
-+.field public static final unica_ui_settings_title:I = 0x7f13345e
++.field public static final unica_ui_settings_title:I = 0x7f133479
 +
-+.field public static final unica_updates_title:I = 0x7f13345f
++.field public static final unica_updates_title:I = 0x7f13347a
 +
- .field public static final uninstall:I = 0x7f132c04
+ .field public static final uninstall:I = 0x7f132c1e
  
- .field public static final uninstall_all_users_text:I = 0x7f132c05
+ .field public static final uninstall_all_users_text:I = 0x7f132c1f
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
-index e0883ec6..8c0606c2 100644
+index 880e2f18..ab165942 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
 +++ b/smali_classes2/com/android/settings/R$xml.smali
-@@ -964,6 +964,8 @@
+@@ -966,6 +966,8 @@
  
- .field public static final turn_screen_on_permissions_details:I = 0x7f16023b
+ .field public static final turn_screen_on_permissions_details:I = 0x7f16023c
  
-+.field public static final unica_settings:I = 0x7f16026e
++.field public static final unica_settings:I = 0x7f16026f
 +
- .field public static final unrestricted_data_access_settings:I = 0x7f16023c
+ .field public static final unrestricted_data_access_settings:I = 0x7f16023d
  
- .field public static final usb_default_fragment:I = 0x7f16023d
+ .field public static final usb_default_fragment:I = 0x7f16023e
 diff --git a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali b/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
 index 69a5d014..ee75d2e6 100644
 --- a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
@@ -6623,5 +6623,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.47.0
+2.47.1
 
