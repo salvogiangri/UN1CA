@@ -1,12 +1,34 @@
-From ca552512780ddf4449869762e2192077dc775001 Mon Sep 17 00:00:00 2001
+From 96ac3f008949751c6e95077d0301367708552723 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Thu, 5 Dec 2024 10:18:18 +0100
-Subject: [PATCH] Allow toggling Emergency call action
+Date: Thu, 5 Dec 2024 11:08:26 +0100
+Subject: [PATCH] Advanced power menu mods
 
 ---
+ .../SamsungGlobalActionsPresenter.smali       | 10 ------
  .../util/TelephonyManagerWrapper.smali        | 34 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ 2 files changed, 32 insertions(+), 12 deletions(-)
 
+diff --git a/smali_classes5/com/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter.smali b/smali_classes5/com/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter.smali
+index f49e0f14..aa318a55 100644
+--- a/smali_classes5/com/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter.smali
++++ b/smali_classes5/com/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter.smali
+@@ -642,16 +642,6 @@
+ 
+     if-eqz v1, :cond_9
+ 
+-    iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;->mSystemCondition:Lcom/samsung/android/globalactions/util/ConditionChecker;
+-
+-    sget-object v2, Lcom/samsung/android/globalactions/util/SystemConditions;->IS_SUPPORT_EMERGENCY_CALL:Lcom/samsung/android/globalactions/util/SystemConditions;
+-
+-    invoke-interface {v1, v2}, Lcom/samsung/android/globalactions/util/ConditionChecker;->isEnabled(Ljava/lang/Object;)Z
+-
+-    move-result v1
+-
+-    if-eqz v1, :cond_9
+-
+     iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;->mFactory:Lcom/samsung/android/globalactions/presentation/features/FeatureFactory;
+ 
+     const-string/jumbo v2, "medical_info"
 diff --git a/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali b/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali
 index 8620117a..06fffc1a 100644
 --- a/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali
