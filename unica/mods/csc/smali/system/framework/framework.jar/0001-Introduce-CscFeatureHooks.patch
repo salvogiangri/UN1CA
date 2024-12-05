@@ -1,12 +1,12 @@
-From 0eb9cf5d28bd852c386c61b29c7cadc27f3cd5db Mon Sep 17 00:00:00 2001
+From 9dd739ae17af731dbc8b09bed13af0ed7f05315b Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Tue, 19 Dec 2023 14:59:11 +0100
 Subject: [PATCH] Introduce CscFeatureHooks
 
 ---
  .../android/feature/SemCscFeature.smali       |  98 ++++-
- .../io/mesalabs/unica/CscFeatureHooks.smali   | 345 ++++++++++++++++++
- 2 files changed, 431 insertions(+), 12 deletions(-)
+ .../io/mesalabs/unica/CscFeatureHooks.smali   | 357 ++++++++++++++++++
+ 2 files changed, 443 insertions(+), 12 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 
 diff --git a/smali_classes5/com/samsung/android/feature/SemCscFeature.smali b/smali_classes5/com/samsung/android/feature/SemCscFeature.smali
@@ -233,10 +233,10 @@ index 7a29d842..b1f910bb 100644
      :catch_0
 diff --git a/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
 new file mode 100644
-index 00000000..89ac4631
+index 00000000..62a6d916
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/CscFeatureHooks.smali
-@@ -0,0 +1,345 @@
+@@ -0,0 +1,357 @@
 +.class public final Lio/mesalabs/unica/CscFeatureHooks;
 +.super Ljava/lang/Object;
 +.source "CscFeatureHooks.java"
@@ -304,6 +304,18 @@ index 00000000..89ac4631
 +    sput-object v2, Lio/mesalabs/unica/CscFeatureHooks;->INTEGER_FEATURES:Ljava/util/HashMap;
 +
 +    const-string v3, "CscFeature_Common_SupportPrivateMode"
++
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v3, "CscFeature_Framework_SupportDataModeSwitchGlobalAction"
++
++    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++
++    invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v3, "CscFeature_Framework_SupportForceRestartGlobalAction"
 +
 +    sget-object v4, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 +
@@ -583,5 +595,5 @@ index 00000000..89ac4631
 +    return-object v0
 +.end method
 -- 
-2.46.0
+2.47.1
 
