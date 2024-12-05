@@ -1,0 +1,65 @@
+From b757e02364c6f9f05de3e50eb82aba2f9e625cd0 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 5 Dec 2024 11:13:43 +0100
+Subject: [PATCH] Advanced power menu mods
+
+---
+ .../features/GlobalActionFeatures.smali       | 35 +++++++++++++++----
+ 1 file changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/smali/com/android/systemui/globalactions/presentation/features/GlobalActionFeatures.smali b/smali/com/android/systemui/globalactions/presentation/features/GlobalActionFeatures.smali
+index 53d90bdbb..25d4d8f2e 100644
+--- a/smali/com/android/systemui/globalactions/presentation/features/GlobalActionFeatures.smali
++++ b/smali/com/android/systemui/globalactions/presentation/features/GlobalActionFeatures.smali
+@@ -79,6 +79,33 @@
+     return-void
+ .end method
+ 
++.method private final isDataModeSwitchEnabled()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/systemui/globalactions/presentation/features/GlobalActionFeatures;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_data"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    const/4 v0, 0x1
++
++    if-ne p0, v0, :cond_0
++
++    move v1, v0
++
++    :cond_0
++    return v1
++.end method
++
+ 
+ # virtual methods
+ .method public final isEnabled(Ljava/lang/String;)Z
+@@ -177,13 +204,7 @@
+ 
+     if-eqz v0, :cond_5
+ 
+-    invoke-static {}, Lcom/samsung/android/feature/SemCscFeature;->getInstance()Lcom/samsung/android/feature/SemCscFeature;
+-
+-    move-result-object v0
+-
+-    const-string v1, "CscFeature_Framework_SupportDataModeSwitchGlobalAction"
+-
+-    invoke-virtual {v0, v1}, Lcom/samsung/android/feature/SemCscFeature;->getBoolean(Ljava/lang/String;)Z
++    invoke-direct {p0}, Lcom/android/systemui/globalactions/presentation/features/GlobalActionFeatures;->isDataModeSwitchEnabled()Z
+ 
+     move-result v0
+ 
+-- 
+2.47.1
+
