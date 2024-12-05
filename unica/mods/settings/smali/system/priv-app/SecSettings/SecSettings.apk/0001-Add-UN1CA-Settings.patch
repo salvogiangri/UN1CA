@@ -1,4 +1,4 @@
-From 775b4c25a4a41cf14f0215156ea29011d4b6848f Mon Sep 17 00:00:00 2001
+From f497a826a60c4db6d5f35d7ec22566276d982763 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -21,8 +21,8 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-es-rES/strings.xml                 |  31 +
  res/values-es-rUS/strings.xml                 |  31 +
  res/values-fa/strings.xml                     |  29 +
- res/values-fr/strings.xml                     |  30 +
- res/values-hu/strings.xml                     |  30 +
+ res/values-fr/strings.xml                     |  31 +
+ res/values-hu/strings.xml                     |  31 +
  res/values-in/strings.xml                     |  29 +
  res/values-it/strings.xml                     |  31 +
  res/values-pl/strings.xml                     |  31 +
@@ -34,8 +34,8 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-sr/strings.xml                     |  31 +
  res/values-th/strings.xml                     |  29 +
  res/values-tr/strings.xml                     |  31 +
- res/values-uk/strings.xml                     |  30 +
- res/values-vi/strings.xml                     |  30 +
+ res/values-uk/strings.xml                     |  31 +
+ res/values-vi/strings.xml                     |  31 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
  res/values/public.xml                         |  41 ++
@@ -76,7 +76,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 72 files changed, 5822 insertions(+), 17 deletions(-)
+ 72 files changed, 5826 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -683,14 +683,15 @@ index f150b706..d536078a 100644
 +    <string name="unica_updates_title">به‌روزرسانی‌ها UN1CA</string>
  </resources>
 diff --git a/res/values-fr/strings.xml b/res/values-fr/strings.xml
-index ac22222c..f1abe0db 100644
+index ac22222c..2c2a941a 100644
 --- a/res/values-fr/strings.xml
 +++ b/res/values-fr/strings.xml
-@@ -7428,4 +7428,34 @@ Dans l'application Appareil photo, vous pouvez utiliser la touche du haut pour p
+@@ -7428,4 +7428,35 @@ Dans l'application Appareil photo, vous pouvez utiliser la touche du haut pour p
      <string name="zone_menu_by_region">Sélectionner par région</string>
      <string name="zone_time_type_dst">"Heure d'été"</string>
      <string name="zone_time_type_standard">Heure standard</string>
 +    <string name="unica_allow_downgrade_title">Autoriser la rétrogradation d\'application</string>
++    <string name="unica_allow_sdkbypass_title">Désactiver le blocage des SDK à cible basse</string>
 +    <string name="unica_asks_title">Désactiver ASKS</string>
 +    <string name="unica_boot_sound_title">Jouer l\'effet sonore au démarrage</string>
 +    <string name="unica_device_name_title">Nom de l\'appareil</string>
@@ -722,14 +723,15 @@ index ac22222c..f1abe0db 100644
 +    <string name="unica_updates_title">Mises à jour UN1CA</string>
  </resources>
 diff --git a/res/values-hu/strings.xml b/res/values-hu/strings.xml
-index bd474085..faaae542 100644
+index bd474085..6e5e0e56 100644
 --- a/res/values-hu/strings.xml
 +++ b/res/values-hu/strings.xml
-@@ -7428,4 +7428,34 @@ A Kamera alkalmazásban a Felső gomb megnyomásával fényképezhet."</string>
+@@ -7428,4 +7428,35 @@ A Kamera alkalmazásban a Felső gomb megnyomásával fényképezhet."</string>
      <string name="zone_menu_by_region">Kiválasztás régió szerint</string>
      <string name="zone_time_type_dst">Nyári időszámítás</string>
      <string name="zone_time_type_standard">Normál idő</string>
 +    <string name="unica_allow_downgrade_title">Alkalmazás visszaminősítésének engedélyezése</string>
++    <string name="unica_allow_sdkbypass_title">Alacsony célzott SDK blokkolás letiltása</string>
 +    <string name="unica_asks_title">ASKS letiltása</string>
 +    <string name="unica_boot_sound_title">Hangeffekt lejátszása bekapcsoláskor</string>
 +    <string name="unica_device_name_title">Eszköz neve</string>
@@ -1194,14 +1196,15 @@ index 5264a8df..ce2f1100 100644
 +    <string name="unica_updates_title">UN1CA Güncellemeleri</string>
  </resources>
 diff --git a/res/values-uk/strings.xml b/res/values-uk/strings.xml
-index 9cd8ecd0..6ea1a2f9 100644
+index 9cd8ecd0..f24495d6 100644
 --- a/res/values-uk/strings.xml
 +++ b/res/values-uk/strings.xml
-@@ -7428,4 +7428,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7428,4 +7428,35 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">Вибрати за регіоном</string>
      <string name="zone_time_type_dst">Літній час</string>
      <string name="zone_time_type_standard">Стандартний час</string>
 +    <string name="unica_allow_downgrade_title">Дозволити знижувати версію додатків</string>
++    <string name="unica_allow_sdkbypass_title">Вимкнути блокування встановлення додатків призначених для старих версій Android</string>
 +    <string name="unica_asks_title">Вимкнути ASKS</string>
 +    <string name="unica_boot_sound_title">Звук увімкнення телефону</string>
 +    <string name="unica_device_name_title">Назва пристрою</string>
@@ -1233,14 +1236,15 @@ index 9cd8ecd0..6ea1a2f9 100644
 +    <string name="unica_updates_title">Оновлення UN1CA</string>
  </resources>
 diff --git a/res/values-vi/strings.xml b/res/values-vi/strings.xml
-index 617c9db6..24ff4339 100644
+index 617c9db6..e93baa91 100644
 --- a/res/values-vi/strings.xml
 +++ b/res/values-vi/strings.xml
-@@ -7428,4 +7428,34 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
+@@ -7428,4 +7428,35 @@ Trong Máy ảnh, bạn có thể sử dụng phím Trên cùng để chụp ả
      <string name="zone_menu_by_region">Chọn theo vùng</string>
      <string name="zone_time_type_dst">Giờ theo mùa</string>
      <string name="zone_time_type_standard">Giờ tiêu chuẩn</string>
 +    <string name="unica_allow_downgrade_title">Cho phép hạ phiên bản ứng dụng</string>
++    <string name="unica_allow_sdkbypass_title">Cho phép cài đặt ứng dụng dành cho Android cũ</string>
 +    <string name="unica_asks_title">Vô hiệu hóa ASKS</string>
 +    <string name="unica_boot_sound_title">Phát âm thanh bật nguồn</string>
 +    <string name="unica_device_name_title">Tên thiết bị</string>
