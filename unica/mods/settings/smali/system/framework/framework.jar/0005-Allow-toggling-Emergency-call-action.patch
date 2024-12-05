@@ -1,0 +1,74 @@
+From ca552512780ddf4449869762e2192077dc775001 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 5 Dec 2024 10:18:18 +0100
+Subject: [PATCH] Allow toggling Emergency call action
+
+---
+ .../util/TelephonyManagerWrapper.smali        | 34 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali b/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali
+index 8620117a..06fffc1a 100644
+--- a/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali
++++ b/smali_classes5/com/samsung/android/globalactions/util/TelephonyManagerWrapper.smali
+@@ -4,6 +4,8 @@
+ 
+ 
+ # instance fields
++.field private final blacklist mContext:Landroid/content/Context;
++
+ .field private final blacklist mHasTelephonyRadio:Z
+ 
+ .field private final blacklist mTelephonyManager:Landroid/telephony/TelephonyManager;
+@@ -15,6 +17,8 @@
+ 
+     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+ 
++    iput-object p1, p0, Lcom/samsung/android/globalactions/util/TelephonyManagerWrapper;->mContext:Landroid/content/Context;
++
+     const-string/jumbo v0, "phone"
+ 
+     invoke-virtual {p1, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+@@ -178,11 +182,37 @@
+ .end method
+ 
+ .method public blacklist hasTelephonyRadio()Z
+-    .locals 1
++    .locals 3
+ 
+     iget-boolean v0, p0, Lcom/samsung/android/globalactions/util/TelephonyManagerWrapper;->mHasTelephonyRadio:Z
+ 
+-    return v0
++    const/4 v1, 0x0
++
++    if-nez v0, :cond_0
++
++    return v1
++
++    :cond_0
++    iget-object p0, p0, Lcom/samsung/android/globalactions/util/TelephonyManagerWrapper;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_emergency"
++
++    const/4 v2, 0x1
++
++    invoke-static {p0, v0, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v2, :cond_1
++
++    move v1, v2
++
++    :cond_1
++    return v1
+ .end method
+ 
+ .method public blacklist isDataEnabled()Z
+-- 
+2.47.1
+
