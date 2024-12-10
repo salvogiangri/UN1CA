@@ -18,6 +18,8 @@
 
 # shellcheck disable=SC2162
 
+# CMD_HELP Downloads the Firmware needed for selected device.
+
 set -e
 
 # [

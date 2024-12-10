@@ -16,6 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# CMD_HELP Usage: apktool d[ecode]/b[uild] <apk> (<apk>...)
+# CMD_HELP APK/JAR path MUST not be full and match an existing file inside work_dir
+# CMD_HELP Output files will be stored in ($APKTOOL_DIR)
+# CMD_HELP Recompiled apk will be copied back to its original directory
+
 set -eu
 shopt -s nullglob
 
