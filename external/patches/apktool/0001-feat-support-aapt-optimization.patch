@@ -1,4 +1,4 @@
-From 9ab77fad26854dc94519358620e24baa24ff28e8 Mon Sep 17 00:00:00 2001
+From 27be7ed37e35f3dbde46f42196a8210fac61a5cb Mon Sep 17 00:00:00 2001
 From: Kofua <1638183271zjn@gmail.com>
 Date: Sat, 30 Mar 2024 22:18:41 +0800
 Subject: [PATCH] feat: support aapt optimization
@@ -10,10 +10,10 @@ Subject: [PATCH] feat: support aapt optimization
  3 files changed, 80 insertions(+), 2 deletions(-)
 
 diff --git a/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java b/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
-index da8d52dd..6e259aba 100644
+index eec8bd9c..32d7e1a4 100644
 --- a/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
 +++ b/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
-@@ -301,6 +301,15 @@ public class Main {
+@@ -307,6 +307,15 @@ public class Main {
          if (cli.hasOption("na") || cli.hasOption("no-apk")) {
              config.noApk = true;
          }
@@ -29,18 +29,18 @@ index da8d52dd..6e259aba 100644
  
          File outFile;
          if (cli.hasOption("o") || cli.hasOption("output")) {
-@@ -309,8 +318,8 @@ public class Main {
+@@ -315,8 +324,8 @@ public class Main {
              outFile = null;
          }
  
 -        if (config.netSecConf && config.aaptVersion == 1) {
--            System.err.println("-n / --net-sec-conf is not supported with legacy AAPT.");
+-            System.err.println("-n / --net-sec-conf is not supported with legacy aapt.");
 +        if ((config.netSecConf || config.shortenResPaths || config.enableSparseEncoding || config.collapseResNames) && config.aaptVersion == 1) {
-+            System.err.println("-n / --net-sec-conf, -srp / --shorten-res-paths, -ese / --enable-sparse-encoding, -crn / --collapse-res-names are not supported with legacy AAPT.");
++            System.err.println("-n / --net-sec-conf, -srp / --shorten-res-paths, -ese / --enable-sparse-encoding, -crn / --collapse-res-names are not supported with legacy aapt.");
              System.exit(1);
          }
  
-@@ -502,6 +511,21 @@ public class Main {
+@@ -508,6 +517,21 @@ public class Main {
                  .desc("Disable repacking of the built files into a new apk.")
                  .build();
  
@@ -62,7 +62,7 @@ index da8d52dd..6e259aba 100644
          Option tagOption = Option.builder("t")
                  .longOpt("tag")
                  .desc("Tag frameworks using <tag>.")
-@@ -552,6 +576,9 @@ public class Main {
+@@ -558,6 +582,9 @@ public class Main {
              buildOptions.addOption(aapt1Option);
              buildOptions.addOption(noCrunchOption);
              buildOptions.addOption(noApkOption);
@@ -72,7 +72,7 @@ index da8d52dd..6e259aba 100644
          }
  
          // add global options
-@@ -615,6 +642,9 @@ public class Main {
+@@ -621,6 +648,9 @@ public class Main {
          allOptions.addOption(noCrunchOption);
          allOptions.addOption(noApkOption);
          allOptions.addOption(onlyMainClassesOption);
@@ -83,7 +83,7 @@ index da8d52dd..6e259aba 100644
  
      private static String verbosityHelp() {
 diff --git a/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java b/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
-index a249869b..ea13cdc1 100644
+index b8964b73..8356cb88 100644
 --- a/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
 +++ b/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
 @@ -23,6 +23,9 @@ import brut.util.AaptManager;
@@ -96,7 +96,7 @@ index a249869b..ea13cdc1 100644
  import java.util.*;
  import java.util.logging.Logger;
  
-@@ -233,6 +236,45 @@ public class AaptInvoker {
+@@ -231,6 +234,45 @@ public class AaptInvoker {
          } catch (BrutException ex) {
              throw new AndrolibException(ex);
          }
@@ -143,10 +143,10 @@ index a249869b..ea13cdc1 100644
  
      private void invokeAapt1(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include,
 diff --git a/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java b/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
-index 85e71a1c..195d1549 100644
+index 7ba3ed24..cc98a9ef 100644
 --- a/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
 +++ b/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
-@@ -54,6 +54,12 @@ public class Config {
+@@ -55,6 +55,12 @@ public final class Config {
      public boolean noCrunch = false;
      public boolean noApk = false;
  
@@ -160,5 +160,5 @@ index 85e71a1c..195d1549 100644
      public short decodeSources = DECODE_SOURCES_SMALI;
      public short decodeResources = DECODE_RESOURCES_FULL;
 -- 
-2.46.2
+2.47.1
 
