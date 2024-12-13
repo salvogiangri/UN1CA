@@ -43,7 +43,7 @@ else
   echo "The following packages are missing: ${MISSING_PACKAGES[*]}"
   echo "Attempting to install missing packages..."
   sudo apt update
-  sudo apt install -y "${MISSING_PACKAGES[@]}"
+  sudo apt install "${MISSING_PACKAGES[@]}"
 fi
 
 echo "Checking for missing Git submodules..."
