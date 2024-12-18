@@ -31,6 +31,7 @@ fi
     if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then
         echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32"
     fi
+    echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n sys.oem_unlock_allowed 0"
     echo ""
 } >> "$WORK_DIR/system/system/etc/init/hw/init.rc"
 
