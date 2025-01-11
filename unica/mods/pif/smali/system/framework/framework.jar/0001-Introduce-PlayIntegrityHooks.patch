@@ -1,4 +1,4 @@
-From a0296513b4f105b47353000ae47c3f29f1a42f9c Mon Sep 17 00:00:00 2001
+From 7c9e3e22dfb2506772f1e758494741c13a1eda09 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 11:04:24 +0200
 Subject: [PATCH] Introduce PlayIntegrityHooks
@@ -120,7 +120,7 @@ index 00000000..fe159605
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 new file mode 100644
-index 00000000..95b71571
+index 00000000..63244303
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 @@ -0,0 +1,970 @@
@@ -142,7 +142,7 @@ index 00000000..95b71571
 +
 +.field private static final blacklist PIF_DEVICE_INITIAL_SDK_INT:Ljava/lang/String; = "null"
 +
-+.field private static final blacklist PIF_FINGERPRINT:Ljava/lang/String; = "google/shiba_beta/shiba:15/BP11.241121.010/12780007:user/release-keys"
++.field private static final blacklist PIF_FINGERPRINT:Ljava/lang/String; = "google/shiba_beta/shiba:15/BP11.241121.013/12873528:user/release-keys"
 +
 +.field private static final blacklist PIF_ID:Ljava/lang/String; = "null"
 +
@@ -158,7 +158,7 @@ index 00000000..95b71571
 +
 +.field private static final blacklist PIF_SECURITY_PATCH:Ljava/lang/String; = "null"
 +
-+.field private static final blacklist PIF_VERSION:Ljava/lang/String; = "20241217"
++.field private static final blacklist PIF_VERSION:Ljava/lang/String; = "20250111"
 +
 +.field private static final blacklist TAG:Ljava/lang/String; = "PlayIntegrityHooks"
 +
@@ -680,7 +680,7 @@ index 00000000..95b71571
 +
 +    move-result v1
 +
-+    const-string v2, "20241217"
++    const-string v2, "20250111"
 +
 +    invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
 +
@@ -698,7 +698,7 @@ index 00000000..95b71571
 +
 +    move-result-object v0
 +
-+    const-string v1, ", Frameworks version: 20241217"
++    const-string v1, ", Frameworks version: 20250111"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
@@ -989,7 +989,7 @@ index 00000000..95b71571
 +    :cond_8
 +    const-string v0, "persist.sys.pif.fingerprint"
 +
-+    const-string v2, "google/shiba_beta/shiba:15/BP11.241121.010/12780007:user/release-keys"
++    const-string v2, "google/shiba_beta/shiba:15/BP11.241121.013/12873528:user/release-keys"
 +
 +    invoke-static {v0, v2}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
@@ -1095,5 +1095,5 @@ index 00000000..95b71571
 +    return-void
 +.end method
 -- 
-2.47.1
+2.48.0
 
