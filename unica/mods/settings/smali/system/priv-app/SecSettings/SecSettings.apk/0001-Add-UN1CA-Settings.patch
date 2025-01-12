@@ -1,4 +1,4 @@
-From dada58a01274526fc382a90ed112ff08df338f75 Mon Sep 17 00:00:00 2001
+From d92961f5b0dc6e89de250b5ff1e9a3066e006bd1 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -23,7 +23,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-fa/strings.xml                     |  29 +
  res/values-fr/strings.xml                     |  31 +
  res/values-hu/strings.xml                     |  31 +
- res/values-in/strings.xml                     |  29 +
+ res/values-in/strings.xml                     |  30 +
  res/values-it/strings.xml                     |  31 +
  res/values-pl/strings.xml                     |  31 +
  res/values-pt-rBR/strings.xml                 |  31 +
@@ -76,7 +76,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 72 files changed, 5826 insertions(+), 17 deletions(-)
+ 72 files changed, 5827 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -763,14 +763,15 @@ index bd474085..6e5e0e56 100644
 +    <string name="unica_updates_title">UN1CA Frissítések</string>
  </resources>
 diff --git a/res/values-in/strings.xml b/res/values-in/strings.xml
-index 7fc82364..8c9dbdf6 100644
+index 7fc82364..2b448dc3 100644
 --- a/res/values-in/strings.xml
 +++ b/res/values-in/strings.xml
-@@ -7428,4 +7428,33 @@ Di Kamera, Anda dapat menggunakan Tombol atas untuk mengambil gambar."</string>
+@@ -7428,4 +7428,34 @@ Di Kamera, Anda dapat menggunakan Tombol atas untuk mengambil gambar."</string>
      <string name="zone_menu_by_region">Pilih menurut wilayah</string>
      <string name="zone_time_type_dst">Waktu musim panas</string>
      <string name="zone_time_type_standard">Waktu standar</string>
 +    <string name="unica_allow_downgrade_title">Izinkan penurunan versi aplikasi</string>
++    <string name="unica_allow_sdkbypass_title">Non-aktifkan low target SDK block</string>
 +    <string name="unica_asks_title">Non-aktifkan ASKS</string>
 +    <string name="unica_boot_sound_title">Aktifkan suara saat dihidupkan</string>
 +    <string name="unica_device_name_title">Nama Perangkat</string>
@@ -6650,5 +6651,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.47.1
+2.48.0
 
