@@ -29,15 +29,20 @@ while [ "$#" != 0 ]; do
         exit 1
     else
         if avbtool info_image --image "$1" &>/dev/null; then
-            echo "Removing AVB footer"
+            echo "Removing AVB footer signature"
             avbtool erase_footer --image "$1"
         fi
+        if head "$1" | grep -q "SignerVer"; then
+            echo "Removing Samsung header signature"
+            dd if="/dev/zero" of="$1" bs=1 seek=0 count=256 conv=notrunc &>/dev/null
+            dd if="/dev/zero" of="$1" bs=1 seek=768 count=256 conv=notrunc &>/dev/null
+        fi
         if tail "$1" | grep -q "SignerVer02"; then
-            echo "Removing Samsung v2 signature"
+            echo "Removing Samsung footer signature"
             truncate -s -512 "$1"
         fi
         if tail "$1" | grep -q "SignerVer03"; then
-            echo "Removing Samsung v3 signature"
+            echo "Removing Samsung footer signature"
             truncate -s -784 "$1"
         fi
     fi
