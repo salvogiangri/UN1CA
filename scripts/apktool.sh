@@ -156,9 +156,6 @@ DO_DECOMPILE()
     if [[ "$APK_PATH" == *"framework.jar" ]]; then
         if unzip -l "$APK_PATH" | grep -q "debian.mime.types"; then
             unzip -q "$APK_PATH" "res/*" -d "$APKTOOL_DIR$OUT_DIR/unknown"
-            sed -i \
-                '/^doNotCompress/i \ \ res\/android.mime.types: 8\n\ \ res\/debian.mime.types: 8\n\ \ res\/vendor.mime.types: 8' \
-                "$APKTOOL_DIR$OUT_DIR/apktool.yml"
         fi
     fi
 }
