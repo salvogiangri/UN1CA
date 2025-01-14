@@ -1,4 +1,4 @@
-From 2411d3662c919cf21fff617dd536de1e6ccfe497 Mon Sep 17 00:00:00 2001
+From 446ca679487fdfafb15e9466aeadec5db5334f4e Mon Sep 17 00:00:00 2001
 From: Kofua <1638183271zjn@gmail.com>
 Date: Sat, 30 Mar 2024 22:18:41 +0800
 Subject: [PATCH] feat: support aapt optimization
@@ -77,19 +77,20 @@ index 914df043..dfa81cc6 100644
  
      private static String verbosityHelp() {
 diff --git a/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java b/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
-index 7210cf12..852aaf9b 100644
+index 7210cf12..36fb7221 100644
 --- a/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
 +++ b/brut.apktool/apktool-lib/src/main/java/brut/androlib/AaptInvoker.java
-@@ -23,6 +23,9 @@ import brut.util.AaptManager;
+@@ -23,7 +23,10 @@ import brut.util.AaptManager;
  import brut.util.OS;
  
  import java.io.*;
 +import java.nio.file.Files;
 +import java.nio.file.Path;
-+import java.nio.file.StandardCopyOption;
  import java.nio.file.Paths;
++import java.nio.file.StandardCopyOption;
  import java.util.*;
  import java.util.logging.Logger;
+ 
 @@ -213,6 +216,46 @@ public class AaptInvoker {
          } catch (BrutException ex) {
              throw new AndrolibException(ex);
@@ -200,5 +201,5 @@ index 6b9c6809..95e1eef2 100644
  
      public short getDecodeSources() {
 -- 
-2.47.1
+2.48.0
 
