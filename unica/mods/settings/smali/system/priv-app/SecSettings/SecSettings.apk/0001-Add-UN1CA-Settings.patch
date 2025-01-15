@@ -1,4 +1,4 @@
-From d92961f5b0dc6e89de250b5ff1e9a3066e006bd1 Mon Sep 17 00:00:00 2001
+From 4e3ac6fdb7eebc7473aa0710267b96ecb2904106 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -1297,78 +1297,50 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index a010f348..9859e320 100644
+index a010f348..2e5da414 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
-@@ -5054,6 +5054,7 @@
-     <public type="color" name="udfps_enroll_progress_help_with_talkback" id="0x7f06098f" />
-     <public type="color" name="udfps_moving_target_fill" id="0x7f060990" />
-     <public type="color" name="udfps_moving_target_fill_error" id="0x7f060991" />
+@@ -5173,6 +5173,7 @@
+     <public type="color" name="wifi_preference_title_color" id="0x7f060a06" />
+     <public type="color" name="wifi_wps_fg" id="0x7f060a07" />
+     <public type="color" name="work_profile_lock_screen_text_color" id="0x7f060a08" />
 +    <public type="color" name="unica_logo_accent" id="0x7f060a09" />
-     <public type="color" name="uninstall_secure_folder_dialog" id="0x7f060992" />
-     <public type="color" name="usage_graph_dots" id="0x7f060993" />
-     <public type="color" name="user_avatar_color_bg" id="0x7f060994" />
-@@ -11721,6 +11722,7 @@
-     <public type="drawable" name="sec_ic_settings_t_service" id="0x7f0807da" />
-     <public type="drawable" name="sec_ic_settings_themes" id="0x7f0807db" />
-     <public type="drawable" name="sec_ic_settings_tips" id="0x7f0807dc" />
+     <public type="dimen" name="abc_cascading_menus_min_smallest_width" id="0x7f070000" />
+     <public type="dimen" name="abc_config_prefDialogWidth" id="0x7f070001" />
+     <public type="dimen" name="abc_dialog_corner_radius_material" id="0x7f070002" />
+@@ -12769,6 +12770,9 @@
+     <public type="drawable" name="ws_ic_2step_02" id="0x7f080bf2" />
+     <public type="drawable" name="ws_ic_knox_premium" id="0x7f080bf3" />
+     <public type="drawable" name="ws_ic_system_lock" id="0x7f080bf4" />
 +    <public type="drawable" name="sec_ic_settings_unica" id="0x7f080bf5" />
-     <public type="drawable" name="sec_ic_settings_user_manual" id="0x7f0807dd" />
-     <public type="drawable" name="sec_ic_settings_wallpaper" id="0x7f0807de" />
-     <public type="drawable" name="sec_ic_share_revert" id="0x7f0807df" />
-@@ -12737,6 +12739,8 @@
-     <public type="drawable" name="tw_list_icon_check_to_caller_id_mtrl" id="0x7f080bd2" />
-     <public type="drawable" name="tw_list_icon_delete_mtrl" id="0x7f080bd3" />
-     <public type="drawable" name="udfps_enroll_checkmark" id="0x7f080bd4" />
 +    <public type="drawable" name="unica_logo_bg" id="0x7f080bf6" />
 +    <public type="drawable" name="unica_logo_fg" id="0x7f080bf7" />
-     <public type="drawable" name="up_down_transition" id="0x7f080bd5" />
-     <public type="drawable" name="use_accessibility_button" id="0x7f080bd6" />
-     <public type="drawable" name="use_accessibility_button_floating" id="0x7f080bd7" />
-@@ -16527,6 +16531,7 @@
-     <public type="id" name="udfps_enroll_animation_fp_view" id="0x7f0a0e9d" />
-     <public type="id" name="un_pair_btn" id="0x7f0a0e9e" />
-     <public type="id" name="unchecked" id="0x7f0a0e9f" />
+     <public type="fraction" name="battery_button_height_fraction" id="0x7f090000" />
+     <public type="fraction" name="battery_subpixel_smoothing_left" id="0x7f090001" />
+     <public type="fraction" name="battery_subpixel_smoothing_right" id="0x7f090002" />
+@@ -16833,6 +16837,7 @@
+     <public type="id" name="zen_radio_buttons" id="0x7f0a0fcf" />
+     <public type="id" name="zen_radio_buttons_content" id="0x7f0a0fd0" />
+     <public type="id" name="zoom_layer" id="0x7f0a0fd1" />
 +    <public type="id" name="unica_logo_wp" id="0x7f0a0fd2" />
-     <public type="id" name="uniform" id="0x7f0a0ea0" />
-     <public type="id" name="uninstall" id="0x7f0a0ea1" />
-     <public type="id" name="uninstall_button" id="0x7f0a0ea2" />
-@@ -18635,6 +18640,7 @@
-     <public type="layout" name="udfps_enroll_enrolling_v2" id="0x7f0d05f2" />
-     <public type="layout" name="udfps_enroll_find_sensor_layout" id="0x7f0d05f3" />
-     <public type="layout" name="udfps_enroll_view" id="0x7f0d05f4" />
+     <public type="integer" name="app_bar_elevation_anim_duration" id="0x7f0b0000" />
+     <public type="integer" name="as_no_item_bottom_weight" id="0x7f0b0001" />
+     <public type="integer" name="as_no_item_top_weight" id="0x7f0b0002" />
+@@ -18707,6 +18712,7 @@
+     <public type="layout" name="zen_rule_type" id="0x7f0d063a" />
+     <public type="layout" name="zen_rule_type_selection" id="0x7f0d063b" />
+     <public type="layout" name="zen_schedule_rule_day" id="0x7f0d063c" />
 +    <public type="layout" name="unica_settings_logo_layout" id="0x7f0d063d" />
-     <public type="layout" name="usage_side_label" id="0x7f0d05f5" />
-     <public type="layout" name="usage_view" id="0x7f0d05f6" />
-     <public type="layout" name="user_creation_progress_dialog" id="0x7f0d05f7" />
-@@ -23826,6 +23832,7 @@
-     <public type="string" name="keywords_time_zone" id="0x7f1312ec" />
-     <public type="string" name="keywords_touch_vibration" id="0x7f1312ed" />
-     <public type="string" name="keywords_tts_default_rate_settings" id="0x7f1312ee" />
+     <public type="menu" name="accessibility_home_menu" id="0x7f0f0000" />
+     <public type="menu" name="as_app_cache_clear_menu" id="0x7f0f0001" />
+     <public type="menu" name="as_home_list_more_option_menu" id="0x7f0f0002" />
+@@ -32380,6 +32386,40 @@
+     <public type="string" name="zone_time_type_standard" id="0x7f133456" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f133457" />
+     <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f133458" />
 +    <public type="string" name="keywords_unica_settings" id="0x7f133459" />
-     <public type="string" name="keywords_unification" id="0x7f1312ef" />
-     <public type="string" name="keywords_universal_switch" id="0x7f1312f0" />
-     <public type="string" name="keywords_users" id="0x7f1312f1" />
-@@ -24574,6 +24581,7 @@
-     <public type="string" name="menu_key_apps" id="0x7f1315d8" />
-     <public type="string" name="menu_key_battery" id="0x7f1315d9" />
-     <public type="string" name="menu_key_bio_and_security" id="0x7f1315da" />
 +    <public type="string" name="menu_key_choidujour" id="0x7f13345a" />
-     <public type="string" name="menu_key_communal" id="0x7f1315db" />
-     <public type="string" name="menu_key_connected_devices" id="0x7f1315dc" />
-     <public type="string" name="menu_key_connections" id="0x7f1315dd" />
-@@ -24608,6 +24616,7 @@
-     <public type="string" name="menu_key_system" id="0x7f1315fa" />
-     <public type="string" name="menu_key_t_roaming" id="0x7f1315fb" />
-     <public type="string" name="menu_key_tips" id="0x7f1315fc" />
 +    <public type="string" name="menu_key_unica_settings" id="0x7f13345b" />
-     <public type="string" name="menu_key_user_manual" id="0x7f1315fd" />
-     <public type="string" name="menu_key_wallpaper" id="0x7f1315fe" />
-     <public type="string" name="menu_new" id="0x7f1315ff" />
-@@ -30272,6 +30281,37 @@
-     <public type="string" name="unable_to_change_usb_options_via_smart_switch" id="0x7f132c1a" />
-     <public type="string" name="unable_to_use_iris" id="0x7f132c1b" />
-     <public type="string" name="unable_to_use_iris_for_videocall" id="0x7f132c1c" />
 +    <public type="string" name="unica_allow_downgrade_title" id="0x7f13345c" />
 +    <public type="string" name="unica_allow_sdkbypass_title" id="0x7f13345d" />
 +    <public type="string" name="unica_asks_title" id="0x7f13345e" />
@@ -1400,17 +1372,15 @@ index a010f348..9859e320 100644
 +    <public type="string" name="unica_ss_detection_title" id="0x7f133478" />
 +    <public type="string" name="unica_ui_settings_title" id="0x7f133479" />
 +    <public type="string" name="unica_updates_title" id="0x7f13347a" />
-     <public type="string" name="unified_sales_setup_title" id="0x7f132c1d" />
-     <public type="string" name="uninstall" id="0x7f132c1e" />
-     <public type="string" name="uninstall_all_users_text" id="0x7f132c1f" />
-@@ -35051,6 +35091,7 @@
-     <public type="xml" name="tts_engine_picker" id="0x7f16023a" />
-     <public type="xml" name="tts_settings" id="0x7f16023b" />
-     <public type="xml" name="turn_screen_on_permissions_details" id="0x7f16023c" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
+     <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
+     <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
+@@ -35101,4 +35141,5 @@
+     <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026c" />
+     <public type="xml" name="zen_mode_settings" id="0x7f16026d" />
+     <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026e" />
 +    <public type="xml" name="unica_settings" id="0x7f16026f" />
-     <public type="xml" name="unrestricted_data_access_settings" id="0x7f16023d" />
-     <public type="xml" name="usb_default_fragment" id="0x7f16023e" />
-     <public type="xml" name="usb_details_fragment" id="0x7f16023f" />
+ </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
 index baacb818..22f2cc0c 100644
 --- a/res/values/strings.xml
