@@ -441,7 +441,6 @@ system/priv-app/SEMFactoryApp
 system/priv-app/SOAgent7
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungPass
-system/priv-app/SecFactoryPhoneTest
 system/priv-app/SmartEpdgTestApp
 system/priv-app/Upday
 "
