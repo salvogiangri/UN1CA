@@ -18,6 +18,8 @@
 
 # shellcheck disable=SC2001
 
+# CMD_HELP Prints the available module informations.
+
 set -Ee
 
 # [

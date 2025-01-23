@@ -16,6 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# CMD_HELP Available options (multiple can be accepted):
+# CMD_HELP  "all"
+# CMD_HELP  "odin"
+# CMD_HELP  "fw"
+# CMD_HELP  "apktool"
+# CMD_HELP  "work_dir"
+# CMD_HELP  "tools"
+
 set -eu
 
 ALL=false
