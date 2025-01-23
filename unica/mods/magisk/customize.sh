@@ -1,7 +1,7 @@
-SKIPUNZIP=1
+SKIPUNZIP=0
 
 # [
-MAGISK_MANAGER_APK="https://github.com/topjohnwu/magisk-files/raw/020c7134ff62000744480d03a8be5d8fbfdd226b/app-release.apk"
+MAGISK_MANAGER_APK="https://github.com/topjohnwu/Magisk/releases/download/v28.1/Magisk-v28.1.apk"
 
 PATCH_KERNEL()
 {
@@ -74,9 +74,7 @@ ADD_MANAGER_APK_TO_PRELOAD()
 }
 # ]
 
-if $TARGET_INCLUDE_MAGISK; then
-    PATCH_KERNEL
-    ADD_MANAGER_APK_TO_PRELOAD
-else
-    echo "TARGET_INCLUDE_MAGISK is not enabled. Ignoring"
-fi
+
+PATCH_KERNEL
+ADD_MANAGER_APK_TO_PRELOAD
+
