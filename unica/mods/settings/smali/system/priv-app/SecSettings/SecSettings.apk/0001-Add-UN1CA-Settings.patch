@@ -1,4 +1,4 @@
-From 4e3ac6fdb7eebc7473aa0710267b96ecb2904106 Mon Sep 17 00:00:00 2001
+From 36c24734141d391f4fc756b5a71fbc5d08c768d4 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -38,17 +38,18 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-vi/strings.xml                     |  31 +
  res/values/colors.xml                         |   1 +
  res/values/ids.xml                            |   1 +
- res/values/public.xml                         |  41 ++
- res/values/strings.xml                        |  34 ++
+ res/values/public.xml                         |  48 ++
+ res/values/strings.xml                        |  40 ++
  res/xml/meta_009_settings.xml                 |   1 +
  res/xml/sec_top_level_settings.xml            |   6 +
- res/xml/unica_settings.xml                    |  26 +
+ res/xml/unica_settings.xml                    |  28 +
+ res/xml/unica_settings_power_menu.xml         |  10 +
  .../com/android/settings/R$color.smali        |   2 +
  .../com/android/settings/R$drawable.smali     |   6 +
  .../com/android/settings/R$id.smali           |   2 +
  .../com/android/settings/R$layout.smali       |   2 +
- .../com/android/settings/R$string.smali       |  68 +++
- .../com/android/settings/R$xml.smali          |   2 +
+ .../com/android/settings/R$string.smali       |  80 +++
+ .../com/android/settings/R$xml.smali          |   4 +
  .../Settings$FOTASuggestionActivity.smali     |  33 +-
  .../core/gateway/SettingsGateway.smali        |   4 +-
  .../search/SearchIndexableResourcesBase.smali |  10 +
@@ -56,6 +57,8 @@ Subject: [PATCH] Add UN1CA Settings
  .../privacy/SecurityDashboardUtils.smali      |  15 +-
  .../ChoiDujourPreferenceController.smali      | 258 ++++++++
  .../unica/UnicaSettingsFragment.smali         | 247 ++++++++
+ .../UnicaSettingsPowerMenuFragment.smali      |  65 +++
+ ...ettingsPowerMenuPreferenceController.smali | 217 +++++++
  .../UnicaSettingsPreferenceController.smali   | 223 +++++++
  .../PIFUtils$$ExternalSyntheticLambda0.smali  |  46 ++
  .../PIFUtils$$ExternalSyntheticLambda1.smali  |  34 ++
@@ -76,14 +79,22 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 72 files changed, 5827 insertions(+), 17 deletions(-)
+ .../DataModePreferenceController.smali        | 205 +++++++
+ .../EmergencyCallPreferenceController.smali   | 205 +++++++
+ .../ForceRestartPreferenceController.smali    | 183 ++++++
+ .../MedicalInfoPreferenceController.smali     | 183 ++++++
+ .../SideKeyPreferenceController.smali         | 195 +++++++
+ 80 files changed, 7119 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
  create mode 100644 res/xml/unica_settings.xml
+ create mode 100644 res/xml/unica_settings_power_menu.xml
  create mode 100644 smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/ChoiDujourPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsFragment.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuFragment.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/pif/PIFUtils$$ExternalSyntheticLambda1.smali
@@ -104,6 +115,11 @@ Subject: [PATCH] Add UN1CA Settings
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/PIFVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali
  create mode 100644 smali_classes4/io/mesalabs/unica/settings/SecureScreenshotPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/powermenu/DataModePreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/powermenu/EmergencyCallPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/powermenu/ForceRestartPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/powermenu/MedicalInfoPreferenceController.smali
+ create mode 100644 smali_classes4/io/mesalabs/unica/settings/powermenu/SideKeyPreferenceController.smali
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
 index 1857f0a9..86fabbf3 100644
@@ -155,7 +171,7 @@ index 00000000..ecd901fe
 \ No newline at end of file
 diff --git a/res/layout/unica_settings_logo_layout.xml b/res/layout/unica_settings_logo_layout.xml
 new file mode 100644
-index 00000000..3f8b037f
+index 00000000..c7d1d159
 --- /dev/null
 +++ b/res/layout/unica_settings_logo_layout.xml
 @@ -0,0 +1,7 @@
@@ -166,7 +182,6 @@ index 00000000..3f8b037f
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_bg" android:scaleType="centerInside" />
 +    <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="65.0dip" android:src="@drawable/unica_logo_fg" android:scaleType="centerInside" app:tint="@color/unica_logo_accent" app:tintMode="src_in" />
 +</FrameLayout>
-\ No newline at end of file
 diff --git a/res/values-ar/strings.xml b/res/values-ar/strings.xml
 index b08b3a14..24a9bfc7 100644
 --- a/res/values-ar/strings.xml
@@ -1297,7 +1312,7 @@ index 936d1e6c..18d38c71 100644
 +    <item type="id" name="unica_logo_wp" />
  </resources>
 diff --git a/res/values/public.xml b/res/values/public.xml
-index a010f348..2e5da414 100644
+index a010f348..6b769061 100644
 --- a/res/values/public.xml
 +++ b/res/values/public.xml
 @@ -5173,6 +5173,7 @@
@@ -1334,7 +1349,7 @@ index a010f348..2e5da414 100644
      <public type="menu" name="accessibility_home_menu" id="0x7f0f0000" />
      <public type="menu" name="as_app_cache_clear_menu" id="0x7f0f0001" />
      <public type="menu" name="as_home_list_more_option_menu" id="0x7f0f0002" />
-@@ -32380,6 +32386,40 @@
+@@ -32380,6 +32386,46 @@
      <public type="string" name="zone_time_type_standard" id="0x7f133456" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code1" id="0x7f133457" />
      <public type="string" name="zzz_lgt_password_wrong_pin_code2" id="0x7f133458" />
@@ -1365,27 +1380,34 @@ index a010f348..2e5da414 100644
 +    <public type="string" name="unica_pif_up_to_date" id="0x7f133471" />
 +    <public type="string" name="unica_pif_updated" id="0x7f133472" />
 +    <public type="string" name="unica_pif_version_title" id="0x7f133473" />
-+    <public type="string" name="unica_rom_version_title" id="0x7f133474" />
-+    <public type="string" name="unica_secure_ss_title" id="0x7f133475" />
-+    <public type="string" name="unica_settings_title" id="0x7f133476" />
-+    <public type="string" name="unica_spoof_settings_title" id="0x7f133477" />
-+    <public type="string" name="unica_ss_detection_title" id="0x7f133478" />
-+    <public type="string" name="unica_ui_settings_title" id="0x7f133479" />
-+    <public type="string" name="unica_updates_title" id="0x7f13347a" />
++    <public type="string" name="unica_power_menu_data_mode_title" id="0x7f133474" />
++    <public type="string" name="unica_power_menu_emergency_call_title" id="0x7f133475" />
++    <public type="string" name="unica_power_menu_force_restart_title" id="0x7f133476" />
++    <public type="string" name="unica_power_menu_medical_info_title" id="0x7f133477" />
++    <public type="string" name="unica_power_menu_side_key_title" id="0x7f133478" />
++    <public type="string" name="unica_power_menu_title" id="0x7f133479" />
++    <public type="string" name="unica_rom_version_title" id="0x7f13347a" />
++    <public type="string" name="unica_secure_ss_title" id="0x7f13347b" />
++    <public type="string" name="unica_settings_title" id="0x7f13347c" />
++    <public type="string" name="unica_spoof_settings_title" id="0x7f13347d" />
++    <public type="string" name="unica_ss_detection_title" id="0x7f13347e" />
++    <public type="string" name="unica_ui_settings_title" id="0x7f13347f" />
++    <public type="string" name="unica_updates_title" id="0x7f133480" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarPreference" id="0x7f140000" />
      <public type="style" name="Accessibility.Preference.A11ySeekBarWithButtonsPreference" id="0x7f140001" />
      <public type="style" name="Accessibility.Preference.SingleChoicePreference" id="0x7f140002" />
-@@ -35101,4 +35141,5 @@
+@@ -35101,4 +35147,6 @@
      <public type="xml" name="zen_mode_schedule_rule_settings" id="0x7f16026c" />
      <public type="xml" name="zen_mode_settings" id="0x7f16026d" />
      <public type="xml" name="zen_mode_sound_vibration_settings" id="0x7f16026e" />
 +    <public type="xml" name="unica_settings" id="0x7f16026f" />
++    <public type="xml" name="unica_settings_power_menu" id="0x7f160270" />
  </resources>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index baacb818..22f2cc0c 100644
+index baacb818..13e7ee5f 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -14047,4 +14047,38 @@ In Camera, you can use the Top button to take pictures."</string>
+@@ -14047,4 +14047,44 @@ In Camera, you can use the Top button to take pictures."</string>
      <string name="zone_time_type_standard">Standard time</string>
      <string name="zzz_lgt_password_wrong_pin_code1">The PIN was entered incorrectly %d time.</string>
      <string name="zzz_lgt_password_wrong_pin_code2">After 3 incorrect PIN attempts, you have to enter the personal unlocking key (PUK).</string>
@@ -1416,6 +1438,12 @@ index baacb818..22f2cc0c 100644
 +    <string name="unica_pif_up_to_date">"You're running the latest version."</string>
 +    <string name="unica_pif_updated">Update completed successfully.</string>
 +    <string name="unica_pif_version_title">Play Integrity Fix version</string>
++    <string name="unica_power_menu_data_mode_title">Mobile data</string>
++    <string name="unica_power_menu_emergency_call_title">Emergency call</string>
++    <string name="unica_power_menu_force_restart_title">Show force restart suggestion text</string>
++    <string name="unica_power_menu_medical_info_title">Medical info</string>
++    <string name="unica_power_menu_side_key_title">Show \"Side button settings\" button</string>
++    <string name="unica_power_menu_title">Advanced power menu settings</string>
 +    <string name="unica_rom_version_title">ROM version</string>
 +    <string name="unica_secure_ss_title">Allow secure screenshot</string>
 +    <string name="unica_settings_title">UN1CA Settings</string>
@@ -1462,10 +1490,10 @@ index 94a8f486..456742a0 100644
          <intent android:targetPackage="@string/config_sec_toplevel_tips_package" android:targetClass="@string/config_sec_toplevel_tips_class">
 diff --git a/res/xml/unica_settings.xml b/res/xml/unica_settings.xml
 new file mode 100644
-index 00000000..c33fa6b5
+index 00000000..173d1ded
 --- /dev/null
 +++ b/res/xml/unica_settings.xml
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,28 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
 +  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
@@ -1480,6 +1508,8 @@ index 00000000..c33fa6b5
 +        <SecDropDownPreference android:title="@string/unica_fod_anim_type_title" android:key="unica_fod_anim_type" settings:controller="io.mesalabs.unica.settings.FODAnimationTypePreferenceController" settings:useSimpleSummaryProvider="true" />
 +        <SecSwitchPreference android:title="@string/unica_max_refresh_rate_title" android:key="unica_max_refresh_rate" settings:controller="io.mesalabs.unica.settings.ForceMaxRefreshRatePreferenceController" />
 +    </SecPreferenceCategory>
++    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
++    <SecPreference android:title="@string/unica_power_menu_title" android:key="unica_power_menu" android:fragment="io.mesalabs.unica.UnicaSettingsPowerMenuFragment" settings:controller="io.mesalabs.unica.UnicaSettingsPowerMenuPreferenceController" />
 +    <SecPreferenceCategory android:title="@string/unica_spoof_settings_title">
 +        <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.GamesPropsPreferenceController" />
 +        <SecSwitchPreference android:title="@string/unica_hide_dev_title" android:key="unica_hide_dev" settings:controller="io.mesalabs.unica.settings.HideDeveloperStatusPreferenceController" />
@@ -1492,7 +1522,22 @@ index 00000000..c33fa6b5
 +        <SecSwitchPreference android:title="@string/unica_ss_detection_title" android:key="unica_ss_detection" settings:controller="io.mesalabs.unica.settings.CaptureDetectionPreferenceController" />
 +    </SecPreferenceCategory>
 +</PreferenceScreen>
-\ No newline at end of file
+diff --git a/res/xml/unica_settings_power_menu.xml b/res/xml/unica_settings_power_menu.xml
+new file mode 100644
+index 00000000..9a697289
+--- /dev/null
++++ b/res/xml/unica_settings_power_menu.xml
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="utf-8"?>
++<PreferenceScreen android:title="@string/unica_power_menu_title" settings:hierarchicalParentFragment="io.mesalabs.unica.UnicaSettingsFragment" settings:topLevelPreferenceKey="unica_power_menu"
++  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
++    <SecSwitchPreference android:title="@string/unica_power_menu_data_mode_title" android:key="unica_power_menu_data" settings:controller="io.mesalabs.unica.settings.powermenu.DataModePreferenceController" />
++    <SecSwitchPreference android:title="@string/unica_power_menu_emergency_call_title" android:key="unica_power_menu_emergency" settings:controller="io.mesalabs.unica.settings.powermenu.EmergencyCallPreferenceController" />
++    <SecSwitchPreference android:title="@string/unica_power_menu_medical_info_title" android:key="unica_power_menu_medical" settings:controller="io.mesalabs.unica.settings.powermenu.MedicalInfoPreferenceController" />
++    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
++    <SecSwitchPreference android:title="@string/unica_power_menu_side_key_title" android:key="unica_power_menu_side" settings:controller="io.mesalabs.unica.settings.powermenu.SideKeyPreferenceController" />
++    <SecSwitchPreference android:title="@string/unica_power_menu_force_restart_title" android:key="unica_power_menu_forcerestart" settings:controller="io.mesalabs.unica.settings.powermenu.ForceRestartPreferenceController" />
++</PreferenceScreen>
 diff --git a/smali_classes2/com/android/settings/R$color.smali b/smali_classes2/com/android/settings/R$color.smali
 index d6f9a5cc..cda45c54 100644
 --- a/smali_classes2/com/android/settings/R$color.smali
@@ -1557,7 +1602,7 @@ index 5279deab..211ba597 100644
  
  .field public static final user_credential:I = 0x7f0d05f8
 diff --git a/smali_classes2/com/android/settings/R$string.smali b/smali_classes2/com/android/settings/R$string.smali
-index 43844dd6..88116de6 100644
+index 43844dd6..f9a23511 100644
 --- a/smali_classes2/com/android/settings/R$string.smali
 +++ b/smali_classes2/com/android/settings/R$string.smali
 @@ -4154,6 +4154,8 @@
@@ -1587,7 +1632,7 @@ index 43844dd6..88116de6 100644
  .field public static final menu_restore:I = 0x7f131605
  
  .field public static final menu_save:I = 0x7f131606
-@@ -10662,6 +10668,68 @@
+@@ -10662,6 +10668,80 @@
  
  .field public static final unable_to_change_usb_options_via_smart_switch:I = 0x7f132c1a
  
@@ -1639,32 +1684,46 @@ index 43844dd6..88116de6 100644
 +
 +.field public static final unica_pif_version_title:I = 0x7f133473
 +
-+.field public static final unica_rom_version_title:I = 0x7f133474
++.field public static final unica_power_menu_data_mode_title:I = 0x7f133474
 +
-+.field public static final unica_secure_ss_title:I = 0x7f133475
++.field public static final unica_power_menu_emergency_call_title:I = 0x7f133475
 +
-+.field public static final unica_settings_title:I = 0x7f133476
++.field public static final unica_power_menu_force_restart_title:I = 0x7f133476
 +
-+.field public static final unica_spoof_settings_title:I = 0x7f133477
++.field public static final unica_power_menu_medical_info_title:I = 0x7f133477
 +
-+.field public static final unica_ss_detection_title:I = 0x7f133478
++.field public static final unica_power_menu_side_key_title:I = 0x7f133478
 +
-+.field public static final unica_ui_settings_title:I = 0x7f133479
++.field public static final unica_power_menu_title:I = 0x7f133479
 +
-+.field public static final unica_updates_title:I = 0x7f13347a
++.field public static final unica_rom_version_title:I = 0x7f13347a
++
++.field public static final unica_secure_ss_title:I = 0x7f13347b
++
++.field public static final unica_settings_title:I = 0x7f13347c
++
++.field public static final unica_spoof_settings_title:I = 0x7f13347d
++
++.field public static final unica_ss_detection_title:I = 0x7f13347e
++
++.field public static final unica_ui_settings_title:I = 0x7f13347f
++
++.field public static final unica_updates_title:I = 0x7f133480
 +
  .field public static final uninstall:I = 0x7f132c1e
  
  .field public static final uninstall_all_users_text:I = 0x7f132c1f
 diff --git a/smali_classes2/com/android/settings/R$xml.smali b/smali_classes2/com/android/settings/R$xml.smali
-index 880e2f18..ab165942 100644
+index 880e2f18..db238269 100644
 --- a/smali_classes2/com/android/settings/R$xml.smali
 +++ b/smali_classes2/com/android/settings/R$xml.smali
-@@ -966,6 +966,8 @@
+@@ -966,6 +966,10 @@
  
  .field public static final turn_screen_on_permissions_details:I = 0x7f16023c
  
 +.field public static final unica_settings:I = 0x7f16026f
++
++.field public static final unica_settings_power_menu:I = 0x7f160270
 +
  .field public static final unrestricted_data_access_settings:I = 0x7f16023d
  
@@ -2315,6 +2374,300 @@ index 00000000..f3324de4
 +
 +    :cond_1
 +    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuFragment.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuFragment.smali
+new file mode 100644
+index 00000000..e163e6ad
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuFragment.smali
+@@ -0,0 +1,65 @@
++.class public Lio/mesalabs/unica/UnicaSettingsPowerMenuFragment;
++.super Lcom/android/settings/dashboard/DashboardFragment;
++.source "UnicaSettingsPowerMenuFragment.java"
++
++
++# static fields
++.field public static final SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++
++# direct methods
++.method public static constructor <clinit>()V
++    .locals 2
++
++    new-instance v0, Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    sget v1, Lcom/android/settings/R$xml;->unica_settings_power_menu:I
++
++    invoke-direct {v0, v1}, Lcom/android/settings/search/BaseSearchIndexProvider;-><init>(I)V
++
++    sput-object v0, Lio/mesalabs/unica/UnicaSettingsPowerMenuFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getLogTag()Ljava/lang/String;
++    .locals 0
++
++    const-string p0, "UnicaSettingsPowerMenuFragment"
++
++    return-object p0
++.end method
++
++.method public getMetricsCategory()I
++    .locals 0
++
++    const/16 p0, 0x2e9
++
++    return p0
++.end method
++
++.method public getPreferenceScreenResId()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$xml;->unica_settings_power_menu:I
++
++    return p0
++.end method
++
++.method public onCreate(Landroid/os/Bundle;)V
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
++
++    return-void
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuPreferenceController.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuPreferenceController.smali
+new file mode 100644
+index 00000000..6d64afe3
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/UnicaSettingsPowerMenuPreferenceController.smali
+@@ -0,0 +1,217 @@
++.class public final Lio/mesalabs/unica/UnicaSettingsPowerMenuPreferenceController;
++.super Lcom/android/settings/core/BasePreferenceController;
++.source "UnicaSettingsPowerMenuPreferenceController.kt"
++
++
++# static fields
++.field public static final $stable:I
++
++
++# direct methods
++.method public static constructor <clinit>()V
++    .locals 0
++
++    return-void
++.end method
++
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/BasePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getLaunchIntent()Landroid/content/Intent;
++    .locals 1
++
++    new-instance v0, Lcom/android/settings/core/SubSettingLauncher;
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-direct {v0, p0}, Lcom/android/settings/core/SubSettingLauncher;-><init>(Landroid/content/Context;)V
++
++    const-class p0, Lio/mesalabs/unica/UnicaSettingsPowerMenuFragment;
++
++    invoke-virtual {p0}, Ljava/lang/Class;->getName()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Lcom/android/settings/core/SubSettingLauncher;->setDestination(Ljava/lang/String;)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    sget v0, Lcom/android/settings/R$string;->unica_power_menu_title:I
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/SubSettingLauncher;->setTitleRes(I)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    const v0, 0x10008000
++
++    invoke-virtual {p0, v0}, Lcom/android/settings/core/SubSettingLauncher;->addFlags(I)Lcom/android/settings/core/SubSettingLauncher;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Lcom/android/settings/core/SubSettingLauncher;->toIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getSliceHighlightMenuRes()I
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getSliceHighlightMenuRes()I
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getValue()Lcom/samsung/android/settings/cube/ControlValue;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic isPublicSlice()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isPublicSlice()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic isSliceable()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->isSliceable()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->setValue(Lcom/samsung/android/settings/cube/ControlValue;)Lcom/samsung/android/settings/cube/ControlResult;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali b/smali_classes4/io/mesalabs/unica/UnicaSettingsPreferenceController.smali
 new file mode 100644
@@ -6603,6 +6956,1007 @@ index 00000000..b3500e39
 +    move-result-object p0
 +
 +    const-string v0, "unica_secure_ss"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/powermenu/DataModePreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/powermenu/DataModePreferenceController.smali
+new file mode 100644
+index 00000000..fa78d216
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/powermenu/DataModePreferenceController.smali
+@@ -0,0 +1,205 @@
++.class public Lio/mesalabs/unica/settings/powermenu/DataModePreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "DataModePreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    const-string v0, "phone"
++
++    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/telephony/TelephonyManager;
++
++    invoke-virtual {p0}, Landroid/telephony/TelephonyManager;->isDataCapable()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_0
++
++    const/4 p0, 0x0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x3
++
++    :goto_0
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_data"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x1
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_data"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/powermenu/EmergencyCallPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/powermenu/EmergencyCallPreferenceController.smali
+new file mode 100644
+index 00000000..ed94cac8
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/powermenu/EmergencyCallPreferenceController.smali
+@@ -0,0 +1,205 @@
++.class public Lio/mesalabs/unica/settings/powermenu/EmergencyCallPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "EmergencyCallPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    const-string v0, "phone"
++
++    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/telephony/TelephonyManager;
++
++    invoke-virtual {p0}, Landroid/telephony/TelephonyManager;->isVoiceCapable()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_0
++
++    const/4 p0, 0x0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x3
++
++    :goto_0
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_emergency"
++
++    const/4 v1, 0x1
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x0
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_emergency"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/powermenu/ForceRestartPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/powermenu/ForceRestartPreferenceController.smali
+new file mode 100644
+index 00000000..706c6dbc
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/powermenu/ForceRestartPreferenceController.smali
+@@ -0,0 +1,183 @@
++.class public Lio/mesalabs/unica/settings/powermenu/ForceRestartPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "ForceRestartPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_forcerestart"
++
++    const/4 v1, 0x0
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x1
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_forcerestart"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/powermenu/MedicalInfoPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/powermenu/MedicalInfoPreferenceController.smali
+new file mode 100644
+index 00000000..75bcde0b
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/powermenu/MedicalInfoPreferenceController.smali
+@@ -0,0 +1,183 @@
++.class public Lio/mesalabs/unica/settings/powermenu/MedicalInfoPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "MedicalInfoPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "lock_screen_medical_info_access"
++
++    const/4 v1, 0x1
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x0
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "lock_screen_medical_info_access"
++
++    invoke-static {p0, v0, p1}, Landroid/provider/Settings$Global;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic useDynamicSliceSummary()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->useDynamicSliceSummary()Z
++
++    move-result p0
++
++    return p0
++.end method
+diff --git a/smali_classes4/io/mesalabs/unica/settings/powermenu/SideKeyPreferenceController.smali b/smali_classes4/io/mesalabs/unica/settings/powermenu/SideKeyPreferenceController.smali
+new file mode 100644
+index 00000000..3697b1ad
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/powermenu/SideKeyPreferenceController.smali
+@@ -0,0 +1,195 @@
++.class public Lio/mesalabs/unica/settings/powermenu/SideKeyPreferenceController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "SideKeyPreferenceController.java"
++
++
++# direct methods
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .locals 0
++
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public getAvailabilityStatus()I
++    .locals 0
++
++    invoke-static {}, Lcom/samsung/android/settings/Rune;->supportFunctionKey()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_0
++
++    const/4 p0, 0x0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x3
++
++    :goto_0
++    return p0
++.end method
++
++.method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getBackgroundWorkerClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getBackupKeys()Ljava/util/List;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getBackupKeys()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getIntentFilter()Landroid/content/IntentFilter;
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->getIntentFilter()Landroid/content/IntentFilter;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getLaunchIntent()Landroid/content/Intent;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .locals 0
++
++    sget p0, Lcom/android/settings/R$string;->menu_key_unica_settings:I
++
++    return p0
++.end method
++
++.method public bridge synthetic getStatusText()Ljava/lang/String;
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->getStatusText()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic hasAsyncUpdate()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/android/settings/slices/Sliceable;->hasAsyncUpdate()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public bridge synthetic ignoreUserInteraction()V
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->ignoreUserInteraction()V
++
++    return-void
++.end method
++
++.method public isChecked()Z
++    .locals 2
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_side"
++
++    const/4 v1, 0x1
++
++    invoke-static {p0, v0, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v1, 0x0
++
++    :goto_0
++    return v1
++.end method
++
++.method public isControllable()Z
++    .locals 0
++
++    const/4 p0, 0x1
++
++    return p0
++.end method
++
++.method public bridge synthetic needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/samsung/android/settings/cube/Controllable;->needUserInteraction(Ljava/lang/Object;)Lcom/samsung/android/settings/cube/Controllable$ControllableType;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public bridge synthetic runDefaultAction()Z
++    .locals 0
++
++    invoke-super {p0}, Lcom/samsung/android/settings/cube/Controllable;->runDefaultAction()Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public setChecked(Z)Z
++    .locals 1
++
++    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "unica_power_menu_side"
 +
 +    invoke-static {p0, v0, p1}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
