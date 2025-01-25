@@ -32,10 +32,10 @@ DO_DEBLOAT()
         rm -rf "$FILE_PATH"
 
         FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
 
         FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
 

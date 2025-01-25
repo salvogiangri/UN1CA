@@ -18,6 +18,8 @@
 
 # shellcheck disable=SC2162
 
+# CMD_HELP Downloads the Firmware needed for selected device.
+
 set -e
 
 # [
@@ -27,24 +29,61 @@ GET_LATEST_FIRMWARE()
         | grep latest | sed 's/^[^>]*>//' | sed 's/<.*//'
 }
 
-DOWNLOAD_FIRMWARE()
-{
+DOWNLOAD_FIRMWARE() {
     local PDR
     PDR="$(pwd)"
 
-    cd "$ODIN_DIR"
-    { samfirm -m "$MODEL" -r "$REGION" -i "$IMEI" > /dev/null; } 2>&1 \
-        && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
-        || exit 1
-    [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && {
-        echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
-        echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
-        echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "CP*" -exec basename {} \; | cut -d "_" -f 2)"
-    } >> "$ODIN_DIR/${MODEL}_${REGION}/.downloaded"
+    cd "$ODIN_DIR" || { echo "Failed to enter ODIN_DIR: $ODIN_DIR"; exit 1; }
+
+    # Directory for firmware download
+    local TARGET_DIR="${ODIN_DIR}/${MODEL}_${REGION}"
+
+    # Ensure the target directory exists
+    if [ ! -d "$TARGET_DIR" ]; then
+        mkdir -p "$TARGET_DIR" || { echo "Failed to create directory: $TARGET_DIR"; exit 1; }
+    fi
+
+    # Determine whether to use -s or -i flag based on the length of $IMEI
+    local SAMLOADER_FLAG
+    if [ "${#IMEI}" -eq 11 ]; then
+        SAMLOADER_FLAG="-s $IMEI"
+    else
+        SAMLOADER_FLAG="-i $IMEI"
+    fi
+
+    # Run samloader and check for success
+    echo "Downloading firmware for $MODEL in region $REGION..."
+    if ! samloader -m "$MODEL" -r "$REGION" $SAMLOADER_FLAG download -O "$TARGET_DIR"; then
+        echo "Firmware download failed."
+        exit 1
+    fi
+
+    # Mark download as successful
+    touch "$TARGET_DIR/.downloaded"
+
+    # Find and unzip firmware zip
+    local ZIP_FILE
+    ZIP_FILE=$(find "$TARGET_DIR" -name "*.zip" | head -n 1)
+    if [ -f "$ZIP_FILE" ]; then
+        echo "Unzipping $ZIP_FILE..."
+        unzip -q "$ZIP_FILE" -d "$TARGET_DIR" || { echo "Failed to unzip $ZIP_FILE"; exit 1; }
+        rm "$ZIP_FILE"  # Optional: Remove the ZIP file after extracting
+    else
+        echo "No ZIP file found in $TARGET_DIR"
+        exit 1
+    fi
+
+    # Write firmware details to .downloaded file
+    {
+        echo -n "$(find "$TARGET_DIR" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
+        echo -n "$(find "$TARGET_DIR" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
+        echo -n "$(find "$TARGET_DIR" -name "CP*" -exec basename {} \; | cut -d "_" -f 2)"
+    } >> "$TARGET_DIR/.downloaded"
 
     echo ""
-    cd "$PDR"
+    cd "$PDR" || exit
 }
+
 
 FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
 IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"

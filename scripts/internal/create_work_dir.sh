@@ -80,8 +80,8 @@ COPY_SOURCE_FIRMWARE()
             mkdir "$WORK_DIR/system/system_ext"
             ln -s "/system_ext" "$WORK_DIR/system/system/system_ext"
             # Create system_ext filesystem configs file by extracting them from system config
-            grep 'system_ext' "$FW_DIR/${MODEL}_${REGION}/fs_config-system" | sed 's/^system\///' | sed '/system_ext 0 0 644 capabilities/d' | sed '/system_ext 0 0 755 capabilities/d' >> "$WORK_DIR/configs/fs_config-system_ext"
-            grep 'system_ext' "$FW_DIR/${MODEL}_${REGION}/file_context-system" | sed '/system_ext u:object_r:system_file:s0/d' | sed 's/^\/system//' >> "$WORK_DIR/configs/file_context-system_ext"
+            cat "$FW_DIR/${MODEL}_${REGION}/fs_config-system" | grep 'system_ext' | sed 's/^system\///' | sed '/system_ext 0 0 644 capabilities/d' | sed '/system_ext 0 0 755 capabilities/d' >> "$WORK_DIR/configs/fs_config-system_ext"
+            cat "$FW_DIR/${MODEL}_${REGION}/file_context-system" | grep 'system_ext' | sed '/system_ext u:object_r:system_file:s0/d' | sed 's/^\/system//' >> "$WORK_DIR/configs/file_context-system_ext"
             # Remove all old system_ext references in system
             sed -i '/system_ext/d' "$WORK_DIR/configs/fs_config-system"
             sed -i '/system_ext/d' "$WORK_DIR/configs/file_context-system"
