@@ -24,8 +24,6 @@ PATCH_KERNEL()
     unzip -q -j "$TMP_DIR/Magisk.apk" "lib/x86_64/libmagiskboot.so" -d "$TMP_DIR" \
         && mv -f "$TMP_DIR/libmagiskboot.so" "$TMP_DIR/magiskboot" \
         && chmod 755 "$TMP_DIR/magiskboot"
-    unzip -q -j "$TMP_DIR/Magisk.apk" "lib/armeabi-v7a/libmagisk32.so" -d "$TMP_DIR" \
-        && mv -f "$TMP_DIR/libmagisk32.so" "$TMP_DIR/magisk32"
     unzip -q -j "$TMP_DIR/Magisk.apk" "lib/arm64-v8a/libmagisk64.so" -d "$TMP_DIR" \
         && mv -f "$TMP_DIR/libmagisk64.so" "$TMP_DIR/magisk64"
     unzip -q -j "$TMP_DIR/Magisk.apk" "lib/arm64-v8a/libmagiskinit.so" -d "$TMP_DIR" \
@@ -73,8 +71,12 @@ ADD_MANAGER_APK_TO_PRELOAD()
     done <<< "$(find "$WORK_DIR/system/system/preload" -name "*.apk" | sort)"
 }
 # ]
+echo $MAGISK
+if $MAGISK = true; then
+    echo "MAGISK IS TRUE"
+    PATCH_KERNEL
+    ADD_MANAGER_APK_TO_PRELOAD
+fi
 
 
-#PATCH_KERNEL
-#ADD_MANAGER_APK_TO_PRELOAD
 

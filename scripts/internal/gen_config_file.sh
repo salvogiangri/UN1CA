@@ -52,6 +52,8 @@ GEN_CONFIG_FILE()
         echo "ROM_VERSION=\"${ROM_VERSION:?}\""
         echo "ROM_CODENAME=\"${ROM_CODENAME:?}\""
         echo "ROM_BUILD_TIMESTAMP=\"$(date '+%s')\""
+        echo "MAGISK=false"
+        echo "fdroid=false"
         echo "SOURCE_FIRMWARE=\"${SOURCE_FIRMWARE:?}\""
         if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
             echo "SOURCE_EXTRA_FIRMWARES=\"$( IFS=:; printf '%s' "${SOURCE_EXTRA_FIRMWARES[*]}" )\""

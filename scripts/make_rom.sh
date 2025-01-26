@@ -40,6 +40,12 @@ while [ "$#" != 0 ]; do
         "-f" | "--force")
             FORCE=true
             ;;
+        "--magisk")
+            MAGISK=true
+            ;;
+        "--fdroid")
+            fdroid=true
+            ;;
         "--no-rom-zip")
             if $BUILD_TAR; then
                 echo "TARGET_INSTALL_METHOD is \"odin\", ignoring --no-rom-zip"
