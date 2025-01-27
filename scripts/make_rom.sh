@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# CMD_HELP Executes series of commands. Downloads, extracts, patches and packages the Rom.
+
 set -Eeuo pipefail
 START=$SECONDS
 
@@ -37,6 +39,12 @@ while [ "$#" != 0 ]; do
     case "$1" in
         "-f" | "--force")
             FORCE=true
+            ;;
+        "--magisk")
+            MAGISK=true
+            ;;
+        "--fdroid")
+            fdroid=true
             ;;
         "--no-rom-zip")
             if $BUILD_TAR; then

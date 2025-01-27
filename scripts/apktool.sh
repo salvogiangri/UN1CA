@@ -16,6 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# CMD_HELP Usage: apktool d[ecode]/b[uild] <apk> (<apk>...)
+# CMD_HELP APK/JAR path MUST not be full and match an existing file inside work_dir
+# CMD_HELP Output files will be stored in ($APKTOOL_DIR)
+# CMD_HELP Recompiled apk will be copied back to its original directory
+
 set -eu
 shopt -s nullglob
 
@@ -42,55 +47,17 @@ REMOVE_FROM_WORK_DIR()
         rm -rf "$FILE_PATH"
 
         FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
+        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
 
         FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
+        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
-}
-
-DEX_TO_API()
-{
-    local DEX_FILE="$1"
-    local API
-    local DEX_VERSION
-
-    DEX_VERSION="$(xxd -p -l "1" --skip "6" "$DEX_FILE")"
-
-    case "$DEX_VERSION" in
-        "35")
-            API="23"
-            ;;
-        "37")
-            API="25"
-            ;;
-        "38")
-            API="27"
-            ;;
-        "39")
-            API="29"
-            ;;
-        "40")
-            API="34"
-            ;;
-        "41")
-            API="35"
-            ;;
-        *)
-            echo "Unknown DEX format version ($DEX_VERSION). Aborting"
-            exit 1
-            ;;
-    esac
-
-    echo "$API"
 }
 
 DO_DECOMPILE()
 {
     local OUT_DIR="$1"
     local APK_PATH
-    local DEX_API_LEVEL
-    local SMALI_OUT
 
     [[ "$OUT_DIR" != "/"* ]] && OUT_DIR="/$OUT_DIR"
 
@@ -134,21 +101,26 @@ DO_DECOMPILE()
         return 1
     fi
 
+    if [[ "$APK_PATH" == *".jar" ]]; then
+        API=( "-api" "$SOURCE_API_LEVEL" )
+    fi
+
     echo "Decompiling $OUT_DIR"
-    apktool -q d -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" -s "$APK_PATH"
+    apktool -q d "${API[@]}" -b $FORCE -o "$APKTOOL_DIR$OUT_DIR" -p "$FRAMEWORK_DIR" -s "$APK_PATH"
 
     for f in "$APKTOOL_DIR$OUT_DIR/"*.dex
     do
-        DEX_API_LEVEL="$(DEX_TO_API "$f")"
-        echo -n "$DEX_API_LEVEL" > "$APKTOOL_DIR$OUT_DIR/../dex_api_version"
+        API="34"
+        [[ "$(xxd -p -l "2" --skip "5" "$f")" == "3339" ]] && API="29"
+        printf "$API" > "$APKTOOL_DIR$OUT_DIR/../dex_api_version"
 
         if [[ "$f" == *"classes.dex" ]]; then
-            SMALI_OUT="smali"
+            DIR_NAME="smali"
         else
-            SMALI_OUT="smali_$(basename "${f//.dex/}")"
+            DIR_NAME="smali_$(basename ${f//.dex/})"
         fi
 
-        baksmali d -a "$DEX_API_LEVEL" --ac false --di false -l -o "$APKTOOL_DIR$OUT_DIR/$SMALI_OUT" --sl "$f"
+        baksmali d -a $API --ac false --di false -l -o "$APKTOOL_DIR$OUT_DIR/$DIR_NAME" --sl "$f"
         rm "$f"
     done
 
@@ -156,6 +128,9 @@ DO_DECOMPILE()
     if [[ "$APK_PATH" == *"framework.jar" ]]; then
         if unzip -l "$APK_PATH" | grep -q "debian.mime.types"; then
             unzip -q "$APK_PATH" "res/*" -d "$APKTOOL_DIR$OUT_DIR/unknown"
+            sed -i \
+                '/^doNotCompress/i \ \ res\/android.mime.types: 8\n\ \ res\/debian.mime.types: 8\n\ \ res\/vendor.mime.types: 8' \
+                "$APKTOOL_DIR$OUT_DIR/apktool.yml"
         fi
     fi
 }
@@ -164,8 +139,6 @@ DO_RECOMPILE()
 {
     local IN_DIR="$1"
     local APK_PATH
-    local APK_NAME
-    local DEX_FILENAME
     local CERT_PREFIX="aosp"
     $ROM_IS_OFFICIAL && CERT_PREFIX="unica"
 
@@ -208,6 +181,7 @@ DO_RECOMPILE()
         return 1
     fi
 
+    local APK_NAME
     APK_NAME="$(basename "$APK_PATH")"
 
     echo "Recompiling $IN_DIR"
@@ -216,13 +190,16 @@ DO_RECOMPILE()
     do
         [[ "$f" != *"smali"* ]] && continue
 
+        API="34"
+        [[ "$(cat "$APKTOOL_DIR$IN_DIR/../dex_api_version")" == "29" ]] && API="29"
+
         if [[ "$f" == *"smali" ]]; then
-            DEX_FILENAME="classes.dex"
+            DEX_FILE="classes.dex"
         else
-            DEX_FILENAME="$(basename "${f/smali_//}").dex"
+            DEX_FILE="$(basename ${f/smali_//}).dex"
         fi
 
-        smali a -a "$(cat "$APKTOOL_DIR$IN_DIR/../dex_api_version")" -o "$APKTOOL_DIR$IN_DIR/$DEX_FILENAME" "$f"
+        smali a -a $API -o "$APKTOOL_DIR$IN_DIR/$DEX_FILE" "$f"
     done
 
     mkdir -p "$APKTOOL_DIR$IN_DIR/build/apk"

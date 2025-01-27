@@ -23,10 +23,8 @@ shopt -s nullglob
 GENERATE_OTA_INFO()
 {
     local FILE="$1"
-    local BUILD_INFO
-
     unzip -p "$FILE" "build_info.txt" > /dev/null || return 1
-    BUILD_INFO="$(unzip -p "$FILE" "build_info.txt")"
+    local BUILD_INFO="$(unzip -p "$FILE" "build_info.txt")"
 
     {
         echo    '    {'

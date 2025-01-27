@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="34" android:compileSdkVersionCodename="14" package="io.mesalabs.unica.mainlinefix" platformBuildVersionCode="34" platformBuildVersionName="14">
-    <application android:extractNativeLibs="true" android:hasCode="false"/>
-    <overlay android:isStatic="true" android:priority="0" android:targetPackage="com.google.android.modulemetadata"/>
-</manifest>
