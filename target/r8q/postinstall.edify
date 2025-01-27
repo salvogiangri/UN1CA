@@ -1,6 +1,0 @@
-
-is_mounted("/prism") || mount("ext4", "EMMC", "/dev/block/bootdevice/by-name/prism", "/prism");
-run_program("/system/bin/test", "-e", "/prism/etc/carriers/single/TUR/default_application_order.xml") &&
-  run_program("/system/bin/sed", "-i", "s/SplashActivity\">/SplashActivity\" \/>/g", "/prism/etc/carriers/single/TUR/default_application_order.xml");
-is_mounted("/prism") && unmount("/prism");
-

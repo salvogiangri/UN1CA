@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="config_mainBuiltInDisplayCutout">M 0,0 M 0,12.25101276465640 a 10.60613009248640,10.60613009248640 0 1,0 0,21.21226018497290 a 10.60613009248640,10.60613009248640 0 1,0 0,-21.21226018497290 Z @dp</string>
-    <string name="config_mobile_hotspot_provision_app_no_ui">com.samsung.provisioning.SILENT_PROVISIONING_CHECK</string>
-    <string name="config_mobile_hotspot_provision_response">com.samsung.provisioning.SILENT_PROVISIONING_CHECK_RESULT</string>
-</resources>
