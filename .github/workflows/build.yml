@@ -20,24 +20,20 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
           tool-cache: true
-          
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
           android: true
           dotnet: true
           haskell: true
           large-packages: true
           docker-images: true
           swap-storage: true
+
       - name: Free disk space through docker
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          sudo docker image prune --all --force
-          sudo docker builder prune -a      
-      
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || echo "Directory not found, skipping..."
+          sudo docker image prune --all --force || echo "Docker image prune failed, skipping..."
+          sudo docker builder prune -a || echo "Docker builder prune failed, skipping..."
+
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
