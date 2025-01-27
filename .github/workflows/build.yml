@@ -17,6 +17,27 @@ jobs:
         target: [a52q, a52sxq, a52xq, a71, a72q, a73xq, b0q, dm1q, dm2q, dm3q, g0q, m52xq, r0q, r8q, r9q, r9q2]
 
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - name: Free disk space through docker
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a      
+      
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -26,6 +47,7 @@ jobs:
         uses: rokibhasansagar/slimhub_actions@main
         with:
           retain: 'compiler_cmake'
+
 
       - name: Set up build environment
         run: |
