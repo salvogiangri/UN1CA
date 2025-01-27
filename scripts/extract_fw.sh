@@ -269,7 +269,7 @@ do
     elif [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
         echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
         EXTRACT_ALL
-        rm -rf "$ODIN_DIR/${MODEL}_${REGION}
+        rm -rf "$ODIN_DIR/${MODEL}_${REGION}"
     else
         echo    "- $MODEL firmware with $REGION CSC is not downloaded."
         echo -e "  Please download the firmware first using the \"download_fw\" cmd\n"
