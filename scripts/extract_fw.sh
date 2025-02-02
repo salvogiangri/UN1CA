@@ -267,6 +267,9 @@ do
     elif [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
         echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
         EXTRACT_ALL
+        if [ -n "$GITHUB_ACTIONS" ]; then
+            rm -rf "$ODIN_DIR/${MODEL}_${REGION}"
+        fi
     else
         echo    "- $MODEL firmware with $REGION CSC is not downloaded."
         echo -e "  Please download the firmware first using the \"download_fw\" cmd\n"
