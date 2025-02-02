@@ -111,6 +111,21 @@ case "$1" in
         BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
             | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
         ;;
+    "target/dm1q/patches/china")
+        MODULE="$1"
+        FW="SM-S9110/TGY/RFCW2198XNF"
+        BLOBS="$(find "$SRC_DIR/target/dm1q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm1q/patches/china/vendor..")"
+        ;;
+    "target/dm2q/patches/china")
+        MODULE="$1"
+        FW="SM-S9160/TGY/R5CW22FT58F"
+        BLOBS="$(find "$SRC_DIR/target/dm2q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm2q/patches/china/vendor..")"
+        ;;
+    "target/dm3q/patches/china")
+        MODULE="$1"
+        FW="SM-S9180/TGY/R5CW613B3ME"
+        BLOBS="$(find "$SRC_DIR/target/dm3q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm3q/patches/china/vendor..")"
+        ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
         FW="SM-A528B/BTU/352599501234566"
