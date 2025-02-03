@@ -1,4 +1,4 @@
-From 85cc5362c9f8519d7d9da12f437392c2e93b196a Mon Sep 17 00:00:00 2001
+From a612ff3d0c5fa87feab0aea30704a8c820a8be25 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 11:09:04 +0200
 Subject: [PATCH] Introduce SamsungPropsHooks
@@ -8,8 +8,8 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
  .../android/provider/Settings$Global.smali    |   9 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 700 ++++++++++++++++++
- 5 files changed, 733 insertions(+)
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 716 ++++++++++++++++++
+ 5 files changed, 749 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
 diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/app/ApplicationPackageManager.smali
@@ -113,10 +113,10 @@ index e5f1ff86..f40ba8e1 100644
      invoke-virtual {v0, p0, p1, p2}, Landroid/provider/Settings$NameValueCache;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
 diff --git a/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 new file mode 100644
-index 00000000..ca82485c
+index 00000000..c501ba81
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,700 @@
+@@ -0,0 +1,716 @@
 +.class public final Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -138,6 +138,8 @@ index 00000000..ca82485c
 +.field private static final blacklist SAMSUNG_CLOUD_PLATFORM_MANAGER_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.scpm"
 +
 +.field private static final blacklist SAMSUNG_HEALTH_PACKAGE_NAME:Ljava/lang/String; = "com.sec.android.app.shealth"
++
++.field private static final blacklist SAMSUNG_TV_PLUS_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.tvplus"
 +
 +.field private static final blacklist SMART_VIEW_PACKAGE_NAME:Ljava/lang/String; = "com.samsung.android.smartmirroring"
 +
@@ -314,24 +316,9 @@ index 00000000..ca82485c
 +
 +    move-result p0
 +
-+    sput-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
++    if-nez p0, :cond_2
 +
-+    const-string p0, "com.sec.android.app.camera"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result p0
-+
-+    if-eqz p0, :cond_2
-+
-+    const-string p0, "USA"
-+
-+    sput-object p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofCountryCode:Ljava/lang/String;
-+
-+    goto :goto_2
-+
-+    :cond_2
-+    const-string p0, "com.samsung.android.app.routines"
++    const-string p0, "com.samsung.android.tvplus"
 +
 +    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -339,11 +326,40 @@ index 00000000..ca82485c
 +
 +    if-eqz p0, :cond_3
 +
++    :cond_2
++    move v2, v1
++
++    :cond_3
++    sput-boolean v2, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofKeystoreProp:Z
++
++    const-string p0, "com.sec.android.app.camera"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_4
++
++    const-string p0, "USA"
++
++    sput-object p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofCountryCode:Ljava/lang/String;
++
++    goto :goto_2
++
++    :cond_4
++    const-string p0, "com.samsung.android.app.routines"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_5
++
 +    const-string p0, "CHINA"
 +
 +    sput-object p0, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofCountryCode:Ljava/lang/String;
 +
-+    :cond_3
++    :cond_5
 +    :goto_2
 +    const-string p0, "com.sec.android.app.fm"
 +
@@ -353,7 +369,7 @@ index 00000000..ca82485c
 +
 +    const-string v2, "MODEL"
 +
-+    if-eqz p0, :cond_4
++    if-eqz p0, :cond_6
 +
 +    const-string p0, "SM-A526B"
 +
@@ -361,14 +377,14 @@ index 00000000..ca82485c
 +
 +    goto :goto_3
 +
-+    :cond_4
++    :cond_6
 +    const-string p0, "com.google.android.apps.photos"
 +
 +    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p0
 +
-+    if-eqz p0, :cond_5
++    if-eqz p0, :cond_7
 +
 +    sput-boolean v1, Lio/mesalabs/unica/SamsungPropsHooks;->sSpoofPixelXL:Z
 +
@@ -406,14 +422,14 @@ index 00000000..ca82485c
 +
 +    goto :goto_3
 +
-+    :cond_5
++    :cond_7
 +    const-string p0, "com.samsung.android.smartmirroring"
 +
 +    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p0
 +
-+    if-eqz p0, :cond_6
++    if-eqz p0, :cond_8
 +
 +    const-string p0, "TYPE"
 +
@@ -423,10 +439,10 @@ index 00000000..ca82485c
 +
 +    goto :goto_3
 +
-+    :cond_6
++    :cond_8
 +    sget-boolean p0, Lio/mesalabs/unica/SamsungPropsHooks;->sIsUserApp:Z
 +
-+    if-eqz p0, :cond_7
++    if-eqz p0, :cond_9
 +
 +    const-string p0, "com.sec"
 +
@@ -434,7 +450,7 @@ index 00000000..ca82485c
 +
 +    move-result p0
 +
-+    if-nez p0, :cond_7
++    if-nez p0, :cond_9
 +
 +    const-string p0, "com.samsung"
 +
@@ -442,7 +458,7 @@ index 00000000..ca82485c
 +
 +    move-result p0
 +
-+    if-nez p0, :cond_7
++    if-nez p0, :cond_9
 +
 +    const-string p0, "ro.boot.em.model"
 +
@@ -454,7 +470,7 @@ index 00000000..ca82485c
 +
 +    invoke-static {v2, p0}, Lio/mesalabs/unica/SamsungPropsHooks;->setBuildField(Ljava/lang/String;Ljava/lang/String;)V
 +
-+    :cond_7
++    :cond_9
 +    :goto_3
 +    return-void
 +.end method
@@ -818,5 +834,5 @@ index 00000000..ca82485c
 +    return-void
 +.end method
 -- 
-2.47.0
+2.48.1
 
