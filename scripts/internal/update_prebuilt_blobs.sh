@@ -200,6 +200,6 @@ for i in $BLOBS; do
     fi
 done
 
-cp --preserve=all "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" "$SRC_DIR/$MODULE/.current"
+cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/.extracted" "$SRC_DIR/$MODULE/.current"
 
 exit 0
