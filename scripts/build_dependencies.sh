@@ -54,6 +54,7 @@ BUILD_ANDROID_TOOLS()
         -DANDROID_TOOLS_USE_BUNDLED_FMT=ON \
         -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON \
         ..
+    git -C "../vendor/f2fs-tools" apply "$SRC_DIR/external/patches/android-tools/0001-Revert-f2fs-tools-give-6-sections-for-overprovision-.patch"
     make -j"$JOBS" --quiet
     find "vendor" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} "$TOOLS_DIR" \;
     cd ..

@@ -1,0 +1,63 @@
+From 562ea9bc565cafbf550c48bc660ecf3aa00b4ddc Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 11 Feb 2025 15:14:15 +0100
+Subject: [PATCH] Revert "f2fs-tools: give 6 sections for overprovision buffer"
+
+This reverts commit 5da4e5241503b385e4a7e75b1b2bb3367b38be96.
+---
+ include/f2fs_fs.h  | 8 +-------
+ mkfs/f2fs_format.c | 5 ++---
+ 2 files changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/include/f2fs_fs.h b/include/f2fs_fs.h
+index 870a6e4..fc56396 100644
+--- a/include/f2fs_fs.h
++++ b/include/f2fs_fs.h
+@@ -1775,12 +1775,6 @@ static inline uint32_t get_reserved(struct f2fs_super_block *sb, double ovp)
+ 	return round_up(reserved, segs_per_sec) * segs_per_sec;
+ }
+ 
+-static inline uint32_t overprovision_segment_buffer(struct f2fs_super_block *sb)
+-{
+-	/* Give 6 current sections to avoid huge GC overheads. */
+-	return 6 * get_sb(segs_per_sec);
+-}
+-
+ static inline double get_best_overprovision(struct f2fs_super_block *sb)
+ {
+ 	double ovp, candidate, end, diff, space;
+@@ -1804,7 +1798,7 @@ static inline double get_best_overprovision(struct f2fs_super_block *sb)
+ 		if (ovp < 0)
+ 			continue;
+ 		space = usable_main_segs - max((double)reserved, ovp) -
+-					overprovision_segment_buffer(sb);
++					2 * get_sb(segs_per_sec);
+ 		if (max_space < space) {
+ 			max_space = space;
+ 			max_ovp = candidate;
+diff --git a/mkfs/f2fs_format.c b/mkfs/f2fs_format.c
+index c9d335a..9e1b0d6 100644
+--- a/mkfs/f2fs_format.c
++++ b/mkfs/f2fs_format.c
+@@ -779,8 +779,7 @@ static int f2fs_write_check_point_pack(void)
+ 		 * In non configurable reserved section case, overprovision
+ 		 * segments are always bigger than two sections.
+ 		 */
+-		if (get_cp(overprov_segment_count) <
+-					overprovision_segment_buffer(sb)) {
++		if (get_cp(overprov_segment_count) < 2 * get_sb(segs_per_sec)) {
+ 			MSG(0, "\tError: Not enough overprovision segments (%u)\n",
+ 			    get_cp(overprov_segment_count));
+ 			goto free_cp_payload;
+@@ -789,7 +788,7 @@ static int f2fs_write_check_point_pack(void)
+ 				get_cp(rsvd_segment_count));
+ 	 } else {
+ 		set_cp(overprov_segment_count, get_cp(overprov_segment_count) +
+-				overprovision_segment_buffer(sb));
++				2 * get_sb(segs_per_sec));
+ 	 }
+ 
+ 	if (f2fs_get_usable_segments(sb) <= get_cp(overprov_segment_count)) {
+-- 
+2.48.1
+
