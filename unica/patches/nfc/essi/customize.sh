@@ -16,7 +16,7 @@ APPLY_PATCH()
     DECOMPILE "$1"
 
     cd "$APKTOOL_DIR/$1"
-    PATCH="$SRC_DIR/unica/patches/nfc/$2"
+    PATCH="$SRC_DIR/unica/patches/nfc/essi/$2"
     OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
         || echo "$OUT" | grep -q "Skipping patch" || false
     patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
@@ -197,7 +197,7 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libspictrl.so"
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
         REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SEMFactoryApp"
-        cp -a --preserve=all "$SRC_DIR/unica/patches/nfc/system/"* "$WORK_DIR/system/system"
+        cp -a --preserve=all "$SRC_DIR/unica/patches/nfc/essi/system/"* "$WORK_DIR/system/system"
         APPLY_PATCH "system/framework/framework.jar" "ese/framework.jar/0001-Disable-SemService.patch"
         APPLY_PATCH "system/framework/services.jar" "ese/services.jar/0001-Disable-SemService.patch"
     else
