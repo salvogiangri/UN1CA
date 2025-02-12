@@ -108,7 +108,7 @@ if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libuwb-cal.conf" ]; then
         fi
 
         if $TARGET_HAS_SYSTEM_EXT; then
-            cp -a --preserve=all "$SRC_DIR/unica/patches/uwb/system_ext/"* "$WORK_DIR/system_ext"
+            cp -a --preserve=all "$SRC_DIR/unica/patches/uwb/qssi/system_ext/"* "$WORK_DIR/system_ext"
             if ! grep -q "DckTimeSyncService" "$WORK_DIR/configs/file_context-system_ext"; then
                 {
                     echo "/system_ext/framework/org\.carconnectivity\.android\.digitalkey\.timesync\.jar u:object_r:system_file:s0"
@@ -124,7 +124,7 @@ if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libuwb-cal.conf" ]; then
                 } >> "$WORK_DIR/configs/fs_config-system_ext"
             fi
         else
-            cp -a --preserve=all "$SRC_DIR/unica/patches/uwb/system_ext/"* "$WORK_DIR/system/system/system_ext"
+            cp -a --preserve=all "$SRC_DIR/unica/patches/uwb/qssi/system_ext/"* "$WORK_DIR/system/system/system_ext"
             if ! grep -q "DckTimeSyncService" "$WORK_DIR/configs/file_context-system"; then
                 {
                     echo "/system/system_ext/framework/org\.carconnectivity\.android\.digitalkey\.timesync\.jar u:object_r:system_file:s0"
