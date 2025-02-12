@@ -171,8 +171,13 @@ export SOURCE_FIRMWARE="$FW"
 export TARGET_FIRMWARE="$FW"
 export SOURCE_EXTRA_FIRMWARES=""
 export TARGET_EXTRA_FIRMWARES=""
-bash "$SRC_DIR/scripts/download_fw.sh"
-bash "$SRC_DIR/scripts/extract_fw.sh"
+if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ] && [[ "$(GET_LATEST_FIRMWARE)" == "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
+    # Latest Firmware is already extracted, no need to download it again as user might have deleted it
+    true
+else
+    bash "$SRC_DIR/scripts/download_fw.sh"
+    bash "$SRC_DIR/scripts/extract_fw.sh"
+fi
 
 for i in $BLOBS; do
     if [[ "$i" == *"system_ext/apex/com.android.vndk.v"* ]]; then
