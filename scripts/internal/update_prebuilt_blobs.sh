@@ -150,6 +150,22 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/target/r8q/patches/vendor/system" -type f \
             | sed "s.$SRC_DIR/target/r8q/patches/vendor.system.")"
         ;;
+    "target/x1q/patches/stock_blobs")
+        MODULE="$1"
+        FW="SM-A525F/SER/352938771234569"
+        BLOBS="$(find "$SRC_DIR/target/x1q/patches/stock_blobs/product" -type f \
+            | sed "s.$SRC_DIR/target/x1q/patches/stock_blobs/product..")"
+        BLOBS+="$(find "$SRC_DIR/target/x1q/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/x1q/patches/stock_blobs.system.")"
+        BLOBS+="$(find "$SRC_DIR/target/x1q/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
+            | sed "s.$SRC_DIR/target/x1q/patches/stock_blobs.system/system.")"
+        ;;
+    "target/x1q/patches/vendor")
+        MODULE="$1"
+        FW="SM-G998U/TMB/354433592036409"
+        BLOBS="$(find "$SRC_DIR/target/x1q/patches/vendor/system" -type f \
+            | sed "s.$SRC_DIR/target/x1q/patches/vendor.system.")"
+        ;;
     *)
         echo "Unsupported path: $1"
         exit 1

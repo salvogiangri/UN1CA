@@ -1,0 +1,12 @@
+# Disable UFFD GC
+ro.dalvik.vm.enable_uffd_gc=false
+
+# Remove duplicated props
+bluetooth.profile.bap.unicast.client.enabled=
+bluetooth.profile.csip.set_coordinator.enabled=
+bluetooth.profile.mcp.server.enabled=
+bluetooth.profile.ccp.server.enabled=
+bluetooth.profile.vcp.controller.enabled=
+bluetooth.profile.bap.broadcast.assist.enabled=
+bluetooth.profile.bap.broadcast.source.enabled=
+ro.frp.pst=
