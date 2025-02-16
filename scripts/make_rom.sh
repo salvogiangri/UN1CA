@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# CMD_HELP Executes series of commands. Downloads, extracts, patches and packages the Rom.
+
 set -Eeuo pipefail
 START=$SECONDS
 
