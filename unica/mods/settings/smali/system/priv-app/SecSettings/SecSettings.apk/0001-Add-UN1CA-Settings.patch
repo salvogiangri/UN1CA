@@ -1,4 +1,4 @@
-From 4e3ac6fdb7eebc7473aa0710267b96ecb2904106 Mon Sep 17 00:00:00 2001
+From 7825af4a54080ab0d1483becb1caf22b147393e7 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 13 Sep 2024 01:59:43 +0200
 Subject: [PATCH] Add UN1CA Settings
@@ -20,7 +20,7 @@ Subject: [PATCH] Add UN1CA Settings
  res/values-en/strings.xml                     |  31 +
  res/values-es-rES/strings.xml                 |  31 +
  res/values-es-rUS/strings.xml                 |  31 +
- res/values-fa/strings.xml                     |  29 +
+ res/values-fa/strings.xml                     |  30 +
  res/values-fr/strings.xml                     |  31 +
  res/values-hu/strings.xml                     |  31 +
  res/values-in/strings.xml                     |  30 +
@@ -76,7 +76,7 @@ Subject: [PATCH] Add UN1CA Settings
  .../PIFVersionPreferenceController.smali      | 234 ++++++++
  .../ROMVersionPreferenceController.smali      | 266 +++++++++
  ...SecureScreenshotPreferenceController.smali | 183 ++++++
- 72 files changed, 5827 insertions(+), 17 deletions(-)
+ 72 files changed, 5828 insertions(+), 17 deletions(-)
  create mode 100644 res/drawable/sec_ic_settings_unica.xml
  create mode 100644 res/layout-night/unica_settings_logo_layout.xml
  create mode 100644 res/layout/unica_settings_logo_layout.xml
@@ -645,14 +645,15 @@ index d61ea872..6bfbc3d5 100644
 +    <string name="unica_updates_title">Actualizaciones de UN1CA</string>
  </resources>
 diff --git a/res/values-fa/strings.xml b/res/values-fa/strings.xml
-index f150b706..d536078a 100644
+index f150b706..4e76f3c7 100644
 --- a/res/values-fa/strings.xml
 +++ b/res/values-fa/strings.xml
-@@ -7427,4 +7427,33 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
+@@ -7427,4 +7427,34 @@ You will switch back to Wi-Fi Sharing when a Wi-Fi network becomes available."</
      <string name="zone_menu_by_region">انتخاب بر اساس منطقه</string>
      <string name="zone_time_type_dst">زمان ساعت تابستانی</string>
      <string name="zone_time_type_standard">زمان استاندارد</string>
 +    <string name="unica_allow_downgrade_title">اجازه نصب برنامه با نسخه پایین</string>
++    <string name="unica_allow_sdkbypass_title">رفع محدودیت نصب برنامه با SDK پایین</string>
 +    <string name="unica_asks_title">غیرفعال کردن ASKS</string>
 +    <string name="unica_boot_sound_title">پخش صدا هنگام روشن شدن</string>
 +    <string name="unica_device_name_title">نام دستگاه</string>
@@ -6621,5 +6622,5 @@ index 00000000..b3500e39
 +    return p0
 +.end method
 -- 
-2.48.0
+2.48.1
 
