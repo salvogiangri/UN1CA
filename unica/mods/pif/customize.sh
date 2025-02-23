@@ -37,6 +37,9 @@ sed -i 's/${ro.boot.warranty_bit}/0/g' "$WORK_DIR/system/system/etc/init/init.ri
     fi
     echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n sys.oem_unlock_allowed 0"
     echo ""
+    echo "on property:sys.unica.vbmeta.digest=*"
+    echo '    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.vbmeta.digest ${sys.unica.vbmeta.digest}'
+    echo ""
 } >> "$WORK_DIR/system/system/etc/init/hw/init.rc"
 
 LINES="$(sed -n "/^(allow init init_exec\b/=" "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil")"
