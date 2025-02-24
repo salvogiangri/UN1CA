@@ -1,12 +1,12 @@
-From 38ed8c7a089ba277bff11212b3bbdf95a0f1fee6 Mon Sep 17 00:00:00 2001
+From e324cd801f409f5ab92fdd324d43472def224d43 Mon Sep 17 00:00:00 2001
 From: BlackMesa123 <giangrecosalvo9@gmail.com>
 Date: Wed, 12 Jun 2024 16:50:22 +0200
 Subject: [PATCH] Introduce GamesPropsUtils
 
 ---
  smali/android/app/Instrumentation.smali       |    4 +
- .../io/mesalabs/unica/GamesPropsUtils.smali   | 1051 +++++++++++++++++
- 2 files changed, 1055 insertions(+)
+ .../io/mesalabs/unica/GamesPropsUtils.smali   | 1094 +++++++++++++++++
+ 2 files changed, 1098 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 
 diff --git a/smali/android/app/Instrumentation.smali b/smali/android/app/Instrumentation.smali
@@ -33,10 +33,10 @@ index 236e3ab4..e29afd3b 100644
  
 diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
 new file mode 100644
-index 00000000..2b3eb71e
+index 00000000..f54aa840
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali
-@@ -0,0 +1,1051 @@
+@@ -0,0 +1,1094 @@
 +.class public final Lio/mesalabs/unica/GamesPropsUtils;
 +.super Ljava/lang/Object;
 +.source "GamesPropsUtils.java"
@@ -75,7 +75,7 @@ index 00000000..2b3eb71e
 +
 +# direct methods
 +.method static constructor blacklist <clinit>()V
-+    .locals 11
++    .locals 14
 +
 +    new-instance v0, Ljava/util/HashMap;
 +
@@ -117,299 +117,329 @@ index 00000000..2b3eb71e
 +
 +    invoke-interface {v0, v4, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const/4 v3, 0x3
++    new-array v3, v2, [Ljava/lang/String;
++
++    const-string v5, "com.mobile.legends"
++
++    aput-object v5, v3, v6
++
++    invoke-interface {v1, v4, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI11TPProps()Ljava/util/Map;
++
++    move-result-object v3
++
++    const-string v4, "MI11TP"
++
++    invoke-interface {v0, v4, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const/4 v3, 0x4
 +
 +    new-array v5, v3, [Ljava/lang/String;
 +
-+    const-string v7, "com.dts.freefiremax"
++    const-string v7, "com.ea.gp.apexlegendsmobilefps"
 +
 +    aput-object v7, v5, v6
 +
-+    const-string v7, "com.dts.freefireth"
++    const-string v7, "com.levelinfinite.hotta.gp"
 +
 +    aput-object v7, v5, v2
 +
-+    const-string v7, "com.mobile.legends"
++    const-string v7, "com.supercell.clashofclans"
 +
 +    const/4 v8, 0x2
 +
 +    aput-object v7, v5, v8
 +
++    const-string v7, "com.vng.mlbbvn"
++
++    const/4 v9, 0x3
++
++    aput-object v7, v5, v9
++
 +    invoke-interface {v1, v4, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createiQ11Props()Ljava/util/Map;
-+
-+    move-result-object v4
-+
-+    const-string v5, "iQ11"
-+
-+    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const/4 v4, 0x4
-+
-+    new-array v7, v4, [Ljava/lang/String;
-+
-+    const-string v9, "com.tencent.KiHan"
-+
-+    aput-object v9, v7, v6
-+
-+    const-string v9, "com.tencent.tmgp.cf"
-+
-+    aput-object v9, v7, v2
-+
-+    const-string v9, "com.tencent.tmgp.cod"
-+
-+    aput-object v9, v7, v8
-+
-+    const-string v9, "com.tencent.tmgp.gnyx"
-+
-+    aput-object v9, v7, v3
-+
-+    invoke-interface {v1, v5, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI11TProps()Ljava/util/Map;
-+
-+    move-result-object v5
-+
-+    const-string v7, "MI11T"
-+
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const/4 v5, 0x5
-+
-+    new-array v9, v5, [Ljava/lang/String;
-+
-+    const-string v10, "com.ea.gp.apexlegendsmobilefps"
-+
-+    aput-object v10, v9, v6
-+
-+    const-string v10, "com.levelinfinite.hotta.gp"
-+
-+    aput-object v10, v9, v2
-+
-+    const-string v10, "com.supercell.brawlstars"
-+
-+    aput-object v10, v9, v8
-+
-+    const-string v10, "com.supercell.clashofclans"
-+
-+    aput-object v10, v9, v3
-+
-+    const-string v10, "com.vng.mlbbvn"
-+
-+    aput-object v10, v9, v4
-+
-+    invoke-interface {v1, v7, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createMI13PProps()Ljava/util/Map;
 +
-+    move-result-object v7
++    move-result-object v4
 +
-+    const-string v9, "MI13P"
++    const-string v5, "MI13P"
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v7, v8, [Ljava/lang/String;
++    new-array v4, v8, [Ljava/lang/String;
 +
-+    const-string v10, "com.levelinfinite.sgameGlobal"
++    const-string v7, "com.levelinfinite.sgameGlobal"
 +
-+    aput-object v10, v7, v6
++    aput-object v7, v4, v6
 +
-+    const-string v10, "com.tencent.tmgp.sgame"
++    const-string v7, "com.tencent.tmgp.sgame"
 +
-+    aput-object v10, v7, v2
++    aput-object v7, v4, v2
 +
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createNX729JProps()Ljava/util/Map;
-+
-+    move-result-object v7
-+
-+    const-string v9, "NX729J"
-+
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    new-array v7, v2, [Ljava/lang/String;
-+
-+    const-string v10, "com.YoStar.AetherGazer"
-+
-+    aput-object v10, v7, v6
-+
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP8PProps()Ljava/util/Map;
 +
-+    move-result-object v7
++    move-result-object v4
 +
-+    const-string v9, "OP8P"
++    const-string v5, "OP8P"
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v7, v4, [Ljava/lang/String;
++    new-array v4, v3, [Ljava/lang/String;
 +
-+    const-string v10, "com.netease.lztgglobal"
++    const-string v7, "com.netease.lztgglobal"
 +
-+    aput-object v10, v7, v6
++    aput-object v7, v4, v6
 +
-+    const-string v10, "com.riotgames.league.wildrift"
++    const-string v7, "com.riotgames.league.wildrift"
 +
-+    aput-object v10, v7, v2
++    aput-object v7, v4, v2
 +
-+    const-string v10, "com.riotgames.league.wildrifttw"
++    const-string v7, "com.riotgames.league.wildrifttw"
 +
-+    aput-object v10, v7, v8
++    aput-object v7, v4, v8
 +
-+    const-string v10, "com.riotgames.league.wildriftvn"
++    const-string v7, "com.riotgames.league.wildriftvn"
 +
-+    aput-object v10, v7, v3
++    aput-object v7, v4, v9
 +
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP9PProps()Ljava/util/Map;
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createOP9RProps()Ljava/util/Map;
 +
-+    move-result-object v7
++    move-result-object v4
 +
-+    const-string v9, "OP9P"
++    const-string v5, "OP9R"
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v7, v4, [Ljava/lang/String;
++    new-array v4, v9, [Ljava/lang/String;
 +
-+    const-string v10, "com.epicgames.fortnite"
++    const-string v7, "com.epicgames.fortnite"
 +
-+    aput-object v10, v7, v6
++    aput-object v7, v4, v6
 +
-+    const-string v10, "com.epicgames.portal"
++    const-string v7, "com.epicgames.portal"
 +
-+    aput-object v10, v7, v2
++    aput-object v7, v4, v2
 +
-+    const-string v10, "com.tencent.lolm"
++    const-string v7, "com.tencent.lolm"
 +
-+    aput-object v10, v7, v8
++    aput-object v7, v4, v8
 +
-+    const-string v10, "jp.konami.pesam"
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    aput-object v10, v7, v3
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createRM9PProps()Ljava/util/Map;
 +
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    move-result-object v4
 +
-+    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG3Props()Ljava/util/Map;
++    const-string v5, "RM9P"
 +
-+    move-result-object v7
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const-string v9, "ROG3"
++    const/16 v4, 0x10
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    new-array v4, v4, [Ljava/lang/String;
 +
-+    new-array v7, v3, [Ljava/lang/String;
++    const-string v7, "com.activision.callofduty.warzone"
 +
-+    const-string v10, "com.ea.gp.fifamobile"
++    aput-object v7, v4, v6
 +
-+    aput-object v10, v7, v6
++    const-string v7, "com.blitzteam.battleprime"
 +
-+    const-string v10, "com.pearlabyss.blackdesertm.gl"
++    aput-object v7, v4, v2
 +
-+    aput-object v10, v7, v2
++    const-string v7, "com.CarXTech.highWay"
 +
-+    const-string v10, "com.pearlabyss.blackdesertm"
++    aput-object v7, v4, v8
 +
-+    aput-object v10, v7, v8
++    const-string v7, "com.ea.game.nfs14_row"
 +
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    aput-object v7, v4, v9
++
++    const-string v7, "com.ea.games.r3_row"
++
++    aput-object v7, v4, v3
++
++    const-string v7, "com.gamedevltd.destinywarfare"
++
++    const/4 v10, 0x5
++
++    aput-object v7, v4, v10
++
++    const-string v7, "com.gameloft.android.ANMP.GloftA8HM"
++
++    const/4 v11, 0x6
++
++    aput-object v7, v4, v11
++
++    const-string v7, "com.mobilelegends.mi"
++
++    const/4 v12, 0x7
++
++    aput-object v7, v4, v12
++
++    const/16 v7, 0x8
++
++    const-string v13, "com.nekki.shadowfight3"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0x9
++
++    const-string v13, "com.nekki.shadowfight"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xa
++
++    const-string v13, "com.nekki.shadowfightarena"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xb
++
++    const-string v13, "com.netease.newspike"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xc
++
++    const-string v13, "com.pikpok.dr2.play"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xd
++
++    const-string v13, "com.pubg.newstate"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xe
++
++    const-string v13, "com.supercell.brawlstars"
++
++    aput-object v13, v4, v7
++
++    const/16 v7, 0xf
++
++    const-string v13, "com.supercell.squad"
++
++    aput-object v13, v4, v7
++
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG1Props()Ljava/util/Map;
++
++    move-result-object v4
++
++    const-string v5, "ROG1"
++
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    new-array v4, v8, [Ljava/lang/String;
++
++    const-string v7, "com.dts.freefiremax"
++
++    aput-object v7, v4, v6
++
++    const-string v7, "com.dts.freefireth"
++
++    aput-object v7, v4, v2
++
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createROG6Props()Ljava/util/Map;
 +
-+    move-result-object v7
++    move-result-object v4
 +
-+    const-string v9, "ROG6"
++    const-string v5, "ROG6"
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v7, v5, [Ljava/lang/String;
++    new-array v4, v10, [Ljava/lang/String;
 +
-+    const-string v10, "com.gameloft.android.ANMP.GloftA9HM"
++    const-string v7, "com.ea.gp.fifamobile"
 +
-+    aput-object v10, v7, v6
++    aput-object v7, v4, v6
 +
-+    const-string v10, "com.madfingergames.legends"
++    const-string v7, "com.gameloft.android.ANMP.GloftA9HM"
 +
-+    aput-object v10, v7, v2
++    aput-object v7, v4, v2
 +
-+    const-string v10, "com.riotgames.league.teamfighttactics"
++    const-string v7, "com.madfingergames.legends"
 +
-+    aput-object v10, v7, v8
++    aput-object v7, v4, v8
 +
-+    const-string v10, "com.riotgames.league.teamfighttacticstw"
++    const-string v7, "com.pearlabyss.blackdesertm.gl"
 +
-+    aput-object v10, v7, v3
++    aput-object v7, v4, v9
 +
-+    const-string v10, "com.riotgames.league.teamfighttacticsvn"
++    const-string v7, "com.pearlabyss.blackdesertm"
 +
-+    aput-object v10, v7, v4
++    aput-object v7, v4, v3
 +
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createS24UProps()Ljava/util/Map;
 +
-+    move-result-object v7
++    move-result-object v4
 +
-+    const-string v9, "SM-S928B"
++    const-string v5, "SM-S928B"
 +
-+    invoke-interface {v0, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    const/4 v7, 0x7
++    new-array v4, v12, [Ljava/lang/String;
 +
-+    new-array v7, v7, [Ljava/lang/String;
++    const-string v7, "com.blizzard.diablo.immortal"
 +
-+    const-string v10, "com.blizzard.diablo.immortal"
++    aput-object v7, v4, v6
 +
-+    aput-object v10, v7, v6
++    const-string v7, "com.pubg.imobile"
 +
-+    const-string v10, "com.pubg.imobile"
++    aput-object v7, v4, v2
 +
-+    aput-object v10, v7, v2
++    const-string v7, "com.pubg.krmobile"
 +
-+    const-string v10, "com.pubg.krmobile"
++    aput-object v7, v4, v8
 +
-+    aput-object v10, v7, v8
++    const-string v7, "com.rekoo.pubgm"
 +
-+    const-string v10, "com.rekoo.pubgm"
++    aput-object v7, v4, v9
 +
-+    aput-object v10, v7, v3
++    const-string v7, "com.tencent.ig"
 +
-+    const-string v10, "com.tencent.ig"
++    aput-object v7, v4, v3
 +
-+    aput-object v10, v7, v4
++    const-string v7, "com.tencent.tmgp.pubgmhd"
 +
-+    const-string v10, "com.tencent.tmgp.pubgmhd"
++    aput-object v7, v4, v10
 +
-+    aput-object v10, v7, v5
++    const-string v7, "com.vng.pubgmobile"
 +
-+    const/4 v5, 0x6
++    aput-object v7, v4, v11
 +
-+    const-string v10, "com.vng.pubgmobile"
-+
-+    aput-object v10, v7, v5
-+
-+    invoke-interface {v1, v9, v7}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    invoke-static {}, Lio/mesalabs/unica/GamesPropsUtils;->createLenovoY700Props()Ljava/util/Map;
 +
-+    move-result-object v5
++    move-result-object v4
 +
-+    const-string v7, "LenovoY700"
++    const-string v5, "LenovoY700"
 +
-+    invoke-interface {v0, v7, v5}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v5, v4}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
-+    new-array v0, v4, [Ljava/lang/String;
++    new-array v0, v3, [Ljava/lang/String;
 +
-+    const-string v4, "com.activision.callofduty.shooter"
++    const-string v3, "com.activision.callofduty.shooter"
 +
-+    aput-object v4, v0, v6
++    aput-object v3, v0, v6
 +
-+    const-string v4, "com.garena.game.codm"
++    const-string v3, "com.garena.game.codm"
 +
-+    aput-object v4, v0, v2
++    aput-object v3, v0, v2
 +
 +    const-string v2, "com.tencent.tmgp.kr.codm"
 +
@@ -417,9 +447,9 @@ index 00000000..2b3eb71e
 +
 +    const-string v2, "com.vng.codmvn"
 +
-+    aput-object v2, v0, v3
++    aput-object v2, v0, v9
 +
-+    invoke-interface {v1, v7, v0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1, v5, v0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-void
 +.end method
@@ -433,7 +463,7 @@ index 00000000..2b3eb71e
 +.end method
 +
 +.method private static blacklist createBS4Props()Ljava/util/Map;
-+    .locals 3
++    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "()",
@@ -453,6 +483,12 @@ index 00000000..2b3eb71e
 +    const-string v2, "blackshark"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "penrose"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "MANUFACTURER"
 +
@@ -485,11 +521,19 @@ index 00000000..2b3eb71e
 +
 +    const-string v1, "BRAND"
 +
-+    const-string v2, "Xiaomi"
++    const-string v2, "POCO"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v2, "marble"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "MANUFACTURER"
++
++    const-string v2, "Xiaomi"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -503,7 +547,7 @@ index 00000000..2b3eb71e
 +.end method
 +
 +.method private static blacklist createLenovoY700Props()Ljava/util/Map;
-+    .locals 3
++    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "()",
@@ -524,6 +568,12 @@ index 00000000..2b3eb71e
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
++    const-string v1, "DEVICE"
++
++    const-string v3, "TB-9707F"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
 +    const-string v1, "MANUFACTURER"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -537,77 +587,7 @@ index 00000000..2b3eb71e
 +    return-object v0
 +.end method
 +
-+.method private static blacklist createMI11TProps()Ljava/util/Map;
-+    .locals 3
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "()",
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+
-+    new-instance v0, Ljava/util/HashMap;
-+
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
-+
-+    const-string v1, "BRAND"
-+
-+    const-string v2, "Xiaomi"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MANUFACTURER"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MODEL"
-+
-+    const-string v2, "21081111RG"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    return-object v0
-+.end method
-+
-+.method private static blacklist createMI13PProps()Ljava/util/Map;
-+    .locals 3
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "()",
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+
-+    new-instance v0, Ljava/util/HashMap;
-+
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
-+
-+    const-string v1, "BRAND"
-+
-+    const-string v2, "Xiaomi"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MANUFACTURER"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MODEL"
-+
-+    const-string v2, "2210132C"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    return-object v0
-+.end method
-+
-+.method private static blacklist createNX729JProps()Ljava/util/Map;
++.method private static blacklist createMI11TPProps()Ljava/util/Map;
 +    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
@@ -625,13 +605,13 @@ index 00000000..2b3eb71e
 +
 +    const-string v1, "BRAND"
 +
-+    const-string v2, "nubia"
++    const-string v2, "Xiaomi"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "DEVICE"
 +
-+    const-string v3, "NX729J"
++    const-string v3, "vili"
 +
 +    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -641,7 +621,50 @@ index 00000000..2b3eb71e
 +
 +    const-string v1, "MODEL"
 +
++    const-string v2, "2107113SI"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createMI13PProps()Ljava/util/Map;
++    .locals 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "Xiaomi"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "nuwa"
++
 +    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    const-string v2, "2210132C"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-object v0
 +.end method
@@ -687,7 +710,7 @@ index 00000000..2b3eb71e
 +    return-object v0
 +.end method
 +
-+.method private static blacklist createOP9PProps()Ljava/util/Map;
++.method private static blacklist createOP9RProps()Ljava/util/Map;
 +    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
@@ -711,7 +734,7 @@ index 00000000..2b3eb71e
 +
 +    const-string v1, "DEVICE"
 +
-+    const-string v3, "OnePlus9Pro"
++    const-string v3, "OnePlus9R"
 +
 +    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -728,8 +751,47 @@ index 00000000..2b3eb71e
 +    return-object v0
 +.end method
 +
-+.method private static blacklist createROG3Props()Ljava/util/Map;
-+    .locals 3
++.method private static blacklist createRM9PProps()Ljava/util/Map;
++    .locals 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()",
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++
++    new-instance v0, Ljava/util/HashMap;
++
++    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++
++    const-string v1, "BRAND"
++
++    const-string v2, "nubia"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "DEVICE"
++
++    const-string v3, "NX769J"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MANUFACTURER"
++
++    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    const-string v1, "MODEL"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    return-object v0
++.end method
++
++.method private static blacklist createROG1Props()Ljava/util/Map;
++    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "()",
@@ -750,13 +812,19 @@ index 00000000..2b3eb71e
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
++    const-string v1, "DEVICE"
++
++    const-string v3, "ASUS_Z01QD_1"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
 +    const-string v1, "MANUFACTURER"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "MODEL"
 +
-+    const-string v2, "ASUS_I003D"
++    const-string v2, "ASUS_Z01QD"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -764,7 +832,7 @@ index 00000000..2b3eb71e
 +.end method
 +
 +.method private static blacklist createROG6Props()Ljava/util/Map;
-+    .locals 3
++    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "()",
@@ -785,21 +853,25 @@ index 00000000..2b3eb71e
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
++    const-string v1, "DEVICE"
++
++    const-string v3, "ASUS_AI2201"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
 +    const-string v1, "MANUFACTURER"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    const-string v1, "MODEL"
 +
-+    const-string v2, "ASUS_AI2201"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    return-object v0
 +.end method
 +
 +.method private static blacklist createS24UProps()Ljava/util/Map;
-+    .locals 3
++    .locals 4
 +    .annotation system Ldalvik/annotation/Signature;
 +        value = {
 +            "()",
@@ -820,6 +892,12 @@ index 00000000..2b3eb71e
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
++    const-string v1, "DEVICE"
++
++    const-string v3, "e3q"
++
++    invoke-interface {v0, v1, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
 +    const-string v1, "MANUFACTURER"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -827,41 +905,6 @@ index 00000000..2b3eb71e
 +    const-string v1, "MODEL"
 +
 +    const-string v2, "SM-S928B"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    return-object v0
-+.end method
-+
-+.method private static blacklist createiQ11Props()Ljava/util/Map;
-+    .locals 3
-+    .annotation system Ldalvik/annotation/Signature;
-+        value = {
-+            "()",
-+            "Ljava/util/Map<",
-+            "Ljava/lang/String;",
-+            "Ljava/lang/Object;",
-+            ">;"
-+        }
-+    .end annotation
-+
-+    new-instance v0, Ljava/util/HashMap;
-+
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
-+
-+    const-string v1, "BRAND"
-+
-+    const-string v2, "vivo"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MANUFACTURER"
-+
-+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    const-string v1, "MODEL"
-+
-+    const-string v2, "V2243A"
 +
 +    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
