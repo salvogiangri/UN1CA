@@ -1,0 +1,30 @@
+on early-init
+
+# KOR variant
+on fs && property:ro.boot.em.model=SM-S901N
+    mount none /vendor/firmware/kor/bin/adpl /vendor/bin/adpl bind
+    mount none /vendor/firmware/kor/bin/hw/rild /vendor/bin/hw/rild bind
+    mount none /vendor/firmware/kor/bin/ipacm-diag /vendor/bin/ipacm-diag bind
+    mount none /vendor/firmware/kor/bin/rmt_storage /vendor/bin/rmt_storage bind
+    mount none /vendor/firmware/kor/bin/tftp_server /vendor/bin/tftp_server bind
+    mount none /vendor/firmware/kor/lib/libconfigdb.so /vendor/lib/libconfigdb.so bind
+    mount none /vendor/firmware/kor/lib/libqcmaputils.so /vendor/lib/libqcmaputils.so bind
+    mount none /vendor/firmware/kor/lib/libqrtr.so /vendor/lib/libqrtr.so bind
+    mount none /vendor/firmware/kor/lib/libsecril-client.so /vendor/lib/libsecril.so bind
+    mount none /vendor/firmware/kor/lib/libsystem_health_mon.so /vendor/lib/libsystem_health_mon.so bind
+    mount none /vendor/firmware/kor/lib/libxml.so /vendor/lib/libxml.so bind
+    mount none /vendor/firmware/kor/lib64/libconfigdb.so /vendor/lib64/libconfigdb.so bind
+    mount none /vendor/firmware/kor/lib64/libengmode_client.so /vendor/lib64/libengmode_client.so bind
+    mount none /vendor/firmware/kor/lib64/libqcmaputils.so /vendor/lib64/libqcmaputils.so bind
+    mount none /vendor/firmware/kor/lib64/libqrtr.so /vendor/lib64/libqrtr.so bind
+    mount none /vendor/firmware/kor/lib64/libril_sem.so /vendor/lib64/libril_sem.so bind
+    mount none /vendor/firmware/kor/lib64/libsec-ril.so /vendor/lib64/libsec-ril.so bind
+    mount none /vendor/firmware/kor/lib64/libsecril-client.so /vendor/lib64/libsecril-client.so bind
+    mount none /vendor/firmware/kor/lib64/libSemDataProps.so /vendor/lib64/libSemDataProps.so bind
+    mount none /vendor/firmware/kor/lib64/libSemTelephonyProps.so /vendor/lib64/libSemTelephonyProps.so bind
+    mount none /vendor/firmware/kor/lib64/libsystem_health_mon.so /vendor/lib64/libsystem_health_mon.so bind
+    mount none /vendor/firmware/kor/lib64/libvkmanager_vendor.so /vendor/lib64/libvkmanager_vendor.so bind
+    mount none /vendor/firmware/kor/lib64/libxml.so /vendor/lib64/libxml.so bind
+    mount none /vendor/firmware/kor/lib64/vendor.samsung.hardware.radio.bridge@2.0.so /vendor/lib64/vendor.samsung.hardware.radio.bridge@2.0.so bind
+    mount none /vendor/firmware/kor/lib64/vendor.samsung.hardware.radio.bridge@2.1.so /vendor/lib64/vendor.samsung.hardware.radio.bridge@2.1.so bind
+    mount none /vendor/firmware/kor/lib64/vendor.samsung.hardware.radio.channel@2.0.so /vendor/lib64/vendor.samsung.hardware.radio.channel@2.0.so bind
