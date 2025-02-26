@@ -1,6 +1,8 @@
 SKIPUNZIP=1
 
-cp -a --preserve=all "$SRC_DIR/target/$TARGET_CODENAME/patches/china/vendor/"* "$WORK_DIR/odm"
+mkdir -p "$WORK_DIR/odm/firmware"
+cp -a --preserve=all "$SRC_DIR/target/$TARGET_CODENAME/patches/china/vendor/etc/init/hw/"* "$WORK_DIR/vendor/etc/init/hw"
+cp -a --preserve=all "$SRC_DIR/target/$TARGET_CODENAME/patches/china/vendor/firmware/"* "$WORK_DIR/odm/firmware"
 if ! grep -q "firmware" "$WORK_DIR/configs/file_context-odm"; then
     {
         echo "/odm/firmware u:object_r:vendor_firmware_file:s0"
@@ -30,4 +32,22 @@ if ! grep -q "firmware" "$WORK_DIR/configs/fs_config-odm"; then
         echo "odm/firmware/evass.mdt 0 0 644 capabilities=0x0"
         echo "odm/firmware/vpu30_4v.mbn 0 0 644 capabilities=0x0"
     } >> "$WORK_DIR/configs/fs_config-odm"
+fi
+if ! grep -q "samsung\\\.firmware" "$WORK_DIR/configs/file_context-vendor"; then
+    {
+        echo "/vendor/etc/init/hw/init\.samsung\.firmware\.rc u:object_r:vendor_configs_file:s0"
+    } >> "$WORK_DIR/configs/file_context-vendor"
+fi
+if ! grep -q "samsung.firmware" "$WORK_DIR/configs/fs_config-vendor"; then
+    {
+        echo "vendor/etc/init/hw/init.samsung.firmware.rc 0 0 644 capabilities=0x0"
+    } >> "$WORK_DIR/configs/fs_config-vendor"
+fi
+
+if ! grep -q "samsung.firmware" "$WORK_DIR/vendor/etc/init/hw/init.samsung.rc"; then
+    sed -i "/samsung.connector/a import /vendor/etc/init/hw/init.samsung.firmware.rc" "$WORK_DIR/vendor/etc/init/hw/init.samsung.rc"
+fi
+
+if ! grep -q "vendor_firmware_file (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+    echo "(allow init_33_0 vendor_firmware_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
 fi

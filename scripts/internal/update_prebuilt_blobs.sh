@@ -114,17 +114,17 @@ case "$1" in
     "target/dm1q/patches/china")
         MODULE="$1"
         FW="SM-S9110/TGY/RFCW2198XNF"
-        BLOBS="$(find "$SRC_DIR/target/dm1q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm1q/patches/china/..")"
+        BLOBS="$(find "$SRC_DIR/target/dm1q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm1q/patches/china/..")"
         ;;
     "target/dm2q/patches/china")
         MODULE="$1"
         FW="SM-S9160/TGY/R5CW22FT58F"
-        BLOBS="$(find "$SRC_DIR/target/dm2q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm2q/patches/china/..")"
+        BLOBS="$(find "$SRC_DIR/target/dm2q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm2q/patches/china/..")"
         ;;
     "target/dm3q/patches/china")
         MODULE="$1"
         FW="SM-S9180/TGY/R5CW613B3ME"
-        BLOBS="$(find "$SRC_DIR/target/dm3q/patches/china/vendor" -type f | sed "s.$SRC_DIR/target/dm3q/patches/china/..")"
+        BLOBS="$(find "$SRC_DIR/target/dm3q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm3q/patches/china/..")"
         ;;
     "target/m52xq/patches/stock_blobs")
         MODULE="$1"
