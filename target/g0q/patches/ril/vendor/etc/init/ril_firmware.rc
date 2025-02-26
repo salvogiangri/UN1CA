@@ -1,0 +1,8 @@
+on early-init
+
+# KOR variant
+on fs && property:ro.boot.em.model=SM-S906N
+    mount none /vendor/firmware/kor/libril_sem.so /vendor/lib64/libril_sem.so bind
+    mount none /vendor/firmware/kor/libsec-ril.so /vendor/lib64/libsec-ril.so bind
+    mount none /vendor/firmware/kor/rild /vendor/bin/hw/rild bind
+    mount none /vendor/firmware/kor/secril_config_svc /vendor/bin/secril_config_svc bind
