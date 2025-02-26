@@ -1,0 +1,17 @@
+service vendor.nfc_hal_service /vendor/bin/hw/nxp.android.hardware.nfc@1.2-service
+    disabled
+    class hal
+    user nfc
+    group nfc net_bt_admin
+
+service nfc_hal_service /vendor/bin/hw/sec.android.hardware.nfc@1.2-service
+    disabled
+    class hal
+    user nfc
+    group nfc net_bt_admin
+
+on property:ro.boot.nfc.feature.chipname=NXP_SN100U
+    start vendor.nfc_hal_service
+
+on property:ro.boot.nfc.feature.chipname=SENN82AB
+    start nfc_hal_service

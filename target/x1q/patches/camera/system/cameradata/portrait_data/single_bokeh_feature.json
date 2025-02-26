@@ -1,0 +1,71 @@
+{
+    "deviceName": "SM8250_common",
+
+    "HumanAwareEngine": {
+        "Perf_mode_preview": "PERFMODE_LOW",
+        "Perf_mode_capture": "PERFMODE_LOW",
+        "Perf_mode_SDK": "PERFMODE_LOW",
+        "bloom_ev_tuning": "false"
+    },
+
+    "BeautyEngine": {
+        "mode_preview": "BEAUTY_SINGLEBLUR_PREVIEW",
+        "mode_capture": "BEAUTY_SINGLEBLUR_CAPTURE"
+    },
+
+    "RelightingEngine": {
+        "mode_preview": "v2",
+        "mode_capture": "v2",
+        "loc_preview": "vendor",
+        "loc_capture": "vendor"
+    },
+
+    "LD_FD_engine": {
+        "mode_preview": "default",
+        "mode_capture": "default"
+    },
+    
+    "capture_segmentation": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_Acenet_FP16_V008.snf",
+        "Version": "008",
+        "ComputeUnit": "COMPUTE_GPU",
+        "ExecutionDataType": "FLOAT16",
+        "ModelType": "MODEL_TYPE_OBJ_INSTANCE_CAPTURE",
+        "ModelFormat": "SNF",
+        "Encryption": "false",
+        "input_size": [[416, 416], [416, 416], [416, 416], [416, 416]]
+    },
+    "capture_depth": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_SID_FP16_V014.caffemodel",
+        "Version": "014",
+        "ComputeUnit": "COMPUTE_GPU",
+        "ExecutionDataType": "FLOAT16",
+        "ModelType": "MODEL_TYPE_DEPTH",
+        "ModelFormat": "CAFFE",
+        "Encryption": "true",
+        "input_size": [[480, 480], [544, 416], [640, 352], [704, 320]]
+    },
+    "capture_matting": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_Matting_INT8_V005.dlc",
+        "Version": "005",
+        "ComputeUnit": "COMPUTE_DSP",
+        "ExecutionDataType": "QASYMM8",
+        "ModelType": "MODEL_TYPE_MATTING",
+        "ModelFormat": "SNPE",
+        "Encryption": "false",
+        "input_size": [[800, 800], [800, 800], [800, 800], [800, 800]]
+    },
+    "preview_1st_segmentation": {
+        "Weightfile": "/system/cameradata/portrait_data/SRIB_HumanSegVideoLite_INT8_V101_sm8250_snpe1395.dlc",
+        "Version": "101",
+        "ComputeUnit": "COMPUTE_DSP",
+        "ExecutionDataType": "QASYMM8",
+        "ModelType": "MODEL_TYPE_SEM_SEG_VIDEO",
+        "ModelFormat": "SNPE",
+        "Encryption": "false",
+        "FadeEffectTime": 500,
+        "TransitionEffectTime": 300,
+        "input_size": [[288, 288], [288, 288], [288, 288], [288, 288]],
+        "effects_supported": [0, 1, 2, 6, 10, 11, 12, 13, 14, 15]
+    }
+}
