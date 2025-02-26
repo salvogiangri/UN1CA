@@ -27,5 +27,14 @@ if ! grep -q "firmware/kor" "$WORK_DIR/configs/fs_config-vendor"; then
     } >> "$WORK_DIR/configs/fs_config-vendor"
 fi
 if ! grep -q "vendor_firmware_file (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
-    echo "(allow init_30_0 vendor_firmware_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow init_31_0 vendor_firmware_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+fi
+if ! grep -q "vendor_file (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+    echo "(allow init_31_0 vendor_file (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+fi
+if ! grep -q "rild_exec (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+    echo "(allow init_31_0 rild_exec (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+fi
+if ! grep -q "secril_config_svc_exec (file (mounton" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+    echo "(allow init_31_0 secril_config_svc_exec (file (mounton)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
 fi
