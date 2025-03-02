@@ -34,20 +34,30 @@ if [ "$#" != 1 ]; then
 fi
 
 case "$1" in
-    "unica/patches/deknox")
+    "unica/patches/deknox/qssi")
         MODULE="$1"
         FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/qssi/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox/qssi.system.")"
+        ;;
+    "unica/patches/deknox/essi")
+        MODULE="$1"
+        FW="SM-X516B/EUX/354136921234567"
+        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/deknox/essi.system.")"
         ;;
     "unica/patches/mass_cam")
         MODULE="$1"
         FW="SM-S711B/EUX/358615311234564"
         BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
         ;;
-    "unica/patches/nfc")
+    "unica/patches/nfc/qssi")
         MODULE="$1"
         FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc/qssi.system.")"
+        ;;
+    "unica/patches/nfc/essi")
+        MODULE="$1"
+        FW="SM-A166B/EUX/356513701234561"
+        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc/essi.system.")"
         ;;
     "unica/patches/product_feature/fingerprint/optical_fod")
         MODULE="$1"
@@ -61,22 +71,39 @@ case "$1" in
         BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system" -type f \
             | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp.system.")"
         ;;
-    "unica/patches/product_feature/resolution")
+    "unica/patches/product_feature/resolution/qssi")
         MODULE="$1"
         FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/system" -type f \
-            | sed "s.$SRC_DIR/unica/patches/product_feature/resolution.system.")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/qssi/system" -type f \
+            | sed "s.$SRC_DIR/unica/patches/product_feature/resolution/qssi.system.")"
         ;;
-    "unica/patches/ultra")
+    "unica/patches/product_feature/resolution/essi")
         MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra.system.")"
+        FW="SM-S908B/BTE/350048581234569"
+        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/essi/system" -type f \
+            | sed "s.$SRC_DIR/unica/patches/product_feature/resolution/essi.system.")"
         ;;
-    "unica/patches/uwb")
+    "unica/patches/ultra/qssi")
         MODULE="$1"
         FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb.system.")"
-        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/..")"
+        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra/qssi.system.")"
+        ;;
+    "unica/patches/ultra/essi")
+        MODULE="$1"
+        FW="SM-S908B/BTE/350048581234569"
+        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra/essi.system.")"
+        ;;
+    "unica/patches/uwb/qssi")
+        MODULE="$1"
+        FW="SM-S918B/EUX/350196551234562"
+        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/qssi/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb/qssi.system.")"
+        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/qssi/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/qssi/..")"
+        ;;
+    "unica/patches/uwb/essi")
+        MODULE="$1"
+        FW="SM-S908B/BTE/350048581234569"
+        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/essi/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb/essi.system.")"
+        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/essi/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/essi/.." | sed 's/system_ext/system\/system\/system_ext/' )"
         ;;
     "unica/patches/vndk/30")
         MODULE="$1"
@@ -171,8 +198,13 @@ export SOURCE_FIRMWARE="$FW"
 export TARGET_FIRMWARE="$FW"
 export SOURCE_EXTRA_FIRMWARES=""
 export TARGET_EXTRA_FIRMWARES=""
-bash "$SRC_DIR/scripts/download_fw.sh"
-bash "$SRC_DIR/scripts/extract_fw.sh"
+if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ] && [[ "$(GET_LATEST_FIRMWARE)" == "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
+    # Latest Firmware is already extracted, no need to download it again as user might have deleted it
+    true
+else
+    bash "$SRC_DIR/scripts/download_fw.sh"
+    bash "$SRC_DIR/scripts/extract_fw.sh"
+fi
 
 for i in $BLOBS; do
     if [[ "$i" == *"system_ext/apex/com.android.vndk.v"* ]]; then
