@@ -110,3 +110,17 @@ sed -i "/keyrefuge/d" "$WORK_DIR/vendor/etc/fstab.qcom"
 
 echo "Set up File-based Encryption V2"
 sed -i "s|fileencryption=ice|fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,keydirectory=/metadata/vold/metadata_encryption,sysfs_path=/sys/devices/platform/soc/1d84000.ufshc|" "$WORK_DIR/vendor/etc/fstab.qcom"
+
+echo "Disable NFC for Japanese variants"
+if ! grep -q "SCG01" "$WORK_DIR/vendor/etc/init/init.nfc.samsung.rc"; then
+    {
+        echo ""
+        echo "on property:ro.boot.em.model=SC-51A"
+        echo "    stop vendor.nfc_hal_service"
+        echo "    stop vendor.secure_element_hal_service"
+        echo ""
+        echo "on property:ro.boot.em.model=SCG01"
+        echo "    stop vendor.nfc_hal_service"
+        echo "    stop vendor.secure_element_hal_service"
+    } >> "$WORK_DIR/vendor/etc/init/init.nfc.samsung.rc"
+fi
