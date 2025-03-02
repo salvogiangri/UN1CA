@@ -36,7 +36,7 @@ run_cmd()
 {
     local CMD=$1
     local CMDS
-    CMDS="$(find "scripts" -mindepth 1 -maxdepth 1 -type f -printf '%f\n' | sed "s/.sh//g")"
+    CMDS="$(find "scripts" -mindepth 1 -maxdepth 1 -type f -printf '%f\n' -o -type l -printf '%f\n' | sort | sed "s/.sh//g")"
 
     if [ -z "$CMD" ] || [ "$CMD" = "-h" ]; then
         echo -e "Available cmds:\n$CMDS"
