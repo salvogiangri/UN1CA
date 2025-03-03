@@ -96,13 +96,7 @@ fi
 if $TOOLS; then
     echo "- Cleaning dependencies dir..."
     rm -rf "$(dirname "$TOOLS_DIR")"
-    {
-        cd "$SRC_DIR/external/android-tools" && git clean -f -d -x && git -C "./vendor/f2fs-tools" checkout . && cd -
-        cd "$SRC_DIR/external/apktool" && git clean -f -d -x && git checkout . && cd -
-        cd "$SRC_DIR/external/erofs-utils" && git clean -f -d -x && cd -
-        cd "$SRC_DIR/external/samfirm.js" && git clean -f -d -x && cd -
-        cd "$SRC_DIR/external/smali" && git clean -f -d -x && cd -
-    } &> /dev/null
+    git submodule foreach --recursive git clean -f -d -x
 fi
 
 exit 0
