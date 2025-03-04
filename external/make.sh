@@ -141,7 +141,7 @@ ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
     "ext2simg" "fastboot" "gki/generate_gki_certificate.py" "img2simg"
     "lpadd" "lpdump" "lpflash" "lpmake"
-    "lpunpack" "make_f2fs" "mkbootimg" "mkdtboimg" "mke2fs"
+    "lpunpack" "make_f2fs" "mkbootfs" "mkbootimg" "mkdtboimg" "mke2fs"
     "mke2fs.android" "mke2fs.conf" "mkf2fsuserimg" "mkuserimg_mke2fs"
     "repack_bootimg" "simg2img" "sload_f2fs" "unpack_bootimg" "zipalign"
 )
