@@ -136,7 +136,6 @@ IMG2SDAT=true
 SAMFIRM=true
 SIGNAPK=true
 SMALI=true
-ZIPALIGN=true
 
 ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
@@ -171,10 +170,6 @@ SMALI_EXEC=(
     "android-smali.jar" "baksmali" "smali" "smali-baksmali.jar"
 )
 CHECK_TOOLS "${SMALI_EXEC[@]}" && SMALI=false
-ZIPALIGN_EXEC=(
-    "zipalign"
-)
-CHECK_TOOLS "${ZIPALIGN_EXEC[@]}" && ZIPALIGN=false
 
 if $ANDROID_TOOLS; then
     ANDROID_TOOLS_CMDS=(
@@ -256,15 +251,6 @@ if $SMALI; then
     )
 
     BUILD "baksmali/smali" "$SRC_DIR/external/smali" "${SMALI_CMDS[@]}"
-fi
-if $ZIPALIGN; then
-    ZIPALIGN_CMDS=(
-        "mkdir -p \"$TOOLS_DIR/../lib64\""
-        "cp --preserve=all \"libc++.so\" \"$TOOLS_DIR/../lib64/libc++.so\""
-        "cp --preserve=all \"zipalign\" \"$TOOLS_DIR/zipalign\""
-    )
-
-    BUILD "zipalign" "$SRC_DIR/external/zipalign" "${ZIPALIGN_CMDS[@]}"
 fi
 
 exit 0
