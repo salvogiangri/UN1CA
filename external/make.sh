@@ -178,8 +178,8 @@ CHECK_TOOLS "${ZIPALIGN_EXEC[@]}" && ZIPALIGN=false
 
 if $ANDROID_TOOLS; then
     ANDROID_TOOLS_CMDS=(
-        "git submodule foreach --recursive git am --abort || true"
-        "git submodule foreach --recursive git reset --hard"
+        "git submodule foreach --recursive \"git am --abort || true\""
+        "git submodule foreach --recursive \"git reset --hard\""
         "cmake -B \"build\" $(BUILD_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=ON -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
         "git -C \"vendor/f2fs-tools\" apply \"$SRC_DIR/external/patches/android-tools/0001-Revert-f2fs-tools-give-6-sections-for-overprovision-.patch\""
         "make -C \"build\" -j\"$(nproc)\""
