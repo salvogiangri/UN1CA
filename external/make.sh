@@ -142,7 +142,7 @@ ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
     "ext2simg" "fastboot" "gki/generate_gki_certificate.py" "img2simg"
     "lpadd" "lpdump" "lpflash" "lpmake"
-    "lpunpack" "make_f2fs" "mkbootimg" "mke2fs"
+    "lpunpack" "make_f2fs" "mkbootimg" "mkdtboimg" "mke2fs"
     "mke2fs.android" "mke2fs.conf" "mkf2fsuserimg" "mkuserimg_mke2fs"
     "repack_bootimg" "simg2img" "sload_f2fs" "unpack_bootimg"
 )
@@ -188,6 +188,7 @@ if $ANDROID_TOOLS; then
         "cp --preserve=all \"vendor/mkbootimg/mkbootimg.py\" \"$TOOLS_DIR/mkbootimg\""
         "cp --preserve=all \"vendor/mkbootimg/repack_bootimg.py\" \"$TOOLS_DIR/repack_bootimg\""
         "cp --preserve=all \"vendor/mkbootimg/unpack_bootimg.py\" \"$TOOLS_DIR/unpack_bootimg\""
+        "cp --preserve=all \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/mkdtboimg\""
         "mkdir -p \"$TOOLS_DIR/gki\""
         "cp --preserve=all \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/gki/generate_gki_certificate.py\""
         "ln -sf \"$TOOLS_DIR/mke2fs.android\" \"$TOOLS_DIR/mke2fs\""
