@@ -143,7 +143,7 @@ ANDROID_TOOLS_EXEC=(
     "lpadd" "lpdump" "lpflash" "lpmake"
     "lpunpack" "make_f2fs" "mkbootimg" "mkdtboimg" "mke2fs"
     "mke2fs.android" "mke2fs.conf" "mkf2fsuserimg" "mkuserimg_mke2fs"
-    "repack_bootimg" "simg2img" "sload_f2fs" "unpack_bootimg"
+    "repack_bootimg" "simg2img" "sload_f2fs" "unpack_bootimg" "zipalign"
 )
 CHECK_TOOLS "${ANDROID_TOOLS_EXEC[@]}" && ANDROID_TOOLS=false
 APKTOOL_EXEC=(

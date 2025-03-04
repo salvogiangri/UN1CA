@@ -1,6 +1,6 @@
 [submodule "external/android-tools"]
 	path = external/android-tools
-	url = https://github.com/nmeum/android-tools.git
+	url = https://github.com/salvogiangri/android-tools.git
 	ignore = dirty
 [submodule "external/apktool"]
 	path = external/apktool
