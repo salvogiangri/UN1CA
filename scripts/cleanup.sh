@@ -96,7 +96,7 @@ fi
 if $TOOLS; then
     echo "- Cleaning dependencies dir..."
     rm -rf "$(dirname "$TOOLS_DIR")"
-    git submodule foreach --recursive git clean -f -d -x
+    git submodule foreach --recursive "git clean -f -d -x" &> /dev/null
 fi
 
 exit 0
