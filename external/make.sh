@@ -111,6 +111,16 @@ BUILD()
 
     return 0
 }
+
+# https://github.com/canonical/snapd/blob/ec7ea857712028b7e3be7a5f4448df575216dbfd/release/release.go#L169-L190
+IS_WSL()
+{
+    if [[ -e "/proc/sys/fs/binfmt_misc/WSLInterop" ]] || [[ -e "/run/WSL" ]]; then
+        echo "ON"
+    else
+        echo "OFF"
+    fi
+}
 # ]
 
 if [ "$#" -gt 0 ]; then
@@ -206,7 +216,7 @@ if $APKTOOL; then
 fi
 if $EROFS_UTILS; then
     EROFS_UTILS_CMDS=(
-        "cmake -S \"build/cmake\" -B \"out\" $(BUILD_CMAKE_FLAGS) -DRUN_ON_WSL=\"OFF\" -DENABLE_FULL_LTO=\"ON\" -DMAX_BLOCK_SIZE=\"4096\""
+        "cmake -S \"build/cmake\" -B \"out\" $(BUILD_CMAKE_FLAGS) -DRUN_ON_WSL=\"$(IS_WSL)\" -DENABLE_FULL_LTO=\"ON\" -DMAX_BLOCK_SIZE=\"4096\""
         "make -C \"out\" -j\"$(nproc)\""
         "find \"out/erofs-tools\" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} \"$TOOLS_DIR\" \;"
     )
