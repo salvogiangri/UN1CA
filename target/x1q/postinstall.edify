@@ -1,0 +1,8 @@
+ifelse(
+    getprop("ro.boot.em.model") == "SCG01" || getprop("ro.boot.em.model") == "SC-51A",
+    (
+        ui_print("Japan variant detected. Patching boot.img and dtbo.img...");
+        package_extract_file("boot_jpn.img", "/dev/block/bootdevice/by-name/boot");
+        package_extract_file("dtbo_jpn.img", "/dev/block/bootdevice/by-name/dtbo");
+    )
+);
