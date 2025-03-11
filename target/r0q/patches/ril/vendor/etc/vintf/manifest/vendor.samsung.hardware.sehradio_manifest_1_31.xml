@@ -1,0 +1,30 @@
+<manifest version="1.0" type="device">
+    <hal format="hidl">
+       <name>vendor.samsung.hardware.radio</name>
+       <transport>hwbinder</transport>
+       <version>2.2</version>
+       <interface>
+           <name>ISehRadio</name>
+           <instance>slot1</instance>
+       </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio.channel</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISehChannel</name>
+            <instance>imsd</instance>
+            <instance>epdgd</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio.bridge</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISehBridge</name>
+            <instance>slot1</instance>
+        </interface>
+    </hal>
+</manifest>
