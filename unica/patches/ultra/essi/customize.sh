@@ -17,7 +17,7 @@ APPLY_PATCH()
     DECOMPILE "$1"
 
     cd "$APKTOOL_DIR/$1"
-    PATCH="$SRC_DIR/unica/patches/ultra/$2"
+    PATCH="$SRC_DIR/unica/patches/ultra/essi/$2"
     COMMIT_NAME="$(grep "^Subject:" "$PATCH" | sed 's/.*PATCH] //')"
     echo "Applying \"$COMMIT_NAME\" to /$1"
     OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
@@ -32,7 +32,7 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 if [ -d "$FW_DIR/${MODEL}_${REGION}/system/system/media/audio/pensounds" ]; then
 
-    cp -a --preserve=all "$SRC_DIR/unica/patches/ultra/system/"* "$WORK_DIR/system/system"
+    cp -a --preserve=all "$SRC_DIR/unica/patches/ultra/essi/system/"* "$WORK_DIR/system/system"
 
     if ! grep -q "AirReadingGlass" "$WORK_DIR/configs/file_context-system"; then
         {
