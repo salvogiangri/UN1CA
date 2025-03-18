@@ -241,10 +241,9 @@ if $SAMFIRM; then
 fi
 if $SIGNAPK; then
     SIGNAPK_CMDS=(
-        "mkdir -p \"$TOOLS_DIR/../lib64\""
-        "cp --preserve=all \"libconscrypt_openjdk_jni.so\" \"$TOOLS_DIR/../lib64/libconscrypt_openjdk_jni.so\""
-        "cp --preserve=all \"signapk.jar\" \"$TOOLS_DIR/signapk.jar\""
-        "cp --preserve=all \"signapk\" \"$TOOLS_DIR/signapk\""
+        "./gradlew build"
+        "cp --preserve=all \"scripts/linux/signapk\" \"$TOOLS_DIR\""
+        "cp --preserve=all \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/signapk.jar\""
     )
 
     BUILD "signapk" "$SRC_DIR/external/signapk" "${SIGNAPK_CMDS[@]}"
