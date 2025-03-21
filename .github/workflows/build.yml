@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - 'fourteen'
+      - 'fifteen'
 
 jobs:
   build:
