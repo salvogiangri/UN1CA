@@ -1,0 +1,90 @@
+From 98eff3b6162b37f07fede0d7afac3ef2742290da Mon Sep 17 00:00:00 2001
+From: Nachito <104278947+naxitoo@users.noreply.github.com>
+Date: Sun, 16 Mar 2025 21:13:08 -0300
+Subject: [PATCH] Add Knox logo visibility toggle
+
+Add a toggle to control the visibility of the "Secured by Knox" logo displayed with the biometric prompt. If the toggle is not enabled, the logo is shown.
+
+Before:
+    public BiometricPromptGuiHelper(Context context, View view, PromptConfig promptConfig, UdfpsInfo udfpsInfo) {
+        this.mContext = context;
+        this.mBaseView = view;
+        this.mPromptConfig = promptConfig;
+        this.mUdfpsInfo = udfpsInfo;
+        this.mDisplayMetrics = Utils.getDisplayMetrics(context);
+        this.mScreenPortraitWidth = Utils.getDisplayWidth(this.mContext);
+        ImageView imageView = (ImageView) this.mBaseView.findViewById(R.id.id_prompt_background);
+        if (!this.mPromptConfig.isManagedProfile() || this.mPromptConfig.isKnoxProfile()) {
+            imageView.setBackgroundColor(android.R.color.transparent);
+        } else {
+            Drawable drawable = new ResourceManager(this.mContext, "com.android.settings").getDrawable("work_challenge_background");
+            if (drawable != null) {
+                drawable.setColorFilter(this.mPromptConfig.getOrganizationColor(), PorterDuff.Mode.DARKEN);
+            }
+            imageView.setBackground(drawable);
+        }
+        ImageView imageView2 = (ImageView) this.mBaseView.findViewById(R.id.id_prompt_knox_image);
+        if (imageView2 != null) {
+            imageView2.setVisibility(0);
+        }
+
+        // The rest of the code
+	}
+	
+After:
+    public BiometricPromptGuiHelper(Context context, View view, PromptConfig promptConfig, UdfpsInfo udfpsInfo) {
+        this.mContext = context;
+        this.mBaseView = view;
+        this.mPromptConfig = promptConfig;
+        this.mUdfpsInfo = udfpsInfo;
+        this.mDisplayMetrics = Utils.getDisplayMetrics(context);
+        this.mScreenPortraitWidth = Utils.getDisplayWidth(this.mContext);
+        ImageView imageView = (ImageView) this.mBaseView.findViewById(R.id.id_prompt_background);
+        if (!this.mPromptConfig.isManagedProfile() || this.mPromptConfig.isKnoxProfile()) {
+            imageView.setBackgroundColor(android.R.color.transparent);
+        } else {
+            Drawable drawable = new ResourceManager(this.mContext, "com.android.settings").getDrawable("work_challenge_background");
+            if (drawable != null) {
+                drawable.setColorFilter(this.mPromptConfig.getOrganizationColor(), PorterDuff.Mode.DARKEN);
+            }
+            imageView.setBackground(drawable);
+        }
+        ImageView imageView2 = (ImageView) this.mBaseView.findViewById(R.id.id_prompt_knox_image);
+        if (imageView2 != null && Settings.System.getInt(this.mContext.getContentResolver(), "unica_hide_bp_knox_logo", 0) == 0) {
+            imageView2.setVisibility(0);
+        }
+        
+		// The rest of the code
+	}
+---
+ .../setting/prompt/BiometricPromptGuiHelper.smali  | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/smali/com/samsung/android/biometrics/app/setting/prompt/BiometricPromptGuiHelper.smali b/smali/com/samsung/android/biometrics/app/setting/prompt/BiometricPromptGuiHelper.smali
+index 00e4c5d..6ce69ea 100644
+--- a/smali/com/samsung/android/biometrics/app/setting/prompt/BiometricPromptGuiHelper.smali
++++ b/smali/com/samsung/android/biometrics/app/setting/prompt/BiometricPromptGuiHelper.smali
+@@ -237,6 +237,20 @@
+ 
+     if-eqz p2, :cond_2
+ 
++    iget-object v1, p0, Lcom/samsung/android/biometrics/app/setting/prompt/BiometricPromptGuiHelper;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v1
++
++    const-string v2, "unica_hide_bp_knox_logo"
++
++    invoke-static {v1, v2, p4}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v1
++
++    if-nez v1, :cond_2
++
+     invoke-virtual {p2, p4}, Landroid/widget/ImageView;->setVisibility(I)V
+ 
+     :cond_2
+-- 
+2.49.0
+
