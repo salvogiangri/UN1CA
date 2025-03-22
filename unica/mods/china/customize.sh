@@ -1,25 +1,3 @@
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
-
 SET_CONFIG()
 {
     local CONFIG="$1"
@@ -53,10 +31,10 @@ SET_CONFIG()
 [ -d "$WORK_DIR/system/system/priv-app/AppLock" ] \
     && mv -f "$WORK_DIR/system/system/priv-app/AppLock" "$WORK_DIR/system/system/priv-app/SAppLock"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SmartManager_v5"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SmartManager_v6_DeviceSecurity"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
+REMOVE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v5"
+REMOVE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v6_DeviceSecurity"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
 
 SET_CONFIG "SEC_FLOATING_FEATURE_SECURITY_CONFIG_DEVICEMONITOR_PACKAGE_NAME" "com.samsung.android.sm.devicesecurity.tcm"
 SET_CONFIG "SEC_FLOATING_FEATURE_SMARTMANAGER_CONFIG_PACKAGE_NAME" "com.samsung.android.sm_cn"

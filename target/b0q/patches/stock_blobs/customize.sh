@@ -56,28 +56,6 @@ ADD_TO_WORK_DIR()
         TMP="$(dirname "$TMP")"
     done
 }
-
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
@@ -90,7 +68,7 @@ ADD_TO_WORK_DIR "system" "system/etc/vintf/manifest.xml" 0 0 644 "u:object_r:sys
 echo "Add stock rscmgr.rc"
 ADD_TO_WORK_DIR "system" "system/etc/init/rscmgr.rc" 0 0 644 "u:object_r:system_file:s0"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
 echo "Add stock system features"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.ledbackcover.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.nfcledcover.xml" 0 0 644 "u:object_r:system_file:s0"
@@ -107,10 +85,10 @@ echo "Add stock libhwui"
 ADD_TO_WORK_DIR "system" "system/lib/libhwui.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib64/libhwui.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/android.hardware.security.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
 echo "Add stock keymint libs"
 ADD_TO_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib/libdk_native_keymint.so" 0 0 644 "u:object_r:system_lib_file:s0"

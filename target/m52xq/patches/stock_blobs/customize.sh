@@ -54,28 +54,6 @@ ADD_TO_WORK_DIR()
         TMP="$(dirname "$TMP")"
     done
 }
-
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
@@ -92,28 +70,28 @@ sed -i "s/HotwordEnrollmentXGoogleEx4HEXAGON/HotwordEnrollmentXGoogleEx3HEXAGON/
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/file_context-product"
 sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGON/g" "$WORK_DIR/configs/fs_config-product"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.cover.flip.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.nfc_authentication.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.nfc_authentication_cover.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.nsflp_level_601.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level29.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.usb_authentication.xml"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.flip.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nfc_authentication.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nfc_authentication_cover.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nsflp_level_601.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level29.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.usb_authentication.xml"
+REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml"
 echo "Add stock system features"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nsflp_level_600.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level40.xml" 0 0 644 "u:object_r:system_file:s0"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp_client_aidl.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libhdcp2.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplay_wfd.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libremotedisplayservice.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsecuibc.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstagefright_hdcp.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/wfd_log.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libhdcp_client_aidl.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libhdcp2.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libremotedisplay_wfd.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libremotedisplayservice.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libsecuibc.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libstagefright_hdcp.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.security.hdcp.wifidisplay-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/wfd_log.so"
 echo "Add stock WFD blobs"
 if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/file_context-system"; then
     {
@@ -144,13 +122,13 @@ echo "Add HIDL face biometrics libs"
 ADD_TO_WORK_DIR "system" "system/lib/android.hardware.biometrics.face@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "system" "system/lib/vendor.samsung.hardware.biometrics.face@2.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/android.hardware.security.secureclock-V1-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libdk_native_keymint.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libdk_native_keymint.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.secureclock-V1-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/libdk_native_keymint.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/android.hardware.security.keymint-V2-ndk.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/libdk_native_keymint.so"
+REMOVE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
 echo "Add stock keymaster libs"
 if ! grep -q "libdk_native_keymaster" "$WORK_DIR/configs/file_context-system"; then
     {

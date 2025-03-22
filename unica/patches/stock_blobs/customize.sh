@@ -1,27 +1,5 @@
 SKIPUNZIP=1
 
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
-
 SOURCE_FIRMWARE_PATH=$(echo -n "$SOURCE_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)
 TARGET_FIRMWARE_PATH=$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)
 
@@ -67,11 +45,11 @@ if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/saiv" ]; then
         cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH$blob" "$WORK_DIR$blob"
     done
 else
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/saiv"
+    REMOVE_FROM_WORK_DIR "system" "system/etc/saiv"
 fi
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/saiv"
+REMOVE_FROM_WORK_DIR "system" "system/saiv"
 cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/saiv" "$WORK_DIR/system/system/saiv"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/saiv/textrecognition"
+REMOVE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
 cp -a --preserve=all "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/saiv/textrecognition" \
     "$WORK_DIR/system/system/saiv/textrecognition"
 while read -r i; do
@@ -83,7 +61,7 @@ while read -r i; do
 done <<< "$(find "$WORK_DIR/system/system/saiv")"
 
 echo "Replacing cameradata blobs with stock"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/cameradata"
+REMOVE_FROM_WORK_DIR "system" "system/cameradata"
 cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata" "$WORK_DIR/system/system/cameradata"
 while read -r i; do
     FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
@@ -111,5 +89,5 @@ if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/usr/share/alsa/alsa.conf" ]
         } >> "$WORK_DIR/configs/fs_config-system"
     fi
 else
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/usr/share/alsa"
+    REMOVE_FROM_WORK_DIR "system" "system/usr/share/alsa"
 fi

@@ -56,38 +56,6 @@ ADD_TO_WORK_DIR()
         TMP="$(dirname "$TMP")"
     done
 }
-
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        if [[ "$PARTITION" == "system" ]] && [[ "$FILE" == *".camera.samsung.so" ]]; then
-            sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
-        fi
-        if [[ "$PARTITION" == "system" ]] && [[ "$FILE" == *".arcsoft.so" ]]; then
-            sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
-        fi
-        if [[ "$PARTITION" == "system" ]] && [[ "$FILE" == *".media.samsung.so" ]]; then
-            sed -i "/$(basename "$FILE")/d" "$WORK_DIR/system/system/etc/public.libraries-media.samsung.txt"
-        fi
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
@@ -173,7 +141,16 @@ system/lib64/vendor.samsung.hardware.frcmc-V1-ndk.so
 "
 for blob in $BLOBS_LIST
 do
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/system/$blob"
+    REMOVE_FROM_WORK_DIR "system" "$blob"
+    if [[ "$blob" == *".camera.samsung.so" ]]; then
+        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+    fi
+    if [[ "$blob" == *".arcsoft.so" ]]; then
+        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
+    fi
+    if [[ "$blob" == *".media.samsung.so" ]]; then
+        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-media.samsung.txt"
+    fi
 done
 
 echo "Add stock camera libs"

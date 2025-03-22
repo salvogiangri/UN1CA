@@ -78,28 +78,6 @@ ADD_TO_WORK_DIR()
         TMP="$(dirname "$TMP")"
     done
 }
-
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ] || [ -L "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE/d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
@@ -108,7 +86,7 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci.conf" ]; then
     ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci.conf" 0 0 644 "u:object_r:system_file:s0"
 else
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/libnfc-nci.conf"
+    REMOVE_FROM_WORK_DIR "system" "system/etc/libnfc-nci.conf"
 fi
 [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci-NXP_SN100U.conf" ] && \
     ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci-NXP_SN100U.conf" 0 0 644 "u:object_r:system_file:s0"
@@ -125,9 +103,9 @@ for i in $TARGET_NFC_CHIPNAMES; do
         if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libnfc_${i}_jni.so" ]; then
             continue
         else
-            REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so"
-            REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libnfc-${i}.so"
-            REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libnfc_${i}_jni.so"
+            REMOVE_FROM_WORK_DIR "system" "system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so"
+            REMOVE_FROM_WORK_DIR "system" "system/lib64/libnfc-${i}.so"
+            REMOVE_FROM_WORK_DIR "system" "system/lib64/libnfc_${i}_jni.so"
         fi
     elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libnfc_${i}_jni.so" ]; then
         ADD_TO_WORK_DIR "system" "system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so" 0 0 644 "u:object_r:system_file:s0"
@@ -148,7 +126,7 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
     if grep -q -w "libstatslog_nfc_nxp" "$WORK_DIR/system/system/lib64/libnfc"*; then
         true
     else
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc_nxp.so"
     fi
 elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
     ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc_nxp.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -158,7 +136,7 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]; then
     if grep -q -w "libstatslog_nfc" "$WORK_DIR/system/system/lib64/libnfc"*; then
         true
     else
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc.so"
     fi
 elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc.so" ]; then
     ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -168,7 +146,7 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so" ]; then
     if grep -q -w "libstatslog_nfc_st" "$WORK_DIR/system/system/lib64/libnfc"*; then
         true
     else
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc_st.so"
     fi
 elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_st.so" ]; then
     ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc_st.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -180,23 +158,23 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
     DECOMPILE "system/framework/services.jar"
 
     if [[ "$TARGET_ESE_CHIP_VENDOR" == "none" ]] && [[ "$TARGET_ESE_COS_NAME" == "none" ]]; then
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/app/ESEServiceAgent"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/bin/sem_daemon"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/init/sem.rc"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.sem.factoryapp.xml"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_sem.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semHal.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semRil.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libsec_semTlc.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/libspictrl.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib/vendor.samsung.hardware.security.sem@1.0.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_sem.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semHal.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semRil.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libsec_semTlc.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/libspictrl.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
-        REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/priv-app/SEMFactoryApp"
+        REMOVE_FROM_WORK_DIR "system" "system/app/ESEServiceAgent"
+        REMOVE_FROM_WORK_DIR "system" "system/bin/sem_daemon"
+        REMOVE_FROM_WORK_DIR "system" "system/etc/init/sem.rc"
+        REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.sem.factoryapp.xml"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/libsec_sem.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/libsec_semHal.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/libsec_semRil.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/libsec_semTlc.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/libspictrl.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.security.sem@1.0.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libsec_sem.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libsec_semHal.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libsec_semRil.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libsec_semTlc.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/libspictrl.so"
+        REMOVE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
+        REMOVE_FROM_WORK_DIR "system" "system/priv-app/SEMFactoryApp"
         cp -a --preserve=all "$SRC_DIR/unica/patches/nfc/system/"* "$WORK_DIR/system/system"
         APPLY_PATCH "system/framework/framework.jar" "ese/framework.jar/0001-Disable-SemService.patch"
         APPLY_PATCH "system/framework/services.jar" "ese/services.jar/0001-Disable-SemService.patch"
