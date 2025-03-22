@@ -21,7 +21,7 @@
 set -Ee
 
 #[
-source "$SRC_DIR/scripts/internal/module_utils.sh"
+source "$SRC_DIR/scripts/utils/module_utils.sh"
 
 SET_PROP()
 {
