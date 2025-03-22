@@ -1,16 +1,3 @@
-GET_PROP()
-{
-    local PROP="$1"
-    local FILE="$2"
-
-    if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
-        exit 1
-    fi
-
-    grep "^$PROP=" "$FILE" | cut -d "=" -f2-
-}
-
 if ! grep -q "system/bin/rezetprop" "$WORK_DIR/configs/file_context-system"; then
     {
         echo "/system/bin/rezetprop u:object_r:init_exec:s0"
@@ -32,7 +19,7 @@ sed -i 's/${ro.boot.warranty_bit}/0/g' "$WORK_DIR/system/system/etc/init/init.ri
     echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.verifiedbootstate green"
     echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.veritymode enforcing"
     echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.boot.warranty_bit 0"
-    if [[ "$(GET_PROP "ro.product.first_api_level" "$WORK_DIR/vendor/build.prop")" -ge "33" ]]; then
+    if [[ "$(GET_PROP "ro.product.first_api_level")" -ge "33" ]]; then
         echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n ro.product.first_api_level 32"
     fi
     echo "    exec u:r:init:s0 root root -- /system/bin/rezetprop -n sys.oem_unlock_allowed 0"

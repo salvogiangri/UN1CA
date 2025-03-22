@@ -23,87 +23,23 @@ set -Ee
 #[
 source "$SRC_DIR/scripts/utils/module_utils.sh"
 
-SET_PROP()
-{
-    local PROP="$1"
-    local VALUE="$2"
-    local FILE="$3"
-
-    if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
-        return 1
-    fi
-
-    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
-        PROP="$(echo -n "$PROP" | sed 's/=//g')"
-        if grep -Fq "$PROP" "$FILE"; then
-            echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
-            sed -i "/^$PROP/d" "$FILE"
-        fi
-    else
-        if grep -Fq "$PROP" "$FILE"; then
-            local LINES
-
-            echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
-            LINES="$(sed -n "/^${PROP}\b/=" "$FILE")"
-            for l in $LINES; do
-                sed -i "$l c${PROP}=${VALUE}" "$FILE"
-            done
-        else
-            echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
-            if ! grep -q "Added by scripts" "$FILE"; then
-                echo "# Added by scripts/internal/apply_modules.sh" >> "$FILE"
-            fi
-            echo "$PROP=$VALUE" >> "$FILE"
-        fi
-    fi
-}
-
 READ_AND_APPLY_PROPS()
 {
     local PARTITION
-    local FILE
 
     for patch in "$1"/*.prop
     do
         PARTITION=$(basename "$patch" | sed 's/.prop//g')
-        case "$PARTITION" in
-            "odm")
-                FILE="$WORK_DIR/odm/etc/build.prop"
-                ;;
-            "product")
-                FILE="$WORK_DIR/product/etc/build.prop"
-                ;;
-            "system")
-                FILE="$WORK_DIR/system/system/build.prop"
-                ;;
-            "system_ext")
-                $TARGET_HAS_SYSTEM_EXT \
-                    && FILE="$WORK_DIR/system_ext/etc/build.prop" \
-                    || FILE="$WORK_DIR/system/system/system_ext/etc/build.prop"
-                ;;
-            "vendor")
-                FILE="$WORK_DIR/vendor/build.prop"
-                ;;
-            "module")
-                continue
-                ;;
-            *)
-                echo "Unvalid file: \"$patch\""
-                return 1
-                ;;
-        esac
+        _IS_VALID_PARTITION_NAME "$PARTITION" || continue
 
         while read -r i; do
             [[ "$i" = "#"* ]] && continue
             [[ -z "$i" ]] && continue
 
             if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
-                SET_PROP "$(echo -n "$i" | cut -d " " -f 1)" --delete \
-                    "$FILE"
+                SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d " " -f 1)" --delete
             elif echo -n "$i" | grep -q "="; then
-                SET_PROP "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)" \
-                    "$FILE"
+                SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)"
             else
                 echo "Malformed string in $patch: \"$i\""
                 return 1
