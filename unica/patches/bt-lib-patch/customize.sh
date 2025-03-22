@@ -1,31 +1,5 @@
 SKIPUNZIP=1
 
-HEX_PATCH()
-{
-    local FILE="$1"
-    local FROM="$2"
-    local TO="$3"
-
-    if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
-        return 1
-    fi
-
-    if xxd -p "$FILE" | tr -d \\n | tr -d " " | grep -q "$TO"; then
-        echo "\"$TO\" already applied in $(echo "$FILE" | sed "s.$WORK_DIR..")"
-        return 0
-    fi
-
-    if ! xxd -p "$FILE" | tr -d \\n | tr -d " " | grep -q "$FROM"; then
-        echo "No \"$FROM\" match in $(echo "$FILE" | sed "s.$WORK_DIR..")"
-        return 1
-    fi
-
-    echo "Patching \"$FROM\" to \"$TO\" in $(echo "$FILE" | sed "s.$WORK_DIR..")"
-    xxd -p "$FILE" | tr -d \\n | tr -d " " | sed "s/$FROM/$TO/" | xxd -r -p > "$FILE.tmp"
-    mv "$FILE.tmp" "$FILE"
-}
-
 if [ ! -f "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" ]; then
     [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
     mkdir -p "$TMP_DIR"
@@ -47,4 +21,3 @@ fi
 # https://github.com/3arthur6/BluetoothLibraryPatcher/blob/425bb59da6505c962a38c143137698849b01d470/hexpatch.sh#L12
 HEX_PATCH "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" \
     "6804003528008052" "2b00001428008052"
-

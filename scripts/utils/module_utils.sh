@@ -160,6 +160,37 @@ GET_PROP()
     cat $(echo "$FILES") 2> /dev/null | sed -n "s/^$PROP=//p" | head -n 1
 }
 
+# HEX_PATCH <file> <old pattern> <new pattern>
+# Applies the supplied hex patch to the desidered file.
+HEX_PATCH()
+{
+    local FILE="${1:?}"
+    local FROM="${2:?}"
+    local TO="${3:?}"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    FROM="$(tr "[:upper:]" "[:lower:]" <<< "$FROM")"
+    TO="$(tr "[:upper:]" "[:lower:]" <<< "$TO")"
+
+    if xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$TO"; then
+        echo "\"$TO\" already applied in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+        return 0
+    fi
+
+    if ! xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$FROM"; then
+        echo "No \"$FROM\" match in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+        return 1
+    fi
+
+    echo "Patching \"$FROM\" to \"$TO\" in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+    xxd -p "$FILE" | tr -d "\n" | tr -d " " | sed "s/$FROM/$TO/" | xxd -r -p > "$FILE.tmp"
+    mv "$FILE.tmp" "$FILE"
+}
+
 # REMOVE_FROM_WORK_DIR "<partition>" "<file/dir>"
 # Deletes a file/directory from work dir along with its entries in fs_config/file_context.
 REMOVE_FROM_WORK_DIR()
