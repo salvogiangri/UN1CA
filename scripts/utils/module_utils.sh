@@ -125,6 +125,21 @@ _GET_WORK_DIR_PARTITION_PATH()
 }
 # ]
 
+# GET_FLOATING_FEATURE_CONFIG "<config>"
+# Returns the supplied config value.
+GET_FLOATING_FEATURE_CONFIG()
+{
+    local CONFIG="${1:?}"
+    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    grep -o -P "(?<=<$CONFIG>)[^<]+" "$FILE" 2> /dev/null
+}
+
 # GET_PROP "<partition>/<file>" "<prop>"
 # Returns the supplied prop value, partition/file can be omitted.
 GET_PROP()
@@ -194,8 +209,44 @@ REMOVE_FROM_WORK_DIR()
     return 0
 }
 
+# SET_FLOATING_FEATURE_CONFIG "<config>" "<value>"
+# Sets the supplied config to the desidered value.
+# "-d" or "--delete" can be passed as value to delete the config.
+SET_FLOATING_FEATURE_CONFIG()
+{
+    local CONFIG="${1:?}"
+    local VALUE="${2:?}"
+    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    if grep -q "$CONFIG" "$FILE"; then
+        if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+            echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
+            sed -i "/$CONFIG/d" "$FILE"
+        else
+            echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
+            sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
+        fi
+    else
+        echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
+        sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
+        if ! grep -q "Added by scripts" "$FILE"; then
+            echo "    <!-- Added by scripts/utils/module_utils.sh -->" >> "$FILE"
+        fi
+        echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
+        echo "</SecFloatingFeatureSet>" >> "$FILE"
+    fi
+
+    return 0
+}
+
 # SET_PROP "<partition>" "<prop>" "<value>"
 # Sets the supplied prop to the desidered value, partition name CANNOT be omitted.
+# "-d" or "--delete" can be passed as value to delete the prop.
 SET_PROP()
 {
     local PARTITION="${1:?}"

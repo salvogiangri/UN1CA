@@ -34,34 +34,6 @@ GET_FP_SENSOR_TYPE()
         exit 1
     fi
 }
-
-SET_CONFIG()
-{
-    local CONFIG="$1"
-    local VALUE="$2"
-    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
-
-    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
-        CONFIG="$(echo -n "$CONFIG" | sed 's/=//g')"
-        if grep -Fq "$CONFIG" "$FILE"; then
-            echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
-            sed -i "/$CONFIG/d" "$FILE"
-        fi
-    else
-        if grep -Fq "<$CONFIG>" "$FILE"; then
-            echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
-        else
-            echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
-            if ! grep -q "Added by unica" "$FILE"; then
-                echo "    <!-- Added by unica/patches/floating_feature/customize.sh -->" >> "$FILE"
-            fi
-            echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
-            echo "</SecFloatingFeatureSet>" >> "$FILE"
-        fi
-    fi
-}
 # ]
 
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
@@ -209,7 +181,7 @@ fi
 if $SOURCE_HAS_HW_MDNIE; then
     if ! $TARGET_HAS_HW_MDNIE; then
         echo "Applying HW mDNIe patches"
-        SET_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" --delete
+        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" --delete
         APPLY_PATCH "system/framework/framework.jar" "mdnie/hw/framework.jar/0001-Disable-HW-mDNIe.patch"
         APPLY_PATCH "system/framework/services.jar" "mdnie/hw/services.jar/0001-Disable-HW-mDNIe.patch"
     fi
@@ -222,7 +194,7 @@ fi
 if $SOURCE_MDNIE_SUPPORT_HDR_EFFECT; then
     if ! $TARGET_MDNIE_SUPPORT_HDR_EFFECT; then
         echo "Applying mDNIe HDR effect patches"
-        SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_HDR_EFFECT" --delete
+        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_HDR_EFFECT" --delete
         APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "mdnie/hdr/SecSettings.apk/0001-Disable-HDR-Settings.patch"
         APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "mdnie/hdr/SettingsProvider.apk/0001-Disable-HDR-Settings.patch"
     fi
@@ -373,8 +345,8 @@ fi
 
 if $SOURCE_IS_ESIM_SUPPORTED; then
     if ! $TARGET_IS_ESIM_SUPPORTED; then
-        SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_EMBEDDED_SIM_SLOTSWITCH" --delete
-        SET_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_EMBEDDED_SIM" --delete
+        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_EMBEDDED_SIM_SLOTSWITCH" --delete
+        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_EMBEDDED_SIM" --delete
     fi
 fi
 
