@@ -1,31 +1,3 @@
-SET_CONFIG()
-{
-    local CONFIG="$1"
-    local VALUE="$2"
-    local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
-
-    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
-        CONFIG="$(echo -n "$CONFIG" | sed 's/=//g')"
-        if grep -Fq "$CONFIG" "$FILE"; then
-            echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
-            sed -i "/$CONFIG/d" "$FILE"
-        fi
-    else
-        if grep -Fq "<$CONFIG>" "$FILE"; then
-            echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
-        else
-            echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
-            sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
-            if ! grep -q "Added by unica" "$FILE"; then
-                echo "    <!-- Added by unica/patches/floating_feature/customize.sh -->" >> "$FILE"
-            fi
-            echo "    <${CONFIG}>${VALUE}</${CONFIG}>" >> "$FILE"
-            echo "</SecFloatingFeatureSet>" >> "$FILE"
-        fi
-    fi
-}
-
 [ -f "$WORK_DIR/system/system/priv-app/AppLock/AppLock.apk" ] \
     && mv -f "$WORK_DIR/system/system/priv-app/AppLock/AppLock.apk" "$WORK_DIR/system/system/priv-app/AppLock/SAppLock.apk"
 [ -d "$WORK_DIR/system/system/priv-app/AppLock" ] \
@@ -36,8 +8,8 @@ REMOVE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v6_DeviceSecurity"
 REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
 REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
 
-SET_CONFIG "SEC_FLOATING_FEATURE_SECURITY_CONFIG_DEVICEMONITOR_PACKAGE_NAME" "com.samsung.android.sm.devicesecurity.tcm"
-SET_CONFIG "SEC_FLOATING_FEATURE_SMARTMANAGER_CONFIG_PACKAGE_NAME" "com.samsung.android.sm_cn"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SECURITY_CONFIG_DEVICEMONITOR_PACKAGE_NAME" "com.samsung.android.sm.devicesecurity.tcm"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SMARTMANAGER_CONFIG_PACKAGE_NAME" "com.samsung.android.sm_cn"
 
 if ! grep -q "SmartManagerCN" "$WORK_DIR/configs/file_context-system"; then
     {
