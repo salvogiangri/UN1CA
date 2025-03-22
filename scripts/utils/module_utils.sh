@@ -206,6 +206,13 @@ REMOVE_FROM_WORK_DIR()
     fi
     sed -i "$PATTERN" "$WORK_DIR/configs/file_context-$PARTITION"
 
+    if [[ "$FILE" == *".so" ]]; then
+        # shellcheck disable=SC2013
+        for f in $(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt); do
+            sed -i "/$(basename "$FILE")/d" "$f"
+        done
+    fi
+
     return 0
 }
 
@@ -224,7 +231,7 @@ SET_FLOATING_FEATURE_CONFIG()
     fi
 
     if grep -q "$CONFIG" "$FILE"; then
-        if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+        if [[ "$VALUE" == "-d" ]] || [[ "$VALUE" == "--delete" ]]; then
             echo "Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
             sed -i "/$CONFIG/d" "$FILE"
         else

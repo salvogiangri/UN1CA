@@ -142,15 +142,6 @@ system/lib64/vendor.samsung.hardware.frcmc-V1-ndk.so
 for blob in $BLOBS_LIST
 do
     REMOVE_FROM_WORK_DIR "system" "$blob"
-    if [[ "$blob" == *".camera.samsung.so" ]]; then
-        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
-    fi
-    if [[ "$blob" == *".arcsoft.so" ]]; then
-        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
-    fi
-    if [[ "$blob" == *".media.samsung.so" ]]; then
-        sed -i "/$(basename "$blob")/d" "$WORK_DIR/system/system/etc/public.libraries-media.samsung.txt"
-    fi
 done
 
 echo "Add stock camera libs"
