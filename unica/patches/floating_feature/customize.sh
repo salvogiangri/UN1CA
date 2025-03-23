@@ -9,10 +9,12 @@ READ_AND_APPLY_CONFIGS()
             [[ "$i" = "#"* ]] && continue
             [[ -z "$i" ]] && continue
 
-            if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
-                SET_FLOATING_FEATURE_CONFIG "$(echo -n "$i" | cut -d " " -f 1)" --delete
-            elif echo -n "$i" | grep -q "="; then
-                SET_FLOATING_FEATURE_CONFIG "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f2-)"
+            if echo -n "$i" | grep -q "="; then
+                if [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
+                    SET_FLOATING_FEATURE_CONFIG "$(echo -n "$i" | cut -d "=" -f 1)" --delete
+                else
+                    SET_FLOATING_FEATURE_CONFIG "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)"
+                fi
             else
                 echo "Malformed string in target/$TARGET_CODENAME/sff.sh: \"$i\""
                 return 1

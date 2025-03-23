@@ -187,18 +187,20 @@ HEX_PATCH()
     TO="$(tr "[:upper:]" "[:lower:]" <<< "$TO")"
 
     if xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$TO"; then
-        echo "\"$TO\" already applied in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+        echo "\"$TO\" already applied in ${FILE//$WORK_DIR/}"
         return 0
     fi
 
     if ! xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$FROM"; then
-        echo "No \"$FROM\" match in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+        echo "No \"$FROM\" match in ${FILE//$WORK_DIR/}"
         return 1
     fi
 
-    echo "Patching \"$FROM\" to \"$TO\" in $(echo "$FILE" | sed "s.$WORK_DIR..")"
+    echo "Patching \"$FROM\" to \"$TO\" in ${FILE//$WORK_DIR/}"
     xxd -p "$FILE" | tr -d "\n" | tr -d " " | sed "s/$FROM/$TO/" | xxd -r -p > "$FILE.tmp"
     mv "$FILE.tmp" "$FILE"
+
+    return 0
 }
 
 # REMOVE_FROM_WORK_DIR "<partition>" "<file/dir>"
@@ -239,7 +241,7 @@ REMOVE_FROM_WORK_DIR()
     sed -i "$PATTERN" "$WORK_DIR/configs/fs_config-$PARTITION"
 
     PATTERN="${FILE//\//\\/}"
-    PATTERN="${PATTERN//\./\\\.}"
+    PATTERN="${PATTERN//\./\\\\\.}"
     if $IS_DIR; then
         PATTERN="/^\/$PATTERN/d"
     else
@@ -279,7 +281,7 @@ SET_FLOATING_FEATURE_CONFIG()
             echo "Replacing \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
             sed -i "$(sed -n "/<${CONFIG}>/=" "$FILE") c\ \ \ \ <${CONFIG}>${VALUE}</${CONFIG}>" "$FILE"
         fi
-    else
+    elif [[ "$VALUE" != "-d" ]] && [[ "$VALUE" != "--delete" ]]; then
         echo "Adding \"$CONFIG\" config with \"$VALUE\" in /system/system/etc/floating_feature.xml"
         sed -i "/<\/SecFloatingFeatureSet>/d" "$FILE"
         if ! grep -q "Added by scripts" "$FILE"; then
@@ -306,16 +308,16 @@ SET_PROP()
         return 1
     fi
 
-    if GET_PROP "$PARTITION" "$PROP" &> /dev/null; then
+    if [[ $(GET_PROP "$PARTITION" "$PROP") ]]; then
         local FILES
         FILES="$(_GET_PROP_LOCATION "$PARTITION" "$PROP")"
         # shellcheck disable=SC2116
         for f in $(echo "$FILES"); do
-            if [[ "$PROP" == "-d" ]] || [[ "$PROP" == "--delete" ]]; then
-                echo "Deleting \"$PROP\" prop in $f" | sed "s.$WORK_DIR..g"
+            if [[ "$VALUE" == "-d" ]] || [[ "$VALUE" == "--delete" ]]; then
+                echo "Deleting \"$PROP\" prop in ${f//$WORK_DIR/}"
                 sed -i "/^$PROP/d" "$f"
             else
-                echo "Replacing \"$PROP\" prop with \"$VALUE\" in $f" | sed "s.$WORK_DIR..g"
+                echo "Replacing \"$PROP\" prop with \"$VALUE\" in ${f//$WORK_DIR/}"
 
                 local LINES
                 LINES="$(sed -n "/^${PROP}\b/=" "$f")"
@@ -324,7 +326,7 @@ SET_PROP()
                 done
             fi
         done
-    else
+    elif [[ "$VALUE" != "-d" ]] && [[ "$VALUE" != "--delete" ]]; then
         local FILE
 
         case "$PARTITION" in
@@ -339,21 +341,13 @@ SET_PROP()
                 fi
                 ;;
             "system_dlkm")
-                if [ -f "$WORK_DIR/system_dlkm/etc/build.prop" ]; then
-                    FILE="$WORK_DIR/system_dlkm/etc/build.prop"
-                else
-                    FILE="$WORK_DIR/system/system/system_dlkm/etc/build.prop"
-                fi
+                FILE="$WORK_DIR/system_dlkm/etc/build.prop"
                 ;;
             "vendor")
                 FILE="$WORK_DIR/vendor/build.prop"
                 ;;
             "vendor_dlkm")
-                if [ -f "$WORK_DIR/vendor_dlkm/etc/build.prop" ]; then
-                    FILE="$WORK_DIR/vendor_dlkm/etc/build.prop"
-                else
-                    FILE="$WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
-                fi
+                FILE="$WORK_DIR/vendor_dlkm/etc/build.prop"
                 ;;
             "odm_dlkm")
                 FILE="$WORK_DIR/vendor/odm_dlkm/etc/build.prop"
@@ -371,7 +365,7 @@ SET_PROP()
             return 0
         fi
 
-        echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+        echo "Adding \"$PROP\" prop with \"$VALUE\" in ${FILE//$WORK_DIR/}"
         if ! grep -q "Added by scripts" "$FILE"; then
             echo "# Added by scripts/utils/module_utils.sh" >> "$FILE"
         fi

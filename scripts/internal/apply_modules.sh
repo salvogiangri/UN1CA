@@ -36,10 +36,12 @@ READ_AND_APPLY_PROPS()
             [[ "$i" = "#"* ]] && continue
             [[ -z "$i" ]] && continue
 
-            if [[ "$i" == *"delete" ]] || [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
-                SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d " " -f 1)" --delete
-            elif echo -n "$i" | grep -q "="; then
-                SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)"
+            if echo -n "$i" | grep -q "="; then
+                if [[ -z "$(echo -n "$i" | cut -d "=" -f 2)" ]]; then
+                    SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d "=" -f 1)" --delete
+                else
+                    SET_PROP "$PARTITION" "$(echo -n "$i" | cut -d "=" -f 1)" "$(echo -n "$i" | cut -d "=" -f 2)"
+                fi
             else
                 echo "Malformed string in $patch: \"$i\""
                 return 1
