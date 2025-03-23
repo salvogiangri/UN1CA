@@ -125,6 +125,16 @@ _GET_WORK_DIR_PARTITION_PATH()
 }
 # ]
 
+# DECODE_APK <file>
+# Same usage as `run_cmd apktool d <file>`.
+# APK/JAR path MUST not be full and match an existing file inside work_dir.
+DECODE_APK()
+{
+    if [ ! -d "$APKTOOL_DIR/$1" ]; then
+        "$SRC_DIR/scripts/apktool.sh" d "$1"
+    fi
+}
+
 # GET_FLOATING_FEATURE_CONFIG "<config>"
 # Returns the supplied config value.
 GET_FLOATING_FEATURE_CONFIG()

@@ -1,20 +1,13 @@
 SKIPUNZIP=1
 
 # [
-DECOMPILE()
-{
-    if [ ! -d "$APKTOOL_DIR/$1" ]; then
-        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
-    fi
-}
-
 APPLY_PATCH()
 {
     local PATCH
     local COMMIT_NAME
     local OUT
 
-    DECOMPILE "$1"
+    DECODE_APK "$1"
 
     cd "$APKTOOL_DIR/$1"
     PATCH="$SRC_DIR/unica/patches/ultra/$2"

@@ -1,19 +1,12 @@
 SKIPUNZIP=1
 
 # [
-DECOMPILE()
-{
-    if [ ! -d "$APKTOOL_DIR/$1" ]; then
-        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
-    fi
-}
-
 APPLY_PATCH()
 {
     local PATCH
     local OUT
 
-    DECOMPILE "$1"
+    DECODE_APK "$1"
 
     cd "$APKTOOL_DIR/$1"
     PATCH="$SRC_DIR/unica/patches/nfc/$2"
@@ -154,8 +147,8 @@ fi
 
 if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
     [[ "$SOURCE_ESE_COS_NAME" != "$TARGET_ESE_COS_NAME" ]]; then
-    DECOMPILE "system/framework/framework.jar"
-    DECOMPILE "system/framework/services.jar"
+    DECODE_APK "system/framework/framework.jar"
+    DECODE_APK "system/framework/services.jar"
 
     if [[ "$TARGET_ESE_CHIP_VENDOR" == "none" ]] && [[ "$TARGET_ESE_COS_NAME" == "none" ]]; then
         REMOVE_FROM_WORK_DIR "system" "system/app/ESEServiceAgent"

@@ -1,17 +1,10 @@
 # [
-DECOMPILE()
-{
-    if [ ! -d "$APKTOOL_DIR/$1" ]; then
-        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
-    fi
-}
-
 APPLY_PATCH()
 {
     local PATCH
     local OUT
 
-    DECOMPILE "$1"
+    DECODE_APK "$1"
 
     cd "$APKTOOL_DIR/$1"
     PATCH="$SRC_DIR/unica/patches/product_feature/$2"
@@ -42,8 +35,8 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]]; then
     echo "Applying MAINLINE_API_LEVEL patches"
 
-    DECOMPILE "system/framework/esecomm.jar"
-    DECOMPILE "system/framework/services.jar"
+    DECODE_APK "system/framework/esecomm.jar"
+    DECODE_APK "system/framework/services.jar"
 
     FTP="
     system/framework/esecomm.jar/smali/com/sec/esecomm/EsecommAdapter.smali
@@ -103,9 +96,9 @@ fi
 if [[ "$SOURCE_AUTO_BRIGHTNESS_TYPE" != "$TARGET_AUTO_BRIGHTNESS_TYPE" ]]; then
     echo "Applying auto brightness type patches"
 
-    DECOMPILE "system/framework/services.jar"
-    DECOMPILE "system/framework/ssrm.jar"
-    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
+    DECODE_APK "system/framework/services.jar"
+    DECODE_APK "system/framework/ssrm.jar"
+    DECODE_APK "system/priv-app/SecSettings/SecSettings.apk"
 
     FTP="
     system/framework/services.jar/smali_classes3/com/android/server/power/PowerManagerUtil.smali
@@ -120,10 +113,10 @@ fi
 if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" ]]; then
     echo "Applying fingerprint sensor patches"
 
-    DECOMPILE "system/framework/framework.jar"
-    DECOMPILE "system/framework/services.jar"
-    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
-    DECOMPILE "system_ext/priv-app/SystemUI/SystemUI.apk"
+    DECODE_APK "system/framework/framework.jar"
+    DECODE_APK "system/framework/services.jar"
+    DECODE_APK "system/priv-app/SecSettings/SecSettings.apk"
+    DECODE_APK "system_ext/priv-app/SystemUI/SystemUI.apk"
 
     FTP="
     system/framework/framework.jar/smali_classes2/android/hardware/fingerprint/FingerprintManager.smali
@@ -168,7 +161,7 @@ if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
     [[ "$SOURCE_MDNIE_WEAKNESS_SOLUTION_FUNCTION" != "$TARGET_MDNIE_WEAKNESS_SOLUTION_FUNCTION" ]]; then
     echo "Applying mDNIe features patches"
 
-    DECOMPILE "system/framework/services.jar"
+    DECODE_APK "system/framework/services.jar"
 
     FTP="
     system/framework/services.jar/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
@@ -222,13 +215,13 @@ fi
 if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     echo "Applying HFR_MODE patches"
 
-    DECOMPILE "system/framework/framework.jar"
-    DECOMPILE "system/framework/gamemanager.jar"
-    DECOMPILE "system/framework/gamesdk.jar"
-    DECOMPILE "system/framework/secinputdev-service.jar"
-    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
-    DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
-    DECOMPILE "system_ext/priv-app/SystemUI/SystemUI.apk"
+    DECODE_APK "system/framework/framework.jar"
+    DECODE_APK "system/framework/gamemanager.jar"
+    DECODE_APK "system/framework/gamesdk.jar"
+    DECODE_APK "system/framework/secinputdev-service.jar"
+    DECODE_APK "system/priv-app/SecSettings/SecSettings.apk"
+    DECODE_APK "system/priv-app/SettingsProvider/SettingsProvider.apk"
+    DECODE_APK "system_ext/priv-app/SystemUI/SystemUI.apk"
 
     # TODO: this breaks 60hz AOD
     #if [[ "${#TARGET_HFR_MODE}" -le "6" ]]; then
@@ -255,8 +248,8 @@ fi
 if [[ "$SOURCE_HFR_SUPPORTED_REFRESH_RATE" != "$TARGET_HFR_SUPPORTED_REFRESH_RATE" ]]; then
     echo "Applying HFR_SUPPORTED_REFRESH_RATE patches"
 
-    DECOMPILE "system/framework/framework.jar"
-    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
+    DECODE_APK "system/framework/framework.jar"
+    DECODE_APK "system/priv-app/SecSettings/SecSettings.apk"
 
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
@@ -273,9 +266,9 @@ fi
 if [[ "$SOURCE_HFR_DEFAULT_REFRESH_RATE" != "$TARGET_HFR_DEFAULT_REFRESH_RATE" ]]; then
     echo "Applying HFR_DEFAULT_REFRESH_RATE patches"
 
-    DECOMPILE "system/framework/framework.jar"
-    DECOMPILE "system/priv-app/SecSettings/SecSettings.apk"
-    DECOMPILE "system/priv-app/SettingsProvider/SettingsProvider.apk"
+    DECODE_APK "system/framework/framework.jar"
+    DECODE_APK "system/priv-app/SecSettings/SecSettings.apk"
+    DECODE_APK "system/priv-app/SettingsProvider/SettingsProvider.apk"
 
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
@@ -293,7 +286,7 @@ if [[ "$SOURCE_HFR_SEAMLESS_BRT" != "$TARGET_HFR_SEAMLESS_BRT" ]] || \
     if [[ "$TARGET_HFR_SEAMLESS_BRT" == "none" ]] && [[ "$TARGET_HFR_SEAMLESS_LUX" == "none" ]]; then
         APPLY_PATCH "system/framework/framework.jar" "hfr/framework.jar/0001-Remove-brightness-threshold-values.patch"
     else
-        DECOMPILE "system/framework/framework.jar"
+        DECODE_APK "system/framework/framework.jar"
 
         FTP="
         system/framework/framework.jar/smali_classes5/com/samsung/android/hardware/display/RefreshRateConfig.smali
@@ -308,7 +301,7 @@ fi
 if [[ "$SOURCE_MULTI_MIC_MANAGER_VERSION" != "$TARGET_MULTI_MIC_MANAGER_VERSION" ]]; then
     echo "Applying SemMultiMicManager patches"
 
-    DECOMPILE "system/framework/framework.jar"
+    DECODE_APK "system/framework/framework.jar"
 
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
@@ -321,7 +314,7 @@ fi
 if [[ "$SOURCE_SSRM_CONFIG_NAME" != "$TARGET_SSRM_CONFIG_NAME" ]]; then
     echo "Applying SSRM patches"
 
-    DECOMPILE "system/framework/ssrm.jar"
+    DECODE_APK "system/framework/ssrm.jar"
 
     FTP="
     system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali
@@ -333,7 +326,7 @@ fi
 if [[ "$SOURCE_DVFS_CONFIG_NAME" != "$TARGET_DVFS_CONFIG_NAME" ]]; then
     echo "Applying DVFS patches"
 
-    DECOMPILE "system/framework/ssrm.jar"
+    DECODE_APK "system/framework/ssrm.jar"
 
     FTP="
     system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali

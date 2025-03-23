@@ -1,14 +1,5 @@
 SKIPUNZIP=1
 
-# [
-DECOMPILE()
-{
-    if [ ! -d "$APKTOOL_DIR/$1" ]; then
-        bash "$SRC_DIR/scripts/apktool.sh" d "$1"
-    fi
-}
-# ]
-
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
@@ -30,7 +21,7 @@ fi
 
 # Enable camera cutout protection
 if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION" ]]; then
-    DECOMPILE "system_ext/priv-app/SystemUI/SystemUI.apk"
+    DECODE_APK "system_ext/priv-app/SystemUI/SystemUI.apk"
 
     FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
     R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"
