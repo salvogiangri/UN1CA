@@ -3,10 +3,10 @@
 [ -d "$WORK_DIR/system/system/priv-app/AppLock" ] \
     && mv -f "$WORK_DIR/system/system/priv-app/AppLock" "$WORK_DIR/system/system/priv-app/SAppLock"
 
-REMOVE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v5"
-REMOVE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v6_DeviceSecurity"
-REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
-REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
+DELETE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v5"
+DELETE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v6_DeviceSecurity"
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
 
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SECURITY_CONFIG_DEVICEMONITOR_PACKAGE_NAME" "com.samsung.android.sm.devicesecurity.tcm"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SMARTMANAGER_CONFIG_PACKAGE_NAME" "com.samsung.android.sm_cn"

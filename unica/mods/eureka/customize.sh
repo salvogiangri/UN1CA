@@ -1,12 +1,12 @@
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_acoustic.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_epic.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_EDM.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_RnB.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_jazz_piano.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Galaxy/ACH_Over_the_Horizon.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_pop_remix.ogg"
-REMOVE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_smooth_remix.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_acoustic.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Calm/ACH_The_Voyage_epic.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_EDM.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_RnB.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Fun/ACH_The_Voyage_jazz_piano.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Galaxy/ACH_Over_the_Horizon.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_pop_remix.ogg"
+DELETE_FROM_WORK_DIR "system" "system/media/audio/ringtones/SoundTheme/Retro/ACH_The_Voyage_smooth_remix.ogg"
 
 if ! grep -q "EnvironmentAdaptiveDisplay" "$WORK_DIR/configs/file_context-system"; then
     {

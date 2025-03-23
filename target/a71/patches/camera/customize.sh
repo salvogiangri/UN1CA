@@ -61,7 +61,7 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/file_context-system"
 sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/fs_config-system"
-REMOVE_FROM_WORK_DIR "system" "system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
+DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
@@ -136,7 +136,7 @@ system/lib64/vendor.samsung.hardware.frcmc-V1-ndk.so
 "
 for blob in $BLOBS_LIST
 do
-    REMOVE_FROM_WORK_DIR "system" "$blob"
+    DELETE_FROM_WORK_DIR "system" "$blob"
 done
 
 echo "Add stock camera libs"

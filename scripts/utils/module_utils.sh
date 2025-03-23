@@ -135,6 +135,67 @@ DECODE_APK()
     fi
 }
 
+# DELETE_FROM_WORK_DIR "<partition>" "<file/dir>"
+# Deletes a file/directory from work dir along with its entries in fs_config/file_context.
+DELETE_FROM_WORK_DIR()
+{
+    local PARTITION="${1:?}"
+    local FILE="${2:?}"
+    local FILE_PATH
+    local PATTERN
+    local IS_DIR=false
+
+    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+        echo "\"$PARTITION\" is not a valid partition name"
+        return 1
+    fi
+
+    while [[ "${FILE:0:1}" == "/" ]]; do
+        FILE="${FILE:1}"
+    done
+
+    if ! $TARGET_HAS_SYSTEM_EXT && [[ "$PARTITION" == "system_ext" ]]; then
+        PARTITION="system"
+        FILE="system/system_ext/$FILE"
+    fi
+
+    FILE_PATH="$(_GET_WORK_DIR_PARTITION_PATH "$PARTITION")/$FILE"
+    if [ ! -e "$FILE_PATH" ]; then
+        echo "File not found: $FILE_PATH"
+        return 0
+    fi
+    [ -d "$FILE_PATH" ] && IS_DIR=true
+
+    echo "Deleting /$PARTITION/$FILE"
+    rm -rf "$FILE_PATH"
+
+    PATTERN="${FILE//\//\\/}"
+    if $IS_DIR; then
+        PATTERN="/^$PATTERN/d"
+    else
+        PATTERN="/^$PATTERN /d"
+    fi
+    sed -i "$PATTERN" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+    PATTERN="${FILE//\//\\/}"
+    PATTERN="${PATTERN//\./\\\\\.}"
+    if $IS_DIR; then
+        PATTERN="/^\/$PATTERN/d"
+    else
+        PATTERN="/^\/$PATTERN /d"
+    fi
+    sed -i "$PATTERN" "$WORK_DIR/configs/file_context-$PARTITION"
+
+    if [[ "$FILE" == *".so" ]]; then
+        # shellcheck disable=SC2013
+        for f in $(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt); do
+            sed -i "/$(basename "$FILE")/d" "$f"
+        done
+    fi
+
+    return 0
+}
+
 # GET_FLOATING_FEATURE_CONFIG "<config>"
 # Returns the supplied config value.
 GET_FLOATING_FEATURE_CONFIG()
@@ -199,67 +260,6 @@ HEX_PATCH()
     echo "Patching \"$FROM\" to \"$TO\" in ${FILE//$WORK_DIR/}"
     xxd -p "$FILE" | tr -d "\n" | tr -d " " | sed "s/$FROM/$TO/" | xxd -r -p > "$FILE.tmp"
     mv "$FILE.tmp" "$FILE"
-
-    return 0
-}
-
-# REMOVE_FROM_WORK_DIR "<partition>" "<file/dir>"
-# Deletes a file/directory from work dir along with its entries in fs_config/file_context.
-REMOVE_FROM_WORK_DIR()
-{
-    local PARTITION="${1:?}"
-    local FILE="${2:?}"
-    local FILE_PATH
-    local PATTERN
-    local IS_DIR=false
-
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
-        return 1
-    fi
-
-    while [[ "${FILE:0:1}" == "/" ]]; do
-        FILE="${FILE:1}"
-    done
-
-    if ! $TARGET_HAS_SYSTEM_EXT && [[ "$PARTITION" == "system_ext" ]]; then
-        PARTITION="system"
-        FILE="system/system_ext/$FILE"
-    fi
-
-    FILE_PATH="$(_GET_WORK_DIR_PARTITION_PATH "$PARTITION")/$FILE"
-    if [ ! -e "$FILE_PATH" ]; then
-        echo "File not found: $FILE_PATH"
-        return 0
-    fi
-    [ -d "$FILE_PATH" ] && IS_DIR=true
-
-    echo "Debloating /$PARTITION/$FILE"
-    rm -rf "$FILE_PATH"
-
-    PATTERN="${FILE//\//\\/}"
-    if $IS_DIR; then
-        PATTERN="/^$PATTERN/d"
-    else
-        PATTERN="/^$PATTERN /d"
-    fi
-    sed -i "$PATTERN" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-    PATTERN="${FILE//\//\\/}"
-    PATTERN="${PATTERN//\./\\\\\.}"
-    if $IS_DIR; then
-        PATTERN="/^\/$PATTERN/d"
-    else
-        PATTERN="/^\/$PATTERN /d"
-    fi
-    sed -i "$PATTERN" "$WORK_DIR/configs/file_context-$PARTITION"
-
-    if [[ "$FILE" == *".so" ]]; then
-        # shellcheck disable=SC2013
-        for f in $(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt); do
-            sed -i "/$(basename "$FILE")/d" "$f"
-        done
-    fi
 
     return 0
 }

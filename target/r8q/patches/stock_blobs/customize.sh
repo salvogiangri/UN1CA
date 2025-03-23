@@ -59,16 +59,16 @@ ADD_TO_WORK_DIR()
 MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
 REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
-REMOVE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.secureclock-V1-ndk.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib/libcallaudio.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib/libdk_native_keymint.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib64/android.hardware.security.keymint-V2-ndk.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib64/libcallaudio.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib64/libdk_native_keymint.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib64/libsecaudiomonomix.so"
-REMOVE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V2-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.secureclock-V1-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/libcallaudio.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/libdk_native_keymint.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.keymint-V2-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/android.hardware.security.keymint-V2-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/libcallaudio.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/libdk_native_keymint.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/libsecaudiomonomix.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
 if ! grep -q "cameralightsensor" "$WORK_DIR/configs/file_context-system"; then
     {
         echo "/system/etc/permissions/privapp-permissions-com\.samsung\.adaptivebrightnessgo\.cameralightsensor\.xml u:object_r:system_file:s0"
@@ -115,9 +115,9 @@ sed -i "s/HotwordEnrollmentOKGoogleEx4HEXAGON/HotwordEnrollmentOKGoogleEx3HEXAGO
 echo "Add stock rscmgr.rc"
 ADD_TO_WORK_DIR "system" "system/etc/init/rscmgr.rc" 0 0 644 "u:object_r:system_file:s0"
 
-REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
-REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.flip.xml"
-REMOVE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml"
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.flip.xml"
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml"
 echo "Add stock system features"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.clearsideviewcover.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.pocketmode_level33.xml" 0 0 644 "u:object_r:system_file:s0"

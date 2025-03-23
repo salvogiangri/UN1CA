@@ -92,7 +92,7 @@ system/lib64/vendor.samsung.hardware.frcmc-V1-ndk.so
 "
 for blob in $BLOBS_LIST
 do
-    REMOVE_FROM_WORK_DIR "system" "$blob"
+    DELETE_FROM_WORK_DIR "system" "$blob"
 done
 
 echo "Add stock camera libs"
