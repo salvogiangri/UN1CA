@@ -16,6 +16,48 @@
 #
 
 # [
+_GET_SELINUX_LABEL()
+{
+    local PARTITION="${1:?}"
+    local FILE="${2:?}"
+    local FC_FILE
+
+    case "$PARTITION" in
+        "product")
+            FC_FILE="$WORK_DIR/product/etc/selinux/product_file_contexts"
+            ;;
+        "vendor")
+            FC_FILE="$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+            ;;
+        "system_ext")
+            if $TARGET_HAS_SYSTEM_EXT; then
+                FC_FILE="$WORK_DIR/system_ext/etc/selinux/system_ext_file_contexts"
+            else
+                FC_FILE="$WORK_DIR/system/system/system_ext/etc/selinux/system_ext_file_contexts"
+            fi
+            ;;
+        *)
+            FC_FILE="$WORK_DIR/system/system/etc/selinux/plat_file_contexts"
+            ;;
+    esac
+
+    if [[ "${FILE:0:1}" != "/" ]]; then
+        FILE="/$FILE"
+    fi
+
+    local PATTERN
+    local LABEL
+    while IFS= read -r l; do
+        l="$(tr -s " " <<< "$l")"
+        PATTERN="$(cut -d " " -f 1 <<< "$l")"
+        LABEL="$(cut -d " " -f 2 <<< "$l")"
+        if grep -q -P "$PATTERN" <<< "$FILE"; then
+            echo "$LABEL"
+            break
+        fi
+    done < "$FC_FILE"
+}
+
 _IS_VALID_PARTITION_NAME()
 {
     local PARTITION="$1"
@@ -137,7 +179,6 @@ ADD_TO_WORK_DIR()
     local GROUP="${5:?}"
     local MODE="${6:?}"
     local LABEL="${7:?}"
-    local TMP
 
     if [ ! -d "$SOURCE" ]; then
         SOURCE="$FW_DIR/$(cut -d "/" -f 1 <<< "$SOURCE")_$(cut -d "/" -f 2 <<< "$SOURCE")"
@@ -185,39 +226,95 @@ ADD_TO_WORK_DIR()
 
     if [ ! -d "$SOURCE_FILE" ]; then
         mkdir -p "$(dirname "$TARGET_FILE")"
+    else
+        mkdir -p "$TARGET_FILE"
     fi
     cp -a -T "$SOURCE_FILE" "$TARGET_FILE"
 
-    # TODO properly handle adding fs_config/file_context entries
+    local TMP
     TMP="${TARGET_FILE//$WORK_DIR\//}"
-    while [[ "$TMP" != "." ]]; do
-        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
-            if [[ "$TMP" == *"$TARGET_FILE" ]]; then
-                echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            elif [[ "$PARTITION" == "vendor" ]]; then
-                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            else
-                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+    [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
+    if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
+        echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+    fi
+    TMP="/${TMP//\./\\.}"
+    if ! grep -q -F "$TMP " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+        echo "$TMP $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
+    fi
+
+    if [ -d "$TARGET_FILE" ]; then
+        local FILES
+        FILES="$(find "$SOURCE_FILE")"
+        FILES="${FILES//$SOURCE\//}"
+        [[ "$PARTITION" == "system" ]] && FILES="${FILES//system\/system\//system/}"
+
+        for f in $(echo "$FILES"); do
+            if ! grep -q -F "$f " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
+                if grep -q -F "$f " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
+                    grep -F "$f " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                else
+                    if [ -d "$SOURCE/$f" ] || [ -d "$SOURCE/system/$f" ]; then
+                        if [[ "$PARTITION" == "vendor" ]]; then
+                            echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
+                        else
+                            echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                        fi
+                    else
+                        if [[ "$PARTITION" == "vendor" ]]; then
+                            echo "$TMP 0 2000 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
+                        else
+                            echo "$TMP 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                        fi
+                    fi
+                fi
             fi
-        else
-            break
-        fi
 
-        TMP="$(dirname "$TMP")"
-    done
+            if ! grep -q -F "/${f//\./\\.} " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+                if grep -q -F "/${f//\./\\.} " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
+                    grep -F "/${f//\./\\.} " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                else
+                    echo "/${f//\./\\.} $(_GET_SELINUX_LABEL "$PARTITION" "/$f")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                fi
+            fi
+        done
+    else
+        TMP="$(dirname "${TARGET_FILE//$WORK_DIR\//}")"
+        [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
+        while [[ "$TMP" != "." ]]; do
+            if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
+                if grep -q -F "$TMP " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
+                    grep -F "$TMP " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                else
+                    if [[ "$PARTITION" == "vendor" ]]; then
+                        echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
+                    else
+                        echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                    fi
+                fi
+            else
+                break
+            fi
 
-    TMP="${TARGET_FILE//$WORK_DIR\//}"
-    TMP="${TMP//\./\\.}"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
-            echo "/$TMP $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
-        else
-            break
-        fi
+            TMP="$(dirname "$TMP")"
+        done
 
-        TMP="$(dirname "$TMP")"
-    done
+        TMP="$(dirname "${TARGET_FILE//$WORK_DIR\//}")"
+        [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
+        while [[ "$TMP" != "." ]]
+        do
+            if ! grep -q -F "/${TMP//\./\\.} " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+                if grep -q -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
+                    grep -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                else
+                    echo "/${TMP//\./\\.} $(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                fi
+            else
+                break
+            fi
+
+            TMP="$(dirname "$TMP")"
+        done
+    fi
 
     return 0
 }
