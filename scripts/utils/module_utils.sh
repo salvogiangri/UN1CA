@@ -111,9 +111,9 @@ _GET_WORK_DIR_PARTITION_PATH()
     case "$PARTITION" in
         "system_ext")
             if $TARGET_HAS_SYSTEM_EXT; then
-                PARTITION_PATH+="/system/system/system_ext"
-            else
                 PARTITION_PATH+="/system_ext"
+            else
+                PARTITION_PATH+="/system/system/system_ext"
             fi
             ;;
         *)
@@ -222,6 +222,11 @@ REMOVE_FROM_WORK_DIR()
         FILE="${FILE:1}"
     done
 
+    if ! $TARGET_HAS_SYSTEM_EXT && [[ "$PARTITION" == "system_ext" ]]; then
+        PARTITION="system"
+        FILE="system/system_ext/$FILE"
+    fi
+
     FILE_PATH="$(_GET_WORK_DIR_PARTITION_PATH "$PARTITION")/$FILE"
     if [ ! -e "$FILE_PATH" ]; then
         echo "File not found: $FILE_PATH"
@@ -229,7 +234,7 @@ REMOVE_FROM_WORK_DIR()
     fi
     [ -d "$FILE_PATH" ] && IS_DIR=true
 
-    echo "Debloating /$FILE"
+    echo "Debloating /$PARTITION/$FILE"
     rm -rf "$FILE_PATH"
 
     PATTERN="${FILE//\//\\/}"
