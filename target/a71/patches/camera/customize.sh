@@ -61,7 +61,7 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
 sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/file_context-system"
 sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/fs_config-system"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/system/system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
+REMOVE_FROM_WORK_DIR "system" "system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
