@@ -15,95 +15,38 @@ APPLY_PATCH()
     patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
     cd - &> /dev/null
 }
-
-ADD_TO_WORK_DIR()
-{
-    local PARTITION="$1"
-    local FILE_PATH="$2"
-    local TMP
-
-    case "$PARTITION" in
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FILE_PATH="system_ext/$FILE_PATH"
-            else
-                PARTITION="system"
-                FILE_PATH="system/system/system_ext/$FILE_PATH"
-            fi
-        ;;
-        *)
-            FILE_PATH="$PARTITION/$FILE_PATH"
-            ;;
-    esac
-
-    mkdir -p "$WORK_DIR/$(dirname "$FILE_PATH")"
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$FILE_PATH" "$WORK_DIR/$FILE_PATH"
-
-    TMP="$FILE_PATH"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION"; then
-            if [[ "$TMP" == "$FILE_PATH" ]]; then
-                echo "$TMP $3 $4 $5 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            elif [[ "$PARTITION" == "vendor" ]]; then
-                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            else
-                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            fi
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-
-    TMP="$(echo "$FILE_PATH" | sed 's/\./\\\./g')"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION"; then
-            echo "/$TMP $6" >> "$WORK_DIR/configs/file_context-$PARTITION"
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-}
 # ]
 
-MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
 
-if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci.conf" ]; then
-    ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci.conf" 0 0 644 "u:object_r:system_file:s0"
+if [ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci.conf" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/etc/libnfc-nci.conf" 0 0 644 "u:object_r:system_file:s0"
 else
     DELETE_FROM_WORK_DIR "system" "system/etc/libnfc-nci.conf"
 fi
-[ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci-NXP_SN100U.conf" ] && \
-    ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci-NXP_SN100U.conf" 0 0 644 "u:object_r:system_file:s0"
-[ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci-NXP_PN553.conf" ] && \
-    ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci-NXP_PN553.conf" 0 0 644 "u:object_r:system_file:s0"
-[ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci-SLSI.conf" ] && \
-    ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci-SLSI.conf" 0 0 644 "u:object_r:system_file:s0"
-[ -f "$FW_DIR/${MODEL}_${REGION}/system/system/etc/libnfc-nci-STM_ST21.conf" ] && \
-    ADD_TO_WORK_DIR "system" "system/etc/libnfc-nci-STM_ST21.conf" 0 0 644 "u:object_r:system_file:s0"
+[ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci-NXP_SN100U.conf" ] && \
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/etc/libnfc-nci-NXP_SN100U.conf" 0 0 644 "u:object_r:system_file:s0"
+[ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci-NXP_PN553.conf" ] && \
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/etc/libnfc-nci-NXP_PN553.conf" 0 0 644 "u:object_r:system_file:s0"
+[ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci-SLSI.conf" ] && \
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/etc/libnfc-nci-SLSI.conf" 0 0 644 "u:object_r:system_file:s0"
+[ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci-STM_ST21.conf" ] && \
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/etc/libnfc-nci-STM_ST21.conf" 0 0 644 "u:object_r:system_file:s0"
 
 TARGET_NFC_CHIPNAMES="nxpsn nxppn sec st"
 for i in $TARGET_NFC_CHIPNAMES; do
     if [ -f "$WORK_DIR/system/system/lib64/libnfc_${i}_jni.so" ]; then
-        if [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libnfc_${i}_jni.so" ]; then
+        if [ -f "$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_${i}_jni.so" ]; then
             continue
         else
             DELETE_FROM_WORK_DIR "system" "system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so"
             DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc-${i}.so"
             DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_${i}_jni.so"
         fi
-    elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libnfc_${i}_jni.so" ]; then
-        ADD_TO_WORK_DIR "system" "system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so" 0 0 644 "u:object_r:system_file:s0"
-        ADD_TO_WORK_DIR "system" "system/lib64/libnfc-${i}.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        ADD_TO_WORK_DIR "system" "system/lib64/libnfc_${i}_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
+    elif [ -f "$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_${i}_jni.so" ]; then
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/app/NfcNci/lib/arm64/libnfc_${i}_jni.so" 0 0 644 "u:object_r:system_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/lib64/libnfc-${i}.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/lib64/libnfc_${i}_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
         # Workaround for pre-U libs
         if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
@@ -121,8 +64,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
     else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc_nxp.so"
     fi
-elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
-    ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc_nxp.so" 0 0 644 "u:object_r:system_lib_file:s0"
+elif [ -f "$TARGET_FIRMWARE_PATH/system/system/lib64/libstatslog_nfc_nxp.so" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/lib64/libstatslog_nfc_nxp.so" 0 0 644 "u:object_r:system_lib_file:s0"
 fi
 
 if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]; then
@@ -131,8 +74,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc.so" ]; then
     else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc.so"
     fi
-elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc.so" ]; then
-    ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc.so" 0 0 644 "u:object_r:system_lib_file:s0"
+elif [ -f "$TARGET_FIRMWARE_PATH/system/system/lib64/libstatslog_nfc.so" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/lib64/libstatslog_nfc.so" 0 0 644 "u:object_r:system_lib_file:s0"
 fi
 
 if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so" ]; then
@@ -141,8 +84,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libstatslog_nfc_st.so" ]; then
     else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libstatslog_nfc_st.so"
     fi
-elif [ -f "$FW_DIR/${MODEL}_${REGION}/system/system/lib64/libstatslog_nfc_st.so" ]; then
-    ADD_TO_WORK_DIR "system" "system/lib64/libstatslog_nfc_st.so" 0 0 644 "u:object_r:system_lib_file:s0"
+elif [ -f "$TARGET_FIRMWARE_PATH/system/system/lib64/libstatslog_nfc_st.so" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/lib64/libstatslog_nfc_st.so" 0 0 644 "u:object_r:system_lib_file:s0"
 fi
 
 if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \

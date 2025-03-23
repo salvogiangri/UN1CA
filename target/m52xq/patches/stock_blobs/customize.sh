@@ -1,66 +1,5 @@
-# [
-ADD_TO_WORK_DIR()
-{
-    local PARTITION="$1"
-    local FILE_PATH="$2"
-    local TMP
-
-    case "$PARTITION" in
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FILE_PATH="system_ext/$FILE_PATH"
-            else
-                PARTITION="system"
-                FILE_PATH="system/system/system_ext/$FILE_PATH"
-            fi
-        ;;
-        *)
-            FILE_PATH="$PARTITION/$FILE_PATH"
-            ;;
-    esac
-
-    mkdir -p "$WORK_DIR/$(dirname "$FILE_PATH")"
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$FILE_PATH" "$WORK_DIR/$FILE_PATH"
-
-    TMP="$FILE_PATH"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION"; then
-            if [[ "$TMP" == "$FILE_PATH" ]]; then
-                echo "$TMP $3 $4 $5 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            elif [[ "$PARTITION" == "vendor" ]]; then
-                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            else
-                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            fi
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-
-    TMP="$(echo "$FILE_PATH" | sed 's/\./\\\./g')"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION"; then
-            echo "/$TMP $6" >> "$WORK_DIR/configs/file_context-$PARTITION"
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-}
-# ]
-
-MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
-
 echo "Add stock /odm/ueventd.rc"
-ADD_TO_WORK_DIR "odm" "ueventd.rc" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "odm" "ueventd.rc" 0 0 644 "u:object_r:vendor_file:s0"
 
 echo "Fix Google Assistant"
 rm -rf "$WORK_DIR/product/priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON"
@@ -80,9 +19,9 @@ DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.usb_authentication.xml"
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml"
 echo "Add stock system features"
-ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.nsflp_level_600.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "system" "system/etc/permissions/com.sec.feature.sensorhub_level40.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/permissions/com.sec.feature.nsflp_level_600.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/permissions/com.sec.feature.sensorhub_level40.xml" 0 0 644 "u:object_r:system_file:s0"
 
 DELETE_FROM_WORK_DIR "system" "system/lib64/libhdcp_client_aidl.so"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libhdcp2.so"
@@ -113,14 +52,14 @@ if ! grep -q "remotedisplay_wfd" "$WORK_DIR/configs/fs_config-system"; then
 fi
 
 echo "Add HIDL fingerprint biometrics libs"
-ADD_TO_WORK_DIR "system" "system/lib/android.hardware.biometrics.fingerprint@2.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "system" "system/lib/vendor.samsung.hardware.biometrics.fingerprint@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "system" "system/lib64/android.hardware.biometrics.fingerprint@2.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.biometrics.fingerprint@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/android.hardware.biometrics.fingerprint@2.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/vendor.samsung.hardware.biometrics.fingerprint@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/android.hardware.biometrics.fingerprint@2.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/vendor.samsung.hardware.biometrics.fingerprint@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
 echo "Add HIDL face biometrics libs"
-ADD_TO_WORK_DIR "system" "system/lib/android.hardware.biometrics.face@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "system" "system/lib/vendor.samsung.hardware.biometrics.face@2.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/android.hardware.biometrics.face@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/vendor.samsung.hardware.biometrics.face@2.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
 DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V2-ndk.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.secureclock-V1-ndk.so"

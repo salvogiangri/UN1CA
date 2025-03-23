@@ -1,63 +1,4 @@
-# [
-ADD_TO_WORK_DIR()
-{
-    local PARTITION="$1"
-    local FILE_PATH="$2"
-    local TMP
-
-    case "$PARTITION" in
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FILE_PATH="system_ext/$FILE_PATH"
-            else
-                PARTITION="system"
-                FILE_PATH="system/system/system_ext/$FILE_PATH"
-            fi
-        ;;
-        *)
-            FILE_PATH="$PARTITION/$FILE_PATH"
-            ;;
-    esac
-
-    mkdir -p "$WORK_DIR/$(dirname "$FILE_PATH")"
-    cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$FILE_PATH" "$WORK_DIR/$FILE_PATH"
-
-    TMP="$FILE_PATH"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION"; then
-            if [[ "$TMP" == "$FILE_PATH" ]]; then
-                echo "$TMP $3 $4 $5 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            elif [[ "$PARTITION" == "vendor" ]]; then
-                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            else
-                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-            fi
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-
-    TMP="$(echo "$FILE_PATH" | sed 's/\./\\\./g')"
-    [[ "$PARTITION" == "system" ]] && TMP="$(echo "$TMP" | sed 's.^system/system/.system/.')"
-    while [[ "$TMP" != "." ]]
-    do
-        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION"; then
-            echo "/$TMP $6" >> "$WORK_DIR/configs/file_context-$PARTITION"
-        else
-            break
-        fi
-
-        TMP="$(dirname "$TMP")"
-    done
-}
-# ]
-
-MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
-REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo -e "\n" >> "$WORK_DIR/vendor/ueventd.rc"
@@ -157,7 +98,7 @@ system/lib64/libtensorflowlite_jni_r2.6.so
 "
 for blob in $BLOBS_LIST
 do
-    ADD_TO_WORK_DIR "system" "$blob" 0 0 644 "u:object_r:system_lib_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "$blob" 0 0 644 "u:object_r:system_lib_file:s0"
 done
 {
     echo "libLttEngine.camera.samsung.so"
@@ -165,7 +106,7 @@ done
 
 echo "Fix AI Photo Editor"
 cp -a --preserve=all \
-    "$FW_DIR/${MODEL}_${REGION}/system/system/cameradata/portrait_data/single_bokeh_feature.json" \
+    "$TARGET_FIRMWARE_PATH/system/system/cameradata/portrait_data/single_bokeh_feature.json" \
     "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
 if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
     {

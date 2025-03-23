@@ -125,8 +125,105 @@ _GET_WORK_DIR_PARTITION_PATH()
 }
 # ]
 
-# DECODE_APK <file>
-# Same usage as `run_cmd apktool d <file>`.
+# ADD_TO_WORK_DIR <source> <partition> <file/dir> <user> <group> <mode> <label>
+# Adds the supplied file/directory in work dir along with its entries in fs_config/file_context.
+# `source` argument can either be a full path or a string in the following format: "MODEL/CSC"
+ADD_TO_WORK_DIR()
+{
+    local SOURCE="${1:?}"
+    local PARTITION="${2:?}"
+    local FILE="${3:?}"
+    local USER="${4:?}"
+    local GROUP="${5:?}"
+    local MODE="${6:?}"
+    local LABEL="${7:?}"
+    local TMP
+
+    if [ ! -d "$SOURCE" ]; then
+        SOURCE="$FW_DIR/$(cut -d "/" -f 1 <<< "$SOURCE")_$(cut -d "/" -f 2 <<< "$SOURCE")"
+    fi
+
+    if [ ! -d "$SOURCE" ]; then
+        echo "Folder not found: $SOURCE"
+        return 1
+    fi
+
+    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+        echo "\"$PARTITION\" is not a valid partition name"
+        return 1
+    fi
+
+    while [[ "${FILE:0:1}" == "/" ]]; do
+        FILE="${FILE:1}"
+    done
+
+    local SOURCE_FILE="$SOURCE"
+    local TARGET_FILE="$WORK_DIR"
+    if [[ "$PARTITION" == "system_ext" ]]; then
+        if [[ "$SOURCE" != "$FW_DIR"* ]] || $SOURCE_HAS_SYSTEM_EXT; then
+            SOURCE_FILE+="/$PARTITION/$FILE"
+        else
+            SOURCE_FILE+="/system/system/system_ext/$FILE"
+        fi
+
+        if $TARGET_HAS_SYSTEM_EXT; then
+            TARGET_FILE+="/$PARTITION/$FILE"
+        else
+            PARTITION="system"
+            FILE="system/system_ext/$FILE"
+            TARGET_FILE+="/system/$FILE"
+        fi
+    else
+        SOURCE_FILE+="/$PARTITION/$FILE"
+        TARGET_FILE+="/$PARTITION/$FILE"
+    fi
+
+    if [ ! -e "$SOURCE_FILE" ] && [ ! -L "$SOURCE_FILE" ]; then
+        echo "File not found: $SOURCE_FILE"
+        return 1
+    fi
+
+    if [ ! -d "$SOURCE_FILE" ]; then
+        mkdir -p "$(dirname "$TARGET_FILE")"
+    fi
+    cp -a -T "$SOURCE_FILE" "$TARGET_FILE"
+
+    # TODO properly handle adding fs_config/file_context entries
+    TMP="${TARGET_FILE//$WORK_DIR\//}"
+    while [[ "$TMP" != "." ]]; do
+        if ! grep -q "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
+            if [[ "$TMP" == *"$TARGET_FILE" ]]; then
+                echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+            elif [[ "$PARTITION" == "vendor" ]]; then
+                echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+            else
+                echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+            fi
+        else
+            break
+        fi
+
+        TMP="$(dirname "$TMP")"
+    done
+
+    TMP="${TARGET_FILE//$WORK_DIR\//}"
+    TMP="${TMP//\./\\.}"
+    while [[ "$TMP" != "." ]]
+    do
+        if ! grep -q "/$TMP " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+            echo "/$TMP $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
+        else
+            break
+        fi
+
+        TMP="$(dirname "$TMP")"
+    done
+
+    return 0
+}
+
+# DECODE_APK <apk/jar>
+# Same usage as `run_cmd apktool d <apk/jar>`.
 # APK/JAR path MUST not be full and match an existing file inside work_dir.
 DECODE_APK()
 {
@@ -136,7 +233,7 @@ DECODE_APK()
 }
 
 # DELETE_FROM_WORK_DIR "<partition>" "<file/dir>"
-# Deletes a file/directory from work dir along with its entries in fs_config/file_context.
+# Deletes the supplied file/directory from work dir along with its entries in fs_config/file_context.
 DELETE_FROM_WORK_DIR()
 {
     local PARTITION="${1:?}"
