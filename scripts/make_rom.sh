@@ -89,9 +89,6 @@ if $BUILD_ROM; then
     echo -e "- Creating work dir..."
     bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
 
-    echo -e "\n- Applying debloat list..."
-    bash "$SRC_DIR/scripts/internal/apply_debloat.sh"
-
     echo -e "\n- Applying ROM patches..."
     bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/patches"
     [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
