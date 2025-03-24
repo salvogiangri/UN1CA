@@ -1,93 +1,62 @@
-SKIPUNZIP=1
-
-SOURCE_FIRMWARE_PATH=$(echo -n "$SOURCE_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)
-TARGET_FIRMWARE_PATH=$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)
+SOURCE_FIRMWARE_PATH="$FW_DIR/$(echo -n "$SOURCE_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
+TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
 
 echo "Replacing boot animation blobs with stock"
 BLOBS_LIST="
-/system/system/media/battery_error.spi
-/system/system/media/battery_lightning_fast.spi
-/system/system/media/battery_lightning.spi
-/system/system/media/battery_low.spi
-/system/system/media/battery_temperature_error.spi
-/system/system/media/battery_temperature_limit.spi
-/system/system/media/battery_water_usb.spi
-/system/system/media/bootsamsungloop.qmg
-/system/system/media/bootsamsung.qmg
-/system/system/media/charging_vi_100.spi
-/system/system/media/charging_vi_level1.spi
-/system/system/media/charging_vi_level2.spi
-/system/system/media/charging_vi_level3.spi
-/system/system/media/charging_vi_level4.spi
-/system/system/media/dock_error_usb.spi
-/system/system/media/incomplete_connect.spi
-/system/system/media/lcd_density.txt
-/system/system/media/percentage.spi
-/system/system/media/safety_timer_usb.spi
-/system/system/media/shutdown.qmg
-/system/system/media/slow_charging_usb.spi
-/system/system/media/temperature_limit_usb.spi
-/system/system/media/water_protection_usb.spi
+system/media/battery_error.spi
+system/media/battery_lightning_fast.spi
+system/media/battery_lightning.spi
+system/media/battery_low.spi
+system/media/battery_temperature_error.spi
+system/media/battery_temperature_limit.spi
+system/media/battery_water_usb.spi
+system/media/bootsamsungloop.qmg
+system/media/bootsamsung.qmg
+system/media/charging_vi_100.spi
+system/media/charging_vi_level1.spi
+system/media/charging_vi_level2.spi
+system/media/charging_vi_level3.spi
+system/media/charging_vi_level4.spi
+system/media/dock_error_usb.spi
+system/media/incomplete_connect.spi
+system/media/lcd_density.txt
+system/media/percentage.spi
+system/media/safety_timer_usb.spi
+system/media/shutdown.qmg
+system/media/slow_charging_usb.spi
+system/media/temperature_limit_usb.spi
+system/media/water_protection_usb.spi
 "
 for blob in $BLOBS_LIST
 do
-    cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH$blob" "$WORK_DIR$blob"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "$blob" 0 0 644 "u:object_r:system_file:s0"
 done
 
 echo "Replacing saiv blobs with stock"
-if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/saiv" ]; then
+if [ -d "$TARGET_FIRMWARE_PATH/system/system/etc/saiv" ]; then
     BLOBS_LIST="
-    /system/system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
-    /system/system/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
+    system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info
+    system/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info
     "
     for blob in $BLOBS_LIST
     do
-        cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH$blob" "$WORK_DIR$blob"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "$blob" 0 0 644 "u:object_r:system_file:s0"
     done
 else
     DELETE_FROM_WORK_DIR "system" "system/etc/saiv"
 fi
 DELETE_FROM_WORK_DIR "system" "system/saiv"
-cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/saiv" "$WORK_DIR/system/system/saiv"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/saiv" 0 0 755 "u:object_r:system_file:s0"
 DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
-cp -a --preserve=all "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/saiv/textrecognition" \
-    "$WORK_DIR/system/system/saiv/textrecognition"
-while read -r i; do
-    FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
-    [ -d "$i" ] && echo "$FILE 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    [ -f "$i" ] && echo "$FILE 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
-    echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-done <<< "$(find "$WORK_DIR/system/system/saiv")"
+ADD_TO_WORK_DIR "$SOURCE_FIRMWARE_PATH" "system" "system/saiv/textrecognition" 0 0 755 "u:object_r:system_file:s0"
 
 echo "Replacing cameradata blobs with stock"
 DELETE_FROM_WORK_DIR "system" "system/cameradata"
-cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata" "$WORK_DIR/system/system/cameradata"
-while read -r i; do
-    FILE="$(echo -n "$i"| sed "s.$WORK_DIR/system/..")"
-    [ -d "$i" ] && echo "$FILE 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    [ -f "$i" ] && echo "$FILE 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    FILE="$(echo -n "$FILE" | sed 's/\./\\./g')"
-    echo "/$FILE u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-done <<< "$(find "$WORK_DIR/system/system/cameradata")"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/cameradata" 0 0 755 "u:object_r:system_file:s0"
 
-if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/usr/share/alsa/alsa.conf" ]; then
+if [ -f "$TARGET_FIRMWARE_PATH/system/system/usr/share/alsa/alsa.conf" ]; then
     echo "Add stock alsa.conf"
-    mkdir -p "$WORK_DIR/system/system/usr/share/alsa"
-    cp -a --preserve=all "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/usr/share/alsa/alsa.conf" \
-        "$WORK_DIR/system/system/usr/share/alsa/alsa.conf"
-    if ! grep -q "alsa\.conf" "$WORK_DIR/configs/file_context-system"; then
-        {
-            echo "/system/usr/share/alsa u:object_r:system_file:s0"
-            echo "/system/usr/share/alsa/alsa\.conf u:object_r:system_file:s0"
-        } >> "$WORK_DIR/configs/file_context-system"
-    fi
-    if ! grep -q "alsa.conf" "$WORK_DIR/configs/fs_config-system"; then
-        {
-            echo "system/usr/share/alsa 0 0 755 capabilities=0x0"
-            echo "system/usr/share/alsa/alsa.conf 0 0 644 capabilities=0x0"
-        } >> "$WORK_DIR/configs/fs_config-system"
-    fi
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/usr/share/alsa/alsa.conf" 0 0 644 "u:object_r:system_file:s0"
 else
     DELETE_FROM_WORK_DIR "system" "system/usr/share/alsa"
 fi

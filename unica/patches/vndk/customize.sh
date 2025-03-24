@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 if [[ "$SOURCE_VNDK_VERSION" != "$TARGET_VNDK_VERSION" ]]; then
     if $TARGET_HAS_SYSTEM_EXT; then
         SYS_EXT_DIR="$WORK_DIR/system_ext"

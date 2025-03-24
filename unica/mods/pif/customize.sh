@@ -1,14 +1,3 @@
-if ! grep -q "system/bin/rezetprop" "$WORK_DIR/configs/file_context-system"; then
-    {
-        echo "/system/bin/rezetprop u:object_r:init_exec:s0"
-    } >> "$WORK_DIR/configs/file_context-system"
-fi
-if ! grep -q "system/bin/rezetprop" "$WORK_DIR/configs/fs_config-system"; then
-    {
-        echo "system/bin/rezetprop 0 2000 755 capabilities=0x0"
-    } >> "$WORK_DIR/configs/fs_config-system"
-fi
-
 sed -i 's/${ro.boot.warranty_bit}/0/g' "$WORK_DIR/system/system/etc/init/init.rilcommon.rc"
 
 {

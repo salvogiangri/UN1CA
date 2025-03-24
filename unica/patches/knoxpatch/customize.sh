@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 # [
 APPLY_PATCH()
 {

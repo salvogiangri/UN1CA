@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 # [
 QUEEN_REPO="https://github.com/smsn-queen-project/krml_queen_kona/releases/download/queen-r8"
 

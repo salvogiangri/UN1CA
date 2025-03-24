@@ -1,0 +1,9 @@
+system/etc/permissions/privapp-permissions-com.samsung.android.applock.xml 0 0 644 capabilities=0x0
+system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity.tcm_v6.xml 0 0 644 capabilities=0x0
+system/etc/permissions/privapp-permissions-com.samsung.android.sm_cn.xml 0 0 644 capabilities=0x0
+system/priv-app/AppLock 0 0 755 capabilities=0x0
+system/priv-app/AppLock/AppLock.apk 0 0 644 capabilities=0x0
+system/priv-app/SmartManagerCN 0 0 755 capabilities=0x0
+system/priv-app/SmartManagerCN/SmartManagerCN.apk 0 0 644 capabilities=0x0
+system/priv-app/SmartManager_v6_DeviceSecurity_CN 0 0 755 capabilities=0x0
+system/priv-app/SmartManager_v6_DeviceSecurity_CN/SmartManager_v6_DeviceSecurity_CN.apk 0 0 644 capabilities=0x0

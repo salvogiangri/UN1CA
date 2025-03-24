@@ -1,0 +1,16 @@
+system/app/UwbUci 0 0 755 capabilities=0x0
+system/app/UwbUci/UwbUci.apk 0 0 644 capabilities=0x0
+system/etc/init/init.system.uwb.rc 0 0 644 capabilities=0x0
+system/etc/permissions/com.samsung.android.uwb_extras.xml 0 0 644 capabilities=0x0
+system/etc/permissions/org.carconnectivity.android.digitalkey.timesync.xml 0 0 644 capabilities=0x0
+system/etc/permissions/privapp-permissions-com.samsung.android.dcktimesync.xml 0 0 644 capabilities=0x0
+system/etc/permissions/samsung.uwb.xml 0 0 644 capabilities=0x0
+system/framework/com.samsung.android.uwb_extras.jar 0 0 644 capabilities=0x0
+system/framework/samsung.uwb.jar 0 0 644 capabilities=0x0
+system/lib/libtflite_uwb_jni.so 0 0 644 capabilities=0x0
+system/lib/libuwb_uci_jni_rust.so 0 0 644 capabilities=0x0
+system/lib64/libtflite_uwb_jni.so 0 0 644 capabilities=0x0
+system/lib64/libuwb_uci_jni_rust.so 0 0 644 capabilities=0x0
+system/system_ext/framework/org.carconnectivity.android.digitalkey.timesync.jar 0 0 644 capabilities=0x0
+system/system_ext/priv-app/DckTimeSyncService 0 0 755 capabilities=0x0
+system/system_ext/priv-app/DckTimeSyncService/DckTimeSyncService.apk 0 0 644 capabilities=0x0

@@ -1,0 +1,4 @@
+system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml 0 0 644 capabilities=0x0
+system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml 0 0 644 capabilities=0x0
+system/priv-app/ChoiDujour 0 0 755 capabilities=0x0
+system/priv-app/ChoiDujour/ChoiDujour.apk 0 0 644 capabilities=0x0

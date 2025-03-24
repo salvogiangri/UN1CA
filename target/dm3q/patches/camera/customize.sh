@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 echo "Add stock camera libs"
 BLOBS_LIST="
 system/etc/public.libraries-arcsoft.txt

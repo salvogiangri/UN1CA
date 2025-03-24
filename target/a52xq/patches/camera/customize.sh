@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
 
 BLOBS_LIST="

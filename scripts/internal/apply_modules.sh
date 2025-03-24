@@ -107,15 +107,11 @@ APPLY_MODULE()
     echo "- Processing \"$MODNAME\" by @$MODAUTH"
 
     if ! grep -q '^SKIPUNZIP=1$' "$MODPATH/customize.sh" 2> /dev/null; then
-        [ -d "$MODPATH/odm" ] && cp -a --preserve=all "$MODPATH/odm/"* "$WORK_DIR/odm"
-        [ -d "$MODPATH/product" ] && cp -a --preserve=all "$MODPATH/product/"* "$WORK_DIR/product"
-        [ -d "$MODPATH/system" ] && cp -a --preserve=all "$MODPATH/system/"* "$WORK_DIR/system/system"
-        if $TARGET_HAS_SYSTEM_EXT; then
-            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext/"* "$WORK_DIR/system_ext"
-        else
-            [ -d "$MODPATH/system_ext" ] && cp -a --preserve=all "$MODPATH/system_ext/"* "$WORK_DIR/system/system/system_ext"
-        fi
-        [ -d "$MODPATH/vendor" ] && cp -a --preserve=all "$MODPATH/vendor/"* "$WORK_DIR/vendor"
+        [ -d "$MODPATH/odm" ] && ADD_TO_WORK_DIR "$MODPATH" "odm" "." 0 0 755 "u:object_r:vendor_file:s0"
+        [ -d "$MODPATH/product" ] && ADD_TO_WORK_DIR "$MODPATH" "product" "." 0 0 755 "u:object_r:system_file:s0"
+        [ -d "$MODPATH/system" ] && ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
+        [ -d "$MODPATH/system_ext" ] && ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
+        [ -d "$MODPATH/vendor" ] && ADD_TO_WORK_DIR "$MODPATH" "vendor" "." 0 2000 755 "u:object_r:vendor_file:s0"
     fi
 
     READ_AND_APPLY_PROPS "$MODPATH"

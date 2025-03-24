@@ -111,7 +111,7 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
         DELETE_FROM_WORK_DIR "system" "system/lib64/libspictrl.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
         DELETE_FROM_WORK_DIR "system" "system/priv-app/SEMFactoryApp"
-        cp -a --preserve=all "$SRC_DIR/unica/patches/nfc/system/"* "$WORK_DIR/system/system"
+        ADD_TO_WORK_DIR "$SRC_DIR/unica/patches/nfc" "system" "." 0 0 755 "u:object_r:system_file:s0"
         APPLY_PATCH "system/framework/framework.jar" "ese/framework.jar/0001-Disable-SemService.patch"
         APPLY_PATCH "system/framework/services.jar" "ese/services.jar/0001-Disable-SemService.patch"
     else

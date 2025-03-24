@@ -1,0 +1,9 @@
+/system/etc/permissions/privapp-permissions-com\.samsung\.android\.applock\.xml u:object_r:system_file:s0
+/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm\.devicesecurity\.tcm_v6\.xml u:object_r:system_file:s0
+/system/etc/permissions/privapp-permissions-com\.samsung\.android\.sm_cn\.xml u:object_r:system_file:s0
+/system/priv-app/AppLock u:object_r:system_file:s0
+/system/priv-app/AppLock/AppLock\.apk u:object_r:system_file:s0
+/system/priv-app/SmartManagerCN u:object_r:system_file:s0
+/system/priv-app/SmartManagerCN/SmartManagerCN\.apk u:object_r:system_file:s0
+/system/priv-app/SmartManager_v6_DeviceSecurity_CN u:object_r:system_file:s0
+/system/priv-app/SmartManager_v6_DeviceSecurity_CN/SmartManager_v6_DeviceSecurity_CN\.apk u:object_r:system_file:s0

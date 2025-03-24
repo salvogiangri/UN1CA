@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 BLOBS_LIST="
 system/lib/FrcMcWrapper.so
 system/lib/libFrucPSVTLib.so

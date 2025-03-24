@@ -1,5 +1,3 @@
-SKIPUNZIP=1
-
 # Fix camera lock for devices with a rear SLSI sensor
 echo "Patching camera HAL"
 HAL_LIBS="
