@@ -45,17 +45,16 @@ _GET_SELINUX_LABEL()
         FILE="/$FILE"
     fi
 
-    local PATTERN
     local LABEL
     while IFS= read -r l; do
-        l="$(tr -s " " <<< "$l")"
-        PATTERN="$(cut -d " " -f 1 <<< "$l")"
-        LABEL="$(cut -d " " -f 2 <<< "$l")"
-        if grep -q -P "$PATTERN" <<< "$FILE"; then
-            echo "$LABEL"
+        l="$(tr -s "\t" " " <<< "$l")"
+        if [[ "$FILE" =~ ^$(cut -d " " -f 1 <<< "$l")$ ]]; then
+            LABEL="$(cut -d " " -f 2 <<< "$l")"
             break
         fi
-    done < "$FC_FILE"
+    done <<< "$(tac "$FC_FILE")"
+
+    echo "$LABEL"
 }
 
 _IS_VALID_PARTITION_NAME()
@@ -131,7 +130,7 @@ _GET_PROP_FILES_PATH()
 _GET_PROP_LOCATION()
 {
     local FILES
-    FILES=$(_GET_PROP_FILES_PATH "${1:?}")
+    FILES="$(_GET_PROP_FILES_PATH "${1:?}")"
 
     if _IS_VALID_PARTITION_NAME "${1:?}"; then
         shift
@@ -201,18 +200,26 @@ ADD_TO_WORK_DIR()
     local SOURCE_FILE="$SOURCE"
     local TARGET_FILE="$WORK_DIR"
     if [[ "$PARTITION" == "system_ext" ]]; then
-        if [[ "$SOURCE" != "$FW_DIR"* ]] || $SOURCE_HAS_SYSTEM_EXT; then
-            SOURCE_FILE+="/$PARTITION/$FILE"
+        if [ -d "$SOURCE/system_ext" ]; then
+            SOURCE_FILE+="/system_ext/$FILE"
         else
             SOURCE_FILE+="/system/system/system_ext/$FILE"
         fi
 
         if $TARGET_HAS_SYSTEM_EXT; then
-            TARGET_FILE+="/$PARTITION/$FILE"
+            TARGET_FILE+="/system_ext/$FILE"
         else
             PARTITION="system"
             FILE="system/system_ext/$FILE"
             TARGET_FILE+="/system/$FILE"
+        fi
+    elif [[ "$PARTITION" == "system" ]]; then
+        if [ -d "$SOURCE/system/system" ]; then
+            SOURCE_FILE+="/system/$FILE"
+            TARGET_FILE+="/system/$FILE"
+        else
+            SOURCE_FILE+="/system/${FILE//system\//}"
+            TARGET_FILE+="/system/system/${FILE//system\//}"
         fi
     else
         SOURCE_FILE+="/$PARTITION/$FILE"
@@ -234,6 +241,7 @@ ADD_TO_WORK_DIR()
     local TMP
     TMP="${TARGET_FILE//$WORK_DIR\//}"
     [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
+    TMP="${TMP%/.}"
     if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
         echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
     fi
@@ -244,26 +252,30 @@ ADD_TO_WORK_DIR()
 
     if [ -d "$TARGET_FILE" ]; then
         local FILES
-        FILES="$(find "$SOURCE_FILE")"
+        FILES="$(find "${SOURCE_FILE%/.}")"
         FILES="${FILES//$SOURCE\//}"
         [[ "$PARTITION" == "system" ]] && FILES="${FILES//system\/system\//system/}"
+        $TARGET_HAS_SYSTEM_EXT || FILES="${FILES//system_ext\//system/system_ext/}"
 
+        # shellcheck disable=SC2116
         for f in $(echo "$FILES"); do
+            _IS_VALID_PARTITION_NAME "$f" && continue
+
             if ! grep -q -F "$f " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
                 if grep -q -F "$f " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
                     grep -F "$f " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                 else
-                    if [ -d "$SOURCE/$f" ] || [ -d "$SOURCE/system/$f" ]; then
+                    if [ -d "$SOURCE/$f" ] || [ -d "$SOURCE/system/$f" ] || [ -d "$SOURCE/${f//system\//}" ]; then
                         if [[ "$PARTITION" == "vendor" ]]; then
-                            echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
+                            echo "$f 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
                         else
-                            echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                            echo "$f 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                         fi
                     else
                         if [[ "$PARTITION" == "vendor" ]]; then
-                            echo "$TMP 0 2000 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
+                            echo "$f 0 2000 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
                         else
-                            echo "$TMP 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+                            echo "$f 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                         fi
                     fi
                 fi
@@ -278,9 +290,12 @@ ADD_TO_WORK_DIR()
             fi
         done
     else
-        TMP="$(dirname "${TARGET_FILE//$WORK_DIR\//}")"
+        TMP="${TARGET_FILE%/.}"
+        TMP="$(dirname "${TMP//$WORK_DIR\//}")"
         [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
         while [[ "$TMP" != "." ]]; do
+            _IS_VALID_PARTITION_NAME "$TMP" && break
+
             if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
                 if grep -q -F "$TMP " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
                     grep -F "$TMP " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
@@ -298,10 +313,13 @@ ADD_TO_WORK_DIR()
             TMP="$(dirname "$TMP")"
         done
 
-        TMP="$(dirname "${TARGET_FILE//$WORK_DIR\//}")"
+        TMP="${TARGET_FILE%/.}"
+        TMP="$(dirname "${TMP//$WORK_DIR\//}")"
         [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
         while [[ "$TMP" != "." ]]
         do
+            _IS_VALID_PARTITION_NAME "$TMP" && break
+
             if ! grep -q -F "/${TMP//\./\\.} " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
                 if grep -q -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
                     grep -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
@@ -354,7 +372,7 @@ DELETE_FROM_WORK_DIR()
     fi
 
     FILE_PATH="$(_GET_WORK_DIR_PARTITION_PATH "$PARTITION")/$FILE"
-    if [ ! -e "$FILE_PATH" ]; then
+    if [ ! -e "$FILE_PATH" ] && [ ! -L "$FILE_PATH" ]; then
         echo "File not found: $FILE_PATH"
         return 0
     fi
@@ -414,7 +432,7 @@ GET_PROP()
         FILES="$1"
         shift
     else
-        FILES=$(_GET_PROP_FILES_PATH "${1:?}")
+        FILES="$(_GET_PROP_FILES_PATH "${1:?}")"
         if _IS_VALID_PARTITION_NAME "${1:?}"; then
             shift
         fi
