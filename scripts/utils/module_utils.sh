@@ -382,6 +382,7 @@ DELETE_FROM_WORK_DIR()
     rm -rf "$FILE_PATH"
 
     PATTERN="${FILE//\//\\/}"
+    [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
     if $IS_DIR; then
         PATTERN="/^$PATTERN/d"
     else
@@ -391,6 +392,7 @@ DELETE_FROM_WORK_DIR()
 
     PATTERN="${FILE//\//\\/}"
     PATTERN="${PATTERN//\./\\\\\.}"
+    [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
     if $IS_DIR; then
         PATTERN="/^\/$PATTERN/d"
     else
