@@ -14,9 +14,7 @@ RESIZE_APK()
     fi
 
     echo "Resize wallpaper-res.apk"
-    if [ ! -d "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk" ]; then
-        bash "$SRC_DIR/scripts/apktool.sh" d "system/priv-app/wallpaper-res/wallpaper-res.apk"
-    fi
+    DECODE_APK "/system/priv-app/wallpaper-res/wallpaper-res.apk"
     for f in "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk/res/drawable-nodpi/Wallpaper_"*.webp
     do
         cwebp -q 100 -resize $WEBP_RES $WEBP_RES "$f" -o "$(dirname "$f")/temp.webp" &> /dev/null
@@ -33,12 +31,6 @@ RESIZE_APK()
 }
 # ]
 
-cat "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.00" \
-    "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.01" \
-    "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.02" \
-    "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.03" \
-    "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.04" \
-    "$SRC_DIR/unica/mods/wallpaper/e1q/wallpaper-res.apk.05" \
-    > "$WORK_DIR/system/system/priv-app/wallpaper-res/wallpaper-res.apk"
-
+ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" \
+    "system/priv-app/wallpaper-res/wallpaper-res.apk" 0 0 644 "u:object_r:system_file:s0"
 RESIZE_APK

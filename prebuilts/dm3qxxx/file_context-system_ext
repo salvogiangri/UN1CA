@@ -1,0 +1,8 @@
+/system_ext u:object_r:system_file:s0
+/system_ext/apex u:object_r:system_file:s0
+/system_ext/apex/com\.android\.vndk\.v33\.apex u:object_r:system_file:s0
+/system_ext/framework u:object_r:system_file:s0
+/system_ext/framework/org\.carconnectivity\.android\.digitalkey\.timesync\.jar u:object_r:system_file:s0
+/system_ext/priv-app u:object_r:system_file:s0
+/system_ext/priv-app/DckTimeSyncService u:object_r:system_file:s0
+/system_ext/priv-app/DckTimeSyncService/DckTimeSyncService\.apk u:object_r:system_file:s0

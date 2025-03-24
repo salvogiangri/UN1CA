@@ -19,18 +19,12 @@
 
 # ROM-specific prebuilt blobs
 unica/flashable-zip/updater binary
-unica/mods/eureka/system/** binary
 unica/mods/pif/system/bin/rezetprop binary
-unica/mods/wallpaper/e1q/** binary
-unica/patches/deknox/system/** binary
-unica/patches/product_feature/fingerprint/optical_fod/system/** binary
-unica/patches/product_feature/resolution/system/** binary
-unica/patches/vndk/30/** binary
+prebuilts/*/*/** binary
 
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a71/patches/*/*/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
 target/*/patches/china/vendor/firmware/** binary
-target/m52xq/patches/vendor/vendor/** binary
-target/r8q/patches/vendor/*/** binary
+target/m52xq/patches/vendor/vendor/firmware/** binary

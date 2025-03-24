@@ -1,0 +1,9 @@
+/system u:object_r:system_file:s0
+/system/bin u:object_r:system_file:s0
+/system/bin/surfaceflinger u:object_r:surfaceflinger_exec:s0
+/system/lib u:object_r:system_lib_file:s0
+/system/lib/libgui\.so u:object_r:system_lib_file:s0
+/system/lib/libui\.so u:object_r:system_lib_file:s0
+/system/lib64 u:object_r:system_lib_file:s0
+/system/lib64/libgui\.so u:object_r:system_lib_file:s0
+/system/lib64/libui\.so u:object_r:system_lib_file:s0

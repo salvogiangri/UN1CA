@@ -1,0 +1,14 @@
+system_ext 0 0 755 capabilities=0x0
+system_ext/app 0 0 755 capabilities=0x0
+system_ext/app/com.qualcomm.qti.services.secureui 0 0 755 capabilities=0x0
+system_ext/app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk 0 0 644 capabilities=0x0
+system_ext/lib 0 0 755 capabilities=0x0
+system_ext/lib/fm_helium.so 0 0 644 capabilities=0x0
+system_ext/lib/libbeluga.so 0 0 644 capabilities=0x0
+system_ext/lib/libfm-hci.so 0 0 644 capabilities=0x0
+system_ext/lib/vendor.qti.hardware.fm@1.0.so 0 0 644 capabilities=0x0
+system_ext/lib64 0 0 755 capabilities=0x0
+system_ext/lib64/fm_helium.so 0 0 644 capabilities=0x0
+system_ext/lib64/libbeluga.so 0 0 644 capabilities=0x0
+system_ext/lib64/libfm-hci.so 0 0 644 capabilities=0x0
+system_ext/lib64/vendor.qti.hardware.fm@1.0.so 0 0 644 capabilities=0x0

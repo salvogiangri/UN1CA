@@ -1,0 +1,9 @@
+system 0 0 755 capabilities=0x0
+system/bin 0 2000 751 capabilities=0x0
+system/bin/surfaceflinger 0 2000 755 capabilities=0x0
+system/lib 0 0 755 capabilities=0x0
+system/lib/libgui.so 0 0 644 capabilities=0x0
+system/lib/libui.so 0 0 644 capabilities=0x0
+system/lib64 0 0 755 capabilities=0x0
+system/lib64/libgui.so 0 0 644 capabilities=0x0
+system/lib64/libui.so 0 0 644 capabilities=0x0

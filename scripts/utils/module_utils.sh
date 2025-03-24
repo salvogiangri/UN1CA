@@ -202,8 +202,10 @@ ADD_TO_WORK_DIR()
     if [[ "$PARTITION" == "system_ext" ]]; then
         if [ -d "$SOURCE/system_ext" ]; then
             SOURCE_FILE+="/system_ext/$FILE"
-        else
+        elif [ -d "$SOURCE/system/system/system_ext" ]; then
             SOURCE_FILE+="/system/system/system_ext/$FILE"
+        else
+            SOURCE_FILE+="/system/system_ext/$FILE"
         fi
 
         if $TARGET_HAS_SYSTEM_EXT; then
@@ -227,16 +229,21 @@ ADD_TO_WORK_DIR()
     fi
 
     if [ ! -e "$SOURCE_FILE" ] && [ ! -L "$SOURCE_FILE" ]; then
-        echo "File not found: $SOURCE_FILE"
-        return 1
-    fi
-
-    if [ ! -d "$SOURCE_FILE" ]; then
-        mkdir -p "$(dirname "$TARGET_FILE")"
+        if [ -e "$SOURCE_FILE.00" ]; then
+            mkdir -p "$(dirname "$TARGET_FILE")"
+            cat "$SOURCE_FILE."* > "$TARGET_FILE"
+        else
+            echo "File not found: $SOURCE_FILE"
+            return 1
+        fi
     else
-        mkdir -p "$TARGET_FILE"
+        if [ ! -d "$SOURCE_FILE" ]; then
+            mkdir -p "$(dirname "$TARGET_FILE")"
+        else
+            mkdir -p "$TARGET_FILE"
+        fi
+        cp -a -T "$SOURCE_FILE" "$TARGET_FILE"
     fi
-    cp -a -T "$SOURCE_FILE" "$TARGET_FILE"
 
     local TMP
     TMP="${TARGET_FILE//$WORK_DIR\//}"

@@ -132,11 +132,12 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
 
     # TODO: handle ultrasonic devices
     if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
-        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod/system/"* "$WORK_DIR/system/system"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/gts9xxx" "system" "." 0 0 755 "u:object_r:system_file:s0"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/r11sxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
         APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isOpticalSensor.patch"
         APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
     elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
-        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system/"* "$WORK_DIR/system/system"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/b5qxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
         APPLY_PATCH "system/framework/services.jar" "fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
         APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
         APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
@@ -201,9 +202,12 @@ fi
 if ! $SOURCE_HAS_QHD_DISPLAY; then
     if $TARGET_HAS_QHD_DISPLAY; then
         echo "Applying multi resolution patches"
-        cp -a --preserve=all "$SRC_DIR/unica/patches/product_feature/resolution/system/"* "$WORK_DIR/system/system"
-        APPLY_PATCH "system/framework/framework.jar" "resolution/multi_res/framework.jar/0001-Enable-dynamic-resolution-control.patch"
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "resolution/multi_res/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm3qxxx" "system" "system/bin/bootanimation" 0 2000 755 "u:object_r:bootanim_exec:s0"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm3qxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm3qxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm3qxxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        APPLY_PATCH "system/framework/framework.jar" "resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "resolution/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
     fi
 else
     if ! $TARGET_HAS_QHD_DISPLAY; then

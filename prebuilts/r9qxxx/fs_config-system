@@ -1,0 +1,10 @@
+system 0 0 755 capabilities=0x0
+system/bin 0 2000 751 capabilities=0x0
+system/bin/insthk 0 2000 755 capabilities=0x0
+system/bin/remotedisplay 0 2000 755 capabilities=0x0
+system/lib 0 0 755 capabilities=0x0
+system/lib/libhdcp2.so 0 0 644 capabilities=0x0
+system/lib/libremotedisplay_wfd.so 0 0 644 capabilities=0x0
+system/lib/libremotedisplayservice.so 0 0 644 capabilities=0x0
+system/lib/libsecuibc.so 0 0 644 capabilities=0x0
+system/lib/libstagefright_hdcp.so 0 0 644 capabilities=0x0

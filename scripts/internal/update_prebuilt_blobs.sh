@@ -33,173 +33,123 @@ if [ "$#" != 1 ]; then
     exit 1
 fi
 
+if [ ! -d "$SRC_DIR/$1" ]; then
+    echo "Folder not found: $SRC_DIR/$1"
+    exit 1
+fi
+
+MODULE="$SRC_DIR/$1"
+BLOBS=""
+FIRMWARE=""
+
+if [ -d "$MODULE/system" ]; then
+    BLOBS+="$(find "$MODULE/system" -type f)"
+    BLOBS="${BLOBS//$MODULE/system}"
+fi
+if [ -d "$MODULE/product" ]; then
+    [[ "$BLOBS" ]] && BLOBS+=$'\n'
+    BLOBS+="$(find "$MODULE/product" -type f)"
+    BLOBS="${BLOBS//$MODULE\//}"
+fi
+if [ -d "$MODULE/vendor" ]; then
+    [[ "$BLOBS" ]] && BLOBS+=$'\n'
+    BLOBS+="$(find "$MODULE/vendor" -type f)"
+    BLOBS="${BLOBS//$MODULE\//}"
+fi
+if [ -d "$MODULE/system_ext" ]; then
+    [[ "$BLOBS" ]] && BLOBS+=$'\n'
+    BLOBS+="$(find "$MODULE/system_ext" -type f)"
+    BLOBS="${BLOBS//$MODULE\//}"
+fi
+
 case "$1" in
-    "unica/patches/deknox")
-        MODULE="$1"
-        FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/deknox/system" -type f -not -name "*server*" | sed "s.$SRC_DIR/unica/patches/deknox.system.")"
+    "prebuilts/a52qnsxx")
+        FIRMWARE="SM-A525F/SER/352938771234569"
         ;;
-    "unica/patches/mass_cam")
-        MODULE="$1"
-        FW="SM-S711B/EUX/358615311234564"
-        BLOBS="$(find "$SRC_DIR/unica/patches/mass_cam/system" -type f | sed "s.$SRC_DIR/unica/patches/mass_cam.system.")"
+    "prebuilts/a52sxqxx")
+        FIRMWARE="SM-A528B/BTU/352599501234566"
         ;;
-    "unica/patches/nfc")
-        MODULE="$1"
-        FW="SM-A736B/XME/352828291234563"
-        BLOBS="$(find "$SRC_DIR/unica/patches/nfc/system" -type f | sed "s.$SRC_DIR/unica/patches/nfc.system.")"
+    "prebuilts/a73xqxx")
+        FIRMWARE="SM-A736B/XME/352828291234563"
         ;;
-    "unica/patches/product_feature/fingerprint/optical_fod")
-        MODULE="$1"
-        FW="SM-X716B/EUX/353439961234567"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod/system" -type f \
-            -not -path "*/priv-app/*" | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/optical_fod.system.")"
+    "prebuilts/b5qxxx")
+        FIRMWARE="SM-F731B/EUX/350929871234569"
         ;;
-    "unica/patches/product_feature/fingerprint/side_fp")
-        MODULE="$1"
-        FW="SM-F731B/EUX/350929871234569"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp/system" -type f \
-            | sed "s.$SRC_DIR/unica/patches/product_feature/fingerprint/side_fp.system.")"
+    "prebuilts/dm1qkdiw")
+        FIRMWARE="SCG19/KDI/RFCW320SDNY"
         ;;
-    "unica/patches/product_feature/resolution")
-        MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/product_feature/resolution/system" -type f \
-            | sed "s.$SRC_DIR/unica/patches/product_feature/resolution.system.")"
+    "prebuilts/dm3qxxx");
+        FIRMWARE="SM-S918B/EUX/350196551234562"
         ;;
-    "unica/patches/ultra")
-        MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/ultra/system" -type f | sed "s.$SRC_DIR/unica/patches/ultra.system.")"
+    "prebuilts/e1qzcx")
+        FIRMWARE="SM-S9210/CHC/356724910402671"
         ;;
-    "unica/patches/uwb")
-        MODULE="$1"
-        FW="SM-S918B/EUX/350196551234562"
-        BLOBS="$(find "$SRC_DIR/unica/patches/uwb/system" -type f | sed "s.$SRC_DIR/unica/patches/uwb.system.")"
-        BLOBS+="$(find "$SRC_DIR/unica/patches/uwb/system_ext" -type f -printf "\n%p" | sed "s.$SRC_DIR/unica/patches/uwb/..")"
+    "prebuilts/gts9xxx")
+        FIRMWARE="SM-X716B/EUX/353439961234567"
         ;;
-    "unica/patches/vndk/30")
-        MODULE="$1"
-        FW="SM-A736B/XME/352828291234563"
-        BLOBS="system/system/system_ext/apex/com.android.vndk.v30.apex"
+    "prebuilts/r0qxxx")
+        FIRMWARE="SM-S901E/INS/350999641234561"
         ;;
-    "unica/patches/vndk/31")
-        MODULE="$1"
-        FW="SM-S901E/INS/350999641234561"
-        BLOBS="system_ext/apex/com.android.vndk.v31.apex"
+    "prebuilts/r9qxxx")
+        FIRMWARE="SM-G990B/EUX/353718681234563"
         ;;
-    "unica/patches/vndk/33")
-        MODULE="$1"
-        FW="SM-S911B/EUX/352404911234563"
-        BLOBS="system_ext/apex/com.android.vndk.v33.apex"
-        ;;
-    "unica/mods/china")
-        MODULE="$1"
-        FW="SM-S9210/CHC/356724910402671"
-        BLOBS="$(find "$SRC_DIR/unica/mods/china/system" -type f | sed "s.$SRC_DIR/unica/mods/china.system.")"
-        ;;
-    "unica/mods/eureka")
-        MODULE="$1"
-        FW="SM-S9210/CHC/356724910402671"
-        BLOBS="$(find "$SRC_DIR/unica/mods/eureka/system" -type f | sed "s.$SRC_DIR/unica/mods/eureka.system.")"
-        ;;
-    "target/a71/patches/stock_blobs")
-        MODULE="$1"
-        FW="SM-A525F/SER/352938771234569"
-        BLOBS="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system.")"
-        BLOBS+="$(find "$SRC_DIR/target/a71/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/a71/patches/stock_blobs.system/system.")"
+    "prebuilts/r11sxxx")
+        FIRMWARE="SM-S711B/EUX/358615311234564"
         ;;
     "target/dm1q/patches/china")
-        MODULE="$1"
-        FW="SM-S9110/TGY/RFCW2198XNF"
-        BLOBS="$(find "$SRC_DIR/target/dm1q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm1q/patches/china/..")"
+        FIRMWARE="SM-S9110/TGY/RFCW2198XNF"
         ;;
     "target/dm2q/patches/china")
-        MODULE="$1"
-        FW="SM-S9160/TGY/R5CW22FT58F"
-        BLOBS="$(find "$SRC_DIR/target/dm2q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm2q/patches/china/..")"
+        FIRMWARE="SM-S9160/TGY/R5CW22FT58F"
         ;;
     "target/dm3q/patches/china")
-        MODULE="$1"
-        FW="SM-S9180/TGY/R5CW613B3ME"
-        BLOBS="$(find "$SRC_DIR/target/dm3q/patches/china/vendor" -type f -not -path "*/etc/*" | sed "s.$SRC_DIR/target/dm3q/patches/china/..")"
-        ;;
-    "target/m52xq/patches/stock_blobs")
-        MODULE="$1"
-        FW="SM-A528B/BTU/352599501234566"
-        BLOBS="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/product" -type f \
-            | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs/product..")"
-        BLOBS+="$(find "$SRC_DIR/target/m52xq/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/m52xq/patches/stock_blobs.system.")"
-        ;;
-    "target/r8q/patches/stock_blobs")
-        MODULE="$1"
-        FW="SM-A525F/SER/352938771234569"
-        BLOBS="$(find "$SRC_DIR/target/r8q/patches/stock_blobs/product" -type f \
-            | sed "s.$SRC_DIR/target/r8q/patches/stock_blobs/product..")"
-        BLOBS+="$(find "$SRC_DIR/target/r8q/patches/stock_blobs/system" -type f -not -path "*/etc/*" -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/r8q/patches/stock_blobs.system.")"
-        BLOBS+="$(find "$SRC_DIR/target/r8q/patches/stock_blobs/system_ext" -type f -printf "\n%p" \
-            | sed "s.$SRC_DIR/target/r8q/patches/stock_blobs.system/system.")"
-        ;;
-    "target/r8q/patches/vendor")
-        MODULE="$1"
-        FW="SM-G990B/EUX/353718681234563"
-        BLOBS="$(find "$SRC_DIR/target/r8q/patches/vendor/system" -type f \
-            | sed "s.$SRC_DIR/target/r8q/patches/vendor.system.")"
+        FIRMWARE="SM-S9180/TGY/R5CW613B3ME"
         ;;
     *)
-        echo "Unsupported path: $1"
+        echo "Firmware not set for path $1"
         exit 1
         ;;
 esac
 
-MODEL=$(echo -n "$FW" | cut -d "/" -f 1)
-REGION=$(echo -n "$FW" | cut -d "/" -f 2)
+MODEL=$(echo -n "$FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$FIRMWARE" | cut -d "/" -f 2)
 
 [ -z "$(GET_LATEST_FIRMWARE)" ] && exit 1
-if [[ "$(GET_LATEST_FIRMWARE)" == "$(cat "$SRC_DIR/$MODULE/.current")" ]]; then
+if [[ "$(GET_LATEST_FIRMWARE)" == "$(cat "$MODULE/.current")" ]]; then
     echo "Nothing to do."
     exit 0
 fi
 
 echo -e "Updating $MODULE blobs\n"
 
-export SOURCE_FIRMWARE="$FW"
-export TARGET_FIRMWARE="$FW"
+export SOURCE_FIRMWARE="$FIRMWARE"
+export TARGET_FIRMWARE="$FIRMWARE"
 export SOURCE_EXTRA_FIRMWARES=""
 export TARGET_EXTRA_FIRMWARES=""
-bash "$SRC_DIR/scripts/download_fw.sh"
-bash "$SRC_DIR/scripts/extract_fw.sh"
+"$SRC_DIR/scripts/download_fw.sh"
+"$SRC_DIR/scripts/extract_fw.sh"
 
 for i in $BLOBS; do
-    if [[ "$i" == *"system_ext/apex/com.android.vndk.v"* ]]; then
-        if [[ "$i" == *"com.android.vndk.v30.apex" ]]; then
-            rm -rf "$SRC_DIR/unica/patches/vndk/30/com.android.vndk.v30.apex."*
-            split -db 52428800 "$FW_DIR/${MODEL}_${REGION}/$i" \
-                "$SRC_DIR/unica/patches/vndk/30/com.android.vndk.v30.apex."
-        else
-            cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-                "$SRC_DIR/$MODULE/$(basename "$i")"
-        fi
-
-        continue
+    if [[ "$i" == *[0-9] ]]; then
+        i="${i%.*}"
+    fi
+    OUT="$MODULE/$i"
+    if [[ "$i" == "system/system/system_ext/"* ]]; then
+        OUT="$MODULE/${i//system\/system\/system_ext\///system_ext/}"
+    elif [[ "$i" == "system/system/"* ]]; then
+        OUT="$MODULE/${i//system\/system\///system/}"
     fi
 
-    if [[ "$i" == "system/system/system_ext/"* ]]; then
-        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/system_ext/.system_ext/.")" || true
-    elif [[ "$i" == "system/system/"* ]]; then
-        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$(echo "$i" | sed "s.system/system/.system/.")" || true
-    elif [[ "$i" == "product/"* ]] || [[ "$i" == "vendor/"* ]] || [[ "$i" == "system_ext/"* ]]; then
-        cp -a --preserve=all "$FW_DIR/${MODEL}_${REGION}/$i" \
-            "$SRC_DIR/$MODULE/$i" || true
+    [[ -e "$FW_DIR/${MODEL}_${REGION}/$i" ]] || continue
+
+    if [[ "$(wc -c "$FW_DIR/${MODEL}_${REGION}/$i" | cut -d " " -f 1)" -gt "52428800" ]]; then
+        rm "$OUT."*
+        split -d -b 52428800 "$FW_DIR/${MODEL}_${REGION}/$i" "$OUT."
+    else
+        cp -a "$FW_DIR/${MODEL}_${REGION}/$i" "$OUT"
     fi
 done
 
-cp --preserve=all "$FW_DIR/${MODEL}_${REGION}/.extracted" "$SRC_DIR/$MODULE/.current"
+cp -a "$FW_DIR/${MODEL}_${REGION}/.extracted" "$MODULE/.current"
 
 exit 0
