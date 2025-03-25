@@ -78,7 +78,7 @@ case "$1" in
     "prebuilts/dm1qkdiw")
         FIRMWARE="SCG19/KDI/RFCW320SDNY"
         ;;
-    "prebuilts/dm3qxxx");
+    "prebuilts/dm3qxxx")
         FIRMWARE="SM-S918B/EUX/350196551234562"
         ;;
     "prebuilts/e1qzcx")
