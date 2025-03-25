@@ -14,6 +14,9 @@ ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" \
 ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" "system/priv-app/SmartManagerCN" 0 0 755 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" "system/priv-app/SmartManager_v6_DeviceSecurity_CN" 0 0 755 "u:object_r:system_file:s0"
 
+DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.sm_cn")" \
+    "$WORK_DIR/system/system/priv-app/SmartManagerCN/SmartManagerCN.apk"
+
 if [ -f "$WORK_DIR/system/system/priv-app/AppLock/AppLock.apk" ]; then
     mv -f "$WORK_DIR/system/system/priv-app/AppLock/AppLock.apk" "$WORK_DIR/system/system/priv-app/AppLock/SAppLock.apk"
     sed -i "s/AppLock.apk/SAppLock.apk/g" "$WORK_DIR/configs/fs_config-system"

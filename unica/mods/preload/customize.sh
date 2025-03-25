@@ -1,31 +1,13 @@
-# [
-GET_GALAXY_STORE_DOWNLOAD_URL()
-{
-    echo "$(curl -L -s "https://vas.samsungapps.com/stub/stubDownload.as?appId=$1&deviceId=SM-S911B&mcc=262&mnc=01&csc=EUX&sdkVer=34&extuk=0191d6627f38685f&pd=0" \
-        | grep 'downloadURI' | cut -d ">" -f 2 | sed -e 's/<!\[CDATA\[//g; s/\]\]//g')"
-}
-
-DOWNLOAD_APK()
-{
-    local URL="$1"
-    local APK_PATH="system/preload/$2"
-
-    echo "Adding $(basename "$APK_PATH") to preload apps"
-    mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
-    curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$URL"
-}
-# ]
-
 # Patched GoodLock Manager @corsicanu
 # https://github.com/corsicanu/goodlock_dump
-DOWNLOAD_APK "https://github.com/corsicanu/goodlock_dump/raw/main/GoodLock_patched.apk" \
-    "GoodLock/GoodLock.apk"
+DOWNLOAD_FILE "https://github.com/corsicanu/goodlock_dump/raw/main/GoodLock_patched.apk" \
+    "$WORK_DIR/system/system/preload/GoodLock/GoodLock.apk"
 
 # Samsung Internet Browser
 # https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser
 if [[ "$TARGET_CODENAME" != "a71" ]]; then
-    DOWNLOAD_APK "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.sec.android.app.sbrowser")" \
-        "SBrowser/SBrowser.apk"
+    DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.sec.android.app.sbrowser")" \
+        "$WORK_DIR/system/system/preload/SBrowser/SBrowser.apk"
 fi
 
 sed -i "/system\/preload/d" "$WORK_DIR/configs/fs_config-system" \

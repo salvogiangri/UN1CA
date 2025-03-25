@@ -52,18 +52,9 @@ _GET_SELINUX_LABEL()
             LABEL="$(cut -d " " -f 2 <<< "$l")"
             break
         fi
-    done <<< "$(tac "$FC_FILE")"
+    done <<< "$(tac "$FC_FILE" 2> /dev/null)"
 
     echo "$LABEL"
-}
-
-_IS_VALID_PARTITION_NAME()
-{
-    local PARTITION="$1"
-    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
-    [[ "$PARTITION" == "system" ]] || [[ "$PARTITION" == "vendor" ]] || [[ "$PARTITION" == "product" ]] || \
-        [[ "$PARTITION" == "system_ext" ]] || [[ "$PARTITION" == "odm" ]] || [[ "$PARTITION" == "vendor_dlkm" ]] || \
-        [[ "$PARTITION" == "odm_dlkm" ]] || [[ "$PARTITION" == "system_dlkm" ]] || false
 }
 
 _GET_PROP_FILES_PATH()
@@ -163,6 +154,15 @@ _GET_WORK_DIR_PARTITION_PATH()
     esac
 
     echo "$PARTITION_PATH"
+}
+
+_IS_VALID_PARTITION_NAME()
+{
+    local PARTITION="$1"
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
+    [[ "$PARTITION" == "system" ]] || [[ "$PARTITION" == "vendor" ]] || [[ "$PARTITION" == "product" ]] || \
+        [[ "$PARTITION" == "system_ext" ]] || [[ "$PARTITION" == "odm" ]] || [[ "$PARTITION" == "vendor_dlkm" ]] || \
+        [[ "$PARTITION" == "odm_dlkm" ]] || [[ "$PARTITION" == "system_dlkm" ]] || false
 }
 # ]
 
@@ -415,6 +415,44 @@ DELETE_FROM_WORK_DIR()
     fi
 
     return 0
+}
+
+# DOWNLOAD_FILE <url> <output path>
+# Downloads the file from the provided URL and stores it in the desidered output path.
+DOWNLOAD_FILE()
+{
+    local URL="${1:?}"
+    local OUTPUT="${2:?}"
+
+    mkdir -p "$(dirname "$OUTPUT")"
+    curl -L -s -o "$OUTPUT" "$URL"
+    return "$?"
+}
+
+# GET_GALAXY_STORE_DOWNLOAD_URL <package name>
+# Returns a URL to download the desidered app from Samsung servers.
+GET_GALAXY_STORE_DOWNLOAD_URL()
+{
+    local PACKAGE="${1:?}"
+
+    local DEVICES
+    # Galaxy S23 International, EUX CSC
+    DEVICES+=("deviceId=SM-S911B&mcc=262&mnc=01&csc=EUX")
+    # Galaxy S24 China, CHC CSC
+    DEVICES+=("deviceId=SM-S9210&mcc=460&mnc=00&csc=CHC")
+
+    # Android 14, One UI 6.1.1
+    local OS="sdkVer=34&oneUiVersion=60101"
+
+    for i in "${DEVICES[@]}"; do
+        local OUT="$(curl -L -s "https://vas.samsungapps.com/stub/stubDownload.as?appId=$PACKAGE&$i&$OS&extuk=0191d6627f38685f&pd=0")"
+        if grep -q "Download URI Available" <<< "$OUT"; then
+            grep "downloadURI" <<< "$OUT" | cut -d ">" -f 2 | sed -e 's/<!\[CDATA\[//g; s/\]\]//g'
+            return
+        fi
+    done
+
+    false
 }
 
 # GET_FLOATING_FEATURE_CONFIG "<config>"
