@@ -4,6 +4,11 @@
 /system/bin u:object_r:system_file:s0
 /system/bin/insthk u:object_r:insthk_exec:s0
 /system/bin/remotedisplay u:object_r:remotedisplay_exec:s0
+/system/cameradata u:object_r:system_file:s0
+/system/cameradata/portrait_data u:object_r:system_file:s0
+/system/cameradata/portrait_data/SRIB_BanetLite_FP16_V400\.snf u:object_r:system_file:s0
+/system/cameradata/portrait_data/SRIB_HumanSegLite_INT8_V004\.snf u:object_r:system_file:s0
+/system/cameradata/portrait_data/single_bokeh_feature\.json u:object_r:system_file:s0
 /system/etc u:object_r:system_file:s0
 /system/etc/permissions u:object_r:system_file:s0
 /system/etc/permissions/privapp-permissions-com\.samsung\.adaptivebrightnessgo\.cameralightsensor\.xml u:object_r:system_file:s0

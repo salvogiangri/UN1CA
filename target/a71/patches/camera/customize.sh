@@ -1,6 +1,5 @@
-sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/file_context-system"
-sed -i 's/SRIB_HumanInsSeg_FP16_V008/SRIB_BanetLite_FP16_V400/g' "$WORK_DIR/configs/fs_config-system"
-DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
+DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data"
+ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a52qnsxx" "system" "system/cameradata/portrait_data" 0 0 755 "u:object_r:system_file:s0"
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
@@ -104,7 +103,7 @@ done
 
 echo "Fix AI Photo Editor"
 cp -a --preserve=all \
-    "$SRC_DIR/target/a71/patches/camera/system/cameradata/portrait_data/single_bokeh_feature.json" \
+    "$SRC_DIR/prebuilts/a52qnsxx/system/cameradata/portrait_data/single_bokeh_feature.json" \
     "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
 if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
     {
