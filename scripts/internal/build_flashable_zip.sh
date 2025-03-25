@@ -90,7 +90,6 @@ GET_SPARSE_IMG_SIZE()
 GENERATE_OP_LIST()
 {
     local OP_LIST_FILE="$TMP_DIR/dynamic_partitions_op_list"
-    local GROUP_NAME="qti_dynamic_partitions"
     local PART_SIZE=0
     local OCCUPIED_SPACE=0
     local HAS_SYSTEM=false
@@ -116,24 +115,24 @@ GENERATE_OP_LIST()
     {
         echo "# Remove all existing dynamic partitions and groups before applying full OTA"
         echo "remove_all_groups"
-        echo "# Add group $GROUP_NAME with maximum size $TARGET_SUPER_GROUP_SIZE"
-        echo "add_group $GROUP_NAME $TARGET_SUPER_GROUP_SIZE"
-        $HAS_SYSTEM && echo "# Add partition system to group $GROUP_NAME"
-        $HAS_SYSTEM && echo "add system $GROUP_NAME"
-        $HAS_VENDOR && echo "# Add partition vendor to group $GROUP_NAME"
-        $HAS_VENDOR && echo "add vendor $GROUP_NAME"
-        $HAS_PRODUCT && echo "# Add partition product to group $GROUP_NAME"
-        $HAS_PRODUCT && echo "add product $GROUP_NAME"
-        $HAS_SYSTEM_EXT && echo "# Add partition system_ext to group $GROUP_NAME"
-        $HAS_SYSTEM_EXT && echo "add system_ext $GROUP_NAME"
-        $HAS_ODM && echo "# Add partition odm to group $GROUP_NAME"
-        $HAS_ODM && echo "add odm $GROUP_NAME"
-        $HAS_VENDOR_DLKM && echo "# Add partition vendor_dlkm to group $GROUP_NAME"
-        $HAS_VENDOR_DLKM && echo "add vendor_dlkm $GROUP_NAME"
-        $HAS_ODM_DLKM && echo "# Add partition odm_dlkm to group $GROUP_NAME"
-        $HAS_ODM_DLKM && echo "add odm_dlkm $GROUP_NAME"
-        $HAS_SYSTEM_DLKM && echo "# Add partition system_dlkm to group $GROUP_NAME"
-        $HAS_SYSTEM_DLKM && echo "add system_dlkm $GROUP_NAME"
+        echo "# Add group $TARGET_SUPER_GROUP_NAME with maximum size $TARGET_SUPER_GROUP_SIZE"
+        echo "add_group $TARGET_SUPER_GROUP_NAME $TARGET_SUPER_GROUP_SIZE"
+        $HAS_SYSTEM && echo "# Add partition system to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_SYSTEM && echo "add system $TARGET_SUPER_GROUP_NAME"
+        $HAS_VENDOR && echo "# Add partition vendor to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_VENDOR && echo "add vendor $TARGET_SUPER_GROUP_NAME"
+        $HAS_PRODUCT && echo "# Add partition product to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_PRODUCT && echo "add product $TARGET_SUPER_GROUP_NAME"
+        $HAS_SYSTEM_EXT && echo "# Add partition system_ext to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_SYSTEM_EXT && echo "add system_ext $TARGET_SUPER_GROUP_NAME"
+        $HAS_ODM && echo "# Add partition odm to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_ODM && echo "add odm $TARGET_SUPER_GROUP_NAME"
+        $HAS_VENDOR_DLKM && echo "# Add partition vendor_dlkm to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_VENDOR_DLKM && echo "add vendor_dlkm $TARGET_SUPER_GROUP_NAME"
+        $HAS_ODM_DLKM && echo "# Add partition odm_dlkm to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_ODM_DLKM && echo "add odm_dlkm $TARGET_SUPER_GROUP_NAME"
+        $HAS_SYSTEM_DLKM && echo "# Add partition system_dlkm to group $TARGET_SUPER_GROUP_NAME"
+        $HAS_SYSTEM_DLKM && echo "add system_dlkm $TARGET_SUPER_GROUP_NAME"
         if $HAS_SYSTEM; then
             PART_SIZE="$(GET_SPARSE_IMG_SIZE "$TMP_DIR/system.img")"
             echo "# Grow partition system from 0 to $PART_SIZE"
@@ -195,7 +194,6 @@ GENERATE_OP_LIST()
 GENERATE_LPMAKE_OPT()
 {
     local OPT
-    local GROUP_NAME="qti_dynamic_partitions"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -217,31 +215,31 @@ GENERATE_LPMAKE_OPT()
     OPT+=" -o $TMP_DIR/super_empty.img"
     OPT+=" --device-size $TARGET_SUPER_PARTITION_SIZE"
     OPT+=" --metadata-size 65536 --metadata-slots 2"
-    OPT+=" -g $GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
+    OPT+=" -g $TARGET_SUPER_GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
 
     if $HAS_SYSTEM; then
-        OPT+=" -p system:readonly:0:$GROUP_NAME"
+        OPT+=" -p system:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_VENDOR; then
-        OPT+=" -p vendor:readonly:0:$GROUP_NAME"
+        OPT+=" -p vendor:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_PRODUCT; then
-        OPT+=" -p product:readonly:0:$GROUP_NAME"
+        OPT+=" -p product:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_SYSTEM_EXT; then
-        OPT+=" -p system_ext:readonly:0:$GROUP_NAME"
+        OPT+=" -p system_ext:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_ODM; then
-        OPT+=" -p odm:readonly:0:$GROUP_NAME"
+        OPT+=" -p odm:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_VENDOR_DLKM; then
-        OPT+=" -p vendor_dlkm:readonly:0:$GROUP_NAME"
+        OPT+=" -p vendor_dlkm:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_ODM_DLKM; then
-        OPT+=" -p odm_dlkm:readonly:0:$GROUP_NAME"
+        OPT+=" -p odm_dlkm:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_SYSTEM_DLKM; then
-        OPT+=" -p system_dlkm:readonly:0:$GROUP_NAME"
+        OPT+=" -p system_dlkm:readonly:0:$TARGET_SUPER_GROUP_NAME"
     fi
 
     echo "$OPT"
