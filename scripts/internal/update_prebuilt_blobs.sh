@@ -133,12 +133,7 @@ for i in $BLOBS; do
     if [[ "$i" == *[0-9] ]]; then
         i="${i%.*}"
     fi
-    OUT="$MODULE/$i"
-    if [[ "$i" == "system/system/system_ext/"* ]]; then
-        OUT="$MODULE/${i//system\/system\/system_ext\///system_ext/}"
-    elif [[ "$i" == "system/system/"* ]]; then
-        OUT="$MODULE/${i//system\/system\///system/}"
-    fi
+    OUT="$MODULE/${i//system\/system\///system/}"
 
     [[ -e "$FW_DIR/${MODEL}_${REGION}/$i" ]] || continue
 
