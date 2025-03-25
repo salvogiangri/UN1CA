@@ -22,7 +22,6 @@ set -Eeuo pipefail
 GENERATE_LPMAKE_OPT()
 {
     local OPT
-    local GROUP_NAME="$SOURCE_SUPER_GROUP_NAME"
     local HAS_SYSTEM=false
     local HAS_VENDOR=false
     local HAS_PRODUCT=false
@@ -45,31 +44,31 @@ GENERATE_LPMAKE_OPT()
     OPT+=" -o $TMP_DIR/super.img"
     OPT+=" --device-size $TARGET_SUPER_PARTITION_SIZE"
     OPT+=" --metadata-size 65536 --metadata-slots 2"
-    OPT+=" -g $GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
+    OPT+=" -g $TARGET_SUPER_GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
 
     if $HAS_SYSTEM; then
-        OPT+=" -p system:readonly:$(wc -c "$TMP_DIR/system.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p system:readonly:$(wc -c "$TMP_DIR/system.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_VENDOR; then
-        OPT+=" -p vendor:readonly:$(wc -c "$TMP_DIR/vendor.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p vendor:readonly:$(wc -c "$TMP_DIR/vendor.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_PRODUCT; then
-        OPT+=" -p product:readonly:$(wc -c "$TMP_DIR/product.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p product:readonly:$(wc -c "$TMP_DIR/product.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_SYSTEM_EXT; then
-        OPT+=" -p system_ext:readonly:$(wc -c "$TMP_DIR/system_ext.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p system_ext:readonly:$(wc -c "$TMP_DIR/system_ext.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_ODM; then
-        OPT+=" -p odm:readonly:$(wc -c "$TMP_DIR/odm.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p odm:readonly:$(wc -c "$TMP_DIR/odm.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_VENDOR_DLKM; then
-        OPT+=" -p vendor_dlkm:readonly:$(wc -c "$TMP_DIR/vendor_dlkm.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p vendor_dlkm:readonly:$(wc -c "$TMP_DIR/vendor_dlkm.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_ODM_DLKM; then
-        OPT+=" -p odm_dlkm:readonly:$(wc -c "$TMP_DIR/odm_dlkm.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p odm_dlkm:readonly:$(wc -c "$TMP_DIR/odm_dlkm.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
     if $HAS_SYSTEM_DLKM; then
-        OPT+=" -p system_dlkm:readonly:$(wc -c "$TMP_DIR/system_dlkm.img" | cut -d " " -f 1):$GROUP_NAME"
+        OPT+=" -p system_dlkm:readonly:$(wc -c "$TMP_DIR/system_dlkm.img" | cut -d " " -f 1):$TARGET_SUPER_GROUP_NAME"
     fi
 
     if $HAS_SYSTEM; then
