@@ -63,6 +63,9 @@ if [ -d "$MODULE/system_ext" ]; then
 fi
 
 case "$1" in
+    "prebuilts/samsung/a16xxx")
+        FIRMWARE="SM-A166B/EUX/352907210202024"
+        ;;
     "prebuilts/samsung/a52qnsxx")
         FIRMWARE="SM-A525F/SER/352938771234569"
         ;;
