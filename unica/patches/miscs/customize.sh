@@ -26,3 +26,9 @@ if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION"
 
     sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
 fi
+
+# Fix playback of Widevine DRM content on Exynos by forcing L3
+if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+    [[ -f "$TARGET_FIRMWARE_PATH/vendor/lib64/liboemcrypto.so" ]] && echo -n > "$WORK_DIR/vendor/lib64/liboemcrypto.so"
+    [[ -f "$TARGET_FIRMWARE_PATH/vendor/lib/liboemcrypto.so" ]] && echo -n > "$WORK_DIR/vendor/lib/liboemcrypto.so"
+fi
