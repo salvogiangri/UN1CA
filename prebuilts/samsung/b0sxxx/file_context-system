@@ -33,12 +33,14 @@
 /system/lib/libgui\.so u:object_r:system_lib_file:s0
 /system/lib/libtflite_uwb_jni\.so u:object_r:system_lib_file:s0
 /system/lib/libsmpsft\.smps\.samsung\.so u:object_r:system_lib_file:s0
+/system/lib/libui\.so u:object_r:system_lib_file:s0
 /system/lib/libuwb_uci_jni_rust\.so u:object_r:system_lib_file:s0
 /system/lib64 u:object_r:system_lib_file:s0
 /system/lib64/libandroid_runtime\.so u:object_r:system_lib_file:s0
 /system/lib64/libgui\.so u:object_r:system_lib_file:s0
 /system/lib64/libtflite_uwb_jni\.so u:object_r:system_lib_file:s0
 /system/lib64/libsmpsft\.smps\.samsung\.so u:object_r:system_lib_file:s0
+/system/lib64/libui\.so u:object_r:system_lib_file:s0
 /system/lib64/libuwb_uci_jni_rust\.so u:object_r:system_lib_file:s0
 /system/media u:object_r:system_file:s0
 /system/media/audio u:object_r:system_file:s0
@@ -52,6 +54,8 @@
 /system/priv-app/AirCommand/AirCommand\.apk u:object_r:system_file:s0
 /system/priv-app/AirReadingGlass u:object_r:system_file:s0
 /system/priv-app/AirReadingGlass/AirReadingGlass\.apk u:object_r:system_file:s0
+/system/priv-app/BiometricSetting u:object_r:system_file:s0
+/system/priv-app/BiometricSetting/BiometricSetting\.apk u:object_r:system_file:s0
 /system/priv-app/SmartEye u:object_r:system_file:s0
 /system/priv-app/SmartEye/SmartEye\.apk u:object_r:system_file:s0
 /system/system_ext u:object_r:system_file:s0
