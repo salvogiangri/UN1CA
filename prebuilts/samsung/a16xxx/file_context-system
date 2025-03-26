@@ -1,0 +1,7 @@
+/system u:object_r:system_file:s0
+/system/lib u:object_r:system_lib_file:s0
+/system/lib/hidl_tlc_payment_comm_client\.so u:object_r:system_lib_file:s0
+/system/lib/libtlc_payment_spay\.so u:object_r:system_lib_file:s0
+/system/lib64 u:object_r:system_lib_file:s0
+/system/lib64/hidl_tlc_payment_comm_client\.so u:object_r:system_lib_file:s0
+/system/lib64/libtlc_payment_spay\.so u:object_r:system_lib_file:s0

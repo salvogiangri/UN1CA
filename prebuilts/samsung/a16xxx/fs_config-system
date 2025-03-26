@@ -1,0 +1,7 @@
+system 0 0 755 capabilities=0x0
+system/lib 0 0 755 capabilities=0x0
+system/lib/hidl_tlc_payment_comm_client.so 0 0 644 capabilities=0x0
+system/lib/libtlc_payment_spay.so 0 0 644 capabilities=0x0
+system/lib64 0 0 755 capabilities=0x0
+system/lib64/hidl_tlc_payment_comm_client.so 0 0 644 capabilities=0x0
+system/lib64/libtlc_payment_spay.so 0 0 644 capabilities=0x0
