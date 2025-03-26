@@ -29,11 +29,13 @@
 /system/framework/com\.samsung\.android\.uwb_extras\.jar u:object_r:system_file:s0
 /system/framework/samsung\.uwb\.jar u:object_r:system_file:s0
 /system/lib u:object_r:system_lib_file:s0
+/system/lib/libandroid_runtime\.so u:object_r:system_lib_file:s0
 /system/lib/libgui\.so u:object_r:system_lib_file:s0
 /system/lib/libtflite_uwb_jni\.so u:object_r:system_lib_file:s0
 /system/lib/libsmpsft\.smps\.samsung\.so u:object_r:system_lib_file:s0
 /system/lib/libuwb_uci_jni_rust\.so u:object_r:system_lib_file:s0
 /system/lib64 u:object_r:system_lib_file:s0
+/system/lib64/libandroid_runtime\.so u:object_r:system_lib_file:s0
 /system/lib64/libgui\.so u:object_r:system_lib_file:s0
 /system/lib64/libtflite_uwb_jni\.so u:object_r:system_lib_file:s0
 /system/lib64/libsmpsft\.smps\.samsung\.so u:object_r:system_lib_file:s0
