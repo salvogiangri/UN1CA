@@ -1,0 +1,6 @@
+<permissions>
+    <privapp-permissions package="com.samsung.android.dck.timesync">
+        <permission name="android.permission.DUMP" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+    </privapp-permissions>
+</permissions>
