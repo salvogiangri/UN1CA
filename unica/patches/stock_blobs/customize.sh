@@ -43,7 +43,9 @@ if [ -d "$TARGET_FIRMWARE_PATH/system/system/etc/saiv" ]; then
         ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "$blob" 0 0 644 "u:object_r:system_file:s0"
     done
 else
-    DELETE_FROM_WORK_DIR "system" "system/etc/saiv"
+    if [[ -d "$WORK_DIR/system/system/etc/saiv" ]]; then
+        DELETE_FROM_WORK_DIR "system" "system/etc/saiv"
+    fi
 fi
 DELETE_FROM_WORK_DIR "system" "system/saiv"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/saiv" 0 0 755 "u:object_r:system_file:s0"
@@ -58,5 +60,7 @@ if [ -f "$TARGET_FIRMWARE_PATH/system/system/usr/share/alsa/alsa.conf" ]; then
     echo "Add stock alsa.conf"
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/usr/share/alsa/alsa.conf" 0 0 644 "u:object_r:system_file:s0"
 else
-    DELETE_FROM_WORK_DIR "system" "system/usr/share/alsa"
+    if [[ -d "$WORK_DIR/system/system/usr/share/alsa" ]]; then
+        DELETE_FROM_WORK_DIR "system" "system/usr/share/alsa"
+    fi
 fi
