@@ -16,45 +16,28 @@
 #
 
 # [
-_GET_SELINUX_LABEL()
+_ECHO_STDERR()
 {
-    local PARTITION="${1:?}"
-    local FILE="${2:?}"
-    local FC_FILE
+    local TYPE="${1:?}"
+    local MESSAGE="${2:?}"
 
-    case "$PARTITION" in
-        "product")
-            FC_FILE="$WORK_DIR/product/etc/selinux/product_file_contexts"
-            ;;
-        "vendor")
-            FC_FILE="$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
-            ;;
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FC_FILE="$WORK_DIR/system_ext/etc/selinux/system_ext_file_contexts"
-            else
-                FC_FILE="$WORK_DIR/system/system/system_ext/etc/selinux/system_ext_file_contexts"
-            fi
-            ;;
-        *)
-            FC_FILE="$WORK_DIR/system/system/etc/selinux/plat_file_contexts"
-            ;;
-    esac
-
-    if [[ "${FILE:0:1}" != "/" ]]; then
-        FILE="/$FILE"
+    if [[ "$TYPE" == "W"* ]]; then
+        echo -n -e '\033[0;33m' >&2
+    elif [[ "$TYPE" == "E"* ]]; then
+        echo -n -e '\033[0;31m' >&2
     fi
 
-    local LABEL
-    while IFS= read -r l; do
-        l="$(tr -s "\t" " " <<< "$l")"
-        if [[ "$FILE" =~ ^$(cut -d " " -f 1 <<< "$l")$ ]]; then
-            LABEL="$(cut -d " " -f 2 <<< "$l")"
-            break
+    local STACK_SIZE="${#FUNCNAME[@]}"
+    if [[ "$STACK_SIZE" -gt "1" ]]; then
+        echo -n "(" >&2
+        if [[ "$STACK_SIZE" -gt "2" ]]; then
+            echo -n "${BASH_SOURCE[2]//$SRC_DIR\//}:${BASH_LINENO[1]}:" >&2
         fi
-    done <<< "$(tac "$FC_FILE" 2> /dev/null)"
+        echo -n "${FUNCNAME[1]}) " >&2
+    fi
 
-    echo "$LABEL"
+    echo -n "$MESSAGE" >&2
+    echo -e '\033[0m' >&2
 }
 
 _GET_PROP_FILES_PATH()
@@ -68,21 +51,15 @@ _GET_PROP_FILES_PATH()
                 FILES="$WORK_DIR/system/system/build.prop"
                 ;;
             "vendor")
-                # TODO replace with `getprop ro.vndk.version <= 30`?
-                if [ -f "$WORK_DIR/vendor/default.prop" ]; then
-                    FILES="$WORK_DIR/vendor/default.prop"$'\n'
-                fi
-                FILES+="$WORK_DIR/vendor/build.prop"
+                FILES="$WORK_DIR/vendor/default.prop
+                    $WORK_DIR/vendor/build.prop"
                 ;;
             "product")
                 FILES="$WORK_DIR/product/etc/build.prop"
                 ;;
             "system_ext")
-                if $TARGET_HAS_SYSTEM_EXT; then
-                    FILES="$WORK_DIR/system_ext/etc/build.prop"
-                else
-                    FILES="$WORK_DIR/system/system/system_ext/etc/build.prop"
-                fi
+                FILES="$WORK_DIR/system_ext/etc/build.prop
+                    $WORK_DIR/system/system/system_ext/etc/build.prop"
                 ;;
             "odm")
                 FILES="$WORK_DIR/odm/etc/build.prop"
@@ -134,26 +111,45 @@ _GET_PROP_LOCATION()
     done
 }
 
-_GET_WORK_DIR_PARTITION_PATH()
+_GET_SELINUX_LABEL()
 {
     local PARTITION="${1:?}"
-    _IS_VALID_PARTITION_NAME "$PARTITION" || return
+    local FILE="${2:?}"
+    local FC_FILE
 
-    local PARTITION_PATH="$WORK_DIR"
     case "$PARTITION" in
+        "product")
+            FC_FILE="$WORK_DIR/product/etc/selinux/product_file_contexts"
+            ;;
+        "vendor")
+            FC_FILE="$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+            ;;
         "system_ext")
             if $TARGET_HAS_SYSTEM_EXT; then
-                PARTITION_PATH+="/system_ext"
+                FC_FILE="$WORK_DIR/system_ext/etc/selinux/system_ext_file_contexts"
             else
-                PARTITION_PATH+="/system/system/system_ext"
+                FC_FILE="$WORK_DIR/system/system/system_ext/etc/selinux/system_ext_file_contexts"
             fi
             ;;
         *)
-            PARTITION_PATH+="/$PARTITION"
+            FC_FILE="$WORK_DIR/system/system/etc/selinux/plat_file_contexts"
             ;;
     esac
 
-    echo "$PARTITION_PATH"
+    if [[ "${FILE:0:1}" != "/" ]]; then
+        FILE="/$FILE"
+    fi
+
+    local LABEL="u:object_r:system_file:s0"
+    while IFS= read -r l; do
+        l="$(tr -s "\t" " " <<< "$l")"
+        if [[ "$FILE" =~ ^$(cut -d " " -f 1 <<< "$l")$ ]]; then
+            LABEL="$(cut -d " " -f 2 <<< "$l")"
+            break
+        fi
+    done <<< "$(tac "$FC_FILE" 2> /dev/null)"
+
+    echo "$LABEL"
 }
 
 _IS_VALID_PARTITION_NAME()
@@ -162,7 +158,7 @@ _IS_VALID_PARTITION_NAME()
     # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
     [[ "$PARTITION" == "system" ]] || [[ "$PARTITION" == "vendor" ]] || [[ "$PARTITION" == "product" ]] || \
         [[ "$PARTITION" == "system_ext" ]] || [[ "$PARTITION" == "odm" ]] || [[ "$PARTITION" == "vendor_dlkm" ]] || \
-        [[ "$PARTITION" == "odm_dlkm" ]] || [[ "$PARTITION" == "system_dlkm" ]] || false
+        [[ "$PARTITION" == "odm_dlkm" ]] || [[ "$PARTITION" == "system_dlkm" ]]
 }
 # ]
 
@@ -184,12 +180,12 @@ ADD_TO_WORK_DIR()
     fi
 
     if [ ! -d "$SOURCE" ]; then
-        echo "Folder not found: $SOURCE"
+        _ECHO_STDERR ERR "Folder not found: ${SOURCE//$SRC_DIR\//}"
         return 1
     fi
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
+        _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
 
@@ -233,7 +229,7 @@ ADD_TO_WORK_DIR()
             mkdir -p "$(dirname "$TARGET_FILE")"
             cat "$SOURCE_FILE."* > "$TARGET_FILE"
         else
-            echo "File not found: $SOURCE_FILE"
+            _ECHO_STDERR ERR "File not found: ${SOURCE_FILE//$SRC_DIR\//}"
             return 1
         fi
     else
@@ -351,7 +347,9 @@ DECODE_APK()
 {
     if [ ! -d "$APKTOOL_DIR/$1" ]; then
         "$SRC_DIR/scripts/apktool.sh" d "$1"
+        return $?
     fi
+    return 0
 }
 
 # DELETE_FROM_WORK_DIR "<partition>" "<file/dir>"
@@ -360,9 +358,6 @@ DELETE_FROM_WORK_DIR()
 {
     local PARTITION="${1:?}"
     local FILE="${2:?}"
-    local FILE_PATH
-    local PATTERN
-    local IS_DIR=false
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
         echo "\"$PARTITION\" is not a valid partition name"
@@ -378,17 +373,33 @@ DELETE_FROM_WORK_DIR()
         FILE="system/system_ext/$FILE"
     fi
 
-    FILE_PATH="$(_GET_WORK_DIR_PARTITION_PATH "$PARTITION")/$FILE"
+    local FILE_PATH="$WORK_DIR"
+    case "$PARTITION" in
+        "system_ext")
+            if $TARGET_HAS_SYSTEM_EXT; then
+                FILE_PATH+="/system_ext"
+            else
+                FILE_PATH+="/system/system/system_ext"
+            fi
+            ;;
+        *)
+            FILE_PATH+="/$PARTITION"
+            ;;
+    esac
+    FILE_PATH+="/$FILE"
+
     if [ ! -e "$FILE_PATH" ] && [ ! -L "$FILE_PATH" ]; then
-        echo "File not found: $FILE_PATH"
+        _ECHO_STDERR WARN "File not found: ${FILE_PATH//$WORK_DIR/}"
         return 0
     fi
+
+    local IS_DIR=false
     [ -d "$FILE_PATH" ] && IS_DIR=true
 
-    echo "Deleting /$PARTITION/$FILE"
+    echo "Deleting ${FILE_PATH//$WORK_DIR/}"
     rm -rf "$FILE_PATH"
 
-    PATTERN="${FILE//\//\\/}"
+    local PATTERN="${FILE//\//\\/}"
     [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
     if $IS_DIR; then
         PATTERN="/^$PATTERN/d"
@@ -425,8 +436,8 @@ DOWNLOAD_FILE()
     local OUTPUT="${2:?}"
 
     mkdir -p "$(dirname "$OUTPUT")"
-    curl -L -s -o "$OUTPUT" "$URL"
-    return "$?"
+    curl -L -# -o "$OUTPUT" "$URL"
+    return $?
 }
 
 # GET_GALAXY_STORE_DOWNLOAD_URL <package name>
@@ -434,25 +445,29 @@ DOWNLOAD_FILE()
 GET_GALAXY_STORE_DOWNLOAD_URL()
 {
     local PACKAGE="${1:?}"
-
     local DEVICES
-    # Galaxy S23 International, EUX CSC
-    DEVICES+=("deviceId=SM-S911B&mcc=262&mnc=01&csc=EUX")
-    # Galaxy S24 China, CHC CSC
-    DEVICES+=("deviceId=SM-S9210&mcc=460&mnc=00&csc=CHC")
+    local OS
+    local OUT
 
-    # Android 14, One UI 6.1.1
-    local OS="sdkVer=34&oneUiVersion=60101"
+    # Galaxy S23 Ultra EUR_OPENX, EUX CSC
+    DEVICES+=("deviceId=SM-S918B&mcc=262&mnc=01&csc=EUX")
+    # Galaxy S23 Ultra CHN_OPENX, CHC CSC
+    DEVICES+=("deviceId=SM-S9180&mcc=460&mnc=00&csc=CHC")
+
+    OS="sdkVer="
+    OS+="$(GET_PROP "system" "ro.build.version.sdk")"
+    OS+="&oneUiVersion="
+    OS+="$(GET_PROP "system" "ro.build.version.oneui")"
 
     for i in "${DEVICES[@]}"; do
-        local OUT="$(curl -L -s "https://vas.samsungapps.com/stub/stubDownload.as?appId=$PACKAGE&$i&$OS&extuk=0191d6627f38685f&pd=0")"
+        OUT="$(curl -L -s "https://vas.samsungapps.com/stub/stubDownload.as?appId=$PACKAGE&$i&$OS&extuk=0191d6627f38685f&pd=0")"
         if grep -q "Download URI Available" <<< "$OUT"; then
             grep "downloadURI" <<< "$OUT" | cut -d ">" -f 2 | sed -e 's/<!\[CDATA\[//g; s/\]\]//g'
-            return
+            return $?
         fi
     done
 
-    false
+    return 1
 }
 
 # GET_FLOATING_FEATURE_CONFIG "<config>"
@@ -463,7 +478,7 @@ GET_FLOATING_FEATURE_CONFIG()
     local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
 
     if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
+        _ECHO_STDERR ERR "File not found: ${FILE//$WORK_DIR/}"
         return 1
     fi
 
@@ -507,12 +522,12 @@ HEX_PATCH()
     TO="$(tr "[:upper:]" "[:lower:]" <<< "$TO")"
 
     if xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$TO"; then
-        echo "\"$TO\" already applied in ${FILE//$WORK_DIR/}"
+        _ECHO_STDERR WARN "\"$TO\" already applied in ${FILE//$WORK_DIR/}"
         return 0
     fi
 
     if ! xxd -p "$FILE" | tr -d "\n" | tr -d " " | grep -q "$FROM"; then
-        echo "No \"$FROM\" match in ${FILE//$WORK_DIR/}"
+        _ECHO_STDERR ERR "No \"$FROM\" match in ${FILE//$WORK_DIR/}"
         return 1
     fi
 
@@ -533,7 +548,7 @@ SET_FLOATING_FEATURE_CONFIG()
     local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
 
     if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
+        _ECHO_STDERR ERR "File not found: ${FILE//$WORK_DIR/}"
         return 1
     fi
 
@@ -568,7 +583,7 @@ SET_PROP()
     local VALUE="${3:?}"
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
+        _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
 
@@ -625,8 +640,8 @@ SET_PROP()
         esac
 
         if [ ! -f "$FILE" ]; then
-            echo "File not found: $FILE"
-            return 0
+            _ECHO_STDERR ERR "File not found: ${FILE//$WORK_DIR/}"
+            return 1
         fi
 
         echo "Adding \"$PROP\" prop with \"$VALUE\" in ${FILE//$WORK_DIR/}"
@@ -648,7 +663,7 @@ SET_PROP_IF_DIFF()
     local EXPECTED="${3:?}"
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
+        _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
 
