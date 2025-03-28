@@ -212,7 +212,7 @@ GENERATE_LPMAKE_OPT()
     [ -f "$TMP_DIR/odm_dlkm.img" ] && HAS_ODM_DLKM=true
     [ -f "$TMP_DIR/system_dlkm.img" ] && HAS_SYSTEM_DLKM=true
 
-    OPT+=" -o $TMP_DIR/super_empty.img"
+    OPT+=" -o $TMP_DIR/unsparse_super_empty.img"
     OPT+=" --device-size $TARGET_SUPER_PARTITION_SIZE"
     OPT+=" --metadata-size 65536 --metadata-slots 2"
     OPT+=" -g $TARGET_SUPER_GROUP_NAME:$TARGET_SUPER_GROUP_SIZE"
@@ -268,7 +268,7 @@ GENERATE_UPDATER_SCRIPT()
     [ -f "$TMP_DIR/dtbo.img" ] && HAS_DTBO=true
     [ -f "$TMP_DIR/init_boot.img" ] && HAS_INIT_BOOT=true
     [ -f "$TMP_DIR/vendor_boot.img" ] && HAS_VENDOR_BOOT=true
-    [ -f "$TMP_DIR/super_empty.img" ] && HAS_SUPER_EMPTY=true
+    [ -f "$TMP_DIR/unsparse_super_empty.img" ] && HAS_SUPER_EMPTY=true
     [ -f "$TMP_DIR/system.new.dat.br" ] && HAS_SYSTEM=true
     [ -f "$TMP_DIR/vendor.new.dat.br" ] && HAS_VENDOR=true && PARTITION_COUNT=$((PARTITION_COUNT + 1))
     [ -f "$TMP_DIR/product.new.dat.br" ] && HAS_PRODUCT=true && PARTITION_COUNT=$((PARTITION_COUNT + 1))
@@ -303,14 +303,13 @@ GENERATE_UPDATER_SCRIPT()
 
         PRINT_HEADER
 
-        if $HAS_SUPER_EMPTY; then
-            echo -n 'package_extract_file("super_empty.img", "'
-            echo -n "$TARGET_BOOT_DEVICE_PATH"
-            echo    '/super");'
-        fi
         echo -e "\n# --- Start patching dynamic partitions ---\n\n"
         echo -e "# Update dynamic partition metadata\n"
-        echo    'assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")));'
+        echo -n 'assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list")'
+        if $HAS_SUPER_EMPTY; then
+            echo -n ', package_extract_file("unsparse_super_empty.img")'
+        fi
+        echo    '));'
         if $HAS_SYSTEM; then
             echo -e "\n# Patch partition system\n"
             echo    'ui_print("Patching system image unconditionally...");'
@@ -447,8 +446,8 @@ while read -r i; do
     mv "$WORK_DIR/$PARTITION.img" "$TMP_DIR/$PARTITION.img"
 done <<< "$(find "$WORK_DIR" -mindepth 1 -maxdepth 1 -type d)"
 
-echo "Building super_empty.img"
-[ -f "$TMP_DIR/super_empty.img" ] && rm -f "$TMP_DIR/super_empty.img"
+echo "Building unsparse_super_empty.img"
+[ -f "$TMP_DIR/unsparse_super_empty.img" ] && rm -f "$TMP_DIR/unsparse_super_empty.img"
 CMD="lpmake $(GENERATE_LPMAKE_OPT)"
 $CMD &> /dev/null
 
@@ -458,7 +457,7 @@ GENERATE_OP_LIST
 while read -r i; do
     PARTITION="$(basename "$i" | sed "s/.img//g")"
 
-    [[ "$PARTITION" == "super_empty" ]] && continue
+    [[ "$PARTITION" == "unsparse_super_empty" ]] && continue
 
     if [ -f "$TMP_DIR/$PARTITION.new.dat" ] || [ -f "$TMP_DIR/$PARTITION.new.dat.br" ]; then
         rm -f "$TMP_DIR/$PARTITION.new.dat" \
