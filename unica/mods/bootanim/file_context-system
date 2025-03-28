@@ -1,1 +1,5 @@
+/system u:object_r:system_file:s0
+/system/media u:object_r:system_file:s0
+/system/media/audio u:object_r:system_file:s0
+/system/media/audio/ui u:object_r:system_file:s0
 /system/media/audio/ui/PowerOn\.ogg u:object_r:system_file:s0

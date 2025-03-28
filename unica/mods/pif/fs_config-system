@@ -1,1 +1,3 @@
+system 0 0 755 capabilities=0x0
+system/bin 0 2000 751 capabilities=0x0
 system/bin/rezetprop 0 2000 755 capabilities=0x0

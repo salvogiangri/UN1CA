@@ -1,4 +1,9 @@
+/system u:object_r:system_file:s0
+/system/etc u:object_r:system_file:s0
+/system/etc/default-permissions u:object_r:system_file:s0
 /system/etc/default-permissions/default-permissions-io\.mesalabs\.choidujour\.xml u:object_r:system_file:s0
+/system/etc/permissions u:object_r:system_file:s0
 /system/etc/permissions/privapp-permissions-io\.mesalabs\.choidujour\.xml u:object_r:system_file:s0
+/system/priv-app u:object_r:system_file:s0
 /system/priv-app/ChoiDujour u:object_r:system_file:s0
 /system/priv-app/ChoiDujour/ChoiDujour\.apk u:object_r:system_file:s0
