@@ -27,10 +27,10 @@ GET_OFFICIAL_STATUS()
 {
     local USES_UNICA_CERT=false
 
-    if [ -f "$SRC_DIR/unica/security/unica_platform.pk8" ]; then
-        openssl ec -pubout -in "$SRC_DIR/unica/security/unica_platform.pk8" -out "$OUT_DIR/unica_platform.pub" &> /dev/null \
+    if [ -f "$SRC_DIR/security/unica_platform.pk8" ]; then
+        openssl ec -pubout -in "$SRC_DIR/security/unica_platform.pk8" -out "$OUT_DIR/unica_platform.pub" &> /dev/null \
             || touch "$OUT_DIR/unica_platform.pub"
-        if cmp -s "$SRC_DIR/unica/security/unica_platform.pub" "$OUT_DIR/unica_platform.pub"; then
+        if cmp -s "$SRC_DIR/security/unica_platform.pub" "$OUT_DIR/unica_platform.pub"; then
             USES_UNICA_CERT=true
         fi
         rm -f "$OUT_DIR/unica_platform.pub"

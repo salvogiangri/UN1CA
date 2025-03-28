@@ -232,7 +232,7 @@ DO_RECOMPILE()
 
     if [[ "$APK_PATH" == *".apk" ]]; then
         echo "Signing $IN_DIR"
-        signapk "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.x509.pem" "$SRC_DIR/unica/security/${CERT_PREFIX}_platform.pk8" \
+        signapk "$SRC_DIR/security/${CERT_PREFIX}_platform.x509.pem" "$SRC_DIR/security/${CERT_PREFIX}_platform.pk8" \
             "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME" "$APKTOOL_DIR$IN_DIR/dist/temp.apk" \
             && mv -f "$APKTOOL_DIR$IN_DIR/dist/temp.apk" "$APKTOOL_DIR$IN_DIR/dist/$APK_NAME"
     else

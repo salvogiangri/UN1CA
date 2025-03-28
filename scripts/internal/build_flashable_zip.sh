@@ -425,7 +425,7 @@ GENERATE_BUILD_INFO()
 
 FILE_NAME="UN1CA_${ROM_VERSION}_$(date +%Y%m%d)_${TARGET_CODENAME}"
 CERT_NAME="aosp_testkey"
-$ROM_IS_OFFICIAL && [ -f "$SRC_DIR/unica/security/unica_ota.pk8" ] && CERT_NAME="unica_ota"
+$ROM_IS_OFFICIAL && [ -f "$SRC_DIR/security/unica_ota.pk8" ] && CERT_NAME="unica_ota"
 # ]
 
 echo "Set up tmp dir"
@@ -495,7 +495,7 @@ cd "$TMP_DIR" ; zip -rq ../rom.zip ./* ; cd - &> /dev/null
 echo "Signing zip"
 [ -f "$OUT_DIR/$FILE_NAME-sign.zip" ] && rm -f "$OUT_DIR/$FILE_NAME-sign.zip"
 signapk -w \
-    "$SRC_DIR/unica/security/$CERT_NAME.x509.pem" "$SRC_DIR/unica/security/$CERT_NAME.pk8" \
+    "$SRC_DIR/security/$CERT_NAME.x509.pem" "$SRC_DIR/security/$CERT_NAME.pk8" \
     "$OUT_DIR/rom.zip" "$OUT_DIR/$FILE_NAME-sign.zip" \
     && rm -f "$OUT_DIR/rom.zip"
 
