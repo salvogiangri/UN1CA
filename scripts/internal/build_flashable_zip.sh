@@ -431,7 +431,7 @@ echo "Set up tmp dir"
 mkdir -p "$TMP_DIR"
 [ -d "$TMP_DIR/META-INF/com/google/android" ] && rm -rf "$TMP_DIR/META-INF/com/google/android"
 mkdir -p "$TMP_DIR/META-INF/com/google/android"
-cp --preserve=all "$SRC_DIR/unica/flashable-zip/updater" "$TMP_DIR/META-INF/com/google/android/update-binary"
+cp --preserve=all "$SRC_DIR/prebuilts/bootable/deprecated-ota/updater" "$TMP_DIR/META-INF/com/google/android/update-binary"
 
 while read -r i; do
     PARTITION=$(basename "$i")

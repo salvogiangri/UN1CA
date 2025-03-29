@@ -18,9 +18,9 @@
 *.webp binary
 
 # ROM-specific prebuilt blobs
-unica/flashable-zip/updater binary
-unica/mods/pif/system/bin/rezetprop binary
+prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
+unica/mods/pif/system/bin/rezetprop binary
 
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary
