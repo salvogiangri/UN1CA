@@ -63,37 +63,37 @@ if [ -d "$MODULE/system_ext" ]; then
 fi
 
 case "$1" in
-    "prebuilts/a52qnsxx")
+    "prebuilts/samsung/a52qnsxx")
         FIRMWARE="SM-A525F/SER/352938771234569"
         ;;
-    "prebuilts/a52sxqxx")
+    "prebuilts/samsung/a52sxqxx")
         FIRMWARE="SM-A528B/BTU/352599501234566"
         ;;
-    "prebuilts/a73xqxx")
+    "prebuilts/samsung/a73xqxx")
         FIRMWARE="SM-A736B/XME/352828291234563"
         ;;
-    "prebuilts/b5qxxx")
+    "prebuilts/samsung/b5qxxx")
         FIRMWARE="SM-F731B/EUX/350929871234569"
         ;;
-    "prebuilts/dm1qkdiw")
+    "prebuilts/samsung/dm1qkdiw")
         FIRMWARE="SCG19/KDI/RFCW320SDNY"
         ;;
-    "prebuilts/dm3qxxx")
+    "prebuilts/samsung/dm3qxxx")
         FIRMWARE="SM-S918B/EUX/350196551234562"
         ;;
-    "prebuilts/e1qzcx")
+    "prebuilts/samsung/e1qzcx")
         FIRMWARE="SM-S9210/CHC/356724910402671"
         ;;
-    "prebuilts/gts9xxx")
+    "prebuilts/samsung/gts9xxx")
         FIRMWARE="SM-X716B/EUX/353439961234567"
         ;;
-    "prebuilts/r0qxxx")
+    "prebuilts/samsung/r0qxxx")
         FIRMWARE="SM-S901E/INS/350999641234561"
         ;;
-    "prebuilts/r9qxxx")
+    "prebuilts/samsung/r9qxxx")
         FIRMWARE="SM-G990B/EUX/353718681234563"
         ;;
-    "prebuilts/r11sxxx")
+    "prebuilts/samsung/r11sxxx")
         FIRMWARE="SM-S711B/EUX/358615311234564"
         ;;
     "target/dm1q/patches/china")

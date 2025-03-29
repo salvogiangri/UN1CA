@@ -103,7 +103,7 @@ done
 
 echo "Fix AI Photo Editor"
 cp -a --preserve=all \
-    "$SRC_DIR/prebuilts/a52qnsxx/system/cameradata/portrait_data/single_bokeh_feature.json" \
+    "$SRC_DIR/prebuilts/samsung/a52qnsxx/system/cameradata/portrait_data/single_bokeh_feature.json" \
     "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
 if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
     {

@@ -167,7 +167,7 @@ _IS_VALID_PARTITION_NAME()
 # `source` argument can be:
 # - a full path
 # - a string in the following format: "MODEL/CSC" (the folder MUST exist under `out/fw`)
-# - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts`)
+# - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts/samsung`)
 ADD_TO_WORK_DIR()
 {
     local SOURCE="${1:?}"
@@ -182,7 +182,7 @@ ADD_TO_WORK_DIR()
         if [ "$(cut -d "/" -f 2 -s <<< "$SOURCE")" ]; then
             SOURCE="$FW_DIR/$(cut -d "/" -f 1 <<< "$SOURCE")_$(cut -d "/" -f 2 <<< "$SOURCE")"
         else
-            SOURCE="$SRC_DIR/prebuilts/$SOURCE"
+            SOURCE="$SRC_DIR/prebuilts/samsung/$SOURCE"
         fi
     fi
 

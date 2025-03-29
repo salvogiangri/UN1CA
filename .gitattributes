@@ -20,7 +20,7 @@
 # ROM-specific prebuilt blobs
 unica/flashable-zip/updater binary
 unica/mods/pif/system/bin/rezetprop binary
-prebuilts/*/*/** binary
+prebuilts/*/*/*/** binary
 
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary
