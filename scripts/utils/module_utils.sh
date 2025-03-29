@@ -408,22 +408,18 @@ DELETE_FROM_WORK_DIR()
 
     local PATTERN="${FILE//\//\\/}"
     [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
+    sed -i "/^$PATTERN /d" "$WORK_DIR/configs/fs_config-$PARTITION"
     if $IS_DIR; then
-        PATTERN="/^$PATTERN/d"
-    else
-        PATTERN="/^$PATTERN /d"
+        sed -i "/^$PATTERN\//d" "$WORK_DIR/configs/fs_config-$PARTITION"
     fi
-    sed -i "$PATTERN" "$WORK_DIR/configs/fs_config-$PARTITION"
 
     PATTERN="${FILE//\//\\/}"
     PATTERN="${PATTERN//\./\\\\\.}"
     [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
+    sed -i "/^\/$PATTERN /d" "$WORK_DIR/configs/file_context-$PARTITION"
     if $IS_DIR; then
-        PATTERN="/^\/$PATTERN/d"
-    else
-        PATTERN="/^\/$PATTERN /d"
+        sed -i "/^\/$PATTERN\//d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
-    sed -i "$PATTERN" "$WORK_DIR/configs/file_context-$PARTITION"
 
     if [[ "$FILE" == *".so" ]]; then
         # shellcheck disable=SC2013
