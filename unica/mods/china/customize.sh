@@ -3,16 +3,16 @@ DELETE_FROM_WORK_DIR "system" "system/priv-app/SmartManager_v6_DeviceSecurity"
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.lool.xml"
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity_v6.xml"
 
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" \
+ADD_TO_WORK_DIR "e1qzcx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.applock.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" \
+ADD_TO_WORK_DIR "e1qzcx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.sm_cn.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" \
+ADD_TO_WORK_DIR "e1qzcx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.sm.devicesecurity.tcm_v6.xml" 0 0 644 "u:object_r:system_file:s0"
 [ ! -f "$WORK_DIR/system/system/priv-app/SAppLock/SAppLock.apk" ] && \
-    ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" "system/priv-app/AppLock" 0 0 755 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" "system/priv-app/SmartManagerCN" 0 0 755 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/e1qzcx" "system" "system/priv-app/SmartManager_v6_DeviceSecurity_CN" 0 0 755 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "e1qzcx" "system" "system/priv-app/AppLock" 0 0 755 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "e1qzcx" "system" "system/priv-app/SmartManagerCN" 0 0 755 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "e1qzcx" "system" "system/priv-app/SmartManager_v6_DeviceSecurity_CN" 0 0 755 "u:object_r:system_file:s0"
 
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.sm_cn")" \
     "$WORK_DIR/system/system/priv-app/SmartManagerCN/SmartManagerCN.apk"

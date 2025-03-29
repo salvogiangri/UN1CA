@@ -164,7 +164,10 @@ _IS_VALID_PARTITION_NAME()
 
 # ADD_TO_WORK_DIR <source> <partition> <file/dir> <user> <group> <mode> <label>
 # Adds the supplied file/directory in work dir along with its entries in fs_config/file_context.
-# `source` argument can either be a full path or a string in the following format: "MODEL/CSC"
+# `source` argument can be:
+# - a full path
+# - a string in the following format: "MODEL/CSC" (the folder MUST exist under `out/fw`)
+# - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts`)
 ADD_TO_WORK_DIR()
 {
     local SOURCE="${1:?}"
@@ -176,7 +179,11 @@ ADD_TO_WORK_DIR()
     local LABEL="${7:?}"
 
     if [ ! -d "$SOURCE" ]; then
-        SOURCE="$FW_DIR/$(cut -d "/" -f 1 <<< "$SOURCE")_$(cut -d "/" -f 2 <<< "$SOURCE")"
+        if [ "$(cut -d "/" -f 2 -s <<< "$SOURCE")" ]; then
+            SOURCE="$FW_DIR/$(cut -d "/" -f 1 <<< "$SOURCE")_$(cut -d "/" -f 2 <<< "$SOURCE")"
+        else
+            SOURCE="$SRC_DIR/prebuilts/$SOURCE"
+        fi
     fi
 
     if [ ! -d "$SOURCE" ]; then

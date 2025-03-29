@@ -1,11 +1,11 @@
 SET_PROP_IF_DIFF "vendor" "ro.security.fips.ux" "Disabled"
 
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a73xqxx" "system" "system/bin" 0 2000 751 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm1qkdiw" "system" "system/lib/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a73xqxx" "system" "system/lib/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/dm1qkdiw" "system" "system/lib64/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a73xqxx" "system" "system/lib64/libepm.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a73xqxx" "system" "system/lib64/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "a73xqxx" "system" "system/bin" 0 2000 751 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "dm1qkdiw" "system" "system/lib/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "dm1qkdiw" "system" "system/lib64/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libepm.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
 DELETE_FROM_WORK_DIR "system" "system/app/BlockchainBasicKit"
 DELETE_FROM_WORK_DIR "system" "system/bin/dualdard"

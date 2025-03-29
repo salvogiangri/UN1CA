@@ -1,5 +1,5 @@
 DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data"
-ADD_TO_WORK_DIR "$SRC_DIR/prebuilts/a52qnsxx" "system" "system/cameradata/portrait_data" 0 0 755 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "a52qnsxx" "system" "system/cameradata/portrait_data" 0 0 755 "u:object_r:system_file:s0"
 
 if ! grep -q "Camera End" "$WORK_DIR/vendor/ueventd.rc"; then
     echo "" >> "$WORK_DIR/vendor/ueventd.rc"
