@@ -16,6 +16,29 @@
 #
 
 # [
+_CHECK_NON_EMPTY_PARAM()
+{
+    if [ ! "$2" ]; then
+        echo -n -e '\033[0;31m' >&2
+
+        local STACK_SIZE="${#FUNCNAME[@]}"
+        if [[ "$STACK_SIZE" -gt "1" ]]; then
+            echo -n "(" >&2
+            if [[ "$STACK_SIZE" -gt "2" ]]; then
+                echo -n "${BASH_SOURCE[2]//$SRC_DIR\//}:${BASH_LINENO[1]}:" >&2
+            fi
+            echo -n "${FUNCNAME[1]}) " >&2
+        fi
+
+        echo -n "$1 is not set!" >&2
+        echo -e '\033[0m' >&2
+
+        return 1
+    fi
+
+    return 0
+}
+
 _ECHO_STDERR()
 {
     local TYPE="${1:?}"
@@ -170,13 +193,21 @@ _IS_VALID_PARTITION_NAME()
 # - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts/samsung`)
 ADD_TO_WORK_DIR()
 {
-    local SOURCE="${1:?}"
-    local PARTITION="${2:?}"
-    local FILE="${3:?}"
-    local USER="${4:?}"
-    local GROUP="${5:?}"
-    local MODE="${6:?}"
-    local LABEL="${7:?}"
+    _CHECK_NON_EMPTY_PARAM "SOURCE" "$1"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$2"
+    _CHECK_NON_EMPTY_PARAM "FILE" "$3"
+    _CHECK_NON_EMPTY_PARAM "USER" "$4"
+    _CHECK_NON_EMPTY_PARAM "GROUP" "$5"
+    _CHECK_NON_EMPTY_PARAM "MODE" "$6"
+    _CHECK_NON_EMPTY_PARAM "LABEL" "$7"
+
+    local SOURCE="$1"
+    local PARTITION="$2"
+    local FILE="$3"
+    local USER="$4"
+    local GROUP="$5"
+    local MODE="$6"
+    local LABEL="$7"
 
     if [ ! -d "$SOURCE" ]; then
         if [ "$(cut -d "/" -f 2 -s <<< "$SOURCE")" ]; then
@@ -352,10 +383,13 @@ ADD_TO_WORK_DIR()
 # APK/JAR path MUST not be full and match an existing file inside work_dir.
 DECODE_APK()
 {
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
+
     if [ ! -d "$APKTOOL_DIR/$1" ]; then
         "$SRC_DIR/scripts/apktool.sh" d "$1"
         return $?
     fi
+
     return 0
 }
 
@@ -363,8 +397,11 @@ DECODE_APK()
 # Deletes the supplied file/directory from work dir along with its entries in fs_config/file_context.
 DELETE_FROM_WORK_DIR()
 {
-    local PARTITION="${1:?}"
-    local FILE="${2:?}"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
+    _CHECK_NON_EMPTY_PARAM "FILE" "$2"
+
+    local PARTITION="$1"
+    local FILE="$2"
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
         echo "\"$PARTITION\" is not a valid partition name"
@@ -431,23 +468,28 @@ DELETE_FROM_WORK_DIR()
     return 0
 }
 
-# DOWNLOAD_FILE <url> <output path>
+# DOWNLOAD_FILE "<url>" "<output path>"
 # Downloads the file from the provided URL and stores it in the desidered output path.
 DOWNLOAD_FILE()
 {
-    local URL="${1:?}"
-    local OUTPUT="${2:?}"
+    _CHECK_NON_EMPTY_PARAM "URL" "$1"
+    _CHECK_NON_EMPTY_PARAM "OUTPUT" "$2"
+
+    local URL="$1"
+    local OUTPUT="$2"
 
     mkdir -p "$(dirname "$OUTPUT")"
     curl -L -# -o "$OUTPUT" "$URL"
     return $?
 }
 
-# GET_GALAXY_STORE_DOWNLOAD_URL <package name>
+# GET_GALAXY_STORE_DOWNLOAD_URL "<package name>"
 # Returns a URL to download the desidered app from Samsung servers.
 GET_GALAXY_STORE_DOWNLOAD_URL()
 {
-    local PACKAGE="${1:?}"
+    _CHECK_NON_EMPTY_PARAM "PACKAGE" "$1"
+
+    local PACKAGE="$1"
     local DEVICES
     local OS
     local OUT
@@ -470,6 +512,7 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
         fi
     done
 
+    _ECHO_STDERR ERR "No download URI found for app \"$PACKAGE\""
     return 1
 }
 
@@ -477,7 +520,9 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
 # Returns the supplied config value.
 GET_FLOATING_FEATURE_CONFIG()
 {
-    local CONFIG="${1:?}"
+    _CHECK_NON_EMPTY_PARAM "CONFIG" "$1"
+
+    local CONFIG="$1"
     local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
 
     if [ ! -f "$FILE" ]; then
@@ -493,31 +538,37 @@ GET_FLOATING_FEATURE_CONFIG()
 GET_PROP()
 {
     local FILES
-    if [[ "${1:?}" == *".prop" ]]; then
+    if [[ "$1" == *".prop" ]]; then
         FILES="$1"
         shift
     else
-        FILES="$(_GET_PROP_FILES_PATH "${1:?}")"
-        if _IS_VALID_PARTITION_NAME "${1:?}"; then
+        FILES="$(_GET_PROP_FILES_PATH "$1")"
+        if _IS_VALID_PARTITION_NAME "$1"; then
             shift
         fi
     fi
 
-    local PROP="${1:?}"
+    _CHECK_NON_EMPTY_PARAM "PROP" "$1"
+
+    local PROP="$1"
     # shellcheck disable=SC2002,SC2046,SC2116
     cat $(echo "$FILES") 2> /dev/null | sed -n "s/^$PROP=//p" | head -n 1
 }
 
-# HEX_PATCH <file> <old pattern> <new pattern>
+# HEX_PATCH "<file>" "<old pattern>" "<new pattern>"
 # Applies the supplied hex patch to the desidered file.
 HEX_PATCH()
 {
-    local FILE="${1:?}"
-    local FROM="${2:?}"
-    local TO="${3:?}"
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
+    _CHECK_NON_EMPTY_PARAM "FROM" "$2"
+    _CHECK_NON_EMPTY_PARAM "TO" "$3"
+
+    local FILE="$1"
+    local FROM="$2"
+    local TO="$3"
 
     if [ ! -f "$FILE" ]; then
-        echo "File not found: $FILE"
+        _ECHO_STDERR ERR "File not found: ${FILE//$WORK_DIR/}"
         return 1
     fi
 
@@ -546,8 +597,11 @@ HEX_PATCH()
 # "-d" or "--delete" can be passed as value to delete the config.
 SET_FLOATING_FEATURE_CONFIG()
 {
-    local CONFIG="${1:?}"
-    local VALUE="${2:?}"
+    _CHECK_NON_EMPTY_PARAM "CONFIG" "$1"
+    _CHECK_NON_EMPTY_PARAM "VALUE" "$2"
+
+    local CONFIG="$1"
+    local VALUE="$2"
     local FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
 
     if [ ! -f "$FILE" ]; then
@@ -581,16 +635,19 @@ SET_FLOATING_FEATURE_CONFIG()
 # "-d" or "--delete" can be passed as value to delete the prop.
 SET_PROP()
 {
-    local PARTITION="${1:?}"
-    local PROP="${2:?}"
-    local VALUE="${3:?}"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
+    _CHECK_NON_EMPTY_PARAM "PROP" "$2"
+
+    local PARTITION="$1"
+    local PROP="$2"
+    local VALUE="$3"
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
         _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
 
-    if [[ $(GET_PROP "$PARTITION" "$PROP") ]]; then
+    if [ "$(GET_PROP "$PARTITION" "$PROP")" ]; then
         local FILES
         FILES="$(_GET_PROP_LOCATION "$PARTITION" "$PROP")"
         # shellcheck disable=SC2116
@@ -661,9 +718,13 @@ SET_PROP()
 # Calls SET_PROP if the current prop value does not match, partition name CANNOT be omitted.
 SET_PROP_IF_DIFF()
 {
-    local PARTITION="${1:?}"
-    local PROP="${2:?}"
-    local EXPECTED="${3:?}"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
+    _CHECK_NON_EMPTY_PARAM "PROP" "$2"
+    _CHECK_NON_EMPTY_PARAM "EXPECTED" "$3"
+
+    local PARTITION="$1"
+    local PROP="$2"
+    local EXPECTED="$3"
 
     if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
         _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
