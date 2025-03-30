@@ -175,6 +175,19 @@ _GET_SELINUX_LABEL()
     echo "$LABEL"
 }
 
+_HANDLE_SPECIAL_CHARS()
+{
+    local STRING="${1:?}"
+
+    STRING="${STRING//\./\\.}"
+    STRING="${STRING//\+/\\+}"
+    STRING="${STRING//\[/\\[}"
+    STRING="${STRING//\]/\\]}"
+    STRING="${STRING//\*/\\*}"
+
+    echo "$STRING"
+}
+
 _IS_VALID_PARTITION_NAME()
 {
     local PARTITION="$1"
@@ -286,7 +299,7 @@ ADD_TO_WORK_DIR()
     if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
         echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
     fi
-    TMP="/${TMP//\./\\.}"
+    TMP="/$(_HANDLE_SPECIAL_CHARS "$TMP")"
     if ! grep -q -F "$TMP " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
         echo "$TMP $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
     fi
@@ -322,11 +335,11 @@ ADD_TO_WORK_DIR()
                 fi
             fi
 
-            if ! grep -q -F "/${f//\./\\.} " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
-                if grep -q -F "/${f//\./\\.} " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
-                    grep -F "/${f//\./\\.} " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
+            if ! grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$f") " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+                if grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$f") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
+                    grep -F "/$(_HANDLE_SPECIAL_CHARS "$f") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 else
-                    echo "/${f//\./\\.} $(_GET_SELINUX_LABEL "$PARTITION" "/$f")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                    echo "/$(_HANDLE_SPECIAL_CHARS "$f") $(_GET_SELINUX_LABEL "$PARTITION" "/$f")" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
             fi
         done
@@ -361,11 +374,11 @@ ADD_TO_WORK_DIR()
         do
             _IS_VALID_PARTITION_NAME "$TMP" && break
 
-            if ! grep -q -F "/${TMP//\./\\.} " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
-                if grep -q -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
-                    grep -F "/${TMP//\./\\.} " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
+            if ! grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+                if grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
+                    grep -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 else
-                    echo "/${TMP//\./\\.} $(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                    echo "/$(_HANDLE_SPECIAL_CHARS "$TMP") $(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
             else
                 break
@@ -450,8 +463,9 @@ DELETE_FROM_WORK_DIR()
         sed -i "/^$PATTERN\//d" "$WORK_DIR/configs/fs_config-$PARTITION"
     fi
 
-    PATTERN="${FILE//\//\\/}"
-    PATTERN="${PATTERN//\./\\\\\.}"
+    PATTERN="$(_HANDLE_SPECIAL_CHARS "$FILE")"
+    PATTERN="${PATTERN//\\/\\\\}"
+    PATTERN="${PATTERN//\//\\/}"
     [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
     sed -i "/^\/$PATTERN /d" "$WORK_DIR/configs/file_context-$PARTITION"
     if $IS_DIR; then
