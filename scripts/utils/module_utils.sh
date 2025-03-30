@@ -370,8 +370,7 @@ ADD_TO_WORK_DIR()
         TMP="${TARGET_FILE%/.}"
         TMP="$(dirname "${TMP//$WORK_DIR\//}")"
         [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
-        while [[ "$TMP" != "." ]]
-        do
+        while [[ "$TMP" != "." ]]; do
             _IS_VALID_PARTITION_NAME "$TMP" && break
 
             if ! grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
@@ -714,8 +713,8 @@ SET_PROP()
         esac
 
         if [ ! -f "$FILE" ]; then
-            _ECHO_STDERR ERR "File not found: ${FILE//$WORK_DIR/}"
-            return 1
+            _ECHO_STDERR WARN "File not found: ${FILE//$WORK_DIR/}"
+            return 0
         fi
 
         echo "Adding \"$PROP\" prop with \"$VALUE\" in ${FILE//$WORK_DIR/}"
