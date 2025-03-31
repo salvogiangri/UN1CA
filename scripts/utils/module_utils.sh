@@ -200,19 +200,18 @@ _IS_VALID_PARTITION_NAME()
 
 # ADD_TO_WORK_DIR <source> <partition> <file/dir> <user> <group> <mode> <label>
 # Adds the supplied file/directory in work dir along with its entries in fs_config/file_context.
+#
 # `source` argument can be:
 # - a full path
 # - a string in the following format: "MODEL/CSC" (the folder MUST exist under `out/fw`)
 # - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts/samsung`)
+#
+# `user`/`group`/`mode`/`label`/ arguments can be omitted as long as the respective entry is present in `source`/fs_config and `source`/file_context.
 ADD_TO_WORK_DIR()
 {
     _CHECK_NON_EMPTY_PARAM "SOURCE" "$1"
     _CHECK_NON_EMPTY_PARAM "PARTITION" "$2"
     _CHECK_NON_EMPTY_PARAM "FILE" "$3"
-    _CHECK_NON_EMPTY_PARAM "USER" "$4"
-    _CHECK_NON_EMPTY_PARAM "GROUP" "$5"
-    _CHECK_NON_EMPTY_PARAM "MODE" "$6"
-    _CHECK_NON_EMPTY_PARAM "LABEL" "$7"
 
     local SOURCE="$1"
     local PARTITION="$2"
@@ -292,16 +291,40 @@ ADD_TO_WORK_DIR()
         cp -a -T "$SOURCE_FILE" "$TARGET_FILE"
     fi
 
-    local TMP
-    TMP="${TARGET_FILE//$WORK_DIR\//}"
-    [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
-    TMP="${TMP%/.}"
-    if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
-        echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+    local ENTRY="${TARGET_FILE//$WORK_DIR\//}"
+    [[ "$PARTITION" == "system" ]] && ENTRY="${ENTRY//system\/system\//system/}"
+    ENTRY="${ENTRY%/.}"
+
+    if ! grep -q -F "$ENTRY " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
+        if [ "$USER" ] && [ "$GROUP" ] && [ "$MODE" ]; then
+            echo "$ENTRY $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+        elif grep -q -F "$ENTRY " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
+            grep -F "$ENTRY " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+        else
+            _ECHO_STDERR WARN "No fs_config entry found for \"$ENTRY\" in \"${SOURCE//$SRC_DIR\//}\". Using default values"
+
+            USER=0
+            GROUP=0
+            MODE=644
+            [[ "$PARTITION" == "vendor" ]] && GROUP=2000
+            [ -d "$TARGET_FILE" ] && MODE=755
+
+            echo "$ENTRY $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+        fi
     fi
-    TMP="/$(_HANDLE_SPECIAL_CHARS "$TMP")"
-    if ! grep -q -F "$TMP " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
-        echo "$TMP $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
+
+    if ! grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
+        if [ "$LABEL" ]; then
+            echo "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
+        elif grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
+            grep -F "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
+        else
+            _ECHO_STDERR WARN "No file_context entry found for \"$ENTRY\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
+
+            LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$ENTRY")"
+
+            echo "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
+        fi
     fi
 
     if [ -d "$TARGET_FILE" ]; then
@@ -319,19 +342,17 @@ ADD_TO_WORK_DIR()
                 if grep -q -F "$f " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
                     grep -F "$f " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                 else
+                    _ECHO_STDERR WARN "No fs_config entry found for \"$f\" in \"${SOURCE//$SRC_DIR\//}\". Using default values"
+
+                    USER=0
+                    GROUP=0
+                    MODE=644
+                    [[ "$PARTITION" == "vendor" ]] && GROUP=2000
                     if [ -d "$SOURCE/$f" ] || [ -d "$SOURCE/system/$f" ] || [ -d "$SOURCE/${f//system\//}" ]; then
-                        if [[ "$PARTITION" == "vendor" ]]; then
-                            echo "$f 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
-                        else
-                            echo "$f 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-                        fi
-                    else
-                        if [[ "$PARTITION" == "vendor" ]]; then
-                            echo "$f 0 2000 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
-                        else
-                            echo "$f 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-                        fi
+                        MODE=755
                     fi
+
+                    echo "$f $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                 fi
             fi
 
@@ -339,14 +360,19 @@ ADD_TO_WORK_DIR()
                 if grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$f") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
                     grep -F "/$(_HANDLE_SPECIAL_CHARS "$f") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 else
-                    echo "/$(_HANDLE_SPECIAL_CHARS "$f") $(_GET_SELINUX_LABEL "$PARTITION" "/$f")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                    _ECHO_STDERR WARN "No file_context entry found for \"$f\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
+
+                    LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$f")"
+
+                    echo "/$(_HANDLE_SPECIAL_CHARS "$f") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
             fi
         done
     else
-        TMP="${TARGET_FILE%/.}"
+        local TMP="${TARGET_FILE%/.}"
         TMP="$(dirname "${TMP//$WORK_DIR\//}")"
         [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
+
         while [[ "$TMP" != "." ]]; do
             _IS_VALID_PARTITION_NAME "$TMP" && break
 
@@ -354,33 +380,27 @@ ADD_TO_WORK_DIR()
                 if grep -q -F "$TMP " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
                     grep -F "$TMP " "$SOURCE/fs_config-$PARTITION" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                 else
-                    if [[ "$PARTITION" == "vendor" ]]; then
-                        echo "$TMP 0 2000 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-vendor"
-                    else
-                        echo "$TMP 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
-                    fi
+                    _ECHO_STDERR WARN "No fs_config entry found for \"$TMP\" in \"${SOURCE//$SRC_DIR\//}\". Using default values"
+
+                    USER=0
+                    GROUP=0
+                    MODE=755
+                    [[ "$PARTITION" == "vendor" ]] && GROUP=2000
+
+                    echo "$TMP $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
                 fi
-            else
-                break
             fi
-
-            TMP="$(dirname "$TMP")"
-        done
-
-        TMP="${TARGET_FILE%/.}"
-        TMP="$(dirname "${TMP//$WORK_DIR\//}")"
-        [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
-        while [[ "$TMP" != "." ]]; do
-            _IS_VALID_PARTITION_NAME "$TMP" && break
 
             if ! grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$WORK_DIR/configs/file_context-$PARTITION" 2> /dev/null; then
                 if grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
                     grep -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 else
-                    echo "/$(_HANDLE_SPECIAL_CHARS "$TMP") $(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")" >> "$WORK_DIR/configs/file_context-$PARTITION"
+                    _ECHO_STDERR WARN "No file_context entry found for \"$TMP\" in \"${SOURCE//$SRC_DIR\//}\". Using default values"
+
+                    LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")"
+
+                    echo "/$(_HANDLE_SPECIAL_CHARS "$TMP") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
-            else
-                break
             fi
 
             TMP="$(dirname "$TMP")"
