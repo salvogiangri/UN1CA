@@ -395,7 +395,7 @@ ADD_TO_WORK_DIR()
                 if grep -q -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" 2> /dev/null; then
                     grep -F "/$(_HANDLE_SPECIAL_CHARS "$TMP") " "$SOURCE/file_context-$PARTITION" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 else
-                    _ECHO_STDERR WARN "No file_context entry found for \"$TMP\" in \"${SOURCE//$SRC_DIR\//}\". Using default values"
+                    _ECHO_STDERR WARN "No file_context entry found for \"$TMP\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
 
                     LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")"
 
@@ -661,6 +661,49 @@ SET_FLOATING_FEATURE_CONFIG()
     fi
 
     return 0
+}
+
+# SET_METADATA <partition> <file/dir> <user> <group> <mode> <label>
+# Adds the supplied file/directory entry attrs in fs_config/file_context.
+SET_METADATA()
+{
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
+    _CHECK_NON_EMPTY_PARAM "ENTRY" "$2"
+    _CHECK_NON_EMPTY_PARAM "USER" "$3"
+    _CHECK_NON_EMPTY_PARAM "GROUP" "$4"
+    _CHECK_NON_EMPTY_PARAM "MODE" "$5"
+    _CHECK_NON_EMPTY_PARAM "LABEL" "$6"
+
+    local PARTITION="$1"
+    local ENTRY="$2"
+    local USER="$3"
+    local GROUP="$4"
+    local MODE="$5"
+    local LABEL="$6"
+
+    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+        _ECHO_STDERR ERR "\"$PARTITION\" is not a valid partition name"
+        return 1
+    fi
+
+    while [[ "${ENTRY:0:1}" == "/" ]]; do
+        ENTRY="${ENTRY:1}"
+    done
+
+    [ "$PARTITION" != "system" ] && [[ "$ENTRY" != "$PARTITION/"* ]] && ENTRY="$PARTITION/$ENTRY"
+
+    local PATTERN
+    PATTERN="${ENTRY//\//\\/}"
+    sed -i "/^$PATTERN /d" "$WORK_DIR/configs/fs_config-$PARTITION"
+
+    echo "$ENTRY $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
+
+    PATTERN="$(_HANDLE_SPECIAL_CHARS "$ENTRY")"
+    PATTERN="${PATTERN//\\/\\\\}"
+    PATTERN="${PATTERN//\//\\/}"
+    sed -i "/^\/$PATTERN /d" "$WORK_DIR/configs/file_context-$PARTITION"
+
+    echo "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
 }
 
 # SET_PROP "<partition>" "<prop>" "<value>"

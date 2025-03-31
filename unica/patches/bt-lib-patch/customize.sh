@@ -12,8 +12,7 @@ if [ ! -f "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" ]; then
     sudo umount "$TMP_DIR/tmp_out"
     rm -rf "$TMP_DIR"
 
-    echo "/system/lib64/libbluetooth_jni\.so u:object_r:system_lib_file:s0" >> "$WORK_DIR/configs/file_context-system"
-    echo "system/lib64/libbluetooth_jni.so 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
+    SET_METADATA "system" "system/lib64/libbluetooth_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
 fi
 
 # https://github.com/3arthur6/BluetoothLibraryPatcher/blob/425bb59da6505c962a38c143137698849b01d470/hexpatch.sh#L12

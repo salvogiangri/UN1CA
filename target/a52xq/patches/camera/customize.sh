@@ -104,16 +104,7 @@ echo "Fix AI Photo Editor"
 cp -a --preserve=all \
     "$TARGET_FIRMWARE_PATH/system/system/cameradata/portrait_data/single_bokeh_feature.json" \
     "$WORK_DIR/system/system/cameradata/portrait_data/unica_bokeh_feature.json"
-if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/file_context-system"; then
-    {
-        echo "/system/cameradata/portrait_data/unica_bokeh_feature\.json u:object_r:system_file:s0"
-    } >> "$WORK_DIR/configs/file_context-system"
-fi
-if ! grep -q "unica_bokeh_feature" "$WORK_DIR/configs/fs_config-system"; then
-    {
-        echo "system/cameradata/portrait_data/unica_bokeh_feature.json 0 0 644 capabilities=0x0"
-    } >> "$WORK_DIR/configs/fs_config-system"
-fi
+SET_METADATA "system" "system/cameradata/portrait_data/unica_bokeh_feature.json" 0 0 644 "u:object_r:system_file:s0"
 sed -i "s/MODEL_TYPE_INSTANCE_CAPTURE/MODEL_TYPE_OBJ_INSTANCE_CAPTURE/g" \
     "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json"
 sed -i \
