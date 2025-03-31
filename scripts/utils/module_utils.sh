@@ -306,8 +306,10 @@ ADD_TO_WORK_DIR()
             USER=0
             GROUP=0
             MODE=644
-            [[ "$PARTITION" == "vendor" ]] && GROUP=2000
-            [ -d "$TARGET_FILE" ] && MODE=755
+            if [ -d "$TARGET_FILE" ]; then
+                [[ "$PARTITION" == "vendor" ]] && GROUP=2000
+                MODE=755
+            fi
 
             echo "$ENTRY $USER $GROUP $MODE capabilities=0x0" >> "$WORK_DIR/configs/fs_config-$PARTITION"
         fi
@@ -347,8 +349,8 @@ ADD_TO_WORK_DIR()
                     USER=0
                     GROUP=0
                     MODE=644
-                    [[ "$PARTITION" == "vendor" ]] && GROUP=2000
                     if [ -d "$SOURCE/$f" ] || [ -d "$SOURCE/system/$f" ] || [ -d "$SOURCE/${f//system\//}" ]; then
+                        [[ "$PARTITION" == "vendor" ]] && GROUP=2000
                         MODE=755
                     fi
 
