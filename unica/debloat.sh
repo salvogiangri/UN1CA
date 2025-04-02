@@ -158,7 +158,10 @@ if $SOURCE_IS_ESIM_SUPPORTED; then
 fi
 
 # fabric_crypto
-if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
+MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+TARGET_ONEUI_VERSION="$(GET_PROP \"$FW_DIR/${MODEL}_${REGION}/system/system/build.prop\" \"ro.build.oneui.version\")"
+if [[ "$TARGET_ONEUI_VERSION" -lt 50101 ]]; then
     SYSTEM_DEBLOAT+="
     system/bin/fabric_crypto
     system/etc/init/fabric_crypto.rc
