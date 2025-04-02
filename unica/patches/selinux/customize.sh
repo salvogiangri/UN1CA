@@ -27,5 +27,11 @@ if [[ "$TARGET_VNDK_VERSION" -gt 30 ]]; then
         sed -i "/proc_compaction_proactiveness/d" "$WORK_DIR/$SYSTEM_EXT/etc/selinux/mapping/$TARGET_VNDK_VERSION.0.cil"
         sed -i "/genfscon.*proactiveness/d" "$WORK_DIR/system_ext/etc/selinux/system_ext_sepolicy.cil"
     fi
+    if grep -q "\(type sbauth\)" "$WORK_DIR/$SYSTEM_EXT/etc/selinux/mapping/$TARGET_VNDK_VERSION.0.cil"; then
+        if ! grep -q "\(type sbauth\)" "$WORK_DIR/vendor/etc/selinux/plat_pub_versioned.cil"; then
+            echo "- sbauth SELinux entry not supported. Removing"
+            sed -i "/sbauth/d" "$WORK_DIR/$SYSTEM_EXT/etc/selinux/mapping/$TARGET_VNDK_VERSION.0.cil"
+        fi
+    fi
 fi
 

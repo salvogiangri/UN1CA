@@ -175,3 +175,11 @@ if [[ "$TARGET_ONEUI_VERSION" -lt 50101 ]]; then
     system/priv-app/KmxService
     "
 fi
+
+# sbauth
+if [[ -e "$WORK_DIR/system/system/bin/sbauth" ]] && [[ ! -e "$FW_DIR/${MODEL}_${REGION}/system/system/bin/sbauth" ]]; then
+    SYSTEM_DEBLOAT+="
+    system/bin/sbauth
+    system/etc/init/sbauth.rc
+    "
+fi
