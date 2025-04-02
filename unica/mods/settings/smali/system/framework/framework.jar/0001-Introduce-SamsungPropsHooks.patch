@@ -8,7 +8,7 @@ Subject: [PATCH] Introduce SamsungPropsHooks
  smali/android/app/Instrumentation.smali       |   4 +
  .../android/os/SystemProperties.smali         |  14 +
  .../android/provider/Settings$Global.smali    |   9 +
- .../io/mesalabs/unica/SamsungPropsHooks.smali | 716 ++++++++++++++++++
+ .../io/mesalabs/unica/SamsungPropsHooks.smali | 738 ++++++++++++++++++
  5 files changed, 749 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
 
@@ -116,7 +116,7 @@ new file mode 100644
 index 00000000..c501ba81
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/SamsungPropsHooks.smali
-@@ -0,0 +1,716 @@
+@@ -0,0 +1,738 @@
 +.class public final Lio/mesalabs/unica/SamsungPropsHooks;
 +.super Ljava/lang/Object;
 +.source "SamsungPropsHooks.java"
@@ -460,9 +460,31 @@ index 00000000..c501ba81
 +
 +    if-nez p0, :cond_9
 +
-+    const-string p0, "ro.boot.em.model"
++    const-string p0, "ro.product.system.device"
 +
++    const-string v0, ""
++
++    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v0, "essi"
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_a
++
++    const-string v0, "SM-S711B"
++
++    goto :goto_4
++
++    :cond_a
 +    const-string v0, "SM-S911B"
++
++    :goto_4
++    const-string p0, "ro.boot.em.model"
 +
 +    invoke-static {p0, v0}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +
