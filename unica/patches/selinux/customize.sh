@@ -1,4 +1,4 @@
-# UN1CA SELinux entries debloat list
+# UN1CA SELinux entries removal list
 # - Append new type entries to the ENTRIES list
 # - Add the EXACT type entry, DO NOT just add a common pattern (eg. "fabriccrypto", "fabriccrypto_exec" and NOT just "fabriccrypto")
 # - DO NOT add the API version at the end of the entry (eg. "fabriccrypto" and NOT "fabriccrypto_30_0")
@@ -6,7 +6,7 @@
 # - DO NOT add unnecessary types or remove the existing ones unless they aren't necessary anymore for all devices
 
 # One UI 6.1.1 additions
-ENTRIES="
+ENTRIES+="
 hal_dsms_default
 hal_dsms_default_exec
 proc_compaction_proactiveness
@@ -27,64 +27,34 @@ uwb_regulation_skip_prop
 "
 
 # [
-# Can be overridden by "export SE_DEBUG=true"
-SE_DEBUG=${SE_DEBUG:=false}
-
 GET_SYSTEM_EXT()
 {
     if $TARGET_HAS_SYSTEM_EXT; then
-        echo -n "system_ext"
+        echo "system_ext"
     else
-        echo -n "system/system/system_ext"
+        echo "system/system/system_ext"
     fi
 }
 
 CIL_NAME="$(cat "$WORK_DIR/vendor/etc/selinux/plat_sepolicy_vers.txt")"
 
-GET_VENDOR_API()
-{
-    echo "$(echo $CIL_NAME | sed 's/\.0//' )"
-}
-
-VENDOR_API_LIST="$(find "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/" -type f  -exec basename {} \; | \
-                    sed '/.compat./d' | sed 's/\.cil//' | sed 's/\.0//' | sort)"
+VENDOR_API_LIST="$(find "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping" -type f -printf "%f\n" | \
+                    sed '/.compat./d' | sed 's/.cil//' | sed 's/\./_/' | sort)"
 # ]
 
 for e in $ENTRIES; do
-    if grep -E -q "\($e\)" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil" || \
-         grep -E -q "${e}_$(GET_VENDOR_API)" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil" || \
-         grep -E -q " $e " "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"; then
+    if grep -q -F "($e)" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil" || \
+         grep -q -F "${e}_${CIL_NAME//./_}" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"; then
         # the problematic entry is currently present in system_ext, check if we need to remove it
-        if ! grep -E -q "\(type $e\)" "$WORK_DIR/vendor/etc/selinux/plat_pub_versioned.cil"; then
+        if ! grep -q -F "(type $e)" "$WORK_DIR/vendor/etc/selinux/plat_pub_versioned.cil"; then
             # the problematic entry is not supported by the target device
-            echo "$e SELinux entry not supported. Removing"
-
-            if $SE_DEBUG; then
-                echo "SE_DEBUG: Removing \"($e)\" from $CIL_NAME.cil"
-            fi
-            sed -i -E "/\($e\)/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
-
-            if $SE_DEBUG; then
-                echo "SE_DEBUG: Removing \" $e \" from $CIL_NAME.cil"
-            fi
-            sed -i -E "/ $e /d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
-
+            echo "\"$e\" SELinux entry not supported. Removing"
+            sed -i "/($e)/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
             for a in $VENDOR_API_LIST; do
-
-                if $SE_DEBUG; then
-                    echo "SE_DEBUG: Removing \"${e}_${a}\" from $CIL_NAME.cil"
-                fi
-                sed -i -E "/${e}_${a}/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
-
+                sed -i "/${e}_${a}/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
             done
-
-            if grep -E -q "genfscon.*$e" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/system_ext_sepolicy.cil"; then
-
-                if $SE_DEBUG; then
-                    echo "SE_DEBUG: Removing \"genfscon.*$e\" from system_ext_sepolicy.cil"
-                fi
-                sed -i -E "/genfscon.*$e/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/system_ext_sepolicy.cil"
-
+            if grep -q "genfscon.*$e" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/system_ext_sepolicy.cil"; then
+                sed -i "/genfscon.*$e/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/system_ext_sepolicy.cil"
             fi
         fi
     fi
