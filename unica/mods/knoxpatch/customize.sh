@@ -8,7 +8,7 @@ APPLY_PATCH()
     DECODE_APK "$1"
 
     cd "$APKTOOL_DIR/$1"
-    PATCH="$SRC_DIR/unica/patches/knoxpatch/$2"
+    PATCH="$SRC_DIR/unica/mods/knoxpatch/$2"
     COMMIT_NAME="$(grep "^Subject:" "$PATCH" | sed 's/.*PATCH] //')"
     echo "Applying \"$COMMIT_NAME\" to /$1"
     OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
