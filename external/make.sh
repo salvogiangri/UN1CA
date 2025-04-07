@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1007,SC2164,SC2181,SC2291
+# shellcheck disable=SC1007,SC2164,SC2291
 
 # [
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#18
@@ -52,17 +52,45 @@ CHECK_TOOLS()
     local EXECUTABLES=("$@")
 
     local EXISTS=true
-    for i in "${EXECUTABLES[@]}"
-    do
+    for i in "${EXECUTABLES[@]}"; do
         [ ! -f "$TOOLS_DIR/$i" ] && EXISTS=false
     done
 
     $EXISTS
 }
 
-BUILD_CMAKE_FLAGS()
+BUILD()
 {
-    local FLAGS=""
+    local PDR
+    PDR="$(pwd)"
+
+    local NAME="$1"; shift
+    local DIR="$1"; shift
+    local CMDS=("$@")
+
+    echo "- Building $NAME..."
+
+    cd "$DIR"
+    for CMD in "${CMDS[@]}"; do
+        local OUT
+        OUT="$(eval "$CMD" 2>&1)"
+        if $?; then
+            echo -e    '\033[1;31m'"BUILD FAILED!"'\033[0m\n' >&2
+            echo -e    '\033[0;31m'"$CMD"'\033[0m\n' >&2
+            echo -n -e '\033[0;33m' >&2
+            echo -n    "$OUT" >&2
+            echo -e    '\033[0m' >&2
+            exit 1
+        fi
+    done
+    cd "$PDR"
+
+    return 0
+}
+
+GET_CMAKE_FLAGS()
+{
+    local FLAGS
 
     FLAGS+="-DCMAKE_SYSTEM_NAME=\"$(uname -s)\" "
     FLAGS+="-DCMAKE_SYSTEM_PROCESSOR=\"$(uname -m)\" "
@@ -82,40 +110,10 @@ BUILD_CMAKE_FLAGS()
     echo "$FLAGS"
 }
 
-BUILD()
-{
-    local PDR
-    PDR="$(pwd)"
-
-    local NAME="$1"; shift
-    local DIR="$1"; shift
-    local CMDS=("$@")
-
-    echo "- Building $NAME..."
-
-    cd "$DIR"
-    for CMD in "${CMDS[@]}"
-    do
-        local OUT
-        OUT="$(eval "$CMD" 2>&1)"
-        if [ $? -ne 0 ]; then
-            echo -e    '\033[1;31m'"BUILD FAILED!"'\033[0m\n' >&2
-            echo -e    '\033[0;31m'"$CMD"'\033[0m\n' >&2
-            echo -e -n '\033[0;33m' >&2
-            echo -n    "$OUT" >&2
-            echo -e    '\033[0m' >&2
-            exit 1
-        fi
-    done
-    cd "$PDR"
-
-    return 0
-}
-
 # https://github.com/canonical/snapd/blob/ec7ea857712028b7e3be7a5f4448df575216dbfd/release/release.go#L169-L190
 IS_WSL()
 {
-    if [[ -e "/proc/sys/fs/binfmt_misc/WSLInterop" ]] || [[ -e "/run/WSL" ]]; then
+    if [ -e "/proc/sys/fs/binfmt_misc/WSLInterop" ] || [ -e "/run/WSL" ]; then
         echo "ON"
     else
         echo "OFF"
@@ -184,21 +182,21 @@ CHECK_TOOLS "${SMALI_EXEC[@]}" && SMALI=false
 if $ANDROID_TOOLS; then
     ANDROID_TOOLS_CMDS=(
         "git submodule foreach --recursive \"git am --abort || true\""
-        "cmake -B \"build\" $(BUILD_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=ON -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
+        "cmake -B \"build\" $(GET_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=ON -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
         "make -C \"build\" -j\"$(nproc)\""
-        "find \"build/vendor\" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} \"$TOOLS_DIR\" \;"
-        "cp --preserve=all \"vendor/avb/avbtool.py\" \"$TOOLS_DIR/avbtool\""
-        "cp --preserve=all \"vendor/mkbootimg/mkbootimg.py\" \"$TOOLS_DIR/mkbootimg\""
-        "cp --preserve=all \"vendor/mkbootimg/repack_bootimg.py\" \"$TOOLS_DIR/repack_bootimg\""
-        "cp --preserve=all \"vendor/mkbootimg/unpack_bootimg.py\" \"$TOOLS_DIR/unpack_bootimg\""
-        "cp --preserve=all \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/mkdtboimg\""
+        "find \"build/vendor\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
+        "cp -a \"vendor/avb/avbtool.py\" \"$TOOLS_DIR/avbtool\""
+        "cp -a \"vendor/mkbootimg/mkbootimg.py\" \"$TOOLS_DIR/mkbootimg\""
+        "cp -a \"vendor/mkbootimg/repack_bootimg.py\" \"$TOOLS_DIR/repack_bootimg\""
+        "cp -a \"vendor/mkbootimg/unpack_bootimg.py\" \"$TOOLS_DIR/unpack_bootimg\""
+        "cp -a \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/mkdtboimg\""
         "mkdir -p \"$TOOLS_DIR/gki\""
-        "cp --preserve=all \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/gki/generate_gki_certificate.py\""
+        "cp -a \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/gki/generate_gki_certificate.py\""
         "ln -sf \"$TOOLS_DIR/mke2fs.android\" \"$TOOLS_DIR/mke2fs\""
-        "cp --preserve=all \"../ext4_utils/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/mkuserimg_mke2fs.py\""
+        "cp -a \"../ext4_utils/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/mkuserimg_mke2fs.py\""
         "ln -sf \"$TOOLS_DIR/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/mkuserimg_mke2fs\""
-        "cp --preserve=all \"../ext4_utils/mke2fs.conf\" \"$TOOLS_DIR/mke2fs.conf\""
-        "cp --preserve=all \"../f2fs_utils/mkf2fsuserimg.sh\" \"$TOOLS_DIR/mkf2fsuserimg\""
+        "cp -a \"../ext4_utils/mke2fs.conf\" \"$TOOLS_DIR/mke2fs.conf\""
+        "cp -a \"../f2fs_utils/mkf2fsuserimg.sh\" \"$TOOLS_DIR/mkf2fsuserimg\""
     )
 
     BUILD "android-tools" "$SRC_DIR/external/android-tools" "${ANDROID_TOOLS_CMDS[@]}"
@@ -208,24 +206,24 @@ if $APKTOOL; then
         "git reset --hard"
         "git apply \"$SRC_DIR/external/patches/apktool/0001-feat-support-aapt-optimization.patch\""
         "./gradlew build shadowJar"
-        "cp --preserve=all \"scripts/linux/apktool\" \"$TOOLS_DIR\""
-        "cp --preserve=all \"brut.apktool/apktool-cli/build/libs/apktool-cli.jar\" \"$TOOLS_DIR/apktool.jar\""
+        "cp -a \"scripts/linux/apktool\" \"$TOOLS_DIR\""
+        "cp -a \"brut.apktool/apktool-cli/build/libs/apktool-cli.jar\" \"$TOOLS_DIR/apktool.jar\""
     )
 
     BUILD "apktool" "$SRC_DIR/external/apktool" "${APKTOOL_CMDS[@]}"
 fi
 if $EROFS_UTILS; then
     EROFS_UTILS_CMDS=(
-        "cmake -S \"build/cmake\" -B \"out\" $(BUILD_CMAKE_FLAGS) -DRUN_ON_WSL=\"$(IS_WSL)\" -DENABLE_FULL_LTO=\"ON\" -DMAX_BLOCK_SIZE=\"4096\""
+        "cmake -S \"build/cmake\" -B \"out\" $(GET_CMAKE_FLAGS) -DRUN_ON_WSL=\"$(IS_WSL)\" -DENABLE_FULL_LTO=\"ON\" -DMAX_BLOCK_SIZE=\"4096\""
         "make -C \"out\" -j\"$(nproc)\""
-        "find \"out/erofs-tools\" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} \"$TOOLS_DIR\" \;"
+        "find \"out/erofs-tools\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
     )
 
     BUILD "erofs-utils" "$SRC_DIR/external/erofs-utils" "${EROFS_UTILS_CMDS[@]}"
 fi
 if $IMG2SDAT; then
     IMG2SDAT_CMDS=(
-        "find \".\" -maxdepth 1 -type f -exec test -x {} \; -exec cp --preserve=all {} \"$TOOLS_DIR\" \;"
+        "find \".\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
     )
 
     BUILD "img2sdat" "$SRC_DIR/external/img2sdat" "${IMG2SDAT_CMDS[@]}"
@@ -234,7 +232,7 @@ if $SAMFIRM; then
     SAMFIRM_CMDS=(
         "npm install"
         "npm run build"
-        "cp --preserve=all \"dist/index.js\" \"$TOOLS_DIR/samfirm\""
+        "cp -a \"dist/index.js\" \"$TOOLS_DIR/samfirm\""
     )
 
     BUILD "samfirm.js" "$SRC_DIR/external/samfirm.js" "${SAMFIRM_CMDS[@]}"
@@ -242,8 +240,8 @@ fi
 if $SIGNAPK; then
     SIGNAPK_CMDS=(
         "./gradlew build"
-        "cp --preserve=all \"scripts/linux/signapk\" \"$TOOLS_DIR\""
-        "cp --preserve=all \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/signapk.jar\""
+        "cp -a \"scripts/linux/signapk\" \"$TOOLS_DIR\""
+        "cp -a \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/signapk.jar\""
     )
 
     BUILD "signapk" "$SRC_DIR/external/signapk" "${SIGNAPK_CMDS[@]}"
@@ -251,10 +249,10 @@ fi
 if $SMALI; then
     SMALI_CMDS=(
         "./gradlew assemble baksmali:fatJar smali:fatJar"
-        "cp --preserve=all \"scripts/baksmali\" \"$TOOLS_DIR\""
-        "cp --preserve=all \"scripts/smali\" \"$TOOLS_DIR\""
-        "cp --preserve=all \"baksmali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/smali-baksmali.jar\""
-        "cp --preserve=all \"smali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/android-smali.jar\""
+        "cp -a \"scripts/baksmali\" \"$TOOLS_DIR\""
+        "cp -a \"scripts/smali\" \"$TOOLS_DIR\""
+        "cp -a \"baksmali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/smali-baksmali.jar\""
+        "cp -a \"smali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/android-smali.jar\""
     )
 
     BUILD "baksmali/smali" "$SRC_DIR/external/smali" "${SMALI_CMDS[@]}"
