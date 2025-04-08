@@ -26,7 +26,7 @@ COPY_SOURCE_FIRMWARE()
     MODEL=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 1)
     REGION=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 2)
 
-    local COMMON_FOLDERS="odm product system"
+    local COMMON_FOLDERS="product system"
     for folder in $COMMON_FOLDERS
     do
         if [ ! -d "$WORK_DIR/$folder" ]; then
@@ -104,7 +104,7 @@ COPY_TARGET_FIRMWARE()
     MODEL=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
     REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 
-    local COMMON_FOLDERS="system_dlkm vendor vendor_dlkm"
+    local COMMON_FOLDERS="odm system_dlkm vendor vendor_dlkm"
     for folder in $COMMON_FOLDERS
     do
         [[ ! -d "$FW_DIR/${MODEL}_${REGION}/$folder" ]] && continue

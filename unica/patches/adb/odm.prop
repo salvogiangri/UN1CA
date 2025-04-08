@@ -1,2 +1,0 @@
-# Enable ADB at boot
-persist.sys.usb.config=mtp,adb

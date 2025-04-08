@@ -1,10 +1,3 @@
-echo "Add stock /odm/etc/vintf"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "odm" "etc/vintf" 0 0 755 "u:object_r:vendor_configs_file:s0"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "odm" "etc/vintf/manifest.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
-
-echo "Add stock /odm/etc/media_profiles_V1_0.xml"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "odm" "etc/media_profiles_V1_0.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
-
 echo "Fix Google Assistant"
 DELETE_FROM_WORK_DIR "product" "priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON"
 DELETE_FROM_WORK_DIR "product" "priv-app/HotwordEnrollmentXGoogleEx4HEXAGON"

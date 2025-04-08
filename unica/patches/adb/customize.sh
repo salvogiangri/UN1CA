@@ -1,3 +1,5 @@
+SET_PROP_IF_DIFF "odm" "persist.sys.usb.config" "mtp,adb"
+
 if [ -f "$WORK_DIR/vendor/etc/init/hw/init.target.rc" ]; then
     if ! grep -q "persist.vendor.radio.port_index" "$WORK_DIR/vendor/etc/init/hw/init.target.rc"; then
         {
