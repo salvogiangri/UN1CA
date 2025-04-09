@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1007,SC2164,SC2291
+# shellcheck disable=SC1007,SC2164,SC2181,SC2291
 
 # [
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#18
@@ -74,7 +74,7 @@ BUILD()
     for CMD in "${CMDS[@]}"; do
         local OUT
         OUT="$(eval "$CMD" 2>&1)"
-        if $?; then
+        if [ $? -ne 0 ]; then
             echo -e    '\033[1;31m'"BUILD FAILED!"'\033[0m\n' >&2
             echo -e    '\033[0;31m'"$CMD"'\033[0m\n' >&2
             echo -n -e '\033[0;33m' >&2
@@ -147,8 +147,8 @@ SMALI=true
 
 ANDROID_TOOLS_EXEC=(
     "adb" "append2simg" "avbtool" "e2fsdroid"
-    "ext2simg" "fastboot" "gki/generate_gki_certificate.py" "img2simg"
-    "lpadd" "lpdump" "lpflash" "lpmake"
+    "ext2simg" "fastboot" "fec" "gki/generate_gki_certificate.py"
+    "img2simg" "lpadd" "lpdump" "lpflash" "lpmake"
     "lpunpack" "make_f2fs" "mkbootfs" "mkbootimg" "mkdtboimg" "mke2fs"
     "mke2fs.android" "mke2fs.conf" "mkf2fsuserimg" "mkuserimg_mke2fs"
     "repack_bootimg" "simg2img" "sload_f2fs" "unpack_bootimg" "zipalign"
