@@ -71,6 +71,12 @@ APPLY_SMALI_PATCHES()
             fi
         fi
 
+        if [[ "$patch" == *".essi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            continue
+        elif [[ "$patch" == *".qssi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            continue
+        fi
+
         echo "Applying \"$COMMIT_NAME\" to $TARGET"
         OUT="$(patch -p1 -s -t -N --dry-run < "$patch")" \
             || echo "$OUT" | grep -q "Skipping patch" || false

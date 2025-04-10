@@ -32,6 +32,7 @@ etc/dpolicy
 SYSTEM_DEBLOAT+="
 system/bin/ssud
 system/etc/init/ssu_dm1qxxx.rc
+system/etc/init/ssu_r11sxxx.rc
 system/etc/init/ssu.rc
 system/etc/permissions/privapp-permissions-com.samsung.ssu.xml
 system/etc/sysconfig/samsungsimunlock.xml
