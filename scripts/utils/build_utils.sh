@@ -15,7 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-DEPENDENCIES=()
+DEPENDENCIES=(
+    "brotli" "cmake" "clang" "go" "lz4"
+    "make" "npm" "java" "perl" "pcre2test"
+    "protoc" "python3" "zstd"
+)
 MISSING=()
 for d in "${DEPENDENCIES[@]}"; do
     if ! type "$d" &> /dev/null; then
