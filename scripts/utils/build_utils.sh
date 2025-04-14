@@ -15,6 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+DEPENDENCIES=()
+MISSING=()
+for d in "${DEPENDENCIES[@]}"; do
+    if ! type "$d" &> /dev/null; then
+        MISSING+=("$d")
+    fi
+done
+if [ "${#MISSING[@]}" -ne 0 ]; then
+    echo -e '\033[1;31m'"The following dependencies are missing from your system:"'\033[0;31m' >&2
+    for each in "${MISSING[@]}"; do
+        echo -n "$each " >&2
+    done
+    echo -e '\033[0m' >&2
+    return 1
+fi
+unset DEPENDENCIES MISSING
+
 if ! "$SRC_DIR/external/make.sh" --check-tools; then
     echo -e '\033[1;37m'"Building required tools..."'\033[0m'
     "$SRC_DIR/external/make.sh"
