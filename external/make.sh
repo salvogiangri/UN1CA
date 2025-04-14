@@ -99,13 +99,8 @@ GET_CMAKE_FLAGS()
         FLAGS+="-DCMAKE_C_COMPILER_LAUNCHER=\"ccache\" "
         FLAGS+="-DCMAKE_CXX_COMPILER_LAUNCHER=\"ccache\" "
     fi
-    if type clang &> /dev/null; then
-        FLAGS+="-DCMAKE_C_COMPILER=\"clang\" "
-        FLAGS+="-DCMAKE_CXX_COMPILER=\"clang++\""
-    else
-        FLAGS+="-DCMAKE_C_COMPILER=\"gcc\" "
-        FLAGS+="-DCMAKE_CXX_COMPILER=\"g++\""
-    fi
+    FLAGS+="-DCMAKE_C_COMPILER=\"clang\" "
+    FLAGS+="-DCMAKE_CXX_COMPILER=\"clang++\""
 
     echo "$FLAGS"
 }
