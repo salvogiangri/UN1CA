@@ -14,3 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+
+if ! "$SRC_DIR/external/make.sh" --check-tools; then
+    echo -e '\033[1;37m'"Building required tools..."'\033[0m'
+    "$SRC_DIR/external/make.sh"
+fi
