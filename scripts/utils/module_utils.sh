@@ -16,37 +16,14 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/log_utils.sh"
-
-_CHECK_NON_EMPTY_PARAM()
-{
-    if [ ! "$2" ]; then
-        echo -n -e '\033[0;31m' >&2
-
-        local STACK_SIZE="${#FUNCNAME[@]}"
-        if [[ "$STACK_SIZE" -gt "1" ]]; then
-            echo -n "(" >&2
-            if [[ "$STACK_SIZE" -gt "2" ]]; then
-                echo -n "${BASH_SOURCE[2]//$SRC_DIR\//}:${BASH_LINENO[1]}:" >&2
-            fi
-            echo -n "${FUNCNAME[1]}) " >&2
-        fi
-
-        echo -n "$1 is not set!" >&2
-        echo -e '\033[0m' >&2
-
-        return 1
-    fi
-
-    return 0
-}
+source "$SRC_DIR/scripts/utils/generic_utils.sh"
 
 _GET_PROP_FILES_PATH()
 {
     local PARTITION="$1"
     local FILES
 
-    if _IS_VALID_PARTITION_NAME "$PARTITION"; then
+    if IS_VALID_PARTITION_NAME "$PARTITION"; then
         case "$PARTITION" in
             "system")
                 FILES="$WORK_DIR/system/system/build.prop"
@@ -101,7 +78,7 @@ _GET_PROP_LOCATION()
     local FILES
     FILES="$(_GET_PROP_FILES_PATH "${1:?}")"
 
-    if _IS_VALID_PARTITION_NAME "${1:?}"; then
+    if IS_VALID_PARTITION_NAME "${1:?}"; then
         shift
     fi
 
@@ -152,28 +129,6 @@ _GET_SELINUX_LABEL()
 
     echo "$LABEL"
 }
-
-_HANDLE_SPECIAL_CHARS()
-{
-    local STRING="${1:?}"
-
-    STRING="${STRING//\./\\.}"
-    STRING="${STRING//\+/\\+}"
-    STRING="${STRING//\[/\\[}"
-    STRING="${STRING//\]/\\]}"
-    STRING="${STRING//\*/\\*}"
-
-    echo "$STRING"
-}
-
-_IS_VALID_PARTITION_NAME()
-{
-    local PARTITION="$1"
-    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
-    [[ "$PARTITION" == "system" ]] || [[ "$PARTITION" == "vendor" ]] || [[ "$PARTITION" == "product" ]] || \
-        [[ "$PARTITION" == "system_ext" ]] || [[ "$PARTITION" == "odm" ]] || [[ "$PARTITION" == "vendor_dlkm" ]] || \
-        [[ "$PARTITION" == "odm_dlkm" ]] || [[ "$PARTITION" == "system_dlkm" ]]
-}
 # ]
 
 # ADD_TO_WORK_DIR <source> <partition> <file/dir> <user> <group> <mode> <label>
@@ -212,7 +167,7 @@ ADD_TO_WORK_DIR()
         return 1
     fi
 
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
         LOGE "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
@@ -316,7 +271,7 @@ ADD_TO_WORK_DIR()
 
         # shellcheck disable=SC2116
         for f in $(echo "$FILES"); do
-            _IS_VALID_PARTITION_NAME "$f" && continue
+            IS_VALID_PARTITION_NAME "$f" && continue
 
             if ! grep -q -F "$f " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
                 if grep -q -F "$f " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
@@ -354,7 +309,7 @@ ADD_TO_WORK_DIR()
         [[ "$PARTITION" == "system" ]] && TMP="${TMP//system\/system\//system/}"
 
         while [[ "$TMP" != "." ]]; do
-            _IS_VALID_PARTITION_NAME "$TMP" && break
+            IS_VALID_PARTITION_NAME "$TMP" && break
 
             if ! grep -q -F "$TMP " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
                 if grep -q -F "$TMP " "$SOURCE/fs_config-$PARTITION" 2> /dev/null; then
@@ -400,82 +355,6 @@ DECODE_APK()
     if [ ! -d "$APKTOOL_DIR/$1" ]; then
         "$SRC_DIR/scripts/apktool.sh" d "$1"
         return $?
-    fi
-
-    return 0
-}
-
-# DELETE_FROM_WORK_DIR "<partition>" "<file/dir>"
-# Deletes the supplied file/directory from work dir along with its entries in fs_config/file_context.
-DELETE_FROM_WORK_DIR()
-{
-    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
-    _CHECK_NON_EMPTY_PARAM "FILE" "$2"
-
-    local PARTITION="$1"
-    local FILE="$2"
-
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
-        return 1
-    fi
-
-    while [[ "${FILE:0:1}" == "/" ]]; do
-        FILE="${FILE:1}"
-    done
-
-    if ! $TARGET_HAS_SYSTEM_EXT && [[ "$PARTITION" == "system_ext" ]]; then
-        PARTITION="system"
-        FILE="system/system_ext/$FILE"
-    fi
-
-    local FILE_PATH="$WORK_DIR"
-    case "$PARTITION" in
-        "system_ext")
-            if $TARGET_HAS_SYSTEM_EXT; then
-                FILE_PATH+="/system_ext"
-            else
-                FILE_PATH+="/system/system/system_ext"
-            fi
-            ;;
-        *)
-            FILE_PATH+="/$PARTITION"
-            ;;
-    esac
-    FILE_PATH+="/$FILE"
-
-    if [ ! -e "$FILE_PATH" ] && [ ! -L "$FILE_PATH" ]; then
-        LOGW "File not found: ${FILE_PATH//$WORK_DIR/}"
-        return 0
-    fi
-
-    local IS_DIR=false
-    [ -d "$FILE_PATH" ] && IS_DIR=true
-
-    echo "Deleting ${FILE_PATH//$WORK_DIR/}"
-    rm -rf "$FILE_PATH"
-
-    local PATTERN="${FILE//\//\\/}"
-    [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
-    sed -i "/^$PATTERN /d" "$WORK_DIR/configs/fs_config-$PARTITION"
-    if $IS_DIR; then
-        sed -i "/^$PATTERN\//d" "$WORK_DIR/configs/fs_config-$PARTITION"
-    fi
-
-    PATTERN="$(_HANDLE_SPECIAL_CHARS "$FILE")"
-    PATTERN="${PATTERN//\\/\\\\}"
-    PATTERN="${PATTERN//\//\\/}"
-    [ "$PARTITION" != "system" ] && PATTERN="$PARTITION\/$PATTERN"
-    sed -i "/^\/$PATTERN /d" "$WORK_DIR/configs/file_context-$PARTITION"
-    if $IS_DIR; then
-        sed -i "/^\/$PATTERN\//d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-
-    if [[ "$FILE" == *".so" ]]; then
-        # shellcheck disable=SC2013
-        for f in $(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt); do
-            sed -i "/$(basename "$FILE")/d" "$f"
-        done
     fi
 
     return 0
@@ -556,7 +435,7 @@ GET_PROP()
         shift
     else
         FILES="$(_GET_PROP_FILES_PATH "$1")"
-        if _IS_VALID_PARTITION_NAME "$1"; then
+        if IS_VALID_PARTITION_NAME "$1"; then
             shift
         fi
     fi
@@ -661,7 +540,7 @@ SET_METADATA()
     local MODE="$5"
     local LABEL="$6"
 
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
         LOGE "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
@@ -698,7 +577,7 @@ SET_PROP()
     local PROP="$2"
     local VALUE="$3"
 
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
         LOGE "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
@@ -782,7 +661,7 @@ SET_PROP_IF_DIFF()
     local PROP="$2"
     local EXPECTED="$3"
 
-    if ! _IS_VALID_PARTITION_NAME "$PARTITION"; then
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
         LOGE "\"$PARTITION\" is not a valid partition name"
         return 1
     fi

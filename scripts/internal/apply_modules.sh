@@ -30,7 +30,7 @@ READ_AND_APPLY_PROPS()
     for patch in "$1"/*.prop
     do
         PARTITION=$(basename "$patch" | sed 's/.prop//g')
-        _IS_VALID_PARTITION_NAME "$PARTITION" || continue
+        IS_VALID_PARTITION_NAME "$PARTITION" || continue
 
         while read -r i; do
             [[ "$i" = "#"* ]] && continue
