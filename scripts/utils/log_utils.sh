@@ -18,7 +18,7 @@
 # [
 _GET_CALLER_INFO()
 {
-    if [ "${FUNCNAME[2]}" ]; then
+    if [ "${FUNCNAME[2]}" ] && [[ "${FUNCNAME[2]}" != "main" ]]; then
         echo -n "("
         if [ "${BASH_SOURCE[3]}" ]; then
             echo -n "${BASH_SOURCE[3]//$SRC_DIR\//}:"
