@@ -23,12 +23,13 @@ source "$SRC_DIR/scripts/utils/generic_utils.sh"
 # Executes the provided command and prints its output if it returns a non-zero exit code.
 EVAL()
 {
-    _CHECK_NON_EMPTY_PARAM "CMD" "$1"
+    _CHECK_NON_EMPTY_PARAM "CMD" "$1" || return 1
 
     local CMD="$1"
 
     local OUT
     OUT="$(eval "$CMD" 2>&1)"
+    # shellcheck disable=SC2181,SC2291
     if [ $? -ne 0 ]; then
         LOGE "Command returned a non-zero exit code\n"
         echo -e    '\033[0;31m'"$CMD"'\033[0m\n' >&2
@@ -45,9 +46,9 @@ EVAL()
 # Reads the desidered amount of bytes from the supplied file.
 READ_BYTES_AT()
 {
-    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
-    _CHECK_NON_EMPTY_PARAM "OFFSET" "$2"
-    _CHECK_NON_EMPTY_PARAM "BYTES" "$3"
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1" || return 1
+    _CHECK_NON_EMPTY_PARAM "OFFSET" "$2" || return 1
+    _CHECK_NON_EMPTY_PARAM "BYTES" "$3" || return 1
 
     local FILE="$1"
     local OFFSET="$2"
@@ -95,8 +96,8 @@ for d in "${DEPENDENCIES[@]}"; do
 done
 if [ "${#MISSING[@]}" -ne 0 ]; then
     echo -e '\033[1;31m'"The following dependencies are missing from your system:"'\033[0;31m' >&2
-    for each in "${MISSING[@]}"; do
-        echo -n "$each " >&2
+    for d in "${MISSING[@]}"; do
+        echo -n "$d " >&2
     done
     echo -e '\033[0m' >&2
     return 1

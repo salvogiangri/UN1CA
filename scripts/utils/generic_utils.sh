@@ -59,14 +59,14 @@ _HANDLE_SPECIAL_CHARS()
 # Deletes the supplied file/directory from work dir along with its entries in fs_config/file_context.
 DELETE_FROM_WORK_DIR()
 {
-    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1"
-    _CHECK_NON_EMPTY_PARAM "FILE" "$2"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1" || return 1
+    _CHECK_NON_EMPTY_PARAM "FILE" "$2" || return 1
 
     local PARTITION="$1"
     local FILE="$2"
 
     if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
-        echo "\"$PARTITION\" is not a valid partition name"
+        LOGE "\"$PARTITION\" is not a valid partition name"
         return 1
     fi
 
@@ -102,7 +102,7 @@ DELETE_FROM_WORK_DIR()
     local IS_DIR=false
     [ -d "$FILE_PATH" ] && IS_DIR=true
 
-    echo "Deleting ${FILE_PATH//$WORK_DIR/}"
+    LOG "Deleting ${FILE_PATH//$WORK_DIR/}"
     rm -rf "$FILE_PATH"
 
     local PATTERN="${FILE//\//\\/}"
