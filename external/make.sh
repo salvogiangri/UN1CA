@@ -68,7 +68,7 @@ BUILD()
     local DIR="$1"; shift
     local CMDS=("$@")
 
-    echo "- Building $NAME..."
+    LOG "- Building $NAME..."
 
     cd "$DIR"
     for CMD in "${CMDS[@]}"; do
@@ -120,6 +120,8 @@ SRC_DIR="$(GET_SRC_DIR)"
 if [ ! "$SRC_DIR" ]; then
     echo "Couldn't locate the top of the tree. Try setting SRC_DIR." >&2
     exit 1
+else
+    source "$SRC_DIR/scripts/utils/log_utils.sh" || exit 1
 fi
 OUT_DIR="$SRC_DIR/out"
 TOOLS_DIR="$OUT_DIR/tools/bin"

@@ -105,7 +105,8 @@ fi
 unset DEPENDENCIES MISSING
 
 if ! "$SRC_DIR/external/make.sh" --check-tools; then
-    echo -e '\033[1;37m'"Building required tools..."'\033[0m'
+    LOG_STEP_IN true "Building required tools..."
     "$SRC_DIR/external/make.sh"
+    LOG_STEP_OUT
 fi
 # ]
