@@ -102,7 +102,7 @@ DELETE_FROM_WORK_DIR()
     local IS_DIR=false
     [ -d "$FILE_PATH" ] && IS_DIR=true
 
-    LOG "Deleting ${FILE_PATH//$WORK_DIR/}"
+    LOG "- Deleting ${FILE_PATH//$WORK_DIR/}"
     rm -rf "$FILE_PATH"
 
     local PATTERN="${FILE//\//\\/}"

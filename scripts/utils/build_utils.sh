@@ -77,7 +77,7 @@ READ_BYTES_AT()
 
     while [[ "$LENGTH" -gt 0 ]]; do
         echo -n "${READ:$LENGTH-2:2}"
-        LENGTH=$((LENGTH-2))
+        LENGTH="$((LENGTH-2))"
     done
     echo ""
 }
