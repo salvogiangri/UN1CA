@@ -97,10 +97,16 @@ if $BUILD_ROM; then
     echo -e "\n- Applying ROM mods..."
     bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/mods"
 
-    echo -e "\n- Recompiling APKs/JARs..."
-    while read -r i; do
-        bash "$SRC_DIR/scripts/apktool.sh" b "$i"
-    done <<< "$(find "$OUT_DIR/apktool" -type d \( -name "*.apk" -o -name "*.jar" \) -printf "%p\n" | sed "s.$OUT_DIR/apktool..")"
+    if [[ -d "$OUT_DIR/apktool" ]] && \
+        COMP_LIST=$(find "$OUT_DIR/apktool" -type d \( -name "*.apk" -o -name "*.jar" \) -printf "%p\n" 2>/dev/null | sed "s.$OUT_DIR/apktool..") && \
+        [[ -n "$COMP_LIST" ]]; then
+            echo -e "\n- Recompiling APKs/JARs..."
+            while read -r i; do
+                bash "$SRC_DIR/scripts/apktool.sh" b "$i"
+            done <<< "$COMP_LIST"
+    else
+        echo -e "\n- Nothing to recompile, continuing..."
+    fi
 
     echo ""
     echo -n "$WORK_DIR_HASH" > "$WORK_DIR/.completed"
