@@ -35,6 +35,12 @@ _GET_CALLER_INFO()
 # Prints a log message in the build output.
 LOG()
 {
+    local INDENT="${INDENT_LEVEL:-0}"
+    while [ "$INDENT" -gt 0 ]; do
+        echo -n " "
+        INDENT="$((INDENT-1))"
+    done
+
     echo -e "$1"
 }
 
@@ -60,4 +66,35 @@ LOGW()
     RESET="$(tput sgr0)"
 
     echo -e "${YELLOW}$(_GET_CALLER_INFO)${1}${RESET}" >&2
+}
+
+# LOG_STEP_IN <bold> <message>
+# Increments the output indentation, additionally prints a log message if supplied.
+LOG_STEP_IN()
+{
+    local BOLD
+    local RESET
+
+    if [[ "$1" == "true" ]]; then
+        BOLD="$(tput bold)"
+        shift
+    fi
+    RESET="$(tput sgr0)"
+
+    if [ "$1" ]; then
+        LOG "${BOLD}${1}${RESET}"
+    fi
+
+    local INDENT="${INDENT_LEVEL:-0}"
+    export INDENT_LEVEL="$((INDENT+2))"
+}
+
+# LOG_STEP_OUT
+# Reduces the output indentation.
+LOG_STEP_OUT()
+{
+    local INDENT="${INDENT_LEVEL:-0}"
+    if [ "$INDENT_LEVEL" -gt 0 ]; then
+        export INDENT_LEVEL=$((INDENT-2))
+    fi
 }
