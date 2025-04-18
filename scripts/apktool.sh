@@ -35,7 +35,7 @@ BUILD()
         exit 1
     fi
 
-    echo "- Building ${INPUT_FILE//$WORK_DIR/}"
+    LOG "- Building ${INPUT_FILE//$WORK_DIR/}"
 
     # DEX format version might not be matching minSdkVersion, currently we handle
     # baksmali manually as apktool will by default use minSdkVersion when available
@@ -81,11 +81,11 @@ BUILD()
         local CERT_PREFIX="aosp"
         $ROM_IS_OFFICIAL && CERT_PREFIX="unica"
 
-        echo "- Signing ${INPUT_FILE//$WORK_DIR/}"
+        LOG "- Signing ${INPUT_FILE//$WORK_DIR/}"
         EVAL "signapk \"$SRC_DIR/security/${CERT_PREFIX}_platform.x509.pem\" \"$SRC_DIR/security/${CERT_PREFIX}_platform.pk8\" \"$OUTPUT_PATH/dist/$FILE_NAME\" \"$OUTPUT_PATH/dist/temp.apk\"" || exit 1
         mv -f "$OUTPUT_PATH/dist/temp.apk" "$OUTPUT_PATH/dist/$FILE_NAME"
     else
-        echo "- Zipaligning ${INPUT_FILE//$WORK_DIR/}"
+        LOG "- Zipaligning ${INPUT_FILE//$WORK_DIR/}"
         EVAL "zipalign -p 4 \"$OUTPUT_PATH/dist/$FILE_NAME\" \"$OUTPUT_PATH/dist/temp\"" || exit 1
         mv -f "$OUTPUT_PATH/dist/temp" "$OUTPUT_PATH/dist/$FILE_NAME"
     fi
@@ -124,7 +124,7 @@ DECODE()
         exit 1
     fi
 
-    echo "- Decoding ${INPUT_FILE//$WORK_DIR/}"
+    LOG "- Decoding ${INPUT_FILE//$WORK_DIR/}"
     EVAL "apktool d -j \"$(nproc)\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -s \"$INPUT_FILE\"" || exit 1
 
     # DEX format version might not be matching minSdkVersion, currently we handle
@@ -276,7 +276,7 @@ PREPARE_SCRIPT "$@"
 
 if [ ! -d "$FRAMEWORK_DIR" ]; then
     if [ -f "$WORK_DIR/system/system/framework/framework-res.apk" ]; then
-        echo "- Installing framework-res.apk"
+        LOG "- Installing framework-res.apk"
         EVAL "apktool if -p \"$FRAMEWORK_DIR\" \"$WORK_DIR/system/system/framework/framework-res.apk\"" || exit 1
     else
         LOGE "File not found: /system/system/framework/framework-res.apk, please set up your work_dir first."
