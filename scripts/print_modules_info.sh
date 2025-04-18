@@ -18,9 +18,9 @@
 
 # shellcheck disable=SC2001
 
-set -Ee
-
 # [
+source "$SRC_DIR/scripts/utils/log_utils.sh"
+
 PRINT_MODULE_INFO()
 {
     local MODPATH="$1"
@@ -29,7 +29,7 @@ PRINT_MODULE_INFO()
     local MODDESC
 
     if [ ! -d "$MODPATH" ]; then
-        echo "Folder not found: $MODPATH"
+        LOGE "Folder not found: $MODPATH"
         exit 1
     fi
 
@@ -38,7 +38,7 @@ PRINT_MODULE_INFO()
     fi
 
     if [ ! -f "$MODPATH/module.prop" ]; then
-        echo "File not found: $MODPATH/module.prop"
+        LOGE "File not found: $MODPATH/module.prop"
         exit 1
     elif [ -f "$MODPATH/disable" ]; then
         return 0
@@ -48,16 +48,16 @@ PRINT_MODULE_INFO()
         MODDESC="$(grep "^description" "$MODPATH/module.prop" | sed "s/description=//")"
     fi
 
-    echo "-- Module $MODULES_COUNT:"
-    echo "Name: $MODNAME"
-    echo "Author(s): $MODAUTH"
-    echo "Description: $MODDESC"
+    LOG "-- Module $MODULES_COUNT:"
+    LOG "Name: $MODNAME"
+    LOG "Author(s): $MODAUTH"
+    LOG "Description: $MODDESC"
 }
 #]
 
 if [ "$#" -gt 0 ]; then
-    echo "Usage: print_modules_info"
-    echo "This cmd does not accepts any arguments."
+    echo "Usage: print_modules_info" >&2
+    echo "This script does not accept any arguments." >&2
     exit 1
 fi
 
