@@ -89,8 +89,49 @@ if $APKTOOL; then
 fi
 
 if $WORK; then
-    echo "- Cleaning ROM work dir..."
-    rm -rf "$WORK_DIR"
+    echo "- Cleaning ROM work dir (selective rm + multi-folder rsync)..."
+    MODEL_T=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 1)
+    REGION_T=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
+    MODEL_S=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 1)
+    REGION_S=$(echo -n "$SOURCE_FIRMWARE" | cut -d "/" -f 2)
+    S_FOLDERS="product system"
+    T_FOLDERS="vendor odm"
+
+    find "$WORK_DIR" -mindepth 1 -maxdepth 1 \
+        -not -name "system" \
+        -not -name "vendor" \
+        -not -name "product" \
+        -not -name "odm" \
+        -exec rm -rf {} +
+
+
+    for folder in $S_FOLDERS; do
+        if [[ -d "$FW_DIR/${MODEL_S}_${REGION_S}/$folder" ]]; then
+            rsync -a --delete --mkpath \
+                "$FW_DIR/${MODEL_S}_${REGION_S}/$folder/" \
+                "$WORK_DIR/$folder/"
+
+            mkdir -p "$WORK_DIR/configs"
+            rsync -a --mkpath \
+                "$FW_DIR/${MODEL_S}_${REGION_S}/file_context-$folder" \
+                "$FW_DIR/${MODEL_S}_${REGION_S}/fs_config-$folder" \
+                "$WORK_DIR/configs/"
+        fi
+    done
+
+    for folder in $T_FOLDERS; do
+        if [[ -d "$FW_DIR/${MODEL_T}_${REGION_T}/$folder" ]]; then
+            rsync -a --delete --mkpath \
+                "$FW_DIR/${MODEL_T}_${REGION_T}/$folder/" \
+                "$WORK_DIR/$folder/"
+
+            mkdir -p "$WORK_DIR/configs"
+            rsync -a \
+                "$FW_DIR/${MODEL_T}_${REGION_T}/file_context-$folder" \
+                "$FW_DIR/${MODEL_T}_${REGION_T}/fs_config-$folder" \
+                "$WORK_DIR/configs/"
+        fi
+    done
 fi
 
 if $TOOLS; then
