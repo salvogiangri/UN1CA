@@ -50,7 +50,14 @@ CALCULATE_SIZE_AND_RESERVED()
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#266
 BUILD_IMAGE_MKFS()
 {
+    local SPARSE=$SPARSE
     local MANUAL_SPARSE=false
+
+    # Avoid OOM errors when building as sparse image
+    if $SPARSE && [[ "$(awk '/MemTotal/ { print int ($2 / 1024) }' "/proc/meminfo")" -lt "10240" ]]; then
+        SPARSE=false
+        MANUAL_SPARSE=true
+    fi
 
     local BUILD_CMD
 
