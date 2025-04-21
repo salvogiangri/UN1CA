@@ -21,6 +21,7 @@ source "$SRC_DIR/scripts/utils/build_utils.sh"
 
 FS_TYPE=""
 SPARSE=false
+AVB_SIGN=true
 INPUT_DIR=""
 PARTITION=""
 IMAGE_SIZE=""
@@ -30,6 +31,74 @@ OUTPUT_FILE=""
 FILE_CONTEXT_FILE=""
 FS_CONFIG_FILE=""
 
+# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/verity_utils.py#224
+CALCULATE_AVB_MAX_IMAGE_SIZE()
+{
+    avbtool add_hashtree_footer --partition_size "$1" --calc_max_image_size
+}
+
+# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/verity_utils.py#157
+CALCULATE_AVB_MIN_PARTITION_SIZE()
+{
+    local IMAGE_RATIO
+    local MAX_IMAGE_SIZE
+    local PARTITION_SIZE
+    local LOW
+    local MID
+    local HIGH
+    local DELTA
+
+    # Use image size as partition size to approximate final partition size.
+    IMAGE_RATIO="$(bc -l <<< "$(CALCULATE_AVB_MAX_IMAGE_SIZE "$IMAGE_SIZE") / $IMAGE_SIZE")"
+
+    # Prepare a binary search for the optimal partition size.
+    LOW="$(bc -l <<< "scale=0; $(bc -l <<< "$IMAGE_SIZE / $IMAGE_RATIO") / 4096")"
+    LOW="$(bc -l <<< "($LOW * 4096) - 4096")"
+
+    # Ensure lo is small enough: max_image_size should <= image_size.
+    DELTA="4096"
+    MAX_IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$LOW")"
+    while [[ "$MAX_IMAGE_SIZE" -gt "$IMAGE_SIZE" ]]; do
+        IMAGE_RATIO="$(bc -l <<< "$MAX_IMAGE_SIZE / $LOW")"
+        LOW="$(bc -l <<< "scale=0; $(bc -l <<< "$IMAGE_SIZE / $IMAGE_RATIO") / 4096")"
+        LOW="$(bc -l <<< "($LOW * 4096) - $DELTA")"
+        DELTA="$(bc -l <<< "$DELTA * 2")"
+        MAX_IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$LOW")"
+    done
+
+    HIGH="$(bc -l <<< "$LOW + 4096")"
+
+    # Ensure hi is large enough: max_image_size should >= image_size.
+    DELTA="4096"
+    MAX_IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$HIGH")"
+    while [[ "$MAX_IMAGE_SIZE" -lt "$IMAGE_SIZE" ]]; do
+        IMAGE_RATIO="$(bc -l <<< "$MAX_IMAGE_SIZE / $HIGH")"
+        HIGH="$(bc -l <<< "scale=0; $(bc -l <<< "$IMAGE_SIZE / $IMAGE_RATIO") / 4096")"
+        HIGH="$(bc -l <<< "($HIGH * 4096) + $DELTA")"
+        DELTA="$(bc -l <<< "$DELTA * 2")"
+        MAX_IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$HIGH")"
+    done
+
+    PARTITION_SIZE="$HIGH"
+
+    # Start to binary search.
+    while [[ "$LOW" -lt "$HIGH" ]]; do
+        MID="$(bc -l <<< "scale=0; ($(bc -l <<< "$LOW + $HIGH")) / (2 * 4096)")"
+        MID="$(bc -l <<< "$MID * 4096")"
+        MAX_IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$MID")"
+        if [[ "$MAX_IMAGE_SIZE" -ge "$IMAGE_SIZE" ]]; then # if mid can accommodate image_size
+            if [[ "$MID" -lt "$PARTITION_SIZE" ]]; then # if a smaller partition size is found
+                PARTITION_SIZE="$MID"
+            fi
+            HIGH="$MID"
+        else
+            LOW="$(bc -l <<< "$MID + 4096")"
+        fi
+    done
+
+    echo "$PARTITION_SIZE"
+}
+
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#247
 CALCULATE_SIZE_AND_RESERVED()
 {
@@ -37,11 +106,12 @@ CALCULATE_SIZE_AND_RESERVED()
 
     # Assume reserved partition size is not set
     if [[ "$FS_TYPE" == "erofs" ]]; then
+        # give .3% margin or a minimum size for AVB footer
         SIZE="$(bc -l <<< "scale=0; ($SIZE * 1003) / 1000")"
         [[ "$SIZE" -lt "262144" ]] && SIZE="262144"
     else
-        SIZE="$(bc -l <<< "scale=0; ($SIZE * 1.1) / 1")"
-        SIZE="$(bc -l <<< "$SIZE + 16777216")"
+        SIZE="$(bc -l <<< "scale=0; ($SIZE * 1.1) / 1")" # 10% headroom to avoid failures
+        SIZE="$(bc -l <<< "$SIZE + 16777216")" # add 16 MB of reserved space
     fi
 
     echo "$SIZE"
@@ -150,6 +220,22 @@ BUILD_IMAGE_MKFS()
     fi
 }
 
+# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/verity_utils.py#264
+GET_AVBTOOL_CMD()
+{
+    local CMD
+
+    CMD+="avbtool add_hashtree_footer "
+    CMD+="--image \"$OUTPUT_FILE\" "
+    CMD+="--partition_size \"$IMAGE_SIZE\" "
+    CMD+="--partition_name \"$PARTITION\" "
+    CMD+="--hash_algorithm \"sha256\" "
+    CMD+="--algorithm \"SHA256_RSA4096\" "
+    CMD+="--key \"$SRC_DIR/security/avb/testkey_rsa4096.pem\""
+
+    echo "$CMD"
+}
+
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#63
 GET_DISK_USAGE()
 {
@@ -197,6 +283,8 @@ PREPARE_SCRIPT()
             elif [[ "$FS_TYPE" != "ext4" ]]; then
                 LOGW "Ignore inodes number flag as file system type is $FS_TYPE"
             fi
+        elif [[ "$1" == "--no-avb" ]]; then
+            AVB_SIGN=false
         elif [[ "$1" == "--output" ]] || [[ "$1" == "-o" ]]; then
             shift; OUTPUT_FILE="$1"
         elif [[ "$1" == "--partition-name" ]] || [[ "$1" == "-p" ]]; then
@@ -273,6 +361,7 @@ PRINT_USAGE()
 {
     echo "Usage: build_fs_image <fs> [options] <dir> <file_context> <fs_config>" >&2
     echo " -i, --inodes : (ext4 only) Specify the extfs inodes count" >&2
+    echo " --no-avb : Disables AVB signing" >&2
     echo " -o, --output : Specify the output image path, defaults to the parent input directory" >&2
     echo " -p, --partition-name : Specify the partition name, defaults to the input directory name" >&2
     echo " -s, --partition-size : Specify the partition size, defaults to the smallest possible" >&2
@@ -357,13 +446,26 @@ if [ ! "$IMAGE_SIZE" ]; then
         IMAGE_SIZE="$((BLOCK_COUNT << LOG_BLOCKSIZE))"
     fi
 
+    if $AVB_SIGN; then
+        IMAGE_SIZE="$(CALCULATE_AVB_MIN_PARTITION_SIZE)"
+    fi
+
     LOG "- Allocating $IMAGE_SIZE bytes ($(bc -l <<< "scale=0; $IMAGE_SIZE / 1048576") MB) for $(basename "$OUTPUT_FILE")"
 
     LOG_STEP_OUT
 fi
 
 LOG "- Building image"
-BUILD_IMAGE_MKFS
+if $AVB_SIGN; then
+    IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$IMAGE_SIZE")" BUILD_IMAGE_MKFS
+else
+    BUILD_IMAGE_MKFS
+fi
+
+if $AVB_SIGN; then
+    LOG "- Signing image with AVB"
+    EVAL "$(GET_AVBTOOL_CMD)" || exit 1
+fi
 
 LOG_STEP_OUT
 
