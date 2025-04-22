@@ -50,35 +50,6 @@ READ_AND_APPLY_PROPS()
     done
 }
 
-APPLY_SMALI_PATCHES()
-{
-    local PATCHES_PATH="$1"
-    local TARGET="$2"
-
-    [ ! -d "$APKTOOL_DIR$TARGET" ] && bash "$SRC_DIR/scripts/apktool.sh" d "$TARGET"
-
-    cd "$APKTOOL_DIR$TARGET"
-    while read -r patch; do
-        local OUT
-        local COMMIT_NAME
-        COMMIT_NAME="$(grep "^Subject:" "$patch" | sed 's/.*PATCH] //')"
-
-        if [[ "$patch" == *"0000-"* ]]; then
-            if $ROM_IS_OFFICIAL; then
-                [[ "$patch" == *"AOSP"* ]] && continue
-            else
-                [[ "$patch" == *"UNICA"* ]] && continue
-            fi
-        fi
-
-        echo "Applying \"$COMMIT_NAME\" to $TARGET"
-        OUT="$(patch -p1 -s -t -N --dry-run < "$patch")" \
-            || echo "$OUT" | grep -q "Skipping patch" || false
-        patch -p1 -s -t -N --no-backup-if-mismatch < "$patch" &> /dev/null || true
-    done <<< "$(find "$PATCHES_PATH$TARGET" -type f -name "*.patch" | sort -n)"
-    cd - &> /dev/null
-}
-
 APPLY_MODULE()
 {
     local MODPATH="$1"
@@ -120,10 +91,23 @@ APPLY_MODULE()
 
     if [ -d "$MODPATH/smali" ]; then
         local FILES_TO_PATCH
-        FILES_TO_PATCH="$(find "$MODPATH/smali" -type d \( -name "*.apk" -o -name "*.jar" \) -printf "%p\n" | sed 's/.*\/smali//')"
+        FILES_TO_PATCH="$(find "$MODPATH/smali" -type d \( -name "*.apk" -o -name "*.jar" \) -printf "%p\n" | sed 's/.*\/smali\///')"
 
         for i in $FILES_TO_PATCH; do
-            APPLY_SMALI_PATCHES "$MODPATH/smali" "$i"
+            while read -r patch; do
+                if [[ "$patch" == *"0000-"* ]]; then
+                    if $ROM_IS_OFFICIAL; then
+                        [[ "$patch" == *"AOSP"* ]] && continue
+                    else
+                        [[ "$patch" == *"UNICA"* ]] && continue
+                    fi
+                fi
+
+                local MODULE_DIR="${MODPATH#$SRC_DIR/}"
+                local PATCH="${patch#$MODPATH/smali/}"
+
+                APPLY_PATCH "${i}" "${MODULE_DIR}/smali" "${PATCH}"
+            done <<< "$(find "$MODPATH/smali/${i}" -type f -name "*.patch" | sort -n)"
         done
     fi
 }
