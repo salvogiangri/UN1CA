@@ -122,10 +122,9 @@ DELETE_FROM_WORK_DIR()
     fi
 
     if [[ "$FILE" == *".so" ]]; then
-        # shellcheck disable=SC2013
-        for f in $(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt); do
+        while IFS= read -r f; do
             sed -i "/$(basename "$FILE")/d" "$f"
-        done
+        done < <(grep -l "$(basename "$FILE")" "$WORK_DIR/system/system/etc/public.libraries"*.txt)
     fi
 
     return 0

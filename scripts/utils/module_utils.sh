@@ -21,78 +21,97 @@ source "$SRC_DIR/scripts/utils/generic_utils.sh"
 _GET_PROP_FILES_PATH()
 {
     local PARTITION="$1"
-    local FILES
+    local FILES=()
 
     if IS_VALID_PARTITION_NAME "$PARTITION"; then
         case "$PARTITION" in
             "system")
-                FILES="$WORK_DIR/system/system/build.prop"
+                FILES+=("$WORK_DIR/system/system/build.prop")
                 ;;
             "vendor")
-                FILES="$WORK_DIR/vendor/default.prop
-                    $WORK_DIR/vendor/build.prop"
+                FILES+=(
+                    "$WORK_DIR/vendor/default.prop"
+                    "$WORK_DIR/vendor/build.prop"
+                )
                 ;;
             "product")
-                FILES="$WORK_DIR/product/etc/build.prop"
+                FILES+=("$WORK_DIR/product/etc/build.prop")
                 ;;
             "system_ext")
-                FILES="$WORK_DIR/system_ext/etc/build.prop
-                    $WORK_DIR/system/system/system_ext/etc/build.prop"
+                FILES+=(
+                    "$WORK_DIR/system_ext/etc/build.prop"
+                    "$WORK_DIR/system/system/system_ext/etc/build.prop"
+                )
                 ;;
             "odm")
-                FILES="$WORK_DIR/odm/etc/build.prop"
+                FILES+=("$WORK_DIR/odm/etc/build.prop")
                 ;;
             "vendor_dlkm")
-                FILES="$WORK_DIR/vendor_dlkm/etc/build.prop
-                    $WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
+                FILES+=(
+                    "$WORK_DIR/vendor_dlkm/etc/build.prop"
+                    "$WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
+                )
                 ;;
             "odm_dlkm")
-                FILES="$WORK_DIR/vendor/odm_dlkm/etc/build.prop"
+                FILES+=("$WORK_DIR/vendor/odm_dlkm/etc/build.prop")
                 ;;
             "system_dlkm")
-                FILES="$WORK_DIR/system_dlkm/etc/build.prop
-                    $WORK_DIR/system/system/system_dlkm/etc/build.prop"
+                FILES+=(
+                    "$WORK_DIR/system_dlkm/etc/build.prop"
+                    "$WORK_DIR/system/system/system_dlkm/etc/build.prop"
+                )
                 ;;
         esac
     else
         # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/init/property_service.cpp#1214
-        FILES="$WORK_DIR/system/system/build.prop
-            $WORK_DIR/system_ext/etc/build.prop
-            $WORK_DIR/system/system/system_ext/etc/build.prop
-            $WORK_DIR/system_dlkm/etc/build.prop
-            $WORK_DIR/system/system/system_dlkm/etc/build.prop
-            $WORK_DIR/vendor/default.prop
-            $WORK_DIR/vendor/build.prop
-            $WORK_DIR/vendor_dlkm/etc/build.prop
-            $WORK_DIR/vendor/vendor_dlkm/etc/build.prop
-            $WORK_DIR/vendor/odm_dlkm/etc/build.prop
-            $WORK_DIR/odm/etc/build.prop
-            $WORK_DIR/product/etc/build.prop"
+        FILES+=(
+            "$WORK_DIR/system/system/build.prop"
+            "$WORK_DIR/system_ext/etc/build.prop"
+            "$WORK_DIR/system/system/system_ext/etc/build.prop"
+            "$WORK_DIR/system_dlkm/etc/build.prop"
+            "$WORK_DIR/system/system/system_dlkm/etc/build.prop"
+            "$WORK_DIR/vendor/default.prop"
+            "$WORK_DIR/vendor/build.prop"
+            "$WORK_DIR/vendor_dlkm/etc/build.prop"
+            "$WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
+            "$WORK_DIR/vendor/odm_dlkm/etc/build.prop"
+            "$WORK_DIR/odm/etc/build.prop"
+            "$WORK_DIR/product/etc/build.prop"
+        )
     fi
 
-    echo "${FILES// }"
+    printf '%s\n' "${FILES[@]}"
 }
 
 _GET_PROP_LOCATION()
 {
     local FILES
-    FILES="$(_GET_PROP_FILES_PATH "${1:?}")"
+    FILES="$(_GET_PROP_FILES_PATH "$1")"
 
-    if IS_VALID_PARTITION_NAME "${1:?}"; then
+    if IS_VALID_PARTITION_NAME "$1"; then
         shift
     fi
 
-    local PROP="${1:?}"
-    # shellcheck disable=SC2116
-    for f in $(echo "$FILES"); do
-        grep -l "^$PROP=" "$f" 2> /dev/null || true
-    done
+    _CHECK_NON_EMPTY_PARAM "PROP" "$1" || return 1
+
+    local PROP="$1"
+    local MATCHES=()
+    while IFS= read -r f; do
+        if grep -q "^$PROP=" "$f" 2> /dev/null; then
+            MATCHES+=("$f")
+        fi
+    done <<< "$FILES"
+
+    printf '%s\n' "${MATCHES[@]}"
 }
 
 _GET_SELINUX_LABEL()
 {
-    local PARTITION="${1:?}"
-    local FILE="${2:?}"
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1" || return 1
+    _CHECK_NON_EMPTY_PARAM "FILE" "$2" || return 1
+
+    local PARTITION="$1"
+    local FILE="$2"
     local FC_FILE
 
     case "$PARTITION" in
@@ -114,19 +133,25 @@ _GET_SELINUX_LABEL()
             ;;
     esac
 
+    if [ ! -f "$FC_FILE" ]; then
+        LOGE "File not found: ${FC_FILE//$WORK_DIR/}"
+        return 1
+    fi
+
     if [[ "${FILE:0:1}" != "/" ]]; then
         FILE="/$FILE"
     fi
 
-    local LABEL="u:object_r:system_file:s0"
-    while IFS= read -r l; do
-        l="$(tr -s "\t" " " <<< "$l")"
-        if [[ "$FILE" =~ ^$(cut -d " " -f 1 <<< "$l")$ ]]; then
-            LABEL="$(cut -d " " -f 2 <<< "$l")"
-            break
-        fi
-    done <<< "$(tac "$FC_FILE" 2> /dev/null)"
-
+    local LABEL
+    LABEL=$(perl -ne '
+        next if /^\s*#/ || /^\s*$/;
+        s/\s+/ /g;
+        my ($pattern, $label) = split(" ", $_, 3);
+        if ($ARGV[0] =~ /^$pattern$/) {
+            print "$label\n";
+            exit;
+        }
+    ' - "$FILE" <<< "$(tac "$FC_FILE")")
     echo "$LABEL"
 }
 # ]
@@ -271,8 +296,7 @@ ADD_TO_WORK_DIR()
         [[ "$PARTITION" == "system" ]] && FILES="${FILES//system\/system\//system/}"
         $TARGET_HAS_SYSTEM_EXT || FILES="${FILES//system_ext\//system/system_ext/}"
 
-        # shellcheck disable=SC2116
-        for f in $(echo "$FILES"); do
+        while IFS= read -r f; do
             IS_VALID_PARTITION_NAME "$f" && continue
 
             if ! grep -q -F "$f " "$WORK_DIR/configs/fs_config-$PARTITION" 2> /dev/null; then
@@ -304,7 +328,7 @@ ADD_TO_WORK_DIR()
                     echo "/$(_HANDLE_SPECIAL_CHARS "$f") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
             fi
-        done
+        done <<< "$FILES"
     else
         local TMP="${TARGET_FILE%/.}"
         TMP="$(dirname "${TMP//$WORK_DIR\//}")"
@@ -445,8 +469,8 @@ GET_PROP()
     _CHECK_NON_EMPTY_PARAM "PROP" "$1" || return 1
 
     local PROP="$1"
-    # shellcheck disable=SC2002,SC2046,SC2116
-    cat $(echo "$FILES") 2> /dev/null | sed -n "s/^$PROP=//p" | head -n 1
+    # shellcheck disable=SC2086
+    cat $FILES 2> /dev/null | sed -n "s/^$PROP=//p" | head -n 1
 }
 
 # HEX_PATCH "<file>" "<old pattern>" "<new pattern>"
@@ -591,8 +615,8 @@ SET_PROP()
     if [ "$(GET_PROP "$PARTITION" "$PROP")" ]; then
         local FILES
         FILES="$(_GET_PROP_LOCATION "$PARTITION" "$PROP")"
-        # shellcheck disable=SC2116
-        for f in $(echo "$FILES"); do
+
+        while IFS= read -r f; do
             if [[ "$VALUE" == "-d" ]] || [[ "$VALUE" == "--delete" ]]; then
                 LOG "- Deleting \"$PROP\" prop in ${f//$WORK_DIR/}"
                 sed -i "/^$PROP/d" "$f"
@@ -605,7 +629,7 @@ SET_PROP()
                     sed -i "$l c${PROP}=${VALUE}" "$f"
                 done
             fi
-        done
+        done <<< "$FILES"
     elif [[ "$VALUE" != "-d" ]] && [[ "$VALUE" != "--delete" ]]; then
         local FILE
 
