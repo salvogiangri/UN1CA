@@ -412,6 +412,45 @@ ADD_TO_WORK_DIR()
     return 0
 }
 
+# APPLY_PATCH <apk_path> <module> <patch_file>
+# Applies a unified diff patch to a decoded APK/JAR directory.
+#
+# <apk_path>   - Relative name of the APK/JAR file inside work_dir (without full path)
+# <module>     - Module/subdirectory under $SRC_DIR where the patch is located (e.g., unica/patches/nfc)
+# <patch_file> - Patch file name to apply (e.g., path/to/0001-disable-knox.patch)
+APPLY_PATCH()
+{
+    _CHECK_NON_EMPTY_PARAM "APK_PATH" "$1"
+    _CHECK_NON_EMPTY_PARAM "MODULE" "$2"
+    _CHECK_NON_EMPTY_PARAM "PATCH_FILE" "$3"
+
+    local APK_PATH
+    local COMMIT_NAME
+    local MODULE
+    local OUT
+    local PATCH
+    local PATCH_FILE
+
+    APK_PATH="$1"
+    MODULE="$2"
+    PATCH_FILE="$3"
+
+    DECODE_APK "$APK_PATH"
+
+    cd "$APKTOOL_DIR/$APK_PATH" || exit 1
+    PATCH="$SRC_DIR/$MODULE/$PATCH_FILE"
+
+    COMMIT_NAME="$(grep "^Subject:" "$PATCH" | sed 's/.*PATCH] //')"
+    echo "Applying \"$COMMIT_NAME\" to /$APK_PATH"
+
+    OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
+        || echo "$OUT" | grep -q "Skipping patch" || false
+    patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
+    cd - &> /dev/null
+
+    return 0
+}
+
 # DECODE_APK <apk/jar>
 # Same usage as `run_cmd apktool d <apk/jar>`.
 # APK/JAR path MUST not be full and match an existing file inside work_dir.

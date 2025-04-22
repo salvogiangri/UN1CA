@@ -1,19 +1,4 @@
 # [
-APPLY_PATCH()
-{
-    local PATCH
-    local OUT
-
-    DECODE_APK "$1"
-
-    cd "$APKTOOL_DIR/$1"
-    PATCH="$SRC_DIR/unica/patches/product_feature/$2"
-    OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
-        || echo "$OUT" | grep -q "Skipping patch" || false
-    patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
-    cd - &> /dev/null
-}
-
 GET_FP_SENSOR_TYPE()
 {
     if [[ "$1" == *"ultrasonic"* ]]; then
@@ -56,7 +41,7 @@ fi
 if $SOURCE_AUDIO_SUPPORT_ACH_RINGTONE; then
     if ! $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
         echo "Applying ACH ringtone patches"
-        APPLY_PATCH "system/framework/framework.jar" "audio/ach/framework.jar/0001-Disable-ACH-ringtone-support.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "audio/ach/framework.jar/0001-Disable-ACH-ringtone-support.patch"
     fi
 else
     if $TARGET_AUDIO_SUPPORT_ACH_RINGTONE; then
@@ -68,8 +53,8 @@ fi
 if $SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER; then
     if ! $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER; then
         echo "Applying dual speaker patches"
-        APPLY_PATCH "system/framework/framework.jar" "audio/dual_speaker/framework.jar/0001-Disable-dual-speaker-support.patch"
-        APPLY_PATCH "system/framework/services.jar" "audio/dual_speaker/services.jar/0001-Disable-dual-speaker-support.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "audio/dual_speaker/framework.jar/0001-Disable-dual-speaker-support.patch"
+        APPLY_PATCH "system/framework/services.jar" "unica/patches/product_feature" "audio/dual_speaker/services.jar/0001-Disable-dual-speaker-support.patch"
     fi
 else
     if $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER; then
@@ -81,10 +66,10 @@ fi
 if $SOURCE_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
     if ! $TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
         echo "Applying virtual vibration patches"
-        APPLY_PATCH "system/framework/framework.jar" "audio/virtual_vib/framework.jar/0001-Disable-virtual-vibration-support.patch"
-        APPLY_PATCH "system/framework/services.jar" "audio/virtual_vib/services.jar/0001-Disable-virtual-vibration-support.patch"
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "audio/virtual_vib/SecSettings.apk/0001-Disable-virtual-vibration-support.patch"
-        APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "audio/virtual_vib/SettingsProvider.apk/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "audio/virtual_vib/framework.jar/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/framework/services.jar" "unica/patches/product_feature" "audio/virtual_vib/services.jar/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "unica/patches/product_feature" "audio/virtual_vib/SecSettings.apk/0001-Disable-virtual-vibration-support.patch"
+        APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "unica/patches/product_feature" "audio/virtual_vib/SettingsProvider.apk/0001-Disable-virtual-vibration-support.patch"
     fi
 else
     if $TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION; then
@@ -134,28 +119,28 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
     if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
         ADD_TO_WORK_DIR "gts9xxx" "system" "." 0 0 755 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "r11sxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isOpticalSensor.patch"
-        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "unica/patches/product_feature" "fingerprint/SecSettings.apk/0001-Enable-isOpticalSensor.patch"
+        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "unica/patches/product_feature" "fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
     elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
         ADD_TO_WORK_DIR "b5qxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
-        APPLY_PATCH "system/framework/services.jar" "fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
-        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
+        APPLY_PATCH "system/framework/services.jar" "unica/patches/product_feature" "fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "unica/patches/product_feature" "fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
+        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "unica/patches/product_feature" "fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
     fi
 
     if [[ "$TARGET_FP_SENSOR_CONFIG" == *"navi=1"* ]]; then
         APPLY_PATCH "system/framework/services.jar" \
-            "fingerprint/services.jar/0001-Enable-FP_FEATURE_GESTURE_MODE.patch"
+            "unica/patches/product_feature" "fingerprint/services.jar/0001-Enable-FP_FEATURE_GESTURE_MODE.patch"
     fi
     if [[ "$TARGET_FP_SENSOR_CONFIG" == *"no_delay_in_screen_off"* ]]; then
         APPLY_PATCH "system/priv-app/BiometricSetting/BiometricSetting.apk" \
-            "fingerprint/BiometricSetting.apk/0001-Enable-FP_FEATURE_NO_DELAY_IN_SCREEN_OFF.patch"
+            "unica/patches/product_feature" "fingerprint/BiometricSetting.apk/0001-Enable-FP_FEATURE_NO_DELAY_IN_SCREEN_OFF.patch"
     fi
 fi
 
 if [[ "$TARGET_API_LEVEL" -lt 34 ]]; then
     echo "Applying Face HIDL patches"
-    APPLY_PATCH "system/framework/services.jar" "face/services.jar/0001-Fallback-to-Face-HIDL-2.0.patch"
+    APPLY_PATCH "system/framework/services.jar" "unica/patches/product_feature" "face/services.jar/0001-Fallback-to-Face-HIDL-2.0.patch"
 fi
 
 if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
@@ -176,8 +161,8 @@ if $SOURCE_HAS_HW_MDNIE; then
     if ! $TARGET_HAS_HW_MDNIE; then
         echo "Applying HW mDNIe patches"
         SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" --delete
-        APPLY_PATCH "system/framework/framework.jar" "mdnie/hw/framework.jar/0001-Disable-HW-mDNIe.patch"
-        APPLY_PATCH "system/framework/services.jar" "mdnie/hw/services.jar/0001-Disable-HW-mDNIe.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "mdnie/hw/framework.jar/0001-Disable-HW-mDNIe.patch"
+        APPLY_PATCH "system/framework/services.jar" "unica/patches/product_feature" "mdnie/hw/services.jar/0001-Disable-HW-mDNIe.patch"
     fi
 else
     if $TARGET_HAS_HW_MDNIE; then
@@ -189,8 +174,8 @@ if $SOURCE_MDNIE_SUPPORT_HDR_EFFECT; then
     if ! $TARGET_MDNIE_SUPPORT_HDR_EFFECT; then
         echo "Applying mDNIe HDR effect patches"
         SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_HDR_EFFECT" --delete
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "mdnie/hdr/SecSettings.apk/0001-Disable-HDR-Settings.patch"
-        APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "mdnie/hdr/SettingsProvider.apk/0001-Disable-HDR-Settings.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "unica/patches/product_feature" "mdnie/hdr/SecSettings.apk/0001-Disable-HDR-Settings.patch"
+        APPLY_PATCH "system/priv-app/SettingsProvider/SettingsProvider.apk" "unica/patches/product_feature" "mdnie/hdr/SettingsProvider.apk/0001-Disable-HDR-Settings.patch"
     fi
 else
     if $TARGET_MDNIE_SUPPORT_HDR_EFFECT; then
@@ -206,8 +191,8 @@ if ! $SOURCE_HAS_QHD_DISPLAY; then
         ADD_TO_WORK_DIR "dm3qxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
         ADD_TO_WORK_DIR "dm3qxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
         ADD_TO_WORK_DIR "dm3qxxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        APPLY_PATCH "system/framework/framework.jar" "resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
-        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "resolution/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
+        APPLY_PATCH "system/priv-app/SecSettings/SecSettings.apk" "unica/patches/product_feature" "resolution/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
     fi
 else
     if ! $TARGET_HAS_QHD_DISPLAY; then
@@ -230,7 +215,7 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     # TODO: this breaks 60hz AOD
     #if [[ "${#TARGET_HFR_MODE}" -le "6" ]]; then
     if [[ "$TARGET_HFR_MODE" -le "1" ]]; then
-        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "hfr/SystemUI.apk/0001-Nuke-KEYGUARD_ADJUST_REFRESH_RATE.patch"
+        APPLY_PATCH "system_ext/priv-app/SystemUI/SystemUI.apk" "unica/patches/product_feature" "hfr/SystemUI.apk/0001-Nuke-KEYGUARD_ADJUST_REFRESH_RATE.patch"
     fi
 
     FTP="
@@ -288,7 +273,7 @@ if [[ "$SOURCE_HFR_SEAMLESS_BRT" != "$TARGET_HFR_SEAMLESS_BRT" ]] || \
     echo "Applying HFR_SEAMLESS_BRT/HFR_SEAMLESS_LUX patches"
 
     if [[ "$TARGET_HFR_SEAMLESS_BRT" == "none" ]] && [[ "$TARGET_HFR_SEAMLESS_LUX" == "none" ]]; then
-        APPLY_PATCH "system/framework/framework.jar" "hfr/framework.jar/0001-Remove-brightness-threshold-values.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "hfr/framework.jar/0001-Remove-brightness-threshold-values.patch"
     else
         DECODE_APK "system/framework/framework.jar"
 
@@ -349,5 +334,5 @@ fi
 
 if [ ! -f "$FW_DIR/${MODEL}_${REGION}/vendor/etc/permissions/android.hardware.strongbox_keystore.xml" ]; then
     echo "Applying strongbox patches"
-    APPLY_PATCH "system/framework/framework.jar" "strongbox/framework.jar/0001-Disable-StrongBox-in-DevRootKeyATCmd.patch"
+    APPLY_PATCH "system/framework/framework.jar" "unica/patches/product_feature" "strongbox/framework.jar/0001-Disable-StrongBox-in-DevRootKeyATCmd.patch"
 fi

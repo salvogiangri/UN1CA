@@ -1,20 +1,3 @@
-# [
-APPLY_PATCH()
-{
-    local PATCH
-    local OUT
-
-    DECODE_APK "$1"
-
-    cd "$APKTOOL_DIR/$1"
-    PATCH="$SRC_DIR/unica/patches/nfc/$2"
-    OUT="$(patch -p1 -s -t -N --dry-run < "$PATCH")" \
-        || echo "$OUT" | grep -q "Skipping patch" || false
-    patch -p1 -s -t -N --no-backup-if-mismatch < "$PATCH" &> /dev/null || true
-    cd - &> /dev/null
-}
-# ]
-
 TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev | cut -d "_" -f2- | rev)"
 
 if [ -f "$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci.conf" ]; then
@@ -113,8 +96,8 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        APPLY_PATCH "system/framework/framework.jar" "ese/framework.jar/0001-Disable-SemService.patch"
-        APPLY_PATCH "system/framework/services.jar" "ese/services.jar/0001-Disable-SemService.patch"
+        APPLY_PATCH "system/framework/framework.jar" "unica/patches/nfc" "ese/framework.jar/0001-Disable-SemService.patch"
+        APPLY_PATCH "system/framework/services.jar" "unica/patches/nfc" "ese/services.jar/0001-Disable-SemService.patch"
     else
         FTP="
         system/framework/framework.jar/smali_classes5/com/android/server/SemService.smali
