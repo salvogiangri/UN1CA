@@ -180,3 +180,16 @@ on fs && property:ro.boot.rp=10 && property:ro.boot.em.model=SM-A528B
     mount none /vendor/firmware/wlan/a528b/rev10/wpss.b06 /vendor/firmware/wpss.b06 bind
     mount none /vendor/firmware/wlan/a528b/rev10/wpss.b07 /vendor/firmware/wpss.b07 bind
     mount none /vendor/firmware/wlan/a528b/rev10/wpss.mdt /vendor/firmware/wpss.mdt bind
+
+# bootloader revision 11, A528B (international)
+on fs && property:ro.boot.rp=11 && property:ro.boot.em.model=SM-A528B
+    mount none /vendor/firmware/wlan/a528b/rev11/wpss.b01 /vendor/firmware/wpss.b01 bind
+    mount none /vendor/firmware/wlan/a528b/rev11/wpss.mdt /vendor/firmware/wpss.mdt bind
+    # BL rev 10 firmware works on all rev11 devices
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b00 /vendor/firmware/wpss.b00 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b02 /vendor/firmware/wpss.b02 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b03 /vendor/firmware/wpss.b03 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b04 /vendor/firmware/wpss.b04 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b05 /vendor/firmware/wpss.b05 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b06 /vendor/firmware/wpss.b06 bind
+    mount none /vendor/firmware/wlan/a528b/rev10/wpss.b07 /vendor/firmware/wpss.b07 bind

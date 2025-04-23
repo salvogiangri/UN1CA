@@ -67,6 +67,9 @@
 /vendor/firmware/wlan/a528b/rev10/wpss\.b06 u:object_r:vendor_firmware_file:s0
 /vendor/firmware/wlan/a528b/rev10/wpss\.b07 u:object_r:vendor_firmware_file:s0
 /vendor/firmware/wlan/a528b/rev10/wpss\.mdt u:object_r:vendor_firmware_file:s0
+/vendor/firmware/wlan/a528b/rev11 u:object_r:vendor_firmware_file:s0
+/vendor/firmware/wlan/a528b/rev11/wpss\.b01 u:object_r:vendor_firmware_file:s0
+/vendor/firmware/wlan/a528b/rev11/wpss\.mdt u:object_r:vendor_firmware_file:s0
 /vendor/firmware/wlan/a528n u:object_r:vendor_firmware_file:s0
 /vendor/firmware/wlan/a528n/rev1 u:object_r:vendor_firmware_file:s0
 /vendor/firmware/wlan/a528n/rev1/wpss\.b01 u:object_r:vendor_firmware_file:s0
