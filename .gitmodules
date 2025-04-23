@@ -14,9 +14,9 @@
 	path = external/img2sdat
 	url = https://github.com/salvogiangri/img2sdat.git
 	ignore = dirty
-[submodule "external/samfirm.js"]
-	path = external/samfirm.js
-	url = https://github.com/DavidArsene/samfirm.js.git
+[submodule "external/samloader"]
+	path = external/samloader
+	url = https://github.com/ananjaser1211/samloader.git
 	ignore = dirty
 [submodule "external/signapk"]
 	path = external/signapk
