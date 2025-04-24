@@ -85,7 +85,7 @@ READ_BYTES_AT()
 # [
 DEPENDENCIES=(
     "brotli" "cmake" "clang" "go" "lz4"
-    "make" "npm" "java" "perl" "pcre2test"
+    "make" "java" "perl" "pcre2test"
     "protoc" "python3" "zstd"
 )
 MISSING=()
