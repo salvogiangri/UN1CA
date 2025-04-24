@@ -223,7 +223,7 @@ for i in "${FIRMWARES[@]}"; do
     fi
 
     LOG "- Downloading firmware..."
-    [ -d "$ODIN_DIR/${MODEL}_${CSC}" ] && rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
+    [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ] && rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
     mkdir -p "$ODIN_DIR/${MODEL}_${CSC}"
     # shellcheck disable=SC2164
     # Anan's samloader stores its logs in the current working directory, let's move into OUT_DIR just for this time
