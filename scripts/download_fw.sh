@@ -84,6 +84,42 @@ PRINT_USAGE()
     echo " --ignore-target : Skip parsing target firmware flags" >&2
     echo " -f, --force : Force firmware download" >&2
 }
+
+VERIFY_ODIN_PACKAGES()
+{
+    local FILE_NAME
+    local LENGTH
+    local STORED_HASH
+    local CALCULATED_HASH
+
+    while IFS= read -r f; do
+        FILE_NAME="$(basename "$f")"
+        LOG_STEP_IN "- Verifying $FILE_NAME..."
+
+        FILE_NAME="${FILE_NAME%.md5}"
+
+        # Samsung stores the output of `md5sum` at the very end of the file
+        LENGTH="32" # Length of MD5 hash
+        LENGTH="$((LENGTH + 2))" # 2 whitespace chars
+        LENGTH="$((LENGTH + ${#FILE_NAME}))" # File name without .md5 extension
+        LENGTH="$((LENGTH + 1))" # 1 newline char
+
+        STORED_HASH="$(tail -c "$LENGTH" "$f" | cut -d " " -f 1 -s)"
+        if [ ! "$STORED_HASH" ] || [[ "${#STORED_HASH}" != "32" ]]; then
+            LOG "$(tput setaf 1)! Expected hash could not be parsed$(tput sgr0)"
+            exit 1
+        fi
+
+        CALCULATED_HASH="$(head -c-$LENGTH "$f" | md5sum | cut -d " " -f 1 -s)"
+
+        if [[ "$STORED_HASH" != "$CALCULATED_HASH" ]]; then
+            LOG "$(tput setaf 1)! File is damaged$(tput sgr0)"
+            exit 1
+        fi
+
+        LOG_STEP_OUT
+    done < <(find "$ODIN_DIR/${MODEL}_${CSC}" -type f -name "*.md5")
+}
 # ]
 
 PREPARE_SCRIPT "$@"
@@ -138,12 +174,14 @@ for i in "${FIRMWARES[@]}"; do
 
     ZIP_FILE="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "*.zip" | sort -r | head -n 1)"
     if [ ! "$ZIP_FILE" ] || [ ! -f "$ZIP_FILE" ]; then
-        LOGE "Download failed"
+        LOG "$(tput setaf 1)! Download failed$(tput sgr0)"
         exit 1
     fi
 
     LOG "- Extracting $(basename "$ZIP_FILE")..."
-    EVAL "unzip -n \"$ZIP_FILE\" -d \"$ODIN_DIR/${MODEL}_${CSC}\" && rm -rf \"$ZIP_FILE\"" || exit 1
+    EVAL "unzip -o \"$ZIP_FILE\" -d \"$ODIN_DIR/${MODEL}_${CSC}\" && rm -rf \"$ZIP_FILE\"" || exit 1
+
+    VERIFY_ODIN_PACKAGES
 
     echo -n "$LATEST_FIRMWARE" > "$ODIN_DIR/${MODEL}_${CSC}/.downloaded"
 
