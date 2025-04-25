@@ -82,7 +82,7 @@ PRINT_USAGE()
     echo "Usage: download_fw [options] <firmware>" >&2
     echo " --ignore-source : Skip parsing source firmware flags" >&2
     echo " --ignore-target : Skip parsing target firmware flags" >&2
-    echo " -f, --force : Force delete output directory" >&2
+    echo " -f, --force : Force firmware download" >&2
 }
 # ]
 
@@ -105,33 +105,24 @@ for i in "${FIRMWARES[@]}"; do
     LOG_STEP_IN
 
     if ! $FORCE; then
-        # Skip if firmware is extracted and equal/newer than the one in FUS
-        if [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ] && \
-                COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$LATEST_FIRMWARE"; then
-            LOG "$(tput setaf 3)! This firmware has already been extracted$(tput sgr0)"
-            LOG_STEP_OUT; LOG_STEP_OUT
-            continue
-        fi
-
-        # Skip and print a warning if a newer firmware has been downloaded but not extracted yet
-        if [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ] && [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ] && \
-                ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted" 2> /dev/null)" "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" 2> /dev/null)"; then
-            LOG "$(tput setaf 3)! A newer firmware has been downloaded$(tput sgr0)"
-            LOG_STEP_OUT; LOG_STEP_OUT
-            continue
+        # Skip if firmware has been extracted and equal/newer than the one in FUS
+        if [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ]; then
+            if COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$LATEST_FIRMWARE"; then
+                LOG "$(tput setaf 3)! This firmware has already been extracted, skipping$(tput sgr0)"
+                LOG_STEP_OUT; LOG_STEP_OUT
+                continue
+            fi
         fi
 
         # Skip if firmware has already been downloaded
         if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
             if ! COMPARE_SEC_BUILD_VERSION "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")" "$LATEST_FIRMWARE"; then
-                LOG "$(tput setaf 3)! A newer firmware is available for download$(tput sgr0)"
-                LOG_STEP_OUT; LOG_STEP_OUT
-                continue
+                LOG "$(tput setaf 3)! A newer firmware is available for download, use --force flag if you want to overwrite it$(tput sgr0)"
             else
                 LOG "$(tput setaf 3)! This firmware has already been downloaded$(tput sgr0)"
-                LOG_STEP_OUT; LOG_STEP_OUT
-                continue
             fi
+            LOG_STEP_OUT; LOG_STEP_OUT
+            continue
         fi
     fi
 
