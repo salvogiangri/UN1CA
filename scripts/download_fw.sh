@@ -17,7 +17,7 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/build_utils.sh"
+source "$SRC_DIR/scripts/utils/firmware_utils.sh"
 source "$TOOLS_DIR/../venv/bin/activate"
 
 FORCE=false
@@ -29,93 +29,6 @@ IMEI=""
 SERIAL_NO=""
 LATEST_FIRMWARE=""
 ZIP_FILE=""
-
-# Samsung Android OS build version scheme works as follows (eg. A528BXXU1DWA4):
-# - A528B: Model number
-# - XX: Region (XX = EUR_OPEN)
-# - U: Firmware type (U = full update, S = security update)
-# - 1: Rollback protection bit
-# - D: Major OS version (D = 4th OS rollout)
-# - W: Year (W = 2023)
-# - A: Month (A = january)
-# - 4: Incremental version
-COMPARE_SEC_BUILD_VERSION()
-{
-    local FIRST="$1"
-    local SECOND="$2"
-
-    FIRST="$(cut -d "/" -f 1 -s <<< "$FIRST")"
-    SECOND="$(cut -d "/" -f 1 -s <<< "$SECOND")"
-
-    local FIRST_MAJOR="${FIRST:${#FIRST}-4:1}"
-    local FIRST_YEAR="${FIRST:${#FIRST}-3:1}"
-    local FIRST_MONTH="${FIRST:${#FIRST}-2:1}"
-    local FIRST_INCREMENTAL="${FIRST:${#FIRST}-1:1}"
-
-    local SECOND_MAJOR="${SECOND:${#SECOND}-4:1}"
-    local SECOND_YEAR="${SECOND:${#SECOND}-3:1}"
-    local SECOND_MONTH="${SECOND:${#SECOND}-2:1}"
-    local SECOND_INCREMENTAL="${SECOND:${#SECOND}-1:1}"
-
-    if [[ "$FIRST_MAJOR" < "$SECOND_MAJOR" ]]; then
-        return 1
-    fi
-    if [[ "$FIRST_YEAR" < "$SECOND_YEAR" ]]; then
-        return 1
-    fi
-    if [[ "$FIRST_MONTH" < "$SECOND_MONTH" ]]; then
-        return 1
-    fi
-    if [[ "$FIRST_INCREMENTAL" < "$SECOND_INCREMENTAL" ]]; then
-        return 1
-    fi
-
-    return 0
-}
-
-GET_LATEST_FIRMWARE()
-{
-    curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$CSC/$MODEL/version.xml" \
-        | perl -nE 'say $1 if /<latest[^>]*>(.*?)<\/latest>/'
-}
-
-PARSE_FIRMWARE_STRING()
-{
-    if [ ! "$1" ]; then
-        LOGE "Firmware value cannot be empty"
-        exit 1
-    fi
-
-    MODEL="$(cut -d "/" -f 1 -s <<< "$1")"
-    if [ ! "$MODEL" ]; then
-        LOGE "No device model value found in \"$1\""
-        exit 1
-    fi
-
-    CSC="$(cut -d "/" -f 2 -s <<< "$1")"
-    if [ ! "$CSC" ]; then
-        LOGE "No CSC value found in \"$1\""
-        exit 1
-    elif [[ "${#CSC}" != "3" ]]; then
-        LOGE "CSC not valid in \"$1\": $CSC"
-        exit 1
-    fi
-
-    local THIRD
-    THIRD="$(cut -d "/" -f 3 -s <<< "$1")"
-    if [ ! "$THIRD" ]; then
-        LOGE "No IMEI/SN value found in \"$1\""
-        exit 1
-    elif [[ "${#THIRD}" == "11" ]] && [[ "$THIRD" == "R"* ]]; then
-        SERIAL_NO="$THIRD"
-    elif [[ "${#THIRD}" -ge "8" ]] && [[ "${#THIRD}" -le "15" ]] && [[ "$THIRD" =~ ^[+-]?[0-9]+$ ]]; then
-        # Allow uncomplete IMEIs as samloader can generate them by providing the first 8 numbers (TAC)
-        IMEI="$THIRD"
-    else
-        LOGE "No valid IMEI/SN in \"$1\": $THIRD"
-        exit 1
-    fi
-}
 
 PREPARE_SCRIPT()
 {
@@ -178,7 +91,7 @@ PREPARE_SCRIPT "$@"
 for i in "${FIRMWARES[@]}"; do
     PARSE_FIRMWARE_STRING "$i"
 
-    LATEST_FIRMWARE="$(GET_LATEST_FIRMWARE)"
+    LATEST_FIRMWARE="$(GET_LATEST_FIRMWARE "$MODEL" "$CSC")"
     if [ ! "$LATEST_FIRMWARE" ]; then
         LOGE "Latest available firmware could not be fetched"
         exit 1
