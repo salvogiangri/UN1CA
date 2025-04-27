@@ -73,9 +73,18 @@ EXTRACT_KERNEL_BINARIES()
 
     mkdir -p "$FW_DIR/${MODEL}_${CSC}/kernel"
     for f in $FILES; do
+        [ -f "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt" ] && rm -f "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+
         EXTRACT_FILE_FROM_TAR "$AP_TAR" "$f" || exit 1
         [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
         mv -f "$FW_DIR/${MODEL}_${CSC}/$f" "$FW_DIR/${MODEL}_${CSC}/kernel/$f"
+
+        if [[ "$f" == *"boot.img" ]]; then
+            EVAL "unpack_bootimg --boot_img \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" --out \"$TMP_DIR\" > \"$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt\"" || exit 1
+            rm -rf "$TMP_DIR/"*
+        elif  [[ "$f" == *"dtbo.img" ]]; then
+            EVAL "mkdtboimg dump \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" > \"$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt\"" || exit 1
+        fi
     done
 
     LOG_STEP_OUT
@@ -83,11 +92,12 @@ EXTRACT_KERNEL_BINARIES()
 
 EXTRACT_OS_PARTITIONS()
 {
-    # # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
     local FILES="system.img vendor.img product.img system_ext.img odm.img vendor_dlkm.img odm_dlkm.img system_dlkm.img"
-    local PARTITION
 
     LOG_STEP_IN "- Extracting OS partitions"
+
+    [ -f "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt" ] && rm -f "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
 
     if FILE_EXISTS_IN_TAR "$AP_TAR" "super.img" || FILE_EXISTS_IN_TAR "$AP_TAR" "super.img.lz4"; then
         EXTRACT_FILE_FROM_TAR "$AP_TAR" "super.img" || exit 1
@@ -95,18 +105,18 @@ EXTRACT_OS_PARTITIONS()
 
         LOG "- Unpacking super.img..."
 
-        EVAL "lpdump \"$FW_DIR/${MODEL}_${CSC}/super.img\" > \"$FW_DIR/${MODEL}_${CSC}/lpdump.txt\"" || exit 1
+        STORE_OS_PARTITION_METADATA "$FW_DIR/${MODEL}_${CSC}/super.img"
 
-        if grep -q "virtual_ab_device" "$FW_DIR/${MODEL}_${CSC}/lpdump.txt"; then
-            # In Virtual A/B devices only the A slot is filled
-            for f in $FILES; do
-                PARTITION="${f%.img}"
-                lpunpack -p "${PARTITION}_a" "$FW_DIR/${MODEL}_${CSC}/super.img" "$FW_DIR/${MODEL}_${CSC}" &> /dev/null || continue
-                mv -f "$FW_DIR/${MODEL}_${CSC}/${PARTITION}_a.img" "$FW_DIR/${MODEL}_${CSC}/$f"
-            done
-        else
-            EVAL "lpunpack \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
-        fi
+        # shellcheck disable=SC2013
+        for p in $(grep "partition_list" "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt" | cut -d "=" -f 2 -s); do
+            if grep -q "virtual_ab" "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"; then
+                # In Virtual A/B devices only the A slot is filled
+                EVAL "lpunpack -p \"${p}_a\" \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
+                mv -f "$FW_DIR/${MODEL}_${CSC}/${p}_a.img" "$FW_DIR/${MODEL}_${CSC}/${p}.img"
+            else
+                EVAL "lpunpack -p \"${p}\" \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
+            fi
+        done
 
         rm -f "$FW_DIR/${MODEL}_${CSC}/super.img"
     else
@@ -114,9 +124,11 @@ EXTRACT_OS_PARTITIONS()
             EXTRACT_FILE_FROM_TAR "$AP_TAR" "$f" || exit 1
             [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
             UNSPARSE_IMAGE "$FW_DIR/${MODEL}_${CSC}/$f" || exit 1
+            STORE_OS_PARTITION_METADATA "$FW_DIR/${MODEL}_${CSC}/$f"
         done
     fi
 
+    local PARTITION
     for f in $FILES; do
         PARTITION="${f%.img}"
 
@@ -233,6 +245,47 @@ PRINT_USAGE()
     echo " --ignore-source : Skip parsing source firmware flags" >&2
     echo " --ignore-target : Skip parsing target firmware flags" >&2
     echo " -f, --force : Force firmware extract" >&2
+}
+
+STORE_OS_PARTITION_METADATA()
+{
+    local FILE="$1"
+
+    if [ ! -f "$FILE" ]; then
+        LOGE "File not found: ${TAR//$SRC_DIR\//}"
+        exit 1
+    fi
+
+    local PARTITION_SIZE
+    PARTITION_SIZE="$(wc -c "$FILE" | cut -d " " -f 1)"
+
+    if [[ "$FILE" == *"super.img" ]]; then
+        local LPDUMP
+        LPDUMP="$(lpdump "$FILE")"
+        # shellcheck disable=SC2181
+        if [ $? -ne 0 ]; then
+            EVAL "lpdump \"$FILE\""
+            return 1
+        fi
+
+        local GROUP_NAME
+        GROUP_NAME="$(grep -F "Group: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a//" -e "s/_b//" | sort -u)"
+
+        {
+            echo "use_dynamic_partitions=true"
+            if grep -q -w "virtual_ab_device" <<< "$LPDUMP"; then
+                echo "virtual_ab=true"
+            fi
+            echo "super_partition_size=$PARTITION_SIZE"
+            echo "super_partition_group=$GROUP_NAME"
+            echo -n "super_${GROUP_NAME}_group_size="
+            grep -F "Maximum size: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed "s/bytes//" | sort -n -r | head -n 1
+            echo -n "super_${GROUP_NAME}_partition_list="
+            grep -F "Name: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a//" -e "s/_b//" -e "/default/d" -e "/$GROUP_NAME/d" | awk '!visited[$0]++' | tr "\n" " " | xargs
+        } > "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
+    else
+        echo "${FILE%.img}_size=$PARTITION_SIZE" >> "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
+    fi
 }
 # ]
 
