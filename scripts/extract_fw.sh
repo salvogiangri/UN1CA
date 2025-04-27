@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (C) 2023 Salvo Giangreco
+# Copyright (C) 2025 Salvo Giangreco
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,265 +16,296 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC2162
-
-set -e
-
 # [
-GET_LATEST_FIRMWARE()
+source "$SRC_DIR/scripts/utils/firmware_utils.sh"
+
+FORCE=false
+
+FIRMWARES=()
+MODEL=""
+CSC=""
+LATEST_FIRMWARE=""
+DOWNLOADED_FIRMWARE=""
+BL_TAR=""
+AP_TAR=""
+
+TMP_DIR="$(mktemp -d)"
+
+# https://unix.stackexchange.com/a/219188
+SUPPORTED_FS="$( (awk '{print $NF}' < "/proc/filesystems" | sed '/^$/d'; ls -1 "/lib/modules/$(uname -r)/kernel/fs") | sort -u)"
+
+GET_IMAGE_FILE_SYSTEM()
 {
-    curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
-        | grep latest | sed 's/^[^>]*>//' | sed 's/<.*//'
+    # https://android.googlesource.com/platform/external/e2fsprogs/+/refs/tags/android-15.0.0_r1/lib/ext2fs/ext2_fs.h#83
+    if [[ "$(READ_BYTES_AT "$1" "1080" "2")" == "ef53" ]]; then
+        echo "ext4"
+    # https://android.googlesource.com/platform/external/f2fs-tools/+/refs/tags/android-15.0.0_r1/include/f2fs_fs.h#395
+    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "f2f52010" ]]; then
+        echo "f2fs"
+    # https://android.googlesource.com/platform/external/erofs-utils/+/refs/tags/android-15.0.0_r1/include/erofs_fs.h#12
+    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "e0f5e1e2" ]]; then
+        echo "erofs"
+    fi
 }
 
-GET_IMG_FS_TYPE()
+EXTRACT_AVB_BINARIES()
 {
-    if [[ "$(xxd -p -l "2" --skip "1080" "$1")" == "53ef" ]]; then
-        echo "ext4"
-    elif [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "1020f5f2" ]]; then
-        echo "f2fs"
-    elif [[ "$(xxd -p -l "4" --skip "1024" "$1")" == "e2e1f5e0" ]]; then
-        echo "erofs"
-    else
-        echo "unknown"
+    if FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img" || FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img.lz4"; then
+        LOG_STEP_IN "- Extracting AVB binaries"
+
+        EXTRACT_FILE_FROM_TAR "$BL_TAR" "vbmeta.img" || exit 1
+
+        [ -f "$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img"
+        LOG "- Creating vbmeta_patched.img..."
+        EVAL "cp -a \"$FW_DIR/${MODEL}_${CSC}/vbmeta.img\" \"$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img\"" || exit 1
+        # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/fastboot/fastboot.cpp#1129
+        EVAL "printf \"\x03\" | dd of=\"$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img\" bs=1 seek=123 count=1 conv=notrunc" || exit 1
+
+        LOG_STEP_OUT
     fi
 }
 
 EXTRACT_KERNEL_BINARIES()
 {
-    local PDR
-    PDR="$(pwd)"
+    local FILES="boot.img dtbo.img init_boot.img vendor_boot.img"
 
-    local FILES="boot.img.lz4 dtbo.img.lz4 init_boot.img.lz4 vendor_boot.img.lz4"
+    LOG_STEP_IN "- Extracting kernel binaries"
 
-    echo "- Extracting kernel binaries..."
-    cd "$FW_DIR/${MODEL}_${REGION}"
-    for file in $FILES
-    do
-        [ -f "${file%.lz4}" ] && continue
-        tar tf "$AP_TAR" "$file" &>/dev/null || continue
-        echo "Extracting ${file%.lz4}"
-        tar xf "$AP_TAR" "$file" && lz4 -d -q --rm "$file" "${file%.lz4}"
+    for f in $FILES; do
+        EXTRACT_FILE_FROM_TAR "$AP_TAR" "$f" || exit 1
     done
 
-    cd "$PDR"
+    LOG_STEP_OUT
 }
 
 EXTRACT_OS_PARTITIONS()
 {
-    local PDR
-    PDR="$(pwd)"
+    # # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#131
+    local FILES="system.img vendor.img product.img system_ext.img odm.img vendor_dlkm.img odm_dlkm.img system_dlkm.img"
+    local PARTITION
 
-    local SHOULD_EXTRACT=false
-    local SHOULD_EXTRACT_SUPER=false
+    LOG_STEP_IN "- Extracting OS partitions"
 
-    echo "- Extracting OS partitions..."
-    cd "$FW_DIR/${MODEL}_${REGION}"
+    if FILE_EXISTS_IN_TAR "$AP_TAR" "super.img" || FILE_EXISTS_IN_TAR "$AP_TAR" "super.img.lz4"; then
+        EXTRACT_FILE_FROM_TAR "$AP_TAR" "super.img" || exit 1
+        UNSPARSE_IMAGE "$FW_DIR/${MODEL}_${CSC}/super.img" || exit 1
 
-    local COMMON_FOLDERS="odm product system vendor"
-    for folder in $COMMON_FOLDERS
-    do
-        [ ! -d "$folder" ] && SHOULD_EXTRACT=true
-        [ ! -f "$folder.img" ] && SHOULD_EXTRACT_SUPER=true
-    done
+        LOG "- Unpacking super.img..."
 
-    if $SHOULD_EXTRACT; then
-        if [ ! -f "lpdump" ] || $SHOULD_EXTRACT_SUPER; then
-            echo "Extracting super.img"
-            tar xf "$AP_TAR" "super.img.lz4"
-            lz4 -d -q --rm "super.img.lz4" "super.img.sparse"
-            simg2img "super.img.sparse" "super.img" && rm "super.img.sparse"
-            { lpunpack "super.img" > /dev/null; } 2>&1
-            lpdump "super.img" > "lpdump" && rm "super.img"
+        EVAL "lpdump \"$FW_DIR/${MODEL}_${CSC}/super.img\" > \"$FW_DIR/${MODEL}_${CSC}/lpdump.txt\"" || exit 1
+
+        if grep -q "virtual_ab_device" "$FW_DIR/${MODEL}_${CSC}/lpdump.txt"; then
+            # In Virtual A/B devices only the A slot is filled
+            for f in $FILES; do
+                PARTITION="${f%.img}"
+                lpunpack -p "${PARTITION}_a" "$FW_DIR/${MODEL}_${CSC}/super.img" "$FW_DIR/${MODEL}_${CSC}" &> /dev/null || continue
+                mv -f "$FW_DIR/${MODEL}_${CSC}/${PARTITION}_a.img" "$FW_DIR/${MODEL}_${CSC}/$f"
+            done
+        else
+            EVAL "lpunpack \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
         fi
 
-        [ -d "tmp_out" ] && mountpoint -q "tmp_out" && sudo umount "tmp_out"
-        mkdir -p "tmp_out"
-        for img in *.img
-        do
-            local PREFIX=""
-            local PARTITION="${img%.img}"
-
-            case "$(GET_IMG_FS_TYPE "$img")" in
-                "erofs")
-                    echo "Extracting $img"
-                    PREFIX=""
-                    [ -d "$PARTITION" ] && rm -rf "$PARTITION"
-                    mkdir -p "$PARTITION"
-                    fuse.erofs "$img" "tmp_out" &>/dev/null
-                    cp -a --preserve=all tmp_out/* "$PARTITION"
-                    ;;
-                "f2fs" | "ext4")
-                    echo "Extracting $img"
-                    PREFIX="sudo"
-                    [ -d "$PARTITION" ] && rm -rf "$PARTITION"
-                    mkdir -p "$PARTITION"
-                    $PREFIX mount -o ro "$img" "tmp_out"
-                    $PREFIX cp -a --preserve=all tmp_out/* "$PARTITION"
-                    for i in $($PREFIX find "$PARTITION"); do
-                        $PREFIX chown -h "$(whoami)":"$(whoami)" "$i"
-                    done
-                    [[ -e "$PARTITION/lost+found" ]] && rm -rf "$PARTITION/lost+found"
-                    ;;
-                *)
-                    continue
-                    ;;
-            esac
-
-            echo "Generating fs_config/file_context for $img"
-            [ -f "file_context-$PARTITION" ] && rm "file_context-$PARTITION"
-            [ -f "fs_config-$PARTITION" ] && rm "fs_config-$PARTITION"
-            while read -r i; do
-                {
-                    echo -n "$i "
-                    $PREFIX getfattr -n security.selinux --only-values -h "$i"
-                    echo ""
-                } >> "file_context-$PARTITION"
-
-                case "$i" in
-                    *"run-as" | *"simpleperf_app_runner")
-                        CAPABILITIES="0xc0"
-                        ;;
-                    *)
-                        CAPABILITIES="0x0"
-                        ;;
-                esac
-                $PREFIX stat -c "%n %u %g %a capabilities=$CAPABILITIES" "$i" >> "fs_config-$PARTITION"
-            done <<< "$($PREFIX find "tmp_out")"
-            if [ "$PARTITION" = "system" ]; then
-                sed -i "s/tmp_out /\/ /g" "file_context-$PARTITION" \
-                    && sed -i "s/tmp_out\//\//g" "file_context-$PARTITION"
-                sed -i "s/tmp_out / /g" "fs_config-$PARTITION" \
-                    && sed -i "s/tmp_out\///g" "fs_config-$PARTITION"
-            else
-                sed -i "s/tmp_out/\/$PARTITION/g" "file_context-$PARTITION"
-                sed -i "s/tmp_out / /g" "fs_config-$PARTITION" \
-                    && sed -i "s/tmp_out/$PARTITION/g" "fs_config-$PARTITION"
-            fi
-            sed -i "s/\x0//g" "file_context-$PARTITION" \
-                && sed -i 's/\./\\./g' "file_context-$PARTITION" \
-                && sed -i 's/\+/\\+/g' "file_context-$PARTITION" \
-                && sed -i 's/\[/\\[/g' "file_context-$PARTITION"
-
-            $PREFIX umount "tmp_out"
-            rm "$img"
+        rm -f "$FW_DIR/${MODEL}_${CSC}/super.img"
+    else
+        for f in $FILES; do
+            EXTRACT_FILE_FROM_TAR "$AP_TAR" "$f" || exit 1
+            [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
+            UNSPARSE_IMAGE "$FW_DIR/${MODEL}_${CSC}/$f" || exit 1
         done
-
-        rm -r "tmp_out"
     fi
 
-    cd "$PDR"
+    for f in $FILES; do
+        PARTITION="${f%.img}"
+
+        [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
+
+        if ! grep -q -w "$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f")" <<< "$SUPPORTED_FS"; then
+            LOGE "$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f") is not supported by your system"
+            exit 1
+        fi
+
+        if ! sudo -n -v &> /dev/null; then
+            LOG "$(tput setaf 3)! Asking user for sudo password$(tput sgr0)"
+            if ! sudo -v 2> /dev/null; then
+                LOGE "Root permissions are required to unpack OS partitions"
+                exit 1
+            fi
+        fi
+
+        LOG "- Unpacking $(basename "$f")..."
+
+        mkdir -p "$FW_DIR/${MODEL}_${CSC}/$PARTITION"
+        sudo umount "$FW_DIR/${MODEL}_${CSC}/$f" &> /dev/null
+        EVAL "sudo mount -o ro \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
+        EVAL "sudo cp -a -T \"$TMP_DIR\" \"$FW_DIR/${MODEL}_${CSC}/$PARTITION\"" || exit 1
+        sudo find "$FW_DIR/${MODEL}_${CSC}/$PARTITION" -exec chown -h "$(whoami):$(whoami)" {} \;
+        [ -d "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found"
+
+        LOG "- Generating fs_config/file_context for $(basename "$f")..."
+
+        # shellcheck disable=SC2024
+        sudo find "$TMP_DIR" -exec \
+            sh -c 'stat -c "%n %u %g %a capabilities=0x0" "$1"' sh {} \; \
+            > "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
+        # shellcheck disable=SC2024
+        sudo find "$TMP_DIR" -exec \
+            sh -c 'echo -n "$1 "; getfattr -n security.selinux --only-values -h --absolute-names "$1"; echo ""' sh {} \; \
+            > "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
+        # https://source.android.com/docs/core/architecture/partitions/system-as-root
+        if [[ "$PARTITION" == "system" ]] && [ -d "$FW_DIR/${MODEL}_${CSC}/system/system" ]; then
+            sed -i -e "s|$TMP_DIR |/ |g" -e "s|$TMP_DIR||g" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
+            sed -i -e "s|$TMP_DIR | |g" -e "s|$TMP_DIR/||g" "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
+        else
+            sed -i "s|$TMP_DIR|/$PARTITION|g" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
+            sed -i "s|$TMP_DIR|$PARTITION|g" "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
+        fi
+        sed -i -e "s|\.|\\\.|g" -e "s|\+|\\\+|g" -e "s|\[|\\\[|g" \
+            -e "s|\]|\\\]|g" -e "s|\*|\\\*|g" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
+
+        # TODO a way to determine file capabilities has yet to be found, for now let's set it for the only known files
+        if [ -f "$FW_DIR/${MODEL}_${CSC}/fs_config-system" ]; then
+            sed -i \
+                -e "$(sed -n "/run-as/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" \
+                -e "$(sed -n "/simpleperf_app_runner/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" \
+                "$FW_DIR/${MODEL}_${CSC}/fs_config-system"
+        fi
+
+        EVAL "sudo umount \"$TMP_DIR\"" || exit 1
+        rm -f "$FW_DIR/${MODEL}_${CSC}/$f"
+    done
+
+    LOG_STEP_OUT
 }
 
-EXTRACT_AVB_BINARIES()
+PREPARE_SCRIPT()
 {
-    local PDR
-    PDR="$(pwd)"
+    local EXTRA_FIRMWARES=()
+    local IGNORE_SOURCE=false
+    local IGNORE_TARGET=false
 
-    echo "- Extracting AVB binaries..."
-    cd "$FW_DIR/${MODEL}_${REGION}"
-    if [ ! -f "vbmeta.img" ] && tar tf "$BL_TAR" "vbmeta.img.lz4" &>/dev/null; then
-        echo "Extracting vbmeta.img"
-        tar xf "$BL_TAR" "vbmeta.img.lz4" && lz4 -d -q --rm "vbmeta.img.lz4" "vbmeta.img"
-    fi
-    if [ ! -f "vbmeta_patched.img" ]; then
-        echo "Generating vbmeta_patched.img"
-        cp --preserve=all "vbmeta.img" "vbmeta_patched.img"
-        printf "\x03" | dd of="vbmeta_patched.img" bs=1 seek=123 count=1 conv=notrunc &> /dev/null
+    while [ "$#" != 0 ]; do
+        if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+            FORCE=true
+        elif [[ "$1" == "--ignore-source" ]]; then
+            IGNORE_SOURCE=true
+        elif [[ "$1" == "--ignore-target" ]]; then
+            IGNORE_TARGET=true
+        elif [[ "$1" == "-"* ]]; then
+            LOGE "Unknown option: $1"
+            PRINT_USAGE
+            exit 1
+        else
+            EXTRA_FIRMWARES+=("$1")
+        fi
+
+        shift
+    done
+
+    if ! $IGNORE_SOURCE; then
+        _CHECK_NON_EMPTY_PARAM "SOURCE_FIRMWARE" "$SOURCE_FIRMWARE"
+        FIRMWARES+=("$SOURCE_FIRMWARE")
+        IFS=':' read -r -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
+        if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
+            FIRMWARES+=("${SOURCE_EXTRA_FIRMWARES[@]}")
+        fi
     fi
 
-    cd "$PDR"
+    if ! $IGNORE_TARGET; then
+        _CHECK_NON_EMPTY_PARAM "TARGET_FIRMWARE" "$TARGET_FIRMWARE"
+        FIRMWARES+=("$TARGET_FIRMWARE")
+        IFS=':' read -r -a TARGET_EXTRA_FIRMWARES <<< "$TARGET_EXTRA_FIRMWARES"
+        if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
+            FIRMWARES+=("${TARGET_EXTRA_FIRMWARES[@]}")
+        fi
+    fi
+
+    if [ "${#EXTRA_FIRMWARES[@]}" -ge 1 ]; then
+        FIRMWARES+=("${EXTRA_FIRMWARES[@]}")
+    fi
 }
 
-EXTRACT_ALL()
+PRINT_USAGE()
 {
-    BL_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "BL*")
-    AP_TAR=$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*")
+    echo "Usage: extract_fw [options] <firmware>" >&2
+    echo " --ignore-source : Skip parsing source firmware flags" >&2
+    echo " --ignore-target : Skip parsing target firmware flags" >&2
+    echo " -f, --force : Force firmware extract" >&2
+}
+# ]
 
-    mkdir -p "$FW_DIR/${MODEL}_${REGION}"
+PREPARE_SCRIPT "$@"
+
+for i in "${FIRMWARES[@]}"; do
+    PARSE_FIRMWARE_STRING "$i" || exit 1
+
+    LATEST_FIRMWARE="$(GET_LATEST_FIRMWARE "$MODEL" "$CSC")"
+    if [ ! "$LATEST_FIRMWARE" ]; then
+        LOGE "Latest available firmware could not be fetched"
+        exit 1
+    fi
+
+    LOG_STEP_IN "- Processing $MODEL firmware with $CSC CSC"
+    LOG "- Downloaded firmware: $(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" 2> /dev/null)"
+    LOG "- Extracted firmware: $(cat "$FW_DIR/${MODEL}_${CSC}/.extracted" 2> /dev/null)"
+    LOG "- Latest available firmware: $LATEST_FIRMWARE"
+
+    LOG_STEP_IN
+
+    if ! $FORCE; then
+        # Skip if firmware has been extracted
+        if [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ]; then
+            if ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$LATEST_FIRMWARE"; then
+                if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
+                    if ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")"; then
+                        LOG "$(tput setaf 3)! A newer firmware has been downloaded, use --force flag if you want to overwrite it$(tput sgr0)"
+                    fi
+                else
+                    LOG "$(tput setaf 3)! A newer firmware is available for download$(tput sgr0)"
+                fi
+            else
+                LOG "$(tput setaf 3)! This firmware has already been extracted$(tput sgr0)"
+            fi
+
+            LOG_STEP_OUT; LOG_STEP_OUT
+            continue
+        fi
+    fi
+
+    # Abort if firmware has not been downloaded
+    if [ ! -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
+        LOG "$(tput setaf 1)! The firmware has not been downloaded$(tput sgr0)"
+        exit 1
+    fi
+
+    [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}"
+    mkdir -p "$FW_DIR/${MODEL}_${CSC}"
+
+    DOWNLOADED_FIRMWARE="$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")"
+
+    BL_TAR="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "BL_$(cut -d "/" -f 1 -s <<< "$DOWNLOADED_FIRMWARE")*.md5" | sort -r | head -n 1)"
+    AP_TAR="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "AP_$(cut -d "/" -f 1 -s <<< "$DOWNLOADED_FIRMWARE")*.md5" | sort -r | head -n 1)"
+
+    if [ ! "$BL_TAR" ]; then
+        LOG "$(tput setaf 1)! No BL tar found$(tput sgr0)"
+        exit 1
+    elif [ ! "$AP_TAR" ]; then
+        LOG "$(tput setaf 1)! No AP tar found$(tput sgr0)"
+        exit 1
+    fi
+
     EXTRACT_KERNEL_BINARIES
     EXTRACT_OS_PARTITIONS
     EXTRACT_AVB_BINARIES
 
-    cp --preserve=all "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" "$FW_DIR/${MODEL}_${REGION}/.extracted"
+    echo -n "$DOWNLOADED_FIRMWARE" > "$FW_DIR/${MODEL}_${CSC}/.extracted"
 
-    echo ""
-}
-
-FIRMWARES=( "$SOURCE_FIRMWARE" "$TARGET_FIRMWARE" )
-IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
-if [ "${#SOURCE_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
-    for i in "${SOURCE_EXTRA_FIRMWARES[@]}"
-    do
-        FIRMWARES+=( "$i" )
-    done
-fi
-IFS=':' read -a TARGET_EXTRA_FIRMWARES <<< "$TARGET_EXTRA_FIRMWARES"
-if [ "${#TARGET_EXTRA_FIRMWARES[@]}" -ge 1 ]; then
-    for i in "${TARGET_EXTRA_FIRMWARES[@]}"
-    do
-        FIRMWARES+=( "$i" )
-    done
-fi
-# ]
-
-FORCE=false
-
-while [ "$#" != 0 ]; do
-    case "$1" in
-        "-f" | "--force")
-            FORCE=true
-            ;;
-        *)
-            echo "Usage: extract_fw [options]"
-            echo " -f, --force : Force firmware extraction"
-            exit 1
-            ;;
-    esac
-
-    shift
-done
-
-mkdir -p "$FW_DIR"
-
-for i in "${FIRMWARES[@]}"
-do
-    MODEL=$(echo -n "$i" | cut -d "/" -f 1)
-    REGION=$(echo -n "$i" | cut -d "/" -f 2)
-
-    if [ -f "$FW_DIR/${MODEL}_${REGION}/.extracted" ]; then
-        [ -z "$(GET_LATEST_FIRMWARE)" ] && continue
-        if [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && \
-            [[ "$(cat "$ODIN_DIR/${MODEL}_${REGION}/.downloaded")" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
-            if $FORCE; then
-                echo "- Updating $MODEL firmware with $REGION CSC..."
-                rm -rf "$FW_DIR/${MODEL}_${REGION}" && EXTRACT_ALL
-            else
-                echo    "- $MODEL firmware with $REGION CSC is already extracted."
-                echo    "  A newer version of this device's firmware is available."
-                echo -e "  To extract, clean your extracted firmwares directory or run this cmd with \"--force\"\n"
-                continue
-            fi
-        elif [[ "$(GET_LATEST_FIRMWARE)" != "$(cat "$FW_DIR/${MODEL}_${REGION}/.extracted")" ]]; then
-            echo    "- $MODEL firmware with $REGION CSC is already extracted."
-            echo    "  A newer version of this device's firmware is available."
-            echo -e "  Please download the firmware using the \"download_fw\" cmd\n"
-            continue
-        else
-            echo -e "- $MODEL firmware with $REGION CSC is already extracted. Skipping...\n"
-            continue
-        fi
-    elif [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ]; then
-        echo -e "- Extracting $MODEL firmware with $REGION CSC...\n"
-        EXTRACT_ALL
-        if [ -n "$GITHUB_ACTIONS" ]; then
-            rm -rf "$ODIN_DIR/${MODEL}_${REGION}"
-        fi
-    else
-        echo    "- $MODEL firmware with $REGION CSC is not downloaded."
-        echo -e "  Please download the firmware first using the \"download_fw\" cmd\n"
-        exit 1
+    if [ -n "$GITHUB_ACTIONS" ]; then
+        rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
     fi
+
+    LOG_STEP_OUT; LOG_STEP_OUT
 done
+
+rm -rf "$TMP_DIR"
 
 exit 0
