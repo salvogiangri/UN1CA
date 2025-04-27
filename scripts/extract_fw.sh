@@ -71,8 +71,11 @@ EXTRACT_KERNEL_BINARIES()
 
     LOG_STEP_IN "- Extracting kernel binaries"
 
+    mkdir -p "$FW_DIR/${MODEL}_${CSC}/kernel"
     for f in $FILES; do
         EXTRACT_FILE_FROM_TAR "$AP_TAR" "$f" || exit 1
+        [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
+        mv -f "$FW_DIR/${MODEL}_${CSC}/$f" "$FW_DIR/${MODEL}_${CSC}/kernel/$f"
     done
 
     LOG_STEP_OUT
