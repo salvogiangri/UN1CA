@@ -53,13 +53,16 @@ EXTRACT_AVB_BINARIES()
     if FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img" || FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img.lz4"; then
         LOG_STEP_IN "- Extracting AVB binaries"
 
-        EXTRACT_FILE_FROM_TAR "$BL_TAR" "vbmeta.img" || exit 1
+        mkdir -p "$FW_DIR/${MODEL}_${CSC}/avb"
 
-        [ -f "$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img"
+        EXTRACT_FILE_FROM_TAR "$BL_TAR" "vbmeta.img" || exit 1
+        mv -f "$FW_DIR/${MODEL}_${CSC}/vbmeta.img" "$FW_DIR/${MODEL}_${CSC}/avb/vbmeta.img"
+
+        [ -f "$FW_DIR/${MODEL}_${CSC}/avb/vbmeta_patched.img" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/avb/vbmeta_patched.img"
         LOG "- Creating vbmeta_patched.img..."
-        EVAL "cp -a \"$FW_DIR/${MODEL}_${CSC}/vbmeta.img\" \"$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img\"" || exit 1
+        EVAL "cp -a \"$FW_DIR/${MODEL}_${CSC}/avb/vbmeta.img\" \"$FW_DIR/${MODEL}_${CSC}/avb/vbmeta_patched.img\"" || exit 1
         # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/fastboot/fastboot.cpp#1129
-        EVAL "printf \"\x03\" | dd of=\"$FW_DIR/${MODEL}_${CSC}/vbmeta_patched.img\" bs=1 seek=123 count=1 conv=notrunc" || exit 1
+        EVAL "printf \"\x03\" | dd of=\"$FW_DIR/${MODEL}_${CSC}/avb/vbmeta_patched.img\" bs=1 seek=123 count=1 conv=notrunc" || exit 1
 
         LOG_STEP_OUT
     fi
