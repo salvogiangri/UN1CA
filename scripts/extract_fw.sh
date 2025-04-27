@@ -156,14 +156,10 @@ EXTRACT_OS_PARTITIONS()
 
         LOG "- Generating fs_config/file_context for $(basename "$f")..."
 
-        # shellcheck disable=SC2024
-        sudo find "$TMP_DIR" -exec \
-            sh -c 'stat -c "%n %u %g %a capabilities=0x0" "$1"' sh {} \; \
-            > "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
-        # shellcheck disable=SC2024
-        sudo find "$TMP_DIR" -exec \
-            sh -c 'echo -n "$1 "; getfattr -n security.selinux --only-values -h --absolute-names "$1"; echo ""' sh {} \; \
-            > "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
+        EVAL "sudo find \"$TMP_DIR\" | xargs -I \"{}\" -P \"$(nproc)\" stat -c \"%n %u %g %a capabilities=0x0\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION\"" || exit 1
+        EVAL "sudo find \"$TMP_DIR\" | xargs -I \"{}\" -P \"$(nproc)\" sh -c 'echo \"\$1 \$(getfattr -n security.selinux --only-values -h --absolute-names \"\$1\")\"' \"sh\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION\"" || exit 1
+        sort -o "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION" "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
+        sort -o "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
         # https://source.android.com/docs/core/architecture/partitions/system-as-root
         if [[ "$PARTITION" == "system" ]] && [ -d "$FW_DIR/${MODEL}_${CSC}/system/system" ]; then
             sed -i -e "s|$TMP_DIR |/ |g" -e "s|$TMP_DIR||g" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
