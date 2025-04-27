@@ -173,10 +173,10 @@ EXTRACT_OS_PARTITIONS()
 
         # TODO a way to determine file capabilities has yet to be found, for now let's set it for the only known files
         if [ -f "$FW_DIR/${MODEL}_${CSC}/fs_config-system" ]; then
-            sed -i \
-                -e "$(sed -n "/run-as/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" \
-                -e "$(sed -n "/simpleperf_app_runner/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" \
-                "$FW_DIR/${MODEL}_${CSC}/fs_config-system"
+            grep -q "run-as" "$FW_DIR/${MODEL}_${CSC}/fs_config-system" && \
+                sed -i "$(sed -n "/run-as/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" "$FW_DIR/${MODEL}_${CSC}/fs_config-system"
+            grep -q "simpleperf_app_runner" "$FW_DIR/${MODEL}_${CSC}/fs_config-system" && \
+                sed -i "$(sed -n "/simpleperf_app_runner/=" "$FW_DIR/${MODEL}_${CSC}/fs_config-system") s/0x0/0xc0/g" "$FW_DIR/${MODEL}_${CSC}/fs_config-system"
         fi
 
         EVAL "sudo umount \"$TMP_DIR\"" || exit 1
