@@ -79,12 +79,7 @@ EXTRACT_KERNEL_BINARIES()
         [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
         mv -f "$FW_DIR/${MODEL}_${CSC}/$f" "$FW_DIR/${MODEL}_${CSC}/kernel/$f"
 
-        if [[ "$f" == *"boot.img" ]]; then
-            EVAL "unpack_bootimg --boot_img \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" --out \"$TMP_DIR\" > \"$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt\"" || exit 1
-            rm -rf "$TMP_DIR/"*
-        elif  [[ "$f" == *"dtbo.img" ]]; then
-            EVAL "mkdtboimg dump \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" > \"$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt\"" || exit 1
-        fi
+        STORE_KERNEL_IMAGE_METADATA "$FW_DIR/${MODEL}_${CSC}/kernel/$f"
     done
 
     LOG_STEP_OUT
@@ -247,6 +242,85 @@ PRINT_USAGE()
     echo " -f, --force : Force firmware extract" >&2
 }
 
+STORE_KERNEL_IMAGE_METADATA()
+{
+    local FILE="$1"
+
+    if [ ! -f "$FILE" ]; then
+        LOGE "File not found: ${TAR//$SRC_DIR\//}"
+        exit 1
+    fi
+
+    if avbtool info_image --image "$FILE" &> /dev/null; then
+        echo "partition_size=$(wc -c "$FILE" | cut -d " " -f 1)" >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+    fi
+
+    if [[ "$f" == *"boot.img" ]]; then
+        local INFO
+        INFO="$(unpack_bootimg --boot_img "$FW_DIR/${MODEL}_${CSC}/kernel/$f" --out "$TMP_DIR" 2>&1)"
+        # shellcheck disable=SC2181
+        if [ $? -ne 0 ]; then
+            EVAL "unpack_bootimg --boot_img \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" --out \"$TMP_DIR\""
+            exit 1
+        fi
+        rm -rf "$TMP_DIR/"*
+
+        while IFS= read -r l; do
+            if [[ "$l" == *"command line args"* ]]; then
+                {
+                    echo -n "cmdline="
+                    cut -d ":" -f 2- <<< "$l" | awk '{$1=$1;print}'
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"dtb address"* ]]; then
+                {
+                    echo -n "dtb_offset="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"header version"* ]]; then
+                {
+                    echo -n "header_version="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"kernel load address"* ]]; then
+                {
+                    echo -n "kernel_offset="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"kernel tags load address"* ]]; then
+                {
+                    echo -n "tags_offset="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"os patch level"* ]]; then
+                {
+                    echo -n "os_patch_level="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"os version"* ]]; then
+                {
+                    echo -n "os_version="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"page size"* ]]; then
+                {
+                    echo -n "pagesize="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"product name"* ]]; then
+                {
+                    echo -n "board="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            elif [[ "$l" == *"ramdisk load address"* ]]; then
+                {
+                    echo -n "ramdisk_offset="
+                    tr -d " " <<< "$l" | cut -d ":" -f 2-
+                } >> "$FW_DIR/${MODEL}_${CSC}/${f}_metadata.txt"
+            fi
+        done <<< "$INFO"
+    fi
+}
+
 STORE_OS_PARTITION_METADATA()
 {
     local FILE="$1"
@@ -261,11 +335,11 @@ STORE_OS_PARTITION_METADATA()
 
     if [[ "$FILE" == *"super.img" ]]; then
         local LPDUMP
-        LPDUMP="$(lpdump "$FILE")"
+        LPDUMP="$(lpdump "$FILE" 2>&1)"
         # shellcheck disable=SC2181
         if [ $? -ne 0 ]; then
             EVAL "lpdump \"$FILE\""
-            return 1
+            exit 1
         fi
 
         local GROUP_NAME
@@ -284,7 +358,7 @@ STORE_OS_PARTITION_METADATA()
             grep -F "Name: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a//" -e "s/_b//" -e "/default/d" -e "/$GROUP_NAME/d" | awk '!visited[$0]++' | tr "\n" " " | xargs
         } > "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
     else
-        echo "${FILE%.img}_size=$PARTITION_SIZE" >> "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
+        echo "$(basename "${FILE%.img}")_size=$PARTITION_SIZE" >> "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
     fi
 }
 # ]
