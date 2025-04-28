@@ -31,9 +31,6 @@ AP_TAR=""
 
 TMP_DIR="$(mktemp -d)"
 
-# https://unix.stackexchange.com/a/219188
-SUPPORTED_FS="$( (awk '{print $NF}' < "/proc/filesystems" | sed '/^$/d'; ls -1 "/lib/modules/$(uname -r)/kernel/fs") | sort -u)"
-
 GET_IMAGE_FILE_SYSTEM()
 {
     # https://android.googlesource.com/platform/external/e2fsprogs/+/refs/tags/android-15.0.0_r1/lib/ext2fs/ext2_fs.h#83
@@ -127,22 +124,10 @@ EXTRACT_OS_PARTITIONS()
     fi
 
     local PARTITION
-    local PARTITION_FS
     for f in $FILES; do
         PARTITION="${f%.img}"
 
         [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
-
-        PARTITION_FS="$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f")"
-        if [ ! "$PARTITION_FS" ]; then
-            LOGE "Unrecognized file system for $f"
-            exit 1
-        fi
-
-        if ! grep -q -w "$PARTITION_FS" <<< "$SUPPORTED_FS" && [[ "$PARTITION_FS" != "erofs" ]]; then
-            LOGE "$PARTITION_FS is not supported by your system"
-            exit 1
-        fi
 
         if ! sudo -n -v &> /dev/null; then
             LOG "$(tput setaf 3)! Asking user for sudo password$(tput sgr0)"
@@ -156,7 +141,7 @@ EXTRACT_OS_PARTITIONS()
 
         mkdir -p "$FW_DIR/${MODEL}_${CSC}/$PARTITION"
         sudo umount "$FW_DIR/${MODEL}_${CSC}/$f" &> /dev/null
-        if [[ "$PARTITION_FS" == "erofs" ]]; then
+        if [[ "$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f")" == "erofs" ]]; then
             EVAL "sudo env \"PATH=$PATH\" fuse.erofs \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
         else
             EVAL "sudo mount -o ro \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
