@@ -16,7 +16,7 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/generic_utils.sh"
+source "$SRC_DIR/scripts/utils/common_utils.sh"
 
 _GET_PROP_FILES_PATH()
 {
