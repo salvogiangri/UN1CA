@@ -151,7 +151,7 @@ EXTRACT_OS_PARTITIONS()
         sudo umount "$FW_DIR/${MODEL}_${CSC}/$f" &> /dev/null
         EVAL "sudo mount -o ro \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
         EVAL "sudo cp -a -T \"$TMP_DIR\" \"$FW_DIR/${MODEL}_${CSC}/$PARTITION\"" || exit 1
-        sudo find "$FW_DIR/${MODEL}_${CSC}/$PARTITION" -exec chown -h "$(whoami):$(whoami)" {} \;
+        sudo chown -hR "$(whoami):$(whoami)" "$FW_DIR/${MODEL}_${CSC}/$PARTITION"
         [ -d "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found"
 
         LOG "- Generating fs_config/file_context for $(basename "$f")..."
