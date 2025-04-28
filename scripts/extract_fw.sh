@@ -127,13 +127,20 @@ EXTRACT_OS_PARTITIONS()
     fi
 
     local PARTITION
+    local PARTITION_FS
     for f in $FILES; do
         PARTITION="${f%.img}"
 
         [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
 
-        if ! grep -q -w "$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f")" <<< "$SUPPORTED_FS"; then
-            LOGE "$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f") is not supported by your system"
+        PARTITION_FS="$(GET_IMAGE_FILE_SYSTEM "$FW_DIR/${MODEL}_${CSC}/$f")"
+        if [ ! "$PARTITION_FS" ]; then
+            LOGE "Unrecognized file system for $f"
+            exit 1
+        fi
+
+        if ! grep -q -w "$PARTITION_FS" <<< "$SUPPORTED_FS" && [[ "$PARTITION_FS" != "erofs" ]]; then
+            LOGE "$PARTITION_FS is not supported by your system"
             exit 1
         fi
 
@@ -149,15 +156,19 @@ EXTRACT_OS_PARTITIONS()
 
         mkdir -p "$FW_DIR/${MODEL}_${CSC}/$PARTITION"
         sudo umount "$FW_DIR/${MODEL}_${CSC}/$f" &> /dev/null
-        EVAL "sudo mount -o ro \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
+        if [[ "$PARTITION_FS" == "erofs" ]]; then
+            EVAL "sudo env \"PATH=$PATH\" fuse.erofs \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
+        else
+            EVAL "sudo mount -o ro \"$FW_DIR/${MODEL}_${CSC}/$f\" \"$TMP_DIR\"" || exit 1
+        fi
         EVAL "sudo cp -a -T \"$TMP_DIR\" \"$FW_DIR/${MODEL}_${CSC}/$PARTITION\"" || exit 1
         sudo chown -hR "$(whoami):$(whoami)" "$FW_DIR/${MODEL}_${CSC}/$PARTITION"
         [ -d "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found" ] && rm -rf "$FW_DIR/${MODEL}_${CSC}/$PARTITION/lost+found"
 
         LOG "- Generating fs_config/file_context for $(basename "$f")..."
 
-        EVAL "sudo find \"$TMP_DIR\" | xargs -I \"{}\" -P \"$(nproc)\" stat -c \"%n %u %g %a capabilities=0x0\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION\"" || exit 1
-        EVAL "sudo find \"$TMP_DIR\" | xargs -I \"{}\" -P \"$(nproc)\" sh -c 'echo \"\$1 \$(getfattr -n security.selinux --only-values -h --absolute-names \"\$1\")\"' \"sh\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION\"" || exit 1
+        EVAL "sudo find \"$TMP_DIR\" | sudo xargs -I \"{}\" -P \"$(nproc)\" stat -c \"%n %u %g %a capabilities=0x0\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION\"" || exit 1
+        EVAL "sudo find \"$TMP_DIR\" | sudo xargs -I \"{}\" -P \"$(nproc)\" sh -c 'echo \"\$1 \$(getfattr -n security.selinux --only-values -h --absolute-names \"\$1\")\"' \"sh\" \"{}\" > \"$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION\"" || exit 1
         sort -o "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION" "$FW_DIR/${MODEL}_${CSC}/fs_config-$PARTITION"
         sort -o "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION" "$FW_DIR/${MODEL}_${CSC}/file_context-$PARTITION"
         # https://source.android.com/docs/core/architecture/partitions/system-as-root
@@ -342,7 +353,7 @@ STORE_OS_PARTITION_METADATA()
         fi
 
         local GROUP_NAME
-        GROUP_NAME="$(grep -F "Group: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a//" -e "s/_b//" | sort -u)"
+        GROUP_NAME="$(grep -F "Group: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a$//" -e "s/_b$//" | sort -u)"
 
         {
             echo "use_dynamic_partitions=true"
@@ -354,7 +365,7 @@ STORE_OS_PARTITION_METADATA()
             echo -n "super_${GROUP_NAME}_group_size="
             grep -F "Maximum size: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed "s/bytes//" | sort -n -r | head -n 1
             echo -n "super_${GROUP_NAME}_partition_list="
-            grep -F "Name: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a//" -e "s/_b//" -e "/default/d" -e "/$GROUP_NAME/d" | awk '!visited[$0]++' | tr "\n" " " | xargs
+            grep -F "Name: " <<< "$LPDUMP" | tr -d " " | cut -d ":" -f 2 | sed -e "s/_a$//" -e "s/_b$//" -e "/default/d" -e "/$GROUP_NAME/d" | awk '!visited[$0]++' | tr "\n" " " | xargs
         } > "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
     else
         echo "$(basename "${FILE%.img}")_size=$PARTITION_SIZE" >> "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"
