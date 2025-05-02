@@ -62,7 +62,8 @@ BUILD()
             EVAL "smali a -a \"$DEX_API_LEVEL\" -j \"$(nproc)\" -o \"$OUTPUT_PATH/$DEX_FILENAME\" \"$f\"" &
         done
 
-        wait -n || exit 1
+        # shellcheck disable=SC2046
+        wait $(jobs -p) || exit 1
     fi
 
     # Copy original META-INF
@@ -153,7 +154,8 @@ DECODE()
             EVAL "baksmali d -a \"$DEX_API_LEVEL\" --ac false --di false -j \"$(nproc)\" -l -o \"$OUTPUT_PATH/$SMALI_OUT\" --sl \"$f\"" &
         done
 
-        wait -n || exit 1
+        # shellcheck disable=SC2046
+        wait $(jobs -p) || exit 1
 
         rm -f "$OUTPUT_PATH/"*.dex
     fi
