@@ -21,72 +21,6 @@ set -e
 #[
 source "$SRC_DIR/scripts/utils/module_utils.sh"
 
-READ_AND_APPLY_PROPS()
-{
-    local MODPATH="$1"
-    local PARTITION
-
-    while IFS= read -r f; do
-        [[ "$f" == *"module.prop" ]] && continue
-
-        PARTITION=$(basename "$f" | sed "s/.prop//g")
-
-        while read -r l; do
-            [[ "$l" == "#"* ]] && continue
-            [ ! "$l" ] && continue
-
-            if grep -q -F "=" <<< "$l"; then
-                if [ ! "$(cut -d "=" -f 2- -s <<< "$l")" ]; then
-                    SET_PROP "$PARTITION" "$(cut -d "=" -f 1 -s <<< "$l")" --delete
-                else
-                    SET_PROP "$PARTITION" "$(cut -d "=" -f 1 -s <<< "$l")" "$(cut -d "=" -f 2- -s <<< "$l")"
-                fi
-            else
-                LOGE "Malformed string in $f: \"$l\""
-                return 1
-            fi
-        done < "$f"
-    done < <(find "$MODPATH" -maxdepth 1 -type f -name "*.prop")
-
-    return 0
-}
-
-APPLY_SMALI_PATCHES()
-{
-    local PATCHES_PATH="$1"
-    local TARGET="$2"
-
-    local PARTITION
-    PARTITION="$(cut -d "/" -f 1 -s <<< "$TARGET")"
-
-    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
-        LOGE "\"$PARTITION\" is not a valid partition name"
-        return 1
-    fi
-
-    [[ "$PARTITION" != "system" ]] && TARGET="$(cut -d "/" -f 2- -s <<< "$TARGET")"
-
-    DECODE_APK "$PARTITION" "$TARGET"
-
-    while IFS= read -r p; do
-        # TODO remove
-        if [[ "$p" == *"0000-"* ]]; then
-            if $ROM_IS_OFFICIAL; then
-                [[ "$p" == *"AOSP"* ]] && continue
-            else
-                [[ "$p" == *"UNICA"* ]] && continue
-            fi
-        fi
-
-        LOG "- Applying \"$(grep "^Subject:" "$p" | sed "s/.*PATCH] //")\" to /$TARGET"
-        (set +e; EVAL "LC_ALL=C git apply --directory=\"$APKTOOL_DIR/$TARGET\" --verbose --unsafe-paths \"$p\"")
-        # shellcheck disable=SC2181
-        [[ "$?" != 0 ]] && return 1
-    done < <(find "$PATCHES_PATH/$TARGET" -type f -name "*.patch" | sort -n)
-
-    return 0
-}
-
 APPLY_MODULE()
 {
     local MODPATH="$1"
@@ -114,7 +48,7 @@ APPLY_MODULE()
 
     LOG_STEP_IN "- Processing \"$MODNAME\" by @$MODAUTH"
 
-    if ! grep -q '^SKIPUNZIP=1$' "$MODPATH/customize.sh" 2> /dev/null; then
+    if ! grep -q "^SKIPUNZIP=1$" "$MODPATH/customize.sh" 2> /dev/null; then
         [ -d "$MODPATH/odm" ] && ADD_TO_WORK_DIR "$MODPATH" "odm" "." 0 0 755 "u:object_r:vendor_file:s0"
         [ -d "$MODPATH/product" ] && ADD_TO_WORK_DIR "$MODPATH" "product" "." 0 0 755 "u:object_r:system_file:s0"
         [ -d "$MODPATH/system" ] && ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
@@ -133,6 +67,69 @@ APPLY_MODULE()
     fi
 
     LOG_STEP_OUT
+
+    return 0
+}
+
+APPLY_SMALI_PATCHES()
+{
+    local PATCHES_PATH="$1"
+    local TARGET="$2"
+
+    local PARTITION
+    PARTITION="$(cut -d "/" -f 1 -s <<< "$TARGET")"
+
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
+        LOGE "\"$PARTITION\" is not a valid partition name"
+        return 1
+    fi
+
+    [[ "$PARTITION" != "system" ]] && TARGET="$(cut -d "/" -f 2- -s <<< "$TARGET")"
+
+    while IFS= read -r p; do
+        # TODO remove
+        if [[ "$p" == *"0000-"* ]]; then
+            if $ROM_IS_OFFICIAL; then
+                [[ "$p" == *"AOSP"* ]] && continue
+            else
+                [[ "$p" == *"UNICA"* ]] && continue
+            fi
+        fi
+
+        (set +e; APPLY_PATCH "$PARTITION" "$TARGET" "$p")
+        # shellcheck disable=SC2181
+        [[ "$?" != 0 ]] && return 1
+    done < <(find "$PATCHES_PATH/$TARGET" -type f -name "*.patch" | sort -n)
+
+    return 0
+}
+
+READ_AND_APPLY_PROPS()
+{
+    local MODPATH="$1"
+    local PARTITION
+
+    while IFS= read -r f; do
+        [[ "$f" == *"module.prop" ]] && continue
+
+        PARTITION=$(basename "$f" | sed "s/.prop//g")
+
+        while read -r l; do
+            [[ "$l" == "#"* ]] && continue
+            [ ! "$l" ] && continue
+
+            if grep -q -F "=" <<< "$l"; then
+                if [ ! "$(cut -d "=" -f 2- -s <<< "$l")" ]; then
+                    SET_PROP "$PARTITION" "$(cut -d "=" -f 1 -s <<< "$l")" --delete
+                else
+                    SET_PROP "$PARTITION" "$(cut -d "=" -f 1 -s <<< "$l")" "$(cut -d "=" -f 2- -s <<< "$l")"
+                fi
+            else
+                LOGE "Malformed string in $f: \"$l\""
+                return 1
+            fi
+        done < "$f"
+    done < <(find "$MODPATH" -maxdepth 1 -type f -name "*.prop")
 
     return 0
 }

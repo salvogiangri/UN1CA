@@ -106,6 +106,38 @@ _GET_PROP_LOCATION()
 }
 # ]
 
+# APPLY_PATCH <partition> <apk/jar> <patch>
+# Applies a unified diff patch to the provided APK/JAR decoded directory.
+APPLY_PATCH()
+{
+    _CHECK_NON_EMPTY_PARAM "PARTITION" "$1" || return 1
+    _CHECK_NON_EMPTY_PARAM "FILE" "$2" || return 1
+    _CHECK_NON_EMPTY_PARAM "PATCH" "$3" || return 1
+
+    local PARTITION="$1"
+    local FILE="$2"
+    local PATCH="$3"
+
+    if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
+        LOGE "\"$PARTITION\" is not a valid partition name"
+        return 1
+    fi
+
+    if [ ! -f "$PATCH" ]; then
+        LOGE "File not found: ${PATCH//$SRC_DIR\//}"
+        return 1
+    fi
+
+    while [[ "${FILE:0:1}" == "/" ]]; do
+        FILE="${FILE:1}"
+    done
+
+    DECODE_APK "$PARTITION" "$FILE" || return 1
+
+    LOG "- Applying \"$(grep "^Subject:" "$PATCH" | sed "s/.*PATCH] //")\" to /$PARTITION/$FILE"
+    EVAL "LC_ALL=C git apply --directory=\"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" --verbose --unsafe-paths \"$PATCH\"" || return 1
+}
+
 # DECODE_APK <partition> <apk/jar>
 # Same usage as `run_cmd apktool d <partition> <apk/jar>`.
 DECODE_APK()
