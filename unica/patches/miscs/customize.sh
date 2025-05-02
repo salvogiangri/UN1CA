@@ -19,7 +19,7 @@ fi
 
 # Enable camera cutout protection
 if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION" ]]; then
-    DECODE_APK "system_ext/priv-app/SystemUI/SystemUI.apk"
+    DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk"
 
     FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
     R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"

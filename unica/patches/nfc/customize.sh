@@ -71,8 +71,8 @@ fi
 
 if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
     [[ "$SOURCE_ESE_COS_NAME" != "$TARGET_ESE_COS_NAME" ]]; then
-    DECODE_APK "system/framework/framework.jar"
-    DECODE_APK "system/framework/services.jar"
+    DECODE_APK "system" "system/framework/framework.jar"
+    DECODE_APK "system" "system/framework/services.jar"
 
     if [[ "$TARGET_ESE_CHIP_VENDOR" == "none" ]] && [[ "$TARGET_ESE_COS_NAME" == "none" ]]; then
         DELETE_FROM_WORK_DIR "system" "system/app/ESEServiceAgent"
