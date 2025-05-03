@@ -183,7 +183,7 @@ ADD_TO_WORK_DIR()
 
     if [ ! -e "$SOURCE_FILE" ] && [ ! -L "$SOURCE_FILE" ]; then
         if [ -e "$SOURCE_FILE.00" ]; then
-            LOG "- Adding ${TARGET_FILE//$WORK_DIR/} from ${SOURCE//$SRC_DIR\//}"
+            LOG "- Adding $(sed -e "s|$WORK_DIR||" -e "s|/\.||" <<< "$TARGET_FILE") from ${SOURCE//$SRC_DIR\//}"
             mkdir -p "$(dirname "$TARGET_FILE")"
             cat "$SOURCE_FILE."* > "$TARGET_FILE"
         else
@@ -191,7 +191,7 @@ ADD_TO_WORK_DIR()
             return 1
         fi
     else
-        LOG "- Adding ${TARGET_FILE//$WORK_DIR/} from ${SOURCE//$SRC_DIR\//}"
+        LOG "- Adding $(sed -e "s|$WORK_DIR||" -e "s|/\.||" <<< "$TARGET_FILE") from ${SOURCE//$SRC_DIR\//}"
         if [ ! -d "$SOURCE_FILE" ]; then
             mkdir -p "$(dirname "$TARGET_FILE")"
         else
@@ -418,6 +418,23 @@ EVAL()
     return 0
 }
 
+# IS_SPARSE_IMAGE <file>
+# Returns whether or not the supplied file is a valid sparse image.
+IS_SPARSE_IMAGE()
+{
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
+
+    local FILE="$1"
+
+    if [ ! -f "$FILE" ]; then
+        LOGE "File not found: ${FILE//$SRC_DIR\//}"
+        return 1
+    fi
+
+    # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/libsparse/sparse_format.h#39
+    [[ "$(READ_BYTES_AT "$FILE" "0" "4")" == "ed26ff3a" ]]
+}
+
 # IS_VALID_PARTITION_NAME <partition>
 # Returns whether or not the supplied partition name is valid.
 IS_VALID_PARTITION_NAME()
@@ -458,7 +475,7 @@ SET_METADATA()
 
     [ "$PARTITION" != "system" ] && [[ "$ENTRY" != "$PARTITION/"* ]] && ENTRY="$PARTITION/$ENTRY"
 
-    LOG "- Adding metadata for /$PARTITION/$ENTRY (uid:$USER gid:$GROUP mode:$MODE selabel:$LABEL)"
+    LOG "- Adding metadata for /$ENTRY (uid:$USER gid:$GROUP mode:$MODE selabel:$LABEL)"
 
     local PATTERN
     PATTERN="${ENTRY//\//\\/}"

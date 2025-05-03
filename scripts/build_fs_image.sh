@@ -19,6 +19,7 @@
 # [
 source "$SRC_DIR/scripts/utils/build_utils.sh"
 
+FORCE=false
 FS_TYPE=""
 SPARSE=false
 AVB_SIGN=true
@@ -32,10 +33,7 @@ FILE_CONTEXT_FILE=""
 FS_CONFIG_FILE=""
 
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/verity_utils.py#224
-CALCULATE_AVB_MAX_IMAGE_SIZE()
-{
-    avbtool add_hashtree_footer --partition_size "$1" --calc_max_image_size
-}
+CALCULATE_AVB_MAX_IMAGE_SIZE() { avbtool add_hashtree_footer --partition_size "$1" --calc_max_image_size; }
 
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/verity_utils.py#157
 CALCULATE_AVB_MIN_PARTITION_SIZE()
@@ -244,6 +242,20 @@ GET_DISK_USAGE()
     bc -l <<< "$SIZE * 1024"
 }
 
+GET_IMAGE_SIZE()
+{
+    if IS_SPARSE_IMAGE "$1"; then
+        local BLOCK_SIZE
+        local BLOCKS
+        BLOCK_SIZE="$(printf "%d" "0x$(READ_BYTES_AT "$1" "12" "4")")"
+        BLOCKS="$(printf "%d" "0x$(READ_BYTES_AT "$1" "16" "4")")"
+
+        bc -l <<< "$BLOCKS * $BLOCK_SIZE"
+    else
+        GET_DISK_USAGE "$1"
+    fi
+}
+
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#77
 GET_INODE_USAGE()
 {
@@ -275,7 +287,9 @@ PREPARE_SCRIPT()
     shift
 
     while [[ "$1" == "-"* ]]; do
-        if [[ "$1" == "--inodes" ]] || [[ "$1" == "-i" ]]; then
+        if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+            FORCE=true
+        elif [[ "$1" == "--inodes" ]] || [[ "$1" == "-i" ]]; then
             shift; INODES="$1"
             if ! [[ "$INODES" =~ ^[+-]?[0-9]+$ ]]; then
                 LOGE "Inodes number not valid: $INODES"
@@ -336,6 +350,15 @@ PREPARE_SCRIPT()
         OUTPUT_FILE="$(dirname "$INPUT_DIR")/$PARTITION.img"
     fi
 
+    if [ -f "$OUTPUT_FILE" ]; then
+        if $FORCE; then
+            rm -rf "$OUTPUT_FILE"
+        else
+            LOGE "Output file already exists (${OUTPUT_FILE//$SRC_DIR\//}). Use --force flag if you want to overwrite it."
+            exit 1
+        fi
+    fi
+
     FILE_CONTEXT_FILE="$1"
     if [ ! "$FILE_CONTEXT_FILE" ]; then
         PRINT_USAGE
@@ -360,6 +383,7 @@ PREPARE_SCRIPT()
 PRINT_USAGE()
 {
     echo "Usage: build_fs_image <fs> [options] <dir> <file_context> <fs_config>" >&2
+    echo " -f, --force : Force delete output file" >&2
     echo " -i, --inodes : (ext4 only) Specify the extfs inodes count" >&2
     echo " --no-avb : Disables AVB signing" >&2
     echo " -o, --output : Specify the output image path, defaults to the parent input directory" >&2
@@ -390,9 +414,8 @@ if [ ! "$IMAGE_SIZE" ]; then
     LOG_STEP_IN "! Partition size is not set, detecting minimum size"
 
     if [[ "$FS_TYPE" == "erofs" ]]; then
-        SPARSE=false BUILD_IMAGE_MKFS
-        IMAGE_SIZE="$(GET_DISK_USAGE "$OUTPUT_FILE")"
-        rm -f "$OUTPUT_FILE"
+        BUILD_IMAGE_MKFS
+        IMAGE_SIZE="$(GET_IMAGE_SIZE "$OUTPUT_FILE")"
     else
         IMAGE_SIZE="$(GET_DISK_USAGE "$INPUT_DIR")"
     fi
@@ -456,10 +479,12 @@ if [ ! "$IMAGE_SIZE" ]; then
 fi
 
 LOG "- Building image"
-if $AVB_SIGN; then
-    IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$IMAGE_SIZE")" BUILD_IMAGE_MKFS
-else
-    BUILD_IMAGE_MKFS
+if [ ! -f "$OUTPUT_FILE" ]; then
+    if $AVB_SIGN; then
+        IMAGE_SIZE="$(CALCULATE_AVB_MAX_IMAGE_SIZE "$IMAGE_SIZE")" BUILD_IMAGE_MKFS
+    else
+        BUILD_IMAGE_MKFS
+    fi
 fi
 
 if $AVB_SIGN; then

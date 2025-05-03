@@ -124,23 +124,6 @@ GET_LATEST_FIRMWARE()
         | perl -nE 'say $1 if /<latest[^>]*>(.*?)<\/latest>/'
 }
 
-# IS_SPARSE_IMAGE <file>
-# Returns whether or not the supplied file is a valid sparse image.
-IS_SPARSE_IMAGE()
-{
-    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
-
-    local FILE="$1"
-
-    if [ ! -f "$FILE" ]; then
-        LOGE "File not found: ${FILE//$SRC_DIR\//}"
-        return 1
-    fi
-
-    # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/libsparse/sparse_format.h#39
-    [[ "$(READ_BYTES_AT "$FILE" "0" "4")" == "ed26ff3a" ]]
-}
-
 # PARSE_FIRMWARE_STRING <string>
 # Parses the supplied string and stores each value in MODEL/CSC/IMEI/SERIAL_NO variables.
 # - The supplied string must be in the following format: <MODEL>/<CSC>/<IMEI/SN>
