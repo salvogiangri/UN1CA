@@ -18,71 +18,6 @@
 # [
 source "$SRC_DIR/scripts/utils/common_utils.sh"
 
-_GET_PROP_FILES_PATH()
-{
-    local PARTITION="$1"
-    local FILES=()
-
-    if IS_VALID_PARTITION_NAME "$PARTITION"; then
-        case "$PARTITION" in
-            "system")
-                FILES+=("$WORK_DIR/system/system/build.prop")
-                ;;
-            "vendor")
-                FILES+=(
-                    "$WORK_DIR/vendor/default.prop"
-                    "$WORK_DIR/vendor/build.prop"
-                )
-                ;;
-            "product")
-                FILES+=("$WORK_DIR/product/etc/build.prop")
-                ;;
-            "system_ext")
-                FILES+=(
-                    "$WORK_DIR/system_ext/etc/build.prop"
-                    "$WORK_DIR/system/system/system_ext/etc/build.prop"
-                )
-                ;;
-            "odm")
-                FILES+=("$WORK_DIR/odm/etc/build.prop")
-                ;;
-            "vendor_dlkm")
-                FILES+=(
-                    "$WORK_DIR/vendor_dlkm/etc/build.prop"
-                    "$WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
-                )
-                ;;
-            "odm_dlkm")
-                FILES+=("$WORK_DIR/vendor/odm_dlkm/etc/build.prop")
-                ;;
-            "system_dlkm")
-                FILES+=(
-                    "$WORK_DIR/system_dlkm/etc/build.prop"
-                    "$WORK_DIR/system/system/system_dlkm/etc/build.prop"
-                )
-                ;;
-        esac
-    else
-        # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/init/property_service.cpp#1214
-        FILES+=(
-            "$WORK_DIR/system/system/build.prop"
-            "$WORK_DIR/system_ext/etc/build.prop"
-            "$WORK_DIR/system/system/system_ext/etc/build.prop"
-            "$WORK_DIR/system_dlkm/etc/build.prop"
-            "$WORK_DIR/system/system/system_dlkm/etc/build.prop"
-            "$WORK_DIR/vendor/default.prop"
-            "$WORK_DIR/vendor/build.prop"
-            "$WORK_DIR/vendor_dlkm/etc/build.prop"
-            "$WORK_DIR/vendor/vendor_dlkm/etc/build.prop"
-            "$WORK_DIR/vendor/odm_dlkm/etc/build.prop"
-            "$WORK_DIR/odm/etc/build.prop"
-            "$WORK_DIR/product/etc/build.prop"
-        )
-    fi
-
-    printf '%s\n' "${FILES[@]}"
-}
-
 _GET_PROP_LOCATION()
 {
     local FILES
@@ -216,28 +151,6 @@ GET_FLOATING_FEATURE_CONFIG()
     fi
 
     grep -o -P "(?<=<$CONFIG>)[^<]+" "$FILE" 2> /dev/null
-}
-
-# GET_PROP "<partition>/<file>" "<prop>"
-# Returns the supplied prop value, partition/file can be omitted.
-GET_PROP()
-{
-    local FILES
-    if [[ "$1" == *".prop" ]]; then
-        FILES="$1"
-        shift
-    else
-        FILES="$(_GET_PROP_FILES_PATH "$1")"
-        if IS_VALID_PARTITION_NAME "$1"; then
-            shift
-        fi
-    fi
-
-    _CHECK_NON_EMPTY_PARAM "PROP" "$1" || return 1
-
-    local PROP="$1"
-    # shellcheck disable=SC2086
-    cat $FILES 2> /dev/null | sed -n "s/^$PROP=//p" | head -n 1
 }
 
 # HEX_PATCH "<file>" "<old pattern>" "<new pattern>"

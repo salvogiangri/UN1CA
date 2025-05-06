@@ -19,6 +19,51 @@
 source "$SRC_DIR/scripts/utils/common_utils.sh"
 # ]
 
+# GET_DISK_USAGE <file>
+# Returns the size in bytes of the supplied file.
+GET_DISK_USAGE()
+{
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1" || return 1
+
+    local FILE="$1"
+
+    if [ ! -e "$FILE" ]; then
+        LOGE "File not found: ${FILE//$SRC_DIR\//}"
+        return 1
+    fi
+
+    local SIZE
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#63
+    SIZE="$(du -b -k -s "$FILE" | cut -f 1)"
+
+    bc -l <<< "$SIZE * 1024"
+}
+
+# GET_IMAGE_SIZE <file>
+# Returns the size in bytes of the supplied image.
+GET_IMAGE_SIZE()
+{
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1" || return 1
+
+    local FILE="$1"
+
+    if [ ! -f "$FILE" ]; then
+        LOGE "File not found: ${FILE//$SRC_DIR\//}"
+        return 1
+    fi
+
+    if IS_SPARSE_IMAGE "$FILE"; then
+        local BLOCK_SIZE
+        local BLOCKS
+        BLOCK_SIZE="$(printf "%d" "0x$(READ_BYTES_AT "$FILE" "12" "4")")"
+        BLOCKS="$(printf "%d" "0x$(READ_BYTES_AT "$FILE" "16" "4")")"
+
+        bc -l <<< "$BLOCKS * $BLOCK_SIZE"
+    else
+        GET_DISK_USAGE "$FILE"
+    fi
+}
+
 # READ_BYTES_AT <file> <offset> <bytes>
 # Reads the desidered amount of bytes from the supplied file.
 READ_BYTES_AT()

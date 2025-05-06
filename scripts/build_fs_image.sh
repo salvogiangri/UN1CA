@@ -234,28 +234,6 @@ GET_AVBTOOL_CMD()
     echo "$CMD"
 }
 
-# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#63
-GET_DISK_USAGE()
-{
-    local SIZE
-    SIZE="$(du -b -k -s "$1" | cut -f 1)"
-    bc -l <<< "$SIZE * 1024"
-}
-
-GET_IMAGE_SIZE()
-{
-    if IS_SPARSE_IMAGE "$1"; then
-        local BLOCK_SIZE
-        local BLOCKS
-        BLOCK_SIZE="$(printf "%d" "0x$(READ_BYTES_AT "$1" "12" "4")")"
-        BLOCKS="$(printf "%d" "0x$(READ_BYTES_AT "$1" "16" "4")")"
-
-        bc -l <<< "$BLOCKS * $BLOCK_SIZE"
-    else
-        GET_DISK_USAGE "$1"
-    fi
-}
-
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#77
 GET_INODE_USAGE()
 {
