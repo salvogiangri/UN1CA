@@ -194,6 +194,54 @@ GENERATE_OP_LIST()
     fi
 }
 
+GENERATE_OTA_METADATA()
+{
+    local PROTO_FILE="$SRC_DIR/external/android-tools/vendor/build/tools/releasetools/ota_metadata.proto"
+
+    local FINGERPRINT
+    local INCREMENTAL
+    local RELEASE
+    local SECURITY_PATCH_LEVEL
+    local TIMESTAMP
+
+    # TODO replace SSI name in fingerprint
+    FINGERPRINT="$(GET_PROP "system" "ro.system.build.fingerprint")"
+    INCREMENTAL="$(GET_PROP "system" "ro.build.version.incremental")"
+    RELEASE="$(GET_PROP "system" "ro.build.version.release")"
+    SECURITY_PATCH_LEVEL="$(GET_PROP "system" "ro.build.version.security_patch")"
+    TIMESTAMP="$(GET_PROP "system" "ro.build.date.utc")"
+
+    mkdir -p "$TMP_DIR/META-INF/com/android"
+
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/ota_utils.py#259
+    if [ -f "$PROTO_FILE" ]; then
+        local MESSAGE
+
+        MESSAGE+="type: BLOCK"
+        MESSAGE+=", precondition: {device: \\\"$TARGET_CODENAME\\\"}"
+        MESSAGE+=", postcondition: {device: \\\"$TARGET_CODENAME\\\""
+        MESSAGE+=", build: \\\"$FINGERPRINT\\\""
+        MESSAGE+=", build_incremental: \\\"$INCREMENTAL\\\""
+        MESSAGE+=", timestamp: $TIMESTAMP"
+        MESSAGE+=", sdk_level: \\\"$RELEASE\\\""
+        MESSAGE+=", security_patch_level: \\\"$SECURITY_PATCH_LEVEL\\\"}"
+
+        EVAL "protoc --encode=build.tools.releasetools.OtaMetadata --proto_path=\"$(dirname "$PROTO_FILE")\" \"$PROTO_FILE\" <<< \"$MESSAGE\" > \"$TMP_DIR/META-INF/com/android/metadata.pb\"" || exit 1
+    fi
+
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/ota_utils.py#317
+    {
+        echo "ota-required-cache=0"
+        echo "ota-type=BLOCK"
+        echo "post-build=$FINGERPRINT"
+        echo "post-build-incremental=$INCREMENTAL"
+        echo "post-sdk-level=$RELEASE"
+        echo "post-security-patch-level=$SECURITY_PATCH_LEVEL"
+        echo "post-timestamp=$TIMESTAMP"
+        echo "pre-device=$TARGET_CODENAME"
+    } > "$TMP_DIR/META-INF/com/android/metadata"
+}
+
 GENERATE_UPDATER_SCRIPT()
 {
     local SCRIPT_FILE="$TMP_DIR/META-INF/com/google/android/updater-script"
@@ -440,12 +488,17 @@ GENERATE_UPDATER_SCRIPT
 LOG "- Generating build_info.txt"
 GENERATE_BUILD_INFO
 
+LOG "- Generating OTA metadata"
+GENERATE_OTA_METADATA
+
 LOG "- Creating zip"
 EVAL "echo | zip > \"$OUT_DIR/rom.zip\" && zip -d \"$OUT_DIR/rom.zip\" -" || exit 1
 while IFS= read -r f; do
     # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#3601
     # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#3609
-    if [[ "$f" == *".new.dat.br" ]] || [[ "$f" == *".patch.dat" ]]; then
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/ota_utils.py#184
+    # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/ota_utils.py#186
+    if [[ "$f" == *".new.dat.br" ]] || [[ "$f" == *".patch.dat" ]] || [[ "$f" == *"com/android/metadata"* ]]; then
         EVAL "cd \"$TMP_DIR\" && zip -r -X -Z store \"$OUT_DIR/rom.zip\" \"${f//$TMP_DIR\//}\"" || exit 1
     else
         EVAL "cd \"$TMP_DIR\" && zip -r -X \"$OUT_DIR/rom.zip\" \"${f//$TMP_DIR\//}\"" || exit 1
