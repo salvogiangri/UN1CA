@@ -96,9 +96,10 @@ APPLY_SMALI_PATCHES()
                 [[ "$p" == *"UNICA"* ]] && continue
             fi
         fi
-        if [[ "$patch" == *".essi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+
+        if [[ "$p" == *".essi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
             continue
-        elif [[ "$patch" == *".qssi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+        elif [[ "$p" == *".qssi."* ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
             continue
         fi
 
