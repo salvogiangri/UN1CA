@@ -22,11 +22,11 @@ if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION"
     if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
         DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk"
         FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
-    else [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+    elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
         DECODE_APK "product" "overlay/SystemUI__auto_generated_rro_product.apk"
         FTP="$APKTOOL_DIR/product/overlay/SystemUI__auto_generated_rro_product.apk/res/values/bools.xml"
     fi
-    
+
     R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"
 
     sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
