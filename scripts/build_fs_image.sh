@@ -22,7 +22,8 @@ source "$SRC_DIR/scripts/utils/build_utils.sh"
 FORCE=false
 FS_TYPE=""
 SPARSE=false
-AVB_SIGN=true
+AVB_SIGN=""
+MAP_FILE=false
 INPUT_DIR=""
 PARTITION=""
 IMAGE_SIZE=""
@@ -142,6 +143,9 @@ BUILD_IMAGE_MKFS()
             # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#49
             BUILD_CMD+="-T \"1230735600\" "
             BUILD_CMD+="-C \"$FS_CONFIG_FILE\" "
+            if $MAP_FILE; then
+                BUILD_CMD+="-B \"${OUTPUT_FILE//.img/.map}\" "
+            fi
             BUILD_CMD+="-L \"$MOUNT_POINT\" "
             if [ "$INODES" ]; then
                 BUILD_CMD+="-i \"$INODES\" "
@@ -179,6 +183,9 @@ BUILD_IMAGE_MKFS()
             BUILD_CMD+="--file-contexts \"$FILE_CONTEXT_FILE\" "
             # Samsung uses a different default fixed timestamp for erofs/f2fs
             BUILD_CMD+="-T \"1640995200\" "
+            if $MAP_FILE; then
+                BUILD_CMD+="--block-list-file \"${OUTPUT_FILE//.img/.map}\" "
+            fi
             BUILD_CMD+="\"$OUTPUT_FILE\" \"$INPUT_DIR\""
 
             # mkfs.erofs has no built-in sparse support
@@ -198,6 +205,9 @@ BUILD_IMAGE_MKFS()
             BUILD_CMD+="-t \"$MOUNT_POINT\" "
             # Samsung uses a different default fixed timestamp for erofs/f2fs
             BUILD_CMD+="-T \"1640995200\" "
+            if $MAP_FILE; then
+                BUILD_CMD+="-B \"${OUTPUT_FILE//.img/.map}\" "
+            fi
             BUILD_CMD+="-L \"$MOUNT_POINT\" "
             # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_image.py#818
             BUILD_CMD+="--readonly "
@@ -265,8 +275,15 @@ PREPARE_SCRIPT()
     shift
 
     while [[ "$1" == "-"* ]]; do
-        if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+        if [[ "$1" == "--avb" ]] || [[ "$1" == "--no-avb" ]]; then
+            if [ ! "$AVB_SIGN" ]; then
+                [[ "$1" == "--avb" ]] && AVB_SIGN=true
+                [[ "$1" == "--no-avb" ]] && AVB_SIGN=false
+            fi
+        elif [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
             FORCE=true
+        elif [[ "$1" == "--generate-map" ]] || [[ "$1" == "-m" ]]; then
+            MAP_FILE=true
         elif [[ "$1" == "--inodes" ]] || [[ "$1" == "-i" ]]; then
             shift; INODES="$1"
             if ! [[ "$INODES" =~ ^[+-]?[0-9]+$ ]]; then
@@ -275,10 +292,12 @@ PREPARE_SCRIPT()
             elif [[ "$FS_TYPE" != "ext4" ]]; then
                 LOGW "Ignore inodes number flag as file system type is $FS_TYPE"
             fi
-        elif [[ "$1" == "--no-avb" ]]; then
-            AVB_SIGN=false
         elif [[ "$1" == "--output" ]] || [[ "$1" == "-o" ]]; then
             shift; OUTPUT_FILE="$1"
+            if [[ "$OUTPUT_FILE" != *".img" ]]; then
+                LOGE "Output file name must have \".img\" extension"
+                exit 1
+            fi
         elif [[ "$1" == "--partition-name" ]] || [[ "$1" == "-p" ]]; then
             shift; PARTITION="$1"
             if ! IS_VALID_PARTITION_NAME "$PARTITION"; then
@@ -300,6 +319,11 @@ PREPARE_SCRIPT()
 
         shift
     done
+
+    # TODO add a global build flag to disable AVB signing
+    if [ ! "$AVB_SIGN" ]; then
+        AVB_SIGN=true
+    fi
 
     INPUT_DIR="$1"
     if [ ! "$INPUT_DIR" ]; then
@@ -361,9 +385,10 @@ PREPARE_SCRIPT()
 PRINT_USAGE()
 {
     echo "Usage: build_fs_image <fs> [options] <dir> <file_context> <fs_config>" >&2
+    echo " --avb/--no-avb : Enables/disables AVB signing" >&2
     echo " -f, --force : Force delete output file" >&2
     echo " -i, --inodes : (ext4 only) Specify the extfs inodes count" >&2
-    echo " --no-avb : Disables AVB signing" >&2
+    echo " -m, --generate-map : Generates block map file" >&2
     echo " -o, --output : Specify the output image path, defaults to the parent input directory" >&2
     echo " -p, --partition-name : Specify the partition name, defaults to the input directory name" >&2
     echo " -s, --partition-size : Specify the partition size, defaults to the smallest possible" >&2
