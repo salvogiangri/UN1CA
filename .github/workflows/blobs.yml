@@ -85,7 +85,9 @@ jobs:
           cache: 'gradle'
 
       - name: Build dependencies
-        run: source ./buildenv.sh a52sxq
+        run: |
+          source ./buildenv.sh a52sxq
+          ./scripts/build_dependencies.sh
 
       - name: Update prebuilt blobs
         run: |

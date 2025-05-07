@@ -139,7 +139,6 @@ if ! echo "${TARGETS[@]}" | grep -w -- "$SELECTED_TARGET" &> /dev/null; then
 fi
 
 mkdir -p "$OUT_DIR"
-run_cmd build_dependencies || return 1
 [ -f "$OUT_DIR/config.sh" ] && unset $(sed "/Automatically/d" "$OUT_DIR/config.sh" | cut -d= -f1)
 "$SRC_DIR/scripts/internal/gen_config_file.sh" "$SELECTED_TARGET" || return 1
 set -o allexport; source "$OUT_DIR/config.sh"; set +o allexport
