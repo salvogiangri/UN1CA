@@ -87,7 +87,7 @@ READ_BYTES_AT()
         LOGE "Offset value not valid: $OFFSET"
         return 1
     fi
-    if ! [[ "$BYTES" =~ ^[+-]?[0-9]+$ ]] || [[ "$BYTES" -gt "$((FILE_SIZE-OFFSET))" ]]; then
+    if ! [[ "$BYTES" =~ ^[+-]?[0-9]+$ ]] || [[ "$BYTES" -gt "$((FILE_SIZE - OFFSET))" ]]; then
         LOGE "Bytes value not valid: $BYTES"
         return 1
     fi
@@ -99,7 +99,7 @@ READ_BYTES_AT()
 
     while [[ "$LENGTH" -gt 0 ]]; do
         echo -n "${READ:$LENGTH-2:2}"
-        LENGTH="$((LENGTH-2))"
+        LENGTH="$((LENGTH - 2))"
     done
     echo ""
 }

@@ -110,9 +110,8 @@ READ_AND_APPLY_PROPS()
     local PARTITION
 
     while IFS= read -r f; do
-        [[ "$f" == *"module.prop" ]] && continue
-
-        PARTITION=$(basename "$f" | sed "s/.prop//g")
+        PARTITION=$(basename "$f" | sed "s/.prop//")
+        IS_VALID_PARTITION_NAME "$PARTITION" || continue
 
         while read -r l; do
             [[ "$l" == "#"* ]] && continue
