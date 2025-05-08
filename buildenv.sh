@@ -15,9 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC1007,SC1091,SC2046,SC2164
-
 # [
+# shellcheck disable=SC1007,SC2164
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#18
 _GET_SRC_DIR()
 {
@@ -48,22 +47,35 @@ _GET_SRC_DIR()
 
 run_cmd()
 {
-    local CMD=$1
+    local CMD="$1"
 
-    local CMDS
-    CMDS="$(find "$SRC_DIR/scripts" -mindepth 1 -maxdepth 1 -type f -printf '%f\n' -o -type l -printf '%f\n' | sort | sed "s/.sh//g")"
-
-    if [ -z "$CMD" ] || [ "$CMD" = "--help" ] || [ "$CMD" = "-h" ]; then
-        echo -e "Available cmds:\n$CMDS"
-        return 1
-    elif ! echo "$CMDS" | grep -w -- "$CMD" &> /dev/null; then
-        echo    "\"$CMD\" is not valid." >&2
-        echo -e "Available cmds:\n$CMDS" >&2
-        return 1
-    else
+    if [ -x "$SRC_DIR/scripts/$CMD.sh" ]; then
         shift
-        "$SRC_DIR/scripts/$CMD.sh" "$@"
+        (set -o pipefail; "$SRC_DIR/scripts/$CMD.sh" "$@" |& tee \
+            >(sed -r -e "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" -e "/#/d" > "$(dirname "$WORK_DIR")/$CMD-$(date +%Y%m%d_%H%M%S).log"))
         return $?
+    else
+        local CMDS=()
+        while IFS= read -r f; do
+            CMDS+=("$f")
+        done < <(find "$SRC_DIR/scripts" -maxdepth 1 ! -type d -printf '%f\n' | sort | sed "s/.sh//")
+
+        if [ "$CMD" ]; then
+            if [[ "$CMD" == "--help" ]] || [[ "$CMD" == "-h" ]]; then
+                echo "Available cmds:" >&2
+                for c in "${CMDS[@]}"; do
+                    echo -e '\n\033[1;37m'"$c:"'\033[0m'
+                    "$SRC_DIR/scripts/$c.sh" --help
+                done
+                return 0
+            else
+                echo -e '\033[0;31m'"\"$CMD\" is not a valid cmd."'\033[0m' >&2
+            fi
+        fi
+
+        echo "Available cmds:" >&2
+        printf '%s\n' "${CMDS[@]}" >&2
+        return 1
     fi
 }
 
@@ -98,21 +110,18 @@ export OUT_DIR="$SRC_DIR/out"
 export TMP_DIR="$OUT_DIR/tmp"
 export ODIN_DIR="$OUT_DIR/odin"
 export FW_DIR="$OUT_DIR/fw"
-export APKTOOL_DIR="$OUT_DIR/apktool"
-export WORK_DIR="$OUT_DIR/work_dir"
 export TOOLS_DIR="$OUT_DIR/tools"
 export PATH="$TOOLS_DIR/bin:$PATH"
 
 TARGETS=()
-while IFS='' read -r t; do TARGETS+=("$t"); done < <(find "$SRC_DIR/target" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+while IFS= read -r t; do
+    TARGETS+=("$t")
+done < <(find "$SRC_DIR/target" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
 
 if [ "$#" -gt 1 ]; then
     echo "Usage: source buildenv.sh <target>" >&2
     echo "Available devices:" >&2
-    for t in "${TARGETS[@]}"
-    do
-        echo "$t" >&2
-    done
+    printf '%s\n' "${TARGETS[@]}" >&2
     return 1
 elif [ "$#" -ne 1 ]; then
     echo "No target specified. Please choose from the available devices below:"
@@ -128,18 +137,19 @@ else
     SELECTED_TARGET="$1"
 fi
 
-if ! echo "${TARGETS[@]}" | grep -w -- "$SELECTED_TARGET" &> /dev/null; then
+if [ ! -d "$SRC_DIR/target/$SELECTED_TARGET" ]; then
     echo "\"$SELECTED_TARGET\" is not a valid device." >&2
     echo "Available devices:" >&2
-    for t in "${TARGETS[@]}"
-    do
-        echo "$t" >&2
-    done
+    printf '%s\n' "${TARGETS[@]}" >&2
     return 1
 fi
 
+export APKTOOL_DIR="$OUT_DIR/target/$SELECTED_TARGET/apktool"
+export WORK_DIR="$OUT_DIR/target/$SELECTED_TARGET/work_dir"
+
 mkdir -p "$OUT_DIR"
-[ -f "$OUT_DIR/config.sh" ] && unset $(sed "/Automatically/d" "$OUT_DIR/config.sh" | cut -d= -f1)
+# shellcheck disable=SC2046
+[ -f "$OUT_DIR/config.sh" ] && unset $(sed "/Automatically/d" "$OUT_DIR/config.sh" | cut -d "=" -f 1)
 "$SRC_DIR/scripts/internal/gen_config_file.sh" "$SELECTED_TARGET" || return 1
 set -o allexport; source "$OUT_DIR/config.sh"; set +o allexport
 
