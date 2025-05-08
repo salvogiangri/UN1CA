@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (C) 2023 Salvo Giangreco
+# Copyright (C) 2025 Salvo Giangreco
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,89 +16,146 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -Eeuo pipefail
-START=$SECONDS
-
 # [
-COMMIT_HASH="$(git rev-parse HEAD)"
-CONFIG_HASH="$(sed '/ROM_BUILD_TIMESTAMP/d' "$OUT_DIR/config.sh" | sha1sum | cut -d " " -f 1)"
-WORK_DIR_HASH="$(echo -n "$COMMIT_HASH$CONFIG_HASH" | sha1sum | cut -d " " -f 1)"
-# ]
+source "$SRC_DIR/scripts/utils/build_utils.sh"
 
 FORCE=false
 BUILD_ROM=false
 BUILD_ZIP=true
 
-while [ "$#" != 0 ]; do
-    case "$1" in
-        "-f" | "--force")
+START_TIME="$(date +%s)"
+
+SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
+TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
+
+GET_WORK_DIR_HASH()
+{
+    find "$SRC_DIR/unica" "$SRC_DIR/target/$TARGET_CODENAME" -type f -print0 | \
+        sort -z | xargs -0 sha1sum | sha1sum | cut -d " " -f 1
+}
+
+PREPARE_SCRIPT()
+{
+    while [ "$#" != 0 ]; do
+        if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
             FORCE=true
-            ;;
-        "--no-rom-zip")
+        elif [[ "$1" == "--no-rom-zip" ]]; then
             BUILD_ZIP=false
-            ;;
-        *)
-            echo "Usage: make_rom [options]"
-            echo " -f, --force : Force build"
-            echo " --no-rom-zip : Do not build ROM zip"
+        else
+            if [[ "$1" == "-"* ]]; then
+                LOGE "Unknown option: $1"
+            fi
+            PRINT_USAGE
             exit 1
-            ;;
-    esac
+        fi
 
-    shift
-done
+        shift
+    done
+}
 
-if [ -f "$WORK_DIR/.completed" ]; then
-    if [[ "$(cat "$WORK_DIR/.completed")" != "$WORK_DIR_HASH" ]] && ! $FORCE; then
-        echo "Changes in config.sh/the repo have been detected."
-        echo "Please clean your work dir or run the cmd with \"--force\"."
-        exit 1
+PRINT_USAGE()
+{
+    echo "Usage: make_rom [options]" >&2
+    echo " -f, --force : Force ROM build" >&2
+    echo " --no-rom-zip : Do not build ROM zip" >&2
+}
+
+ON_EXIT()
+{
+    local EXIT_CODE="$?"
+    local END_TIME
+    local ESTIMATED
+
+    END_TIME="$(date +%s)"
+    ESTIMATED="$((END_TIME - START_TIME))"
+
+    if [ "$EXIT_CODE" != "0" ]; then
+        echo -n -e '\n\033[1;31m'"Build failed "
+    else
+        echo -n -e '\n\033[1;32m'"Build completed "
     fi
-else
-    BUILD_ROM=true
-fi
+    echo -e "in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."'\033[0m\n'
+}
+# ]
+
+PREPARE_SCRIPT "$@"
 
 if $FORCE; then
     BUILD_ROM=true
+else
+    if [ -f "$WORK_DIR/.completed" ]; then
+        if [[ "$(cat "$WORK_DIR/.completed")" == "$(GET_WORK_DIR_HASH)" ]]; then
+            LOGW "No changes have been detected in the build environment."
+            BUILD_ROM=false
+        else
+            LOGW "Changes detected in the build environment."
+            BUILD_ROM=true
+        fi
+    else
+        BUILD_ROM=true
+    fi
 fi
 
+trap 'ON_EXIT' EXIT
+trap 'echo' INT
+
 if $BUILD_ROM; then
-    NEED_FW_DOWNLOAD=false
-    bash "$SRC_DIR/scripts/extract_fw.sh" &> /dev/null || NEED_FW_DOWNLOAD=true
-    if $NEED_FW_DOWNLOAD; then
-        bash "$SRC_DIR/scripts/download_fw.sh"
-        bash "$SRC_DIR/scripts/extract_fw.sh"
+    [ -d "$APKTOOL_DIR" ] && rm -rf "$APKTOOL_DIR"
+    [ -f "$WORK_DIR/.completed" ] && rm -f "$WORK_DIR/.completed"
+
+    if [ ! -f "$FW_DIR/$SOURCE_FIRMWARE_PATH/.extracted" ] || [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/.extracted" ]; then
+        if [ ! -f "$ODIN_DIR/$SOURCE_FIRMWARE_PATH/.downloaded" ] || [ ! -f "$ODIN_DIR/$TARGET_FIRMWARE_PATH/.downloaded" ]; then
+            LOG_STEP_IN true "Downloading required firmwares"
+            "$SRC_DIR/scripts/download_fw.sh" || exit 1
+            LOG_STEP_OUT
+        fi
+        LOG_STEP_IN true "Extracting required firmwares"
+        "$SRC_DIR/scripts/extract_fw.sh" || exit 1
+        LOG_STEP_OUT
     fi
 
-    echo -e "- Creating work dir..."
-    bash "$SRC_DIR/scripts/internal/create_work_dir.sh"
+    LOG_STEP_IN true "Creating work dir"
+    "$SRC_DIR/scripts/internal/create_work_dir.sh" || exit 1
+    LOG_STEP_OUT
 
-    echo -e "\n- Applying ROM patches..."
-    bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/patches"
-    [[ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]] \
-        && bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/target/$TARGET_CODENAME/patches"
+    if [ -d "$SRC_DIR/unica/patches" ]; then
+        LOG_STEP_IN true "Applying ROM patches"
+        "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/patches" || exit 1
+        LOG_STEP_OUT
+    fi
+    if [ -d "$SRC_DIR/target/$TARGET_CODENAME/patches" ]; then
+        LOG_STEP_IN true "Applying device patches"
+        "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/target/$TARGET_CODENAME/patches" || exit 1
+        LOG_STEP_OUT
+    fi
 
-    echo -e "\n- Applying ROM mods..."
-    bash "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/mods"
+    if [ -d "$SRC_DIR/unica/mods" ]; then
+        LOG_STEP_IN true "Applying ROM mods"
+        "$SRC_DIR/scripts/internal/apply_modules.sh" "$SRC_DIR/unica/mods" || exit 1
+        LOG_STEP_OUT
+    fi
 
-    echo -e "\n- Recompiling APKs/JARs..."
-    while read -r i; do
-        bash "$SRC_DIR/scripts/apktool.sh" b "$i"
-    done <<< "$(find "$OUT_DIR/apktool" -type d \( -name "*.apk" -o -name "*.jar" \) -printf "%p\n" | sed "s.$OUT_DIR/apktool..")"
+    if [ -d "$OUT_DIR/apktool" ]; then
+        LOG_STEP_IN true "Building APKs/JARs"
+        while IFS= read -r f; do
+            f="${f/$APKTOOL_DIR\//}"
+            PARTITION="$(cut -d "/" -f 1 -s <<< "$f")"
+            if [[ "$PARTITION" == "system" ]]; then
+                "$SRC_DIR/scripts/apktool.sh" b "system" "$f" || exit 1
+            else
+                "$SRC_DIR/scripts/apktool.sh" b "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" || exit 1
+            fi
+        done < <(find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \))
+        LOG_STEP_OUT
+    fi
 
-    echo ""
-    echo -n "$WORK_DIR_HASH" > "$WORK_DIR/.completed"
-else
-    echo -e "- Nothing to do in work dir.\n"
+    echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"
 fi
 
 if $BUILD_ZIP; then
-    echo "- Building ROM zip..."
-    bash "$SRC_DIR/scripts/internal/build_flashable_zip.sh"
-    echo ""
+    LOG_STEP_IN true "Creating zip"
+    "$SRC_DIR/scripts/internal/build_flashable_zip.sh" || exit 1
+    LOG_STEP_OUT
 fi
-
-ESTIMATED=$((SECONDS-START))
-echo "Build completed in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."
 
 exit 0
