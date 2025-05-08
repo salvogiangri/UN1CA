@@ -45,7 +45,7 @@ BUILD()
         local DEX_API_LEVEL
         local DEX_FILENAME
 
-        for f in "$OUTPUT_PATH/smali"*; do
+        while IFS= read -r d; do
             DEX_API_LEVEL="$(cat "$OUTPUT_PATH/../dex_api_version" 2> /dev/null)"
 
             # https://github.com/google/smali/blob/3.0.9/dexlib2/src/main/java/com/android/tools/smali/dexlib2/VersionMap.java#L55-L79
@@ -54,14 +54,14 @@ BUILD()
                 exit 1
             fi
 
-            if [[ "$f" == *"smali" ]]; then
+            if [[ "$d" == *"smali" ]]; then
                 DEX_FILENAME="classes.dex"
             else
-                DEX_FILENAME="$(basename "${f//smali_/}").dex"
+                DEX_FILENAME="$(basename "${d//smali_/}").dex"
             fi
 
-            EVAL "smali a -a \"$DEX_API_LEVEL\" -j \"$(nproc)\" -o \"$OUTPUT_PATH/$DEX_FILENAME\" \"$f\"" &
-        done
+            EVAL "smali a -a \"$DEX_API_LEVEL\" -j \"$(nproc)\" -o \"$OUTPUT_PATH/$DEX_FILENAME\" \"$d\"" &
+        done < <(find "$OUTPUT_PATH" -maxdepth 1 -type d -name "smali*")
 
         # shellcheck disable=SC2046
         wait $(jobs -p) || exit 1
@@ -74,7 +74,7 @@ BUILD()
     # Build APK with --shorten-resource-paths (https://developer.android.com/tools/aapt2#optimize_options)
     EVAL "apktool b -j \"$(nproc)\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" -srp \"$OUTPUT_PATH\"" || exit 1
 
-    [ -f "$OUTPUT_PATH/classes.dex" ] && rm "$OUTPUT_PATH/"*.dex
+    find "$OUTPUT_PATH" -maxdepth 1 -type f -name "*.dex" -delete
 
     local FILE_NAME
     FILE_NAME="$(basename "$INPUT_FILE")"
@@ -136,7 +136,7 @@ DECODE()
         local DEX_API_LEVEL
         local SMALI_OUT
 
-        for f in "$OUTPUT_PATH/"*.dex; do
+        while IFS= read -r f; do
             DEX_API_LEVEL="$(DEX_TO_API "$f")"
             [ "$DEX_API_LEVEL" ] || exit 1
             echo -n "$DEX_API_LEVEL" > "$OUTPUT_PATH/../dex_api_version"
@@ -153,12 +153,12 @@ DECODE()
             # - Use .locals directive instead of the .registers one
             # - Use a sequential numbering scheme for labels
             EVAL "baksmali d -a \"$DEX_API_LEVEL\" --ac false --di false -j \"$(nproc)\" -l -o \"$OUTPUT_PATH/$SMALI_OUT\" --sl \"$f\"" &
-        done
+        done < <(find "$OUTPUT_PATH" -maxdepth 1 -type f -name "*.dex")
 
         # shellcheck disable=SC2046
         wait $(jobs -p) || exit 1
 
-        rm -f "$OUTPUT_PATH/"*.dex
+        find "$OUTPUT_PATH" -maxdepth 1 -type f -name "*.dex" -delete
     fi
 
     # https://github.com/iBotPeaches/Apktool/issues/3615
