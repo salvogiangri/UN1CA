@@ -130,7 +130,7 @@ EXTRACT_OS_PARTITIONS()
         [ -f "$FW_DIR/${MODEL}_${CSC}/$f" ] || continue
 
         if ! sudo -n -v &> /dev/null; then
-            LOG "$(tput setaf 3)! Asking user for sudo password$(tput sgr0)"
+            LOG "\033[0;33m! Asking user for sudo password\033[0m"
             if ! sudo -v 2> /dev/null; then
                 LOGE "Root permissions are required to unpack OS partitions"
                 exit 1
@@ -382,13 +382,13 @@ for i in "${FIRMWARES[@]}"; do
             if ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$LATEST_FIRMWARE"; then
                 if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
                     if ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")"; then
-                        LOG "$(tput setaf 3)! A newer firmware has been downloaded, use --force flag if you want to overwrite it$(tput sgr0)"
+                        LOG "\033[0;33m! A newer firmware has been downloaded, use --force flag if you want to overwrite it\033[0m"
                     fi
                 else
-                    LOG "$(tput setaf 3)! A newer firmware is available for download$(tput sgr0)"
+                    LOG "\033[0;33m! A newer firmware is available for download\033[0m"
                 fi
             else
-                LOG "$(tput setaf 3)! This firmware has already been extracted$(tput sgr0)"
+                LOG "\033[0;33m! This firmware has already been extracted\033[0m"
             fi
 
             LOG_STEP_OUT; LOG_STEP_OUT
@@ -398,7 +398,7 @@ for i in "${FIRMWARES[@]}"; do
 
     # Abort if firmware has not been downloaded
     if [ ! -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
-        LOG "$(tput setaf 1)! The firmware has not been downloaded$(tput sgr0)"
+        LOG "\033[0;31m! The firmware has not been downloaded\033[0m"
         exit 1
     fi
 
@@ -411,10 +411,10 @@ for i in "${FIRMWARES[@]}"; do
     AP_TAR="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "AP_$(cut -d "/" -f 1 -s <<< "$DOWNLOADED_FIRMWARE")*.md5" | sort -r | head -n 1)"
 
     if [ ! "$BL_TAR" ]; then
-        LOG "$(tput setaf 1)! No BL tar found$(tput sgr0)"
+        LOG "\033[0;31m! No BL tar found\033[0m"
         exit 1
     elif [ ! "$AP_TAR" ]; then
-        LOG "$(tput setaf 1)! No AP tar found$(tput sgr0)"
+        LOG "\033[0;31m! No AP tar found\033[0m"
         exit 1
     fi
 

@@ -59,8 +59,8 @@ LOGE()
 {
     local RED
     local RESET
-    RED="$(tput setaf 1)"
-    RESET="$(tput sgr0)"
+    RED="\033[0;31m"
+    RESET="\033[0m"
 
     echo -e "${RED}$(_GET_CALLER_INFO)${1}${RESET}" >&2
 }
@@ -71,8 +71,8 @@ LOGW()
 {
     local YELLOW
     local RESET
-    YELLOW="$(tput setaf 3)"
-    RESET="$(tput sgr0)"
+    YELLOW="\033[0;33m"
+    RESET="\033[0m"
 
     echo -e "${YELLOW}$(_GET_CALLER_INFO)${1}${RESET}" >&2
 }
@@ -85,10 +85,10 @@ LOG_STEP_IN()
     local RESET
 
     if [[ "$1" == "true" ]]; then
-        BOLD="$(tput bold)"
+        BOLD="\033[1;37m"
         shift
     fi
-    RESET="$(tput sgr0)"
+    RESET="\033[0m"
 
     if [ "$1" ]; then
         LOG "${BOLD}${1}${RESET}"

@@ -106,14 +106,14 @@ VERIFY_ODIN_PACKAGES()
 
         STORED_HASH="$(tail -c "$LENGTH" "$f" | cut -d " " -f 1 -s)"
         if [ ! "$STORED_HASH" ] || [[ "${#STORED_HASH}" != "32" ]]; then
-            LOG "$(tput setaf 1)! Expected hash could not be parsed$(tput sgr0)"
+            LOG "\033[0;31m! Expected hash could not be parsed\033[0m"
             exit 1
         fi
 
         CALCULATED_HASH="$(head -c-$LENGTH "$f" | md5sum | cut -d " " -f 1 -s)"
 
         if [[ "$STORED_HASH" != "$CALCULATED_HASH" ]]; then
-            LOG "$(tput setaf 1)! File is damaged$(tput sgr0)"
+            LOG "\033[0;31m! File is damaged\033[0m"
             exit 1
         fi
 
@@ -144,7 +144,7 @@ for i in "${FIRMWARES[@]}"; do
         # Skip if firmware has been extracted and equal/newer than the one in FUS
         if [ -f "$FW_DIR/${MODEL}_${CSC}/.extracted" ]; then
             if COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$LATEST_FIRMWARE"; then
-                LOG "$(tput setaf 3)! This firmware has already been extracted, skipping$(tput sgr0)"
+                LOG "\033[0;33m! This firmware has already been extracted, skipping\033[0m"
                 LOG_STEP_OUT; LOG_STEP_OUT
                 continue
             fi
@@ -153,9 +153,9 @@ for i in "${FIRMWARES[@]}"; do
         # Skip if firmware has already been downloaded
         if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
             if ! COMPARE_SEC_BUILD_VERSION "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")" "$LATEST_FIRMWARE"; then
-                LOG "$(tput setaf 3)! A newer firmware is available for download, use --force flag if you want to overwrite it$(tput sgr0)"
+                LOG "\033[0;33m! A newer firmware is available for download, use --force flag if you want to overwrite it\033[0m"
             else
-                LOG "$(tput setaf 3)! This firmware has already been downloaded$(tput sgr0)"
+                LOG "\033[0;33m! This firmware has already been downloaded\033[0m"
             fi
             LOG_STEP_OUT; LOG_STEP_OUT
             continue
@@ -174,7 +174,7 @@ for i in "${FIRMWARES[@]}"; do
 
     ZIP_FILE="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "*.zip" | sort -r | head -n 1)"
     if [ ! "$ZIP_FILE" ] || [ ! -f "$ZIP_FILE" ]; then
-        LOG "$(tput setaf 1)! Download failed$(tput sgr0)"
+        LOG "\033[0;31m! Download failed\033[0m"
         exit 1
     fi
 
