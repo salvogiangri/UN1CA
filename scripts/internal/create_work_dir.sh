@@ -17,7 +17,7 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/build_utils.sh"
+source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"

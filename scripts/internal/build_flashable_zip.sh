@@ -17,7 +17,7 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/build_utils.sh"
+source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 TMP_DIR="$OUT_DIR/zip"
 
