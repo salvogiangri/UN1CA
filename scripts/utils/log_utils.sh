@@ -18,7 +18,7 @@
 # [
 _GET_CALLER_INFO()
 {
-    if [ "${FUNCNAME[2]}" ] && [[ "${FUNCNAME[2]}" != "main" ]]; then
+    if [[ "${FUNCNAME[2]}" != "main" ]]; then
         echo -n "("
         if [ "${BASH_SOURCE[3]}" ]; then
             echo -n "${BASH_SOURCE[3]//$SRC_DIR\//}:"
@@ -27,6 +27,15 @@ _GET_CALLER_INFO()
             echo -n "${BASH_LINENO[2]}:"
         fi
         echo -n "${FUNCNAME[2]}) "
+    else
+        echo -n "("
+        if [ "${BASH_SOURCE[2]}" ]; then
+            echo -n "${BASH_SOURCE[2]//$SRC_DIR\//}:"
+        fi
+        if [ "${BASH_LINENO[1]}" ]; then
+            echo -n "${BASH_LINENO[1]}"
+        fi
+        echo -n ") "
     fi
 }
 # ]
