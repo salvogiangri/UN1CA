@@ -201,9 +201,9 @@ if $ANDROID_TOOLS; then
         "cp -a \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/bin/mkdtboimg\""
         "mkdir -p \"$TOOLS_DIR/bin/gki\""
         "cp -a \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/bin/gki/generate_gki_certificate.py\""
-        "ln -sf \"$TOOLS_DIR/mke2fs.android\" \"$TOOLS_DIR/bin/mke2fs\""
+        "ln -sf \"$TOOLS_DIR/bin/mke2fs.android\" \"$TOOLS_DIR/bin/mke2fs\""
         "cp -a \"../ext4_utils/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/bin/mkuserimg_mke2fs.py\""
-        "ln -sf \"$TOOLS_DIR/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/bin/mkuserimg_mke2fs\""
+        "ln -sf \"$TOOLS_DIR/bin/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/bin/mkuserimg_mke2fs\""
         "cp -a \"../ext4_utils/mke2fs.conf\" \"$TOOLS_DIR/bin/mke2fs.conf\""
         "cp -a \"../f2fs_utils/mkf2fsuserimg.sh\" \"$TOOLS_DIR/bin/mkf2fsuserimg\""
     )
