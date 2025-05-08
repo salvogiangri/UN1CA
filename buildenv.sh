@@ -100,8 +100,8 @@ export ODIN_DIR="$OUT_DIR/odin"
 export FW_DIR="$OUT_DIR/fw"
 export APKTOOL_DIR="$OUT_DIR/apktool"
 export WORK_DIR="$OUT_DIR/work_dir"
-export TOOLS_DIR="$OUT_DIR/tools/bin"
-export PATH="$TOOLS_DIR:$PATH"
+export TOOLS_DIR="$OUT_DIR/tools"
+export PATH="$TOOLS_DIR/bin:$PATH"
 
 TARGETS=()
 while IFS='' read -r t; do TARGETS+=("$t"); done < <(find "$SRC_DIR/target" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)

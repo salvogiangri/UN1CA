@@ -27,7 +27,7 @@ PRINT_USAGE()
     echo " - fw ($FW_DIR)" >&2
     echo " - apktool ($APKTOOL_DIR)" >&2
     echo " - work_dir ($WORK_DIR)" >&2
-    echo " - tools ($(dirname "$TOOLS_DIR"))" >&2
+    echo " - tools ($TOOLS_DIR))" >&2
 }
 # ]
 
@@ -61,7 +61,7 @@ while [ "$#" != 0 ]; do
             ;;
         "tools")
             LOG "- Cleaning dependencies dir..."
-            rm -rf "$(dirname "$TOOLS_DIR")"
+            rm -rf "$TOOLS_DIR"
             git submodule foreach --recursive "git clean -f -d -x" &> /dev/null
             ;;
         *)

@@ -53,7 +53,7 @@ CHECK_TOOLS()
 
     local EXISTS=true
     for i in "${EXECUTABLES[@]}"; do
-        [ ! -f "$TOOLS_DIR/$i" ] && EXISTS=false
+        [ ! -f "$TOOLS_DIR/bin/$i" ] && EXISTS=false
     done
 
     $EXISTS
@@ -124,9 +124,9 @@ else
     source "$SRC_DIR/scripts/utils/log_utils.sh" || exit 1
 fi
 OUT_DIR="$SRC_DIR/out"
-TOOLS_DIR="$OUT_DIR/tools/bin"
+TOOLS_DIR="$OUT_DIR/tools"
 
-mkdir -p "$TOOLS_DIR"
+mkdir -p "$TOOLS_DIR/bin"
 
 ANDROID_TOOLS=true
 APKTOOL=true
@@ -193,19 +193,19 @@ if $ANDROID_TOOLS; then
         "git submodule foreach --recursive \"git am --abort || true\""
         "cmake -B \"build\" $(GET_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=ON -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
         "make -C \"build\" -j\"$(nproc)\""
-        "find \"build/vendor\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
-        "cp -a \"vendor/avb/avbtool.py\" \"$TOOLS_DIR/avbtool\""
-        "cp -a \"vendor/mkbootimg/mkbootimg.py\" \"$TOOLS_DIR/mkbootimg\""
-        "cp -a \"vendor/mkbootimg/repack_bootimg.py\" \"$TOOLS_DIR/repack_bootimg\""
-        "cp -a \"vendor/mkbootimg/unpack_bootimg.py\" \"$TOOLS_DIR/unpack_bootimg\""
-        "cp -a \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/mkdtboimg\""
-        "mkdir -p \"$TOOLS_DIR/gki\""
-        "cp -a \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/gki/generate_gki_certificate.py\""
-        "ln -sf \"$TOOLS_DIR/mke2fs.android\" \"$TOOLS_DIR/mke2fs\""
-        "cp -a \"../ext4_utils/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/mkuserimg_mke2fs.py\""
-        "ln -sf \"$TOOLS_DIR/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/mkuserimg_mke2fs\""
-        "cp -a \"../ext4_utils/mke2fs.conf\" \"$TOOLS_DIR/mke2fs.conf\""
-        "cp -a \"../f2fs_utils/mkf2fsuserimg.sh\" \"$TOOLS_DIR/mkf2fsuserimg\""
+        "find \"build/vendor\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR/bin\" \;"
+        "cp -a \"vendor/avb/avbtool.py\" \"$TOOLS_DIR/bin/avbtool\""
+        "cp -a \"vendor/mkbootimg/mkbootimg.py\" \"$TOOLS_DIR/bin/mkbootimg\""
+        "cp -a \"vendor/mkbootimg/repack_bootimg.py\" \"$TOOLS_DIR/bin/repack_bootimg\""
+        "cp -a \"vendor/mkbootimg/unpack_bootimg.py\" \"$TOOLS_DIR/bin/unpack_bootimg\""
+        "cp -a \"vendor/libufdt/utils/src/mkdtboimg.py\" \"$TOOLS_DIR/bin/mkdtboimg\""
+        "mkdir -p \"$TOOLS_DIR/bin/gki\""
+        "cp -a \"vendor/mkbootimg/gki/generate_gki_certificate.py\" \"$TOOLS_DIR/bin/gki/generate_gki_certificate.py\""
+        "ln -sf \"$TOOLS_DIR/mke2fs.android\" \"$TOOLS_DIR/bin/mke2fs\""
+        "cp -a \"../ext4_utils/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/bin/mkuserimg_mke2fs.py\""
+        "ln -sf \"$TOOLS_DIR/mkuserimg_mke2fs.py\" \"$TOOLS_DIR/bin/mkuserimg_mke2fs\""
+        "cp -a \"../ext4_utils/mke2fs.conf\" \"$TOOLS_DIR/bin/mke2fs.conf\""
+        "cp -a \"../f2fs_utils/mkf2fsuserimg.sh\" \"$TOOLS_DIR/bin/mkf2fsuserimg\""
     )
 
     BUILD "android-tools" "$SRC_DIR/external/android-tools" "${ANDROID_TOOLS_CMDS[@]}"
@@ -215,8 +215,8 @@ if $APKTOOL; then
         "git reset --hard"
         "git apply \"$SRC_DIR/external/patches/apktool/0001-feat-support-aapt-optimization.patch\""
         "./gradlew build shadowJar"
-        "cp -a \"scripts/linux/apktool\" \"$TOOLS_DIR\""
-        "cp -a \"brut.apktool/apktool-cli/build/libs/apktool-cli.jar\" \"$TOOLS_DIR/apktool.jar\""
+        "cp -a \"scripts/linux/apktool\" \"$TOOLS_DIR/bin\""
+        "cp -a \"brut.apktool/apktool-cli/build/libs/apktool-cli.jar\" \"$TOOLS_DIR/bin/apktool.jar\""
     )
 
     BUILD "apktool" "$SRC_DIR/external/apktool" "${APKTOOL_CMDS[@]}"
@@ -225,22 +225,22 @@ if $EROFS_UTILS; then
     EROFS_UTILS_CMDS=(
         "cmake -S \"build/cmake\" -B \"out\" $(GET_CMAKE_FLAGS) -DRUN_ON_WSL=\"$(IS_WSL)\" -DENABLE_FULL_LTO=\"ON\" -DMAX_BLOCK_SIZE=\"4096\""
         "make -C \"out\" -j\"$(nproc)\""
-        "find \"out/erofs-tools\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
+        "find \"out/erofs-tools\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR/bin\" \;"
     )
 
     BUILD "erofs-utils" "$SRC_DIR/external/erofs-utils" "${EROFS_UTILS_CMDS[@]}"
 fi
 if $IMG2SDAT; then
     IMG2SDAT_CMDS=(
-        "find \".\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR\" \;"
+        "find \".\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR/bin\" \;"
     )
 
     BUILD "img2sdat" "$SRC_DIR/external/img2sdat" "${IMG2SDAT_CMDS[@]}"
 fi
 if $SAMLOADER; then
     SAMLOADER_CMDS=(
-        "python3 -m venv \"$TOOLS_DIR/../venv\""
-        "source \"$TOOLS_DIR/../venv/bin/activate\"; pip3 install ."
+        "python3 -m venv \"$TOOLS_DIR/venv\""
+        "source \"$TOOLS_DIR/venv/bin/activate\"; pip3 install ."
     )
 
     BUILD "samloader" "$SRC_DIR/external/samloader" "${SAMLOADER_CMDS[@]}"
@@ -248,8 +248,8 @@ fi
 if $SIGNAPK; then
     SIGNAPK_CMDS=(
         "./gradlew build"
-        "cp -a \"scripts/linux/signapk\" \"$TOOLS_DIR\""
-        "cp -a \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/signapk.jar\""
+        "cp -a \"scripts/linux/signapk\" \"$TOOLS_DIR/bin\""
+        "cp -a \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/bin/signapk.jar\""
     )
 
     BUILD "signapk" "$SRC_DIR/external/signapk" "${SIGNAPK_CMDS[@]}"
@@ -257,10 +257,10 @@ fi
 if $SMALI; then
     SMALI_CMDS=(
         "./gradlew assemble baksmali:fatJar smali:fatJar"
-        "cp -a \"scripts/baksmali\" \"$TOOLS_DIR\""
-        "cp -a \"scripts/smali\" \"$TOOLS_DIR\""
-        "cp -a \"baksmali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/smali-baksmali.jar\""
-        "cp -a \"smali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/android-smali.jar\""
+        "cp -a \"scripts/baksmali\" \"$TOOLS_DIR/bin\""
+        "cp -a \"scripts/smali\" \"$TOOLS_DIR/bin\""
+        "cp -a \"baksmali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/bin/smali-baksmali.jar\""
+        "cp -a \"smali/build/libs/\"*-dev-fat.jar \"$TOOLS_DIR/bin/android-smali.jar\""
     )
 
     BUILD "baksmali/smali" "$SRC_DIR/external/smali" "${SMALI_CMDS[@]}"
