@@ -85,10 +85,10 @@ if $FORCE; then
 else
     if [ -f "$WORK_DIR/.completed" ]; then
         if [[ "$(cat "$WORK_DIR/.completed")" == "$(GET_WORK_DIR_HASH)" ]]; then
-            LOGW "No changes have been detected in the build environment."
+            LOGW "No changes have been detected in the build environment"
             BUILD_ROM=false
         else
-            LOGW "Changes detected in the build environment."
+            LOGW "Changes detected in the build environment"
             BUILD_ROM=true
         fi
     else
@@ -137,15 +137,20 @@ if $BUILD_ROM; then
 
     if [ -d "$OUT_DIR/apktool" ]; then
         LOG_STEP_IN true "Building APKs/JARs"
+
         while IFS= read -r f; do
             f="${f/$APKTOOL_DIR\//}"
             PARTITION="$(cut -d "/" -f 1 -s <<< "$f")"
             if [[ "$PARTITION" == "system" ]]; then
-                "$SRC_DIR/scripts/apktool.sh" b "system" "$f" || exit 1
+                "$SRC_DIR/scripts/apktool.sh" b "system" "$f" &
             else
-                "$SRC_DIR/scripts/apktool.sh" b "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" || exit 1
+                "$SRC_DIR/scripts/apktool.sh" b "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" &
             fi
         done < <(find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \))
+
+        # shellcheck disable=SC2046
+        wait $(jobs -p) || exit 1
+
         LOG_STEP_OUT
     fi
 
