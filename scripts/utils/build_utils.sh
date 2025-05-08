@@ -106,9 +106,14 @@ READ_BYTES_AT()
 
 # [
 DEPENDENCIES=(
-    "brotli" "cmake" "clang" "go" "lz4"
-    "make" "java" "perl" "pcre2test"
-    "protoc" "python3" "zstd"
+    "awk" "basename" "bc" "brotli" "cat" "clang" "cmake"
+    "cmp" "cp" "curl" "cut" "cwebp" "dd" "dirname" "du"
+    "ffmpeg" "file" "getfattr" "git" "go" "grep" "head"
+    "java" "ln" "lz4" "make" "md5sum" "mkdir" "mount"
+    "mv" "openssl" "pcre2test" "perl" "protoc" "python3"
+    "rm" "sed" "sha1sum" "sort" "stat" "tail" "tar" "touch"
+    "tr" "truncate" "umount" "unzip" "wc" "whoami" "xargs"
+    "xxd" "zip" "zstd"
 )
 MISSING=()
 for d in "${DEPENDENCIES[@]}"; do
@@ -118,9 +123,7 @@ for d in "${DEPENDENCIES[@]}"; do
 done
 if [ "${#MISSING[@]}" -ne 0 ]; then
     echo -e '\033[1;31m'"The following dependencies are missing from your system:"'\033[0;31m' >&2
-    for d in "${MISSING[@]}"; do
-        echo -n "$d " >&2
-    done
+    printf '%s ' "${MISSING[@]}" >&2
     echo -e '\033[0m' >&2
     return 1
 fi
@@ -128,7 +131,7 @@ unset DEPENDENCIES MISSING
 
 if ! "$SRC_DIR/external/make.sh" --check-tools; then
     LOG_STEP_IN true "Building required tools..."
-    "$SRC_DIR/external/make.sh"
+    "$SRC_DIR/external/make.sh" || return 1
     LOG_STEP_OUT
 fi
 # ]
