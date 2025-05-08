@@ -19,7 +19,8 @@
 # [
 source "$SRC_DIR/scripts/utils/build_utils.sh"
 
-FRAMEWORK_DIR="$APKTOOL_DIR/bin/fw"
+FRAMEWORK_DIR="$TOOLS_DIR/apktool/framework"
+FRAMEWORK_TAG="$(GET_PROP "system" "ro.build.version.incremental")"
 
 FORCE=false
 PARTITION=""
@@ -71,7 +72,7 @@ BUILD()
     cp -a "$OUTPUT_PATH/original/META-INF" "$OUTPUT_PATH/build/apk/META-INF"
 
     # Build APK with --shorten-resource-paths (https://developer.android.com/tools/aapt2#optimize_options)
-    EVAL "apktool b -j \"$(nproc)\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
+    EVAL "apktool b -j \"$(nproc)\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" -srp \"$OUTPUT_PATH\"" || exit 1
 
     [ -f "$OUTPUT_PATH/classes.dex" ] && rm "$OUTPUT_PATH/"*.dex
 
@@ -126,7 +127,7 @@ DECODE()
     fi
 
     LOG "- Decoding ${INPUT_FILE//$WORK_DIR/}"
-    EVAL "apktool d -j \"$(nproc)\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -s \"$INPUT_FILE\"" || exit 1
+    EVAL "apktool d -j \"$(nproc)\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" -s \"$INPUT_FILE\"" || exit 1
 
     # DEX format version might not be matching minSdkVersion, currently we handle
     # baksmali manually as apktool will by default use minSdkVersion when available
@@ -276,14 +277,12 @@ ACTION=""
 
 PREPARE_SCRIPT "$@"
 
-if [ ! -d "$FRAMEWORK_DIR" ]; then
-    if [ -f "$WORK_DIR/system/system/framework/framework-res.apk" ]; then
-        LOG "- Installing framework-res.apk"
-        EVAL "apktool if -p \"$FRAMEWORK_DIR\" \"$WORK_DIR/system/system/framework/framework-res.apk\"" || exit 1
-    else
-        LOGE "File not found: /system/system/framework/framework-res.apk, please set up your work_dir first."
-        exit 1
-    fi
+if [ ! "$FRAMEWORK_TAG" ]; then
+    LOGE "Work dir needs to be set up before using this script"
+    exit 1
+elif [ ! -f "$FRAMEWORK_DIR/1-$FRAMEWORK_TAG.apk" ]; then
+    LOGW "framework-res.apk for \"$FRAMEWORK_TAG\" not found, installing"
+    EVAL "apktool if -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" \"$WORK_DIR/system/system/framework/framework-res.apk\"" || exit 1
 fi
 
 case "$ACTION" in
