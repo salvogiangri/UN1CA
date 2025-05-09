@@ -84,9 +84,10 @@ APPLY_SMALI_PATCHES()
         return 1
     fi
 
-    [[ "$PARTITION" != "system" ]] && TARGET="$(cut -d "/" -f 2- -s <<< "$TARGET")"
-
     while IFS= read -r p; do
+        local FILE="$TARGET"
+        [[ "$PARTITION" != "system" ]] && FILE="$(cut -d "/" -f 2- -s <<< "$FILE")"
+
         # TODO remove
         if [[ "$p" == *"0000-"* ]]; then
             if $ROM_IS_OFFICIAL; then
@@ -96,9 +97,7 @@ APPLY_SMALI_PATCHES()
             fi
         fi
 
-        (set +e; APPLY_PATCH "$PARTITION" "$TARGET" "$p")
-        # shellcheck disable=SC2181
-        [[ "$?" != 0 ]] && return 1
+        APPLY_PATCH "$PARTITION" "$FILE" "$p"
     done < <(find "$PATCHES_PATH/$TARGET" -type f -name "*.patch" | sort -n)
 
     return 0
