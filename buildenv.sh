@@ -147,7 +147,7 @@ fi
 export APKTOOL_DIR="$OUT_DIR/target/$SELECTED_TARGET/apktool"
 export WORK_DIR="$OUT_DIR/target/$SELECTED_TARGET/work_dir"
 
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUT_DIR/target/$SELECTED_TARGET"
 # shellcheck disable=SC2046
 [ -f "$OUT_DIR/config.sh" ] && unset $(sed "/Automatically/d" "$OUT_DIR/config.sh" | cut -d "=" -f 1)
 "$SRC_DIR/scripts/internal/gen_config_file.sh" "$SELECTED_TARGET" || return 1

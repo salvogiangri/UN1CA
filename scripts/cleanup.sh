@@ -54,6 +54,7 @@ while [ "$#" != 0 ]; do
         "work_dir")
             LOG "- Cleaning ROM work dir..."
             rm -rf "$(dirname "$WORK_DIR")"
+            mkdir -p "$(dirname "$WORK_DIR")"
             ;;
         "logs")
             LOG "- Cleaning log files..."
