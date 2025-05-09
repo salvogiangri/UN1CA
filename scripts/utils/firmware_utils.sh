@@ -16,7 +16,7 @@
 #
 
 # [
-source "$SRC_DIR/scripts/utils/build_utils.sh"
+source "$SRC_DIR/scripts/utils/build_utils.sh" || return 1
 # ]
 
 # COMPARE_SEC_BUILD_VERSION <string1> <string2>
