@@ -48,18 +48,14 @@ COMPARE_SEC_BUILD_VERSION()
     local STRING2_MONTH="${STRING2:${#STRING2}-2:1}"
     local STRING2_INCREMENTAL="${STRING2:${#STRING2}-1:1}"
 
-    if [[ "$STRING1_MAJOR" < "$STRING2_MAJOR" ]]; then
-        return 1
-    fi
-    if [[ "$STRING1_YEAR" < "$STRING2_YEAR" ]]; then
-        return 1
-    fi
-    if [[ "$STRING1_MONTH" < "$STRING2_MONTH" ]]; then
-        return 1
-    fi
-    if [[ "$STRING1_INCREMENTAL" < "$STRING2_INCREMENTAL" ]]; then
-        return 1
-    fi
+    [[ "$STRING1_MAJOR" > "$STRING2_MAJOR" ]] && return 0
+    [[ "$STRING1_MAJOR" < "$STRING2_MAJOR" ]] && return 1
+    [[ "$STRING1_YEAR" > "$STRING2_YEAR" ]] && return 0
+    [[ "$STRING1_YEAR" < "$STRING2_YEAR" ]] && return 1
+    [[ "$STRING1_MONTH" > "$STRING2_MONTH" ]] && return 0
+    [[ "$STRING1_MONTH" < "$STRING2_MONTH" ]] && return 1
+    [[ "$STRING1_INCREMENTAL" > "$STRING2_INCREMENTAL" ]] && return 0
+    [[ "$STRING1_INCREMENTAL" < "$STRING2_INCREMENTAL" ]] && return 1
 
     return 0
 }

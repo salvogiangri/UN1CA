@@ -383,6 +383,8 @@ for i in "${FIRMWARES[@]}"; do
                 if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
                     if ! COMPARE_SEC_BUILD_VERSION "$(cat "$FW_DIR/${MODEL}_${CSC}/.extracted")" "$(cat "$ODIN_DIR/${MODEL}_${CSC}/.downloaded")"; then
                         LOG "\033[0;33m! A newer firmware has been downloaded, use --force flag if you want to overwrite it\033[0m"
+                    else
+                        LOG "\033[0;33m! This firmware has already been extracted\033[0m"
                     fi
                 else
                     LOG "\033[0;33m! A newer firmware is available for download\033[0m"
