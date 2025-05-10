@@ -52,6 +52,7 @@ applications that come with the platform
         <permission name="android.permission.SCHEDULE_EXACT_ALARM" />
         <permission name="android.permission.INTERACT_ACROSS_USERS" />
         <permission name="android.permission.CONTROL_KEYGUARD" /> 
+        <permission name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
     </privapp-permissions>
 </permissions>
 

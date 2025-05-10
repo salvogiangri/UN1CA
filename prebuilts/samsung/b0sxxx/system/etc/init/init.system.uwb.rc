@@ -28,8 +28,14 @@
 #
 #
 on post-fs-data
-    mkdir /data/uwb/ 770 uwb system encryption=None
+    mkdir /data/uwb/ 775 system system encryption=None
     copy /system/etc/uwb_key /data/uwb/Key
     chmod 660 /data/uwb/Key
-    chown uwb uwb /data/uwb/Key
-    chown uwb system /data/misc/apexdata/com.android.uwb
+    chown system system /data/uwb/Key
+    chown system system /data/misc/apexdata/com.android.uwb
+
+    mkdir /data/uwb/scpm/ 775 system system encryption=None
+    chmod 775 /data/uwb/scpm
+    chmod 775 /data/uwb/scpm/libuwb-countrycode.conf
+    chown system system /data/uwb/scpm
+    chown system system /data/uwb/scpm/libuwb-countrycode.conf
