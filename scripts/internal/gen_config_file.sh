@@ -57,10 +57,17 @@ if [ $# -ne 1 ]; then
 elif [ ! -f "$SRC_DIR/target/$1/config.sh" ]; then
     LOGE "File not found: target/$1/config.sh"
     exit 1
+else
+    source "$SRC_DIR/unica/configs/version.sh" || exit 1
+    source "$SRC_DIR/target/$1/config.sh" || exit 1
 fi
 
-source "$SRC_DIR/target/$1/config.sh" || exit 1
-source "$SRC_DIR/unica/config.sh" || exit 1
+if [ ! -f "$SRC_DIR/unica/configs/$TARGET_SINGLE_SYSTEM_IMAGE.sh" ]; then
+    LOGE "\"$TARGET_SINGLE_SYSTEM_IMAGE\" is not a valid system image"
+    exit 1
+else
+    source "$SRC_DIR/unica/configs/$TARGET_SINGLE_SYSTEM_IMAGE.sh" || exit 1
+fi
 
 if [ -f "$OUT_DIR/config.sh" ]; then
     LOGW "config.sh already exists. Regenerating"
