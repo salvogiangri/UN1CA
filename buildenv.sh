@@ -45,6 +45,28 @@ _GET_SRC_DIR()
     fi
 }
 
+_PRINT_USAGE()
+{
+    echo "Usage: source buildenv.sh [--debug] <target>" >&2
+    echo "Available devices:" >&2
+    printf '%s\n' "${TARGETS[@]}" >&2
+}
+
+# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#806
+croot()
+{
+    if [ -d "$SRC_DIR" ]; then
+        if [ "$1" ]; then
+            cd "$SRC_DIR/$1"
+        else
+            cd "$SRC_DIR"
+        fi
+    else
+        echo "Couldn't locate the top of the tree. Try setting SRC_DIR."
+        return 1
+    fi
+}
+
 run_cmd()
 {
     local CMD="$1"
@@ -81,21 +103,6 @@ run_cmd()
 }
 
 alias unica=run_cmd
-
-# https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#806
-croot()
-{
-    if [ -d "$SRC_DIR" ]; then
-        if [ "$1" ]; then
-            cd "$SRC_DIR/$1"
-        else
-            cd "$SRC_DIR"
-        fi
-    else
-        echo "Couldn't locate the top of the tree. Try setting SRC_DIR."
-        return 1
-    fi
-}
 # ]
 
 SRC_DIR="$(_GET_SRC_DIR)"
@@ -106,6 +113,7 @@ fi
 
 unset -f _GET_SRC_DIR
 
+export DEBUG=false
 export SRC_DIR
 export OUT_DIR="$SRC_DIR/out"
 export TMP_DIR="$OUT_DIR/tmp"
@@ -119,12 +127,21 @@ while IFS= read -r t; do
     TARGETS+=("$t")
 done < <(find "$SRC_DIR/target" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
 
-if [ "$#" -gt 1 ]; then
-    echo "Usage: source buildenv.sh <target>" >&2
-    echo "Available devices:" >&2
-    printf '%s\n' "${TARGETS[@]}" >&2
-    return 1
-elif [ "$#" -ne 1 ]; then
+while [[ "$1" == "-"* ]]; do
+    if [[ "$1" == "--debug" ]]; then
+        export DEBUG=true
+    elif [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+        _PRINT_USAGE
+        return 0
+    else
+        echo "Unknown option: $1" >&2
+        _PRINT_USAGE
+        return 1
+    fi
+    shift
+done
+
+if [ "$#" -ne 1 ]; then
     echo "No target specified. Please choose from the available devices below:"
 
     select SELECTED_TARGET in "${TARGETS[@]}"; do
@@ -140,10 +157,11 @@ fi
 
 if [ ! -d "$SRC_DIR/target/$SELECTED_TARGET" ]; then
     echo "\"$SELECTED_TARGET\" is not a valid device." >&2
-    echo "Available devices:" >&2
-    printf '%s\n' "${TARGETS[@]}" >&2
+    _PRINT_USAGE
     return 1
 fi
+
+unset -f _PRINT_USAGE
 
 export APKTOOL_DIR="$OUT_DIR/target/$SELECTED_TARGET/apktool"
 export WORK_DIR="$OUT_DIR/target/$SELECTED_TARGET/work_dir"
