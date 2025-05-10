@@ -57,10 +57,8 @@ LOG()
 # Prints an error log message in the build output.
 LOGE()
 {
-    local RED
-    local RESET
-    RED="\033[0;31m"
-    RESET="\033[0m"
+    local RED="\033[0;31m"
+    local RESET="\033[0m"
 
     echo -e "${RED}$(_GET_CALLER_INFO)${1}${RESET}" >&2
 }
@@ -69,10 +67,8 @@ LOGE()
 # Prints a warning log message in the build output.
 LOGW()
 {
-    local YELLOW
-    local RESET
-    YELLOW="\033[0;33m"
-    RESET="\033[0m"
+    local YELLOW="\033[0;33m"
+    local RESET="\033[0m"
 
     echo -e "${YELLOW}$(_GET_CALLER_INFO)${1}${RESET}" >&2
 }
@@ -82,13 +78,12 @@ LOGW()
 LOG_STEP_IN()
 {
     local BOLD
-    local RESET
+    local RESET="\033[0m"
 
     if [[ "$1" == "true" ]]; then
         BOLD="\033[1;37m"
         shift
     fi
-    RESET="\033[0m"
 
     if [ "$1" ]; then
         LOG "${BOLD}${1}${RESET}"

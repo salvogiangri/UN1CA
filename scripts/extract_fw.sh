@@ -31,20 +31,6 @@ AP_TAR=""
 
 TMP_DIR="$(mktemp -d)"
 
-GET_IMAGE_FILE_SYSTEM()
-{
-    # https://android.googlesource.com/platform/external/e2fsprogs/+/refs/tags/android-15.0.0_r1/lib/ext2fs/ext2_fs.h#83
-    if [[ "$(READ_BYTES_AT "$1" "1080" "2")" == "ef53" ]]; then
-        echo "ext4"
-    # https://android.googlesource.com/platform/external/f2fs-tools/+/refs/tags/android-15.0.0_r1/include/f2fs_fs.h#395
-    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "f2f52010" ]]; then
-        echo "f2fs"
-    # https://android.googlesource.com/platform/external/erofs-utils/+/refs/tags/android-15.0.0_r1/include/erofs_fs.h#12
-    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "e0f5e1e2" ]]; then
-        echo "erofs"
-    fi
-}
-
 EXTRACT_AVB_BINARIES()
 {
     if FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img" || FILE_EXISTS_IN_TAR "$BL_TAR" "vbmeta.img.lz4"; then
@@ -180,6 +166,20 @@ EXTRACT_OS_PARTITIONS()
     done
 
     LOG_STEP_OUT
+}
+
+GET_IMAGE_FILE_SYSTEM()
+{
+    # https://android.googlesource.com/platform/external/e2fsprogs/+/refs/tags/android-15.0.0_r1/lib/ext2fs/ext2_fs.h#83
+    if [[ "$(READ_BYTES_AT "$1" "1080" "2")" == "ef53" ]]; then
+        echo "ext4"
+    # https://android.googlesource.com/platform/external/f2fs-tools/+/refs/tags/android-15.0.0_r1/include/f2fs_fs.h#395
+    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "f2f52010" ]]; then
+        echo "f2fs"
+    # https://android.googlesource.com/platform/external/erofs-utils/+/refs/tags/android-15.0.0_r1/include/erofs_fs.h#12
+    elif [[ "$(READ_BYTES_AT "$1" "1024" "4")" == "e0f5e1e2" ]]; then
+        echo "erofs"
+    fi
 }
 
 PREPARE_SCRIPT()

@@ -39,7 +39,7 @@ fi
 PRIVATE_KEY_PATH+=".pk8"
 PUBLIC_KEY_PATH+=".x509.pem"
 
-trap 'rm -rf $TMP_DIR' EXIT INT
+trap 'rm -rf "$TMP_DIR"' EXIT INT
 
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/build_super_image.py#72
 BUILD_SUPER_EMPTY()

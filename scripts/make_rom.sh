@@ -53,14 +53,7 @@ PREPARE_SCRIPT()
     done
 }
 
-PRINT_USAGE()
-{
-    echo "Usage: make_rom [options]" >&2
-    echo " -f, --force : Force ROM build" >&2
-    echo " --no-rom-zip : Do not build ROM zip" >&2
-}
-
-ON_EXIT()
+PRINT_BUILD_OUTCOME()
 {
     local EXIT_CODE="$?"
     local END_TIME
@@ -75,6 +68,13 @@ ON_EXIT()
         echo -n -e '\n\033[1;32m'"Build completed "
     fi
     echo -e "in $((ESTIMATED / 3600))hrs $(((ESTIMATED / 60) % 60))min $((ESTIMATED % 60))sec."'\033[0m\n'
+}
+
+PRINT_USAGE()
+{
+    echo "Usage: make_rom [options]" >&2
+    echo " -f, --force : Force ROM build" >&2
+    echo " --no-rom-zip : Do not build ROM zip" >&2
 }
 # ]
 
@@ -96,7 +96,7 @@ else
     fi
 fi
 
-trap 'ON_EXIT' EXIT
+trap 'PRINT_BUILD_OUTCOME' EXIT
 trap 'echo' INT
 
 if $BUILD_ROM; then
