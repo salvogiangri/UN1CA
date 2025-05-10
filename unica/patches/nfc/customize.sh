@@ -75,6 +75,11 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
     DECODE_APK "system" "system/framework/services.jar"
 
     if [[ "$TARGET_ESE_CHIP_VENDOR" == "none" ]] && [[ "$TARGET_ESE_COS_NAME" == "none" ]]; then
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            SOURCE="a73xqxx"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            SOURCE="a16xxx"
+        fi
         DELETE_FROM_WORK_DIR "system" "system/app/ESEServiceAgent"
         DELETE_FROM_WORK_DIR "system" "system/bin/sem_daemon"
         DELETE_FROM_WORK_DIR "system" "system/etc/init/sem.rc"
@@ -92,12 +97,17 @@ if [[ "$SOURCE_ESE_CHIP_VENDOR" != "$TARGET_ESE_CHIP_VENDOR" ]] || \
         DELETE_FROM_WORK_DIR "system" "system/lib64/libspictrl.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.security.sem@1.0.so"
         DELETE_FROM_WORK_DIR "system" "system/priv-app/SEMFactoryApp"
-        ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/nfc/ese/framework.jar/0001-Disable-SemService.patch"
-        APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/nfc/ese/services.jar/0001-Disable-SemService.patch"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib64/hidl_tlc_payment_comm_client.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib64/libtlc_payment_spay.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/ese/qssi/framework.jar/0001-Disable-SemService.patch"
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/ese/qssi/services.jar/0001-Disable-SemService.patch"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/ese/essi/framework.jar/0001-Disable-SemService.patch"
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/ese/essi/services.jar/0001-Disable-SemService.patch"
+        fi
     else
         FTP="
         system/framework/framework.jar/smali_classes5/com/android/server/SemService.smali

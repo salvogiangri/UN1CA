@@ -63,6 +63,9 @@ if [ -d "$MODULE/system_ext" ]; then
 fi
 
 case "$1" in
+    "prebuilts/samsung/a16xxx")
+        FIRMWARE="SM-A166B/EUX/352907210202024"
+        ;;
     "prebuilts/samsung/a52qnsxx")
         FIRMWARE="SM-A525F/SER/352938771234569"
         ;;
@@ -71,6 +74,9 @@ case "$1" in
         ;;
     "prebuilts/samsung/a73xqxx")
         FIRMWARE="SM-A736B/XME/352828291234563"
+        ;;
+    "prebuilts/samsung/b0sxxx")
+        FIRMWARE="SM-S908B/BTE/350048581234569"
         ;;
     "prebuilts/samsung/b5qxxx")
         FIRMWARE="SM-F731B/EUX/350929871234569"
@@ -84,11 +90,17 @@ case "$1" in
     "prebuilts/samsung/e1qzcx")
         FIRMWARE="SM-S9210/CHC/356724910402671"
         ;;
+    "prebuilts/samsung/gts9fexx")
+        FIRMWARE="SM-X516B/EUX/354136921234567"
+        ;;
     "prebuilts/samsung/gts9xxx")
         FIRMWARE="SM-X716B/EUX/353439961234567"
         ;;
     "prebuilts/samsung/r0qxxx")
         FIRMWARE="SM-S901E/INS/350999641234561"
+        ;;
+    "prebuilts/samsung/r0sxxx")
+        FIRMWARE="SM-S901B/EUX/350020271234563"
         ;;
     "prebuilts/samsung/r9qxxx")
         FIRMWARE="SM-G990B/EUX/353718681234563"
