@@ -1,4 +1,4 @@
 id=vndk
 name=VNDK
-author=salvogiangri
-description=Checks the source VNDK package and replaces it if it's mismatched from target device.
+author=salvogiangri, Fede2782
+description=Checks the source device vendor API and replaces it if it's mismatched from target device.
