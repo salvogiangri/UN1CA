@@ -13,6 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - module: "Galaxy A23 5G (a23xqnsxx)"
+            path: "prebuilts/samsung/a23xqnsxx"
           - module: "Galaxy A52 (a52qnsxx)"
             path: "prebuilts/samsung/a52qnsxx"
           - module: "Galaxy A52s 5G (a52sxqxx)"
