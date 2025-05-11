@@ -141,6 +141,10 @@ fi
 #     String containing the path to the target device folder containing its block devices.
 #     Defaults to "/dev/block/bootdevice/by-name".
 #
+#   TARGET_DISABLE_AVB_SIGNING
+#     If set to true, AVB signing will be disabled.
+#     Defaults to false.
+#
 #   TARGET_INCLUDE_PATCHED_VBMETA (DEPRECATED)
 #     If set to true, a patched vbmeta image will be included in the compiled Odin tar package.
 #     Only applies when TARGET_INSTALL_METHOD is set to "odin".
@@ -335,6 +339,7 @@ fi
     GET_BUILD_VAR "TARGET_SINGLE_SYSTEM_IMAGE"
     GET_BUILD_VAR "TARGET_OS_FILE_SYSTEM"
     GET_BUILD_VAR "TARGET_BOOT_DEVICE_PATH" "/dev/block/bootdevice/by-name"
+    GET_BUILD_VAR "TARGET_DISABLE_AVB_SIGNING" "false"
     GET_BUILD_VAR "TARGET_INCLUDE_PATCHED_VBMETA" "false"
     GET_BUILD_VAR "TARGET_KEEP_ORIGINAL_SIGN" "false"
     GET_BUILD_VAR "TARGET_SUPER_PARTITION_SIZE"

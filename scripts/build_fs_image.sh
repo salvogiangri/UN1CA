@@ -320,9 +320,12 @@ PREPARE_SCRIPT()
         shift
     done
 
-    # TODO add a global build flag to disable AVB signing
     if [ ! "$AVB_SIGN" ]; then
-        AVB_SIGN=true
+        if $TARGET_DISABLE_AVB_SIGNING; then
+            AVB_SIGN=false
+        else
+            AVB_SIGN=true
+        fi
     fi
 
     INPUT_DIR="$1"
