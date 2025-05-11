@@ -1,0 +1,27 @@
+From db4e524a1fe59452105aa1fe3f4732cbd4cff8fd Mon Sep 17 00:00:00 2001
+From: Ocin4ever <85343782+Ocin4ever@users.noreply.github.com>
+Date: Sun, 11 May 2025 12:03:36 +0200
+Subject: [PATCH] Enable dynamic resolution control
+
+---
+ .../android/game/GameManagerService$DisplayListener.smali     | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali b/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
+index f88f1bce7a..57f8ddebe1 100644
+--- a/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
++++ b/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
+@@ -51,9 +51,7 @@
+ 
+     const-string v0, "WQHD,FHD,HD"
+ 
+-    const-string v1, ""
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    invoke-virtual {v0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+     move-result v0
+ 
+-- 
+2.43.0
+
