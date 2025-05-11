@@ -41,6 +41,16 @@ _GET_PROP_LOCATION()
 }
 # ]
 
+# ABORT <message>
+# Stops the build process, additionally prints a log message if supplied.
+ABORT()
+{
+    if [ "$1" ]; then
+        LOGE "$1"
+    fi
+    return 1
+}
+
 # APPLY_PATCH <partition> <apk/jar> <patch>
 # Applies a unified diff patch to the provided APK/JAR decoded directory.
 APPLY_PATCH()
