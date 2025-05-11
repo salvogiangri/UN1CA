@@ -19,14 +19,16 @@ if [[ "$SOURCE_VENDOR_API_LEVEL" != "$TARGET_VENDOR_API_LEVEL" ]]; then
         SYS_EXT_DIR="$WORK_DIR/system/system/system_ext"
     fi
 
-    if [[ "$SOURCE_VENDOR_API_LEVEL" == "none" ]]; then
+    if [ "$SOURCE_VENDOR_API_LEVEL" -gt "34" ] && [ "$TARGET_VENDOR_API_LEVEL" -gt "34" ]; then
+        :
+    elif [ "$SOURCE_VENDOR_API_LEVEL" -gt "34" ] && [ "$TARGET_VENDOR_API_LEVEL" -le "34" ]; then
         ADD_TARGET_VNDK_APEX
         sed -i '$d' "$SYS_EXT_DIR/etc/vintf/manifest.xml"
         echo "    <vendor-ndk>" >> "$SYS_EXT_DIR/etc/vintf/manifest.xml"
         echo "        <version>$TARGET_VENDOR_API_LEVEL</version>" >> "$SYS_EXT_DIR/etc/vintf/manifest.xml"
         echo "    </vendor-ndk>" >> "$SYS_EXT_DIR/etc/vintf/manifest.xml"
         echo "</manifest>" >> "$SYS_EXT_DIR/etc/vintf/manifest.xml"
-    elif [[ "$TARGET_VENDOR_API_LEVEL" == "none" ]]; then
+    elif [ "$SOURCE_VENDOR_API_LEVEL" -le "34" ] && [ "$TARGET_VENDOR_API_LEVEL" -gt "34" ]; then
         DELETE_FROM_WORK_DIR "system_ext" "apex/com.android.vndk.v$SOURCE_VENDOR_API_LEVEL.apex"
         sed -i "/    <vendor-ndk>/d" "$SYS_EXT_DIR/etc/vintf/manifest.xml"
         sed -i "/        <version>$SOURCE_VENDOR_API_LEVEL<\/version>/d" "$SYS_EXT_DIR/etc/vintf/manifest.xml"
