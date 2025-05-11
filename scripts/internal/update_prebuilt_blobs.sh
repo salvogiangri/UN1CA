@@ -21,6 +21,8 @@
 set -Ee
 
 # [
+source "$SRC_DIR/scripts/utils/common_utils.sh" || exit 1
+
 GET_LATEST_FIRMWARE()
 {
     curl -s --retry 5 --retry-delay 5 "https://fota-cloud-dn.ospserver.net/firmware/$REGION/$MODEL/version.xml" \
@@ -63,6 +65,9 @@ if [ -d "$MODULE/system_ext" ]; then
 fi
 
 case "$1" in
+    "prebuilts/samsung/a23xqnsxx")
+        FIRMWARE="SM-A236B/EUX/356740313365075"
+        ;;
     "prebuilts/samsung/a52qnsxx")
         FIRMWARE="SM-A525F/SER/352938771234569"
         ;;
@@ -134,6 +139,11 @@ for i in $BLOBS; do
         i="${i%.*}"
     fi
     OUT="$MODULE/${i//system\/system\///system/}"
+
+    if [[ ! -e "$FW_DIR/${MODEL}_${REGION}/$i" ]] && [[ "$i" == *"com.android.vndk.v34.apex" ]] \
+        && [[ "$(GET_PROP "$FW_DIR/${MODEL}_${REGION}/product/etc/build.prop" "ro.product.vndk.version")" == "34" ]]; then
+            i="system/system/apex/com.android.vndk.current.apex"
+    fi
 
     [[ -e "$FW_DIR/${MODEL}_${REGION}/$i" ]] || continue
 
