@@ -18,7 +18,6 @@ system/lib64/libDocDeblur.camera.samsung.so
 system/lib64/libDocDeblur.enhanceX.samsung.so
 system/lib64/libDocObjectRemoval.camera.samsung.so
 system/lib64/libDocObjectRemoval.enhanceX.samsung.so
-system/lib64/libDocShadowRemoval.arcsoft.so
 system/lib64/libDualCamBokehCapture.camera.samsung.so
 system/lib64/libFaceRecognition.arcsoft.so
 system/lib64/libFrucPSVTLib.so
