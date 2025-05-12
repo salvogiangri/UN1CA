@@ -19,10 +19,21 @@ fi
 
 # Enable camera cutout protection
 if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION" ]]; then
-    DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk"
+    if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+        DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk"
+        FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
+    elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+        DECODE_APK "product" "overlay/SystemUI__auto_generated_rro_product.apk"
+        FTP="$APKTOOL_DIR/product/overlay/SystemUI__auto_generated_rro_product.apk/res/values/bools.xml"
+    fi
 
-    FTP="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/res/values/bools.xml"
     R="\ \ \ \ <bool name=\"config_enableDisplayCutoutProtection\">$TARGET_SUPPORT_CUTOUT_PROTECTION</bool>"
 
     sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
+fi
+
+# Fix playback of Widevine DRM content on Exynos by forcing L3
+if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+    [[ -f "$TARGET_FIRMWARE_PATH/vendor/lib64/liboemcrypto.so" ]] && echo -n > "$WORK_DIR/vendor/lib64/liboemcrypto.so"
+    [[ -f "$TARGET_FIRMWARE_PATH/vendor/lib/liboemcrypto.so" ]] && echo -n > "$WORK_DIR/vendor/lib/liboemcrypto.so"
 fi

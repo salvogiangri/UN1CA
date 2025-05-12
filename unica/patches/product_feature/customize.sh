@@ -115,17 +115,26 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
         sed -i "s/$SOURCE_FP_SENSOR_CONFIG/$TARGET_FP_SENSOR_CONFIG/g" "$APKTOOL_DIR/$f"
     done
 
-    # TODO: handle ultrasonic devices
-    if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
+    if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then # This can be only for QSSI as ESSI already has optical
         ADD_TO_WORK_DIR "gts9xxx" "system" "." 0 0 755 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "r11sxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
         APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SecSettings.apk/0001-Enable-isOpticalSensor.patch"
         APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SystemUI.apk/0001-Add-optical-FOD-support.patch"
     elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "side" ]]; then
         ADD_TO_WORK_DIR "b5qxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
-        APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
-        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SecSettings.apk/0001-Enable-isSideSensor.patch"
-        APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
+            APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SecSettings.apk/0001-Enable-isSideSensor.qssi.patch"
+            APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.qssi.patch"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            APPLY_PATCH "system" "system_ext/priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.essi.patch"
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/fingerprint/services.jar/0001-Disable-SECURITY_FINGERPRINT_IN_DISPLAY.patch"
+            APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SecSettings.apk/0001-Enable-isSideSensor.essi.patch"
+        fi
+    elif [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "ultrasonic" ]]; then # This can be only for ESSI as QSSI already has ultrasonic
+        ADD_TO_WORK_DIR "r0sxxx" "system" "." 0 0 755 "u:object_r:system_file:s0"
+        APPLY_PATCH "system" "system_ext/priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SystemUI.apk/0001-Add-ultrasonic-FOD-support.patch"
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/fingerprint/SecSettings.apk/0001-Disable-isOpticalSensor.patch"
     fi
 
     if [[ "$TARGET_FP_SENSOR_CONFIG" == *"navi=1"* ]]; then
@@ -187,10 +196,15 @@ fi
 if ! $SOURCE_HAS_QHD_DISPLAY; then
     if $TARGET_HAS_QHD_DISPLAY; then
         echo "Applying multi resolution patches"
-        ADD_TO_WORK_DIR "dm3qxxx" "system" "system/bin/bootanimation" 0 2000 755 "u:object_r:bootanim_exec:s0"
-        ADD_TO_WORK_DIR "dm3qxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
-        ADD_TO_WORK_DIR "dm3qxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
-        ADD_TO_WORK_DIR "dm3qxxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            SOURCE="dm3qxxx"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            SOURCE="b0sxxx"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/bin/bootanimation" 0 2000 755 "u:object_r:bootanim_exec:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
         APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
         APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/resolution/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
     fi
@@ -214,7 +228,7 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
 
     # TODO: this breaks 60hz AOD
     #if [[ "${#TARGET_HFR_MODE}" -le "6" ]]; then
-    if [[ "$TARGET_HFR_MODE" -le "1" ]]; then
+    if [[ "$TARGET_HFR_MODE" -le "1" ]] && [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
         APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/hfr/SystemUI.apk/0001-Nuke-KEYGUARD_ADJUST_REFRESH_RATE.patch"
     fi
 
@@ -273,7 +287,11 @@ if [[ "$SOURCE_HFR_SEAMLESS_BRT" != "$TARGET_HFR_SEAMLESS_BRT" ]] || \
     echo "Applying HFR_SEAMLESS_BRT/HFR_SEAMLESS_LUX patches"
 
     if [[ "$TARGET_HFR_SEAMLESS_BRT" == "none" ]] && [[ "$TARGET_HFR_SEAMLESS_LUX" == "none" ]]; then
-        APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/hfr/framework.jar/0001-Remove-brightness-threshold-values.patch"
+        if [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+            APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/hfr/qssi/framework.jar/0001-Remove-brightness-threshold-values.patch"
+        elif [[ "$TARGET_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+            APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/hfr/essi/framework.jar/0001-Remove-brightness-threshold-values.patch"
+        fi
     else
         DECODE_APK "system" "system/framework/framework.jar"
 

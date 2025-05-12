@@ -1,0 +1,12 @@
+system 0 0 755 capabilities=0x0
+system/bin 0 2000 751 capabilities=0x0
+system/bin/installd 0 2000 755 capabilities=0x0
+system/bin/vdc 0 2000 755 capabilities=0x0
+system/bin/vold 0 2000 755 capabilities=0x0
+system/lib 0 0 755 capabilities=0x0
+system/lib/libandroid_servers.so  0 0 644 capabilities=0x0
+system/lib/libmdf.so 0 0 644 capabilities=0x0
+system/lib64 0 0 755 capabilities=0x0
+system/lib64/libandroid_servers.so  0 0 644 capabilities=0x0
+system/lib64/libepm.so 0 0 644 capabilities=0x0
+system/lib64/libmdf.so 0 0 644 capabilities=0x0
