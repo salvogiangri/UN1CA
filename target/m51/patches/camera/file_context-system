@@ -1,0 +1,5 @@
+/system u:object_r:system_file:s0
+/system/cameradata u:object_r:system_file:s0
+/system/cameradata/camera-feature\.xml u:object_r:system_file:s0
+/system/etc u:object_r:system_file:s0
+/system/etc/public\.libraries-camera\.samsung\.txt u:object_r:system_file:s0
