@@ -33,9 +33,24 @@ DOWNLOAD_FIRMWARE()
     PDR="$(pwd)"
 
     cd "$ODIN_DIR"
-    { samfirm -m "$MODEL" -r "$REGION" -i "$IMEI" > /dev/null; } 2>&1 \
-        && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
-        || exit 1
+    if [ "$i" == "$SOURCE_FIRMWARE" ]; then
+        # Special handling for source firmware - download from the specified URL
+        mkdir -p "$ODIN_DIR/${MODEL}_${REGION}"
+        echo "- Downloading source firmware from custom URL..."
+        curl -s --retry 5 --retry-delay 5 "https://23-samfw.cloud/v2/IxJCDiMnLjghMC4/AwM8AB4sCiQBCB4lFzssIDs2ByAzMUEgOzEUQDMQMCMBOyw/MhEGNh4kKRIPJS4SMzBBGhIWQSYXOCECOzBBAwM2NDA7Fx8NHiUgDSMAKREjMTMLHiwpPw0AHgQ4MC8kMxszDhc7MAABByklITgNMDsILi00LCAlDzsfBzM4BkIeCzwGHgM8FCMkNDEjCxVACTghHzInDQYuFx8rIwAvJCFAMxE8EQY5NRshDjURPho0ES8kNRYhOR44LwsJEQc5NBsjKyEAPg4hAAYsLjgeLDQRHg4yJTMsMiUNKzwAPh8mGzk5FyUzDTUHQQEuByADISxBIwMnOUANQAokMzYCICMXPjkDFzA1CS8pDTsxHhwzQAZCOzEHHjMsNCsNMT4eODAeHgkvIxQjAwcEODEvLxcHPgMBAwgGDSwpPDskKRYXO0EIOAAhKTw/FD01OCBCJgchITQALhIvJSEAIy8pQTRAIAgyFiElLwAuPTQ7KQg0FikFAQMsEDMbAh8jOAZCIwM0MQEWIhQjCzYxAQ0TEw==" -o "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
+        
+        echo "- Extracting firmware..."
+        unzip -q "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip" -d "$ODIN_DIR/${MODEL}_${REGION}"
+        rm -f "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
+        
+        touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded"
+    else
+        # Original download method for other firmwares
+        { samfirm -m "$MODEL" -r "$REGION" -i "$IMEI" > /dev/null; } 2>&1 \
+            && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
+            || exit 1
+    fi
+    
     [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && {
         echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
         echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
