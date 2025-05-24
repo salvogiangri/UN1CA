@@ -135,7 +135,7 @@ if $BUILD_ROM; then
         LOG_STEP_OUT
     fi
 
-    if [ -d "$OUT_DIR/apktool" ]; then
+    if [ -d "$APKTOOL_DIR" ]; then
         LOG_STEP_IN true "Building APKs/JARs"
 
         while IFS= read -r f; do
