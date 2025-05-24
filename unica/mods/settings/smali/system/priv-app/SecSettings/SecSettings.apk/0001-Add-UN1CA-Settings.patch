@@ -4450,7 +4450,7 @@ index 00000000..8da5c1b4
 +
 +    move-result-object p0
 +
-+    const-string v0, "a71"
++    const-string v0, "m51"
 +
 +    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
@@ -5629,7 +5629,7 @@ index 00000000..0b266327
 +
 +    const/4 v1, 0x0
 +
-+    const-string v2, "a71"
++    const-string v2, "m51"
 +
 +    aput-object v2, v0, v1
 +
