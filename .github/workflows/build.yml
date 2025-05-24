@@ -1,4 +1,4 @@
-name: Build
+name: Build M51
 
 on:
   workflow_dispatch:
@@ -76,7 +76,30 @@ jobs:
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
 
-      - name: Build ROM
+      - name: Build ROM ZIP
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh --no-rom-zip --no-rom-tar
+          # remove the --no-rom-zip flag so a zip is produced
+          ./scripts/make_rom.sh
+
+      # 👇— NEW: create a GitHub release for this build
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: m51-build-${{ github.run_number }}
+          name: UN1CA M51 Build ${{ github.run_number }}
+          body: |
+            🚀 Automatic build of UN1CA for Galaxy M51  
+            Commit: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 👇— NEW: upload the generated ZIP
+      - name: Upload ROM ZIP
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: m51-build-${{ github.run_number }}
+          files: out/target/product/m51/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
