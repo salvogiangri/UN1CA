@@ -27,30 +27,40 @@ GET_LATEST_FIRMWARE()
         | grep latest | sed 's/^[^>]*>//' | sed 's/<.*//'
 }
 
+DOWNLOAD_AND_EXTRACT_FIRMWARE()
+{
+    local url="$1"
+    echo "- Downloading firmware..."
+    curl -s --retry 5 --retry-delay 5 "$url" -o "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
+    
+    echo "- Extracting firmware..."
+    unzip -q "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip" -d "$ODIN_DIR/${MODEL}_${REGION}"
+    rm -f "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
+}
+
 DOWNLOAD_FIRMWARE()
 {
     local PDR
     PDR="$(pwd)"
 
     cd "$ODIN_DIR"
+    mkdir -p "$ODIN_DIR/${MODEL}_${REGION}"
+    
     if [ "$i" == "$SOURCE_FIRMWARE" ]; then
-        # Special handling for source firmware - download from the specified URL
-        mkdir -p "$ODIN_DIR/${MODEL}_${REGION}"
-        echo "- Downloading source firmware from custom URL..."
-        curl -s --retry 5 --retry-delay 5 "https://23-samfw.cloud/v2/IxJCDiMnLkA7ET45IycxMCExNEADMR4lFzssIDs2ByAzMUEgOzEUQDMQMCMBOyw/DSQzKw0vQQ0vCAYJNBE7MDgkKTUyAywUIQA7ADUDIS8SOCNADS8iQDwXFTABAy84MjEzLzwSMDsJFy86DwgwJx47MDwuABoUHhYNMDMWLgAhETEALzseFwEbBkIeCzwGHgM8FCMkNDEjCxVACTghHzInDQYuFx8rIwAvJCFAMxE8EQY5NRshDjURPho0ES8kNRYhOR44LwsJEQc5NBsjKyEAPg4hAAYsLjgeLDQRHg4yJTMsMiUNKzwAPh8mGzk5FyUzDTUHQQEuByADISxBIwMnOUANQAokMzYCICMXPjkDFzA1CS8pDTsxHhwzQAZCOzEHHjMsNCsNMT4eODAeHgkvIxQjAwcEODEvLxcHPgMBAwgGDSwpPDskKRYXO0EIOAAhKTw/FD01OCBCJgg0FDU2FRQuLzQ5PDEvDCMXOz8DAywaHjsfDhIxPhoeCCwwDws8JA0XLwIjOAZCIwM0MQEWCDkjAzxAHg0TEw==" -o "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
-        
-        echo "- Extracting firmware..."
-        unzip -q "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip" -d "$ODIN_DIR/${MODEL}_${REGION}"
-        rm -f "$ODIN_DIR/${MODEL}_${REGION}/firmware.zip"
-        
-        touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded"
+        # Source firmware download and extract
+        DOWNLOAD_AND_EXTRACT_FIRMWARE "https://23-samfw.cloud/v2/IxJCDiMnNB8jFiASLzsNMC8vIEEvOx4lFzssIDs2ByAzMUEgOzEUQDMQMCMBOyw/LyQzPDQLNBQXOAc9IxcsHh4WIj8zCCMGLjENQC4WLjkhJzMwMzBBOC8wQTsJLykMDQAwJhIRISY7ByAeHjAvLRI2HwENLAcaLjAvBS8vLhwuByAWEiwpLSMbBkIjCyI/Iws8MQEWCDAeCw0xCREHOTQbIyshAD4OIQAGLC44Hiw0ER4OMiUzLDIlDSs8AD4fJhsGOg8HCkA8AywnCRc+Di8LBxAzBy4RDxYpKTwkHjUeBylCJgceIAM7ITgJNh4cAy8+AwMSMAMBAwgGDSw+By8vKSY7JDYGIztBPBcHIx0NMCwEMwc+ETwXIysPESw5JhsGEg0XOT80MC4IOy8pOAMDKSUuOy8/MxdBJx4bAgINOy4pOxchPy8ALywJAwdCJhYIQB4WFQYjFjw/IwM2Ew=="
+    elif [ "$i" == "$TARGET_FIRMWARE" ]; then
+        # Target firmware download and extract
+        DOWNLOAD_AND_EXTRACT_FIRMWARE "https://23-samfw.cloud/v2/IxJCDiMnNDk0JzAaDSUCOiMvBzwyOx4lFzssIDs2ByAzMUEgOzEUJTMQMCMBOyw/EhshEjQxAi0SJAgGIycpGiEIIQcjJEEUEkA0FDI4PDABGzMBEhYNPzQAFQYhMTAMHxcGBzUDBxIzJB46M0AgCy87LCQ8OCFBPDYGOhcsQTYXBzs5IwcCMyYbOQAeCwgwHgs2JB4kDT8BFjQfLhEwGiEWBzA1AB0kITgeJS4nIRAyGyAKLhE+DDIABj8hOB4KHiUiMC4XIys8OCA5ND8UJTIAPiUyJy8wNAAvPzwAPisuJy8rLgQUCzIAMEImFiA1LgcgCjs2FDE7Bx4ROzYGIzIWLhYPCx4nEjYIBjJAIB4yLwofFwcgAw0xPhsmGwYDDTswJy8/FBYDMTAmOzExHwMDOwYeOyEmDSwhHDgxMTAjAy8nFwcpAx42MzwzAzMmIREHCwklAgI0GwZCLyUCITsALwkeJz4FMxYvLy87Hh4POAcCNDAIMSMxLw0NLykLHkACGxIXNAYmGzkGHiQNHSMDIgAeFg0G"
     else
-        # Original download method for other firmwares
+        # Original download method for extra firmwares
         { samfirm -m "$MODEL" -r "$REGION" -i "$IMEI" > /dev/null; } 2>&1 \
             && touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" \
             || exit 1
     fi
     
+    # Create .downloaded file with version info
+    touch "$ODIN_DIR/${MODEL}_${REGION}/.downloaded"
     [ -f "$ODIN_DIR/${MODEL}_${REGION}/.downloaded" ] && {
         echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "AP*" -exec basename {} \; | cut -d "_" -f 2)/"
         echo -n "$(find "$ODIN_DIR/${MODEL}_${REGION}" -name "CSC*" -exec basename {} \; | cut -d "_" -f 3)/"
