@@ -33,6 +33,7 @@ jobs:
             libssl-dev rsync liblz4-tool repo
 
           # Platform keys
+          mkdir -p security
           echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
           echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
 
@@ -49,13 +50,14 @@ jobs:
           ./scripts/extract_fw.sh
           ./scripts/make_rom.sh
 
-          # Ensure output directory exists
+          # Create output directory if it doesn't exist
           mkdir -p out/target/product/m51
 
-          # Create ZIP if not automatically generated
-          if [ ! -f out/target/product/m51/UN1CA*.zip ]; then
+          # Package ROM if not already done
+          if ! ls out/target/product/m51/UN1CA*.zip 1> /dev/null 2>&1; then
+            echo "Packaging ROM files into ZIP..."
             cd out/target/product/m51
-            zip -r UN1CA-m51-$(date +%Y%m%d).zip *.img
+            zip -r UN1CA-m51-$(date +%Y%m%d-%H%M).zip *.img
             cd ../../../../..
           fi
 
@@ -64,12 +66,13 @@ jobs:
         run: |
           ROM_PATH=$(find out/target/product/m51 -name 'UN1CA*.zip' -o -name 'UN1CA*.tar' | head -n1)
           if [ -z "$ROM_PATH" ]; then
-            echo "::error::No ROM file found!"
+            echo "::error::No ROM file found in out/target/product/m51/"
+            find out/ -type f -name "*.img" -o -name "*.zip" -o -name "*.tar"
             exit 1
           fi
-          echo "ROM_FILE=$ROM_PATH" >> $GITHUB_OUTPUT
-          echo "ROM_NAME=$(basename "$ROM_PATH")" >> $GITHUB_OUTPUT
-          echo "Found ROM: $ROM_PATH"
+          echo "ROM_FILE=${ROM_PATH}" >> $GITHUB_OUTPUT
+          echo "ROM_NAME=$(basename "${ROM_PATH}")" >> $GITHUB_OUTPUT
+          echo "Found ROM: ${ROM_PATH}"
 
       - name: Upload ROM to Releases
         uses: softprops/action-gh-release@v1
@@ -78,16 +81,19 @@ jobs:
           tag_name: build-${{ github.run_number }}
           name: "UN1CA ROM for M51 (Build ${{ github.run_number }})"
           body: |
-            Automated build of UN1CA ROM for Samsung M51
-            Build date: $(date +'%Y-%m-%d %H:%M:%S')
+            Automated build of UN1CA ROM
+            • Device: m51
+            • Build date: $(date +'%Y-%m-%d %H:%M:%S')
+            • Commit: ${{ github.sha }}
           draft: false
           prerelease: false
 
-      - name: Upload build logs (debug)
+      - name: Upload build logs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: build-logs
+          name: build-logs-${{ github.run_number }}
           path: |
-            out/verbose.log
+            out/*.log
             out/error.log
+            out/verbose.log
