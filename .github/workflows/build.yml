@@ -84,7 +84,7 @@ jobs:
       - name: Find ROM zip file
         id: find-rom
         run: |
-          SRC_DIR="un1ca"
+          SRC_DIR="UN1CA"
           OUT_DIR="$SRC_DIR/out"
           ROM_FILE=$(find $OUT_DIR -name 'UN1CA*.zip' | head -1)
           echo "ROM_FILE=$ROM_FILE" >> $GITHUB_OUTPUT
