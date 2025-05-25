@@ -85,18 +85,13 @@ jobs:
         id: find-rom
         run: |
           
-          ROM_FILE=$(find UN1CA/out -name 'UN1CA*.zip' | head -1)
+          ROM_FILE=$(find out -name 'UN1CA*.zip' | head -1)
           echo "ROM_FILE=$ROM_FILE" >> $GITHUB_OUTPUT
           echo "ROM_NAME=$(basename $ROM_FILE)" >> $GITHUB_OUTPUT
           echo "Found ROM file: $ROM_FILE"
 
-      - name: Upload ROM to GitHub Releases
-        if: github.event_name != 'pull_request'
-        uses: softprops/action-gh-release@v1
+      - name: Upload ROM as artifact
+        uses: actions/upload-artifact@v3
         with:
-          files: ${{ steps.find-rom.outputs.ROM_FILE }}
-          tag_name: build-${{ github.run_id }}
-          name: "UN1CA ROM Build #${{ github.run_number }}"
-          body: "Automated build of UN1CA ROM for ${{ matrix.target }}"
-          draft: false
-          prerelease: false
+          name: ${{ steps.find-rom.outputs.ROM_NAME }}
+          path: ${{ steps.find-rom.outputs.ROM_FILE }}
