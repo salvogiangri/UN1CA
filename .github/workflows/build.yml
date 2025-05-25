@@ -1,68 +1,101 @@
-# .github/workflows/build-and-release.yml
-name: Build and Release UN1CA ROM for M51
+name: Build and Release M51
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
-    tags:
-      - 'm51-build-*'
+    branches:
+      - 'fourteen'
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
 
-    env:
-      JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/11.0.27-6/x64
-      JAVA_HOME_11_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/11.0.27-6/x64
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [m51]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
 
-      - name: Install prerequisites
+      - name: Free disk space (1/3)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y git zip unzip tree
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a
 
-      - name: Build UN1CA ROM
+      - name: Free disk space (2/3)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+
+      - name: Free disk space (3/3)
+        uses: rokibhasansagar/slimhub_actions@main
+        with:
+          retain: 'compiler_cmake'
+
+      - name: Set up build environment
         run: |
-          cd UN1CA
-          # replace with your actual build commands:
-          # source build/envsetup.sh && lunch m51-userdebug && make -j$(nproc) bacon
-          bash build_rom.sh
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            attr ccache clang ffmpeg golang \
+            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          sudo modprobe erofs f2fs
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
+          echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
 
-      - name: Locate built ROM ZIP
-        id: find_zip
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'gradle'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Build dependencies
+        run: source ./buildenv.sh ${{ matrix.target }}
+
+      - name: Download stock firmwares
         run: |
-          OUTDIR="$GITHUB_WORKSPACE/UN1CA/out/target/product/m51"
-          echo "Looking for ROM ZIP in $OUTDIR"
-          ZIP=$(find "$OUTDIR" -maxdepth 1 -type f -name 'UN1CA_*.zip' | head -n1)
-          if [ -z "$ZIP" ]; then
-            echo "❌ No ROM ZIP found in $OUTDIR"
-            exit 1
-          fi
-          NAME=$(basename "$ZIP")
-          echo "✅ Found ROM ZIP: $NAME"
-          echo "zip_path=$ZIP" >> "$GITHUB_OUTPUT"
-          echo "zip_name=$NAME" >> "$GITHUB_OUTPUT"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/download_fw.sh
 
-      - name: Create GitHub Release
-        id: create_release
+      - name: Extract stock firmwares
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/extract_fw.sh
+
+      - name: Build ROM
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/make_rom.sh
+
+      - name: Find ROM zip file
+        id: find-rom
+        run: |
+          ROM_FILE=$(find out/target/product/${{ matrix.target }} -name 'UN1CA*.zip' -o -name 'UN1CA*.tar' | head -1)
+          echo "ROM_FILE=$ROM_FILE" >> $GITHUB_OUTPUT
+          echo "ROM_NAME=$(basename $ROM_FILE)" >> $GITHUB_OUTPUT
+          echo "Found ROM file: $ROM_FILE"
+
+      - name: Upload ROM to GitHub Releases
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "UN1CA ROM Build ${{ github.ref_name }}"
-          body: |
-            • Device: Galaxy M51  
-            • ROM: UN1CA  
-            • Tag: ${{ github.ref_name }}  
-            • Built at: ${{ github.run_started_at }}
-
-      - name: Upload ROM ZIP to Release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.find_zip.outputs.zip_path }}
-          asset_name: ${{ steps.find_zip.outputs.zip_name }}
-          asset_content_type: application/zip
+          files: ${{ steps.find-rom.outputs.ROM_FILE }}
+          tag_name: build-${{ github.run_id }}
+          name: "UN1CA ROM Build #${{ github.run_number }}"
+          body: "Automated build of UN1CA ROM for ${{ matrix.target }}"
+          draft: false
+          prerelease: false
