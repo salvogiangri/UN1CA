@@ -76,14 +76,17 @@ jobs:
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
 
-      - name: Build ROM ZIP
+      - name: Build ROM
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          # remove the --no-rom-zip flag so a zip is produced
           ./scripts/make_rom.sh
 
-      # 👇— NEW: create a GitHub release for this build
-      - name: Create Release
+      - name: Show build output files
+        run: |
+          echo "Contents of ROM output directory:"
+          ls -lhR un1ca/out/target/product/m51 || true
+
+      - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
@@ -95,11 +98,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 👇— NEW: upload the generated ZIP
       - name: Upload ROM ZIP
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-release-asset@v1
         with:
-          tag_name: m51-build-${{ github.run_number }}
-          files: out/target/product/m51/*.zip
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: un1ca/out/target/product/m51/UN1CA-*.zip
+          asset_name: UN1CA-m51-${{ github.run_number }}.zip
+          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
