@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: UN1CA/out/target/product/m51/UN1CA_*.zip
+          asset_path: un1ca/out/target/product/m51/UN1CA_*.zip
           asset_name: UN1CA-m51-${{ github.run_number }}.zip
           asset_content_type: application/zip
         env:
