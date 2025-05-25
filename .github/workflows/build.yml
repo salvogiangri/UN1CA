@@ -1,4 +1,4 @@
-name: Build and Release M51
+name: Build and Package M51
 
 on:
   workflow_dispatch:
@@ -81,17 +81,24 @@ jobs:
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/make_rom.sh
 
-      - name: Find ROM zip file
+      - name: Find and verify ROM file
         id: find-rom
         run: |
-          
           ROM_FILE=$(find out -name 'UN1CA*.zip' | head -1)
+          if [ -z "$ROM_FILE" ]; then
+            echo "::error::No ROM file found in out/"
+            find out/ -type f || true
+            exit 1
+          fi
           echo "ROM_FILE=$ROM_FILE" >> $GITHUB_OUTPUT
-          echo "ROM_NAME=$(basename $ROM_FILE)" >> $GITHUB_OUTPUT
-          echo "Found ROM file: $ROM_FILE"
+          echo "ROM_NAME=$(basename "$ROM_FILE")" >> $GITHUB_OUTPUT
+          echo "ROM_SIZE=$(du -h "$ROM_FILE" | cut -f1)" >> $GITHUB_OUTPUT
+          echo "Found ROM file: $ROM_FILE (Size: $(du -h "$ROM_FILE" | cut -f1))"
 
       - name: Upload ROM as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.find-rom.outputs.ROM_NAME }}
+          name: UN1CA-${{ matrix.target }}-ROM
           path: ${{ steps.find-rom.outputs.ROM_FILE }}
+          retention-days: 1
+          if-no-files-found: error
