@@ -85,7 +85,7 @@ jobs:
         id: find-rom
         run: |
           
-          ROM_FILE=$(find out -name 'UN1CA*.zip' | head -1)
+          ROM_FILE=$(find un1ca/out -name 'UN1CA*.zip' | head -1)
           echo "ROM_FILE=$ROM_FILE" >> $GITHUB_OUTPUT
           echo "ROM_NAME=$(basename $ROM_FILE)" >> $GITHUB_OUTPUT
           echo "Found ROM file: $ROM_FILE"
