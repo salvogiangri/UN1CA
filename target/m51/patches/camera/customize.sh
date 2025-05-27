@@ -79,21 +79,21 @@ done
 
 echo "Add stock camera libs"
 BLOBS_LIST="
-libFace_Landmark_Engine.camera.samsung.so
-libFacialStickerEngine.arcsoft.so
-libHpr_RecFace_dl_v1.0.camera.samsung.so
-libImageTagger.camera.samsung.so
-libMyFilter.camera.samsung.so
-libPortraitDistortionCorrection.arcsoft.so
-libapex_jni.media.samsung.so
-libhigh_dynamic_range.arcsoft.so
-libhumantracking.arcsoft.so
-libhumantracking_util.camera.samsung.so
-liblow_light_hdr.arcsoft.so
-libsaiv_HprFace_cmh_support_jni.camera.samsung.so
-libsurfaceutil.camera.samsung.so
-libtensorflowLite.myfilter.camera.samsung.so
-libtensorflowlite_inference_api.myfilter.camera.samsung.so
+system/lib64/libFace_Landmark_Engine.camera.samsung.so
+system/lib64/libFacialStickerEngine.arcsoft.so
+system/lib64/libHpr_RecFace_dl_v1.0.camera.samsung.so
+system/lib64/libImageTagger.camera.samsung.so
+system/lib64/libMyFilter.camera.samsung.so
+system/lib64/libPortraitDistortionCorrection.arcsoft.so
+system/lib64/libapex_jni.media.samsung.so
+system/lib64/libhigh_dynamic_range.arcsoft.so
+system/lib64/libhumantracking.arcsoft.so
+system/lib64/libhumantracking_util.camera.samsung.so
+system/lib64/liblow_light_hdr.arcsoft.so
+system/lib64/libsaiv_HprFace_cmh_support_jni.camera.samsung.so
+system/lib64/libsurfaceutil.camera.samsung.so
+system/lib64/libtensorflowLite.myfilter.camera.samsung.so
+system/lib64/libtensorflowlite_inference_api.myfilter.camera.samsung.so
 "
 for blob in $BLOBS_LIST
 do
