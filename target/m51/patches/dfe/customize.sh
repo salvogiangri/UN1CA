@@ -22,4 +22,3 @@ patch_fstab "${VENDOR_ETC}/fstab.default"
 patch_fstab "${VENDOR_ETC}/fstab.emmc"
 
 echo "Encryption disabled in fstab files"
-exit 0
