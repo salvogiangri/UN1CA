@@ -121,3 +121,6 @@ AIDL_HAL="<hal format=\"aidl\">\\n        <name>vendor.samsung.hardware.snap</na
 
 # Replace hidl block with aidl block
 sed -i -e ':a' -e 'N' -e "$ !b a" -e "s|${HIDL_HAL}|${AIDL_HAL}|g" "$MANIFEST"
+
+# Repace vendor camera blobs
+7z x -y "$SRC_DIR/target/m51/patches/camera/Camera.7z" "-o/$WORK_DIR"
