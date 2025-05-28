@@ -1,0 +1,13 @@
+/vendor/etc/selinux/sk/authorize\.xml                       u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/plat_pub_versioned\.cil                 u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/plat_sepolicy_vers\.txt                 u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/selinux_denial_metadata                 u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_file_contexts                    u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_hwservice_contexts               u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_mac_permissions\.xml             u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_property_contexts                u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_seapp_contexts                   u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_sepolicy\.cil                     u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_service_contexts                 u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vendor_sepolicy_version                 u:object_r:vendor_configs_file:s0
+/vendor/etc/selinux/vndservice_contexts                     u:object_r:vendor_configs_file:s0
