@@ -3,7 +3,6 @@ vendor/lib64 0 2000 755 capabilities=0x0
 vendor/bin/hw 0 2000 755 capabilities=0x0
 vendor/etc/init 0 2000 755 capabilities=0x0
 
-vendor/lib/libarcsoft_picportrait_video.so 0 0 644 capabilities=0x0
 vendor/lib/libexifa.camera.samsung.so 0 0 644 capabilities=0x0
 vendor/lib/libHandGesture.camera.samsung.so 0 0 644 capabilities=0x0
 vendor/lib/libhand_interaction.uniplugin@1.0.so 0 0 644 capabilities=0x0
