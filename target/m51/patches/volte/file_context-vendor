@@ -1,0 +1,40 @@
+/vendor/bin/hw/rild                                             u:object_r:radio_exec:s0
+
+/vendor/etc/init/emservice\.rc                                  u:object_r:vendor_init_rc_file:s0
+/vendor/etc/init/init\.vendor\.rilchip\.rc                      u:object_r:vendor_init_rc_file:s0
+/vendor/etc/init/init\.vendor\.rilcommon\.rc                    u:object_r:vendor_init_rc_file:s0
+
+/vendor/lib64/libSemDataProps\.so                               u:object_r:vendor_file:s0
+/vendor/lib64/libSemTelephonyProps\.so                          u:object_r:vendor_file:s0
+/vendor/lib64/libdsi_netctrl\.so                                u:object_r:vendor_file:s0
+/vendor/lib64/libdsutils\.so                                    u:object_r:vendor_file:s0
+/vendor/lib64/libnetmgr\.so                                     u:object_r:vendor_file:s0
+/vendor/lib64/libnetmgr_common\.so                              u:object_r:vendor_file:s0
+/vendor/lib64/libnlnetmgr\.so                                   u:object_r:vendor_file:s0
+/vendor/lib64/libqmi\.so                                        u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_cci\.so                                    u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_client_helper\.so                          u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_client_qmux\.so                            u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_common_so\.so                              u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_csi\.so                                    u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_encdec\.so                                 u:object_r:vendor_file:s0
+/vendor/lib64/libqmi_legacy\.so                                 u:object_r:vendor_file:s0
+/vendor/lib64/libqmiservices-ext\.so                            u:object_r:vendor_file:s0
+/vendor/lib64/libqmiservices\.so                                u:object_r:vendor_file:s0
+/vendor/lib64/libril_sem\.so                                    u:object_r:vendor_file:s0
+/vendor/lib64/libqrtr\.so                                       u:object_r:vendor_file:s0
+/vendor/lib64/librilutils\.so                                   u:object_r:vendor_file:s0
+/vendor/lib64/libsec-ril\.so                                    u:object_r:vendor_file:s0
+/vendor/lib64/libsec_semHalTlc\.so                              u:object_r:vendor_file:s0
+/vendor/lib64/librmnetctl\.so                                   u:object_r:vendor_file:s0
+/vendor/lib64/libsec_semRil\.so                                 u:object_r:vendor_file:s0
+/vendor/lib64/libsecril-client\.so                              u:object_r:vendor_file:s0
+/vendor/lib64/libsemnativecarrierfeature\.so                    u:object_r:vendor_file:s0
+/vendor/lib64/libsomxcmn\.so                                    u:object_r:vendor_file:s0
+
+/vendor/lib64/vendor\.samsung\.hardware\.radio\.bridge@2\.0\.so  u:object_r:vendor_file:s0
+/vendor/lib64/vendor\.samsung\.hardware\.radio\.bridge@2\.1\.so  u:object_r:vendor_file:s0
+/vendor/lib64/vendor\.samsung\.hardware\.radio\.channel@2\.0\.so u:object_r:vendor_file:s0
+/vendor/lib64/vendor\.samsung\.hardware\.radio@2\.0\.so          u:object_r:vendor_file:s0
+/vendor/lib64/vendor\.samsung\.hardware\.radio@2\.1\.so          u:object_r:vendor_file:s0
+/vendor/lib64/vendor\.samsung\.hardware\.radio@2\.2\.so          u:object_r:vendor_file:s0
