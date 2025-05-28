@@ -1,0 +1,16 @@
+vendor/etc/selinux                  0    2000   755   capabilities=0x0
+vendor/etc/selinux/sk               0    2000   755   capabilities=0x0
+
+vendor/etc/selinux/sk/authorize.xml         0    0   644   capabilities=0x0
+vendor/etc/selinux/plat_pub_versioned.cil   0    0   644   capabilities=0x0
+vendor/etc/selinux/plat_sepolicy_vers.txt   0    0   644   capabilities=0x0
+vendor/etc/selinux/selinux_denial_metadata  0    0   644   capabilities=0x0
+vendor/etc/selinux/vendor_file_contexts     0    0   644   capabilities=0x0
+vendor/etc/selinux/vendor_hwservice_contexts 0  0   644   capabilities=0x0
+vendor/etc/selinux/vendor_mac_permissions.xml 0  0   644   capabilities=0x0
+vendor/etc/selinux/vendor_property_contexts  0   0   644   capabilities=0x0
+vendor/etc/selinux/vendor_seapp_contexts     0   0   644   capabilities=0x0
+vendor/etc/selinux/vendor_sepolicy.cil       0   0   644   capabilities=0x0
+vendor/etc/selinux/vendor_service_contexts   0   0   644   capabilities=0x0
+vendor/etc/selinux/vendor_sepolicy_version   0   0   644   capabilities=0x0
+vendor/etc/selinux/vndservice_contexts       0   0   644   capabilities=0x0
