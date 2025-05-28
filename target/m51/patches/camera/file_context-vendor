@@ -23,7 +23,6 @@
 /vendor/lib/vendor\.samsung\.hardware\.snap@1\.2\.so                u:object_r:vendor_file:s0
 
 /vendor/lib64/libHandGesture\.camera\.samsung\.so                    u:object_r:vendor_file:s0
-/vendor/lib64/libarcsoft_picportrait_video\.so                       u:object_r:vendor_file:s0
 /vendor/lib64/libexifa\.camera\.samsung\.so                          u:object_r:vendor_file:s0
 /vendor/lib64/libformatConverter\.unifunc\.so                        u:object_r:vendor_file:s0
 /vendor/lib64/libhal\.wsm\.samsung\.so                               u:object_r:vendor_file:s0
