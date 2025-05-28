@@ -1,0 +1,40 @@
+vendor/bin/hw/rild                                      0   2000  755  capabilities=0x0
+
+vendor/etc/init/emservice.rc                            0   0     644  capabilities=0x0
+vendor/etc/init/init.vendor.rilchip.rc                  0   0     644  capabilities=0x0
+vendor/etc/init/init.vendor.rilcommon.rc                0   0     644  capabilities=0x0
+
+vendor/lib64/libSemDataProps.so                         0   0     644  capabilities=0x0
+vendor/lib64/libSemTelephonyProps.so                    0   0     644  capabilities=0x0
+vendor/lib64/libdsi_netctrl.so                          0   0     644  capabilities=0x0
+vendor/lib64/libdsutils.so                              0   0     644  capabilities=0x0
+vendor/lib64/libnetmgr.so                               0   0     644  capabilities=0x0
+vendor/lib64/libnetmgr_common.so                        0   0     644  capabilities=0x0
+vendor/lib64/libnlnetmgr.so                             0   0     644  capabilities=0x0
+vendor/lib64/libqmi.so                                  0   0     644  capabilities=0x0
+vendor/lib64/libqmi_cci.so                              0   0     644  capabilities=0x0
+vendor/lib64/libqmi_client_helper.so                    0   0     644  capabilities=0x0
+vendor/lib64/libqmi_client_qmux.so                      0   0     644  capabilities=0x0
+vendor/lib64/libqmi_common_so.so                        0   0     644  capabilities=0x0
+vendor/lib64/libqmi_csi.so                              0   0     644  capabilities=0x0
+vendor/lib64/libqmi_encdec.so                           0   0     644  capabilities=0x0
+vendor/lib64/libqmi_legacy.so                           0   0     644  capabilities=0x0
+vendor/lib64/libqmiservices-ext.so                      0   0     644  capabilities=0x0
+vendor/lib64/libqmiservices.so                          0   0     644  capabilities=0x0
+vendor/lib64/libril_sem.so                              0   0     644  capabilities=0x0
+vendor/lib64/libqrtr.so                                 0   0     644  capabilities=0x0
+vendor/lib64/librilutils.so                             0   0     644  capabilities=0x0
+vendor/lib64/libsec-ril.so                              0   0     644  capabilities=0x0
+vendor/lib64/libsec_semHalTlc.so                        0   0     644  capabilities=0x0
+vendor/lib64/librmnetctl.so                             0   0     644  capabilities=0x0
+vendor/lib64/libsec_semRil.so                           0   0     644  capabilities=0x0
+vendor/lib64/libsecril-client.so                        0   0     644  capabilities=0x0
+vendor/lib64/libsemnativecarrierfeature.so              0   0     644  capabilities=0x0
+vendor/lib64/libsomxcmn.so                              0   0     644  capabilities=0x0
+
+vendor/lib64/vendor.samsung.hardware.radio.bridge@2.0.so      0  0  644 capabilities=0x0
+vendor/lib64/vendor.samsung.hardware.radio.bridge@2.1.so      0  0  644 capabilities=0x0
+vendor/lib64/vendor.samsung.hardware.radio.channel@2.0.so     0  0  644 capabilities=0x0
+vendor/lib64/vendor.samsung.hardware.radio@2.0.so             0  0  644 capabilities=0x0
+vendor/lib64/vendor.samsung.hardware.radio@2.1.so             0  0  644 capabilities=0x0
+vendor/lib64/vendor.samsung.hardware.radio@2.2.so             0  0  644 capabilities=0x0
