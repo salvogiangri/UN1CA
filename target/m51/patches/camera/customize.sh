@@ -111,16 +111,16 @@ sed -i \
     's/system\/cameradata\/portrait_data\/single_bokeh_feature.json/system\/cameradata\/portrait_data\/unica_bokeh_feature.json\x00/g' \
     "$WORK_DIR/system/system/lib64/libPortraitSolution.camera.samsung.so"
 
-MANIFEST="$WORK_DIR/vendor/etc/vintf/manifest.xml"
+#MANIFEST="$WORK_DIR/vendor/etc/vintf/manifest.xml"
 
 # Define the full EXACT hidl block to be replaced
-HIDL_HAL="<hal format=\"hidl\">\\n        <name>vendor.samsung.hardware.snap</name>\\n        <transport>hwbinder</transport>\\n        <version>1.2</version>\\n        <interface>\\n            <name>ISehSnap</name>\\n            <instance>default</instance>\\n        </interface>\\n        <fqname>@1.2::ISehSnap/default</fqname>\\n    </hal>"
+#HIDL_HAL="<hal format=\"hidl\">\\n        <name>vendor.samsung.hardware.snap</name>\\n        <transport>hwbinder</transport>\\n        <version>1.2</version>\\n        <interface>\\n            <name>ISehSnap</name>\\n            <instance>default</instance>\\n        </interface>\\n        <fqname>@1.2::ISehSnap/default</fqname>\\n    </hal>"
 
 # Define the full EXACT aidl block to insert
-AIDL_HAL="<hal format=\"aidl\">\\n        <name>vendor.samsung.hardware.snap</name>\\n        <fqname>ISehSnap/default</fqname>\\n    </hal>"
+#AIDL_HAL="<hal format=\"aidl\">\\n        <name>vendor.samsung.hardware.snap</name>\\n        <fqname>ISehSnap/default</fqname>\\n    </hal>"
 
 # Replace hidl block with aidl block
-sed -i -e ':a' -e 'N' -e "$ !b a" -e "s|${HIDL_HAL}|${AIDL_HAL}|g" "$MANIFEST"
+#sed -i -e ':a' -e 'N' -e "$ !b a" -e "s|${HIDL_HAL}|${AIDL_HAL}|g" "$MANIFEST"
 
 # Repace vendor camera blobs
 #7z x -y "$SRC_DIR/target/m51/patches/camera/Camera.7z" "-o/$WORK_DIR"
