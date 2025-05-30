@@ -1,8 +1,0 @@
-/vendor u:object_r:vendor_file:s0
-/vendor/etc u:object_r:vendor_configs_file:s0
-/vendor/etc/vintf u:object_r:vendor_configs_file:s0
-/vendor/etc/vintf/manifest\.xml u:object_r:vendor_configs_file:s0
-/vendor/lib64 u:object_r:vendor_file:s0
-/vendor/lib64/libSemTelephonyProps\.so u:object_r:vendor_file:s0
-/vendor/lib64/libril_sem\.so u:object_r:vendor_file:s0
-/vendor/lib64/libsec-ril\.so u:object_r:vendor_file:s0
