@@ -26,3 +26,7 @@ if [[ "$SOURCE_SUPPORT_CUTOUT_PROTECTION" != "$TARGET_SUPPORT_CUTOUT_PROTECTION"
 
     sed -i "$(sed -n "/config_enableDisplayCutoutProtection/=" "$FTP") c$R" "$FTP"
 fi
+
+# Add Multi-User Support
+SET_PROP "system" "fw.max_users" "3"
+SET_PROP "system" "fw.show_multiuserui" "1"
