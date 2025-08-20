@@ -34,6 +34,8 @@ THREAD_COUNT=$(awk -v max="$(nproc)" '/MemTotal/ {
   print (tc < 1 ? 1 : (tc > max ? max : tc));
 }' /proc/meminfo)
 
+[ -n "$GITHUB_ACTIONS" ] && THREAD_COUNT=1
+
 BUILD()
 {
     if [ ! -d "$OUTPUT_PATH" ]; then
