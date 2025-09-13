@@ -312,6 +312,20 @@ GENERATE_UPDATER_SCRIPT()
             echo -n "$TARGET_CODENAME"
             echo    '\" devices; this is a \"" + getprop("ro.product.device") + "\".");'
         fi
+        if $TARGET_REQUIRES_SPECIFIC_FIRMWARE; then
+            TARGET_FW_VERSION=$(GET_PROP "$WORK_DIR/vendor/build.prop" ro.vendor.build.version.incremental)
+            [[ "$TARGET_SUPPORTED_FIRMWARES" == "none" ]] \
+                && TARGET_SUPPORTED_FIRMWARES=("$TARGET_FW_VERSION") \
+                || TARGET_SUPPORTED_FIRMWARES+=("$TARGET_FW_VERSION")
+            BL=""
+            for i in "${TARGET_SUPPORTED_FIRMWARES[@]}"; do
+                BL+="getprop(\"ro.bootloader\") == \"$i\" || "
+            done
+            BL=""${BL% || }""
+
+            echo -e "ifelse($BL,\"\","
+            echo -e 'abort("E3004: Your firmware version is not supported."););'
+        fi
 
         PRINT_HEADER
 
