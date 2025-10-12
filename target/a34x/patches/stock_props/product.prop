@@ -1,0 +1,5 @@
+# Bluetooth config
+bluetooth.profile.asha.central.enabled=false
+
+# FRP
+ro.frp.pst=/dev/block/by-name/persistent

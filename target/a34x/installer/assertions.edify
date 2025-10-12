@@ -1,0 +1,3 @@
+if (getprop("ro.boot.em.model") == "SM-A346B" && getprop("ro.boot.bootloader") != "A346BXXSBDYI1") then
+abort ("E3003: This package requires the \"A346BXXSBDYI1\" firmware installed on your device; you have \"" + getprop("ro.bootloader") + "\"");
+endif;

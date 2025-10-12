@@ -1,0 +1,36 @@
+
+# --- Start patching firmware partitions ---
+
+# Camera Video Processing Unit
+ui_print("Full Patching cam_vpu1-verified.img img...");
+package_extract_file("firmware/A346B/cam_vpu1-verified.img", "/dev/block/by-name/cam_vpu1");
+
+ui_print("Full Patching cam_vpu2-verified.img img...");
+package_extract_file("firmware/A346B/cam_vpu2-verified.img", "/dev/block/by-name/cam_vpu2");
+
+ui_print("Full Patching cam_vpu3-verified.img img...");
+package_extract_file("firmware/A346B/cam_vpu3-verified.img", "/dev/block/by-name/cam_vpu3");
+
+# Open BOTA
+assert(mark_header_bt("/dev/block/by-name/bota", 0, 0, "000"));
+
+# Audio Digital Signal Processing
+ui_print("Write audio_dsp-verified.img to /dev/block/by-name/bota");
+assert(write_data_bt("firmware/A346B/audio_dsp-verified.img", "/dev/block/by-name/bota", 8, 5825616));
+
+# Voice Wakeup
+ui_print("Write scp-verified.img to /dev/block/by-name/bota");
+assert(write_data_bt("firmware/A346B/scp-verified.img", "/dev/block/by-name/bota", 5825660, 882800));
+
+# DTBO
+ui_print("Write dtbo.img to /dev/block/by-name/bota");
+assert(write_data_bt("firmware/A346B/dtbo.img", "/dev/block/by-name/bota", 6708496, 228624));
+
+# Close BOTA
+assert(mark_header_bt("/dev/block/by-name/bota", 0, 3, 3142939818));
+
+# Vbmeta
+ui_print("Full Patching vbmeta.img img...");
+package_extract_file("firmware/A346B/vbmeta.img", "/dev/block/by-name/vbmeta");
+
+# --- End patching firmware partitions ---

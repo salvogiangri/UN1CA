@@ -1,0 +1,3 @@
+SKIPUNZIP=1
+DELETE_FROM_WORK_DIR "vendor" "tee"
+ADD_TO_WORK_DIR "$MODPATH" "vendor" "tee"

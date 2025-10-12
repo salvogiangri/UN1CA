@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_mainBuiltInDisplayCutout">M 0,0 H -25.6 V 26.66666666666667 H 25.6 V 0 H 0 Z @dp</string>
+    <string name="config_oemCredentialManagerDialogComponent">com.android.config oem CredentialManager Dialog Component</string>
+    <string name="config_wallpaperCropperPackage">com.android.wallpaperpicker</string>
+    <string name="config_wifi_tcp_buffers">1730560,3461120,6922240,524288,1048576,4525824</string>
+</resources>
