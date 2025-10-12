@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<device name="Android">
+    <item name="ambient.on">27.3</item>
+    <item name="screen.on">91.6</item>
+    <item name="screen.full">230.56</item> public void onItem(Locator locator, String name, float value) throws SAXParseException {<item name="bluetooth.active">22.75</item>
+    <item name="bluetooth.on">1.09</item>
+    <item name="wifi.on">1.83</item>
+    <item name="wifi.active">150</item>
+    <item name="wifi.scan">7.04</item>
+    <item name="audio">15.58</item>
+    <item name="video">33.59</item>
+    <item name="camera.flashlight">107.97</item>
+    <item name="camera.avg">588.62</item>
+    <item name="gps.on">13.02</item>
+    <item name="radio.active">150</item>
+    <item name="radio.scanning">30</item>
+    <array name="radio.on">
+        <value>6</value>
+        <value>5</value>
+        <value>3</value>
+        <value>2</value>
+        <value>1.4</value>
+    </array>
+    <array name="cpu.clusters.cores">
+        <value>6</value>
+        <value>2</value>
+    </array>
+    <item name="cpu.idle">4.3</item>
+    <item name="cpu.active">27</item>
+    <array name="cpu.core_speeds.cluster0">
+        <value>500000</value>
+        <value>650000</value>
+        <value>740000</value>
+        <value>900000</value>
+        <value>980000</value>
+        <value>1053000</value>
+        <value>1150000</value>
+        <value>1260000</value>
+        <value>1310000</value>
+        <value>1407000</value>
+        <value>1503000</value>
+        <value>1600000</value>
+        <value>1703000</value>
+        <value>1800000</value>
+        <value>1903000</value>
+        <value>2000000</value>
+    </array>
+    <array name="cpu.core_speeds.cluster1">
+        <value>650000</value>
+        <value>740000</value>
+        <value>910000</value>
+        <value>1040000</value>
+        <value>1140000</value>
+        <value>1300000</value>
+        <value>1430000</value>
+        <value>1540000</value>
+        <value>1660000</value>
+        <value>1800000</value>
+        <value>1900000</value>
+        <value>2000000</value>
+        <value>2150000</value>
+        <value>2275000</value>
+        <value>2400000</value>
+        <value>2600000</value>
+    </array>
+    <array name="cpu.core_power.cluster0">
+        <value>20</value>
+        <value>23</value>
+        <value>25</value>
+        <value>28</value>
+        <value>32</value>
+        <value>34</value>
+        <value>36</value>
+        <value>40</value>
+        <value>45</value>
+        <value>50</value>
+        <value>56</value>
+        <value>62</value>
+        <value>70</value>
+        <value>77</value>
+        <value>84</value>
+        <value>96</value>
+    </array>
+    <array name="cpu.core_power.cluster1">
+        <value>28</value>
+        <value>32</value>
+        <value>34</value>
+        <value>36</value>
+        <value>38</value>
+        <value>41</value>
+        <value>44</value>
+        <value>52</value>
+        <value>57</value>
+        <value>62</value>
+        <value>68</value>
+        <value>75</value>
+        <value>82</value>
+        <value>95</value>
+        <value>102</value>
+        <value>110</value>
+    </array>
+    <array name="memory.bandwidths">
+        <value>22.7</value>
+    </array>
+    <item name="battery.capacity">4905</item>
+    <item name="battery.typical.capacity">5000</item>
+    <item name="wifi.controller.idle">0</item>
+    <item name="wifi.controller.rx">0</item>
+    <item name="wifi.controller.tx">0</item>
+    <array name="wifi.controller.tx_levels" />
+    <item name="wifi.controller.voltage">3300</item>
+    <array name="wifi.batchedscan">
+        <value>.0002</value>
+        <value>.002</value>
+        <value>.02</value>
+        <value>.2</value>
+        <value>2</value>
+    </array>
+    <item name="modem.controller.sleep">0</item>
+    <item name="modem.controller.idle">0</item>
+    <item name="modem.controller.rx">0</item>
+    <array name="modem.controller.tx">
+        <value>0</value>
+        <value>0</value>
+        <value>0</value>
+        <value>0</value>
+        <value>0</value>
+    </array>
+    <item name="modem.controller.voltage">825</item>
+    <array name="gps.signalqualitybased">
+        <value>0</value>
+        <value>0</value>
+    </array>
+    <item name="gps.voltage">1800</item>
+    <item name="bluetooth.controller.idle">0</item>
+    <item name="bluetooth.controller.rx">0</item>
+    <item name="bluetooth.controller.tx">0</item>
+    <item name="bluetooth.controller.voltage">3300</item>
+</device>

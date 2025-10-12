@@ -1,0 +1,11 @@
+if (getprop("ro.boot.em.model") == "SM-A346E" && (getprop("ro.boot.bootloader") != "A346EXXSADYH1" && getprop("ro.boot.bootloader") != "A346EXXSADYG1")) then
+abort ("E3003: This package requires the \"A346EXXSADYH1\" or \"A346EXXSADYG1\" firmware installed on your device; you have \"" + getprop("ro.bootloader") + "\"");
+endif;
+
+if (getprop("ro.boot.em.model") == "SM-A346B" && getprop("ro.boot.bootloader") != "A346BXXSBDYI1") then
+abort ("E3003: This package requires the \"A346BXXSBDYI1\" firmware installed on your device; you have \"" + getprop("ro.bootloader") + "\"");
+endif;
+
+if (getprop("ro.boot.em.model") == "SM-A346M" && getprop("ro.boot.bootloader") != "A346MUBSBDYI1") then
+abort ("E3003: This package requires the \"A346MUBSBDYI1\" firmware installed on your device; you have \"" + getprop("ro.bootloader") + "\"");
+endif;

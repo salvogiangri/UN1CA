@@ -22,3 +22,7 @@
 	path = external/signapk
 	url = https://github.com/UN1CA/external_signapk.git
 	ignore = dirty
+[submodule "target/a34x/patches/tee"]
+	path = target/a34x/patches/tee
+	url = https://github.com/UN1CA/target_a34x_patches_tee
+	ignore = dirty

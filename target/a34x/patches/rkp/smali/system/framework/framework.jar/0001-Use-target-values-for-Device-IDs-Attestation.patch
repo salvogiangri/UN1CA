@@ -1,0 +1,199 @@
+From 15f0d655387381e5618fec5ad09c241a89df484a Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Wed, 24 Dec 2025 17:28:18 +0100
+Subject: [PATCH] Use target values for Device IDs Attestation
+
+---
+ smali_classes3/android/os/Build.smali | 139 ++++++++++++++++++++++----
+ 1 file changed, 120 insertions(+), 19 deletions(-)
+
+diff --git a/smali_classes3/android/os/Build.smali b/smali_classes3/android/os/Build.smali
+index 4c518543..22e8c391 100644
+--- a/smali_classes3/android/os/Build.smali
++++ b/smali_classes3/android/os/Build.smali
+@@ -177,28 +177,137 @@
+ 
+     sput-object v0, Landroid/os/Build;->PRODUCT:Ljava/lang/String;
+ 
+-    const-string/jumbo v0, "name"
++    const-string/jumbo v0, "ro.product.name"
+ 
+-    invoke-static {v0}, Landroid/os/Build;->getVendorDeviceIdProperty(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v0}, Landroid/os/Build;->getString(Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+-    sput-object v0, Landroid/os/Build;->PRODUCT_FOR_ATTESTATION:Ljava/lang/String;
++    const-string v1, "eea"
+ 
+-    const-string/jumbo v0, "ro.product.device"
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_3
++
++    const-string/jumbo v0, "a34xeea"
++
++    goto :goto_2
++
++    :cond_3
++    const-string v1, "tur"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_4
++
++    const-string/jumbo v0, "a34xdtur"
++
++    goto :goto_2
++
++    :cond_4
++    const-string v1, "ser"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_5
++
++    const-string/jumbo v0, "a34xdser"
++
++    goto :goto_2
++
++    :cond_5
++    const-string/jumbo v0, "ro.boot.em.model"
+ 
+     invoke-static {v0}, Landroid/os/Build;->getString(Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+-    sput-object v0, Landroid/os/Build;->DEVICE:Ljava/lang/String;
++    const-string/jumbo v1, "SM-A346B"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_6
++
++    const-string/jumbo v0, "a34xxx"
++
++    goto :goto_2
++
++    :cond_6
++    const-string/jumbo v1, "SM-A346E"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_7
+ 
+-    const-string v0, "device"
++    const-string/jumbo v0, "a34xdxx"
+ 
+-    invoke-static {v0}, Landroid/os/Build;->getVendorDeviceIdProperty(Ljava/lang/String;)Ljava/lang/String;
++    goto :goto_2
++
++    :cond_7
++    const-string/jumbo v1, "SM-A346M"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_8
++
++    const-string/jumbo v0, "a34xub"
++
++    goto :goto_2
++
++    :cond_8
++    const-string/jumbo v1, "SM-A346N"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_9
++
++    const-string/jumbo v0, "a34xks"
++
++    goto :goto_2
++
++    :cond_9
++    const-string/jumbo v1, "SM-A3460"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_a
++
++    const-string/jumbo v0, "a34xzh"
++
++    goto :goto_2
++
++    :cond_a
++    const-string/jumbo v0, "a34xxx"
++
++    :goto_2
++    sput-object v0, Landroid/os/Build;->PRODUCT_FOR_ATTESTATION:Ljava/lang/String;
++
++    const-string/jumbo v0, "ro.product.device"
++
++    invoke-static {v0}, Landroid/os/Build;->getString(Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
++    sput-object v0, Landroid/os/Build;->DEVICE:Ljava/lang/String;
++
++    const-string v0, "a34x"
++
+     sput-object v0, Landroid/os/Build;->DEVICE_FOR_ATTESTATION:Ljava/lang/String;
+ 
+     const-string/jumbo v0, "ro.product.board"
+@@ -217,11 +326,7 @@
+ 
+     sput-object v0, Landroid/os/Build;->MANUFACTURER:Ljava/lang/String;
+ 
+-    const-string/jumbo v0, "manufacturer"
+-
+-    invoke-static {v0}, Landroid/os/Build;->getVendorDeviceIdProperty(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
++    const-string/jumbo v0, "samsung"
+ 
+     sput-object v0, Landroid/os/Build;->MANUFACTURER_FOR_ATTESTATION:Ljava/lang/String;
+ 
+@@ -233,11 +338,7 @@
+ 
+     sput-object v0, Landroid/os/Build;->BRAND:Ljava/lang/String;
+ 
+-    const-string v0, "brand"
+-
+-    invoke-static {v0}, Landroid/os/Build;->getVendorDeviceIdProperty(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
++    const-string/jumbo v0, "samsung"
+ 
+     sput-object v0, Landroid/os/Build;->BRAND_FOR_ATTESTATION:Ljava/lang/String;
+ 
+@@ -249,9 +350,9 @@
+ 
+     sput-object v0, Landroid/os/Build;->MODEL:Ljava/lang/String;
+ 
+-    const-string/jumbo v0, "model"
++    const-string/jumbo v0, "ro.boot.em.model"
+ 
+-    invoke-static {v0}, Landroid/os/Build;->getVendorDeviceIdProperty(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v0}, Landroid/os/Build;->getString(Ljava/lang/String;)Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+-- 
+2.51.0
+
