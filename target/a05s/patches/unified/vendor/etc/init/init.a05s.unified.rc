@@ -1,0 +1,37 @@
+
+# Since A057F, A057G, A057M and M145F have differences with wifi and some other things then we will try to bind mount some vendor files
+# Took reference from -- https://github.com/majaahh/unica_target_a53x_patches_variants/blob/sixteen/vendor/etc/init/init.a53x.unify.rc
+
+# SM-A057F files... well no need to do nothing, this vendor is originally from that device
+
+# SM-A057M Latam files
+on early-init && property:ro.boot.em.model=SM-A057M
+    # Firmware blobs
+    mount none /vendor/firmware/device/a05sub/ipa_fws.b01 /vendor/firmware/ipa_fws.b01 bind
+    mount none /vendor/firmware/device/a05sub/ipa_fws.elf /vendor/firmware/ipa_fws.elf bind
+    mount none /vendor/firmware/device/a05sub/ipa_fws.mdt /vendor/firmware/ipa_fws.mdt bind
+    mount none /vendor/firmware/device/a05sub/wlanmdsp.mbn.bin /vendor/firmware/wlanmdsp.mbn bind
+    
+# SM-M145F A05s but with another name
+on early-init && property:ro.boot.em.model=SM-M145F
+    # Firmware blobs
+    mount none /vendor/firmware/device/a05sddxx/ipa_fws.b01 /vendor/firmware/ipa_fws.b01 bind
+    mount none /vendor/firmware/device/a05sddxx/ipa_fws.elf /vendor/firmware/ipa_fws.elf bind
+    mount none /vendor/firmware/device/a05sddxx/ipa_fws.mdt /vendor/firmware/ipa_fws.mdt bind
+    mount none /vendor/firmware/device/a05sddxx/wlanmdsp.mbn.bin /vendor/firmware/wlanmdsp.mbn bind
+
+# SM-E145F A05s but indian
+on early-init && property:ro.boot.em.model=SM-E145F
+    # Firmware blobs
+    mount none /vendor/firmware/device/a05sins/ipa_fws.b01 /vendor/firmware/ipa_fws.b01 bind
+    mount none /vendor/firmware/device/a05sins/ipa_fws.elf /vendor/firmware/ipa_fws.elf bind
+    mount none /vendor/firmware/device/a05sins/ipa_fws.mdt /vendor/firmware/ipa_fws.mdt bind
+    mount none /vendor/firmware/device/a05sins/wlanmdsp.mbn.bin /vendor/firmware/wlanmdsp.mbn bind
+
+# SM-A057G files
+on early-init && property:ro.boot.em.model=SM-A057G
+    # Firmware blobs
+    mount none /vendor/firmware/device/a05sxx/ipa_fws.b01 /vendor/firmware/ipa_fws.b01 bind
+    mount none /vendor/firmware/device/a05sxx/ipa_fws.elf /vendor/firmware/ipa_fws.elf bind
+    mount none /vendor/firmware/device/a05sxx/ipa_fws.mdt /vendor/firmware/ipa_fws.mdt bind
+    mount none /vendor/firmware/device/a05sxx/wlanmdsp.mbn.bin /vendor/firmware/wlanmdsp.mbn bind

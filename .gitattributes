@@ -24,6 +24,7 @@ unica/mods/paradigm/system/** binary
 unica/mods/prophide/system/bin/rezetprop binary
 
 # Device-specific prebuilt blobs
+target/a05s/patches/unified/vendor/firmware/** binary
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a53x/patches/*/vendor/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
