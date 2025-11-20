@@ -142,6 +142,9 @@ fi
 #     If set to true, the original AVB/Samsung signature footer is kept in the target device kernel images.
 #     Defaults to false.
 #
+#   TARGET_KERNEL_VERSION
+#     Float containing the LTS version of the Linux kernel used by the device.
+#
 #   TARGET_BOOT_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device boot partition size.
 #
