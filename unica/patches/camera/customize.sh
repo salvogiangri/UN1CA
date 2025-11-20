@@ -165,7 +165,7 @@ if $SOURCE_CAMERA_SUPPORT_CAMERAX_EXTENSION; then
         DELETE_FROM_WORK_DIR "system" "system/lib/libsec_camerax_util_jni.camera.samsung.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libsec_camerax_util_jni.camera.samsung.so"
         DELETE_FROM_WORK_DIR "system" "system/priv-app/sec_camerax_service"
-        SET_PROP "ro.camerax.extensions.enabled" --delete
+        SET_PROP "system" "ro.camerax.extensions.enabled" --delete
     fi
 else
     if $TARGET_CAMERA_SUPPORT_CAMERAX_EXTENSION; then
