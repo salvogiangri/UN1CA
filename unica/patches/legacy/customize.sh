@@ -207,6 +207,17 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Ensure Userfaultfd Garbage Collector support in kernel
+# https://github.com/LineageOS/android_build_soong/blob/cff28f536f9684e4b3ae1f4c54443ccca73006c9/scripts/uffd_gc_utils.py#L28
+# - Shipped with API 31 or above: supported
+# - 5.10.x and above: supported
+# - 4.14.x/4.19.x/5.4.x: backport available
+# - 4.9.x and under: unsupported (as of now)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "31" ] && [ "$TARGET_KERNEL_VERSION" -lt "5.10" ] && \
+        [ "$TARGET_KERNEL_HAS_UFFD_BACKPORT" -ne "true"]; then
+    SET_PROP "product" "ro.dalvik.vm.enable_uffd_gc" "false"
+fi
+
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi

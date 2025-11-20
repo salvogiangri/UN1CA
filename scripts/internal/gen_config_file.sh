@@ -145,6 +145,9 @@ fi
 #   TARGET_KERNEL_VERSION
 #     Float containing the LTS version of the Linux kernel used by the device.
 #
+#   TARGET_KERNEL_HAS_UFFD_BACKPORT
+#     Boolean containing the truth value of the Linux kernel having an UFFD backport.
+#
 #   TARGET_BOOT_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device boot partition size.
 #
