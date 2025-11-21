@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024 Salvo Giangreco
+# Copyright (C) 2025 Salvo Giangreco
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 # Camera
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_CAMID_TELE2=54
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_NIGHT_FRONT_DISPLAY_FLASH_TRANSPARENT=65
-SEC_FLOATING_FEATURE_CAMERA_CONFIG_SDK_FEATURE_INFO=super_night.v1,preview_dis.v1,video_hdr.v1,smooth_zoom.v1,logical_rear_camera_id.v20,exposure_table_control.v1,selfie_tone.v1
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_UW_DISTORTION_CORRECTION=0,109,2,22011703,4000,3000,1,0,60,0
-SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=food.samsung.v1,ai_clear_zoom.arcsoft.v1,beauty.samsung.v4,face_landmark.arcsoft.v2_1,facial_attribute.samsung.v1,image_enhance.arcsoft.v1,scene_detection.samsung.v1,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,super_night.mpi.v2,super_resolution_raw.arcsoft.v2,macro_raw_sr.arcsoft.v1,fr_tracking.arcsoft.v1,human_tracking_hand.arcsoft.v4,mfhdr.arcsoft.v4,hybridhdr.arcsoft.v1,aebhdr.arcsoft.v1,llhdr.arcsoft.v4,facial_restoration.arcsoft.v1,dual_bokeh.samsung.v1_1,smart_scan.samsung.v2,single_bokeh.samsung.v2,localtm.samsung.v1_1,pro_single_rgb.mpi.v1,aimode.samsung.v2,aimfisp.samsung.v1
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_WIDE_DISTORTION_CORRECTION=0,109,2,22011703,4000,3000,0,150,60,0
 
 # Display
