@@ -88,6 +88,21 @@ system/etc/permissions/privapp-permissions-com.samsung.android.app.updatecenter.
 system/priv-app/AppUpdateCenter
 "
 
+# Bixby
+SYSTEM_DEBLOAT+="
+system/priv-app/Bixby
+system/priv-app/BixbyInterpreter
+system/priv-app/BixbyVisionFramework3.5
+system/priv-app/BixbyVisionFramework3.7
+system/app/BixbyWakeup
+system/system/etc/sysconfig/bixbyagent.xml
+system/etc/preferred-apps/com.samsung.android.bixby.agent.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.bixby.agent.xml
+system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml
+system/etc/permissions/signature-permissions-com.samsung.android.bixby.agent.xml
+"
+
+
 # BCService
 SYSTEM_DEBLOAT+="
 system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
