@@ -13,7 +13,7 @@ if ! $SOURCE_HAS_UWB; then
         EVAL "sed -i \"/usb.config/a ro.boot.uwbcountrycode=ff\" \"$WORK_DIR/product/etc/build.prop\""
 
         ADD_TO_WORK_DIR "b0qxxx" "product" \
-            "product/overlay/UwbRROverlay.apk" 0 0 644 "u:object_r:system_file:s0"
+            "overlay/UwbRROverlay.apk" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
             "system/app/UwbTest/UwbTest.apk" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "$([[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && echo "b0qxxx" || echo "b0sxxx")" \
