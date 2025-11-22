@@ -1,0 +1,1 @@
+verify_no_downgrade(getprop("ro.boot.bootloader"), "S908BXXSIFYI3") && getprop("ro.boot.rp") != "18" && abort("E3003: This package requires the \"S908BXXSIFYI3\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
