@@ -65,9 +65,6 @@ jobs:
           source ./buildenv.sh a52sxq
           ./scripts/build_dependencies.sh
           echo "TOOLS_VERSION=$(date -u +"%Y%m%d")" >> "$GITHUB_ENV"
-          find . -type d -path './out/*/.git' -prune -exec rm -rf {} +
-          find . -type d -path './prebuilts/*/.git' -prune -exec rm -rf {} +
-          find . -type d -path './external/*/.git' -prune -exec rm -rf {} +
           git status
           
       - name: Create Pull Request
