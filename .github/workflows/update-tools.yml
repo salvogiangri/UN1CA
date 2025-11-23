@@ -4,7 +4,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 12 * * *"
-
+    
+permissions:
+  checks: write
+  id-token: write   # This is required for requesting the JWT
+  contents: write  # This is required for actions/checkout
+  security-events: write
+  pull-requests: write
+  issues: write
+  
 jobs:
   update:
     runs-on: ubuntu-24.04
