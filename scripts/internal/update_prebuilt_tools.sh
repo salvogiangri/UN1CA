@@ -16,8 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# shellcheck disable=SC2164
-
 # [
 source "$SRC_DIR/scripts/utils/log_utils.sh" || exit 1
 
@@ -27,22 +25,22 @@ GENERATE_VERSION_INFO()
     echo "# Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
     echo ""
     
-    cd "$SRC_DIR/external/android-tools"
+    cd "$SRC_DIR/external/android-tools" || exit 1
     echo "android-tools=$(git rev-parse HEAD)"
     
-    cd "$SRC_DIR/external/apktool"
+    cd "$SRC_DIR/external/apktool" || exit 1
     echo "apktool=$(git rev-parse HEAD)"
     
-    cd "$SRC_DIR/external/erofs-utils"
+    cd "$SRC_DIR/external/erofs-utils" || exit 1
     echo "erofs-utils=$(git rev-parse HEAD)"
     
-    cd "$SRC_DIR/external/img2sdat"
+    cd "$SRC_DIR/external/img2sdat" || exit 1
     echo "img2sdat=$(git rev-parse HEAD)"
     
-    cd "$SRC_DIR/external/samloader"
+    cd "$SRC_DIR/external/samloader" || exit 1
     echo "samloader=$(git rev-parse HEAD)"
     
-    cd "$SRC_DIR/external/signapk"
+    cd "$SRC_DIR/external/signapk" || exit 1
     echo "signapk=$(git rev-parse HEAD)"
 }
 
@@ -122,7 +120,6 @@ LOG_STEP_IN true "Starting update_prebuilt_tools"
 
 # Check if there are any changes
 if CHECK_CHANGES; then
-    LOG_STEP_IN
     LOG "\033[0;33m! No version changes detected. Nothing to do.\033[0m"
     exit 0
 fi
