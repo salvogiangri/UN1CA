@@ -56,13 +56,18 @@ jobs:
         run: |
           source ./buildenv.sh a52sxq
           ./scripts/build_dependencies.sh
+
+      - name: Update prebuilt external tools
+        run: |
+          source ./buildenv.sh a52sxq
+          ./scripts/internal/update_prebuilt_tools.sh
           echo "TOOLS_VERSION=$(date -u +"%Y%m%d")" >> "$GITHUB_ENV"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           add-paths: |
-            out
+            prebuilts/external
           commit-message: 'prebuilts/external: update tools to ${{ env.TOOLS_VERSION }}'
           committer: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
           author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
