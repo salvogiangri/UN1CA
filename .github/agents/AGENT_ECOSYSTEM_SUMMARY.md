@@ -4,7 +4,7 @@
 
 ## 🎯 Overview
 
-The UN1CA agent ecosystem consists of 5 specialized agents designed to assist with custom ROM development for Samsung Galaxy devices. Each agent brings deep expertise in specific domains while working together seamlessly to support the entire development lifecycle.
+The UN1CA agent ecosystem consists of 6 specialized agents designed to assist with custom ROM development for Samsung Galaxy devices. Each agent brings deep expertise in specific domains while working together seamlessly to support the entire development lifecycle.
 
 ## 🤖 Complete Agent Capability Matrix
 
@@ -12,6 +12,7 @@ The UN1CA agent ecosystem consists of 5 specialized agents designed to assist wi
 |-------|---------------|------------------|------------------|
 | 🔧 **Build Orchestrator** | Task Management & Analysis | • Build system analysis<br>• Issue creation<br>• Agent assignment<br>• Priority management | • Project analysis<br>• Sprint planning<br>• Quality reviews<br>• Task distribution |
 | 📦 **Firmware Specialist** | Samsung Firmware | • Firmware download<br>• Partition extraction<br>• Image building<br>• Metadata handling | • Firmware updates<br>• Format changes<br>• Optimization<br>• New device support |
+| 📱 **Device Firmware Analyzer** | Device Configuration | • Config analysis<br>• Hardware features<br>• Regional variants<br>• Optimization opportunities | • New device setup<br>• Feature mapping<br>• Device comparison<br>• Config validation |
 | 💻 **Shell Script Specialist** | Build Scripts | • shellcheck compliance<br>• Error handling<br>• Performance optimization<br>• Code quality | • Script debugging<br>• Refactoring<br>• Performance tuning<br>• Best practices |
 | 🔨 **Patch Developer** | ROM Customization | • Smali modifications<br>• APK patching<br>• Module development<br>• Feature enablement | • Create patches<br>• Fix compatibility<br>• Develop mods<br>• Enable features |
 | 📝 **Documentation Specialist** | Technical Writing | • User guides<br>• API documentation<br>• Tutorials<br>• Troubleshooting | • Write guides<br>• Update docs<br>• Create tutorials<br>• FAQs |
@@ -47,6 +48,21 @@ The UN1CA agent ecosystem consists of 5 specialized agents designed to assist wi
 - "Add support for new EROFS compression"
 - "Handle new super.img partition layout"
 - "Improve firmware download reliability"
+
+#### 📱 Device Firmware Analyzer
+**Use when you need:**
+- Device configuration analysis
+- Hardware feature identification
+- Regional firmware comparison
+- Device-specific optimization
+- New device support planning
+
+**Example tasks:**
+- "Analyze Galaxy A52s configuration and suggest optimizations"
+- "Compare hardware features between a52sxq and a73xq"
+- "Extract SEC Product Features from new device firmware"
+- "Identify regional differences for BTU vs XME firmware"
+- "Validate config.sh for new device"
 
 #### 💻 Shell Script Specialist
 **Use when you need:**

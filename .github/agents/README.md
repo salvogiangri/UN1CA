@@ -1,10 +1,11 @@
 # UN1CA GitHub Copilot Custom Agent Profiles
 
-This directory contains **5 specialized custom agent profiles** that enable domain-specific assistance from GitHub Copilot for the UN1CA custom firmware project. Each profile provides deep expertise in specific areas of Android custom ROM development, from firmware handling to patch development.
+This directory contains **6 specialized custom agent profiles** that enable domain-specific assistance from GitHub Copilot for the UN1CA custom firmware project. Each profile provides deep expertise in specific areas of Android custom ROM development, from firmware handling to patch development.
 
 **Quick Navigation:**
 - [🔧 Build Orchestrator](#-build-orchestrator) - Main coordinator and task manager
 - [📦 Firmware Specialist](#-firmware-specialist) - Samsung firmware expert
+- [📱 Device Firmware Analyzer](#-device-firmware-analyzer) - Device configuration and analysis expert
 - [💻 Shell Script Specialist](#-shell-script-specialist) - Bash scripting master
 - [🔨 Patch Developer](#-patch-developer) - Android patching expert
 - [📝 Documentation Specialist](#-documentation-specialist) - Technical writing expert
@@ -38,6 +39,7 @@ graph TB
     
     subgraph "Technical Specialists"
         FW[📦 Firmware Specialist<br/>Samsung Firmware]
+        DFA[📱 Device Firmware Analyzer<br/>Device Analysis]
         SS[💻 Shell Script Specialist<br/>Build Scripts]
         PD[🔨 Patch Developer<br/>ROM Modifications]
     end
@@ -47,15 +49,19 @@ graph TB
     end
     
     BO -->|Assigns Tasks| FW
+    BO -->|Assigns Tasks| DFA
     BO -->|Assigns Tasks| SS
     BO -->|Assigns Tasks| PD
     BO -->|Assigns Tasks| DOC
     
+    FW <-->|Collaboration| DFA
     FW <-->|Collaboration| SS
     FW <-->|Collaboration| PD
+    DFA <-->|Collaboration| PD
     SS <-->|Collaboration| PD
     
     DOC -->|Documents| FW
+    DOC -->|Documents| DFA
     DOC -->|Documents| SS
     DOC -->|Documents| PD
 ```
@@ -115,6 +121,37 @@ The Firmware Specialist deeply understands Samsung firmware structure, Odin pack
 - "Add support for new firmware compression format"
 - "Improve partition metadata extraction"
 - "Handle EROFS to ext4 conversion"
+
+---
+
+### 📱 Device Firmware Analyzer (`device-firmware-analyzer.md`)
+**Role**: Device Configuration and Analysis Expert  
+**Focus**: Device-Specific Firmware Analysis, Hardware Features, Configuration Optimization
+
+The Device Firmware Analyzer specializes in analyzing Samsung device configurations, hardware capabilities, and firmware variations across different device models and regions.
+
+**Core Expertise:**
+- 📱 Device configuration analysis (config.sh files)
+- 🔍 SEC Product Feature identification and mapping
+- 🏗️ Hardware capability assessment
+- 🌍 Regional firmware variation analysis
+- ⚡ Performance optimization opportunities
+- 📊 Device comparison and compatibility analysis
+
+**Key Capabilities:**
+- Analyzing device-specific configurations
+- Extracting and documenting hardware features
+- Comparing device variants and regional differences
+- Identifying optimization opportunities
+- Supporting new device addition
+- Validating firmware compatibility
+
+**Use Cases:**
+- "Analyze configuration for Galaxy A52s and suggest optimizations"
+- "Compare hardware features between a52sxq and a73xq"
+- "Extract SEC Product Features from new device firmware"
+- "Validate config.sh for new device support"
+- "Identify regional firmware differences"
 
 ---
 
@@ -351,6 +388,7 @@ To contribute to agent profiles:
 |-------|------------------|--------------|
 | 🔧 Build Orchestrator | Project analysis and task management | Comprehensive system understanding |
 | 📦 Firmware Specialist | Firmware handling and extraction | Samsung firmware expertise |
+| 📱 Device Firmware Analyzer | Device configuration and analysis | Hardware feature identification |
 | 💻 Shell Script Specialist | Script quality and optimization | Bash best practices |
 | 🔨 Patch Developer | ROM customization and patches | Android patching mastery |
 | 📝 Documentation Specialist | Guides and documentation | Technical writing clarity |
