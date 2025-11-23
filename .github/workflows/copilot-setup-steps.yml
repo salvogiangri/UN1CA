@@ -29,3 +29,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.0 # v6.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install MCP Server Dependencies
+        run: |
+          # Install MCP servers globally to make them available for Copilot
+          for package in \
+            "@modelcontextprotocol/server-filesystem" \
+            "@modelcontextprotocol/server-github" \
+            "@modelcontextprotocol/server-sequential-thinking" \
+            "@modelcontextprotocol/server-git" \
+            "@modelcontextprotocol/server-memory" \
+            "@modelcontextprotocol/server-playwright"; do
+            echo "Installing $package..."
+            npm install -g "$package" || echo "Warning: Failed to install $package"
+          done
