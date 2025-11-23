@@ -45,5 +45,6 @@ jobs:
             "@modelcontextprotocol/server-git" \
             "@modelcontextprotocol/server-memory" \
             "@modelcontextprotocol/server-playwright"; do
-            npm install -g "$package" || true
+            echo "Installing $package..."
+            npm install -g "$package" || echo "Warning: Failed to install $package"
           done
