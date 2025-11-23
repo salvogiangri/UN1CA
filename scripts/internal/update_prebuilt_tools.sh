@@ -21,6 +21,31 @@
 # [
 source "$SRC_DIR/scripts/utils/log_utils.sh" || exit 1
 
+GENERATE_VERSION_INFO()
+{
+    echo "# External tool versions"
+    echo "# Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+    echo ""
+    
+    cd "$SRC_DIR/external/android-tools"
+    echo "android-tools=$(git rev-parse HEAD)"
+    
+    cd "$SRC_DIR/external/apktool"
+    echo "apktool=$(git rev-parse HEAD)"
+    
+    cd "$SRC_DIR/external/erofs-utils"
+    echo "erofs-utils=$(git rev-parse HEAD)"
+    
+    cd "$SRC_DIR/external/img2sdat"
+    echo "img2sdat=$(git rev-parse HEAD)"
+    
+    cd "$SRC_DIR/external/samloader"
+    echo "samloader=$(git rev-parse HEAD)"
+    
+    cd "$SRC_DIR/external/signapk"
+    echo "signapk=$(git rev-parse HEAD)"
+}
+
 COPY_TOOLS()
 {
     local TOOLS_BIN="$OUT_DIR/tools/bin"
@@ -57,30 +82,7 @@ RECORD_VERSIONS()
 
     LOG "- Recording tool versions"
 
-    # Record git commit hashes for all submodules
-    {
-        echo "# External tool versions"
-        echo "# Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-        echo ""
-        
-        cd "$SRC_DIR/external/android-tools"
-        echo "android-tools=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/apktool"
-        echo "apktool=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/erofs-utils"
-        echo "erofs-utils=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/img2sdat"
-        echo "img2sdat=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/samloader"
-        echo "samloader=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/signapk"
-        echo "signapk=$(git rev-parse HEAD)"
-    } > "$VERSION_FILE"
+    GENERATE_VERSION_INFO > "$VERSION_FILE"
 }
 
 CHECK_CHANGES()
@@ -95,29 +97,7 @@ CHECK_CHANGES()
     fi
 
     # Generate current versions to temp file
-    {
-        echo "# External tool versions"
-        echo "# Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-        echo ""
-        
-        cd "$SRC_DIR/external/android-tools"
-        echo "android-tools=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/apktool"
-        echo "apktool=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/erofs-utils"
-        echo "erofs-utils=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/img2sdat"
-        echo "img2sdat=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/samloader"
-        echo "samloader=$(git rev-parse HEAD)"
-        
-        cd "$SRC_DIR/external/signapk"
-        echo "signapk=$(git rev-parse HEAD)"
-    } > "$TEMP_VERSION_FILE"
+    GENERATE_VERSION_INFO > "$TEMP_VERSION_FILE"
 
     # Compare versions (ignoring date lines)
     if diff <(grep -v "^#" "$VERSION_FILE") <(grep -v "^#" "$TEMP_VERSION_FILE") >/dev/null 2>&1; then
