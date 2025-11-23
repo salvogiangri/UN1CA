@@ -7,6 +7,14 @@ on:
     branches:
       - 'sixteen'
 
+permissions:
+  checks: write
+  id-token: write   # This is required for requesting the JWT
+  contents: write  # This is required for actions/checkout
+  security-events: write
+  pull-requests: write
+  issues: write
+  
 jobs:
   build:
     runs-on: ubuntu-24.04
