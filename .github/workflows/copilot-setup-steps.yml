@@ -37,9 +37,15 @@ jobs:
 
       - name: Install MCP Server Dependencies
         run: |
-          timeout 5s npx -y @modelcontextprotocol/server-filesystem || true
-          timeout 5s npx -y @modelcontextprotocol/server-github || true
-          timeout 5s npx -y @modelcontextprotocol/server-sequential-thinking || true
-          timeout 5s npx -y @modelcontextprotocol/server-git || true
-          timeout 5s npx -y @modelcontextprotocol/server-memory || true
-          timeout 5s npx -y @modelcontextprotocol/server-playwright || true
+          # Pre-install MCP servers using timeout to cache packages
+          # Each server is started briefly (5s) which allows npx to download,
+          # cache, and initialize the package before timing out
+          for package in \
+            "@modelcontextprotocol/server-filesystem" \
+            "@modelcontextprotocol/server-github" \
+            "@modelcontextprotocol/server-sequential-thinking" \
+            "@modelcontextprotocol/server-git" \
+            "@modelcontextprotocol/server-memory" \
+            "@modelcontextprotocol/server-playwright"; do
+            timeout 5s npx -y "$package" || true
+          done
