@@ -37,9 +37,7 @@ jobs:
 
       - name: Install MCP Server Dependencies
         run: |
-          # Pre-install MCP servers using timeout to cache packages
-          # Each server is started briefly (30s) which allows npx to download,
-          # cache, and initialize the package before timing out
+          # Install MCP servers globally to make them available for Copilot
           for package in \
             "@modelcontextprotocol/server-filesystem" \
             "@modelcontextprotocol/server-github" \
@@ -47,5 +45,5 @@ jobs:
             "@modelcontextprotocol/server-git" \
             "@modelcontextprotocol/server-memory" \
             "@modelcontextprotocol/server-playwright"; do
-            timeout 30s npx -y "$package" || true
+            npm install -g "$package" || true
           done
