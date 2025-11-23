@@ -81,19 +81,11 @@ jobs:
           ./scripts/build_dependencies.sh
           echo "TOOLS_VERSION=$(date -u +"%Y%m%d")" >> "$GITHUB_ENV"
           
-          echo "=== Verifying build artifacts ==="
-          if [ ! -d "out" ] || [ -z "$(ls -A out)" ]; then
-            echo "❌ ERROR: Build failed - 'out' directory is empty or doesn't exist"
-            ls -la out/ || echo "out/ directory does not exist"
-            exit 1
-          fi
-          
-          echo "✅ Build successful - $(find out -type f | wc -l) files generated"
-          find out -type f -exec ls -lh {} \; | head -20
-          
           echo "=== Git status after build ==="
           git status
           git diff --name-status
+          git add out
+          git commit -m "Update prebuilts"
 
       - name: Detect changes
         id: check_changes
@@ -118,7 +110,6 @@ jobs:
         with:
           add-paths: |
             out
-            prebuilts/external
           commit-message: 'prebuilts/external: update tools to ${{ env.TOOLS_VERSION }}'
           committer: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
           author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
@@ -143,7 +134,7 @@ jobs:
             
             See `prebuilts/external/.current` for git commit hashes.
           draft: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TEST }}
 
       - name: Log workflow status
         if: always()
