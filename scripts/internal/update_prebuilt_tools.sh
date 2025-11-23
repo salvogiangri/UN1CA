@@ -61,16 +61,19 @@ COPY_TOOLS()
     mkdir -p "$PREBUILTS_DIR/bin"
     mkdir -p "$PREBUILTS_DIR/venv"
 
-    # Copy all binaries from tools/bin
-    cp -a "$TOOLS_BIN"/* "$PREBUILTS_DIR/bin/" || exit 1
+    # Copy all binaries from tools/bin, excluding .git files/directories
+    rsync -a --exclude='.git' "$TOOLS_BIN/" "$PREBUILTS_DIR/bin/" || exit 1
 
-    # Copy venv for samloader
+    # Copy venv for samloader, excluding .git files/directories
     if [ -d "$OUT_DIR/tools/venv" ]; then
-        cp -a "$OUT_DIR/tools/venv"/* "$PREBUILTS_DIR/venv/" || exit 1
+        rsync -a --exclude='.git' "$OUT_DIR/tools/venv/" "$PREBUILTS_DIR/venv/" || exit 1
     fi
 
     # Make all executables in bin directory executable
     find "$PREBUILTS_DIR/bin" -type f -exec chmod +x {} \; 2>/dev/null || true
+    
+    # Remove any .git files/directories that may have been copied
+    find "$PREBUILTS_DIR" -name ".git" -print0 2>/dev/null | xargs -0 rm -rf 2>/dev/null || true
 }
 
 RECORD_VERSIONS()
