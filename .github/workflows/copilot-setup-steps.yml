@@ -37,9 +37,9 @@ jobs:
 
       - name: Install MCP Server Dependencies
         run: |
-          npx -y @modelcontextprotocol/server-filesystem --version || true
-          npx -y @modelcontextprotocol/server-github --version || true
-          npx -y @modelcontextprotocol/server-sequential-thinking --version || true
-          npx -y @modelcontextprotocol/server-git --version || true
-          npx -y @modelcontextprotocol/server-memory --version || true
-          npx -y @modelcontextprotocol/server-playwright --version || true
+          timeout 5s npx -y @modelcontextprotocol/server-filesystem || true
+          timeout 5s npx -y @modelcontextprotocol/server-github || true
+          timeout 5s npx -y @modelcontextprotocol/server-sequential-thinking || true
+          timeout 5s npx -y @modelcontextprotocol/server-git || true
+          timeout 5s npx -y @modelcontextprotocol/server-memory || true
+          timeout 5s npx -y @modelcontextprotocol/server-playwright || true
