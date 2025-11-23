@@ -42,9 +42,8 @@ jobs:
             "@modelcontextprotocol/server-filesystem" \
             "@modelcontextprotocol/server-github" \
             "@modelcontextprotocol/server-sequential-thinking" \
-            "@modelcontextprotocol/server-git" \
             "@modelcontextprotocol/server-memory" \
-            "@modelcontextprotocol/server-playwright"; do
+            "@modelcontextprotocol/server-puppeteer"; do
             echo "Installing $package..."
             npm install -g "$package" || echo "Warning: Failed to install $package"
           done
