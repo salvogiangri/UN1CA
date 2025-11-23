@@ -22,6 +22,9 @@ prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
 unica/mods/prophide/system/bin/rezetprop binary
 
+# Build output - all files are binary (executables, libs, JARs, etc.)
+out/** binary
+
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
