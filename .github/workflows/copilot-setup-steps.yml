@@ -29,3 +29,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.0 # v6.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install MCP Server Dependencies
+        run: |
+          npx -y @modelcontextprotocol/server-filesystem --version || true
+          npx -y @modelcontextprotocol/server-github --version || true
+          npx -y @modelcontextprotocol/server-sequential-thinking --version || true
+          npx -y @modelcontextprotocol/server-git --version || true
+          npx -y @modelcontextprotocol/server-memory --version || true
+          npx -y @modelcontextprotocol/server-playwright --version || true
