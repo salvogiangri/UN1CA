@@ -38,7 +38,7 @@ jobs:
       - name: Install MCP Server Dependencies
         run: |
           # Pre-install MCP servers using timeout to cache packages
-          # Each server is started briefly (5s) which allows npx to download,
+          # Each server is started briefly (30s) which allows npx to download,
           # cache, and initialize the package before timing out
           for package in \
             "@modelcontextprotocol/server-filesystem" \
@@ -47,5 +47,5 @@ jobs:
             "@modelcontextprotocol/server-git" \
             "@modelcontextprotocol/server-memory" \
             "@modelcontextprotocol/server-playwright"; do
-            timeout 5s npx -y "$package" || true
+            timeout 30s npx -y "$package" || true
           done
