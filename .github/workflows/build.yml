@@ -62,6 +62,11 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      - name: Set up Swap
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 4
+
       - name: Build dependencies
         run: |
           source ./buildenv.sh ${{ matrix.target }}
