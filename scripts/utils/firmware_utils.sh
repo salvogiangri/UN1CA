@@ -93,6 +93,11 @@ EXTRACT_FILE_FROM_TAR()
         EVAL "tar xf \"$TAR\" -C \"$FW_DIR/${MODEL}_${CSC}\" \"$FILE.lz4\"" || return 1
         LOG "- Decompressing $FILE.lz4..."
         EVAL "lz4 -d --rm \"$FW_DIR/${MODEL}_${CSC}/$FILE.lz4\" \"$FW_DIR/${MODEL}_${CSC}/$FILE\"" || return 1
+        # Ensure .lz4 file is removed (--rm should handle this, but verify)
+        if [ -f "$FW_DIR/${MODEL}_${CSC}/$FILE.lz4" ]; then
+            LOG "- Removing $FILE.lz4..."
+            rm -f "$FW_DIR/${MODEL}_${CSC}/$FILE.lz4"
+        fi
     fi
 
     return 0
