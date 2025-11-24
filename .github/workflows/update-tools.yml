@@ -70,6 +70,9 @@ jobs:
           echo "=== Git status after build ==="
           git status
           git diff --name-status
+          git add out
+          git commit -m "update"
+          git push
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
