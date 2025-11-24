@@ -423,6 +423,28 @@ for i in "${FIRMWARES[@]}"; do
 
     echo -n "$DOWNLOADED_FIRMWARE" > "$FW_DIR/${MODEL}_${CSC}/.extracted"
 
+    # Clean up .tar.md5 archive files after successful extraction
+    LOG "- Cleaning up archive files..."
+    if [ -f "$BL_TAR" ]; then
+        LOG "- Removing $(basename "$BL_TAR")"
+        rm -f "$BL_TAR"
+    fi
+    if [ -f "$AP_TAR" ]; then
+        LOG "- Removing $(basename "$AP_TAR")"
+        rm -f "$AP_TAR"
+    fi
+    # Also remove CP and CSC tar files if they exist
+    CP_TAR="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "CP_$(cut -d "/" -f 1 -s <<< "$DOWNLOADED_FIRMWARE")*.md5" | sort -r | head -n 1)"
+    CSC_TAR="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "CSC_$(cut -d "/" -f 1 -s <<< "$DOWNLOADED_FIRMWARE")*.md5" | sort -r | head -n 1)"
+    if [ -n "$CP_TAR" ] && [ -f "$CP_TAR" ]; then
+        LOG "- Removing $(basename "$CP_TAR")"
+        rm -f "$CP_TAR"
+    fi
+    if [ -n "$CSC_TAR" ] && [ -f "$CSC_TAR" ]; then
+        LOG "- Removing $(basename "$CSC_TAR")"
+        rm -f "$CSC_TAR"
+    fi
+
     if [ -n "$GITHUB_ACTIONS" ]; then
         rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
     fi
