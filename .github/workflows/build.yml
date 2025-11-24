@@ -14,7 +14,7 @@ permissions:
   security-events: write
   pull-requests: write
   issues: write
-  
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -31,7 +31,7 @@ jobs:
           fetch-tags: '0'
           submodules: 'false'
           fetch-depth: '0'
-          
+
 
       - name: Free disk space (1/3)
         run: |
@@ -41,7 +41,7 @@ jobs:
           sudo rm -rf /usr/share/swift /usr/local/.ghcup
           sudo rm -rf /usr/local/share/powershell /usr/share/az_* /opt/az
           df -h
-          
+
 
       - name: Free disk space (2/3)
         uses: jlumbroso/free-disk-space@main
@@ -58,7 +58,7 @@ jobs:
         uses: rokibhasansagar/slimhub_actions@main
         with:
           retain: 'compiler_cmake'
-          
+
       - name: Set up build environment
         run: |
           sudo apt update
@@ -96,4 +96,84 @@ jobs:
       - name: Build ROM
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh --no-rom-zip
+          ./scripts/make_rom.sh
+
+      - name: Get ROM version and filename
+        id: rom_info
+        run: |
+          source ./buildenv.sh ${{ matrix.target }}
+          source ./unica/configs/version.sh
+          echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
+          ZIP_FILE=$(ls -1 out/UN1CA_*.zip 2>/dev/null | head -n1)
+          if [ -n "$ZIP_FILE" ]; then
+            echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
+            echo "zip_name=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error: No ZIP file found in out/ directory"
+            exit 1
+          fi
+
+      - name: Upload ROM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UN1CA-${{ matrix.target }}-${{ steps.rom_info.outputs.rom_version }}
+          path: ${{ steps.rom_info.outputs.zip_file }}
+          retention-days: 30
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'push' && github.ref == 'refs/heads/sixteen'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get version info
+        id: version
+        run: |
+          source ./unica/configs/version.sh
+          echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
+          echo "release_tag=v$ROM_VERSION" >> "$GITHUB_OUTPUT"
+          echo "release_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.release_tag }}
+          name: UN1CA ${{ steps.version.outputs.rom_version }} - ${{ steps.version.outputs.release_date }}
+          body: |
+            ## UN1CA ${{ steps.version.outputs.rom_version }}
+
+            ### Build Information
+            - **Version**: ${{ steps.version.outputs.rom_version }}
+            - **Build Date**: ${{ steps.version.outputs.release_date }}
+            - **Commit**: ${{ github.sha }}
+
+            ### Supported Devices
+            - Galaxy A52s 5G (a52sxq)
+            - Galaxy A73 5G (a73xq)
+            - Galaxy M52 5G (m52xq)
+
+            ### Installation
+            1. Download the appropriate ZIP file for your device
+            2. Boot into recovery mode
+            3. Flash the ZIP file
+            4. Reboot and enjoy!
+
+            ### Notes
+            - Make sure to backup your data before flashing
+            - Firmware files are signed and ready to flash
+
+          draft: false
+          prerelease: false
+          files: release-artifacts/**/*.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
