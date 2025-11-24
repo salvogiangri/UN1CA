@@ -228,6 +228,8 @@ TARGET_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
 - Compare configurations across devices
 - Detect missing or incorrect configuration values
 - Validate configuration consistency
+- **Extract real device values using apktool** - never copy from other models
+- Analyze floating_feature files to determine actual device capabilities
 
 ### Firmware Compatibility Assessment
 - Determine compatible firmware versions
@@ -242,6 +244,8 @@ TARGET_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
 - Compare feature sets across devices
 - Document feature dependencies
 - Suggest feature enablement opportunities
+- **Use apktool to extract APK and JAR files for accurate feature detection**
+- Compare floating_feature values with source_target to identify SEC_ replacements
 
 ### Optimization Opportunity Detection
 - Identify performance tuning opportunities
@@ -256,6 +260,13 @@ TARGET_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
 - Assess firmware availability
 - Determine partition layout compatibility
 - Check SoC platform support
+
+### Patch Development and Compatibility
+- **Create device-specific patches for new devices** - never copy patch files from other devices
+- Analyze UN1CA patches to determine compatibility with target device
+- Identify which patches apply to specific device configurations
+- Map patch requirements to device floating_features
+- Determine SEC_ value replacements based on floating_feature analysis
 
 ## Analysis Patterns
 
@@ -364,6 +375,137 @@ TARGET_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
    - Testing methodology
 ```
 
+### Pattern 4: Apktool-Based Device Analysis (CRITICAL FOR NEW DEVICES)
+
+**Objective**: Extract real device values using apktool - NEVER copy from other models
+
+**Steps Overview**:
+
+1. **Extract Framework Files from Device Firmware**
+   - Locate and extract the system image from firmware package
+   - Find and extract framework JAR files (framework.jar, services.jar, telephony-common.jar)
+   - Extract APK files containing device-specific configurations
+
+2. **Decompile Using Apktool**
+   - Use apktool to decompile framework.jar to access smali code
+   - Decompile services.jar for system services analysis
+   - Decompile relevant APK files (SecSettings, SemWifi-service, etc.)
+
+3. **Extract SEC Floating Features (ACTUAL Device Values)**
+   - Locate SemFloatingFeature class in decompiled smali code
+   - Extract all SEC_FLOATING_FEATURE_* constant strings
+   - Parse feature values from smali (getString, getBoolean, getInt methods)
+   - Document all discovered features with their actual values
+
+4. **Compare with Source Firmware (Source_Target)**
+   - Decompile source device framework for comparison
+   - Extract floating features from source device
+   - Identify differences: new features, removed features, common features
+   - Compare values for common features to determine which SEC_ values need replacement
+   - Document all differences for patch development
+
+5. **Create Device-Specific sff.sh**
+   - Based on floating feature analysis, create sff.sh with REAL device values
+   - **NEVER copy sff.sh from another device model**
+   - Only include features that differ from source or require customization
+   - Document extraction source (firmware version, date, method)
+
+6. **Document the Analysis**
+   - Create comprehensive analysis report for the device
+   - Include firmware information, extracted features, differences from source
+   - Document required patches based on feature analysis
+   - Provide reasoning for each configuration decision
+
+### Pattern 5: UN1CA Patch Compatibility Analysis
+
+**Objective**: Analyze which UN1CA patches are compatible with the target device
+
+**Steps Overview**:
+
+1. **Inventory Available Patches**
+   - Locate all UN1CA patches in the repository
+   - Categorize patches by type and function
+   - Document what each patch category does
+
+2. **Analyze Patch Requirements**
+   - For each patch, identify the target file (APK/JAR)
+   - Check if the target device firmware contains these files
+   - Verify file locations and availability in device firmware
+
+3. **Map Patches to Floating Features**
+   - Determine which patches require specific SEC_FLOATING_FEATURE values
+   - Cross-reference with device's extracted floating features
+   - Identify patches that depend on hardware capabilities
+   - Document compatibility based on feature availability
+
+4. **Analyze Smali Code Compatibility**
+   - Decompile target files from device firmware
+   - Compare with patch expectations
+   - Verify that classes and methods referenced in patches exist in device code
+   - Identify patches that may need adaptation for device-specific code structure
+
+5. **Create Device-Specific Patch List**
+   - Document which patches are automatically compatible
+   - List patches that need adaptation
+   - Identify patches that are not compatible
+   - Explain reasons for incompatibility
+
+6. **Test Patch Application**
+   - For compatible patches, verify they apply cleanly to device files
+   - Test with dry-run to avoid permanent changes
+   - Document results for each patch
+   - Identify any conflicts or issues
+
+### Pattern 6: Device-Specific Patch Creation
+
+**Objective**: Create NEW patches for new devices - NEVER copy patches from other devices
+
+**Steps Overview**:
+
+1. **Identify Patching Requirements**
+   - Based on device analysis and requirements, determine what needs to be patched
+   - Identify the target file (services.jar, framework.jar, APK, etc.)
+   - Determine the specific class or functionality that needs modification
+   - Document why the patch is needed for THIS device
+
+2. **Decompile Target File**
+   - Decompile the target file from device firmware using apktool
+   - Locate relevant smali code files
+   - Search for classes and methods that need modification
+
+3. **Analyze Current Code Behavior**
+   - Study the decompiled smali code to understand current logic
+   - Identify the exact methods and instructions that need changes
+   - Understand the code flow and dependencies
+   - Note any device-specific implementations
+
+4. **Make Device-Specific Modifications**
+   - Edit smali files with values specific to THIS device
+   - **CRITICAL**: Use ACTUAL values from device analysis, not copied values
+   - Ensure modifications match device hardware configuration
+   - Test logic changes thoroughly
+
+5. **Generate Patch File**
+   - Create backup of original decompiled code
+   - Apply modifications to working copy
+   - Generate unified diff patch file
+   - Store patch in device-specific patch directory structure
+   - Add descriptive patch header with device information
+
+6. **Document the Patch**
+   - Create README explaining patch purpose
+   - Document the analysis that led to the patch
+   - Describe implementation details
+   - Include testing results and firmware version
+   - Explain why this patch is specific to this device
+
+7. **Verify Patch Validity**
+   - Test patch application on clean decompiled code
+   - Recompile patched code to ensure validity
+   - Verify no syntax errors or compilation issues
+   - Document any dependencies or requirements
+
+
 ## Device Comparison Matrix
 
 ### Comparing Similar Devices
@@ -409,35 +551,81 @@ TARGET_WLAN_CONFIG_DATA_ACTIVITY_AFFINITY_BOOSTER_THRESHOLD="9999"
 
 ## Tools & Commands for Analysis
 
-### Extract Device Features from Firmware
-```bash
-# Extract framework.jar from firmware
-tar -xOf AP_*.tar.lz4 system.img.lz4 | lz4cat | \
-    sudo mount -o loop /dev/stdin /mnt
-cp /mnt/system/framework/framework.jar .
+### Primary Tools
 
-# Decompile and analyze
-apktool d framework.jar
-grep -r "SemFloatingFeature" framework/smali/
+**Apktool**: Essential tool for decompiling and analyzing APK and JAR files
+- Decompile framework.jar, services.jar, and other system files
+- Access smali code to extract SEC_FLOATING_FEATURE values
+- Analyze class structures and methods
+- Recompile modified code for testing
 
-# Extract all features
-grep -A 1 "getString" framework/smali/com/samsung/android/feature/* | \
-    grep "const-string" | cut -d'"' -f2 | sort -u
-```
+**Key Analysis Tasks**:
 
-### Analyze Partition Layout
-```bash
-# Extract super.img metadata
-lpdump --json super.img > super_metadata.json
+#### 1. Framework Analysis
+- Extract framework JAR files from device firmware
+- Decompile using apktool to access smali code
+- Locate SemFloatingFeature class implementation
+- Extract all SEC_FLOATING_FEATURE_* constants
+- Parse feature values (getString, getBoolean, getInt methods)
+- Document all discovered features with their actual values
 
-# Parse partition sizes
-jq '.partitions[] | {name: .name, size: .size}' super_metadata.json
+#### 2. Floating Feature Extraction
+- Search for SEC_FLOATING_FEATURE constant strings in smali code
+- Extract feature names and their types
+- Parse boolean features and their values
+- Parse string features and their values
+- Parse integer features and their values
+- Create comprehensive list of all device features
 
-# Calculate total size
-jq '[.partitions[].size] | add' super_metadata.json
-```
+#### 3. Source vs Target Comparison
+- Decompile source device framework
+- Extract floating features from source
+- Compare with target device features
+- Identify new features, removed features, and common features
+- Compare values for common features
+- Document which SEC_ values need replacement in patches
+- Create detailed comparison report
 
-### Compare Configurations
+#### 4. APK Analysis
+- Extract system APKs (SecSettings, SemWifi-service, etc.)
+- Extract vendor APKs as needed
+- Decompile APKs using apktool
+- Analyze device-specific configurations
+- Extract feature flags and settings
+
+#### 5. Patch Compatibility Analysis
+- Inventory all UN1CA patches in repository
+- For each patch, identify target file
+- Verify target file exists in device firmware
+- Check if classes/methods in patch exist in device code
+- Test patch application with dry-run
+- Document compatibility status for each patch
+
+#### 6. Device-Specific Patch Creation
+- Decompile target file from device firmware
+- Create backup for diff generation
+- Make device-specific modifications to smali code
+- Generate unified diff patch file
+- Add descriptive patch headers
+- Test patch application
+- Recompile to verify validity
+
+### Additional Analysis Tools
+
+**Partition Analysis**:
+- Extract and analyze super.img metadata
+- Parse partition sizes and layout
+- Calculate dynamic partition requirements
+
+**Configuration Comparison**:
+- Compare config.sh files between devices
+- Identify configuration differences
+- Extract common and unique features
+
+**Firmware Extraction**:
+- Extract images from firmware packages
+- Mount partition images for file access
+- Copy framework and system files for analysis
 ```bash
 # Compare two config.sh files
 diff -u target/a52sxq/config.sh target/a73xq/config.sh
@@ -473,149 +661,307 @@ BOOT_SIZE=$(grep TARGET_BOOT_PARTITION_SIZE config.sh | cut -d'=' -f2)
 if [ "$BOOT_SIZE" -lt 67108864 ]; then  # 64MB minimum
     echo "Boot partition too small"
 fi
-```
 
 ## Common Analysis Tasks
 
 ### Task 1: Add Support for New Device
-```bash
-# Step-by-step device analysis:
 
-1. Gather device information
+**Objective**: Perform complete analysis for adding new device support
+
+**Steps**:
+1. **Gather Device Information**
    - Official model number (SM-XXXX)
    - Marketing name
    - SoC platform
-   - Regional variants
+   - Regional variants available
 
-2. Find similar supported device
+2. **Find Similar Supported Device**
    - Same SoC family
-   - Similar features
-   - Same Android version
+   - Similar hardware features
+   - Same Android version range
 
-3. Download firmware sample
-   samloader -m SM-A736B -r XME download
+3. **Download Firmware Sample**
+   - Obtain official firmware for analysis
+   - Prefer BTU or XME region (least restrictions)
 
-4. Extract and analyze partitions
-   ./scripts/extract_fw.sh
+4. **Extract and Analyze Firmware**
+   - Extract firmware images
+   - Analyze partition structure
+   - Extract framework and system files
 
-5. Create config.sh
-   cp target/similar_device/config.sh target/new_device/
-   # Modify all values based on analysis
+5. **Perform Apktool Analysis**
+   - Decompile framework.jar using apktool
+   - Extract ALL SEC_FLOATING_FEATURE values
+   - **CRITICAL**: Use REAL values from THIS device
+   - **NEVER copy config from similar device**
+   - Compare floating features with source firmware
+   - Document all feature differences
 
-6. Test build process
-   source buildenv.sh new_device
-   unica make_rom
-```
+6. **Create Device-Specific Configuration**
+   - Use similar device config as TEMPLATE for structure only
+   - Replace ALL values with analyzed real values
+   - Create device-specific sff.sh based on floating feature analysis
+   - Document all configuration decisions
+
+7. **Analyze UN1CA Patch Compatibility**
+   - Check which patches apply to this device
+   - Identify patches that need adaptation
+   - Create device-specific patches where needed
+
+8. **Test Build Process**
+   - Attempt initial build
+   - Address any compatibility issues
+   - Verify ROM functionality
 
 ### Task 2: Optimize Device Configuration
-```bash
-# Analyze current configuration for improvements:
 
-1. Review feature flags
-   - Check for disabled features that hardware supports
-   - Example: HDR effect, adaptive refresh rate
+**Objective**: Improve performance and features for existing device
 
-2. Compare with similar devices
-   - Find optimization differences
-   - Example: WiFi booster threshold
+**Steps**:
+1. **Review Current Feature Flags**
+   - Extract current floating features using apktool
+   - Compare with hardware capabilities
+   - Identify disabled features that hardware supports
 
-3. Test feature enablement
-   - Enable feature in config.sh
-   - Build and test ROM
-   - Verify stability
+2. **Compare with Similar Devices**
+   - Analyze configurations of devices with same SoC
+   - Identify optimization opportunities
+   - Note performance tuning differences
 
-4. Benchmark performance
-   - Before and after measurements
+3. **Test Feature Enablement**
+   - Enable one feature at a time
+   - Build and test thoroughly
+   - Verify stability and performance
+
+4. **Benchmark and Measure**
+   - Performance before and after
    - Battery impact analysis
-   - Thermal behavior
+   - Thermal behavior testing
 
-5. Document changes
-   - Add comments explaining optimizations
+5. **Document Optimizations**
+   - Explain each change
    - Note any trade-offs
-```
+   - Provide testing results
 
 ### Task 3: Troubleshoot Firmware Compatibility
-```bash
-# When firmware doesn't work as expected:
 
-1. Verify firmware version
-   - Check downloaded vs expected
-   - Validate MD5 checksums
-   - Confirm region matches
+**Objective**: Resolve issues with firmware that doesn't work as expected
 
-2. Compare partition metadata
-   - Extract from working firmware
-   - Compare with problematic one
-   - Check for structure changes
+**Steps**:
+1. **Verify Firmware Version**
+   - Confirm downloaded firmware matches expected version
+   - Validate checksums
+   - Verify region is correct
 
-3. Analyze build failures
+2. **Analyze Partition Metadata**
+   - Extract partition information
+   - Compare with working firmware
+   - Check for structural changes
+
+3. **Investigate Build Failures**
    - Review extraction logs
-   - Check partition sizes
-   - Validate feature flags
+   - Validate partition sizes
+   - Check feature flag compatibility
 
-4. Test with different firmware
+4. **Test Alternative Firmware**
    - Try different region
-   - Use older version
-   - Check for known issues
-```
+   - Test with older version
+   - Research known issues
+
+### Task 4: Create Device-Specific Patches
+
+**Objective**: Develop custom patches for device-specific fixes
+
+**Steps**:
+1. **Identify Requirement**
+   - What needs to be patched?
+   - Why is it specific to this device?
+
+2. **Analyze Target File**
+   - Decompile target JAR/APK using apktool
+   - Locate relevant smali code
+   - Understand current implementation
+
+3. **Make Device-Specific Modifications**
+   - Edit smali based on device analysis
+   - Use ACTUAL values from floating feature extraction
+   - **NEVER copy patch code from other devices**
+
+4. **Generate and Test Patch**
+   - Create unified diff patch
+   - Test application
+   - Recompile to verify
+
+5. **Document Thoroughly**
+   - Explain why patch is needed
+   - Document what it changes
+   - Include testing results
+   - Add comments explaining optimizations
+   - Provide testing results
 
 ## Best Practices
 
-### 1. Configuration Documentation
-```bash
-# Always document non-obvious configurations
-# Bad:
-TARGET_LCD_CONFIG_HFR_MODE="2"
+### 1. Always Extract Real Device Values - NEVER Copy
 
-# Good:
-# [
+**WRONG Approach**: Copying configuration from similar device
+- Copying config.sh directly from another device model
+- This copies values that may not match the new device hardware
+- Results in incorrect feature flags and broken functionality
+
+**CORRECT Approach**: Extract real values using apktool
+- Decompile framework.jar from the NEW device firmware
+- Extract actual SEC_FLOATING_FEATURE values from smali code
+- Parse and verify each feature value
+- Create config.sh with VERIFIED values only
+- Use similar device config as TEMPLATE for structure, but replace ALL values with analyzed data
+
+### 2. Create Device-Specific Patches - NEVER Copy Patch Files
+
+**WRONG Approach**: Copying patches from another device
+- Copying patch directory from similar device
+- This assumes smali code structure is identical
+- Different devices often have different class implementations
+
+**CORRECT Approach**: Create new patches based on actual device analysis
+- Decompile target file from NEW device using apktool
+- Analyze what needs to be patched in THIS device's code
+- Understand the actual smali code structure
+- Make device-specific modifications based on THIS device's implementation
+- Generate NEW patch file using diff
+- **Key Principle**: Every device may have different smali structure; patches must be created specifically for each device
+### 3. Analyze UN1CA Patch Compatibility
+
+**Before applying ANY UN1CA patch to a new device**:
+
+**Step 1**: Verify target file exists
+- Check if device firmware contains the target file specified in patch
+
+**Step 2**: Decompile and verify structure
+- Decompile target file using apktool
+- Verify that smali paths referenced in patch exist in device code
+- Check if classes and methods match
+
+**Step 3**: Check floating feature requirements
+- Some patches require specific SEC_FLOATING_FEATURE values
+- Verify device has required features by analyzing extracted floating features
+
+**Step 4**: Test patch application
+- Use dry-run to test if patch applies cleanly
+- If compatible, patch can be used
+- If incompatible, patch needs adaptation for this device
+
+### 4. Compare Floating Features with Source Target
+
+**Understanding which SEC_ values to replace in patches**:
+
+**Purpose**: Identify differences between source device (what patches were built for) and target device (new device being added)
+
+**Process**:
+1. Extract SEC_FLOATING_FEATURE values from source device framework using apktool
+2. Extract SEC_FLOATING_FEATURE values from target device framework using apktool
+3. Compare the two lists to find differences
+4. For each different feature, compare actual values
+5. Document which SEC_ values need replacement in patches
+6. Use this mapping when creating or adapting device-specific patches
+
+**Key Insight**: This comparison tells you exactly which feature values differ and need to be replaced in patch code
+
+### 5. Configuration Documentation
+
+**Always document non-obvious configurations**
+
+**Bad Example**:
+```
+TARGET_LCD_CONFIG_HFR_MODE="2"
+```
+
+**Good Example**:
+```
 # Enable seamless refresh rate feature
 # Mode 2 allows dynamic switching between 60Hz and 120Hz
 # based on content and battery state
+# Extracted from: framework.jar - SemFloatingFeature
+# Feature: SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE
+# Device value: 2 (verified via apktool analysis)
 TARGET_LCD_CONFIG_HFR_MODE="2"
-# ]
 ```
 
-### 2. Feature Validation
-```bash
-# Verify features are actually supported by hardware
+### 6. Feature Validation
 
-# Don't blindly enable features from other devices
-# Example: WiFi 6E requires specific WiFi chip
+**Verify features are actually supported by hardware**
 
-# Check hardware specifications before enabling:
-# - Display features → Panel capabilities
-# - Audio features → Speaker/DAC hardware
-# - Camera features → Sensor and ISP support
-# - Network features → Modem/WiFi chip capabilities
-```
+**Never blindly enable features from other devices**
 
-### 3. Incremental Testing
-```bash
-# When optimizing configuration:
+**Correct approach**:
+1. Use apktool to decompile device framework
+2. Search for the specific SEC_FLOATING_FEATURE in smali code
+3. Check if feature exists and verify its value
+4. Only enable feature if confirmed present and TRUE/enabled in device firmware
 
-1. Change one parameter at a time
+**Hardware verification checklist**:
+- Display features → Verify in floating features (panel capabilities)
+- Audio features → Verify in floating features (speaker/DAC hardware)
+- Camera features → Verify in floating features (sensor and ISP support)
+- Network features → Verify in floating features (modem/WiFi capabilities)
+
+### 7. Incremental Testing
+
+**When optimizing or modifying configuration**:
+
+1. Change ONE parameter at a time
 2. Build and test thoroughly
 3. Document results
 4. Commit successful changes
 5. Repeat for next optimization
 
-# Don't change multiple parameters simultaneously
-# Makes it hard to identify which change caused issues
-```
+**Never change multiple parameters simultaneously** - makes it impossible to identify which change caused issues
 
-### 4. Regional Considerations
-```bash
-# Consider regional variations:
+### 8. Regional Considerations
 
-# Some features are region-locked:
-# - Call recording (illegal in some regions)
-# - 5G bands (different per region)
-# - FM radio (hardware may be present but disabled)
+**Consider regional firmware variations**:
 
-# Use most permissive region as base (usually BTU/XME)
-# Then adapt for specific regions if needed
-```
+- Some features are region-locked (call recording, 5G bands, FM radio)
+- Hardware may be present but software-disabled in certain regions
+- Use most permissive region as base firmware (typically BTU or XME)
+- Adapt for specific regional requirements as needed
+
+### 9. Patch Development Workflow
+
+**Standard workflow for creating device-specific patches**:
+
+1. **Identify the need**: What feature/fix is needed? Which file needs patching?
+2. **Extract and decompile**: Use apktool to decompile target file from device firmware
+3. **Make backup**: Create backup for diff generation
+4. **Analyze and modify**: Study smali code, understand logic, make device-specific changes
+5. **Generate patch**: Create unified diff patch file
+6. **Document**: Explain what, why, and how
+7. **Test**: Apply patch to clean code, recompile to verify
+8. **Store**: Save in device-specific patch directory
+
+### 10. Floating Feature Analysis Priority
+
+**Always prioritize floating feature analysis as first step**:
+
+**Step 1**: Extract floating features
+- Use apktool to decompile framework.jar
+- Extract all SEC_FLOATING_FEATURE constants from smali
+
+**Step 2**: Compare with source firmware
+- Identify differences between source and target devices
+
+**Step 3**: Guide all decisions with analysis
+- Every TARGET_* variable based on floating feature analysis
+- Every patch decision considers floating features
+- Every compatibility check verifies floating features
+
+**Step 4**: Document the analysis
+- Create comprehensive documentation of extracted features
+- Document firmware version and analysis date
+- List all features found
+- Compare with source device
+- Note implications for patches and configuration
+
+**Key Principle**: Floating feature analysis is the foundation for all device configuration and patch decisions
 
 ## Collaboration with Other Agents
 
