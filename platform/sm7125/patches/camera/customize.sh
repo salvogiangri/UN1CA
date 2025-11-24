@@ -22,3 +22,13 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libsaiv_HprFace_cmh_su
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libsecimaging_pdk.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libveengine.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Replace MIDAS config files with a73xqxx"
+DELETE_FROM_WORK_DIR "vendor" "etc/midas"
+ADD_TO_WORK_DIR "a73xqxx" "vendor" "etc/midas" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Replace singletake config files with a73xqxx"
+DELETE_FROM_WORK_DIR "vendor" "etc/singletake"
+ADD_TO_WORK_DIR "a73xqxx" "vendor" "etc/singletake" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+LOG_STEP_OUT
