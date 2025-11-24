@@ -71,23 +71,6 @@ jobs:
           git status
           git diff --name-status
 
-      - name: Detect changes
-        id: check_changes
-        run: |
-          echo "=== Checking for changes ==="
-          # Get the list of modified files
-          MODIFIED_FILES=$(git status --porcelain | grep -E '^ M|^\?\?' | awk '{print $2}' | tr '\n' ',')
-          echo "Modified files: $MODIFIED_FILES"
-          
-          # Check if out/ directory has changes
-          if [ -n "$(git status --porcelain | grep 'out/')" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "✅ Changes detected in build artifacts"
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "⚠️ No changes detected"
-          fi
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
@@ -97,9 +80,9 @@ jobs:
           commit-message: 'prebuilts/external: update tools to ${{ env.TOOLS_VERSION }}'
           committer: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
           author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
-          branch: 'prebuilts/external-tools-${{ env.TOOLS_VERSION }}'
+          branch: 'prebuilts/external-tools'
           delete-branch: true
-          title: 'Update prebuilt external tools (${{ env.TOOLS_VERSION }})'
+          title: 'Update prebuilt external tools'
           body: ''
         
       - name: Log workflow status
