@@ -16,6 +16,7 @@
 *.png binary
 *.qmg binary
 *.webp binary
+*.mbn binary
 
 # ROM-specific prebuilt blobs
 prebuilts/bootable/deprecated-ota/updater binary
