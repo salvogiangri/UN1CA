@@ -35,7 +35,7 @@ jobs:
         with:
           repo: extremerom/DumprX
           token: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
-          artifact_name: sha256:2269eed67d3770e57dce5085bd4968287708df4cf300bfa50553f10ae11322c4
+          artifact_name: device-dump
           rename: device-dump.zip  
 
       - name: Setup Node.js
