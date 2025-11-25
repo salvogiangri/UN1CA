@@ -18,6 +18,10 @@ SET_PROP_IF_DIFF "vendor_dlkm" "persist.sys.usb.config" "$(GET_PROP "vendor_dlkm
 SET_PROP_IF_DIFF "system" "ro.adb.secure" "0"
 SET_PROP_IF_DIFF "vendor" "ro.adb.secure" "0"
 
+# Enable klogd daemon
+# https://android.googlesource.com/platform/system/logging/+/refs/tags/android-16.0.0_r2/logd/main.cpp#214
+SET_PROP "system" "ro.logd.kernel" "true"
+
 # Do not filter out Samsung processes in logs
 SET_PROP_IF_DIFF "system" "persist.log.semlevel" "0xFFFFFFFF"
 

@@ -112,11 +112,11 @@ fi
 LOG_STEP_OUT
 
 LOG_STEP_IN true "Downloading firmware"
-"$SRC_DIR/scripts/download_fw.sh" --ignore-source --ignore-target "$MODEL/$CSC/$IMEI" || exit 1
+"$SRC_DIR/scripts/download_fw.sh" --ignore-source --ignore-target "$MODEL/$CSC/${IMEI:=$SERIAL_NO}" || exit 1
 LOG_STEP_OUT
 
 LOG_STEP_IN true "Extracting firmware"
-"$SRC_DIR/scripts/extract_fw.sh" --ignore-source --ignore-target "$MODEL/$CSC/$IMEI" || exit 1
+"$SRC_DIR/scripts/extract_fw.sh" --ignore-source --ignore-target "$MODEL/$CSC/${IMEI:=$SERIAL_NO}" || exit 1
 LOG_STEP_OUT
 
 LOG_STEP_IN true "Updating blobs"

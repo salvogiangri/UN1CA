@@ -207,6 +207,50 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Support legacy usb_notify kernel drivers (pre-API 36)
+# https://github.com/salvogiangri/UN1CA/discussions/519
+# - Check for 'SKY_DEFAULT' to determine if newer usb_notify drivers are in place
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+    if ! grep -q "SKY_DEFAULT" "$WORK_DIR/kernel/boot.img"; then
+        PATCHED=true
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbHostRestrictor.smali" "replace" \
+            "isFinishLockTimer()Z" \
+            "RAINY_RESTRICT_MODE" \
+            "2"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbHostRestrictor.smali" "replace" \
+            "onKeyguardStateChanged(Z)V" \
+            "CLOUDY_WORK_MODE" \
+            "1"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbHostRestrictor\$1.smali" "replace" \
+            "onChange(Z)V" \
+            "CLOUDY_WORK_MODE" \
+            "1"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbHostRestrictor\$8.smali" "replace" \
+            "handleMessage(Landroid/os/Message;)V" \
+            "SUNNY_WORK_MODE" \
+            "0"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbHostRestrictor\$8.smali" "replace" \
+            "handleMessage(Landroid/os/Message;)V" \
+            "RAINY_RESTRICT_MODE" \
+            "2"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbService\$Lifecycle.smali" "replace" \
+            "onBootPhase(I)V" \
+            "RAINY_RESTRICT_MODE" \
+            "2"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali_classes2/com/android/server/usb/UsbService\$Lifecycle.smali" "replace" \
+            "onBootPhase(I)V" \
+            "CLOUDY_WORK_MODE" \
+            "1"
+    fi
+fi
+
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi

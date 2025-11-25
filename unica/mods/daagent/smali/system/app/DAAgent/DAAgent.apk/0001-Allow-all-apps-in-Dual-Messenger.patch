@@ -1,4 +1,4 @@
-From 4e28b0a23c866810098dbaf219074c940cf59824 Mon Sep 17 00:00:00 2001
+From 1914932a2439b9ad762bef86b94896f4375e0c40 Mon Sep 17 00:00:00 2001
 From: David Arsene <80218600+DavidArsene@users.noreply.github.com>
 Date: Fri, 17 Oct 2025 10:45:02 +0200
 Subject: [PATCH] Allow all apps in Dual Messenger
@@ -7,9 +7,9 @@ Subject: [PATCH] Allow all apps in Dual Messenger
  AndroidManifest.xml                           |   5 +
  .../da/daagent/provider/DualAppProvider.smali |  60 ++----
  .../da/daagent/provider/WhiteListApps.smali   | 179 +++++++-----------
- .../receiver/DualAppIntentReceiver.smali      |  31 ++-
+ .../receiver/DualAppIntentReceiver.smali      |  35 +++-
  .../android/da/daagent/utils/DAUtility.smali  |  50 +----
- 5 files changed, 121 insertions(+), 204 deletions(-)
+ 5 files changed, 123 insertions(+), 206 deletions(-)
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
 index 445e42a..42547c3 100644
@@ -399,7 +399,7 @@ index 49c1881..81a0f7a 100644
 +    return-void
  .end method
 diff --git a/smali/com/samsung/android/da/daagent/receiver/DualAppIntentReceiver.smali b/smali/com/samsung/android/da/daagent/receiver/DualAppIntentReceiver.smali
-index 730cc8d..0e66e4f 100644
+index 730cc8d..671f176 100644
 --- a/smali/com/samsung/android/da/daagent/receiver/DualAppIntentReceiver.smali
 +++ b/smali/com/samsung/android/da/daagent/receiver/DualAppIntentReceiver.smali
 @@ -33,7 +33,7 @@
@@ -411,6 +411,24 @@ index 730cc8d..0e66e4f 100644
  
      invoke-virtual {v3}, Landroid/content/Intent;->getAction()Ljava/lang/String;
  
+@@ -325,6 +325,8 @@
+ 
+     if-eqz v0, :cond_16
+ 
++    invoke-static {v2}, Lcom/samsung/android/da/daagent/utils/DAUtility;->updateWhitelistAppsInSystemServer(Landroid/content/Context;)V
++
+     invoke-static {v2}, Lcom/samsung/android/da/daagent/service/SendSaLogService;->schedule(Landroid/content/Context;)V
+ 
+     invoke-static {}, Lcom/samsung/android/da/daagent/utils/DAUtility;->getDualAppProfileId()I
+@@ -694,8 +696,6 @@
+     goto :goto_e
+ 
+     :cond_12
+-    invoke-static {v2}, Lcom/samsung/android/da/daagent/utils/DAUtility;->updateWhitelistAppsInSystemServer(Landroid/content/Context;)V
+-
+     new-instance v1, Landroid/os/Bundle;
+ 
+     invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
 @@ -847,7 +847,7 @@
  
      move-result-object v0
@@ -575,5 +593,5 @@ index 67af4f2..4a9de41 100644
      return-void
  .end method
 -- 
-2.51.0
+2.51.2
 
