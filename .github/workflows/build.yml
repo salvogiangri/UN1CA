@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [a52sxq, a73xq, m52xq, dm1q, dm2q, dm3q]
+        target: [dm2q]
 
     steps:
       - name: Checkout repo
@@ -98,7 +98,7 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-24.04
+    runs-on: Unica
     if: github.event_name == 'push' && github.ref == 'refs/heads/sixteen'
 
     steps:
@@ -134,9 +134,7 @@ jobs:
             - **Commit**: ${{ github.sha }}
 
             ### Supported Devices
-            - Galaxy A52s 5G (a52sxq)
-            - Galaxy A73 5G (a73xq)
-            - Galaxy M52 5G (m52xq)
+            - Galaxy S23+ (dm2qxxx)
 
             ### Installation
             1. Download the appropriate ZIP file for your device
