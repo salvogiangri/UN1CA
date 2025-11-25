@@ -12,8 +12,8 @@ on:
       - .github/workflows/copilot-setup-steps.yml
 
 env:
-  GITHUB_TOKEN: ${{ secrets.TEST2 }}
-  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.TEST2 }}
+  GITHUB_TOKEN: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
+  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
 
 jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
@@ -55,4 +55,14 @@ jobs:
             echo "Installing $package..."
             npm install -g "$package" || echo "Warning: Failed to install $package"
           done
-          unzip *.zip
+          
+      - name: Install MCP Server Dependencies
+        run: |
+         sudo apt update
+         sudo apt install p7zip-full
+         mkdir -p dump
+         ls *.zip
+         sudo 7z x archivo.zip -odump
+         sudo chown -R $(whoami):$(id -gn) ./dump
+         sudo chmod -R 777 ./dump
+
