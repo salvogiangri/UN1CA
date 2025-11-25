@@ -12,8 +12,8 @@ on:
       - .github/workflows/copilot-setup-steps.yml
 
 env:
-  GITHUB_TOKEN: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
-  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.TEST2 }}
+  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.TEST2 }}
 
 jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
@@ -34,7 +34,7 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: device-dump
-          github-token: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }} # token with actions:read permissions on target repo
+          github-token: ${{ secrets.TEST2 }} # token with actions:read permissions on target repo
           repository: extremerom/DumprX
           run-id: 21
     
