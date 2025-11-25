@@ -60,6 +60,11 @@ elif [ ! -f "$SRC_DIR/target/$1/config.sh" ]; then
 else
     source "$SRC_DIR/unica/configs/version.sh" || exit 1
     source "$SRC_DIR/target/$1/config.sh" || exit 1
+    if [ -f "$SRC_DIR/platform/$TARGET_PLATFORM/config.sh" ]; then
+        # HACK
+        source "$SRC_DIR/platform/$TARGET_PLATFORM/config.sh" || exit
+        source "$SRC_DIR/target/$1/config.sh" || exit 1
+    fi
 fi
 
 if [ ! "$TARGET_OS_SINGLE_SYSTEM_IMAGE" ]; then
@@ -110,6 +115,10 @@ fi
 #
 #   TARGET_CODENAME
 #     String containing the target device codename, it must match the `ro.product.vendor.device` prop.
+#
+#   TARGET_PLATFORM
+#     String containing the target device platform. It is optional and only used when more targets
+#     use the same platform.
 #
 #   [SOURCE/TARGET]_PLATFORM_SDK_VERSION
 #     Integer containing the SDK API level of the device firmware, it must match the `ro.build.version.sdk` prop.
@@ -423,6 +432,7 @@ fi
     GET_BUILD_VAR "SOURCE_BOARD_API_LEVEL"
     GET_BUILD_VAR "TARGET_NAME"
     GET_BUILD_VAR "TARGET_CODENAME"
+    GET_BUILD_VAR "TARGET_PLATFORM" "none"
     if [ "${#TARGET_ASSERT_MODEL[@]}" -ge 1 ]; then
         echo "TARGET_ASSERT_MODEL=\"$(IFS=":"; printf '%s' "${TARGET_ASSERT_MODEL[*]}")\""
     else
