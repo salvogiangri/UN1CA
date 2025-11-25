@@ -62,7 +62,7 @@ jobs:
          sudo apt install p7zip-full
          mkdir -p dump
          ls *.zip
-         sudo 7z x archivo.zip -odump
+         sudo 7z x out.zip -odump
          sudo chown -R $(whoami):$(id -gn) ./dump
          sudo chmod -R 777 ./dump
-
+         sudo rm -rf out.zip
