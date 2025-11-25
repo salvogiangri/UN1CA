@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item type="dimen" name="config_letterboxHorizontalPositionMultiplier">0.5</item>
+    <item type="dimen" name="config_letterboxVerticalPositionMultiplier">0.5</item>
     <item type="dimen" name="config_screenBrightnessDimFloat">0.050980393</item>
     <item type="dimen" name="config_screenBrightnessSettingDefaultFloat">0.5019608</item>
     <item type="dimen" name="config_screenBrightnessSettingMaximumFloat">1.0</item>
@@ -10,8 +12,6 @@
     <dimen name="cover_clear_view_rounded_corner">33.0dip</dimen>
     <dimen name="cover_clear_view_top">0.0dip</dimen>
     <dimen name="physical_power_button_center_screen_location_y">965.0px</dimen>
-    <dimen name="rounded_corner_radius_bottom">36.0dip</dimen>
-    <dimen name="rounded_corner_radius_top">36.0dip</dimen>
     <dimen name="status_bar_camera_side_padding">30.0px</dimen>
     <dimen name="status_bar_camera_top_margin">22.0px</dimen>
     <dimen name="status_bar_height_portrait">74.0px</dimen>
