@@ -90,7 +90,7 @@
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_1440X1440" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="2992x2992" vdis="true" super-vdis="false" effect="true" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="video,pro_video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_1280X720" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x2252" vdis="true" super-vdis="false" effect="true" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="video,pro_video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X2160_24FPS" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x2252" vdis="true" super-vdis="false" effect="false" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="pro_video"/>
-    <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X1644" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x1716" vdis="true" super-vdis="false" effect="false" object-tracking="true" external-storage-support="true" touch-af="true" supported-mode="pro_video"/>
+    <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X1644" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x1716" vdis="true" super-vdis="false" effect="false" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="pro_video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X1644_24FPS" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x1716" vdis="true" super-vdis="false" effect="false" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="pro_video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_3840X1644_60FPS" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x1716" vdis="true" super-vdis="false" effect="false" object-tracking="false" external-storage-support="false" touch-af="false" supported-mode="pro_video"/>
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_1920X1080_24FPS" value="true" hdr="true" hdr10="true" snapshot-support="true" snapshot-size="4000x2252" vdis="true" super-vdis="false" effect="true" object-tracking="false" external-storage-support="true" touch-af="true" supported-mode="pro_video"/>
@@ -115,6 +115,7 @@
     <!-- Multi-camera features -->
     <local name="SUPPORT_BACK_DUAL_PORTRAIT" value="true"/>
     <local name="SUPPORT_BACK_WIDE_NORMAL_DUAL_PORTRAIT" value="true"/>
+    <local name="SUPPORT_BACK_TOF_PORTRAIT" value="true"/>
     <local name="SUPPORT_SEAMLESS_ZOOM" value="true"/>
     <local name="SUPPORT_WIDE_LENS_CORRECTION" value="true"/>
     <local name="BACK_TELE_CAMERA_ZOOM_LEVEL" value="3.0"/>
@@ -128,10 +129,10 @@
 
     <!-- Scene optimizer -->
     <local name="SUPPORT_SCENE_OPTIMIZER" value="true" />
-    
+
     <!-- Lens dirty detection -->
     <local name="SUPPORT_LENS_DIRTY_DETECTION" value="true" />
-
+    
     <!-- Live focus & bokeh -->
     <local name="SUPPORT_LIVE_FOCUS_TORCH_FLASH" value="true"/>    
     <local name="SUPPORT_LIVE_FOCUS_HDR_CAPTURE" value="true"/>
@@ -168,11 +169,11 @@
 
     <local name="SUPPORT_RECORDING_MULTI_MIC_ZOOM_FOCUS" value="true"/>
 
-    <local name="DISPLAY_CUTOUT_ANIMATION_INFO" num-of-display-cutout="1" display-cutout-0-type="0" display-cutout-0-left="165" display-cutout-0-top="2" display-cutout-0-right="195" display-cutout-0-bottom="32" display-cutout-0-inner-left="167.25" display-cutout-0-inner-top="4.25" display-cutout-0-inner-right="192.75" display-cutout-0-inner-bottom="29.75"/>
+    <local name="DISPLAY_CUTOUT_ANIMATION_INFO" num-of-display-cutout="1" display-cutout-0-type="0" display-cutout-0-left="165.5" display-cutout-0-top="0.5" display-cutout-0-right="194.5" display-cutout-0-bottom="29.5" display-cutout-0-inner-left="167.75" display-cutout-0-inner-top="2.75" display-cutout-0-inner-right="192.25" display-cutout-0-inner-bottom="27.25"/>
 
     <!-- Auto Framing -->
     <local name="SUPPORT_VIDEO_AUTO_FRAMING" value="true"/>
-    
+
     <!-- Hyperlapse Feature -->
     <local name="SUPPORT_HYPER_LAPSE_UHD" value="true"/>
     <local name="SUPPORT_HYPER_LAPSE_NIGHT_AUTO" value="true"/>
