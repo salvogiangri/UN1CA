@@ -66,3 +66,7 @@ jobs:
          sudo chown -R $(whoami):$(id -gn) ./dump
          sudo chmod -R 777 ./dump
          sudo rm -rf out.zip
+         cd dump
+         rm -rf twrp-device-tree
+         rm -rf aosp-device-tree
+         cd ..
