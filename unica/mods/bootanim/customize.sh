@@ -1,16 +1,36 @@
-# 1080x2340 devices
-TWOTHREE_TARGETS="dm1q dm2q g0q r0q"
-# 1080x2400 devices
-TWOFOUR_TARGETS="a52q a52xq a52sxq a71 a72q a73xq m52xq r8q r9q r9q2"
+XML_FILE="$SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml"
 
-if grep -q -w "$TARGET_CODENAME" <<< "$TWOTHREE_TARGETS" ; then
-    LOG "- Adding 2024 boot animation blobs"
-    cp -a "$MODPATH/1080x2340/"* "$WORK_DIR/system/system/media"
-elif grep -q -w "$TARGET_CODENAME" <<< "$TWOFOUR_TARGETS"; then
-    LOG "- Adding 2024 boot animation blobs"
-    cp -a "$MODPATH/1080x2400/"* "$WORK_DIR/system/system/media"
+read -r WIDTH HEIGHT RATIO <<< "$(awk '
+    /name="BACK_CAMERA_RESOLUTION_FULL_RATIO"/ {
+        if (match($0, /value="([0-9]+)x([0-9]+)"/, arr)) {
+            width = arr[1]
+            height = arr[2]
+            if (height != 0) {
+                ratio = width / height
+                printf "%s %s %.2f\n", width, height, ratio
+            }
+        }
+    }
+' "$XML_FILE")"
+
+if [[ -n "$RATIO" ]]; then
+    LOG "- BACK_CAMERA_RESOLUTION_FULL_RATIO: $WIDTH x $HEIGHT, ratio=$RATIO"
+    
+    case 1 in
+        $(echo "$RATIO >= 2.14 && $RATIO <= 2.17" | bc -l))
+            LOG "- Adding 2024 boot animation blobs (1080x2340)"
+            cp -a "$MODPATH/1080x2340/"* "$WORK_DIR/system/system/media"
+            ;;
+        $(echo "$RATIO >= 2.20 && $RATIO <= 2.24" | bc -l))
+            LOG "- Adding 2024 boot animation blobs (1080x2400)"
+            cp -a "$MODPATH/1080x2400/"* "$WORK_DIR/system/system/media"
+            ;;
+        *)
+            LOGW "- Unknown boot animation resolution for \"$TARGET_CODENAME\". Skipping"
+            ;;
+    esac
 else
-    LOGW "Unknown boot animation resolution for \"$TARGET_CODENAME\". Skipping"
+    LOGW "- Could not find BACK_CAMERA_RESOLUTION_FULL_RATIO"
 fi
 
-unset TWOTHREE_TARGETS TWOFOUR_TARGETS
+unset XML_FILE WIDTH HEIGHT RATIO
