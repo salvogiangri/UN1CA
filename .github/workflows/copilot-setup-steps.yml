@@ -33,10 +33,10 @@ jobs:
 
       - uses: actions/download-artifact@v5
         with:
-          name: device-dump
+          artifact-ids: 4669005837
           github-token: ${{ secrets.TEST2 }} # token with actions:read permissions on target repo
           repository: extremerom/DumprX
-          run-id: 21
+          run-id: 19657597840
     
       - name: Setup Node.js
         uses: actions/setup-node@v4
