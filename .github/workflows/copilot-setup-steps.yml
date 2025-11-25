@@ -24,20 +24,20 @@ jobs:
     # Copilot will be given its own token for its operations.
     permissions:
       contents: read
+      actions: read
 
     # Steps run before the agent starts working
     steps:
       - name: Checkout
         uses: actions/checkout@master # v6.0.0
 
-      - name: Download artifact from build
-        uses: bettermarks/action-artifact-download@0.3.0
+      - uses: actions/download-artifact@v5
         with:
-          repo: extremerom/DumprX
-          token: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }}
-          artifact_name: device-dump
-          rename: device-dump.zip  
-
+          name: device-dump
+          github-token: ${{ secrets.COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN }} # token with actions:read permissions on target repo
+          repository: extremerom/DumprX
+          run-id: 21
+    
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
