@@ -1,0 +1,13 @@
+{
+    "SERVICE_NAME": "BIXBYVISION",
+    "SERVICE_VERSION": "3.5",
+    "MODEL_TYPE": "detector",
+    "COMPILER_NAME": "SNPE",
+    "COMPUTE_UNIT": "DSP",
+    "COMPILER_OPTION": "HTP_SM7325",
+    "COMPILER_VERSION": "1.50.0.2672",
+    "MODEL_VERSION": "6.7.0",
+    "MODEL_FOLDER": "/vendor/etc/saiv/image_understanding/db/",
+    "MODEL_TYPE_ABBR": "OD",
+    "MODEL_FILES": "slens_detector_cnn.dlc"
+}

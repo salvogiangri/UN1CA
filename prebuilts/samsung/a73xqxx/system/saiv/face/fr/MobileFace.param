@@ -1,0 +1,130 @@
+7767517
+128 147
+Input            data             0 1 data 0=96 1=112 2=3
+Convolution      conv1            1 1 data conv1 0=64 1=3 2=1 3=2 4=1 5=1 6=1728
+PReLU            relu1            1 1 conv1 conv1_relu1 0=64
+ConvolutionDepthWise conv1_dw         1 1 conv1_relu1 conv1_dw 0=64 1=3 2=1 3=1 4=1 5=1 6=576 7=64
+PReLU            relu1_dw         1 1 conv1_dw conv1_dw_relu1_dw 0=64
+Convolution      conv2_ex         1 1 conv1_dw_relu1_dw conv2_ex 0=128 1=1 2=1 3=1 4=0 5=1 6=8192
+PReLU            relu2_ex         1 1 conv2_ex conv2_ex_relu2_ex 0=128
+Slice            conv2_ex_slice   1 3 conv2_ex_relu2_ex conv2_ex_3x3 conv2_ex_5x5 conv2_ex_7x7 -23300=3,64,32,-233 1=0
+ConvolutionDepthWise conv2_dw_3x3     1 1 conv2_ex_3x3 conv2_dw_3x3 0=64 1=3 2=1 3=2 4=1 5=1 6=576 7=64
+PReLU            relu2_dw_3x3     1 1 conv2_dw_3x3 conv2_dw_3x3_relu2_dw_3x3 0=64
+ConvolutionDepthWise conv2_dw_5x5     1 1 conv2_ex_5x5 conv2_dw_5x5 0=32 1=5 2=1 3=2 4=2 5=1 6=800 7=32
+PReLU            relu2_dw_5x5     1 1 conv2_dw_5x5 conv2_dw_5x5_relu2_dw_5x5 0=32
+ConvolutionDepthWise conv2_dw_7x7     1 1 conv2_ex_7x7 conv2_dw_7x7 0=32 1=7 2=1 3=2 4=3 5=1 6=1568 7=32
+PReLU            relu2_dw_7x7     1 1 conv2_dw_7x7 conv2_dw_7x7_relu2_dw_7x7 0=32
+Concat           conv2_dw         3 1 conv2_dw_3x3_relu2_dw_3x3 conv2_dw_5x5_relu2_dw_5x5 conv2_dw_7x7_relu2_dw_7x7 conv2_dw 0=0
+Convolution      conv2_em         1 1 conv2_dw conv2_em 0=64 1=1 2=1 3=1 4=0 5=1 6=8192
+Split            splitncnn_0      1 2 conv2_em conv2_em_splitncnn_0 conv2_em_splitncnn_1
+Convolution      conv2_1_ex       1 1 conv2_em_splitncnn_1 conv2_1_ex 0=128 1=1 2=1 3=1 4=0 5=1 6=8192
+PReLU            relu2_1_ex       1 1 conv2_1_ex conv2_1_ex_relu2_1_ex 0=128
+ConvolutionDepthWise conv2_1_dw       1 1 conv2_1_ex_relu2_1_ex conv2_1_dw 0=128 1=3 2=1 3=1 4=1 5=1 6=1152 7=128
+PReLU            relu2_1_dw       1 1 conv2_1_dw conv2_1_dw_relu2_1_dw 0=128
+Convolution      conv2_1_em       1 1 conv2_1_dw_relu2_1_dw conv2_1_em 0=64 1=1 2=1 3=1 4=0 5=1 6=8192
+Eltwise          res2_1           2 1 conv2_em_splitncnn_0 conv2_1_em res2_1 0=1 -23301=0
+Split            splitncnn_1      1 2 res2_1 res2_1_splitncnn_0 res2_1_splitncnn_1
+Convolution      conv2_2_ex       1 1 res2_1_splitncnn_1 conv2_2_ex 0=128 1=1 2=1 3=1 4=0 5=1 6=8192
+PReLU            relu2_2_ex       1 1 conv2_2_ex conv2_2_ex_relu2_2_ex 0=128
+ConvolutionDepthWise conv2_2_dw       1 1 conv2_2_ex_relu2_2_ex conv2_2_dw 0=128 1=3 2=1 3=1 4=1 5=1 6=1152 7=128
+PReLU            relu2_2_dw       1 1 conv2_2_dw conv2_2_dw_relu2_2_dw 0=128
+Convolution      conv2_2_em       1 1 conv2_2_dw_relu2_2_dw conv2_2_em 0=64 1=1 2=1 3=1 4=0 5=1 6=8192
+Eltwise          res2_2           2 1 res2_1_splitncnn_0 conv2_2_em res2_2 0=1 -23301=0
+Split            splitncnn_2      1 2 res2_2 res2_2_splitncnn_0 res2_2_splitncnn_1
+Convolution      conv2_3_ex       1 1 res2_2_splitncnn_1 conv2_3_ex 0=128 1=1 2=1 3=1 4=0 5=1 6=8192
+PReLU            relu2_3_ex       1 1 conv2_3_ex conv2_3_ex_relu2_3_ex 0=128
+ConvolutionDepthWise conv2_3_dw       1 1 conv2_3_ex_relu2_3_ex conv2_3_dw 0=128 1=3 2=1 3=1 4=1 5=1 6=1152 7=128
+PReLU            relu2_3_dw       1 1 conv2_3_dw conv2_3_dw_relu2_3_dw 0=128
+Convolution      conv2_3_em       1 1 conv2_3_dw_relu2_3_dw conv2_3_em 0=64 1=1 2=1 3=1 4=0 5=1 6=8192
+Eltwise          res2_3           2 1 res2_2_splitncnn_0 conv2_3_em res2_3 0=1 -23301=0
+Split            splitncnn_3      1 2 res2_3 res2_3_splitncnn_0 res2_3_splitncnn_1
+Convolution      conv2_4_ex       1 1 res2_3_splitncnn_1 conv2_4_ex 0=128 1=1 2=1 3=1 4=0 5=1 6=8192
+PReLU            relu2_4_ex       1 1 conv2_4_ex conv2_4_ex_relu2_4_ex 0=128
+ConvolutionDepthWise conv2_4_dw       1 1 conv2_4_ex_relu2_4_ex conv2_4_dw 0=128 1=3 2=1 3=1 4=1 5=1 6=1152 7=128
+PReLU            relu2_4_dw       1 1 conv2_4_dw conv2_4_dw_relu2_4_dw 0=128
+Convolution      conv2_4_em       1 1 conv2_4_dw_relu2_4_dw conv2_4_em 0=64 1=1 2=1 3=1 4=0 5=1 6=8192
+Eltwise          res2_4           2 1 res2_3_splitncnn_0 conv2_4_em res2_4 0=1 -23301=0
+Convolution      conv3_ex         1 1 res2_4 conv3_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=16384
+PReLU            relu3_ex         1 1 conv3_ex conv3_ex_relu3_ex 0=256
+Slice            conv3_ex_slice   1 3 conv3_ex_relu3_ex conv3_ex_3x3 conv3_ex_5x5 conv3_ex_7x7 -23300=3,128,64,-233 1=0
+ConvolutionDepthWise conv3_dw_3x3     1 1 conv3_ex_3x3 conv3_dw_3x3 0=128 1=3 2=1 3=2 4=1 5=1 6=1152 7=128
+PReLU            relu3_dw_3x3     1 1 conv3_dw_3x3 conv3_dw_3x3_relu3_dw_3x3 0=128
+ConvolutionDepthWise conv3_dw_5x5     1 1 conv3_ex_5x5 conv3_dw_5x5 0=64 1=5 2=1 3=2 4=2 5=1 6=1600 7=64
+PReLU            relu3_dw_5x5     1 1 conv3_dw_5x5 conv3_dw_5x5_relu3_dw_5x5 0=64
+ConvolutionDepthWise conv3_dw_7x7     1 1 conv3_ex_7x7 conv3_dw_7x7 0=64 1=7 2=1 3=2 4=3 5=1 6=3136 7=64
+PReLU            relu3_dw_7x7     1 1 conv3_dw_7x7 conv3_dw_7x7_relu3_dw_7x7 0=64
+Concat           conv3_dw         3 1 conv3_dw_3x3_relu3_dw_3x3 conv3_dw_5x5_relu3_dw_5x5 conv3_dw_7x7_relu3_dw_7x7 conv3_dw 0=0
+Convolution      conv3_em         1 1 conv3_dw conv3_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Split            splitncnn_4      1 2 conv3_em conv3_em_splitncnn_0 conv3_em_splitncnn_1
+Convolution      conv3_1_ex       1 1 conv3_em_splitncnn_1 conv3_1_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_1_ex       1 1 conv3_1_ex conv3_1_ex_relu3_1_ex 0=256
+ConvolutionDepthWise conv3_1_dw       1 1 conv3_1_ex_relu3_1_ex conv3_1_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_1_dw       1 1 conv3_1_dw conv3_1_dw_relu3_1_dw 0=256
+Convolution      conv3_1_em       1 1 conv3_1_dw_relu3_1_dw conv3_1_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_1           2 1 conv3_em_splitncnn_0 conv3_1_em res3_1 0=1 -23301=0
+Split            splitncnn_5      1 2 res3_1 res3_1_splitncnn_0 res3_1_splitncnn_1
+Convolution      conv3_2_ex       1 1 res3_1_splitncnn_1 conv3_2_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_2_ex       1 1 conv3_2_ex conv3_2_ex_relu3_2_ex 0=256
+ConvolutionDepthWise conv3_2_dw       1 1 conv3_2_ex_relu3_2_ex conv3_2_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_2_dw       1 1 conv3_2_dw conv3_2_dw_relu3_2_dw 0=256
+Convolution      conv3_2_em       1 1 conv3_2_dw_relu3_2_dw conv3_2_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_2           2 1 res3_1_splitncnn_0 conv3_2_em res3_2 0=1 -23301=0
+Split            splitncnn_6      1 2 res3_2 res3_2_splitncnn_0 res3_2_splitncnn_1
+Convolution      conv3_3_ex       1 1 res3_2_splitncnn_1 conv3_3_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_3_ex       1 1 conv3_3_ex conv3_3_ex_relu3_3_ex 0=256
+ConvolutionDepthWise conv3_3_dw       1 1 conv3_3_ex_relu3_3_ex conv3_3_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_3_dw       1 1 conv3_3_dw conv3_3_dw_relu3_3_dw 0=256
+Convolution      conv3_3_em       1 1 conv3_3_dw_relu3_3_dw conv3_3_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_3           2 1 res3_2_splitncnn_0 conv3_3_em res3_3 0=1 -23301=0
+Split            splitncnn_7      1 2 res3_3 res3_3_splitncnn_0 res3_3_splitncnn_1
+Convolution      conv3_4_ex       1 1 res3_3_splitncnn_1 conv3_4_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_4_ex       1 1 conv3_4_ex conv3_4_ex_relu3_4_ex 0=256
+ConvolutionDepthWise conv3_4_dw       1 1 conv3_4_ex_relu3_4_ex conv3_4_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_4_dw       1 1 conv3_4_dw conv3_4_dw_relu3_4_dw 0=256
+Convolution      conv3_4_em       1 1 conv3_4_dw_relu3_4_dw conv3_4_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_4           2 1 res3_3_splitncnn_0 conv3_4_em res3_4 0=1 -23301=0
+Split            splitncnn_8      1 2 res3_4 res3_4_splitncnn_0 res3_4_splitncnn_1
+Convolution      conv3_5_ex       1 1 res3_4_splitncnn_1 conv3_5_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_5_ex       1 1 conv3_5_ex conv3_5_ex_relu3_5_ex 0=256
+ConvolutionDepthWise conv3_5_dw       1 1 conv3_5_ex_relu3_5_ex conv3_5_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_5_dw       1 1 conv3_5_dw conv3_5_dw_relu3_5_dw 0=256
+Convolution      conv3_5_em       1 1 conv3_5_dw_relu3_5_dw conv3_5_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_5           2 1 res3_4_splitncnn_0 conv3_5_em res3_5 0=1 -23301=0
+Split            splitncnn_9      1 2 res3_5 res3_5_splitncnn_0 res3_5_splitncnn_1
+Convolution      conv3_6_ex       1 1 res3_5_splitncnn_1 conv3_6_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu3_6_ex       1 1 conv3_6_ex conv3_6_ex_relu3_6_ex 0=256
+ConvolutionDepthWise conv3_6_dw       1 1 conv3_6_ex_relu3_6_ex conv3_6_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu3_6_dw       1 1 conv3_6_dw conv3_6_dw_relu3_6_dw 0=256
+Convolution      conv3_6_em       1 1 conv3_6_dw_relu3_6_dw conv3_6_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res3_6           2 1 res3_5_splitncnn_0 conv3_6_em res3_6 0=1 -23301=0
+Convolution      conv4_ex         1 1 res3_6 conv4_ex 0=512 1=1 2=1 3=1 4=0 5=1 6=65536
+PReLU            relu4_ex         1 1 conv4_ex conv4_ex_relu4_ex 0=512
+Slice            conv4_ex_slice   1 4 conv4_ex_relu4_ex conv4_ex_3x3 conv4_ex_5x5 conv4_ex_7x7 conv4_ex_9x9 -23300=4,128,128,128,-233 1=0
+ConvolutionDepthWise conv4_dw_3x3     1 1 conv4_ex_3x3 conv4_dw_3x3 0=128 1=3 2=1 3=2 4=1 5=1 6=1152 7=128
+PReLU            relu4_dw_3x3     1 1 conv4_dw_3x3 conv4_dw_3x3_relu4_dw_3x3 0=128
+ConvolutionDepthWise conv4_dw_5x5     1 1 conv4_ex_5x5 conv4_dw_5x5 0=128 1=5 2=1 3=2 4=2 5=1 6=3200 7=128
+PReLU            relu4_dw_5x5     1 1 conv4_dw_5x5 conv4_dw_5x5_relu4_dw_5x5 0=128
+ConvolutionDepthWise conv4_dw_7x7     1 1 conv4_ex_7x7 conv4_dw_7x7 0=128 1=7 2=1 3=2 4=3 5=1 6=6272 7=128
+PReLU            relu4_dw_7x7     1 1 conv4_dw_7x7 conv4_dw_7x7_relu4_dw_7x7 0=128
+ConvolutionDepthWise conv4_dw_9x9     1 1 conv4_ex_9x9 conv4_dw_9x9 0=128 1=9 2=1 3=2 4=4 5=1 6=10368 7=128
+PReLU            relu4_dw_9x9     1 1 conv4_dw_9x9 conv4_dw_9x9_relu4_dw_9x9 0=128
+Concat           conv4_dw         4 1 conv4_dw_3x3_relu4_dw_3x3 conv4_dw_5x5_relu4_dw_5x5 conv4_dw_7x7_relu4_dw_7x7 conv4_dw_9x9_relu4_dw_9x9 conv4_dw 0=0
+Convolution      conv4_em         1 1 conv4_dw conv4_em 0=128 1=1 2=1 3=1 4=0 5=1 6=65536
+Split            splitncnn_10     1 2 conv4_em conv4_em_splitncnn_0 conv4_em_splitncnn_1
+Convolution      conv4_1_ex       1 1 conv4_em_splitncnn_1 conv4_1_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu4_1_ex       1 1 conv4_1_ex conv4_1_ex_relu4_1_ex 0=256
+ConvolutionDepthWise conv4_1_dw       1 1 conv4_1_ex_relu4_1_ex conv4_1_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu4_1_dw       1 1 conv4_1_dw conv4_1_dw_relu4_1_dw 0=256
+Convolution      conv4_1_em       1 1 conv4_1_dw_relu4_1_dw conv4_1_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res4_1           2 1 conv4_em_splitncnn_0 conv4_1_em res4_1 0=1 -23301=0
+Split            splitncnn_11     1 2 res4_1 res4_1_splitncnn_0 res4_1_splitncnn_1
+Convolution      conv4_2_ex       1 1 res4_1_splitncnn_1 conv4_2_ex 0=256 1=1 2=1 3=1 4=0 5=1 6=32768
+PReLU            relu4_2_ex       1 1 conv4_2_ex conv4_2_ex_relu4_2_ex 0=256
+ConvolutionDepthWise conv4_2_dw       1 1 conv4_2_ex_relu4_2_ex conv4_2_dw 0=256 1=3 2=1 3=1 4=1 5=1 6=2304 7=256
+PReLU            relu4_2_dw       1 1 conv4_2_dw conv4_2_dw_relu4_2_dw 0=256
+Convolution      conv4_2_em       1 1 conv4_2_dw_relu4_2_dw conv4_2_em 0=128 1=1 2=1 3=1 4=0 5=1 6=32768
+Eltwise          res4_2           2 1 res4_1_splitncnn_0 conv4_2_em res4_2 0=1 -23301=0
+Convolution      conv5_ex         1 1 res4_2 conv5_ex 0=512 1=1 2=1 3=1 4=0 5=1 6=65536
+PReLU            relu5_ex         1 1 conv5_ex conv5_ex_relu5_ex 0=512
+ConvolutionDepthWise conv5_dw         1 1 conv5_ex_relu5_ex conv5_dw 0=512 1=6 11=7 2=1 3=1 4=0 5=1 6=21504 7=512
+InnerProduct     fc5              1 1 conv5_dw fc5 0=128 1=0 2=65536

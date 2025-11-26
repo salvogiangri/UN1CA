@@ -1,0 +1,14 @@
+/odm u:object_r:vendor_file:s0
+/odm/etc u:object_r:vendor_configs_file:s0
+/odm/etc/NOTICE\.xml\.gz u:object_r:vendor_configs_file:s0
+/odm/etc/build\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/fs_config_dirs u:object_r:vendor_configs_file:s0
+/odm/etc/fs_config_files u:object_r:vendor_configs_file:s0
+/odm/etc/group u:object_r:vendor_configs_file:s0
+/odm/etc/passwd u:object_r:vendor_configs_file:s0
+/odm/etc/selinux u:object_r:vendor_configs_file:s0
+/odm/etc/selinux/precompiled_sepolicy u:object_r:sepolicy_file:s0
+/odm/etc/selinux/precompiled_sepolicy\.plat_sepolicy_and_mapping\.sha256 u:object_r:vendor_configs_file:s0
+/odm/etc/selinux/precompiled_sepolicy\.product_sepolicy_and_mapping\.sha256 u:object_r:vendor_configs_file:s0
+/odm/etc/selinux/precompiled_sepolicy\.system_ext_sepolicy_and_mapping\.sha256 u:object_r:vendor_configs_file:s0
+/odm/etc/ueventd\.rc u:object_r:vendor_configs_file:s0

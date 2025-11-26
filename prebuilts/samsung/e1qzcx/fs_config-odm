@@ -1,0 +1,14 @@
+ 0 0 755 capabilities=0x0
+odm/etc 0 0 755 capabilities=0x0
+odm/etc/NOTICE.xml.gz 0 0 644 capabilities=0x0
+odm/etc/build.prop 0 0 600 capabilities=0x0
+odm/etc/fs_config_dirs 0 0 444 capabilities=0x0
+odm/etc/fs_config_files 0 0 444 capabilities=0x0
+odm/etc/group 0 0 644 capabilities=0x0
+odm/etc/passwd 0 0 644 capabilities=0x0
+odm/etc/selinux 0 0 755 capabilities=0x0
+odm/etc/selinux/precompiled_sepolicy 0 0 644 capabilities=0x0
+odm/etc/selinux/precompiled_sepolicy.plat_sepolicy_and_mapping.sha256 0 0 644 capabilities=0x0
+odm/etc/selinux/precompiled_sepolicy.product_sepolicy_and_mapping.sha256 0 0 644 capabilities=0x0
+odm/etc/selinux/precompiled_sepolicy.system_ext_sepolicy_and_mapping.sha256 0 0 644 capabilities=0x0
+odm/etc/ueventd.rc 0 0 644 capabilities=0x0

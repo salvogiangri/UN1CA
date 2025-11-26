@@ -1,0 +1,12 @@
+{
+    "SERVICE_NAME": "SmartScan",
+    "SERVICE_VERSION": "v2",
+    "MODEL_TYPE": "deep_dewarp",
+    "COMPILER_NAME": "SNAP",
+    "COMPUTE_UNIT": "GPU",
+    "COMPILER_OPTION": "none",
+    "COMPILER_VERSION": "none",
+    "MODEL_VERSION": "1.3.9",
+    "MODEL_TYPE_ABBR": "deep_dewarp",
+    "MODEL_FILES": "deep_dewarp_cnn.onnx"
+}
