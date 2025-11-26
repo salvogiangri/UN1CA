@@ -6,6 +6,9 @@ security/unica_platform.pk8
 out.zip
 dump/
 
+# Generated build config
+out/config.sh
+
 #
 # We don't want to ignore the following even if they are dot-files
 #
