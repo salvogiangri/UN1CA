@@ -147,6 +147,9 @@ COPY_TARGET_FIRMWARE()
 
 COPY_TARGET_KERNEL()
 {
+    if [[ -d "$SRC_DIR/prebuilts/kernels/$TARGET_CODENAME" ]]; then
+        cp -r "$SRC_DIR/prebuilts/kernels/$TARGET_CODENAME/"* "$FW_DIR/$TARGET_FIRMWARE_PATH/kernel"
+    fi
     if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/kernel" ]; then
         LOG_STEP_IN "- Copying target firmware kernel images"
         EVAL "rsync -a --mkpath --delete \"$FW_DIR/$TARGET_FIRMWARE_PATH/kernel\" \"$WORK_DIR\"" || exit 1

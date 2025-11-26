@@ -1,0 +1,28 @@
+From 1c30fe9050924cdae37e5fb822a51f40901a226b Mon Sep 17 00:00:00 2001
+From: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
+Date: Mon, 21 Jul 2025 01:21:30 +0300
+Subject: [PATCH] Force AppLock support
+
+Signed-off-by: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
+---
+ .../usefulfeature/applock/AppLockPreferenceController.smali   | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/smali_classes3/com/samsung/android/settings/usefulfeature/applock/AppLockPreferenceController.smali b/smali_classes3/com/samsung/android/settings/usefulfeature/applock/AppLockPreferenceController.smali
+index fabab015..d69d23ba 100644
+--- a/smali_classes3/com/samsung/android/settings/usefulfeature/applock/AppLockPreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/usefulfeature/applock/AppLockPreferenceController.smali
+@@ -123,10 +123,6 @@
+ 
+     sget-object p0, Lcom/android/settings/Utils;->sBuilder:Ljava/lang/StringBuilder;
+ 
+-    sget-boolean p0, Lcom/samsung/android/settings/Rune;->SUPPORT_SMARTMANAGER_CN:Z
+-
+-    if-eqz p0, :cond_0
+-
+     invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+ 
+     move-result p0
+-- 
+2.45.2
+

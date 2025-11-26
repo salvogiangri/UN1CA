@@ -19,6 +19,9 @@ jobs:
           - module: "Galaxy A54 5G (a54xnsxx)"
             device: "a54xnsxx"
             firmware: "SM-A546E/EGY/350090711234564"
+          - module: "Galaxy A52 (a52qnsxx)"
+            device: "a52qnsxx"
+            firmware: "SM-A525F/SER/352938771234569"
           - module: "Galaxy A56 5G (a56xnaxx)"
             device: "a56xnaxx"
             firmware: "SM-A566B/EUX/352371191234565"
@@ -55,7 +58,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           submodules: 'recursive'
 
@@ -88,21 +91,21 @@ jobs:
           echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
           echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
 
       - name: Build dependencies
         run: |
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh m51
           ./scripts/build_dependencies.sh
 
       - name: Update prebuilt blobs
         run: |
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh m51
           ./scripts/internal/update_prebuilt_blobs.sh "${{ matrix.device }}" "${{ matrix.firmware }}"
           echo "PDA_BUILD=$(cat "./prebuilts/samsung/${{ matrix.device }}/.current" | cut -d "/" -f "1")" >> "$GITHUB_ENV"
 

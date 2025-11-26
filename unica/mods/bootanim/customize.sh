@@ -1,7 +1,7 @@
 # 1080x2340 devices
 TWOTHREE_TARGETS="dm1q dm2q g0q r0q"
 # 1080x2400 devices
-TWOFOUR_TARGETS="a52q a52xq a52sxq a71 a72q a73xq m52xq r8q r9q r9q2"
+TWOFOUR_TARGETS="a52q a52xq a52sxq a71 a72q a73xq m52xq r8q r9q r9q2 m51"
 
 if grep -q -w "$TARGET_CODENAME" <<< "$TWOTHREE_TARGETS" ; then
     LOG "- Adding 2024 boot animation blobs"

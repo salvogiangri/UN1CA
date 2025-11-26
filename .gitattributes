@@ -16,13 +16,15 @@
 *.png binary
 *.qmg binary
 *.webp binary
+*.img binary
 
 # ROM-specific prebuilt blobs
 prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
 unica/mods/prophide/system/bin/rezetprop binary
+unica/patches/__m51ify/M515F/vendor/** binary
 
 # Device-specific prebuilt blobs
-target/a52sxq/patches/wpss/vendor/firmware/** binary
-target/a73xq/patches/wpss/vendor/firmware/** binary
-target/m52xq/patches/wpss/vendor/firmware/** binary
+target/*/patches/*/system/** binary
+target/*/patches/*/product/** binary
+target/*/patches/*/vendor/** binary

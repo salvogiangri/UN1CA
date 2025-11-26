@@ -1,0 +1,46 @@
+{
+  "config":
+  {
+    "hw_platform": ["MTP", "Dragon", "Surf", "IDP"],
+    "soc_id": ["355", "365", "366"],
+  },
+  "stk3a9x_0":{
+    "owner": "sns_stk3a9x",
+    ".ambient_light":{
+      "owner": "sns_stk3a9x",
+      ".config":{
+        "owner": "sns_stk3a9x",
+        "is_dri":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "hw_id":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "res_idx":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "sync_stream":{ "type": "int", "ver": "0",
+          "data": "0"
+        }
+      }
+    },
+    ".proximity":{
+      "owner": "sns_stk3a9x",
+      ".config":{
+        "owner": "sns_stk3a9x",
+        "is_dri":{ "type": "int", "ver": "0",
+          "data": "1"
+        },
+        "hw_id":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "res_idx":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "sync_stream":{ "type": "int", "ver": "0",
+          "data": "0"
+        }
+      }
+    }
+  }
+}

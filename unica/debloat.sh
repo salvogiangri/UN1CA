@@ -104,11 +104,6 @@ ADD_TO_WORK_DIR "pa2qxxx" "system" \
     "system/etc/permissions/signature-permissions-com.samsung.android.game.gamehome.xml" \
     0 0 644 "u:object_r:system_file:s0"
 
-# Gemini shortcut
-PRODUCT_DEBLOAT+="
-app/BardShell
-"
-
 # Gmail
 PRODUCT_DEBLOAT+="
 app/Gmail2
@@ -220,26 +215,9 @@ system/priv-app/AREmojiEditor
 system/priv-app/AvatarEmojiSticker
 "
 
-# Samsung Calendar
-SYSTEM_DEBLOAT+="
-system/app/SamsungCalendar
-"
-
-# Samsung Clock
-SYSTEM_DEBLOAT+="
-system/app/ClockPackage
-"
-
 # Samsung Free
 SYSTEM_DEBLOAT+="
 system/app/MinusOnePage
-"
-
-# Samsung Messages
-SYSTEM_DEBLOAT+="
-system/etc/default-permissions/default-permissions-com.samsung.android.messaging.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.messaging.xml
-system/priv-app/SamsungMessages
 "
 
 # Samsung Pass
@@ -343,4 +321,8 @@ system/etc/sysconfig/feature-a11y-preload-voacc.xml
 # YouTube
 PRODUCT_DEBLOAT+="
 app/YouTube
+"
+# Google Messages
+PRODUCT_DEBLOAT+="
+priv-app/Messages
 "
