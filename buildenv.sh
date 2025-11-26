@@ -122,6 +122,10 @@ export FW_DIR="$OUT_DIR/fw"
 export TOOLS_DIR="$OUT_DIR/tools"
 if [[ ":$PATH:" != *":$TOOLS_DIR/bin:"* ]]; then
     export PATH="$TOOLS_DIR/bin:$PATH"
+    # Export PATH to GitHub Actions if running in CI
+    if [ -n "$GITHUB_PATH" ]; then
+        echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
+    fi
 fi
 
 TARGETS=()
@@ -173,6 +177,21 @@ mkdir -p "$OUT_DIR/target/$SELECTED_TARGET"
 [ -f "$OUT_DIR/config.sh" ] && unset $(sed "/Automatically/d" "$OUT_DIR/config.sh" | cut -d "=" -f 1)
 "$SRC_DIR/scripts/internal/gen_config_file.sh" "$SELECTED_TARGET" || return 1
 set -o allexport; source "$OUT_DIR/config.sh"; set +o allexport
+
+# Export environment variables to GitHub Actions if running in CI
+if [ -n "$GITHUB_ENV" ]; then
+    echo "DEBUG=$DEBUG" >> "$GITHUB_ENV"
+    echo "SRC_DIR=$SRC_DIR" >> "$GITHUB_ENV"
+    echo "OUT_DIR=$OUT_DIR" >> "$GITHUB_ENV"
+    echo "TMP_DIR=$TMP_DIR" >> "$GITHUB_ENV"
+    echo "ODIN_DIR=$ODIN_DIR" >> "$GITHUB_ENV"
+    echo "FW_DIR=$FW_DIR" >> "$GITHUB_ENV"
+    echo "TOOLS_DIR=$TOOLS_DIR" >> "$GITHUB_ENV"
+    echo "APKTOOL_DIR=$APKTOOL_DIR" >> "$GITHUB_ENV"
+    echo "WORK_DIR=$WORK_DIR" >> "$GITHUB_ENV"
+    # Export all variables from config.sh to GitHub Actions
+    sed "/Automatically/d" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
+fi
 
 unset TARGETS SELECTED_TARGET
 
