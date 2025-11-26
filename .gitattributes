@@ -22,7 +22,7 @@
 prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
 unica/mods/prophide/system/bin/rezetprop binary
-unica/patches/__m51ify/M515F/vendor/** binary
+target/m51/patches/__m51ify/M515F/vendor/** binary
 
 # Device-specific prebuilt blobs
 target/*/patches/*/system/** binary
