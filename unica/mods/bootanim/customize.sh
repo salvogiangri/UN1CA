@@ -24,10 +24,10 @@ if [[ -n "$RATIO" ]]; then
     
     if [ "$(echo "$RATIO >= $RATIO_2340 - $RATIO_2340_DELTA && $RATIO <= $RATIO_2340 + $RATIO_2340_DELTA" | bc -l)" = "1" ]; then
         LOG "- Adding 2024 boot animation blobs (1080x2340)"
-        EVAL "cp -a '$MODPATH/1080x2340/'* '$WORK_DIR/system/system/media'" || return 1
+        EVAL "cp -a \"$MODPATH/1080x2340/\"* \"$WORK_DIR/system/system/media\""
     elif [ "$(echo "$RATIO >= $RATIO_2400 - $RATIO_2400_DELTA && $RATIO <= $RATIO_2400 + $RATIO_2400_DELTA" | bc -l)" = "1" ]; then
         LOG "- Adding 2024 boot animation blobs (1080x2400)"
-        EVAL "cp -a '$MODPATH/1080x2400/'* '$WORK_DIR/system/system/media'" || return 1
+        EVAL "cp -a \"$MODPATH/1080x2400/\"* \"$WORK_DIR/system/system/media\""
     else
         LOGW "- Unknown boot animation resolution for \"$TARGET_CODENAME\". Skipping"
     fi
