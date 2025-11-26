@@ -31,12 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master # v6.0.0
 
-      - uses: actions/download-artifact@v5
-        with:
-          artifact-ids: 4669005837
-          github-token: ${{ secrets.TEST2 }} # token with actions:read permissions on target repo
-          repository: extremerom/DumprX
-          run-id: 19657597840
+      
     
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -54,17 +49,4 @@ jobs:
             npm install -g "$package" || echo "Warning: Failed to install $package"
           done
           
-      - name: Install MCP Server Dependencies
-        run: |
-         sudo apt update
-         sudo apt install p7zip-full
-         mkdir -p dump
-         ls *.zip
-         sudo 7z x out.zip -odump
-         sudo chown -R $(whoami):$(id -gn) ./dump
-         sudo chmod -R 777 ./dump
-         sudo rm -rf out.zip
-         cd dump
-         rm -rf twrp-device-tree
-         rm -rf aosp-device-tree
-         cd ..
+    
