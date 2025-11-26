@@ -159,9 +159,6 @@ fi
 
 if $BUILD_ZIP; then
     LOG_STEP_IN true "Creating zip"
-    if [ -n "$GITHUB_ACTIONS" ]; then
-    	rm -r "$SRC_DIR/out/fw"    
-    fi
     "$SRC_DIR/scripts/internal/build_flashable_zip.sh" || exit 1
     LOG_STEP_OUT
 fi
