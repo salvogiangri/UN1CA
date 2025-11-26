@@ -29,7 +29,7 @@
 /system/lib/android\.hardware\.graphics\.allocator@4\.0\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.graphics\.bufferqueue@1\.0\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.graphics\.bufferqueue@2\.0\.so u:object_r:system_lib_file:s0
-/system/lib/android\.hardware\.graphics\.common-V5-ndk\.so u:object_r:system_lib_file:s0
+/system/lib/android\.hardware\.graphics\.common-V6-ndk\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.graphics\.common@1\.0\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.graphics\.common@1\.1\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.graphics\.common@1\.2\.so u:object_r:system_lib_file:s0
@@ -51,7 +51,7 @@
 /system/lib/android\.hidl\.safe_union@1\.0\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hidl\.token@1\.0-utils\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hidl\.token@1\.0\.so u:object_r:system_lib_file:s0
-/system/lib/android\.media\.audio\.common\.types-V3-cpp\.so u:object_r:system_lib_file:s0
+/system/lib/android\.media\.audio\.common\.types-V4-cpp\.so u:object_r:system_lib_file:s0
 /system/lib/android\.media\.audiopolicy-aconfig-cc\.so u:object_r:system_lib_file:s0
 /system/lib/audio-permission-aidl-cpp\.so u:object_r:system_lib_file:s0
 /system/lib/audioclient-types-aidl-cpp\.so u:object_r:system_lib_file:s0
