@@ -155,25 +155,25 @@ done <<< "$DEBLOAT_LIST"
 
 # Copy M51 blobs
 LOG "Installing M51 drivers"
-cp -a "$SRC_DIR/target/$TARGET_CODENAME/patches/__m51ify/M515F/." "$WORK_DIR/"
+cp -a "$MODPATH/M515F/." "$WORK_DIR/"
 
 # SELinux and prop config
 LOG "Configuring properties"
-CONTEXTS_LIST="$(cd "$SRC_DIR/target/$TARGET_CODENAME/patches/__m51ify/M515F/vendor" 2>/dev/null && find lib lib64 -type f -print 2>/dev/null | sort || true)"
+CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find lib lib64 -type f -print 2>/dev/null | sort || true)"
 
 while IFS= read -r context; do
     [ -z "$context" ] && continue
     ADD_TO_WORK_DIR_CONTEXT "vendor" "$context" 0 2000 644 "u:object_r:vendor_lib_file:s0"
 done <<< "$CONTEXTS_LIST"
 
-CONTEXTS_LIST="$(cd "$SRC_DIR/target/$TARGET_CODENAME/patches/__m51ify/M515F/vendor" 2>/dev/null && find etc -type f -print 2>/dev/null | sort || true)"
+CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find etc -type f -print 2>/dev/null | sort || true)"
 
 while IFS= read -r context; do
     [ -z "$context" ] && continue
     ADD_TO_WORK_DIR_CONTEXT "vendor" "$context" 0 0 644 "u:object_r:vendor_configs_file:s0"
 done <<< "$CONTEXTS_LIST"
 
-CONTEXTS_LIST="$(cd "$SRC_DIR/target/$TARGET_CODENAME/patches/__m51ify/M515F/vendor" 2>/dev/null && find firmware -type f -print 2>/dev/null | sort || true)"
+CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find firmware -type f -print 2>/dev/null | sort || true)"
 
 while IFS= read -r context; do
     [ -z "$context" ] && continue
@@ -191,7 +191,7 @@ ADD_TO_WORK_DIR_CONTEXT "vendor" "bin/wvkprov" 0 2000 755 "u:object_r:wvkprov_ex
 
 ADD_TO_WORK_DIR_CONTEXT "vendor" "overlay/framework-res__auto_generated_rro_vendor.apk" 0 2000 755 "u:object_r:vendor_file:s0"
 
-CONTEXTS_LIST="$(cd "$SRC_DIR/target/$TARGET_CODENAME/patches/__m51ify/M515F/vendor" 2>/dev/null && find etc/audconf -type d -print 2>/dev/null | sort || true)"
+CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find etc/audconf -type d -print 2>/dev/null | sort || true)"
 
 while IFS= read -r context; do
     [ -z "$context" ] && continue
