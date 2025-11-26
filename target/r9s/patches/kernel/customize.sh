@@ -1,0 +1,5 @@
+LOG "- Replacing kernel binaries"
+rm -f "$WORK_DIR/kernel/boot.img"
+rm -f "$WORK_DIR/kernel/dtbo.img"
+rm -f "$WORK_DIR/kernel/vendor_boot.img"
+cp -fa "$SRC_DIR/prebuilts/kernels/r9s/"*.img "$WORK_DIR/kernel/"
