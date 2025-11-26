@@ -238,6 +238,6 @@ LOG "- Adding source firmware odm props"
 ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "odm" "etc/build.prop"
 
 LOG "Patching selinux"
-ADD_TO_WORK_DIR "system_ext" "etc/selinux/mapping/30.0.cil"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/selinux/mapping/30.0.cil"
 
 LOG "m51ify has been completed successfully!"
