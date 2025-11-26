@@ -16,19 +16,21 @@ read -r WIDTH HEIGHT RATIO <<< "$(awk '
 if [[ -n "$RATIO" ]]; then
     LOG "- BACK_CAMERA_RESOLUTION_FULL_RATIO: $WIDTH x $HEIGHT, ratio=$RATIO"
     
-    case 1 in
-        $(echo "$RATIO >= 2.14 && $RATIO <= 2.17" | bc -l))
-            LOG "- Adding 2024 boot animation blobs (1080x2340)"
-            cp -a "$MODPATH/1080x2340/"* "$WORK_DIR/system/system/media"
-            ;;
-        $(echo "$RATIO >= 2.20 && $RATIO <= 2.24" | bc -l))
-            LOG "- Adding 2024 boot animation blobs (1080x2400)"
-            cp -a "$MODPATH/1080x2400/"* "$WORK_DIR/system/system/media"
-            ;;
-        *)
-            LOGW "- Unknown boot animation resolution for \"$TARGET_CODENAME\". Skipping"
-            ;;
-    esac
+    RATIO_2340=2.16 # 2340/1080
+    RATIO_2340_DELTA=0.02
+    
+    RATIO_2400=2.22 # 2400/1080
+    RATIO_2400_DELTA=0.02
+    
+    if [ "$(echo "$RATIO >= $RATIO_2340 - $RATIO_2340_DELTA && $RATIO <= $RATIO_2340 + $RATIO_2340_DELTA" | bc -l)" = "1" ]; then
+        LOG "- Adding 2024 boot animation blobs (1080x2340)"
+        EVAL "cp -a '$MODPATH/1080x2340/'* '$WORK_DIR/system/system/media'" || return 1
+    elif [ "$(echo "$RATIO >= $RATIO_2400 - $RATIO_2400_DELTA && $RATIO <= $RATIO_2400 + $RATIO_2400_DELTA" | bc -l)" = "1" ]; then
+        LOG "- Adding 2024 boot animation blobs (1080x2400)"
+        EVAL "cp -a '$MODPATH/1080x2400/'* '$WORK_DIR/system/system/media'" || return 1
+    else
+        LOGW "- Unknown boot animation resolution for \"$TARGET_CODENAME\". Skipping"
+    fi
 else
     LOGW "- Could not find BACK_CAMERA_RESOLUTION_FULL_RATIO"
 fi
