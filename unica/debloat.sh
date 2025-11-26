@@ -88,21 +88,6 @@ system/etc/permissions/privapp-permissions-com.samsung.android.app.updatecenter.
 system/priv-app/AppUpdateCenter
 "
 
-# Bixby
-SYSTEM_DEBLOAT+="
-system/priv-app/Bixby
-system/priv-app/BixbyInterpreter
-system/priv-app/BixbyVisionFramework3.5
-system/priv-app/BixbyVisionFramework3.7
-system/app/BixbyWakeup
-system/system/etc/sysconfig/bixbyagent.xml
-system/etc/preferred-apps/com.samsung.android.bixby.agent.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.bixby.agent.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml
-system/etc/permissions/signature-permissions-com.samsung.android.bixby.agent.xml
-"
-
-
 # BCService
 SYSTEM_DEBLOAT+="
 system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
@@ -358,4 +343,35 @@ system/etc/sysconfig/feature-a11y-preload-voacc.xml
 # YouTube
 PRODUCT_DEBLOAT+="
 app/YouTube
+"
+
+# ====== CUSTOM DEBLOAT TO SAVE SPACE ======
+
+# Samsung Internet/Browser
+SYSTEM_DEBLOAT+="
+system/preload/SBrowser
+"
+
+# Bixby
+SYSTEM_DEBLOAT+="
+system/app/BixbyWakeup
+system/priv-app/Bixby
+system/priv-app/BixbyVisionFramework3.5
+system/priv-app/BixbyInterpreter
+"
+
+# Unused fonts
+SYSTEM_DEBLOAT+="$(find "$WORK_DIR/system" -type f -path "*/fonts/*" | grep -iE "(Chinese|Japanese|Korean|Arabic|Thai|Hindi)" | sed "s|$WORK_DIR/system/||g")"
+
+# Unused wallpapers
+SYSTEM_DEBLOAT+="$(find "$WORK_DIR/system" -type f -path "*/wallpaper/*" | tail -n +5 | sed "s|$WORK_DIR/system/||g")"
+
+# Samsung Health stub
+SYSTEM_DEBLOAT+="
+system/app/SHealth
+"
+
+# Samsung Notes
+SYSTEM_DEBLOAT+="
+system/app/Notes
 "
