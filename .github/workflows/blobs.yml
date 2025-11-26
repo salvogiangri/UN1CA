@@ -7,76 +7,19 @@ on:
 
 jobs:
   update:
-    runs-on: ubuntu-24.04
+    runs-on: Unica
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - module: "Galaxy A17 5G (a17xxx)"
-            device: "a17xxx"
-            firmware: "SM-A176B/INS/350042791234568"
-          - module: "Galaxy A54 5G (a54xnsxx)"
-            device: "a54xnsxx"
-            firmware: "SM-A546E/EGY/350090711234564"
-          - module: "Galaxy A56 5G (a56xnaxx)"
-            device: "a56xnaxx"
-            firmware: "SM-A566B/EUX/352371191234565"
-          - module: "Galaxy A73 5G (a73xqxx)"
-            device: "a73xqxx"
-            firmware: "SM-A736B/XME/352828291234563"
-          - module: "Galaxy S22 Ultra (Snapdragon) (b0qxxx)"
-            device: "b0qxxx"
-            firmware: "SM-S908E/INS/350280381234560"
-          - module: "Galaxy S22 Ultra (Exynos) (b0sxxx)"
-            device: "b0sxxx"
-            firmware: "SM-S908B/EUX/353074281234565"
-          - module: "Galaxy Z Flip4 (b4qxxx)"
-            device: "b4qxxx"
-            firmware: "SM-F721B/EUX/350525851234569"
-          - module: "Galaxy S23 (dm1qxxx)"
-            device: "dm1qxxx"
-            firmware: "SM-S911B/EUX/352404911234563"
           - module: "Galaxy S23+ (dm2qxxx)"
             device: "dm2qxxx"
             firmware: "SM-S916B/EUX/356761461234566"
-          - module: "Galaxy Tab S11 5G (gts11xx)"
-            device: "gts11xx"
-            firmware: "SM-X736B/EUX/R52Y8065XJM"
-          - module: "Galaxy S25+ (pa2qxxx)"
-            device: "pa2qxxx"
-            firmware: "SM-S936B/EUX/350634601234562"
-          - module: "Galaxy S21 FE 5G (Snapdragon) (r9qxxx)"
-            device: "r9qxxx"
-            firmware: "SM-G990B/EUX/353718681234563"
-          - module: "Galaxy S21 FE 5G (Exynos) (r9sxxx)"
-            device: "r9sxxx"
-            firmware: "SM-G990E/INS/352755851234560"
-          - module: "Galaxy S23 FE (r11sxxx)"
-            device: "r11sxxx"
-            firmware: "SM-S711B/EUX/358615311234564"
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
-        with:
-          submodules: 'recursive'
-
-      - name: Free disk space (1/3)
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          sudo docker image prune --all --force
-          sudo docker builder prune -a
-
-      - name: Free disk space (2/3)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-
-      - name: Free disk space (3/3)
-        uses: rokibhasansagar/slimhub_actions@main
-        with:
-          retain: 'compiler_cmake'
 
       - name: Set up build environment
         run: |
