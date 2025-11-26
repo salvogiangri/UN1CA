@@ -49,6 +49,8 @@ jobs:
         run: |
           echo "=== Starting build process ==="
           rm -rf out
+          git rm -r out
+          git commit -m "delete prebuilt tools"
           source ./buildenv.sh a52sxq
           ./scripts/build_dependencies.sh
           echo "TOOLS_VERSION=$(date -u +"%Y%m%d")" >> "$GITHUB_ENV"
@@ -57,7 +59,7 @@ jobs:
           git status
           git diff --name-status
           git add out
-          git commit -m "update"
+          git commit -m "update prebuilt tools"
           git push
 
       - name: Create Pull Request
