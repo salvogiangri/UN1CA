@@ -1,6 +1,5 @@
-# shellcheck shell=bash
 #
-# Copyright (C) 2024 Salvo Giangreco
+# Copyright (C) 2023 Salvo Giangreco
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,15 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy S23 (Snapdragon) (dm1q)
+# Debloat list for Galaxy A52s 5G (a52sxq)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
-# Configuration Manager
+# Overlays
 SYSTEM_DEBLOAT+="
-system/priv-app/CIDManager
-system/etc/permissions/privapp-permissions-com.samsung.android.cidmanager.xml
+system/app/WifiRROverlayAppLls
+"
+
+# mAFPC
+SYSTEM_DEBLOAT+="
+system/bin/mafpc_write
+"
+
+# HDCP
+SYSTEM_DEBLOAT+="
+system/bin/dhkprov
+system/bin/qchdcpkprov
+system/etc/init/dhkprov.rc
+system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
 "
 
 # system_ext clean-up
