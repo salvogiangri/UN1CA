@@ -1,4 +1,4 @@
-From 73ce3d7fb3df20c832117e0c843ea0d5a5df12ce Mon Sep 17 00:00:00 2001
+From 0aa85b14fbb86436b489b89d6adc2cfa718049b8 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 13 Oct 2025 14:55:01 +0200
 Subject: [PATCH] Enable dynamic resolution control
@@ -8,7 +8,7 @@ UN1CA: this patch is not complete! Please check unica/patches/product_feature/cu
  .../coroutines/JobSupport$Finishing.smali     |    2 +-
  .../android/settings/DisplaySettings$3.smali  |   24 +
  .../android/settings/DisplaySettings$4.smali  |  246 ++-
- .../Utils$$ExternalSyntheticLambda3.smali     |   54 +-
+ .../Utils$$ExternalSyntheticLambda3.smali     |   52 +-
  .../Utils$$ExternalSyntheticLambda4.smali     |   38 +
  .../Utils$$ExternalSyntheticOutline0.smali    |   18 +
  .../com/android/settings/Utils.smali          |  128 +-
@@ -62,14 +62,14 @@ UN1CA: this patch is not complete! Please check unica/patches/product_feature/cu
  .../eternal/provider/items/DisplayItem.smali  | 1353 +++++++++--------
  ...elSamsungAccountPreferenceController.smali |    4 +-
  .../settings/lockscreen/LockUtils.smali       |    2 +-
- 57 files changed, 2602 insertions(+), 1543 deletions(-)
+ 57 files changed, 2601 insertions(+), 1542 deletions(-)
  create mode 100644 smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda4.smali
  create mode 100644 smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda1.smali
  create mode 100644 smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda6.smali
  create mode 100644 smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda8.smali
 
 diff --git a/smali/kotlinx/coroutines/JobSupport$Finishing.smali b/smali/kotlinx/coroutines/JobSupport$Finishing.smali
-index 6461ea33a..7c6bff796 100644
+index b816a4180..45e4fd27c 100644
 --- a/smali/kotlinx/coroutines/JobSupport$Finishing.smali
 +++ b/smali/kotlinx/coroutines/JobSupport$Finishing.smali
 @@ -329,7 +329,7 @@
@@ -82,7 +82,7 @@ index 6461ea33a..7c6bff796 100644
      move-result-object v0
  
 diff --git a/smali_classes2/com/android/settings/DisplaySettings$3.smali b/smali_classes2/com/android/settings/DisplaySettings$3.smali
-index 31d2978ee..c4c524a2a 100644
+index 140417dc1..dc3faa481 100644
 --- a/smali_classes2/com/android/settings/DisplaySettings$3.smali
 +++ b/smali_classes2/com/android/settings/DisplaySettings$3.smali
 @@ -13,6 +13,30 @@
@@ -117,7 +117,7 @@ index 31d2978ee..c4c524a2a 100644
  
      move-result-object v0
 diff --git a/smali_classes2/com/android/settings/DisplaySettings$4.smali b/smali_classes2/com/android/settings/DisplaySettings$4.smali
-index 3bef1ca6d..ecc7dc018 100644
+index 8bee92004..5825f9b50 100644
 --- a/smali_classes2/com/android/settings/DisplaySettings$4.smali
 +++ b/smali_classes2/com/android/settings/DisplaySettings$4.smali
 @@ -132,32 +132,32 @@
@@ -856,15 +856,10 @@ index 3bef1ca6d..ecc7dc018 100644
      .array-data 4
          0x3f000000    # 0.5f
 diff --git a/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda3.smali b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda3.smali
-index df95f152c..b142cc910 100644
+index 1d1448810..f33986828 100644
 --- a/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda3.smali
 +++ b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda3.smali
-@@ -3,36 +3,68 @@
- .source "qb/101886872 cc50e995e4fc65df429a508d912903f2f35e60315f091e679da7afd461b54de3"
- 
- # interfaces
--.implements Ljava/util/function/Predicate;
-+.implements Landroidx/core/view/OnApplyWindowInsetsListener;
+@@ -7,32 +7,64 @@
  
  
  # instance fields
@@ -941,13 +936,13 @@ index df95f152c..b142cc910 100644
  .end method
 diff --git a/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda4.smali b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda4.smali
 new file mode 100644
-index 000000000..98e354ef3
+index 000000000..1fe87a87c
 --- /dev/null
 +++ b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticLambda4.smali
 @@ -0,0 +1,38 @@
 +.class public final synthetic Lcom/android/settings/Utils$$ExternalSyntheticLambda4;
 +.super Ljava/lang/Object;
-+.source "qb/101886872 cc50e995e4fc65df429a508d912903f2f35e60315f091e679da7afd461b54de3"
++.source "qb/103318193 2390ff46673e3ef514dc97fdebae472cba4dc92ba53b83fbd6db12d168e29743"
 +
 +# interfaces
 +.implements Ljava/util/function/Predicate;
@@ -984,7 +979,7 @@ index 000000000..98e354ef3
 +    return p0
 +.end method
 diff --git a/smali_classes2/com/android/settings/Utils$$ExternalSyntheticOutline0.smali b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticOutline0.smali
-index b41a7b558..db91848b9 100644
+index c1db5fb0e..7b8b0228e 100644
 --- a/smali_classes2/com/android/settings/Utils$$ExternalSyntheticOutline0.smali
 +++ b/smali_classes2/com/android/settings/Utils$$ExternalSyntheticOutline0.smali
 @@ -4,6 +4,24 @@
@@ -1013,7 +1008,7 @@ index b41a7b558..db91848b9 100644
      .locals 1
  
 diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
-index f1680e464..392f2156a 100644
+index a0d5ecdbc..aec99c1bb 100644
 --- a/smali_classes2/com/android/settings/Utils.smali
 +++ b/smali_classes2/com/android/settings/Utils.smali
 @@ -4069,9 +4069,9 @@
@@ -1221,13 +1216,13 @@ index f1680e464..392f2156a 100644
  .method public static isGuestMode(Landroid/content/Context;)Z
 diff --git a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda1.smali b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda1.smali
 new file mode 100644
-index 000000000..95bb00791
+index 000000000..2302232ed
 --- /dev/null
 +++ b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda1.smali
 @@ -0,0 +1,222 @@
 +.class public final synthetic Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda1;
 +.super Ljava/lang/Object;
-+.source "qb/101886872 cc50e995e4fc65df429a508d912903f2f35e60315f091e679da7afd461b54de3"
++.source "qb/103318193 2390ff46673e3ef514dc97fdebae472cba4dc92ba53b83fbd6db12d168e29743"
 +
 +# interfaces
 +.implements Ljava/lang/Runnable;
@@ -1448,7 +1443,7 @@ index 000000000..95bb00791
 +    return-void
 +.end method
 diff --git a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda2.smali b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda2.smali
-index 7135a80ef..7a1e42450 100644
+index 34b0017f2..61caba2b4 100644
 --- a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda2.smali
 +++ b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda2.smali
 @@ -7,24 +7,20 @@
@@ -1744,13 +1739,13 @@ index 7135a80ef..7a1e42450 100644
  .end method
 diff --git a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda6.smali b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda6.smali
 new file mode 100644
-index 000000000..139441834
+index 000000000..10026157e
 --- /dev/null
 +++ b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda6.smali
 @@ -0,0 +1,108 @@
 +.class public final synthetic Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda6;
 +.super Ljava/lang/Object;
-+.source "qb/101886872 cc50e995e4fc65df429a508d912903f2f35e60315f091e679da7afd461b54de3"
++.source "qb/103318193 2390ff46673e3ef514dc97fdebae472cba4dc92ba53b83fbd6db12d168e29743"
 +
 +# interfaces
 +.implements Ljava/lang/Runnable;
@@ -1858,13 +1853,13 @@ index 000000000..139441834
 +.end method
 diff --git a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda8.smali b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda8.smali
 new file mode 100644
-index 000000000..c7d1514f4
+index 000000000..c856abbb8
 --- /dev/null
 +++ b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda8.smali
 @@ -0,0 +1,80 @@
 +.class public final synthetic Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticLambda8;
 +.super Ljava/lang/Object;
-+.source "qb/101886872 cc50e995e4fc65df429a508d912903f2f35e60315f091e679da7afd461b54de3"
++.source "qb/103318193 2390ff46673e3ef514dc97fdebae472cba4dc92ba53b83fbd6db12d168e29743"
 +
 +# interfaces
 +.implements Ljava/lang/Runnable;
@@ -1943,7 +1938,7 @@ index 000000000..c7d1514f4
 +    .end packed-switch
 +.end method
 diff --git a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter.smali b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter.smali
-index aca35c8ed..09a3ac86f 100644
+index d965b7b3e..f548d5858 100644
 --- a/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter.smali
 +++ b/smali_classes2/com/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter.smali
 @@ -1113,9 +1113,9 @@
@@ -2042,7 +2037,7 @@ index aca35c8ed..09a3ac86f 100644
      move-result-object p1
  
 diff --git a/smali_classes2/com/android/settings/biometrics/BiometricEnrollActivity.smali b/smali_classes2/com/android/settings/biometrics/BiometricEnrollActivity.smali
-index b2a1649be..046fa1531 100644
+index 3e7bffb18..77b52da8b 100644
 --- a/smali_classes2/com/android/settings/biometrics/BiometricEnrollActivity.smali
 +++ b/smali_classes2/com/android/settings/biometrics/BiometricEnrollActivity.smali
 @@ -643,7 +643,7 @@
@@ -2055,7 +2050,7 @@ index b2a1649be..046fa1531 100644
      move-result-object v5
  
 diff --git a/smali_classes2/com/android/settings/bluetooth/BluetoothDetailsAmbientVolumePreferenceController.smali b/smali_classes2/com/android/settings/bluetooth/BluetoothDetailsAmbientVolumePreferenceController.smali
-index dcdc4a2b6..2a32c657a 100644
+index 55e858b99..d2194e559 100644
 --- a/smali_classes2/com/android/settings/bluetooth/BluetoothDetailsAmbientVolumePreferenceController.smali
 +++ b/smali_classes2/com/android/settings/bluetooth/BluetoothDetailsAmbientVolumePreferenceController.smali
 @@ -177,7 +177,7 @@
@@ -2068,7 +2063,7 @@ index dcdc4a2b6..2a32c657a 100644
      move-result-object v4
  
 diff --git a/smali_classes2/com/android/settings/bluetooth/BluetoothEnabler.smali b/smali_classes2/com/android/settings/bluetooth/BluetoothEnabler.smali
-index bb3453656..35ea73625 100644
+index 33efde2f2..94c46462f 100644
 --- a/smali_classes2/com/android/settings/bluetooth/BluetoothEnabler.smali
 +++ b/smali_classes2/com/android/settings/bluetooth/BluetoothEnabler.smali
 @@ -851,7 +851,7 @@
@@ -2081,7 +2076,7 @@ index bb3453656..35ea73625 100644
      move-result-object v2
  
 diff --git a/smali_classes2/com/android/settings/connecteddevice/audiosharing/AudioSharingBasePreferenceController.smali b/smali_classes2/com/android/settings/connecteddevice/audiosharing/AudioSharingBasePreferenceController.smali
-index 60d9f16f8..cf4fb57e2 100644
+index e6474f8ee..672775bc3 100644
 --- a/smali_classes2/com/android/settings/connecteddevice/audiosharing/AudioSharingBasePreferenceController.smali
 +++ b/smali_classes2/com/android/settings/connecteddevice/audiosharing/AudioSharingBasePreferenceController.smali
 @@ -183,7 +183,7 @@
@@ -2094,7 +2089,7 @@ index 60d9f16f8..cf4fb57e2 100644
      move-result-object v0
  
 diff --git a/smali_classes2/com/android/settings/connecteddevice/audiosharing/audiostreams/AudioStreamsCategoryController.smali b/smali_classes2/com/android/settings/connecteddevice/audiosharing/audiostreams/AudioStreamsCategoryController.smali
-index b0888755c..4e4f5f361 100644
+index f8c6679c0..ece0264c0 100644
 --- a/smali_classes2/com/android/settings/connecteddevice/audiosharing/audiostreams/AudioStreamsCategoryController.smali
 +++ b/smali_classes2/com/android/settings/connecteddevice/audiosharing/audiostreams/AudioStreamsCategoryController.smali
 @@ -176,7 +176,7 @@
@@ -2107,7 +2102,7 @@ index b0888755c..4e4f5f361 100644
      move-result-object v0
  
 diff --git a/smali_classes2/com/android/settings/localepicker/AppLocaleAllListPreferenceController.smali b/smali_classes2/com/android/settings/localepicker/AppLocaleAllListPreferenceController.smali
-index 155ed5563..904dc8307 100644
+index d3e181a2a..828df7527 100644
 --- a/smali_classes2/com/android/settings/localepicker/AppLocaleAllListPreferenceController.smali
 +++ b/smali_classes2/com/android/settings/localepicker/AppLocaleAllListPreferenceController.smali
 @@ -792,7 +792,7 @@
@@ -2120,7 +2115,7 @@ index 155ed5563..904dc8307 100644
      move-result-object p1
  
 diff --git a/smali_classes2/com/android/settings/localepicker/LocalePickerBaseListPreferenceController.smali b/smali_classes2/com/android/settings/localepicker/LocalePickerBaseListPreferenceController.smali
-index 9a2d36e3b..da050048f 100644
+index 7d7dc6c08..21a29c0a8 100644
 --- a/smali_classes2/com/android/settings/localepicker/LocalePickerBaseListPreferenceController.smali
 +++ b/smali_classes2/com/android/settings/localepicker/LocalePickerBaseListPreferenceController.smali
 @@ -1192,7 +1192,7 @@
@@ -2133,7 +2128,7 @@ index 9a2d36e3b..da050048f 100644
      move-result-object v5
  
 diff --git a/smali_classes2/com/android/settings/network/SimOnboardingService$initData$1.smali b/smali_classes2/com/android/settings/network/SimOnboardingService$initData$1.smali
-index 4e60fd876..290483d16 100644
+index 9065233f6..460ab4792 100644
 --- a/smali_classes2/com/android/settings/network/SimOnboardingService$initData$1.smali
 +++ b/smali_classes2/com/android/settings/network/SimOnboardingService$initData$1.smali
 @@ -221,7 +221,7 @@
@@ -2146,7 +2141,7 @@ index 4e60fd876..290483d16 100644
      move-result-object v0
  
 diff --git a/smali_classes2/com/android/settings/network/apn/ApnSettings.smali b/smali_classes2/com/android/settings/network/apn/ApnSettings.smali
-index 6ed16264c..b9b6eeb5b 100644
+index ffe6a2d80..fad3ce644 100644
 --- a/smali_classes2/com/android/settings/network/apn/ApnSettings.smali
 +++ b/smali_classes2/com/android/settings/network/apn/ApnSettings.smali
 @@ -1059,7 +1059,7 @@
@@ -2159,7 +2154,7 @@ index 6ed16264c..b9b6eeb5b 100644
      move-result-object v7
  
 diff --git a/smali_classes2/com/android/settings/notification/modes/SetupInterstitialActivity.smali b/smali_classes2/com/android/settings/notification/modes/SetupInterstitialActivity.smali
-index af5a5470a..0c6b677ea 100644
+index 08f9c909b..05d8d6dfb 100644
 --- a/smali_classes2/com/android/settings/notification/modes/SetupInterstitialActivity.smali
 +++ b/smali_classes2/com/android/settings/notification/modes/SetupInterstitialActivity.smali
 @@ -45,9 +45,9 @@
@@ -2175,7 +2170,7 @@ index af5a5470a..0c6b677ea 100644
      sget-object v2, Landroidx/core/view/ViewCompat;->sViewPropertyAnimatorMap:Ljava/util/WeakHashMap;
  
 diff --git a/smali_classes3/com/samsung/android/settings/nfc/NfcEnabler.smali b/smali_classes3/com/samsung/android/settings/nfc/NfcEnabler.smali
-index 775276b4d..df5387332 100644
+index 6c8b42bf3..c1812b7cd 100644
 --- a/smali_classes3/com/samsung/android/settings/nfc/NfcEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/nfc/NfcEnabler.smali
 @@ -1170,7 +1170,7 @@
@@ -2188,7 +2183,7 @@ index 775276b4d..df5387332 100644
      move-result-object v5
  
 diff --git a/smali_classes3/com/samsung/android/settings/taskbar/TaskBarPreferenceController.smali b/smali_classes3/com/samsung/android/settings/taskbar/TaskBarPreferenceController.smali
-index eba231ef1..f2f6cc644 100644
+index d1a885286..a7c3f1476 100644
 --- a/smali_classes3/com/samsung/android/settings/taskbar/TaskBarPreferenceController.smali
 +++ b/smali_classes3/com/samsung/android/settings/taskbar/TaskBarPreferenceController.smali
 @@ -273,7 +273,7 @@
@@ -2201,7 +2196,7 @@ index eba231ef1..f2f6cc644 100644
      move-result-object v6
  
 diff --git a/smali_classes3/com/samsung/android/settings/theftprotection/ProtectionPromptActivity.smali b/smali_classes3/com/samsung/android/settings/theftprotection/ProtectionPromptActivity.smali
-index 4abfd43f1..2824c1e02 100644
+index 4de449776..cae0579d2 100644
 --- a/smali_classes3/com/samsung/android/settings/theftprotection/ProtectionPromptActivity.smali
 +++ b/smali_classes3/com/samsung/android/settings/theftprotection/ProtectionPromptActivity.smali
 @@ -398,7 +398,7 @@
@@ -2214,7 +2209,7 @@ index 4abfd43f1..2824c1e02 100644
      move-result-object v5
  
 diff --git a/smali_classes3/com/samsung/android/settings/uwb/UwbPreferenceController.smali b/smali_classes3/com/samsung/android/settings/uwb/UwbPreferenceController.smali
-index c25fa8ed8..d6ebc6156 100644
+index 200c19732..5d12f148b 100644
 --- a/smali_classes3/com/samsung/android/settings/uwb/UwbPreferenceController.smali
 +++ b/smali_classes3/com/samsung/android/settings/uwb/UwbPreferenceController.smali
 @@ -236,7 +236,7 @@
@@ -2227,7 +2222,7 @@ index c25fa8ed8..d6ebc6156 100644
      move-result-object v0
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/WifiSetupWizardActivity$InternetResultHandler$1.smali b/smali_classes3/com/samsung/android/settings/wifi/WifiSetupWizardActivity$InternetResultHandler$1.smali
-index 48b0f8e41..1a11ea4c4 100644
+index 5809d6495..fb37ffac2 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/WifiSetupWizardActivity$InternetResultHandler$1.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/WifiSetupWizardActivity$InternetResultHandler$1.smali
 @@ -276,7 +276,7 @@
@@ -2240,7 +2235,7 @@ index 48b0f8e41..1a11ea4c4 100644
      move-result-object v3
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchController$1.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchController$1.smali
-index 6bffc7f61..a08ac0685 100644
+index ae30e760b..f90ac138d 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchController$1.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchController$1.smali
 @@ -78,7 +78,7 @@
@@ -2253,7 +2248,7 @@ index 6bffc7f61..a08ac0685 100644
      move-result-object v1
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
-index f4e5dd788..7eb42d5b4 100644
+index d9dac483b..d7641e845 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
 @@ -382,7 +382,7 @@
@@ -2275,7 +2270,7 @@ index f4e5dd788..7eb42d5b4 100644
      move-result-object v3
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1$2.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1$2.smali
-index 5e3fbaad9..d4100d84b 100644
+index d7f2a0523..2e1150c0d 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1$2.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1$2.smali
 @@ -90,7 +90,7 @@
@@ -2288,7 +2283,7 @@ index 5e3fbaad9..d4100d84b 100644
      move-result-object p0
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
-index ed6673ba4..5e907b0bb 100644
+index 25c0eeff4..a41185a62 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
 @@ -2076,7 +2076,7 @@
@@ -2301,7 +2296,7 @@ index ed6673ba4..5e907b0bb 100644
      move-result-object v1
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
-index ec48e7cd6..17f9dde29 100644
+index 65452f430..25dcbc6ba 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
 @@ -364,7 +364,7 @@
@@ -2314,7 +2309,7 @@ index ec48e7cd6..17f9dde29 100644
      move-result-object v1
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApAutoHotspotSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApAutoHotspotSwitchEnabler.smali
-index a097de77b..d2a18e090 100644
+index 28725957a..5c4a1209a 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApAutoHotspotSwitchEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApAutoHotspotSwitchEnabler.smali
 @@ -565,7 +565,7 @@
@@ -2327,7 +2322,7 @@ index a097de77b..d2a18e090 100644
      move-result-object v13
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApFamilySharingSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApFamilySharingSwitchEnabler.smali
-index 57e25d1c4..18a3c85cc 100644
+index b2163d778..9911dfd62 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApFamilySharingSwitchEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/WifiApFamilySharingSwitchEnabler.smali
 @@ -693,7 +693,7 @@
@@ -2340,7 +2335,7 @@ index 57e25d1c4..18a3c85cc 100644
      move-result-object v5
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaAutoHotspotSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaAutoHotspotSwitchEnabler.smali
-index 2b3886b20..f228b1bc0 100644
+index b34ee9243..52d1dd451 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaAutoHotspotSwitchEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaAutoHotspotSwitchEnabler.smali
 @@ -487,7 +487,7 @@
@@ -2353,7 +2348,7 @@ index 2b3886b20..f228b1bc0 100644
      move-result-object v8
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaFamilySharingSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaFamilySharingSwitchEnabler.smali
-index 3cc88e051..9ff1b7c45 100644
+index 3126ad02e..d5099f4bf 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaFamilySharingSwitchEnabler.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/autohotspot/safamily/WifiApSaFamilySharingSwitchEnabler.smali
 @@ -202,7 +202,7 @@
@@ -2366,7 +2361,7 @@ index 3cc88e051..9ff1b7c45 100644
      move-result-object v11
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController.smali
-index 0713eb9bd..836e89741 100644
+index 93b9a2bf8..37c56aff5 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController.smali
 @@ -295,7 +295,7 @@
@@ -2379,7 +2374,7 @@ index 0713eb9bd..836e89741 100644
      move-result-object p0
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
-index ef59a0efc..2a33da5ee 100644
+index 968e7b78a..43c0a3cce 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
 @@ -420,7 +420,7 @@
@@ -2401,7 +2396,7 @@ index ef59a0efc..2a33da5ee 100644
      move-result-object v3
  
 diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils.smali
-index 2d4ca1208..17fb89b77 100644
+index 364f78ac3..7b0b15f19 100644
 --- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils.smali
 @@ -426,7 +426,7 @@
@@ -2414,7 +2409,7 @@ index 2d4ca1208..17fb89b77 100644
      move-result-object v2
  
 diff --git a/smali_classes4/com/samsung/android/settings/Rune.smali b/smali_classes4/com/samsung/android/settings/Rune.smali
-index ef70ec6ef..d315c7c9b 100644
+index 6e97478ca..909024a7b 100644
 --- a/smali_classes4/com/samsung/android/settings/Rune.smali
 +++ b/smali_classes4/com/samsung/android/settings/Rune.smali
 @@ -3073,7 +3073,7 @@
@@ -2436,7 +2431,7 @@ index ef70ec6ef..d315c7c9b 100644
      move-result-object v4
  
 diff --git a/smali_classes4/com/samsung/android/settings/bixbyroutinehandler/BixbyRoutineActionHandler.smali b/smali_classes4/com/samsung/android/settings/bixbyroutinehandler/BixbyRoutineActionHandler.smali
-index 9e4909884..8455c134f 100644
+index 8b7bbb5de..e56f95510 100644
 --- a/smali_classes4/com/samsung/android/settings/bixbyroutinehandler/BixbyRoutineActionHandler.smali
 +++ b/smali_classes4/com/samsung/android/settings/bixbyroutinehandler/BixbyRoutineActionHandler.smali
 @@ -2053,7 +2053,7 @@
@@ -2449,7 +2444,7 @@ index 9e4909884..8455c134f 100644
      move-result-object v0
  
 diff --git a/smali_classes4/com/samsung/android/settings/bluetooth/CheckBluetoothStateActivity$1.smali b/smali_classes4/com/samsung/android/settings/bluetooth/CheckBluetoothStateActivity$1.smali
-index be57f9632..5a673b8ef 100644
+index cde7f1445..15be7b4a9 100644
 --- a/smali_classes4/com/samsung/android/settings/bluetooth/CheckBluetoothStateActivity$1.smali
 +++ b/smali_classes4/com/samsung/android/settings/bluetooth/CheckBluetoothStateActivity$1.smali
 @@ -87,7 +87,7 @@
@@ -2462,7 +2457,7 @@ index be57f9632..5a673b8ef 100644
      move-result-object v3
  
 diff --git a/smali_classes4/com/samsung/android/settings/connection/SecSatelliteNetworksPreferenceController.smali b/smali_classes4/com/samsung/android/settings/connection/SecSatelliteNetworksPreferenceController.smali
-index 21ee1ebb6..fe95f61b3 100644
+index aaad79835..4b665ed36 100644
 --- a/smali_classes4/com/samsung/android/settings/connection/SecSatelliteNetworksPreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/connection/SecSatelliteNetworksPreferenceController.smali
 @@ -527,7 +527,7 @@
@@ -2475,7 +2470,7 @@ index 21ee1ebb6..fe95f61b3 100644
      move-result-object v1
  
 diff --git a/smali_classes4/com/samsung/android/settings/datausage/SecBillingCycleManager.smali b/smali_classes4/com/samsung/android/settings/datausage/SecBillingCycleManager.smali
-index e08afed37..1bb325832 100644
+index 9af04b1d7..539f0997c 100644
 --- a/smali_classes4/com/samsung/android/settings/datausage/SecBillingCycleManager.smali
 +++ b/smali_classes4/com/samsung/android/settings/datausage/SecBillingCycleManager.smali
 @@ -217,7 +217,7 @@
@@ -2488,7 +2483,7 @@ index e08afed37..1bb325832 100644
      move-result-object v1
  
 diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/SecDeviceInfoUtils$Operator.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/SecDeviceInfoUtils$Operator.smali
-index 7e91835ea..35c0282e7 100644
+index f17bc0e67..c61c6e171 100644
 --- a/smali_classes4/com/samsung/android/settings/deviceinfo/SecDeviceInfoUtils$Operator.smali
 +++ b/smali_classes4/com/samsung/android/settings/deviceinfo/SecDeviceInfoUtils$Operator.smali
 @@ -123,9 +123,9 @@
@@ -2504,7 +2499,7 @@ index 7e91835ea..35c0282e7 100644
      invoke-interface {p0, v0}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2$2.smali b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2$2.smali
-index 4b96531ec..c3ebd858f 100644
+index e6fca2221..ef0240e1b 100644
 --- a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2$2.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2$2.smali
 @@ -30,15 +30,21 @@
@@ -2535,7 +2530,7 @@ index 4b96531ec..c3ebd858f 100644
      iget-object p1, p0, Lcom/samsung/android/settings/display/ScreenResolutionFragment$2$2;->this$1:Lcom/samsung/android/settings/display/ScreenResolutionFragment$2;
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2.smali b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2.smali
-index 86900e44f..cf7a4c206 100644
+index 18779d785..08fea0943 100644
 --- a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment$2.smali
 @@ -229,13 +229,17 @@
@@ -2560,7 +2555,7 @@ index 86900e44f..cf7a4c206 100644
      iget-object v0, p0, Lcom/samsung/android/settings/display/ScreenResolutionFragment$2;->this$0:Lcom/samsung/android/settings/display/ScreenResolutionFragment;
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment.smali b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment.smali
-index b3b5b6482..1df9e7143 100644
+index 6fc03d6d2..9020f5048 100644
 --- a/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/ScreenResolutionFragment.smali
 @@ -312,15 +312,21 @@
@@ -2656,7 +2651,7 @@ index b3b5b6482..1df9e7143 100644
  .end method
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/ScreenZoomSettingsReceiver.smali b/smali_classes4/com/samsung/android/settings/display/ScreenZoomSettingsReceiver.smali
-index 019d89769..5e4f59a51 100644
+index 65d15c748..f84d8060a 100644
 --- a/smali_classes4/com/samsung/android/settings/display/ScreenZoomSettingsReceiver.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/ScreenZoomSettingsReceiver.smali
 @@ -137,6 +137,10 @@
@@ -2684,7 +2679,7 @@ index 019d89769..5e4f59a51 100644
  
      move-result-object p2
 diff --git a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
-index 989a019bc..83c79ea09 100644
+index 3aa655fc2..17c45ddea 100644
 --- a/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
 @@ -2584,6 +2584,14 @@
@@ -3390,7 +3385,7 @@ index 989a019bc..83c79ea09 100644
      invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/SecScreenZoomPreferenceFragment.smali b/smali_classes4/com/samsung/android/settings/display/SecScreenZoomPreferenceFragment.smali
-index 35804e2dd..9908cf72f 100644
+index c60d89e0f..75dea880e 100644
 --- a/smali_classes4/com/samsung/android/settings/display/SecScreenZoomPreferenceFragment.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/SecScreenZoomPreferenceFragment.smali
 @@ -155,33 +155,35 @@
@@ -4992,7 +4987,7 @@ index 35804e2dd..9908cf72f 100644
      sget-object p1, Landroidx/core/view/ViewCompat;->sViewPropertyAnimatorMap:Ljava/util/WeakHashMap;
  
 diff --git a/smali_classes4/com/samsung/android/settings/display/controller/EasyModePreferenceController.smali b/smali_classes4/com/samsung/android/settings/display/controller/EasyModePreferenceController.smali
-index b05c484eb..accb4ebf2 100644
+index 68d085b97..245644466 100644
 --- a/smali_classes4/com/samsung/android/settings/display/controller/EasyModePreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/controller/EasyModePreferenceController.smali
 @@ -102,9 +102,9 @@
@@ -5117,7 +5112,7 @@ index b05c484eb..accb4ebf2 100644
  
      sget-object p1, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
 diff --git a/smali_classes4/com/samsung/android/settings/display/controller/ScreenResolutionPreferenceController.smali b/smali_classes4/com/samsung/android/settings/display/controller/ScreenResolutionPreferenceController.smali
-index 4b011133a..dfac4a863 100644
+index f08af9eb1..d18558bdd 100644
 --- a/smali_classes4/com/samsung/android/settings/display/controller/ScreenResolutionPreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/controller/ScreenResolutionPreferenceController.smali
 @@ -143,11 +143,36 @@
@@ -5161,7 +5156,7 @@ index 4b011133a..dfac4a863 100644
      return p0
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali b/smali_classes4/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
-index 7e9265ceb..a28272685 100644
+index 2a735db0b..3b57cfce7 100644
 --- a/smali_classes4/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
 @@ -510,11 +510,36 @@
@@ -5205,7 +5200,7 @@ index 7e9265ceb..a28272685 100644
      return p0
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/eternal/provider/items/DisplayItem.smali b/smali_classes4/com/samsung/android/settings/eternal/provider/items/DisplayItem.smali
-index 0eae8a1b2..ade6b2647 100644
+index e9d8c6ee0..b8495e936 100644
 --- a/smali_classes4/com/samsung/android/settings/eternal/provider/items/DisplayItem.smali
 +++ b/smali_classes4/com/samsung/android/settings/eternal/provider/items/DisplayItem.smali
 @@ -58,6 +58,86 @@
@@ -8653,7 +8648,7 @@ index 0eae8a1b2..ade6b2647 100644
      .sparse-switch
          -0x7fd88b6c -> :sswitch_22
 diff --git a/smali_classes4/com/samsung/android/settings/homepage/TopLevelSamsungAccountPreferenceController.smali b/smali_classes4/com/samsung/android/settings/homepage/TopLevelSamsungAccountPreferenceController.smali
-index dba388c7c..15643839f 100644
+index 2fb4e5577..0567dce63 100644
 --- a/smali_classes4/com/samsung/android/settings/homepage/TopLevelSamsungAccountPreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/homepage/TopLevelSamsungAccountPreferenceController.smali
 @@ -825,9 +825,9 @@
@@ -8669,7 +8664,7 @@ index dba388c7c..15643839f 100644
      invoke-interface {p0, v0}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
  
 diff --git a/smali_classes4/com/samsung/android/settings/lockscreen/LockUtils.smali b/smali_classes4/com/samsung/android/settings/lockscreen/LockUtils.smali
-index 2608d6ed0..49b7ce271 100644
+index 85b97d1ab..f697bcaac 100644
 --- a/smali_classes4/com/samsung/android/settings/lockscreen/LockUtils.smali
 +++ b/smali_classes4/com/samsung/android/settings/lockscreen/LockUtils.smali
 @@ -1364,7 +1364,7 @@
@@ -8682,5 +8677,5 @@ index 2608d6ed0..49b7ce271 100644
      move-result-object v5
  
 -- 
-2.51.0
+2.52.0
 
