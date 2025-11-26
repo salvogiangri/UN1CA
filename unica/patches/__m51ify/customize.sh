@@ -164,15 +164,24 @@ SET_PROP "vendor" "ro.product.vendor.device" "m51"
 SET_PROP "vendor" "ro.product.vendor.model" "SM-M515F"
 SET_PROP "vendor" "ro.product.vendor.name" "m51nsxx"
 SET_PROP "vendor" "ro.bootimage.build.fingerprint" "samsung/m51nsxx/m51:11/RP1A.200720.012/M515FXXS6DXE4:user/release-keys"
-sed -i "s/siop_a52q_sm7125/siop_m51_sm7150/g" $WORK_DIR/vendor/etc/floating_feature.xml 
-sed -i "s/a52q/m51/g" $WORK_DIR/vendor/etc/floating_feature.xml 
-sed -i "s/A52/M51/g" $WORK_DIR/vendor/etc/floating_feature.xml 
-sed -i "s/a52q/m51/g" $WORK_DIR/vendor/etc/ev_lux_map_config.xml 
-sed -i "s/a52q/m51/g" $WORK_DIR/vendor/etc/sensorhub_services.json 
-find "$WORK_DIR/vendor" -type f -name '*atoll*' -print0 | while IFS= read -r -d '' f; do HEX_PATCH "$f" "61746F6C6C2E736F00" "736D363135302E736F"; mv -- "$f" "$(printf %s "$f" | sed 's/atoll/sm6150/g')" 2>/dev/null; done
-seid -i "s/atoll/sm6150/g" $WORK_DIR/vendor/etc/vramdiskd.xml
-seid -i "s/atoll/sm6150/g" $WORK_DIR/configs/file_context-vendor
-seid -i "s/atoll/sm6150/g" $WORK_DIR/configs/fs_config-vendor
+# XML / json replacements
+sed -i -e 's/siop_a52q_sm7125/siop_m51_sm7150/g' \
+       -e 's/a52q/m51/g' \
+       -e 's/A52/M51/g' "$WORK_DIR/vendor/etc/floating_feature.xml"
+sed -i 's/a52q/m51/g' "$WORK_DIR/vendor/etc/ev_lux_map_config.xml"
+sed -i 's/a52q/m51/g' "$WORK_DIR/vendor/etc/sensorhub_services.json"
+
+# Patch binaries that contain "atoll.so" and then rename files containing "atoll"
+find "$WORK_DIR/vendor" -type f -name '*atoll*' -print0 |
+ while IFS= read -r -d '' f; do
+   HEX_PATCH "$f" 61746f6c6c2e736f00 736d363135302e736f
+   mv -- "$f" "$(printf '%s' "$f" | sed 's/atoll/sm6150/g')" 2>/dev/null
+ done
+
+# Text replacements in other config files
+sed -i 's/atoll/sm6150/g' "$WORK_DIR/vendor/etc/vramdiskd.xml"
+sed -i 's/atoll/sm6150/g' "$WORK_DIR/configs/file_context-vendor"
+sed -i 's/atoll/sm6150/g' "$WORK_DIR/configs/fs_config-vendor"
 LOG_STEP_OUT 
 
 LOG "Patching media_profiles_V1_0.xml on odm"
