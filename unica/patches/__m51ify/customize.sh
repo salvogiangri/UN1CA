@@ -75,6 +75,55 @@ REMOVE_FROM_WORK_DIR()
         sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
     fi
 }
+
+GET_PROPS()
+{
+    local PROP="$1"
+    local FILE="$2"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        exit 1
+    fi
+
+    grep "^$PROP=" "$FILE" | cut -d "=" -f2-
+}
+
+SET_PROPS()
+{
+    local PROP="$1"
+    local VALUE="$2"
+    local FILE="$3"
+
+    if [ ! -f "$FILE" ]; then
+        echo "File not found: $FILE"
+        return 1
+    fi
+
+    if [[ "$2" == "-d" ]] || [[ "$2" == "--delete" ]]; then
+        PROP="$(echo -n "$PROP" | sed 's/=//g')"
+        if grep -Fq "$PROP" "$FILE"; then
+            echo "Deleting \"$PROP\" prop in $FILE" | sed "s.$WORK_DIR..g"
+            sed -i "/^$PROP/d" "$FILE"
+        fi
+    else
+        if grep -Fq "$PROP" "$FILE"; then
+            local LINES
+
+            echo "Replacing \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            LINES="$(sed -n "/^${PROP}\b/=" "$FILE")"
+            for l in $LINES; do
+                sed -i "$l c${PROP}=${VALUE}" "$FILE"
+            done
+        else
+            echo "Adding \"$PROP\" prop with \"$VALUE\" in $FILE" | sed "s.$WORK_DIR..g"
+            if ! grep -q "Added by scripts" "$FILE"; then
+                echo "# Added by scripts/internal/apply_modules.sh" >> "$FILE"
+            fi
+            echo "$PROP=$VALUE" >> "$FILE"
+        fi
+    fi
+}
 # ]
 
 LOG "M51 System Adaptor"
@@ -151,11 +200,9 @@ while IFS= read -r context; do
 done <<< "$CONTEXTS_LIST"
 
 LOG_STEP_IN "Patching a52q properties for m51"
-TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
-VE=$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version" "VE")
-BD=$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version" "BD")
-SET_PROP $WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version "VE" $VE
-SET_PROP $WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version "BD" $BD
+SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
+SET_PROPS "VE" "$(GET_PROPS "VE" "$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
+SET_PROPS "BD" "$(GET_PROPS "BD" "$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
 SET_PROP "vendor" "ro.product.board" "sm6150"
 SET_PROP "vendor" "ro.board.platform" "sm6150"
 SET_PROP "vendor" "ro.vendor.build.fingerprint" "samsung/m51nsxx/m51:11/RP1A.200720.012/M515FXXS6DXE4:user/release-keys"
@@ -165,11 +212,12 @@ SET_PROP "vendor" "ro.product.vendor.model" "SM-M515F"
 SET_PROP "vendor" "ro.product.vendor.name" "m51nsxx"
 SET_PROP "vendor" "ro.bootimage.build.fingerprint" "samsung/m51nsxx/m51:11/RP1A.200720.012/M515FXXS6DXE4:user/release-keys"
 # XML / json replacements
-sed -i -e 's/siop_a52q_sm7125/siop_m51_sm7150/g' \
-       -e 's/a52q/m51/g' \
-       -e 's/A52/M51/g' "$WORK_DIR/vendor/etc/floating_feature.xml"
-sed -i 's/a52q/m51/g' "$WORK_DIR/vendor/etc/ev_lux_map_config.xml"
-sed -i 's/a52q/m51/g' "$WORK_DIR/vendor/etc/sensorhub_services.json"
+sed -i -e 's|siop_a52q_sm7125|siop_m51_sm7150|g' \
+       -e 's|a52q|m51|g' \
+       -e 's|A52|M51|g' "$WORK_DIR/vendor/etc/floating_feature.xml"
+
+sed -i 's|a52q|m51|g' "$WORK_DIR/vendor/etc/ev_lux_map_config.xml"
+sed -i 's|a52q|m51|g' "$WORK_DIR/vendor/etc/sensorhub_services.json"
 
 # Patch binaries that contain "atoll.so" and then rename files containing "atoll"
 find "$WORK_DIR/vendor" -type f -name '*atoll*' -print0 |
@@ -179,9 +227,9 @@ find "$WORK_DIR/vendor" -type f -name '*atoll*' -print0 |
  done
 
 # Text replacements in other config files
-sed -i 's/atoll/sm6150/g' "$WORK_DIR/vendor/etc/vramdiskd.xml"
-sed -i 's/atoll/sm6150/g' "$WORK_DIR/configs/file_context-vendor"
-sed -i 's/atoll/sm6150/g' "$WORK_DIR/configs/fs_config-vendor"
+sed -i 's|atoll|sm6150|g' "$WORK_DIR/vendor/etc/vramdiskd.xml"
+sed -i 's|atoll|sm6150|g' "$WORK_DIR/configs/file_context-vendor"
+sed -i 's|atoll|sm6150|g' "$WORK_DIR/configs/fs_config-vendor"
 LOG_STEP_OUT 
 
 LOG "Patching media_profiles_V1_0.xml on odm"
