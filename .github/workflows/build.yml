@@ -131,7 +131,7 @@ jobs:
           echo "✅ ROM built successfully" >> $GITHUB_STEP_SUMMARY
 
       - name: 📋 Get ROM version and filename
-        id: rom-info
+        id: rom_info
         run: |
           source ./buildenv.sh ${{ matrix.target }}
           source ./unica/configs/version.sh
@@ -158,8 +158,8 @@ jobs:
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: UN1CA-${{ matrix.target }}-${{ steps.rom-info.outputs.rom_version }}
-          path: ${{ steps.rom-info.outputs.zip_file }}
+          name: UN1CA-${{ matrix.target }}-${{ steps.rom_info.outputs.rom_version }}
+          path: ${{ steps.rom_info.outputs.zip_file }}
           retention-days: 30
           if-no-files-found: error
 
@@ -181,7 +181,7 @@ jobs:
     
     environment:
       name: release
-      url: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.rom_version }}
+      url: https://github.com/${{ github.repository }}/releases
     
     permissions:
       contents: write
