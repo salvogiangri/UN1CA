@@ -6,8 +6,6 @@
 /system/bin u:object_r:system_file:s0
 /system/bin/bootstrap/linker u:object_r:system_linker_exec:s0
 /system/bin/bootstrap/linker_asan u:object_r:system_file:s0
-/system/bin/linker u:object_r:system_linker_exec:s0
-/system/bin/linker_asan u:object_r:system_file:s0
 /system/lib u:object_r:system_lib_file:s0
 /system/lib/aconfig_mediacodec_flags_c_lib\.so u:object_r:system_lib_file:s0
 /system/lib/android\.hardware\.cas@1\.0\.so u:object_r:system_lib_file:s0
@@ -93,7 +91,6 @@
 /system/lib/libbinder_ndk\.so u:object_r:system_lib_file:s0
 /system/lib/libbinder\.so u:object_r:system_lib_file:s0
 /system/lib/libbufferstats\.so u:object_r:system_lib_file:s0
-/system/lib/libc\.so u:object_r:system_lib_file:s0
 /system/lib/libc\+\+\.so u:object_r:system_lib_file:s0
 /system/lib/libcamera_client\.so u:object_r:system_lib_file:s0
 /system/lib/libcamera_metadata\.so u:object_r:system_lib_file:s0
@@ -113,8 +110,6 @@
 /system/lib/libcutils\.so u:object_r:system_lib_file:s0
 /system/lib/libdatasource_local_cache\.so u:object_r:system_lib_file:s0
 /system/lib/libdatasource\.so u:object_r:system_lib_file:s0
-/system/lib/libdl_android\.so u:object_r:system_lib_file:s0
-/system/lib/libdl\.so u:object_r:system_lib_file:s0
 /system/lib/libdmabufheap\.so u:object_r:system_lib_file:s0
 /system/lib/libedmnativehelper\.so u:object_r:system_lib_file:s0
 /system/lib/libEGL\.so u:object_r:system_lib_file:s0
@@ -140,7 +135,6 @@
 /system/lib/libknox_remotedesktopclient\.knox\.samsung\.so u:object_r:system_lib_file:s0
 /system/lib/liblog\.so u:object_r:system_lib_file:s0
 /system/lib/liblzma\.so u:object_r:system_lib_file:s0
-/system/lib/libm\.so u:object_r:system_lib_file:s0
 /system/lib/libmedia_codeclist\.so u:object_r:system_lib_file:s0
 /system/lib/libmedia_helper\.so u:object_r:system_lib_file:s0
 /system/lib/libmedia_jni_utils\.so u:object_r:system_lib_file:s0
@@ -150,7 +144,6 @@
 /system/lib/libmedia\.so u:object_r:system_lib_file:s0
 /system/lib/libmediacapture_jni\.so u:object_r:system_lib_file:s0
 /system/lib/libmediacapture\.so u:object_r:system_lib_file:s0
-/system/lib/libmediacaptureservice\.so u:object_r:system_lib_file:s0
 /system/lib/libmediadrm\.so u:object_r:system_lib_file:s0
 /system/lib/libmediadrmmetrics_consumer\.so u:object_r:system_lib_file:s0
 /system/lib/libmediadrmmetrics_full\.so u:object_r:system_lib_file:s0
@@ -158,7 +151,6 @@
 /system/lib/libmediametrics\.so u:object_r:system_lib_file:s0
 /system/lib/libmediandk_utils\.so u:object_r:system_lib_file:s0
 /system/lib/libmediandk\.so u:object_r:system_lib_file:s0
-/system/lib/libmediaplayerservice\.so u:object_r:system_lib_file:s0
 /system/lib/libmediaresourcehelper\.so u:object_r:system_lib_file:s0
 /system/lib/libmediasndk\.mediacore\.samsung\.so u:object_r:system_lib_file:s0
 /system/lib/libmediasndk\.so u:object_r:system_lib_file:s0
@@ -169,7 +161,6 @@
 /system/lib/libnativeloader_lazy\.so u:object_r:system_lib_file:s0
 /system/lib/libnativewindow\.so u:object_r:system_lib_file:s0
 /system/lib/libnblog\.so u:object_r:system_lib_file:s0
-/system/lib/libomafldrm\.so u:object_r:system_lib_file:s0
 /system/lib/libpackagelistparser\.so u:object_r:system_lib_file:s0
 /system/lib/libpcre2\.so u:object_r:system_lib_file:s0
 /system/lib/libpermission\.so u:object_r:system_lib_file:s0
@@ -206,7 +197,6 @@
 /system/lib/libstagefright_framecapture_utils\.so u:object_r:system_lib_file:s0
 /system/lib/libstagefright_graphicbuffersource_aidl\.so u:object_r:system_lib_file:s0
 /system/lib/libstagefright_http_support\.so u:object_r:system_lib_file:s0
-/system/lib/libstagefright_httplive_sec\.so u:object_r:system_lib_file:s0
 /system/lib/libstagefright_omx_utils\.so u:object_r:system_lib_file:s0
 /system/lib/libstagefright_omx\.so u:object_r:system_lib_file:s0
 /system/lib/libstagefright_surface_utils\.so u:object_r:system_lib_file:s0
@@ -241,6 +231,3 @@
 /system/lib64/libvkmanager\.so u:object_r:system_lib_file:s0
 /system/lib64/vendor\.samsung\.hardware\.security\.engmode@1\.0\.so u:object_r:system_lib_file:s0
 /system/lib64/vendor\.samsung\.hardware\.security\.vaultkeeper@2\.0\.so u:object_r:system_lib_file:s0
-/system/system_ext u:object_r:system_file:s0
-/system/system_ext/apex u:object_r:system_file:s0
-/system/system_ext/apex/com\.android\.vndk\.v33\.apex u:object_r:system_file:s0
