@@ -42,6 +42,11 @@ SMALI_PATCH "system" "system/framework/services.jar" \
 SMALI_PATCH "system" "system/framework/services.jar" \
     "smali/com/android/server/knox/dar/AuthResult.smali" 'remove'
 
+# Disable root checks in StorageManagerService
+SMALI_PATCH "system" "system/framework/services.jar" \
+    "smali/com/android/server/StorageManagerService.smali" "return" \
+    'isRootedDevice()Z' 'false'
+
 # Spoof ROT/IntegrityStatus in Knox Matrix
 if [ -f "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk" ]; then
     LOG "- Downloading latest Knox Matrix app"
