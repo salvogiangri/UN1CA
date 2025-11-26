@@ -1,3 +1,8 @@
+if $DEBUG; then
+    LOG "\033[0;33m! Debug build detected. Skipping\033[0m"
+    return 0
+fi
+
 # [
 COMPRESS_WEBP()
 {

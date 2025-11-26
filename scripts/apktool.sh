@@ -29,6 +29,13 @@ FILE=""
 INPUT_FILE=""
 OUTPUT_PATH=""
 
+THREAD_COUNT=$(awk -v max="$(nproc)" '/MemTotal/ {
+  tc = int(($2 + 1048575) / 2097152);
+  print (tc < 1 ? 1 : (tc > max ? max : tc));
+}' /proc/meminfo)
+
+[ -n "$GITHUB_ACTIONS" ] && THREAD_COUNT=1
+
 BUILD()
 {
     if [ ! -d "$OUTPUT_PATH" ]; then
@@ -43,7 +50,7 @@ BUILD()
     cp -a "$OUTPUT_PATH/original/META-INF" "$OUTPUT_PATH/build/apk/META-INF"
 
     # Build APK with --shorten-resource-paths (https://developer.android.com/tools/aapt2#optimize_options)
-    EVAL "apktool b -j \"$(nproc)\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
+    EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
 
     local FILE_NAME
     FILE_NAME="$(basename "$INPUT_FILE")"
@@ -102,7 +109,7 @@ DECODE()
     # - Disabled debug info
     # - Use .locals directive instead of the .registers one
     # - Use a sequential numbering scheme for labels
-    EVAL "apktool d --no-debug-info -j \"$(nproc)\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" \"$INPUT_FILE\"" || exit 1
+    EVAL "apktool d --no-debug-info -j \"$THREAD_COUNT\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" \"$INPUT_FILE\"" || exit 1
 
     # https://github.com/iBotPeaches/Apktool/issues/3615
     if [[ "$INPUT_FILE" == *"framework.jar" ]]; then
