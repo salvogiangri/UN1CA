@@ -1,19 +1,26 @@
-name: Build
+name: 🏗️ Build UN1CA ROM
 
 on:
   workflow_dispatch:
 
 permissions:
-  checks: write
-  id-token: write   # This is required for requesting the JWT
-  contents: write  # This is required for actions/checkout
-  security-events: write
-  pull-requests: write
-  issues: write
+  contents: write
+  actions: write
+  id-token: write
 
 jobs:
   build:
+    name: 🔨 Build ROM for ${{ matrix.target }}
     runs-on: Unica
+    
+    environment:
+      name: production
+      url: https://github.com/${{ github.repository }}/releases
+    
+    permissions:
+      contents: write
+      actions: write
+      id-token: write
 
     strategy:
       fail-fast: false
@@ -21,60 +28,110 @@ jobs:
         target: [dm2q]
 
     steps:
-      - name: Checkout repo
+      - name: 📥 Checkout repository
+        id: checkout
         uses: actions/checkout@v6
         with:
           fetch-tags: '0'
           submodules: 'false'
           fetch-depth: '0'
 
-
-      - name: Set up build environment
+      - name: 🎯 Display workflow information
+        id: workflow-info
         run: |
+          echo "### 🚀 Build Workflow Started" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Target Device** | \`${{ matrix.target }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Workflow Run** | [\#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Triggered by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🔧 Set up build environment
+        id: setup-environment
+        run: |
+          echo "::group::📦 Installing system packages"
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             7zip attr ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          echo "::endgroup::"
+          
+          echo "::group::🔌 Loading kernel modules"
           sudo modprobe erofs f2fs
+          echo "::endgroup::"
+          
+          echo "::group::⚙️ Configuring git"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "::endgroup::"
+          
+          echo "::group::🔐 Setting up signing keys"
           echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
           echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
+          echo "::endgroup::"
+          
+          echo "### ✅ Build environment configured" >> $GITHUB_STEP_SUMMARY
 
-      - name: Set up JDK 17
+      - name: ☕ Set up JDK 17
+        id: setup-jdk
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Swap
+      - name: 💾 Set up swap space
+        id: setup-swap
         uses: pierotofy/set-swap-space@master
         with:
           swap-size-gb: 4
 
-      - name: Build dependencies
+      - name: 🏗️ Build dependencies
+        id: build-dependencies
         run: |
+          echo "### 📦 Building Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
+          echo "::endgroup::"
+          echo "✅ Dependencies built successfully" >> $GITHUB_STEP_SUMMARY
 
-      - name: Download stock firmwares
+      - name: 📥 Download stock firmwares
+        id: download-firmware
         run: |
+          echo "### 📲 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
+          echo "::endgroup::"
+          echo "✅ Firmware downloaded successfully" >> $GITHUB_STEP_SUMMARY
 
-      - name: Extract stock firmwares
+      - name: 📦 Extract stock firmwares
+        id: extract-firmware
         run: |
+          echo "### 🗜️ Extracting Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
+          echo "::endgroup::"
+          echo "✅ Firmware extracted successfully" >> $GITHUB_STEP_SUMMARY
 
-      - name: Build ROM
+      - name: 🚀 Build ROM
+        id: build-rom
         run: |
+          echo "### 🔨 Building UN1CA ROM" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Building ROM for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/make_rom.sh
+          echo "::endgroup::"
+          echo "✅ ROM built successfully" >> $GITHUB_STEP_SUMMARY
 
-      - name: Get ROM version and filename
-        id: rom_info
+      - name: 📋 Get ROM version and filename
+        id: rom-info
         run: |
           source ./buildenv.sh ${{ matrix.target }}
           source ./unica/configs/version.sh
@@ -83,44 +140,87 @@ jobs:
           if [ -n "$ZIP_FILE" ]; then
             echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zip_name=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
+            
+            # Add to summary
+            echo "### 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| **ROM Version** | \`$ROM_VERSION\` |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Filename** | \`$(basename "$ZIP_FILE")\` |" >> $GITHUB_STEP_SUMMARY
+            echo "| **File Size** | \`$(du -h "$ZIP_FILE" | cut -f1)\` |" >> $GITHUB_STEP_SUMMARY
           else
-            echo "Error: No ZIP file found in out/ directory"
+            echo "::error::No ZIP file found in out/ directory"
             exit 1
           fi
 
-      - name: Upload ROM artifact
+      - name: ⬆️ Upload ROM artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: UN1CA-${{ matrix.target }}-${{ steps.rom_info.outputs.rom_version }}
-          path: ${{ steps.rom_info.outputs.zip_file }}
+          name: UN1CA-${{ matrix.target }}-${{ steps.rom-info.outputs.rom_version }}
+          path: ${{ steps.rom-info.outputs.zip_file }}
           retention-days: 30
           if-no-files-found: error
 
+      - name: 🎉 Build completed
+        id: build-summary
+        if: success()
+        run: |
+          echo "### 🎊 Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The ROM build has been completed and the artifact has been uploaded." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✨ **Download the artifact from the workflow run page.**" >> $GITHUB_STEP_SUMMARY
+
   release:
+    name: 📦 Create Release
     needs: build
     runs-on: Unica
     if: github.event_name == 'push' && github.ref == 'refs/heads/sixteen'
+    
+    environment:
+      name: release
+      url: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.rom_version }}
+    
+    permissions:
+      contents: write
+      actions: write
+      id-token: write
 
     steps:
-      - name: Checkout repo
+      - name: 📥 Checkout repository
+        id: checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Get version info
+      - name: 📋 Get version information
         id: version
         run: |
+          echo "::group::Reading version information"
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
           echo "release_tag=v$ROM_VERSION" >> "$GITHUB_OUTPUT"
           echo "release_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+          echo "::endgroup::"
+          
+          echo "### 📊 Release Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Version** | \`$ROM_VERSION\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tag** | \`v$ROM_VERSION\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Date** | \`$(date +'%Y-%m-%d')\` |" >> $GITHUB_STEP_SUMMARY
 
-      - name: Download all artifacts
+      - name: ⬇️ Download all build artifacts
+        id: download-artifacts
         uses: actions/download-artifact@v4
         with:
           path: release-artifacts
 
-      - name: Create release
+      - name: 🚀 Create GitHub release
+        id: create-release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.release_tag }}
@@ -150,3 +250,11 @@ jobs:
           prerelease: false
           files: release-artifacts/**/*.zip
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🎉 Release completed
+        id: release-summary
+        if: success()
+        run: |
+          echo "### 🎊 Release Published Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.release_tag }})**" >> $GITHUB_STEP_SUMMARY
