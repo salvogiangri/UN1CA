@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 #
 # Copyright (C) 2025 Salvo Giangreco
 #
