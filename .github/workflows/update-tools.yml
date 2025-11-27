@@ -15,7 +15,7 @@ permissions:
   
 jobs:
   update:
-    runs-on: Ubuntu
+    runs-on: ubuntu
     permissions:
       contents: write
       pull-requests: write
