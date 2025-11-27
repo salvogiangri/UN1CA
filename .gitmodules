@@ -16,7 +16,8 @@
 	ignore = dirty
 [submodule "external/samloader"]
 	path = external/samloader
-	url = https://github.com/ananjaser1211/samloader.git
+	url = https://github.com/Eduardob3677/samloader.git
+	branch = master
 	ignore = dirty
 [submodule "external/signapk"]
 	path = external/signapk
