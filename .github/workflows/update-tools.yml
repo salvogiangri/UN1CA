@@ -15,7 +15,7 @@ permissions:
   
 jobs:
   update:
-    runs-on: rom
+    runs-on: Unica
     permissions:
       contents: write
       pull-requests: write
