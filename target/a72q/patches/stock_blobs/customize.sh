@@ -67,3 +67,10 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/libbeluga.so" 0 0 644 "u:
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/libfm-hci.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.hardware.fm@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding libpenguin blobs"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/libpenguin.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/libpenguin_impl.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/libpenguin.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/libpenguin_impl.so" 0 0 644 "u:object_r:system_lib_file:s0"
+LOG_STEP_OUT
