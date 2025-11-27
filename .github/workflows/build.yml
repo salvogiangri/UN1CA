@@ -32,9 +32,7 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
         with:
-          fetch-tags: '0'
-          submodules: 'false'
-          fetch-depth: '0'
+          submodules: 'recursive'
 
       - name: 🎯 Display workflow information
         id: workflow-info
