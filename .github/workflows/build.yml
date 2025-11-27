@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: 🔨 Build ROM for ${{ matrix.target }}
-    runs-on: rom
+    runs-on: rom2
     
     environment:
       name: production
