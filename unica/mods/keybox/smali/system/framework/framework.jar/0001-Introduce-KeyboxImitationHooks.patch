@@ -1,4 +1,4 @@
-From ee6b6f174131a3f65a7a73cd98e2763eb4b01c10 Mon Sep 17 00:00:00 2001
+From b0560a6cd9077dc24b226be9d32d4bd779b6c76a Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 6 Oct 2025 15:12:32 +0200
 Subject: [PATCH] Introduce KeyboxImitationHooks
@@ -22,8 +22,8 @@ Subject: [PATCH] Introduce KeyboxImitationHooks
  .../KeyboxOperationUtils$SignOperation.smali  |  223 ++
  .../mesalabs/unica/KeyboxOperationUtils.smali |  127 +
  ...eyboxUtils$$ExternalSyntheticLambda0.smali |   30 +
- .../io/mesalabs/unica/KeyboxUtils.smali       | 2274 +++++++++++++++
- 19 files changed, 9008 insertions(+), 24 deletions(-)
+ .../io/mesalabs/unica/KeyboxUtils.smali       | 2272 +++++++++++++++
+ 19 files changed, 9006 insertions(+), 24 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/IKeyboxProvider.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider$$ExternalSyntheticLambda0.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider.smali
@@ -7132,10 +7132,10 @@ index 00000000..ad520932
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxUtils.smali b/smali_classes6/io/mesalabs/unica/KeyboxUtils.smali
 new file mode 100644
-index 00000000..df4c9792
+index 00000000..3ddef86c
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxUtils.smali
-@@ -0,0 +1,2274 @@
+@@ -0,0 +1,2272 @@
 +.class final Lio/mesalabs/unica/KeyboxUtils;
 +.super Ljava/lang/Object;
 +.source "KeyboxUtils.java"
@@ -7175,15 +7175,15 @@ index 00000000..df4c9792
 +.method static constructor blacklist <clinit>()V
 +    .locals 1
 +
-+    new-instance v0, Ljava/util/HashMap;
++    new-instance v0, Ljava/util/concurrent/ConcurrentHashMap;
 +
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++    invoke-direct {v0}, Ljava/util/concurrent/ConcurrentHashMap;-><init>()V
 +
 +    sput-object v0, Lio/mesalabs/unica/KeyboxUtils;->sCache:Ljava/util/Map;
 +
-+    new-instance v0, Ljava/util/HashMap;
++    new-instance v0, Ljava/util/concurrent/ConcurrentHashMap;
 +
-+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
++    invoke-direct {v0}, Ljava/util/concurrent/ConcurrentHashMap;-><init>()V
 +
 +    sput-object v0, Lio/mesalabs/unica/KeyboxUtils;->sAliases:Ljava/util/Map;
 +
@@ -7484,19 +7484,25 @@ index 00000000..df4c9792
 +    :cond_0
 +    new-instance v1, Ljava/util/ArrayList;
 +
-+    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
-+
-+    invoke-interface {v0}, Ljava/util/Map;->keySet()Ljava/util/Set;
++    invoke-interface {v0}, Ljava/util/Map;->values()Ljava/util/Collection;
 +
 +    move-result-object v0
 +
-+    invoke-interface {v0}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
++    invoke-direct {v1, v0}, Ljava/util/ArrayList;-><init>(Ljava/util/Collection;)V
 +
-+    move-result-object v0
++    invoke-static {v1}, Ljava/util/Collections;->sort(Ljava/util/List;)V
++
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    invoke-interface {v1}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++
++    move-result-object v1
 +
 +    :cond_1
 +    :goto_0
-+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
++    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
 +
 +    move-result v3
 +
@@ -7504,15 +7510,7 @@ index 00000000..df4c9792
 +
 +    if-eqz v3, :cond_3
 +
-+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-+
-+    move-result-object v3
-+
-+    check-cast v3, Ljava/lang/Long;
-+
-+    sget-object v5, Lio/mesalabs/unica/KeyboxUtils;->sAliases:Ljava/util/Map;
-+
-+    invoke-interface {v5, v3}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
 +    move-result-object v3
 +
@@ -7530,7 +7528,7 @@ index 00000000..df4c9792
 +
 +    move-result v5
 +
-+    if-ltz v5, :cond_1
++    if-lez v5, :cond_1
 +
 +    :cond_2
 +    new-instance v5, Landroid/system/keystore2/KeyDescriptor;
@@ -7547,14 +7545,14 @@ index 00000000..df4c9792
 +
 +    iput-object v2, v5, Landroid/system/keystore2/KeyDescriptor;->blob:[B
 +
-+    invoke-virtual {v1, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++    invoke-virtual {v0, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 +
 +    goto :goto_0
 +
 +    :cond_3
 +    new-array p0, v4, [Landroid/system/keystore2/KeyDescriptor;
 +
-+    invoke-virtual {v1, p0}, Ljava/util/ArrayList;->toArray([Ljava/lang/Object;)[Ljava/lang/Object;
++    invoke-virtual {v0, p0}, Ljava/util/ArrayList;->toArray([Ljava/lang/Object;)[Ljava/lang/Object;
 +
 +    move-result-object p0
 +
@@ -9411,5 +9409,5 @@ index 00000000..df4c9792
 +    return-void
 +.end method
 -- 
-2.51.2
+2.52.0
 
