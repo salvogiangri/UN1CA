@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: 🔨 Build ROM for ${{ matrix.target }}
-    runs-on: self-hosted
+    runs-on: rom2
     
     environment:
       name: production
@@ -32,7 +32,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
         with:
-          submodules: 'recursive'
+          fetch-tags: '0'
+          submodules: 'false'
+          fetch-depth: '0'
 
       - name: 🎯 Display workflow information
         id: workflow-info
@@ -56,18 +58,7 @@ jobs:
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             7zip attr ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp \
-            jq attr ccache clang ffmpeg golang \
-            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev  lld protobuf-compiler webp \
-            curl xxd patchelf flex bison libarchive-tools build-essential pkg-config liblz4-dev
-          
-          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-          build-essential clang cmake ninja-build ccache pkg-config \
-          libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libssl-dev \
-          zlib1g-dev liblzma-dev libjsoncpp-dev libfmt-dev \
-          git python3 python3-pip flex bison autoconf automake libtool
-         
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
