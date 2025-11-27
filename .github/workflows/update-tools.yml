@@ -15,7 +15,7 @@ permissions:
   
 jobs:
   update:
-    runs-on: Unica2
+    runs-on: Ubuntu
     permissions:
       contents: write
       pull-requests: write
