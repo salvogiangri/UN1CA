@@ -124,11 +124,11 @@ while IFS= read -r file; do
 done <<< "$DEBLOAT_LIST"
 
 #Camera
-DEBLOAT_LIST="$(find "$WORK_DIR/vendor/lib" "$WORK_DIR/vendor/lib64" -type f -path '*/camera/*' -printf '%P\n' 2>/dev/null | sort || true)"
+DEBLOAT_LIST="$(find "$WORK_DIR/vendor" -type f -path '*/lib*/camera/*' -printf '%P\n' 2>/dev/null | sort || true)"
 
 while IFS= read -r file; do
     [ -z "$file" ] && continue
-    DELETE_FROM_WORK_DIR "vendor" lib*/"$file"
+    DELETE_FROM_WORK_DIR "vendor" "$file"
 done <<< "$DEBLOAT_LIST"
 
 # Copy M51 blobs
