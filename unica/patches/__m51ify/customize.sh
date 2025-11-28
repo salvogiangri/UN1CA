@@ -53,7 +53,7 @@ ADD_TO_WORK_DIR_CONTEXT()
     done
 }
 
-GET_PROPS()
+GET_PROP_FROM_FILE()
 {
     local PROP="$1"
     local FILE="$2"
@@ -66,7 +66,7 @@ GET_PROPS()
     grep "^$PROP=" "$FILE" | cut -d "=" -f2-
 }
 
-SET_PROPS()
+SET_PROP_INTO_FILE()
 {
     local PROP="$1"
     local VALUE="$2"
@@ -108,19 +108,19 @@ LOG "M51 System Adaptor"
 # We wipe the A52 blobs we don't need
 LOG "Removing A52 blobs"
 #fstab, init, soundbooster 
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.default"
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.emmc"
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/init/hw/init.a52q.rc"
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/lib_SoundBooster_ver1050.so"
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib64/lib_SoundBooster_ver1050.so"
-DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/audio.primary.atoll.so"
+DELETE_FROM_WORK_DIR "vendor" "etc/fstab.default"
+DELETE_FROM_WORK_DIR "vendor" "etc/fstab.emmc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/hw/init.a52q.rc"
+DELETE_FROM_WORK_DIR "vendor" "lib/lib_SoundBooster_ver1050.so"
+DELETE_FROM_WORK_DIR "vendor" "lib64/lib_SoundBooster_ver1050.so"
+DELETE_FROM_WORK_DIR "vendor" "lib/audio.primary.atoll.so"
 
 #Sensors
 DEBLOAT_LIST="$(cd "$WORK_DIR/vendor/etc" 2>/dev/null && find sensors -type f -print 2>/dev/null | sort || true)"
 
 while IFS= read -r file; do
     [ -z "$file" ] && continue
-    DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/$file"
+    DELETE_FROM_WORK_DIR "vendor" "etc/$file"
 done <<< "$DEBLOAT_LIST"
 
 #Camera
@@ -178,8 +178,8 @@ done <<< "$CONTEXTS_LIST"
 
 LOG_STEP_IN "Patching a52q properties for m51"
 SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
-SET_PROPS "VE" "$(GET_PROPS "VE" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
-SET_PROPS "BD" "$(GET_PROPS "BD" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
+SET_PROP_INTO_FILE "VE" "$(GET_PROP_FROM_FILE "VE" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
+SET_PROP_INTO_FILE "BD" "$(GET_PROP_FROM_FILE "BD" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
 SET_PROP "vendor" "ro.product.board" "sm6150"
 SET_PROP "vendor" "ro.board.platform" "sm6150"
 SET_PROP "vendor" "ro.hardware.chipname" "SM7150"
