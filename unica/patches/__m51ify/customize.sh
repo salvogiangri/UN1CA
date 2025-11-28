@@ -128,7 +128,7 @@ DEBLOAT_LIST="$(find "$WORK_DIR/vendor/lib" "$WORK_DIR/vendor/lib64" -type f -pa
 
 while IFS= read -r file; do
     [ -z "$file" ] && continue
-    DELETE_FROM_WORK_DIR "$WORK_DIR/vendor"/lib*/"$file"
+    DELETE_FROM_WORK_DIR "vendor" lib*/"$file"
 done <<< "$DEBLOAT_LIST"
 
 # Copy M51 blobs
