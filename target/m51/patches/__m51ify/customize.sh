@@ -163,7 +163,7 @@ CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find lib lib64 -type 
 
 while IFS= read -r context; do
     [ -z "$context" ] && continue
-    ADD_TO_WORK_DIR_CONTEXT "vendor" "$context" 0 2000 644 "u:object_r:vendor_lib_file:s0"
+    ADD_TO_WORK_DIR_CONTEXT "vendor" "$context" 0 0 644 "u:object_r:vendor_lib_file:s0"
 done <<< "$CONTEXTS_LIST"
 
 CONTEXTS_LIST="$(cd "$MODPATH/M515F/vendor" 2>/dev/null && find etc -type f -print 2>/dev/null | sort || true)"
@@ -204,6 +204,9 @@ SET_PROPS "VE" "$(GET_PROPS "VE" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selin
 SET_PROPS "BD" "$(GET_PROPS "BD" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
 SET_PROP "vendor" "ro.product.board" "sm6150"
 SET_PROP "vendor" "ro.board.platform" "sm6150"
+SET_PROP "vendor" "ro.hardware.chipname" "SM7150"
+SET_PROP "vendor" "ro.soc.model" "SM7150"
+
 SET_PROP "vendor" "ro.vendor.build.fingerprint" "samsung/m51nsxx/m51:11/RP1A.200720.012/M515FXXS6DXE4:user/release-keys"
 SET_PROP "vendor" "ro.vendor.build.version.incremental" "M515FXXS6DXE4"
 SET_PROP "vendor" "ro.product.vendor.device" "m51"
@@ -236,8 +239,5 @@ cp -r $WORK_DIR/vendor/etc/media_profiles_V1_0.xml $WORK_DIR/odm/etc
 
 LOG "- Adding source firmware odm props"
 ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "odm" "etc/build.prop"
-
-LOG "Patching selinux"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/selinux/mapping/30.0.cil"
 
 LOG "m51ify has been completed successfully!"
