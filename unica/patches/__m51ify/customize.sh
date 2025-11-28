@@ -53,28 +53,6 @@ ADD_TO_WORK_DIR_CONTEXT()
     done
 }
 
-REMOVE_FROM_WORK_DIR()
-{
-    local FILE_PATH="$1"
-
-    if [ -e "$FILE_PATH" ] || [ -L "$FILE_PATH" ]; then
-        local FILE
-        local PARTITION
-        FILE="$(echo -n "$FILE_PATH" | sed "s.$WORK_DIR/..")"
-        PARTITION="$(echo -n "$FILE" | cut -d "/" -f 1)"
-
-        echo "Debloating /$FILE"
-        rm -rf "$FILE_PATH"
-
-        [[ "$PARTITION" == "system" ]] && FILE="$(echo "$FILE" | sed 's.^system/system/.system/.')"
-        FILE="$(echo -n "$FILE" | sed 's/\//\\\//g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/fs_config-$PARTITION"
-
-        FILE="$(echo -n "$FILE" | sed 's/\./\\\\\./g')"
-        sed -i "/$FILE /d" "$WORK_DIR/configs/file_context-$PARTITION"
-    fi
-}
-
 GET_PROPS()
 {
     local PROP="$1"
@@ -130,19 +108,19 @@ LOG "M51 System Adaptor"
 # We wipe the A52 blobs we don't need
 LOG "Removing A52 blobs"
 #fstab, init, soundbooster 
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.default"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.emmc"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/init/hw/init.a52q.rc"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/lib_SoundBooster_ver1050.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/lib64/lib_SoundBooster_ver1050.so"
-REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/audio.primary.atoll.so"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.default"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/fstab.emmc"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/init/hw/init.a52q.rc"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/lib_SoundBooster_ver1050.so"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib64/lib_SoundBooster_ver1050.so"
+DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/lib/audio.primary.atoll.so"
 
 #Sensors
 DEBLOAT_LIST="$(cd "$WORK_DIR/vendor/etc" 2>/dev/null && find sensors -type f -print 2>/dev/null | sort || true)"
 
 while IFS= read -r file; do
     [ -z "$file" ] && continue
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/$file"
+    DELETE_FROM_WORK_DIR "$WORK_DIR/vendor/etc/$file"
 done <<< "$DEBLOAT_LIST"
 
 #Camera
@@ -150,7 +128,7 @@ DEBLOAT_LIST="$(find "$WORK_DIR/vendor/lib" "$WORK_DIR/vendor/lib64" -type f -pa
 
 while IFS= read -r file; do
     [ -z "$file" ] && continue
-    REMOVE_FROM_WORK_DIR "$WORK_DIR/vendor"/lib*/"$file"
+    DELETE_FROM_WORK_DIR "$WORK_DIR/vendor"/lib*/"$file"
 done <<< "$DEBLOAT_LIST"
 
 # Copy M51 blobs
