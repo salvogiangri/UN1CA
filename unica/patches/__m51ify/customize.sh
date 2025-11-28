@@ -2,7 +2,7 @@ SKIPUNZIP=1
 
 ADD_CONTEXT()
 { 
-p="$1"; f="$2"
+ p="$1"; f="$2"
  case "$p" in system_ext)
    if [ "${TARGET_HAS_SYSTEM_EXT:-}" = "true" ] || [ "${TARGET_HAS_SYSTEM_EXT:-}" = "1" ]; then f="system_ext/$f"; else p=system; f="system/system/system_ext/$f"; fi;;
  *) f="$p/$f";;
@@ -34,7 +34,7 @@ GET_PROP_FROM_FILE()
 
 SET_PROP_INTO_FILE()
 { 
-prop="$1"; val="$2"; file="$3"
+ prop="$1"; val="$2"; file="$3"
  [ -f "$file" ] || { echo "File not found: $file" >&2; return 1; }
  if [ "$val" = "-d" ] || [ "$val" = "--delete" ]; then
    prop="${prop//=*/}"; grep -q "^$prop=" "$file" && { LOG "- Deleting \"$prop\" prop in $file"; sed -i "/^$prop=/d" "$file"; }
