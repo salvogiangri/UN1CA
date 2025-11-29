@@ -54,9 +54,7 @@ LOG "- Patching a52q vendor with m51 device tree"
 
 LOG_STEP_IN "- Removing A52 vendor blobs"
 
-LOG_STEP_IN "- Removing fstab, init, soundbooster"
-DELETE_FROM_WORK_DIR "vendor" "etc/fstab.default"
-DELETE_FROM_WORK_DIR "vendor" "etc/fstab.emmc"
+LOG_STEP_IN "- Removing init, soundbooster"
 DELETE_FROM_WORK_DIR "vendor" "etc/init/hw/init.a52q.rc"
 DELETE_FROM_WORK_DIR "vendor" "lib/lib_SoundBooster_ver1050.so"
 DELETE_FROM_WORK_DIR "vendor" "lib64/lib_SoundBooster_ver1050.so"
@@ -68,7 +66,7 @@ DEBLOAT_LIST="$(cd "$WORK_DIR/vendor/etc" 2>/dev/null && find sensors -type f -p
 while IFS= read -r file; do [ -z "$file" ] && continue; DELETE_FROM_WORK_DIR "vendor" "etc/$file"; done <<< "$DEBLOAT_LIST"
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Removing camera libraries (lib & lib64)"
+LOG_STEP_IN "- Removing camera libraries"
 DEBLOAT_LIST="$(find "$WORK_DIR/vendor" -type f -path '*/lib*/camera/*' -printf '%P\n' 2>/dev/null | sort || true)"
 while IFS= read -r file; do [ -z "$file" ] && continue; DELETE_FROM_WORK_DIR "vendor" "$file"; done <<< "$DEBLOAT_LIST"
 LOG_STEP_OUT
@@ -121,7 +119,7 @@ LOG_STEP_OUT
 
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Patching A52Q properties with M51"
+LOG_STEP_IN "- Patching a52q properties with m51"
 SOURCE_FIRMWARE_PATH="$(cut -d/ -f1 -s <<<"$SOURCE_FIRMWARE")_$(cut -d/ -f2 -s <<<"$SOURCE_FIRMWARE")"
 SET_PROP_INTO_FILE "VE" "$(GET_PROP_FROM_FILE "VE" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
 SET_PROP_INTO_FILE "BD" "$(GET_PROP_FROM_FILE "BD" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
