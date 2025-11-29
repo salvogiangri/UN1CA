@@ -121,7 +121,7 @@ LOG_STEP_OUT
 
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Patching A52Q properties for M51"
+LOG_STEP_IN "- Patching A52Q properties with M51"
 SOURCE_FIRMWARE_PATH="$(cut -d/ -f1 -s <<<"$SOURCE_FIRMWARE")_$(cut -d/ -f2 -s <<<"$SOURCE_FIRMWARE")"
 SET_PROP_INTO_FILE "VE" "$(GET_PROP_FROM_FILE "VE" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
 SET_PROP_INTO_FILE "BD" "$(GET_PROP_FROM_FILE "BD" "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/selinux/vendor_sepolicy_version")" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy_version"
