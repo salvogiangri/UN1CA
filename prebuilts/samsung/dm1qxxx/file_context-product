@@ -1,4 +1,6 @@
 /product u:object_r:system_file:s0
 /product/overlay u:object_r:system_file:s0
+/product/overlay/SoftapOverlayDualAp u:object_r:system_file:s0
+/product/overlay/SoftapOverlayDualAp/SoftapOverlayDualAp\.apk u:object_r:system_file:s0
 /product/overlay/SoftapOverlayOWE u:object_r:system_file:s0
 /product/overlay/SoftapOverlayOWE/SoftapOverlayOWE\.apk u:object_r:system_file:s0

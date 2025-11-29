@@ -1,0 +1,3522 @@
+From 151842f9c7f28fffa006458b5a2fecc87be685af Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sat, 29 Nov 2025 18:01:15 +0100
+Subject: [PATCH] Enable MOBILEAP_DUALAP support
+
+UN1CA: this patch is not complete! Please check unica/patches/product_feature/customize.sh for more info.
+---
+ .../com/android/settings/Utils.smali          |  50 ++-
+ ...EditSettings$SaveButtonClickListener.smali |  90 ++---
+ .../wifi/mobileap/WifiApEditSettings.smali    | 168 +++++++--
+ .../WifiApSmartSwitchBackupRestore$1.smali    | 141 ++++----
+ .../WifiApSmartSwitchBackupRestore$3.smali    |   3 +
+ .../WifiApSmartSwitchBackupRestore.smali      | 148 +++++---
+ .../wifi/mobileap/WifiApSwitchEnabler.smali   | 225 ++++++------
+ .../wifi/mobileap/WifiApSwitchEnabler1.smali  |   4 +
+ .../wifi/mobileap/WifiApWarning.smali         | 338 ++++++++++--------
+ ...WifiApConfigureWifiSharingController.smali |  84 ++---
+ .../datamodels/WifiApBandConfig.smali         | 167 +++++++--
+ .../WifiApDialogP2pWifiDirectDisconnect.smali |  17 +
+ .../WifiApDialogSmartViewTurnOff.smali        |  19 +-
+ .../mobileap/utils/WifiApFrameworkUtils.smali |  25 +-
+ .../mobileap/utils/WifiApSoftApUtils.smali    |  33 +-
+ .../views/WifiApSeekBarPreference$1.smali     |  46 ++-
+ 16 files changed, 980 insertions(+), 578 deletions(-)
+ create mode 100644 smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3.smali
+
+diff --git a/smali_classes2/com/android/settings/Utils.smali b/smali_classes2/com/android/settings/Utils.smali
+index a0d5ecdbc..4d3006e34 100644
+--- a/smali_classes2/com/android/settings/Utils.smali
++++ b/smali_classes2/com/android/settings/Utils.smali
+@@ -16,6 +16,8 @@
+ 
+ .field public static final SPF_SupportInstantHotspot:Z
+ 
++.field public static final SPF_SupportMobileApDualAp:Z
++
+ .field public static final SPF_SupportMobileApEnhanced:Z
+ 
+ .field public static SUPPORT_MOBILEAP_5G_BASED_ON_COUNTRY:Z
+@@ -109,6 +111,8 @@
+ 
+     sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhanced:Z
+ 
++    sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++
+     sput-boolean v2, Lcom/android/settings/Utils;->SPF_SupportInstantHotspot:Z
+ 
+     sput-boolean v1, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARINGLITE:Z
+@@ -4841,7 +4845,19 @@
+ 
+     invoke-static {v0, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const-string p0, "initMHSFeature SPF_SupportMobileApDualAp :false"
++    new-instance p0, Ljava/lang/StringBuilder;
++
++    const-string v1, "initMHSFeature SPF_SupportMobileApDualAp :"
++
++    invoke-direct {p0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    sget-boolean v1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++
++    invoke-virtual {p0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
+ 
+     invoke-static {v0, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+@@ -7759,6 +7775,38 @@
+     return p0
+ .end method
+ 
++.method public static supportBridgedApStaConcurrency()Z
++    .locals 3
++
++    sget-boolean v0, Lcom/samsung/android/wifi/SemWifiApCust;->DBG:Z
++
++    const/4 v1, 0x0
++
++    if-eqz v0, :cond_1
++
++    const-string/jumbo v0, "vendor.wifiap.debug.BridgedApSta"
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
++
++    move-result v0
++
++    const/4 v2, 0x1
++
++    if-ne v0, v2, :cond_0
++
++    move v1, v2
++
++    :cond_0
++    const-string/jumbo v0, "supportBridgedApStaConcurrency() "
++
++    const-string v2, "Settings"
++
++    invoke-static {v0, v2, v1}, Lcom/android/settings/AirplaneModeEnabler$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Z)V
++
++    :cond_1
++    return v1
++.end method
++
+ .method public static updateSmartNetworkSwitchAvailability(Landroid/content/Context;)I
+     .locals 13
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener.smali
+index 087b11edb..230f8f21d 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener.smali
+@@ -28,13 +28,13 @@
+ 
+ # virtual methods
+ .method public final onClick(Landroid/view/View;)V
+-    .locals 3
++    .locals 1
+ 
+-    const-string p1, "TETH_011"
++    iget p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->$r8$classId:I
+ 
+-    iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->$r8$classId:I
++    packed-switch p1, :pswitch_data_0
+ 
+-    packed-switch v0, :pswitch_data_0
++    const-string p1, "TETH_011"
+ 
+     const-string v0, "8009"
+ 
+@@ -51,94 +51,58 @@
+     return-void
+ 
+     :pswitch_0
+-    iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
++    iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
+ 
+-    iget-object v0, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
++    iget-object p1, p1, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+-    invoke-static {v0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils;->hideKeyboard(Landroid/content/Context;)V
++    invoke-static {p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils;->hideKeyboard(Landroid/content/Context;)V
++
++    const-string p1, "TETH_011"
+ 
+     const-string v0, "8008"
+ 
+     invoke-static {p1, v0}, Lcom/samsung/android/settings/logging/SALogging;->insertSALog(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    sget-object p1, Lcom/android/settings/Utils;->sBuilder:Ljava/lang/StringBuilder;
+-
+-    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
+-
+-    iget-boolean p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mIsBandSeekBarUxSupported:Z
++    sget-boolean p1, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+-    if-eqz p1, :cond_1
++    if-eqz p1, :cond_0
+ 
+-    iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mBandSeekBarController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;
+-
+-    invoke-virtual {p1}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;->isBandTypeModified()Z
++    invoke-static {}, Lcom/android/settings/Utils;->supportBridgedApStaConcurrency()Z
+ 
+     move-result p1
+ 
+-    if-eqz p1, :cond_1
+-
+-    new-instance p1, Landroid/app/AlertDialog$Builder;
+-
+-    iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+-
+-    const/4 v1, 0x0
+-
+-    invoke-direct {p1, v0, v1}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;I)V
+-
+-    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->getBandPreferenceConfig()Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+-
+-    move-result-object v0
++    if-nez p1, :cond_0
+ 
+-    iget-object v1, v0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplayText:Ljava/lang/String;
++    iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
+ 
+-    invoke-virtual {p1, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++    invoke-virtual {p1}, Landroidx/fragment/app/Fragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
+ 
+-    iget-object v1, v0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mContext:Landroid/content/Context;
++    move-result-object p1
+ 
+-    invoke-static {v1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getSupportedBandList(Landroid/content/Context;)Ljava/util/List;
++    const-string/jumbo v0, "wifi"
+ 
+-    move-result-object v1
++    invoke-virtual {p1, v0}, Landroid/app/Activity;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+ 
+-    check-cast v1, Ljava/util/ArrayList;
++    move-result-object p1
+ 
+-    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
++    check-cast p1, Landroid/net/wifi/WifiManager;
+ 
+-    move-result v1
++    invoke-virtual {p1}, Landroid/net/wifi/WifiManager;->getWifiState()I
+ 
+-    const/4 v2, 0x1
++    invoke-virtual {p1}, Landroid/net/wifi/WifiManager;->getWifiApState()I
+ 
+-    if-gt v1, v2, :cond_0
++    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
+ 
+-    const-string v0, ""
++    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->-$$Nest$mshowBandSelectionTipsDialog(Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;)V
+ 
+     goto :goto_0
+ 
+     :cond_0
+-    iget-object v0, v0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplaySummaryText:Ljava/lang/String;
+-
+-    :goto_0
+-    invoke-virtual {p1, v0}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+-
+-    new-instance v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$6;
+-
+-    invoke-direct {v0, p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$6;-><init>(Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;)V
+-
+-    const p0, 0x7f140de4
+-
+-    invoke-virtual {p1, p0, v0}, Landroid/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+-
+-    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->create()Landroid/app/AlertDialog;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Landroid/app/AlertDialog;->show()V
+-
+-    goto :goto_1
++    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$SaveButtonClickListener;->this$0:Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;
+ 
+-    :cond_1
+-    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->buildNewSoftApConfiguration()V
++    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->-$$Nest$mshowBandSelectionTipsDialog(Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;)V
+ 
+-    :goto_1
++    :goto_0
+     return-void
+ 
+     nop
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings.smali
+index 9463f24bc..ac4a9bea6 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApEditSettings.smali
+@@ -79,6 +79,87 @@
+ 
+ 
+ # direct methods
++.method public static -$$Nest$mshowBandSelectionTipsDialog(Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;)V
++    .locals 4
++
++    iget-boolean v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mIsBandSeekBarUxSupported:Z
++
++    if-eqz v0, :cond_1
++
++    iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mBandSeekBarController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;
++
++    invoke-virtual {v0}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;->isBandTypeModified()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1
++
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
++
++    sget-boolean v2, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils;->DBG:Z
++
++    const/4 v2, 0x0
++
++    invoke-direct {v0, v1, v2}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;I)V
++
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->getBandPreferenceConfig()Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
++
++    move-result-object v1
++
++    iget-object v2, v1, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplayText:Ljava/lang/String;
++
++    invoke-virtual {v0, v2}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    iget-object v2, v1, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mContext:Landroid/content/Context;
++
++    invoke-static {v2}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getSupportedBandList(Landroid/content/Context;)Ljava/util/List;
++
++    move-result-object v2
++
++    check-cast v2, Ljava/util/ArrayList;
++
++    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
++
++    move-result v2
++
++    const/4 v3, 0x1
++
++    if-gt v2, v3, :cond_0
++
++    const-string v1, ""
++
++    goto :goto_0
++
++    :cond_0
++    iget-object v1, v1, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplaySummaryText:Ljava/lang/String;
++
++    :goto_0
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    new-instance v1, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$6;
++
++    invoke-direct {v1, p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$6;-><init>(Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;)V
++
++    const p0, 0x7f140de4
++
++    invoke-virtual {v0, p0, v1}, Landroid/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->create()Landroid/app/AlertDialog;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Landroid/app/AlertDialog;->show()V
++
++    return-void
++
++    :cond_1
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->buildNewSoftApConfiguration()V
++
++    return-void
++.end method
++
+ .method static constructor <clinit>()V
+     .locals 2
+ 
+@@ -128,7 +209,7 @@
+ 
+ # virtual methods
+ .method public final buildNewSoftApConfiguration()V
+-    .locals 12
++    .locals 13
+ 
+     const-string v0, "WifiApEditSettings"
+ 
+@@ -276,32 +357,51 @@
+     goto :goto_2
+ 
+     :cond_4
+-    invoke-virtual {v5}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
++    invoke-virtual {v5}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
+ 
+     move-result v10
+ 
++    const/16 v12, 0x95
++
+     if-eqz v10, :cond_5
+ 
+     new-instance v5, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$7;
+ 
+     invoke-direct {v5}, Landroid/util/SparseIntArray;-><init>()V
+ 
+-    const/16 v10, 0x95
++    invoke-virtual {v5, v6, v4}, Landroid/util/SparseIntArray;->put(II)V
+ 
+-    invoke-virtual {v5, v7, v10}, Landroid/util/SparseIntArray;->put(II)V
++    invoke-virtual {v5, v7, v12}, Landroid/util/SparseIntArray;->put(II)V
+ 
+     invoke-virtual {v3, v5}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    invoke-virtual {v2, v11, v10}, Lcom/samsung/android/settings/wifi/mobileap/WifiApBigDataLogger;->insertMHSBigData(II)V
+-
+     goto :goto_2
+ 
+     :cond_5
++    invoke-virtual {v5}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
++
++    move-result v10
++
++    if-eqz v10, :cond_6
++
++    new-instance v5, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings$7;
++
++    invoke-direct {v5}, Landroid/util/SparseIntArray;-><init>()V
++
++    invoke-virtual {v5, v7, v12}, Landroid/util/SparseIntArray;->put(II)V
++
++    invoke-virtual {v3, v5}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
++
++    invoke-virtual {v2, v11, v12}, Lcom/samsung/android/settings/wifi/mobileap/WifiApBigDataLogger;->insertMHSBigData(II)V
++
++    goto :goto_2
++
++    :cond_6
+     invoke-virtual {v5}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand2Ghz()Z
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_7
++    if-eqz v5, :cond_8
+ 
+     iget-object v5, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mBroadcastChannelDropDownController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBroadcastChannelDropDownController;
+ 
+@@ -309,7 +409,7 @@
+ 
+     move-result v5
+ 
+-    if-eqz v5, :cond_6
++    if-eqz v5, :cond_7
+ 
+     iget-object v5, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mBroadcastChannelDropDownController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBroadcastChannelDropDownController;
+ 
+@@ -319,7 +419,7 @@
+ 
+     goto :goto_1
+ 
+-    :cond_6
++    :cond_7
+     iget-object v5, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+     invoke-static {v5}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getBroadcastChannel(Landroid/content/Context;)I
+@@ -335,7 +435,7 @@
+ 
+     invoke-virtual {v3, v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    :cond_7
++    :cond_8
+     :goto_2
+     iget-object v5, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mHiddenNetworkController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureHiddenNetworkController;
+ 
+@@ -359,7 +459,7 @@
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_9
++    if-eqz v2, :cond_a
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+@@ -369,18 +469,18 @@
+ 
+     move-result v2
+ 
+-    if-ne v2, v6, :cond_8
++    if-ne v2, v6, :cond_9
+ 
+     invoke-virtual {v3, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_3
+ 
+-    :cond_8
++    :cond_9
+     invoke-virtual {v3, v6}, Landroid/net/wifi/SoftApConfiguration$Builder;->setMacRandomizationSetting(I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     invoke-virtual {v3, v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBssid(Landroid/net/MacAddress;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    :cond_9
++    :cond_a
+     :goto_3
+     invoke-virtual {v3}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+ 
+@@ -426,22 +526,22 @@
+ 
+     move-result v3
+ 
+-    if-nez v3, :cond_a
++    if-nez v3, :cond_b
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_a
++    :cond_b
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mMaxConnectionDropDownController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureMaxConnectionDropDownController;
+ 
+     invoke-virtual {v3}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureMaxConnectionDropDownController;->isValueModified()Z
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_b
++    if-eqz v3, :cond_c
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_b
++    :cond_c
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+     invoke-static {v3}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getWifiApBandConfig(Landroid/content/Context;)Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+@@ -460,7 +560,7 @@
+ 
+     move-result v5
+ 
+-    if-eq v3, v5, :cond_c
++    if-eq v3, v5, :cond_d
+ 
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+@@ -468,44 +568,44 @@
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_c
++    if-eqz v3, :cond_d
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_c
++    :cond_d
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mSupportWifi6Controller:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureSupportWifi6Controller;
+ 
+     invoke-virtual {v3}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureSupportWifi6Controller;->isSupportWifi6SwitchStateModified()Z
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_d
++    if-eqz v3, :cond_e
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_d
++    :cond_e
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mPmfController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController;
+ 
+     invoke-virtual {v3}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePmfController;->isValueModified()Z
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_e
++    if-eqz v3, :cond_f
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_e
++    :cond_f
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mPowerSavingModeController:Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePowerSavingModeController;
+ 
+     invoke-virtual {v3}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigurePowerSavingModeController;->isPowerSavingModeModified()Z
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_f
++    if-eqz v3, :cond_10
+ 
+     iput-boolean v6, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    :cond_f
++    :cond_10
+     const-string v3, "VZW"
+ 
+     sget-object v5, Lcom/android/settings/Utils;->CONFIGOPBRANDINGFORMOBILEAP:Ljava/lang/String;
+@@ -514,11 +614,11 @@
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_10
++    if-eqz v3, :cond_11
+ 
+     iget-boolean v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->resetSoftAp:Z
+ 
+-    if-eqz v3, :cond_10
++    if-eqz v3, :cond_11
+ 
+     iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+@@ -526,7 +626,7 @@
+ 
+     move-result v3
+ 
+-    if-eqz v3, :cond_10
++    if-eqz v3, :cond_11
+ 
+     const-string v3, "VZW dialog for save button, reset"
+ 
+@@ -580,20 +680,20 @@
+ 
+     return-void
+ 
+-    :cond_10
++    :cond_11
+     invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->saveNewConfiguration(Landroid/net/wifi/SoftApConfiguration;)V
+ 
+     invoke-virtual {v1}, Landroid/net/wifi/SoftApConfiguration;->getPassphrase()Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+-    if-eqz v0, :cond_11
++    if-eqz v0, :cond_12
+ 
+     invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+ 
+     move-result v1
+ 
+-    if-nez v1, :cond_11
++    if-nez v1, :cond_12
+ 
+     iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApEditSettings;->mContext:Landroidx/fragment/app/FragmentActivity;
+ 
+@@ -605,7 +705,7 @@
+ 
+     invoke-static {p0, v1, v0}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
+ 
+-    :cond_11
++    :cond_12
+     return-void
+ .end method
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$1.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$1.smali
+index 5716095a4..1cffca121 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$1.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$1.smali
+@@ -1185,6 +1185,8 @@
+ 
+     invoke-static {v9, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
++    const/4 v2, 0x5
++
+     if-nez v4, :cond_1c
+ 
+     :goto_12
+@@ -1193,55 +1195,60 @@
+     goto :goto_13
+ 
+     :cond_1c
+-    const/4 v2, 0x1
++    const/4 v3, 0x1
+ 
+-    if-ne v4, v2, :cond_1d
++    if-ne v4, v3, :cond_1d
+ 
+     const/4 v4, 0x4
+ 
+     goto :goto_13
+ 
+     :cond_1d
+-    const/4 v2, 0x3
++    const/4 v3, 0x3
+ 
+-    if-ne v4, v2, :cond_1e
++    if-ne v4, v3, :cond_1e
+ 
+     const/16 v17, 0x19
+ 
+     goto :goto_12
+ 
+     :cond_1e
+-    const/4 v2, 0x2
++    const/4 v3, 0x2
+ 
+-    if-ne v4, v2, :cond_1f
++    if-ne v4, v3, :cond_1f
+ 
+     const/16 v17, 0x1a
+ 
+     goto :goto_12
+ 
+     :cond_1f
++    if-ne v4, v2, :cond_20
++
++    move v4, v2
++
++    :cond_20
+     :goto_13
+-    new-instance v2, Ljava/lang/StringBuilder;
++    new-instance v3, Ljava/lang/StringBuilder;
+ 
+-    invoke-direct {v2, v7}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v3, v7}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+ 
+-    invoke-virtual {v2, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+-    move-result-object v2
++    move-result-object v3
+ 
+-    invoke-static {v9, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v9, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     invoke-static {v4}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->checkIfSecurityTypeIsAnyOpenVariant(I)Z
+ 
+-    move-result v2
++    move-result v3
+ 
+-    if-nez v2, :cond_20
++    if-nez v3, :cond_21
+ 
+     invoke-virtual/range {v18 .. v18}, Landroid/net/wifi/SoftApConfiguration;->getPassphrase()Ljava/lang/String;
+ 
+-    move-result-object v2
++    move-result-object v3
+ 
+     goto :goto_14
+ 
+@@ -1250,63 +1257,63 @@
+ 
+     goto/16 :goto_e
+ 
+-    :cond_20
+-    move-object/from16 v2, v20
++    :cond_21
++    move-object/from16 v3, v20
+ 
+     :goto_14
+-    new-instance v3, Ljava/lang/StringBuilder;
++    new-instance v7, Ljava/lang/StringBuilder;
+ 
+-    invoke-direct {v3, v6}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v7, v6}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+ 
+-    invoke-virtual {v3, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",isHidden:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v14}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v14}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",apBand:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v11}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v11}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",apChannel:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v10}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",maxclient:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v15}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v15}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",authType:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",support5G:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     iget-boolean v6, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->support5G:Z
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+     const-string v6, ",support6G:"
+ 
+-    invoke-virtual {v3, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     iget-boolean v0, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->support6G:Z
+ 
+-    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+     move-result-object v0
+ 
+@@ -1316,35 +1323,33 @@
+ 
+     invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
+ 
+-    const-string v3, "key_SSID"
+-
+-    invoke-virtual {v0, v3, v13}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
++    const-string v6, "key_SSID"
+ 
+-    const-string v3, "key_is_hidden"
++    invoke-virtual {v0, v6, v13}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v14}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++    const-string v6, "key_is_hidden"
+ 
+-    const-string v3, "key_channel"
++    invoke-virtual {v0, v6, v14}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v10}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++    const-string v6, "key_channel"
+ 
+-    const-string v3, "key_band"
++    invoke-virtual {v0, v6, v10}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v11}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++    const-string v6, "key_band"
+ 
+-    const-string v3, "key_max_client"
++    invoke-virtual {v0, v6, v11}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v15}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++    const-string v6, "key_max_client"
+ 
+-    const-string v3, "key_security_type"
++    invoke-virtual {v0, v6, v15}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++    const-string v6, "key_security_type"
+ 
+-    const-string v3, "key_passphrase"
++    invoke-virtual {v0, v6, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
+ 
+-    invoke-virtual {v0, v3, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
++    const-string v4, "key_passphrase"
+ 
+-    const/4 v2, 0x5
++    invoke-virtual {v0, v4, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
+ 
+     invoke-virtual {v12, v2}, Ljava/io/DataOutputStream;->writeInt(I)V
+ 
+@@ -1466,7 +1471,7 @@
+ 
+     cmp-long v7, v10, v12
+ 
+-    if-nez v7, :cond_21
++    if-nez v7, :cond_22
+ 
+     const-string v0, "There is no conf file"
+ 
+@@ -1484,7 +1489,7 @@
+ 
+     goto/16 :goto_1e
+ 
+-    :cond_21
++    :cond_22
+     move/from16 v22, v6
+ 
+     move-object v6, v1
+@@ -1514,7 +1519,7 @@
+ 
+     cmp-long v7, v12, v10
+ 
+-    if-gez v7, :cond_22
++    if-gez v7, :cond_23
+ 
+     const-string v0, "freeSpaceInBytes : "
+ 
+@@ -1536,7 +1541,7 @@
+ 
+     goto/16 :goto_1e
+ 
+-    :cond_22
++    :cond_23
+     new-instance v7, Ljava/io/File;
+ 
+     invoke-direct {v7, v8}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+@@ -1555,14 +1560,14 @@
+ 
+     move-result v10
+ 
+-    if-eqz v10, :cond_23
++    if-eqz v10, :cond_24
+ 
+     invoke-virtual {v7}, Ljava/io/File;->delete()Z
+ 
+-    :cond_23
++    :cond_24
+     const/4 v7, -0x1
+ 
+-    if-ne v8, v7, :cond_24
++    if-ne v8, v7, :cond_25
+ 
+     const-string v0, "encrypt softap fail"
+ 
+@@ -1578,7 +1583,7 @@
+ 
+     goto/16 :goto_1e
+ 
+-    :cond_24
++    :cond_25
+     new-instance v7, Ljava/io/File;
+ 
+     const-string v8, "/data/misc/wifi_hostapd/MHStempbackup.conf"
+@@ -1601,14 +1606,14 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_25
++    if-eqz v1, :cond_26
+ 
+     invoke-virtual {v7}, Ljava/io/File;->delete()Z
+ 
+-    :cond_25
++    :cond_26
+     const/4 v4, -0x1
+ 
+-    if-ne v0, v4, :cond_26
++    if-ne v0, v4, :cond_27
+ 
+     const-string v0, "encrypt fail"
+ 
+@@ -1624,7 +1629,7 @@
+ 
+     goto/16 :goto_1e
+ 
+-    :cond_26
++    :cond_27
+     const-string v0, "otherconf"
+ 
+     const-string v1, "conf"
+@@ -1790,7 +1795,7 @@
+     :try_end_19
+     .catchall {:try_start_19 .. :try_end_19} :catchall_9
+ 
+-    if-eqz v12, :cond_27
++    if-eqz v12, :cond_28
+ 
+     :try_start_1a
+     invoke-virtual {v12}, Ljava/io/FileWriter;->close()V
+@@ -1808,7 +1813,7 @@
+ 
+     goto :goto_19
+ 
+-    :cond_27
++    :cond_28
+     :goto_1b
+     const-string v0, "makeXML fail"
+ 
+@@ -1825,7 +1830,7 @@
+     goto :goto_1e
+ 
+     :goto_1c
+-    if-eqz v12, :cond_28
++    if-eqz v12, :cond_29
+ 
+     :try_start_1b
+     invoke-virtual {v12}, Ljava/io/FileWriter;->close()V
+@@ -1849,7 +1854,7 @@
+ 
+     invoke-static {v9, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_28
++    :cond_29
+     :goto_1d
+     throw v1
+ 
+@@ -1871,6 +1876,8 @@
+     :goto_1e
+     return-void
+ 
++    nop
++
+     :pswitch_data_0
+     .packed-switch 0x0
+         :pswitch_0
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3.smali
+new file mode 100644
+index 000000000..5ca57b054
+--- /dev/null
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3.smali
+@@ -0,0 +1,3 @@
++.class public final Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
++.super Landroid/util/SparseIntArray;
++.source "qb/103318193 2390ff46673e3ef514dc97fdebae472cba4dc92ba53b83fbd6db12d168e29743"
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
+index c0112824a..18b8d778c 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore.smali
+@@ -3732,31 +3732,33 @@
+     const/4 v8, 0x0
+ 
+     :cond_2
+-    iget-boolean v4, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->support6G:Z
++    sget-boolean v4, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
+ 
+     const/4 v9, 0x1
+ 
+-    const/4 v10, 0x2
++    const/16 v10, 0x95
+ 
+-    if-eqz v4, :cond_4
++    const/4 v12, 0x3
+ 
+-    if-ne v7, v10, :cond_4
++    const/4 v13, 0x2
++
++    if-eqz v4, :cond_3
+ 
+-    if-nez v8, :cond_3
++    if-ne v7, v12, :cond_3
+ 
+-    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$5;
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
+ 
+     invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
+ 
+     const/4 v7, 0x0
+ 
+-    const/4 v12, 0x4
++    invoke-virtual {v4, v9, v7}, Landroid/util/SparseIntArray;->put(II)V
+ 
+-    invoke-virtual {v4, v12, v7}, Landroid/util/SparseIntArray;->put(II)V
++    invoke-virtual {v4, v13, v10}, Landroid/util/SparseIntArray;->put(II)V
+ 
+     invoke-virtual {v11, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    goto :goto_6
++    goto/16 :goto_6
+ 
+     :catchall_1
+     move-exception v0
+@@ -3783,7 +3785,51 @@
+     goto/16 :goto_c
+ 
+     :cond_3
+-    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$5;
++    if-eqz v4, :cond_4
++
++    const/4 v4, 0x4
++
++    if-ne v7, v4, :cond_4
++
++    new-instance v7, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
++
++    invoke-direct {v7}, Landroid/util/SparseIntArray;-><init>()V
++
++    const/4 v10, 0x0
++
++    invoke-virtual {v7, v9, v10}, Landroid/util/SparseIntArray;->put(II)V
++
++    invoke-virtual {v7, v4, v10}, Landroid/util/SparseIntArray;->put(II)V
++
++    invoke-virtual {v11, v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
++
++    goto :goto_6
++
++    :cond_4
++    iget-boolean v4, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->support6G:Z
++
++    if-eqz v4, :cond_6
++
++    if-ne v7, v13, :cond_6
++
++    if-nez v8, :cond_5
++
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
++
++    invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
++
++    const/4 v7, 0x0
++
++    const/4 v10, 0x4
++
++    invoke-virtual {v4, v10, v7}, Landroid/util/SparseIntArray;->put(II)V
++
++    invoke-virtual {v11, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
++
++    goto :goto_6
++
++    :cond_5
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
+ 
+     invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
+ 
+@@ -3795,37 +3841,35 @@
+ 
+     goto :goto_6
+ 
+-    :cond_4
++    :cond_6
+     const/16 v4, 0xb
+ 
+-    if-le v8, v4, :cond_5
++    if-le v8, v4, :cond_7
+ 
+     iget-boolean v7, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->support5G:Z
+ 
+-    if-eqz v7, :cond_5
++    if-eqz v7, :cond_7
+ 
+     const-string/jumbo v4, "setting 5Ghz band"
+ 
+     invoke-static {v6, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$5;
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
+ 
+     invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
+ 
+-    const/16 v7, 0x95
+-
+-    invoke-virtual {v4, v10, v7}, Landroid/util/SparseIntArray;->put(II)V
++    invoke-virtual {v4, v13, v10}, Landroid/util/SparseIntArray;->put(II)V
+ 
+     invoke-virtual {v11, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_6
+ 
+-    :cond_5
+-    if-gt v8, v4, :cond_7
++    :cond_7
++    if-gt v8, v4, :cond_9
+ 
+-    if-nez v8, :cond_6
++    if-nez v8, :cond_8
+ 
+-    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$5;
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
+ 
+     invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
+ 
+@@ -3837,8 +3881,8 @@
+ 
+     goto :goto_6
+ 
+-    :cond_6
+-    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$5;
++    :cond_8
++    new-instance v4, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore$3;
+ 
+     invoke-direct {v4}, Landroid/util/SparseIntArray;-><init>()V
+ 
+@@ -3846,9 +3890,9 @@
+ 
+     invoke-virtual {v11, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setChannels(Landroid/util/SparseIntArray;)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    :cond_7
++    :cond_9
+     :goto_6
+-    if-nez v15, :cond_8
++    if-nez v15, :cond_a
+ 
+     const/4 v4, 0x0
+ 
+@@ -3858,32 +3902,36 @@
+ 
+     goto :goto_7
+ 
+-    :cond_8
+-    const/4 v4, 0x5
++    :cond_a
++    const/4 v4, 0x0
++
++    const/4 v7, 0x5
+ 
+-    if-ne v15, v4, :cond_9
++    if-ne v15, v7, :cond_b
++
++    invoke-virtual {v11, v4, v7}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_7
+ 
+-    :cond_9
++    :cond_b
+     invoke-static {v15}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->checkIfSecurityTypeIsAnyOpenVariant(I)Z
+ 
+     move-result v4
+ 
+-    if-nez v4, :cond_d
++    if-nez v4, :cond_f
+ 
+     const/4 v7, 0x4
+ 
+-    if-ne v15, v7, :cond_a
++    if-ne v15, v7, :cond_c
+ 
+     invoke-virtual {v11, v5, v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_7
+ 
+-    :cond_a
++    :cond_c
+     const/16 v4, 0x19
+ 
+-    if-ne v15, v4, :cond_b
++    if-ne v15, v4, :cond_d
+ 
+     iget-object v4, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -3891,18 +3939,16 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_b
+-
+-    const/4 v4, 0x3
++    if-eqz v4, :cond_d
+ 
+-    invoke-virtual {v11, v5, v4}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
++    invoke-virtual {v11, v5, v12}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_7
+ 
+-    :cond_b
++    :cond_d
+     const/16 v4, 0x1a
+ 
+-    if-ne v15, v4, :cond_c
++    if-ne v15, v4, :cond_e
+ 
+     iget-object v4, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -3910,16 +3956,16 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_c
++    if-eqz v4, :cond_e
+ 
+-    invoke-virtual {v11, v5, v10}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
++    invoke-virtual {v11, v5, v13}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+     goto :goto_7
+ 
+-    :cond_c
++    :cond_e
+     invoke-virtual {v11, v5, v9}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    :cond_d
++    :cond_f
+     :goto_7
+     iget-object v4, v0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->xmlModel:Ljava/lang/String;
+ 
+@@ -3931,13 +3977,13 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_e
++    if-eqz v4, :cond_10
+ 
+     const-string v4, "Both models are same"
+ 
+     invoke-static {v6, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_e
++    :cond_10
+     invoke-virtual {v11}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+ 
+     move-result-object v4
+@@ -3988,7 +4034,7 @@
+ 
+     const/16 v0, 0xe
+ 
+-    if-ge v8, v0, :cond_f
++    if-ge v8, v0, :cond_11
+ 
+     invoke-virtual/range {p1 .. p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+ 
+@@ -3998,7 +4044,7 @@
+ 
+     invoke-static {v0, v2, v8}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+ 
+-    :cond_f
++    :cond_11
+     invoke-static/range {p1 .. p1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSmartSwitchBackupRestore;->sendConfigChangedBroadcastToSmartTethering(Landroid/content/Context;)V
+     :try_end_6
+     .catch Ljava/io/IOException; {:try_start_6 .. :try_end_6} :catch_3
+@@ -4017,7 +4063,7 @@
+ 
+     invoke-static {v1, v0, v6}, Lcom/android/settingslib/qrcode/QrCamera$DecodingTask$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/io/IOException;Ljava/lang/String;)V
+ 
+-    :cond_10
++    :cond_12
+     :goto_8
+     const/16 v16, 0x0
+ 
+@@ -4085,7 +4131,7 @@
+     move-object v2, v0
+ 
+     :goto_a
+-    if-eqz v10, :cond_11
++    if-eqz v10, :cond_13
+ 
+     :try_start_9
+     invoke-virtual {v10}, Ljava/io/DataInputStream;->close()V
+@@ -4099,12 +4145,12 @@
+ 
+     invoke-static {v1, v0, v6}, Lcom/android/settingslib/qrcode/QrCamera$DecodingTask$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/io/IOException;Ljava/lang/String;)V
+ 
+-    :cond_11
++    :cond_13
+     :goto_b
+     throw v2
+ 
+     :goto_c
+-    if-eqz v10, :cond_10
++    if-eqz v10, :cond_12
+ 
+     :try_start_a
+     invoke-virtual {v10}, Ljava/io/DataInputStream;->close()V
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
+index d9dac483b..61f1c2f59 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler.smali
+@@ -360,33 +360,48 @@
+ 
+     invoke-static {v2}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getWifiApBandConfig(Landroid/content/Context;)Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
+-    const/4 v2, 0x1
++    move-result-object v2
+ 
+-    const/4 v3, 0x0
++    invoke-virtual {v2}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
+ 
+-    if-eqz v0, :cond_0
++    move-result v2
+ 
+-    if-nez v1, :cond_0
++    const/4 v3, 0x1
+ 
+-    move v4, v2
++    const/4 v4, 0x0
+ 
+-    goto :goto_0
++    if-eqz v0, :cond_1
++
++    if-nez v2, :cond_0
++
++    if-nez v1, :cond_1
+ 
+     :cond_0
+-    move v4, v3
++    move v5, v3
++
++    goto :goto_0
++
++    :cond_1
++    move v5, v4
+ 
+     :goto_0
+-    const-string v5, " isP2pCon: "
++    const-string v6, " isP2pCon: "
+ 
+-    const-string v6, ", isDualBandCurSel: false, isP2pSoftApConcurrencySupported: "
++    const-string v7, ", isDualBandCurSel: "
+ 
+-    const-string v7, ", isP2pDialogCanBeShown: "
++    const-string v8, ", isP2pSoftApConcurrencySupported: "
+ 
+-    invoke-static {v5, v0, v6, v1, v7}, Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-static {v6, v0, v7, v2, v8}, Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     move-result-object v0
+ 
+-    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    const-string v1, ", isP2pDialogCanBeShown: "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+@@ -394,11 +409,11 @@
+ 
+     sget-object v1, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->TAG:Ljava/lang/String;
+ 
+-    const-string v5, "CheckWiFiConcurrencyAndProceedFurther - "
++    const-string v2, "CheckWiFiConcurrencyAndProceedFurther - "
+ 
+-    invoke-static {v5, v0, v1}, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v2, v0, v1}, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    iget-object v5, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
++    iget-object v2, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     new-instance v6, Ljava/lang/StringBuilder;
+ 
+@@ -416,13 +431,13 @@
+ 
+     move-result-object v0
+ 
+-    invoke-virtual {v5, v0}, Lcom/samsung/android/wifi/SemWifiManager;->reportHotspotDumpLogs(Ljava/lang/String;)V
++    invoke-virtual {v2, v0}, Lcom/samsung/android/wifi/SemWifiManager;->reportHotspotDumpLogs(Ljava/lang/String;)V
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mContext:Landroid/content/Context;
+ 
+-    const-string v5, "display"
++    const-string v2, "display"
+ 
+-    invoke-virtual {v0, v5}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-virtual {v0, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+ 
+     move-result-object v0
+ 
+@@ -434,19 +449,19 @@
+ 
+     const/4 v6, 0x2
+ 
+-    if-eqz v0, :cond_1
++    if-eqz v0, :cond_2
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getActiveDisplayState()I
+ 
+     move-result v7
+ 
+-    if-ne v7, v6, :cond_1
++    if-ne v7, v6, :cond_2
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getConnectedState()I
+ 
+     move-result v0
+ 
+-    if-ne v0, v6, :cond_1
++    if-ne v0, v6, :cond_2
+ 
+     const-string v0, "isWirelessDexEnabled:true"
+ 
+@@ -458,14 +473,14 @@
+ 
+     return-void
+ 
+-    :cond_1
++    :cond_2
+     const-string v0, "isWirelessDexEnabled:false"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mContext:Landroid/content/Context;
+ 
+-    invoke-virtual {v0, v5}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-virtual {v0, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+ 
+     move-result-object v0
+ 
+@@ -475,25 +490,25 @@
+ 
+     move-result-object v0
+ 
+-    if-eqz v0, :cond_2
++    if-eqz v0, :cond_3
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getActiveDisplayState()I
+ 
+-    move-result v5
++    move-result v2
+ 
+-    if-ne v5, v6, :cond_2
++    if-ne v2, v6, :cond_3
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getConnectedState()I
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_2
++    if-nez v0, :cond_3
+ 
+     const-string v0, "isSmartViewEnabled:true"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-eqz v4, :cond_3
++    if-eqz v5, :cond_4
+ 
+     const-string v0, "Smartview is enabled. Create dailog"
+ 
+@@ -505,19 +520,19 @@
+ 
+     return-void
+ 
+-    :cond_2
++    :cond_3
+     const-string v0, "isSmartViewEnabled:false"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_3
++    :cond_4
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mContext:Landroid/content/Context;
+ 
+     invoke-static {v0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils;->isNanEnabledDialogRequired(Landroid/content/Context;)Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_4
++    if-eqz v0, :cond_5
+ 
+     const-string v0, "WiFi Nan is enabled. Create dailog"
+ 
+@@ -529,20 +544,20 @@
+ 
+     return-void
+ 
+-    :cond_4
++    :cond_5
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+     invoke-virtual {v0}, Landroid/net/wifi/WifiManager;->getWifiState()I
+ 
+     move-result v0
+ 
+-    const/16 v5, 0xa
++    const/16 v2, 0xa
+ 
+     const-string v7, "WiFi P2p is connected. Create dailog"
+ 
+     const/4 v8, 0x3
+ 
+-    if-eq v0, v6, :cond_7
++    if-eq v0, v6, :cond_8
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+@@ -550,20 +565,20 @@
+ 
+     move-result v0
+ 
+-    if-ne v0, v8, :cond_5
++    if-ne v0, v8, :cond_6
+ 
+     goto :goto_1
+ 
+-    :cond_5
+-    if-eqz v4, :cond_6
++    :cond_6
++    if-eqz v5, :cond_7
+ 
+     invoke-static {v1, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    invoke-virtual {p0, v5}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_6
++    :cond_7
+     const-string v0, " Wi-Fi is not enabled"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+@@ -572,32 +587,32 @@
+ 
+     return-void
+ 
+-    :cond_7
++    :cond_8
+     :goto_1
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
+ 
+     const/4 v9, -0x1
+ 
+-    if-eqz v0, :cond_15
++    if-eqz v0, :cond_16
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_8
++    if-nez v0, :cond_9
+ 
+     goto/16 :goto_4
+ 
+-    :cond_8
++    :cond_9
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARINGLITE:Z
+ 
+-    if-eqz v0, :cond_12
++    if-eqz v0, :cond_13
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_12
++    if-eqz v0, :cond_13
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -605,44 +620,44 @@
+ 
+     move-result-object v0
+ 
+-    if-eqz v0, :cond_9
++    if-eqz v0, :cond_a
+ 
+     array-length v8, v0
+ 
+-    if-ne v8, v2, :cond_9
++    if-ne v8, v3, :cond_a
+ 
+-    aget v0, v0, v3
++    aget v0, v0, v4
+ 
+-    and-int/2addr v0, v2
++    and-int/2addr v0, v3
+ 
+-    if-eqz v0, :cond_9
++    if-eqz v0, :cond_a
+ 
+-    move v0, v2
++    move v0, v3
+ 
+     goto :goto_2
+ 
+-    :cond_9
+-    move v0, v3
++    :cond_a
++    move v0, v4
+ 
+     :goto_2
+-    if-eqz v4, :cond_a
++    if-eqz v5, :cond_b
+ 
+     invoke-static {v1, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    invoke-virtual {p0, v5}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_a
++    :cond_b
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->getWifiConnectedFrequency()I
+ 
+-    move-result v4
++    move-result v2
+ 
+-    if-eq v4, v9, :cond_11
++    if-eq v2, v9, :cond_12
+ 
+     const-string v5, "Frequency : "
+ 
+-    invoke-static {v4, v5, v1}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
++    invoke-static {v2, v5, v1}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
+ 
+     const/16 v5, 0x96c
+ 
+@@ -650,72 +665,72 @@
+ 
+     const/4 v8, 0x6
+ 
+-    if-lt v4, v5, :cond_b
++    if-lt v2, v5, :cond_c
+ 
+     const/16 v5, 0x9b4
+ 
+-    if-gt v4, v5, :cond_b
++    if-gt v2, v5, :cond_c
+ 
+     goto :goto_3
+ 
+-    :cond_b
++    :cond_c
+     const/16 v5, 0x170c
+ 
+-    if-le v4, v5, :cond_c
++    if-le v2, v5, :cond_d
+ 
+     move v6, v8
+ 
+     goto :goto_3
+ 
+-    :cond_c
++    :cond_d
+     move v6, v7
+ 
+     :goto_3
+-    new-instance v4, Ljava/lang/StringBuilder;
++    new-instance v2, Ljava/lang/StringBuilder;
+ 
+     const-string v5, "Frequency band of connected AP:"
+ 
+-    invoke-direct {v4, v5}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++    invoke-direct {v2, v5}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+ 
+-    invoke-virtual {v4, v6}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v6}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v5, ",is MHS 2.4 band="
+ 
+-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+-    move-result-object v4
++    move-result-object v2
+ 
+-    invoke-static {v1, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v1, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-ne v6, v7, :cond_d
++    if-ne v6, v7, :cond_e
+ 
+-    iget-object v3, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
++    iget-object v2, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+-    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->getIndoorStatus()I
++    invoke-virtual {v2}, Lcom/samsung/android/wifi/SemWifiManager;->getIndoorStatus()I
+ 
+-    move-result v3
++    move-result v4
+ 
+-    :cond_d
+-    const-string v4, "WiFi Sharing lite model. Wifi connected , indoor status:"
++    :cond_e
++    const-string v2, "WiFi Sharing lite model. Wifi connected , indoor status:"
+ 
+-    invoke-static {v3, v4, v1}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
++    invoke-static {v4, v2, v1}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
+ 
+-    const/16 v4, 0x14
++    const/16 v2, 0x14
+ 
+-    if-ne v3, v2, :cond_e
++    if-ne v4, v3, :cond_f
+ 
+-    invoke-virtual {p0, v4}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_e
+-    if-ne v6, v7, :cond_f
++    :cond_f
++    if-ne v6, v7, :cond_10
+ 
+-    if-eqz v0, :cond_f
++    if-eqz v0, :cond_10
+ 
+     const/16 v0, 0x15
+ 
+@@ -723,23 +738,23 @@
+ 
+     return-void
+ 
+-    :cond_f
+-    if-ne v6, v8, :cond_10
++    :cond_10
++    if-ne v6, v8, :cond_11
+ 
+     const-string v0, "Wifi connected 6Ghz, so dialog to turnoff"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    invoke-virtual {p0, v4}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_10
++    :cond_11
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_11
++    :cond_12
+     const-string v0, "WiFi Sharing lite model. Wifi not connected"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+@@ -748,42 +763,42 @@
+ 
+     return-void
+ 
+-    :cond_12
++    :cond_13
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
+ 
+-    if-eqz v0, :cond_14
++    if-eqz v0, :cond_15
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_14
++    if-eqz v0, :cond_15
+ 
+     const-string v0, "WiFi Sharing  model."
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-eqz v4, :cond_13
++    if-eqz v5, :cond_14
+ 
+     invoke-static {v1, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    invoke-virtual {p0, v5}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_13
++    :cond_14
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_14
++    :cond_15
+     const-string p0, "not handling in any case, it is an error"
+ 
+     invoke-static {v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     return-void
+ 
+-    :cond_15
++    :cond_16
+     :goto_4
+     const-string v0, "TMO"
+ 
+@@ -793,7 +808,7 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_17
++    if-nez v0, :cond_18
+ 
+     const-string v0, "NEWCO"
+ 
+@@ -803,11 +818,11 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_16
++    if-eqz v0, :cond_17
+ 
+     goto :goto_5
+ 
+-    :cond_16
++    :cond_17
+     const-string v0, "WiFi Sharing not supported/not enabled. Create dailog"
+ 
+     invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+@@ -816,22 +831,22 @@
+ 
+     return-void
+ 
+-    :cond_17
++    :cond_18
+     :goto_5
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->getWifiConnectedFrequency()I
+ 
+     move-result v0
+ 
+-    if-eq v0, v9, :cond_18
++    if-eq v0, v9, :cond_19
+ 
+     invoke-virtual {p0, v8}, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->showDialog(I)V
+ 
+     return-void
+ 
+-    :cond_18
++    :cond_19
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+-    invoke-virtual {v0, v3}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
++    invoke-virtual {v0, v4}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
+ 
+     new-instance v0, Landroid/os/Handler;
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
+index 25c0eeff4..5c70e9b80 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1.smali
+@@ -1663,6 +1663,10 @@
+ 
+     invoke-virtual {p1}, Lcom/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect;->isEligibleToShow()Z
+ 
++    move-result p1
++
++    if-nez p1, :cond_e
++
+     iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApSwitchEnabler1;->mWiFiNetworkDisconnectDialog:Lcom/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogWiFiNetworkDisconnect;
+ 
+     invoke-virtual {p1}, Lcom/samsung/android/settings/wifi/mobileap/views/WifiApDialog;->showIfEligible$1()Z
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
+index 65452f430..b239f6050 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/WifiApWarning.smali
+@@ -306,7 +306,7 @@
+ 
+ # virtual methods
+ .method public final CheckWiFiConcurrencyAndProceedFurther()V
+-    .locals 12
++    .locals 11
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+@@ -342,33 +342,48 @@
+ 
+     invoke-static {v3}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getWifiApBandConfig(Landroid/content/Context;)Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
+-    const/4 v3, 0x1
++    move-result-object v3
+ 
+-    const/4 v4, 0x0
++    invoke-virtual {v3}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
+ 
+-    if-eqz v1, :cond_0
++    move-result v3
+ 
+-    if-nez v2, :cond_0
++    const/4 v4, 0x1
+ 
+-    move v5, v3
++    const/4 v5, 0x0
+ 
+-    goto :goto_0
++    if-eqz v1, :cond_1
++
++    if-nez v3, :cond_0
++
++    if-nez v2, :cond_1
+ 
+     :cond_0
+-    move v5, v4
++    move v6, v4
++
++    goto :goto_0
++
++    :cond_1
++    move v6, v5
+ 
+     :goto_0
+-    const-string v6, " isP2pCon: "
++    const-string v7, " isP2pCon: "
+ 
+-    const-string v7, ", isDualBandCurSel: false, isP2pSoftApConcurrencySupported: "
++    const-string v8, ", isDualBandCurSel: "
+ 
+-    const-string v8, ", isP2pDialogCanBeShown: "
++    const-string v9, ", isP2pSoftApConcurrencySupported: "
+ 
+-    invoke-static {v6, v1, v7, v2, v8}, Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-static {v7, v1, v8, v3, v9}, Lcom/android/settings/applications/manageapplications/ManageApplications$ApplicationsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     move-result-object v1
+ 
+-    invoke-virtual {v1, v5}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    const-string v2, ", isP2pDialogCanBeShown: "
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {v1, v6}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+@@ -376,9 +391,9 @@
+ 
+     const-string v2, "CheckWiFiConcurrencyAndProceedFurther - "
+ 
+-    const-string v6, "WifiApWarning"
++    const-string v3, "WifiApWarning"
+ 
+-    invoke-static {v2, v1, v6}, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {v2, v1, v3}, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ 
+     iget-object v2, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -416,36 +431,36 @@
+ 
+     const/4 v9, -0x1
+ 
+-    if-eqz v1, :cond_2
++    if-eqz v1, :cond_3
+ 
+     invoke-virtual {v1}, Landroid/hardware/display/SemWifiDisplayStatus;->getActiveDisplayState()I
+ 
+     move-result v10
+ 
+-    if-ne v10, v7, :cond_2
++    if-ne v10, v7, :cond_3
+ 
+     invoke-virtual {v1}, Landroid/hardware/display/SemWifiDisplayStatus;->getConnectedState()I
+ 
+     move-result v1
+ 
+-    if-ne v1, v7, :cond_2
++    if-ne v1, v7, :cond_3
+ 
+     const-string v0, "isWirelessDexEnabled:true"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_1
++    if-eq v0, v9, :cond_2
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_1
++    :cond_2
+     const-string v0, "WirelessDex is enabled. Create dailog"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     const/16 v0, 0x34
+ 
+@@ -453,10 +468,10 @@
+ 
+     return-void
+ 
+-    :cond_2
++    :cond_3
+     const-string v1, "isWirelessDexEnabled:false"
+ 
+-    invoke-static {v6, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mContext:Landroid/content/Context;
+ 
+@@ -470,38 +485,38 @@
+ 
+     move-result-object v1
+ 
+-    if-eqz v1, :cond_4
++    if-eqz v1, :cond_5
+ 
+     invoke-virtual {v1}, Landroid/hardware/display/SemWifiDisplayStatus;->getActiveDisplayState()I
+ 
+     move-result v2
+ 
+-    if-ne v2, v7, :cond_4
++    if-ne v2, v7, :cond_5
+ 
+     invoke-virtual {v1}, Landroid/hardware/display/SemWifiDisplayStatus;->getConnectedState()I
+ 
+     move-result v1
+ 
+-    if-nez v1, :cond_4
++    if-nez v1, :cond_5
+ 
+     const-string v1, "isSmartViewEnabled:true"
+ 
+-    invoke-static {v6, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-eqz v5, :cond_5
++    if-eqz v6, :cond_6
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_3
++    if-eq v0, v9, :cond_4
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_3
++    :cond_4
+     const-string v0, "Smartview is enabled. Create dailog"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     const/16 v0, 0x22
+ 
+@@ -509,32 +524,32 @@
+ 
+     return-void
+ 
+-    :cond_4
++    :cond_5
+     const-string v1, "isSmartViewEnabled:false"
+ 
+-    invoke-static {v6, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_5
++    :cond_6
+     iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mContext:Landroid/content/Context;
+ 
+     invoke-static {v1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSettingsUtils;->isNanEnabledDialogRequired(Landroid/content/Context;)Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_7
++    if-eqz v1, :cond_8
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_6
++    if-eq v0, v9, :cond_7
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_6
++    :cond_7
+     const-string v0, "WiFi Nan is enabled. Create dailog"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     const/16 v0, 0x23
+ 
+@@ -542,70 +557,111 @@
+ 
+     return-void
+ 
+-    :cond_7
+-    const/16 v1, 0x1f
++    :cond_8
++    const-string v1, "WiFi P2p is connected. Create dailog"
+ 
+-    const-string v2, "WiFi P2p is connected. Create dailog"
++    const/16 v2, 0x1f
+ 
+-    if-eq v0, v7, :cond_b
++    if-eq v0, v7, :cond_c
+ 
+     const/4 v10, 0x3
+ 
+-    if-ne v0, v10, :cond_8
++    if-ne v0, v10, :cond_9
+ 
+     goto :goto_1
+ 
+-    :cond_8
+-    if-eqz v5, :cond_a
++    :cond_9
++    if-eqz v6, :cond_b
+ 
+-    invoke-static {v6, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_9
++    if-eq v0, v9, :cond_a
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_9
+-    invoke-virtual {p0, v1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++    :cond_a
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_a
++    :cond_b
+     const-string v0, " Wi-Fi is not enabled"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_b
++    :cond_c
+     :goto_1
++    sget-boolean v0, Lcom/android/settings/Utils;->SPF_SupportMobileApDualAp:Z
++
++    if-eqz v0, :cond_f
++
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
+ 
+-    if-eqz v0, :cond_1f
++    if-eqz v0, :cond_f
++
++    iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
++
++    if-eq v0, v9, :cond_f
++
++    if-eqz v6, :cond_e
++
++    const-string v0, "Dualband supported model,WiFi P2p is connected. Create dailog"
++
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
++
++    if-eq v0, v9, :cond_d
++
++    iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
++
++    invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
++
++    :cond_d
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++
++    return-void
++
++    :cond_e
++    const-string v0, "Dualband supported model, so dont check for WifiSharing Switch if Autohotspot client in trying to enable in single band"
++
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->startProvisioningIfNecessary()V
++
++    return-void
++
++    :cond_f
++    sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
++
++    if-eqz v0, :cond_23
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_c
++    if-nez v0, :cond_10
+ 
+     goto/16 :goto_5
+ 
+-    :cond_c
++    :cond_10
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARINGLITE:Z
+ 
+-    if-eqz v0, :cond_1b
++    if-eqz v0, :cond_1f
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_1b
++    if-eqz v0, :cond_1f
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -613,100 +669,100 @@
+ 
+     move-result-object v0
+ 
+-    if-eqz v0, :cond_d
++    if-eqz v0, :cond_11
+ 
+     array-length v10, v0
+ 
+-    if-ne v10, v3, :cond_d
++    if-ne v10, v4, :cond_11
+ 
+-    aget v0, v0, v4
++    aget v0, v0, v5
+ 
+-    and-int/2addr v0, v3
++    and-int/2addr v0, v4
+ 
+-    if-eqz v0, :cond_d
++    if-eqz v0, :cond_11
+ 
+-    move v0, v3
++    move v0, v4
+ 
+     goto :goto_2
+ 
+-    :cond_d
+-    move v0, v4
++    :cond_11
++    move v0, v5
+ 
+     :goto_2
+-    if-eqz v5, :cond_f
++    if-eqz v6, :cond_13
+ 
+-    invoke-static {v6, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_e
++    if-eq v0, v9, :cond_12
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_e
+-    invoke-virtual {p0, v1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++    :cond_12
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_f
++    :cond_13
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->getWifiConnectedFrequency()I
+ 
+     move-result v1
+ 
+-    if-eq v1, v9, :cond_1a
++    if-eq v1, v9, :cond_1e
+ 
+     const-string v2, "Frequency : "
+ 
+-    invoke-static {v1, v2, v6}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
++    invoke-static {v1, v2, v3}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
+ 
+     const/4 v2, 0x6
+ 
+-    const/4 v5, 0x5
++    const/4 v6, 0x5
+ 
+-    if-eq v1, v9, :cond_13
++    if-eq v1, v9, :cond_17
+ 
+     const/16 v10, 0x96c
+ 
+-    if-lt v1, v10, :cond_10
++    if-lt v1, v10, :cond_14
+ 
+     const/16 v10, 0x9b4
+ 
+-    if-gt v1, v10, :cond_10
++    if-gt v1, v10, :cond_14
+ 
+     goto :goto_3
+ 
+-    :cond_10
++    :cond_14
+     const/16 v7, 0x170c
+ 
+-    if-le v1, v7, :cond_11
++    if-le v1, v7, :cond_15
+ 
+     move v7, v2
+ 
+     goto :goto_3
+ 
+-    :cond_11
+-    move v7, v5
++    :cond_15
++    move v7, v6
+ 
+     :goto_3
+-    if-ne v7, v5, :cond_12
++    if-ne v7, v6, :cond_16
+ 
+     iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v1}, Lcom/samsung/android/wifi/SemWifiManager;->getIndoorStatus()I
+ 
+-    move-result v4
++    move-result v5
+ 
+-    :cond_12
+-    move v1, v4
++    :cond_16
++    move v1, v5
+ 
+-    move v4, v7
++    move v5, v7
+ 
+     goto :goto_4
+ 
+-    :cond_13
+-    move v1, v4
++    :cond_17
++    move v1, v5
+ 
+     :goto_4
+     new-instance v7, Ljava/lang/StringBuilder;
+@@ -715,7 +771,7 @@
+ 
+     invoke-direct {v7, v10}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+ 
+-    invoke-virtual {v7, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+     const-string v10, ",is MHS 2.4 Band="
+ 
+@@ -727,124 +783,124 @@
+ 
+     move-result-object v7
+ 
+-    invoke-static {v6, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     const-string v7, "WiFi Sharing lite model. Wifi connected , indoor status:"
+ 
+-    invoke-static {v1, v7, v6}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
++    invoke-static {v1, v7, v3}, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
+ 
+-    const/16 v6, 0x28
++    const/16 v3, 0x28
+ 
+-    if-ne v1, v3, :cond_15
++    if-ne v1, v4, :cond_19
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_14
++    if-eq v0, v9, :cond_18
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_14
+-    invoke-virtual {p0, v6}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++    :cond_18
++    invoke-virtual {p0, v3}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_15
+-    if-ne v4, v5, :cond_17
++    :cond_19
++    if-ne v5, v6, :cond_1b
+ 
+-    if-eqz v0, :cond_17
++    if-eqz v0, :cond_1b
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_16
++    if-eq v0, v9, :cond_1a
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_16
++    :cond_1a
+     const/16 v0, 0x29
+ 
+     invoke-virtual {p0, v0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_17
+-    if-ne v4, v2, :cond_19
++    :cond_1b
++    if-ne v5, v2, :cond_1d
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_18
++    if-eq v0, v9, :cond_1c
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_18
+-    invoke-virtual {p0, v6}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++    :cond_1c
++    invoke-virtual {p0, v3}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_19
++    :cond_1d
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_1a
++    :cond_1e
+     const-string v0, "WiFi Sharing lite model. Wifi not connected"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_1b
++    :cond_1f
+     sget-boolean v0, Lcom/android/settings/Utils;->SUPPORT_MOBILEAP_WIFISHARING:Z
+ 
+-    if-eqz v0, :cond_1e
++    if-eqz v0, :cond_22
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->isWifiSharingEnabled()Z
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_1e
++    if-eqz v0, :cond_22
+ 
+     const-string v0, "WiFi Sharing  model."
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    if-eqz v5, :cond_1d
++    if-eqz v6, :cond_21
+ 
+-    invoke-static {v6, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_1c
++    if-eq v0, v9, :cond_20
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_1c
+-    invoke-virtual {p0, v1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
++    :cond_20
++    invoke-virtual {p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_1d
++    :cond_21
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->startProvisioningIfNecessary()V
+ 
+     return-void
+ 
+-    :cond_1e
++    :cond_22
+     const-string p0, "not handling in any case, it is an error"
+ 
+-    invoke-static {v6, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     return-void
+ 
+-    :cond_1f
++    :cond_23
+     :goto_5
+     const-string v0, "TMO"
+ 
+@@ -856,9 +912,9 @@
+ 
+     const/16 v1, 0x1e
+ 
+-    const-wide/16 v10, 0x258
++    const-wide/16 v6, 0x258
+ 
+-    if-nez v0, :cond_22
++    if-nez v0, :cond_26
+ 
+     const-string v0, "NEWCO"
+ 
+@@ -868,26 +924,26 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_20
++    if-eqz v0, :cond_24
+ 
+     goto :goto_6
+ 
+-    :cond_20
++    :cond_24
+     const-string v0, "WiFi Sharing not supported/not enabled. Create dailog"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_21
++    if-eq v0, v9, :cond_25
+ 
+     const-string v0, "Autohotspot client is trying to enable,so dont show Wi-Fi disabble diaalog"
+ 
+-    invoke-static {v6, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {v3, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+-    invoke-virtual {v0, v4}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
++    invoke-virtual {v0, v5}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mContext:Landroid/content/Context;
+ 
+@@ -897,7 +953,7 @@
+ 
+     const-string/jumbo v1, "wifi_saved_state"
+ 
+-    invoke-static {v0, v1, v3}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {v0, v1, v4}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+ 
+     new-instance v0, Landroid/os/Handler;
+ 
+@@ -909,40 +965,40 @@
+ 
+     invoke-direct {v1, p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning$72;-><init>(Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;I)V
+ 
+-    invoke-virtual {v0, v1, v10, v11}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++    invoke-virtual {v0, v1, v6, v7}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+ 
+     return-void
+ 
+-    :cond_21
++    :cond_25
+     invoke-virtual {p0, v1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_22
++    :cond_26
+     :goto_6
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->getWifiConnectedFrequency()I
+ 
+     move-result v0
+ 
+-    if-eq v0, v9, :cond_24
++    if-eq v0, v9, :cond_28
+ 
+     iget v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mBand:I
+ 
+-    if-eq v0, v9, :cond_23
++    if-eq v0, v9, :cond_27
+ 
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+ 
+     invoke-virtual {v0, v8}, Lcom/samsung/android/wifi/SemWifiManager;->setAutohotspotToastMessage(I)V
+ 
+-    :cond_23
++    :cond_27
+     invoke-virtual {p0, v1}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->showNextHotspotDialog(I)V
+ 
+     return-void
+ 
+-    :cond_24
++    :cond_28
+     iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;->mAOSPWifiManager:Landroid/net/wifi/WifiManager;
+ 
+-    invoke-virtual {v0, v4}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
++    invoke-virtual {v0, v5}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
+ 
+     new-instance v0, Landroid/os/Handler;
+ 
+@@ -954,7 +1010,7 @@
+ 
+     invoke-direct {v1, p0, v2}, Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning$72;-><init>(Lcom/samsung/android/settings/wifi/mobileap/WifiApWarning;I)V
+ 
+-    invoke-virtual {v0, v1, v10, v11}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++    invoke-virtual {v0, v1, v6, v7}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+ 
+     return-void
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
+index 968e7b78a..5ceddcea8 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController.smali
+@@ -373,45 +373,15 @@
+     :goto_0
+     iput-boolean v3, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mB2bDisabledFlag:Z
+ 
+-    sget-object v6, Lcom/android/settings/Utils;->sBuilder:Ljava/lang/StringBuilder;
+-
+-    sget-boolean v6, Lcom/samsung/android/wifi/SemWifiApCust;->DBG:Z
+-
+-    if-eqz v6, :cond_2
+-
+-    const-string/jumbo v6, "vendor.wifiap.debug.BridgedApSta"
+-
+-    invoke-static {v6, v5}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
++    invoke-static {}, Lcom/android/settings/Utils;->supportBridgedApStaConcurrency()Z
+ 
+     move-result v6
+ 
+-    if-ne v6, v4, :cond_1
+-
+-    move v6, v4
+-
+-    goto :goto_1
+-
+-    :cond_1
+-    move v6, v5
+-
+-    :goto_1
+-    const-string/jumbo v7, "supportBridgedApStaConcurrency() "
+-
+-    const-string v8, "Settings"
+-
+-    invoke-static {v7, v8, v6}, Lcom/android/settings/AirplaneModeEnabler$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Z)V
+-
+-    goto :goto_2
+-
+-    :cond_2
+-    move v6, v5
+-
+-    :goto_2
+-    if-eqz v6, :cond_3
++    if-eqz v6, :cond_1
+ 
+     move p1, v5
+ 
+-    :cond_3
++    :cond_1
+     sget-object v6, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->TAG:Ljava/lang/String;
+ 
+     const-string v7, "Updating state: wifiApBandConfig(isDualBand): "
+@@ -426,7 +396,7 @@
+ 
+     invoke-static {p1, v3, v6}, Landroidx/appcompat/view/SeslContentViewInsetsCallback$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ZLjava/lang/String;)V
+ 
+-    if-eqz v3, :cond_4
++    if-eqz v3, :cond_2
+ 
+     iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mThisSwitchPreference:Landroidx/preference/SecSwitchPreference;
+ 
+@@ -438,7 +408,7 @@
+ 
+     return-void
+ 
+-    :cond_4
++    :cond_2
+     iget-object p1, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mContext:Landroid/content/Context;
+ 
+     invoke-static {p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->isAutoHotspotSetOn(Landroid/content/Context;)Z
+@@ -465,38 +435,38 @@
+ 
+     invoke-static {v3, v5, v6}, Landroidx/recyclerview/widget/ItemTouchHelper$3$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ILjava/lang/String;)V
+ 
+-    if-eqz p1, :cond_6
++    if-eqz p1, :cond_4
+ 
+-    if-eqz v0, :cond_5
++    if-eqz v0, :cond_3
+ 
+-    goto :goto_3
++    goto :goto_1
+ 
+-    :cond_5
+-    if-eqz v1, :cond_7
++    :cond_3
++    if-eqz v1, :cond_5
+ 
+-    if-eqz p1, :cond_7
++    if-eqz p1, :cond_5
+ 
+     iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mThisSwitchPreference:Landroidx/preference/SecSwitchPreference;
+ 
+     invoke-virtual {v1, v4}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
+ 
+-    goto :goto_4
++    goto :goto_2
+ 
+-    :cond_6
+-    :goto_3
++    :cond_4
++    :goto_1
+     iget-object v1, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mThisSwitchPreference:Landroidx/preference/SecSwitchPreference;
+ 
+     invoke-virtual {v1, v2}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
+ 
+-    :cond_7
+-    :goto_4
+-    if-eqz p1, :cond_9
++    :cond_5
++    :goto_2
++    if-eqz p1, :cond_7
+ 
+-    if-eqz v0, :cond_8
++    if-eqz v0, :cond_6
+ 
+-    goto :goto_5
++    goto :goto_3
+ 
+-    :cond_8
++    :cond_6
+     iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mThisSwitchPreference:Landroidx/preference/SecSwitchPreference;
+ 
+     xor-int/2addr p1, v4
+@@ -505,8 +475,8 @@
+ 
+     return-void
+ 
+-    :cond_9
+-    :goto_5
++    :cond_7
++    :goto_3
+     iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->mThisSwitchPreference:Landroidx/preference/SecSwitchPreference;
+ 
+     invoke-virtual {p0, v4}, Landroidx/preference/Preference;->setEnabled(Z)V
+@@ -567,7 +537,11 @@
+ 
+     invoke-static {p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getWifiApBandConfig(Landroid/content/Context;)Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
+-    const/4 p1, 0x0
++    move-result-object p1
++
++    invoke-virtual {p1}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
++
++    move-result p1
+ 
+     invoke-direct {p0, p1}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->updateState(Z)V
+ 
+@@ -1086,9 +1060,9 @@
+ 
+     move-result-object v0
+ 
+-    invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++    invoke-virtual {v0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
+ 
+-    const/4 v0, 0x0
++    move-result v0
+ 
+     invoke-direct {p0, v0}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureWifiSharingController;->updateState(Z)V
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig.smali
+index a4ae0e121..6a3abae74 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig.smali
+@@ -58,13 +58,13 @@
+     goto :goto_0
+ 
+     :cond_0
+-    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
+ 
+     move-result v2
+ 
+     if-eqz v2, :cond_1
+ 
+-    const v2, 0x7f143527
++    const v2, 0x7f143525
+ 
+     invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+ 
+@@ -73,13 +73,13 @@
+     goto :goto_0
+ 
+     :cond_1
+-    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand6Ghz()Z
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
+ 
+     move-result v2
+ 
+     if-eqz v2, :cond_2
+ 
+-    const v2, 0x7f142a4b
++    const v2, 0x7f143527
+ 
+     invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+ 
+@@ -88,6 +88,21 @@
+     goto :goto_0
+ 
+     :cond_2
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand6Ghz()Z
++
++    move-result v2
++
++    if-eqz v2, :cond_3
++
++    const v2, 0x7f142a4b
++
++    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
++
++    move-result-object v1
++
++    goto :goto_0
++
++    :cond_3
+     const-string v1, "Error getting band text, Invalid Band."
+ 
+     invoke-static {v4, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+@@ -99,28 +114,39 @@
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_4
++
++    const/4 v1, 0x2
++
++    goto :goto_1
++
++    :cond_4
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_3
++    if-eqz v1, :cond_5
+ 
+     const/4 v1, 0x1
+ 
+     goto :goto_1
+ 
+-    :cond_3
++    :cond_5
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand6Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_4
++    if-eqz v1, :cond_6
+ 
+     const/4 v1, 0x3
+ 
+     goto :goto_1
+ 
+-    :cond_4
++    :cond_6
+     const-string v1, "Error getting band event value, Invalid Band."
+ 
+     invoke-static {v4, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+@@ -140,13 +166,13 @@
+ 
+     const v6, 0x7f1434fb    # 1.9700083E38f
+ 
+-    if-eqz v1, :cond_9
++    if-eqz v1, :cond_c
+ 
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand2Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_5
++    if-eqz v1, :cond_7
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -160,12 +186,31 @@
+ 
+     goto/16 :goto_2
+ 
+-    :cond_5
++    :cond_7
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_8
++
++    invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v1
++
++    const v2, 0x7f1434f3    # 1.9700067E38f
++
++    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
++
++    move-result-object v3
++
++    goto/16 :goto_2
++
++    :cond_8
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_6
++    if-eqz v1, :cond_9
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -179,12 +224,12 @@
+ 
+     goto/16 :goto_2
+ 
+-    :cond_6
++    :cond_9
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand6Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_8
++    if-eqz v1, :cond_b
+ 
+     invoke-static {}, Lcom/android/settings/Utils;->readCountryCode()Ljava/lang/String;
+ 
+@@ -194,7 +239,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_7
++    if-eqz v1, :cond_a
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -204,9 +249,9 @@
+ 
+     move-result-object v3
+ 
+-    goto :goto_2
++    goto/16 :goto_2
+ 
+-    :cond_7
++    :cond_a
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+     move-result-object v1
+@@ -217,19 +262,19 @@
+ 
+     move-result-object v3
+ 
+-    goto :goto_2
++    goto/16 :goto_2
+ 
+-    :cond_8
++    :cond_b
+     invoke-static {v4, v5}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     goto :goto_2
+ 
+-    :cond_9
++    :cond_c
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand2Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_a
++    if-eqz v1, :cond_d
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -243,12 +288,31 @@
+ 
+     goto :goto_2
+ 
+-    :cond_a
++    :cond_d
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_e
++
++    invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v1
++
++    const v2, 0x7f143526
++
++    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
++
++    move-result-object v3
++
++    goto :goto_2
++
++    :cond_e
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand5Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_b
++    if-eqz v1, :cond_f
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -262,12 +326,12 @@
+ 
+     goto :goto_2
+ 
+-    :cond_b
++    :cond_f
+     invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisBand6Ghz()Z
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_d
++    if-eqz v1, :cond_11
+ 
+     invoke-static {}, Lcom/android/settings/Utils;->readCountryCode()Ljava/lang/String;
+ 
+@@ -277,7 +341,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_c
++    if-eqz v1, :cond_10
+ 
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+@@ -289,7 +353,7 @@
+ 
+     goto :goto_2
+ 
+-    :cond_c
++    :cond_10
+     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+ 
+     move-result-object v1
+@@ -316,7 +380,7 @@
+ 
+     goto :goto_2
+ 
+-    :cond_d
++    :cond_11
+     invoke-static {v4, v5}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     :goto_2
+@@ -324,7 +388,7 @@
+ 
+     const/4 v1, -0x1
+ 
+-    if-ne p3, v1, :cond_11
++    if-ne p3, v1, :cond_15
+ 
+     invoke-static {p1}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getSupportedBandList(Landroid/content/Context;)Ljava/util/List;
+ 
+@@ -336,12 +400,12 @@
+ 
+     move-result-object p1
+ 
+-    :cond_e
++    :cond_12
+     invoke-interface {p1}, Ljava/util/Iterator;->hasNext()Z
+ 
+     move-result p3
+ 
+-    if-eqz p3, :cond_f
++    if-eqz p3, :cond_13
+ 
+     invoke-interface {p1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+ 
+@@ -355,17 +419,17 @@
+ 
+     move-result v2
+ 
+-    if-eqz v2, :cond_e
++    if-eqz v2, :cond_12
+ 
+     iget p1, p3, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplayValueIndex:I
+ 
+     goto :goto_3
+ 
+-    :cond_f
++    :cond_13
+     move p1, v1
+ 
+     :goto_3
+-    if-ne p1, v1, :cond_10
++    if-ne p1, v1, :cond_14
+ 
+     const-string p1, "Error getting band index (Resetting to 0), Invalid Band."
+ 
+@@ -373,7 +437,7 @@
+ 
+     goto :goto_4
+ 
+-    :cond_10
++    :cond_14
+     move v0, p1
+ 
+     :goto_4
+@@ -381,7 +445,7 @@
+ 
+     return-void
+ 
+-    :cond_11
++    :cond_15
+     iput p3, p0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mDisplayValueIndex:I
+ 
+     return-void
+@@ -463,3 +527,34 @@
+     :cond_0
+     return v1
+ .end method
++
++.method public final isThisDualBand2GhzAnd5Ghz()Z
++    .locals 1
++
++    iget-object v0, p0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mContext:Landroid/content/Context;
++
++    invoke-static {v0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->getSemWifiManager(Landroid/content/Context;)Lcom/samsung/android/wifi/SemWifiManager;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Lcom/samsung/android/wifi/SemWifiManager;->supportWifiAp5GBasedOnCountry()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_0
++
++    iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->mBandArray:[I
++
++    array-length p0, p0
++
++    const/4 v0, 0x1
++
++    if-le p0, v0, :cond_0
++
++    return v0
++
++    :cond_0
++    const/4 p0, 0x0
++
++    return p0
++.end method
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect.smali
+index 902c4bd66..d11264109 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect.smali
+@@ -103,11 +103,28 @@
+ 
+     invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->getWifiApBandConfig(Landroid/content/Context;)Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
++    move-result-object p0
++
++    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;->isThisDualBand2GhzAnd5Ghz()Z
++
++    move-result p0
++
++    if-nez p0, :cond_4
++
+     const-string p0, "Dual band AP is not selected. [Not required to show dialog]"
+ 
+     invoke-static {v2, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     return v1
++
++    :cond_4
++    const-string p0, "All conditions met to show the dialog"
++
++    invoke-static {v2, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    const/4 p0, 0x1
++
++    return p0
+ .end method
+ 
+ .method public final onCreate(Landroid/os/Bundle;)V
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogSmartViewTurnOff.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogSmartViewTurnOff.smali
+index 997924275..7dffcd6d0 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogSmartViewTurnOff.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogSmartViewTurnOff.smali
+@@ -49,7 +49,7 @@
+ 
+     const-string v3, "WifiApSettingsUtils"
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getActiveDisplayState()I
+ 
+@@ -57,13 +57,13 @@
+ 
+     const/4 v5, 0x2
+ 
+-    if-ne v4, v5, :cond_0
++    if-ne v4, v5, :cond_1
+ 
+     invoke-virtual {v0}, Landroid/hardware/display/SemWifiDisplayStatus;->getConnectedState()I
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_0
++    if-nez v0, :cond_1
+ 
+     const-string v0, "isSmartViewEnabled:true"
+ 
+@@ -89,6 +89,10 @@
+ 
+     invoke-virtual {v0}, Lcom/samsung/android/settings/wifi/mobileap/dialogs/WifiApDialogP2pWifiDirectDisconnect;->isEligibleToShow()Z
+ 
++    move-result p0
++
++    if-nez p0, :cond_0
++
+     const-string p0, "P2P Dialog cannot be shown. [Not required to show dialog]"
+ 
+     invoke-static {v2, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+@@ -96,6 +100,15 @@
+     return v1
+ 
+     :cond_0
++    const-string p0, "All conditions met to show the dialog"
++
++    invoke-static {v2, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    const/4 p0, 0x1
++
++    return p0
++
++    :cond_1
+     const-string p0, "isSmartViewEnabled:false"
+ 
+     invoke-static {v3, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils.smali
+index abbce4cd8..26a6b33bc 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils.smali
+@@ -609,7 +609,7 @@
+ .end method
+ 
+ .method public static isBandSeekBarUxSupported(Landroid/content/Context;)Z
+-    .locals 4
++    .locals 5
+ 
+     invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->getSemWifiManager(Landroid/content/Context;)Lcom/samsung/android/wifi/SemWifiManager;
+ 
+@@ -637,6 +637,21 @@
+ 
+     invoke-virtual {p0, v3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+ 
++    move-result-object v4
++
++    check-cast v4, Lcom/samsung/android/wifi/SemWifiManager;
++
++    invoke-virtual {v4}, Lcom/samsung/android/wifi/SemWifiManager;->supportWifiAp5GBasedOnCountry()Z
++
++    move-result v4
++
++    if-eqz v4, :cond_1
++
++    add-int/lit8 v0, v0, 0x1
++
++    :cond_1
++    invoke-virtual {p0, v3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
+     move-result-object p0
+ 
+     check-cast p0, Lcom/samsung/android/wifi/SemWifiManager;
+@@ -645,16 +660,16 @@
+ 
+     move-result p0
+ 
+-    if-eqz p0, :cond_1
++    if-eqz p0, :cond_2
+ 
+     add-int/lit8 v0, v0, 0x1
+ 
+-    :cond_1
+-    if-le v0, v2, :cond_2
++    :cond_2
++    if-le v0, v2, :cond_3
+ 
+     return v1
+ 
+-    :cond_2
++    :cond_3
+     const/4 p0, 0x0
+ 
+     return p0
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils.smali
+index 1b616bb30..0848c87a3 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils.smali
+@@ -393,7 +393,7 @@
+ .end method
+ 
+ .method public static getSupportedBandList(Landroid/content/Context;)Ljava/util/List;
+-    .locals 4
++    .locals 6
+ 
+     new-instance v0, Ljava/util/ArrayList;
+ 
+@@ -423,7 +423,7 @@
+ 
+     new-instance v1, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
+-    sget-object v3, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->BAND_5GHZ_ARRAY:[I
++    sget-object v3, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->BAND_2GHZ_AND_5GHZ_ARRAY:[I
+ 
+     invoke-direct {v1, p0, v3, v2}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;-><init>(Landroid/content/Context;[II)V
+ 
+@@ -436,6 +436,31 @@
+ 
+     invoke-virtual {p0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+ 
++    move-result-object v3
++
++    check-cast v3, Lcom/samsung/android/wifi/SemWifiManager;
++
++    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->supportWifiAp5GBasedOnCountry()Z
++
++    move-result v3
++
++    if-eqz v3, :cond_1
++
++    new-instance v3, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
++
++    sget-object v4, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApSoftApUtils;->BAND_5GHZ_ARRAY:[I
++
++    add-int/lit8 v5, v2, 0x1
++
++    invoke-direct {v3, p0, v4, v2}, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;-><init>(Landroid/content/Context;[II)V
++
++    invoke-virtual {v0, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++
++    move v2, v5
++
++    :cond_1
++    invoke-virtual {p0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++
+     move-result-object v1
+ 
+     check-cast v1, Lcom/samsung/android/wifi/SemWifiManager;
+@@ -444,7 +469,7 @@
+ 
+     move-result v1
+ 
+-    if-eqz v1, :cond_1
++    if-eqz v1, :cond_2
+ 
+     new-instance v1, Lcom/samsung/android/settings/wifi/mobileap/datamodels/WifiApBandConfig;
+ 
+@@ -454,7 +479,7 @@
+ 
+     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+ 
+-    :cond_1
++    :cond_2
+     return-object v0
+ .end method
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference$1.smali b/smali_classes3/com/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference$1.smali
+index 0d83cac0c..8077055ff 100644
+--- a/smali_classes3/com/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference$1.smali
++++ b/smali_classes3/com/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference$1.smali
+@@ -24,7 +24,7 @@
+ 
+ # virtual methods
+ .method public final onClick(Landroid/view/View;)V
+-    .locals 4
++    .locals 5
+ 
+     sget p1, Lcom/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference;->$r8$clinit:I
+ 
+@@ -38,7 +38,7 @@
+ 
+     iget-object p0, p0, Lcom/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference;->mOnPreferenceItemsCLickListener:Lcom/samsung/android/settings/wifi/mobileap/views/WifiApSeekBarPreference$OnPreferenceItemsCLickListener;
+ 
+-    if-eqz p0, :cond_2
++    if-eqz p0, :cond_3
+ 
+     check-cast p0, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController$1;
+ 
+@@ -110,10 +110,30 @@
+ 
+     check-cast p1, Landroid/widget/LinearLayout;
+ 
+-    const/16 v3, 0x8
++    invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;->-$$Nest$fgetmContext(Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;)Landroid/content/Context;
++
++    move-result-object v3
++
++    invoke-static {v3}, Lcom/samsung/android/settings/wifi/mobileap/utils/WifiApFrameworkUtils;->getSemWifiManager(Landroid/content/Context;)Lcom/samsung/android/wifi/SemWifiManager;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->supportWifiAp5GBasedOnCountry()Z
++
++    move-result v3
++
++    const/16 v4, 0x8
++
++    if-eqz v3, :cond_0
++
++    invoke-virtual {v0, v1}, Landroid/widget/LinearLayout;->setVisibility(I)V
++
++    goto :goto_0
+ 
+-    invoke-virtual {v0, v3}, Landroid/widget/LinearLayout;->setVisibility(I)V
++    :cond_0
++    invoke-virtual {v0, v4}, Landroid/widget/LinearLayout;->setVisibility(I)V
+ 
++    :goto_0
+     invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;->-$$Nest$fgetmContext(Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;)Landroid/content/Context;
+ 
+     move-result-object v0
+@@ -126,16 +146,16 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     invoke-virtual {v2, v1}, Landroid/widget/LinearLayout;->setVisibility(I)V
+ 
+-    goto :goto_0
++    goto :goto_1
+ 
+-    :cond_0
+-    invoke-virtual {v2, v3}, Landroid/widget/LinearLayout;->setVisibility(I)V
++    :cond_1
++    invoke-virtual {v2, v4}, Landroid/widget/LinearLayout;->setVisibility(I)V
+ 
+-    :goto_0
++    :goto_1
+     invoke-static {p0}, Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;->-$$Nest$fgetmContext(Lcom/samsung/android/settings/wifi/mobileap/configure/WifiApConfigureBandSeekBarController;)Landroid/content/Context;
+ 
+     move-result-object p0
+@@ -148,15 +168,15 @@
+ 
+     move-result p0
+ 
+-    if-eqz p0, :cond_1
++    if-eqz p0, :cond_2
+ 
+     invoke-virtual {p1, v1}, Landroid/widget/LinearLayout;->setVisibility(I)V
+ 
+     return-void
+ 
+-    :cond_1
+-    invoke-virtual {p1, v3}, Landroid/widget/LinearLayout;->setVisibility(I)V
+-
+     :cond_2
++    invoke-virtual {p1, v4}, Landroid/widget/LinearLayout;->setVisibility(I)V
++
++    :cond_3
+     return-void
+ .end method
+-- 
+2.52.0
+
