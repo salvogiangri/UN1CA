@@ -319,7 +319,9 @@ if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi
 
-#[ -d "$TMP_DIR" ] && EVAL "rm -rf \"$TMP_DIR\""
+if [ -d "$TMP_DIR" ]; then
+    EVAL "rm -rf \"$TMP_DIR\""
+fi
 
 unset PATCHED TARGET_FIRMWARE_PATH
 unset -f BACKPORT_SF_PROPS EXTRACT_KERNEL_IMAGE EXTRACT_KERNEL_MODULES
