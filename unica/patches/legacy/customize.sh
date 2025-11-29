@@ -67,6 +67,42 @@ BACKPORT_SF_PROPS()
         fi
     fi
 }
+
+EXTRACT_KERNEL_IMAGE() {
+    if [ -d "$TMP_DIR" ]; then
+        EVAL "rm -rf \"$TMP_DIR\""
+    fi
+    EVAL "mkdir -p \"$TMP_DIR\""
+    EVAL "cp -a \"$WORK_DIR/kernel/boot.img\" \"$TMP_DIR/boot.img\""
+
+    EVAL "unpack_bootimg --boot_img \"$TMP_DIR/boot.img\" --out \"$TMP_DIR/out\" 2>&1"
+
+    EVAL "rm \"$TMP_DIR/boot.img\""
+
+    if [[ "$(READ_BYTES_AT "$TMP_DIR/out/kernel" "0" "2")" == "8b1f" ]]; then
+        EVAL "cat \"$TMP_DIR/out/kernel\" | gzip -d > \"$TMP_DIR/out/tmp\" && mv -f \"$TMP_DIR/out/tmp\" \"$TMP_DIR/out/kernel\""
+    fi
+}
+
+EXTRACT_KERNEL_MODULES() {
+    if [ -d "$TMP_DIR" ]; then
+        EVAL "rm -rf \"$TMP_DIR\""
+    fi
+    EVAL "mkdir -p \"$TMP_DIR\""
+    EVAL "cp -a \"$WORK_DIR/kernel/vendor_boot.img\" \"$TMP_DIR/vendor_boot.img\""
+
+    EVAL "unpack_bootimg --boot_img \"$TMP_DIR/vendor_boot.img\" --out \"$TMP_DIR/out\" 2>&1"
+
+    EVAL "rm \"$TMP_DIR/vendor_boot.img\""
+
+    while IFS= read -r f; do
+        if [[ "$(READ_BYTES_AT "$f" "0" "4")" == "184c2102" ]]; then
+            EVAL "cat \"$f\" | lz4 -d > \"$TMP_DIR/out/tmp\" && mv -f \"$TMP_DIR/out/tmp\" \"$f\""
+        elif [[ "$(READ_BYTES_AT "$f" "0" "2")" == "8b1f" ]]; then
+            EVAL "cat \"$f\" | gzip -d > \"$TMP_DIR/out/tmp\" && mv -f \"$TMP_DIR/out/tmp\" \"$f\""
+        fi
+    done < <(find "$TMP_DIR/out" -maxdepth 1 -type f -name "vendor_ramdisk*")
+}
 # ]
 
 PATCHED=false
@@ -137,12 +173,14 @@ fi
 # Support legacy sdFAT kernel drivers (pre-API 35)
 # https://android.googlesource.com/platform/system/vold/+/refs/tags/android-16.0.0_r2/fs/Vfat.cpp#150
 # - Check for 'bogus directory:' to determine if newer sdFAT drivers are in place
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && \
-        grep -q "SDFAT" "$WORK_DIR/kernel/boot.img" && \
-        ! grep -q "bogus directory:" "$WORK_DIR/kernel/boot.img"; then
-    PATCHED=true
-    # ",time_offset=%d" -> "NUL"
-    HEX_PATCH "$WORK_DIR/system/system/bin/vold" "2c74696d655f6f66667365743d2564" "000000000000000000000000000000"
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    EXTRACT_KERNEL_IMAGE
+    if grep -q "SDFAT" "$TMP_DIR/out/kernel" && \
+        ! grep -q "bogus directory:" "$TMP_DIR/out/kernel"; then
+        PATCHED=true
+        # ",time_offset=%d" -> "NUL"
+        HEX_PATCH "$WORK_DIR/system/system/bin/vold" "2c74696d655f6f66667365743d2564" "000000000000000000000000000000"
+    fi
 fi
 
 # Ensure IMAGE_CODEC_SAMSUNG support (pre-API 35)
@@ -176,20 +214,22 @@ fi
 # - 4.19.x and below: unsupported
 # - 5.4.x-5.10.x: backport (https://github.com/namjaejeon/ksmbd.git)
 # - 5.15.x and above: supported
-if [ -f "$WORK_DIR/system/system/priv-app/StorageShare/StorageShare.apk" ] && \
-        ! grep -q "ksmbd" "$WORK_DIR/kernel/boot.img"; then
-    PATCHED=true
-    DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.addshare"
-    DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.adduser"
-    DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.control"
-    DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.mountd"
-    DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.tools"
-    DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.samsung.android.hwresourceshare.storage.xml"
-    DELETE_FROM_WORK_DIR "system" "system/etc/init/ksmbd.rc"
-    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.hwresourceshare.storage.xml"
-    DELETE_FROM_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.samsung.android.hwresourceshare.storage.xml"
-    DELETE_FROM_WORK_DIR "system" "system/etc/ksmbd.conf"
-    DELETE_FROM_WORK_DIR "system" "system/priv-app/StorageShare"
+if [ -f "$WORK_DIR/system/system/priv-app/StorageShare/StorageShare.apk" ]; then
+    EXTRACT_KERNEL_IMAGE
+    if ! grep -q "ksmbd" "$TMP_DIR/out/kernel"; then
+        PATCHED=true
+        DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.addshare"
+        DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.adduser"
+        DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.control"
+        DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.mountd"
+        DELETE_FROM_WORK_DIR "system" "system/bin/ksmbd.tools"
+        DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.samsung.android.hwresourceshare.storage.xml"
+        DELETE_FROM_WORK_DIR "system" "system/etc/init/ksmbd.rc"
+        DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.hwresourceshare.storage.xml"
+        DELETE_FROM_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.samsung.android.hwresourceshare.storage.xml"
+        DELETE_FROM_WORK_DIR "system" "system/etc/ksmbd.conf"
+        DELETE_FROM_WORK_DIR "system" "system/priv-app/StorageShare"
+    fi
 fi
 
 # Ensure sbauth support in target firmware
@@ -215,7 +255,25 @@ fi
 # https://github.com/salvogiangri/UN1CA/discussions/519
 # - Check for 'SKY_DEFAULT' to determine if newer usb_notify drivers are in place
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
-    if ! grep -q "SKY_DEFAULT" "$WORK_DIR/kernel/boot.img"; then
+    VBOOT_MISSING=true
+    KERNEL_MISSING=true
+
+    if [ "$TARGET_PRODUCT_SHIPPING_API_LEVEL" -ge "30" ]; then
+        # Check for GKI devices
+        EXTRACT_KERNEL_MODULES
+        find "$TMP_DIR/out/"
+        if grep -q "SKY_DEFAULT" "$TMP_DIR/out/vendor_ramdisk"*; then
+            VBOOT_MISSING=false
+        fi
+    fi
+
+    # Check for legacy devices
+    EXTRACT_KERNEL_IMAGE
+    if grep -q "SKY_DEFAULT" "$TMP_DIR/out/kernel"; then
+        KERNEL_MISSING=false
+    fi
+
+    if $VBOOT_MISSING && $KERNEL_MISSING; then
         PATCHED=true
         SMALI_PATCH "system" "system/framework/services.jar" \
             "smali_classes2/com/android/server/usb/UsbHostRestrictor.smali" "replace" \
@@ -253,11 +311,15 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
             "CLOUDY_WORK_MODE" \
             "1"
     fi
+
+    unset VBOOT_MISSING KERNEL_MISSING
 fi
 
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi
 
+#[ -d "$TMP_DIR" ] && EVAL "rm -rf \"$TMP_DIR\""
+
 unset PATCHED TARGET_FIRMWARE_PATH
-unset -f BACKPORT_SF_PROPS
+unset -f BACKPORT_SF_PROPS EXTRACT_KERNEL_IMAGE EXTRACT_KERNEL_MODULES
