@@ -15,34 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy A52s 5G (a52sxq)
+# Debloat list for Galaxy M52 5G (m52xq)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
-# Overlays
+# Apps debloat
 SYSTEM_DEBLOAT+="
-system/app/WifiRROverlayAppLls
-"
-
-# mAFPC
-SYSTEM_DEBLOAT+="
-system/bin/mafpc_write
-"
-
-# HDCP
-SYSTEM_DEBLOAT+="
-system/bin/dhkprov
-system/bin/qchdcpkprov
-system/etc/init/dhkprov.rc
-system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
-"
-
-# system_ext clean-up
-SYSTEM_EXT_DEBLOAT+="
-etc/permissions/com.qti.location.sdk.xml
-etc/permissions/com.qualcomm.location.xml
-etc/permissions/privapp-permissions-com.qualcomm.location.xml
-framework/com.qti.location.sdk.jar
-priv-app/com.qualcomm.location
+system/etc/permissions/privapp-permissions-com.samsung.android.app.earphonetypec.xml
+system/priv-app/EarphoneTypeC
 "

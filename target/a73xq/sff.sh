@@ -20,9 +20,6 @@
 # Enable Video brightness feature
 SEC_FLOATING_FEATURE_COMMON_SUPPORT_HDR_EFFECT=true
 
-# Stock ImageTagger version
-SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_TAGGER_VERSION=V701
-
 # Enable seamless refresh rate feature
 SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=2
 

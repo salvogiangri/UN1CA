@@ -16,6 +16,7 @@ fi
 
 # ROM & device-specific debloat list
 [ -f "$SRC_DIR/unica/debloat.sh" ] && source "$SRC_DIR/unica/debloat.sh"
+[ -f "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh" ] && source "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh"
 [ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ] && source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
 
 ODM_DEBLOAT="$(sed "/^$/d" <<< "$ODM_DEBLOAT" | sort)"

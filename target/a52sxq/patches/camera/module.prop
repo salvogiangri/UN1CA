@@ -1,4 +1,4 @@
 id=camera
 name=Camera fix
-author=salvogiangri, DavidArsene
-description=Various camera-related patches.
+author=DavidArsene
+description=Fixes camera lock for devices with a rear SLSI sensor.

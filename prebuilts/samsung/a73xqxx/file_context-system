@@ -6,6 +6,7 @@
 /system/bin/apexd u:object_r:apexd_exec:s0
 /system/bin/gsid u:object_r:gsid_exec:s0
 /system/bin/installd u:object_r:installd_exec:s0
+/system/bin/insthk u:object_r:insthk_exec:s0
 /system/bin/vdc u:object_r:vdc_exec:s0
 /system/bin/vold u:object_r:vold_exec:s0
 /system/etc u:object_r:system_file:s0
@@ -28,10 +29,12 @@
 /system/lib64/libYuv\.polarr\.so u:object_r:system_lib_file:s0
 /system/lib64/libandroid_servers\.so u:object_r:system_lib_file:s0
 /system/lib64/libepm\.so u:object_r:system_lib_file:s0
+/system/lib64/libhdcp2\.so u:object_r:system_lib_file:s0
 /system/lib64/libhwui\.so u:object_r:system_lib_file:s0
 /system/lib64/libmdf\.so u:object_r:system_lib_file:s0
 /system/lib64/libsec_semRil\.so u:object_r:system_lib_file:s0
 /system/lib64/libsqlite\.so u:object_r:system_lib_file:s0
+/system/lib64/libstagefright_hdcp\.so u:object_r:system_lib_file:s0
 /system/lib64/libtlc_blockchain_keystore\.so u:object_r:system_lib_file:s0
 /system/lib64/libtlc_payment_spay\.so u:object_r:system_lib_file:s0
 /system/lib64/service\.incremental\.so u:object_r:system_lib_file:s0
