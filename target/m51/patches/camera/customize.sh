@@ -89,10 +89,8 @@ done
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding a73xqxx midas and singletake blobs"
-# Upgrade midas blobs
 DELETE_FROM_WORK_DIR "vendor" "etc/midas"
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "etc/midas" 0 2000 755 "u:object_r:vendor_configs_file:s0"
-# Upgrade singletake blobs
 DELETE_FROM_WORK_DIR "vendor" "etc/singletake"
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "etc/singletake" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 LOG_STEP_OUT
@@ -100,4 +98,9 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Fixing MIDAS model detection"
 sed -i "s/a73xq/m51/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
 sed -i "s/ro.product.device/ro.product.vendor.device/g" "$WORK_DIR/vendor/etc/midas/midas_config.json"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding a73xqxx saiv blobs"
+DELETE_FROM_WORK_DIR "system" "system/saiv"
+ADD_TO_WORK_DIR "a73xqxx" "system" "system/saiv" 0 0 755 "u:object_r:system_file:s0"
 LOG_STEP_OUT
