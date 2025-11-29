@@ -17,9 +17,6 @@
 
 # SEC Floating Feature configuration file for Galaxy S23+ (dm2q)
 
-# Frameworks
-SEC_FLOATING_FEATURE_SYSTEM_CONFIG_SIOP_POLICY_FILENAME=siop_dm2q_sm8550
-
 # Lockscreen
 SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_PUNCHHOLE_VI=face,pos:0.5:0.02,size:0.0796:0.03675,type:circle
 
