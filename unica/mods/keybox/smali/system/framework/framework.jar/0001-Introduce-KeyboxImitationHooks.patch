@@ -1,4 +1,4 @@
-From b0560a6cd9077dc24b226be9d32d4bd779b6c76a Mon Sep 17 00:00:00 2001
+From bf6063c760021b32a252511410939af08ad59353 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 6 Oct 2025 15:12:32 +0200
 Subject: [PATCH] Introduce KeyboxImitationHooks
@@ -3715,7 +3715,7 @@ index 00000000..228262c3
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
 new file mode 100644
-index 00000000..fe627c76
+index 00000000..fe182ca8
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
 @@ -0,0 +1,2539 @@
@@ -4421,7 +4421,7 @@ index 00000000..fe627c76
 +
 +    iget-object p3, p2, Landroid/system/keystore2/Authorization;->keyParameter:Landroid/hardware/security/keymint/KeyParameter;
 +
-+    invoke-static {p5}, Landroid/hardware/security/keymint/KeyParameterValue;->integer(I)Landroid/hardware/security/keymint/KeyParameterValue;
++    invoke-static {p5}, Landroid/hardware/security/keymint/KeyParameterValue;->origin(I)Landroid/hardware/security/keymint/KeyParameterValue;
 +
 +    move-result-object p5
 +
