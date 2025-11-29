@@ -951,6 +951,27 @@ elif $SOURCE_WLAN_SUPPORT_MOBILEAP_6G && ! $TARGET_WLAN_SUPPORT_MOBILEAP_6G; the
         "false"
 fi
 
+# SEC_PRODUCT_FEATURE_WLAN_SUPPORT_MOBILEAP_OWE
+if ! $SOURCE_WLAN_SUPPORT_MOBILEAP_OWE; then
+    if $TARGET_WLAN_SUPPORT_MOBILEAP_OWE; then
+        ADD_TO_WORK_DIR "dm1qxxx" "product" "overlay/SoftapOverlayOWE/SoftapOverlayOWE.apk" 0 0 644 "u:object_r:system_file:s0"
+
+        APPLY_PATCH "system" "system/framework/semwifi-service.jar" \
+            "$MODPATH/wifi/owe/semwifi-service.jar/0001-Enable-MOBILEAP_OWE-support.patch"
+        SMALI_PATCH "system" "system/framework/semwifi-service.jar" \
+            "smali/com/samsung/android/server/wifi/ap/SemSoftApConfiguration.smali" "replaceall" \
+            "SPF_OWE=false" \
+            "SPF_OWE=true"
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+            "$MODPATH/wifi/owe/SecSettings.apk/0001-Enable-MOBILEAP_OWE-support.patch"
+    fi
+else
+    if ! $TARGET_WLAN_SUPPORT_MOBILEAP_OWE; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_WLAN_SUPPORT_MOBILEAP_OWE" "TARGET_WLAN_SUPPORT_MOBILEAP_OWE"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_WLAN_SUPPORT_MOBILEAP_POWER_SAVEMODE
 if $SOURCE_WLAN_SUPPORT_MOBILEAP_POWER_SAVEMODE; then
     if ! $TARGET_WLAN_SUPPORT_MOBILEAP_POWER_SAVEMODE; then

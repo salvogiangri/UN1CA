@@ -1,0 +1,157 @@
+From cb7b3a85de9855286a5fe62ea6899b9efb60e6e1 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sun, 31 Aug 2025 16:07:47 +0200
+Subject: [PATCH] Enable MOBILEAP_OWE support
+
+UN1CA: this patch is not complete! Please check unica/patches/product_feature/customize.sh for more info.
+---
+ ...emWifiShellCommand$SqeCommandHandler.smali |  2 +-
+ .../server/wifi/ap/SemWifiApConfigStore.smali | 63 ++++++-------------
+ 2 files changed, 21 insertions(+), 44 deletions(-)
+
+diff --git a/smali/com/samsung/android/server/wifi/SemWifiShellCommand$SqeCommandHandler.smali b/smali/com/samsung/android/server/wifi/SemWifiShellCommand$SqeCommandHandler.smali
+index 9cded28..cb26028 100644
+--- a/smali/com/samsung/android/server/wifi/SemWifiShellCommand$SqeCommandHandler.smali
++++ b/smali/com/samsung/android/server/wifi/SemWifiShellCommand$SqeCommandHandler.smali
+@@ -244,7 +244,7 @@
+     return v5
+ 
+     :pswitch_b
+-    const-string p0, "Open, WPA2-Personal, WPA2/WPA3-Personal, WPA3-Personal"
++    const-string p0, "Open, WPA2-Personal, WPA2/WPA3-Personal, WPA3-Personal, Enhanced open"
+ 
+     invoke-virtual {p2, p0}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
+ 
+diff --git a/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali b/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
+index e7b0942..035e076 100644
+--- a/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
++++ b/smali/com/samsung/android/server/wifi/ap/SemWifiApConfigStore.smali
+@@ -7103,6 +7103,8 @@
+ 
+     move-result v7
+ 
++    const/4 v8, 0x0
++
+     if-nez v7, :cond_6
+ 
+     if-nez p1, :cond_6
+@@ -7134,9 +7136,7 @@
+ 
+     iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->configBuilder:Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    const/4 v1, 0x0
+-
+-    invoke-virtual {p1, v1}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBssid(Landroid/net/MacAddress;)Landroid/net/wifi/SoftApConfiguration$Builder;
++    invoke-virtual {p1, v8}, Landroid/net/wifi/SoftApConfiguration$Builder;->setBssid(Landroid/net/MacAddress;)Landroid/net/wifi/SoftApConfiguration$Builder;
+     :try_end_1
+     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+     .catchall {:try_start_1 .. :try_end_1} :catchall_0
+@@ -7344,9 +7344,9 @@
+ 
+     const-string p1, "SemWifiApConfigStore"
+ 
+-    const-string p2, "6GHz selected, but OPEN type is set, error"
++    const-string v1, "6GHz selected, but OPEN type is set, error"
+ 
+-    invoke-static {p1, p2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {p1, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+ 
+     const-string p1, " setApConfiguration() 6GHz selected, but OPEN type is set, error "
+ 
+@@ -7358,13 +7358,13 @@
+ 
+     invoke-direct {p0}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->getTimeStamp()Ljava/lang/String;
+ 
+-    move-result-object p2
++    move-result-object v1
+ 
+-    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    const-string p2, ", ssetApConfiguration() 6GHz selected, but OPEN type is set, error \n "
++    const-string v1, ", ssetApConfiguration() 6GHz selected, but OPEN type is set, error \n "
+ 
+-    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+@@ -7372,45 +7372,22 @@
+ 
+     invoke-direct {p0, p1, v5}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->dumpToLogFile(Ljava/lang/String;Z)V
+ 
+-    const-string p1, "SemWifiApConfigStore"
+-
+-    const-string p2, "6GHz selected, but OPEN type is set, OWE not supported error"
+-
+-    invoke-static {p1, p2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const-string p1, " setApConfiguration() 6GHz selected, but OPEN type is set, OWE not supported error "
+-
+-    invoke-virtual {p0, p1}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->addMHSDumpLog(Ljava/lang/String;)V
+-
+-    new-instance p1, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+-
+-    invoke-direct {p0}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->getTimeStamp()Ljava/lang/String;
+-
+-    move-result-object p2
++    iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->configBuilder:Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    const/4 v1, 0x5
+ 
+-    const-string p2, ", setApConfiguration() 6GHz selected, but OPEN type is set, OWE not supported error \n "
++    invoke-virtual {p1, v8, v1}, Landroid/net/wifi/SoftApConfiguration$Builder;->setPassphrase(Ljava/lang/String;I)Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->configBuilder:Landroid/net/wifi/SoftApConfiguration$Builder;
+ 
+-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p1}, Landroid/net/wifi/SoftApConfiguration$Builder;->build()Landroid/net/wifi/SoftApConfiguration;
+ 
+     move-result-object p1
+ 
+-    invoke-direct {p0, p1, v5}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->dumpToLogFile(Ljava/lang/String;Z)V
+-    :try_end_4
+-    .catchall {:try_start_4 .. :try_end_4} :catchall_0
+-
+-    monitor-exit p0
+-
+-    return-void
++    iput-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->mWifiApConfig:Landroid/net/wifi/SoftApConfiguration;
+ 
+     :cond_a
+     :goto_6
+-    :try_start_5
+     new-instance p1, Ljava/lang/StringBuilder;
+ 
+     invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+@@ -7444,18 +7421,18 @@
+     iget-object p1, p0, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->mWifiApConfig:Landroid/net/wifi/SoftApConfiguration;
+ 
+     invoke-direct {p0, p1, p2, p3}, Lcom/samsung/android/server/wifi/ap/SemWifiApConfigStore;->setAndSaveWifiApConfiguration(Landroid/net/wifi/SoftApConfiguration;Ljava/lang/String;Ljava/lang/String;)V
+-    :try_end_5
+-    .catchall {:try_start_5 .. :try_end_5} :catchall_0
++    :try_end_4
++    .catchall {:try_start_4 .. :try_end_4} :catchall_0
+ 
+     monitor-exit p0
+ 
+     return-void
+ 
+     :goto_7
+-    :try_start_6
++    :try_start_5
+     monitor-exit p0
+-    :try_end_6
+-    .catchall {:try_start_6 .. :try_end_6} :catchall_0
++    :try_end_5
++    .catchall {:try_start_5 .. :try_end_5} :catchall_0
+ 
+     throw p1
+ .end method
+-- 
+2.52.0
+
