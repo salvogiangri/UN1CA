@@ -12,12 +12,18 @@ if [[ "$TARGET_OS_FILE_SYSTEM_TYPE" != "erofs" ]]; then
 fi
 
 BOOT_FILE="boot.img"
-[ -f "$WORK_DIR/kernel/vendor_boot.img" ] && BOOT_FILE="vendor_boot.img"
-[ ! -f "$WORK_DIR/kernel/$BOOT_FILE" ] && ABORT "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/$BOOT_FILE"
+if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
+    BOOT_FILE="vendor_boot.img"
+fi
+if [ ! -f "$WORK_DIR/kernel/$BOOT_FILE" ]; then
+    ABORT "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/$BOOT_FILE"
+fi
 
 LOG "- Extracting $BOOT_FILE"
 
-[ -d "$TMP_DIR" ] && EVAL "rm -rf \"$TMP_DIR\""
+if [ -d "$TMP_DIR" ]; then
+    EVAL "rm -rf \"$TMP_DIR\""
+fi
 EVAL "mkdir -p \"$TMP_DIR\""
 EVAL "cp -a \"$WORK_DIR/kernel/$BOOT_FILE\" \"$TMP_DIR/$BOOT_FILE\""
 
@@ -31,8 +37,12 @@ fi
 LOG "- Extracting ramdisk"
 
 RAMDISK_FORMAT=""
-[[ "$(READ_BYTES_AT "$RAMDISK_FILE" "0" "2")" == "8b1f" ]] && RAMDISK_FORMAT="gz"
-[[ "$(READ_BYTES_AT "$RAMDISK_FILE" "0" "4")" == "184c2102" ]] && RAMDISK_FORMAT="lz4"
+if [[ "$(READ_BYTES_AT "$RAMDISK_FILE" "0" "2")" == "8b1f" ]]; then
+    RAMDISK_FORMAT="gz"
+fi
+if [[ "$(READ_BYTES_AT "$RAMDISK_FILE" "0" "4")" == "184c2102" ]]; then
+    RAMDISK_FORMAT="lz4"
+fi
 if [ ! "$RAMDISK_FORMAT" ]; then
     ABORT "Ramdisk format not valid\n\n$(LC_ALL=C file -b "$RAMDISK_FILE")"
 fi
@@ -45,8 +55,9 @@ elif [[ "$RAMDISK_FORMAT" == "lz4" ]]; then
 fi
 
 while IFS= read -r f; do
-    [[ "$f" == *"emmc" ]] && continue
-    [[ "$f" == *"ramplus" ]] && continue
+    if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
+        continue
+    fi
     sed -E -i \
         '/^(system|vendor|product|system_ext|odm|vendor_dlkm|odm_dlkm|system_dlkm)\s+/ s/(\s+\S+\s+)\S+/\1erofs/' \
         "$f" && LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")" \

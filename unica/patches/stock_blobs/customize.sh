@@ -38,17 +38,17 @@ else
 fi
 
 # TODO add APE/DSD extractor libs if required
-if [ -f "$WORK_DIR/system/system/lib64/extractors/libsapeextractor.so" ]; then
-    [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_APE_FORMAT")" ] && \
-        DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsapeextractor.so"
+if [ -f "$WORK_DIR/system/system/lib64/extractors/libsapeextractor.so" ] && \
+        [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_APE_FORMAT")" ]; then
+    DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsapeextractor.so"
 fi
-if [ -f "$WORK_DIR/system/system/lib64/extractors/libsdffextractor.so" ]; then
-    [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_DSD_FORMAT")" ] && \
-        DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsdffextractor.so"
+if [ -f "$WORK_DIR/system/system/lib64/extractors/libsdffextractor.so" ] && \
+        [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_DSD_FORMAT")" ]; then
+    DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsdffextractor.so"
 fi
-if [ -f "$WORK_DIR/system/system/lib64/extractors/libsdsfextractor.so" ]; then
-    [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_DSD_FORMAT")" ] && \
-        DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsdsfextractor.so"
+if [ -f "$WORK_DIR/system/system/lib64/extractors/libsdsfextractor.so" ] && \
+        [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_DSD_FORMAT")" ]; then
+    DELETE_FROM_WORK_DIR "system" "system/lib64/extractors/libsdsfextractor.so"
 fi
 
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/media/bootsamsung.qmg" 0 0 644 "u:object_r:system_file:s0"

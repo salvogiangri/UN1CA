@@ -1,7 +1,9 @@
 if [ ! -f "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" ]; then
     LOG_STEP_IN "- Extracting libbluetooth_jni.so from com.android.bt.apex"
 
-    [ -d "$TMP_DIR" ] && EVAL "rm -rf \"$TMP_DIR\""
+    if [ -d "$TMP_DIR" ]; then
+        EVAL "rm -rf \"$TMP_DIR\""
+    fi
     mkdir -p "$TMP_DIR"
 
     EVAL "unzip -j \"$WORK_DIR/system/system/apex/com.android.bt.apex\" \"apex_payload.img\" -d \"$TMP_DIR\""

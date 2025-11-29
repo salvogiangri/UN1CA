@@ -66,8 +66,12 @@ ADD_JAR_TO_CLASSPATH()
         echo "jars {"
         echo "  path: \"$JAR_PATH\""
         echo "  classpath: $SCOPE"
-        [ "$MIN_API" ] && echo "  min_sdk_version: \"$MIN_API\""
-        [ "$MAX_API" ] && echo "  max_sdk_version: \"$MAX_API\""
+        if [ "$MIN_API" ]; then
+            echo "  min_sdk_version: \"$MIN_API\""
+        fi
+        if [ "$MAX_API" ]; then
+        echo "  max_sdk_version: \"$MAX_API\""
+        fi
         echo "}"
     } >> "$(dirname "$FILE")/$(basename "$FILE").txt"
 

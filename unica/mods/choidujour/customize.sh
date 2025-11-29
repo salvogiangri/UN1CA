@@ -5,21 +5,21 @@ if ! $ROM_IS_OFFICIAL; then
     return 0
 fi
 
-[ ! "$(GET_PROP "system" "ro.unica.version")" ] && \
+if [ ! "$(GET_PROP "system" "ro.unica.version")" ]; then
     SET_PROP "system" "ro.unica.version" "$ROM_VERSION"
-[ ! "$(GET_PROP "system" "ro.unica.timestamp")" ] && \
+fi
+if [ ! "$(GET_PROP "system" "ro.unica.timestamp")" ]; then
     SET_PROP "system" "ro.unica.timestamp" "$ROM_BUILD_TIMESTAMP"
-[ ! "$(GET_PROP "system" "ro.unica.device")" ] && \
+fi
+if [ ! "$(GET_PROP "system" "ro.unica.device")" ]; then
     SET_PROP "system" "ro.unica.device" "$TARGET_CODENAME"
+fi
 
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
-CERT_NAME="aosp_testkey"
-[ -f "$SRC_DIR/security/unica_ota.x509.pem" ] && CERT_NAME="unica_ota"
-
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
-EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/$CERT_NAME.x509.pem\""
+EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/unica_ota.x509.pem\""
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 

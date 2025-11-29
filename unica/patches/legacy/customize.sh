@@ -2,7 +2,9 @@
 BACKPORT_SF_PROPS()
 {
     local FILE="$WORK_DIR/vendor/build.prop"
-    [ -f "$WORK_DIR/vendor/default.prop" ] && local FILE="$WORK_DIR/vendor/default.prop"
+    if [ -f "$WORK_DIR/vendor/default.prop" ]; then
+        FILE="$WORK_DIR/vendor/default.prop"
+    fi
 
     if [ ! -f "$FILE" ]; then
         ABORT "File not found: ${FILE//$SRC_DIR\//}"
@@ -33,11 +35,13 @@ BACKPORT_SF_PROPS()
         fi
 
         PROP="ro.surface_flinger.enable_frame_rate_override"
-        [ "$(GET_PROP "vendor" "ro.surface_flinger.set_idle_timer_ms")" ] && \
+        if [ "$(GET_PROP "vendor" "ro.surface_flinger.set_idle_timer_ms")" ]; then
             PROP="ro.surface_flinger.set_idle_timer_ms"
+        fi
         VALUE="$(GET_PROP "vendor" "ro.surface_flinger.use_content_detection_for_refresh_rate")"
-        [ ! "$VALUE" ] && \
+        if [ ! "$VALUE" ]; then
             VALUE="$(test "$TARGET_LCD_CONFIG_HFR_MODE" -gt "1" && echo "true" || echo "false")"
+        fi
 
         if [[ "$(sed -n "/$PROP/{x;p;d;}; x" "$FILE")" != *"use_content_detection_for_refresh_rate"* ]]; then
             if [ ! "$(GET_PROP "vendor" "ro.surface_flinger.use_content_detection_for_refresh_rate")" ]; then

@@ -138,9 +138,9 @@ APPLY_TARGET_FEATURE()
 
     # Step 1: iterate through work_dir floating_feature.xml
     while IFS= read -r l; do
-        [[ "$l" == *"xml"* ]] && continue
-        [[ "$l" == *"SecFloatingFeatureSet"* ]] && continue
-        [ ! "$l" ] && continue
+        if [ ! "$l" ] || [[ "$l" == *"xml"* ]] || [[ "$l" == *"SecFloatingFeatureSet"* ]]; then
+            continue
+        fi
 
         if [[ "$l" != "    <SEC_FLOATING_FEATURE_"*"</SEC_FLOATING_FEATURE_"*">" ]]; then
             ABORT "Malformed string in ${SOURCE_FILE//$SRC_DIR\//}: \"$l\""
@@ -168,9 +168,9 @@ APPLY_TARGET_FEATURE()
 
     # Step 2: iterate through target floating_feature.xml
     while IFS= read -r l; do
-        [[ "$l" == *"xml"* ]] && continue
-        [[ "$l" == *"SecFloatingFeatureSet"* ]] && continue
-        [ ! "$l" ] && continue
+        if [ ! "$l" ] || [[ "$l" == *"xml"* ]] || [[ "$l" == *"SecFloatingFeatureSet"* ]]; then
+            continue
+        fi
 
         if [[ "$l" != "    <SEC_FLOATING_FEATURE_"*"</SEC_FLOATING_FEATURE_"*">" ]]; then
             ABORT "Malformed string in ${TARGET_FILE//$SRC_DIR\//}: \"$l\""
@@ -191,8 +191,9 @@ APPLY_TARGET_FEATURE()
 APPLY_CUSTOM_FEATURE()
 {
     while IFS= read -r l; do
-        [[ "$l" == "#"* ]] && continue
-        [ ! "$l" ] && continue
+        if [ ! "$l" ] || [[ "$l" == "#"* ]]; then
+            continue
+        fi
 
         if [[ "$l" == "SEC_FLOATING_FEATURE_"*"="* ]]; then
             if [ ! "$(cut -d "=" -f 2- <<< "$l")" ]; then

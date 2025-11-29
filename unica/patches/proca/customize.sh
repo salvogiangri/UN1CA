@@ -1,17 +1,25 @@
-[ ! -f "$WORK_DIR/kernel/boot.img" ] && ABORT "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/boot.img"
+if [ ! -f "$WORK_DIR/kernel/boot.img" ]; then
+    ABORT "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/boot.img"
+fi
 
 LOG "- Extracting boot.img"
 
-[ -d "$TMP_DIR" ] && EVAL "rm -rf \"$TMP_DIR\""
+if [ -d "$TMP_DIR" ]; then
+    EVAL "rm -rf \"$TMP_DIR\""
+fi
 EVAL "mkdir -p \"$TMP_DIR\""
 EVAL "cp -a \"$WORK_DIR/kernel/boot.img\" \"$TMP_DIR/boot.img\""
 
 MKBOOTIMG_ARGS="$(unpack_bootimg --boot_img "$TMP_DIR/boot.img" --out "$TMP_DIR/out" --format mkbootimg 2>&1)"
 
-[ ! -f "$TMP_DIR/out/kernel" ] && ABORT "Failed to extract boot.img\n\n$MKBOOTIMG_ARGS"
+if [ ! -f "$TMP_DIR/out/kernel" ]; then
+    ABORT "Failed to extract boot.img\n\n$MKBOOTIMG_ARGS"
+fi
 
 GZ_COMPRESSED=false
-[[ "$(READ_BYTES_AT "$TMP_DIR/out/kernel" "0" "2")" == "8b1f" ]] && GZ_COMPRESSED=true
+if [[ "$(READ_BYTES_AT "$TMP_DIR/out/kernel" "0" "2")" == "8b1f" ]]; then
+    GZ_COMPRESSED=true
+fi
 if $GZ_COMPRESSED; then
     LOG "- Decompressing kernel image"
     EVAL "cat \"$TMP_DIR/out/kernel\" | gzip -d > \"$TMP_DIR/out/tmp\" && mv -f \"$TMP_DIR/out/tmp\" \"$TMP_DIR/out/kernel\""

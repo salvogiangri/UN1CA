@@ -15,9 +15,15 @@ if $TARGET_OS_BUILD_SYSTEM_EXT_PARTITION; then
 fi
 
 # ROM & device-specific debloat list
-[ -f "$SRC_DIR/unica/debloat.sh" ] && source "$SRC_DIR/unica/debloat.sh"
-[ -f "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh" ] && source "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh"
-[ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ] && source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
+if [ -f "$SRC_DIR/unica/debloat.sh" ]; then
+    source "$SRC_DIR/unica/debloat.sh"
+fi
+if [ -f "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh" ]; then
+    source "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh"
+fi
+if [ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ]; then
+    source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
+fi
 
 ODM_DEBLOAT="$(sed "/^$/d" <<< "$ODM_DEBLOAT" | sort)"
 PRODUCT_DEBLOAT="$(sed "/^$/d" <<< "$PRODUCT_DEBLOAT" | sort)"
@@ -25,20 +31,30 @@ SYSTEM_DEBLOAT="$(sed "/^$/d" <<< "$SYSTEM_DEBLOAT" | sort)"
 SYSTEM_EXT_DEBLOAT="$(sed "/^$/d" <<< "$SYSTEM_EXT_DEBLOAT" | sort)"
 VENDOR_DEBLOAT="$(sed "/^$/d" <<< "$VENDOR_DEBLOAT" | sort)"
 
-[ "$ODM_DEBLOAT" ] && xargs -I "{}" -P "$(nproc)" \
-    bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "odm" "$1"' "bash" "{}" \
-    <<< "$ODM_DEBLOAT" 2>&1 | sed "/File not found/d"
-[ "$PRODUCT_DEBLOAT" ] && xargs -I "{}" -P "$(nproc)" \
-    bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "product" "$1"' "bash" "{}" \
-    <<< "$PRODUCT_DEBLOAT" 2>&1 | sed "/File not found/d"
-[ "$SYSTEM_DEBLOAT" ] && xargs -I "{}" -P "$(nproc)" \
-    bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "system" "$1"' "bash" "{}" \
-    <<< "$SYSTEM_DEBLOAT" 2>&1 | sed "/File not found/d"
-[ "$SYSTEM_EXT_DEBLOAT" ] && xargs -I "{}" -P "$(nproc)" \
-    bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "system_ext" "$1"' "bash" "{}" \
-    <<< "$SYSTEM_EXT_DEBLOAT" 2>&1 | sed "/File not found/d"
-[ "$VENDOR_DEBLOAT" ] && xargs -I "{}" -P "$(nproc)" \
-    bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "vendor" "$1"' "bash" "{}" \
-    <<< "$VENDOR_DEBLOAT" 2>&1 | sed "/File not found/d"
+if [ "$ODM_DEBLOAT" ]; then
+    xargs -I "{}" -P "$(nproc)" \
+        bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "odm" "$1"' "bash" "{}" \
+        <<< "$ODM_DEBLOAT" 2>&1 | sed "/File not found/d"
+fi
+if [ "$PRODUCT_DEBLOAT" ]; then
+    xargs -I "{}" -P "$(nproc)" \
+        bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "product" "$1"' "bash" "{}" \
+        <<< "$PRODUCT_DEBLOAT" 2>&1 | sed "/File not found/d"
+fi
+if [ "$SYSTEM_DEBLOAT" ]; then
+    xargs -I "{}" -P "$(nproc)" \
+        bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "system" "$1"' "bash" "{}" \
+        <<< "$SYSTEM_DEBLOAT" 2>&1 | sed "/File not found/d"
+fi
+if [ "$SYSTEM_EXT_DEBLOAT" ]; then
+    xargs -I "{}" -P "$(nproc)" \
+        bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "system_ext" "$1"' "bash" "{}" \
+        <<< "$SYSTEM_EXT_DEBLOAT" 2>&1 | sed "/File not found/d"
+fi
+if [ "$VENDOR_DEBLOAT" ]; then
+    xargs -I "{}" -P "$(nproc)" \
+        bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "vendor" "$1"' "bash" "{}" \
+        <<< "$VENDOR_DEBLOAT" 2>&1 | sed "/File not found/d"
+fi
 
 unset ODM_DEBLOAT PRODUCT_DEBLOAT SYSTEM_DEBLOAT SYSTEM_EXT_DEBLOAT VENDOR_DEBLOAT
