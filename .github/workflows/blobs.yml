@@ -52,6 +52,9 @@ jobs:
           - module: "Galaxy S23 FE (r11sxxx)"
             device: "r11sxxx"
             firmware: "SM-S711B/EUX/358615311234564"
+          - module: "Galaxy S20 FE (Snapdragon) (r8qxxx)"
+            device: "r8qxxx"
+            firmware: "SM-G780G/XME/357107761234568"
 
     steps:
       - name: Checkout repo
