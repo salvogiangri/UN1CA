@@ -1,3 +1,4 @@
+/vendor u:object_r:vendor_file:s0
 /vendor/lib64 u:object_r:vendor_file:s0
 /vendor/lib64/hw u:object_r:vendor_hal_file:s0
 /vendor/lib64/hw/gatekeeper\.mdfpp\.so u:object_r:vendor_file:s0

@@ -17,9 +17,6 @@
 
 # SEC Floating Feature configuration file for Galaxy A52s 5G (a52sxq)
 
-# Update ImageTagger to B
-SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_TAGGER_VERSION=V701
-
 # Enable seamless refresh rate feature
 SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=2
 
