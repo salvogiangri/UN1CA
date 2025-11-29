@@ -36,7 +36,7 @@ LOG_STEP_IN "- Removing sensor blobs"
 DEBLOAT_LIST="$(cd "$WORK_DIR/vendor/etc" 2>/dev/null && find sensors -type f -print 2>/dev/null | sort || true)"
 while IFS= read -r file; do 
     [ -z "$file" ] && continue
-    [ ! -f "$MODPATH/M515F/vendor/etc/$file" ] && DELETE_FROM_WORK_DIR "vendor" "etc/$file"
+    [ ! -f "$MODPATH/vendor/etc/$file" ] && DELETE_FROM_WORK_DIR "vendor" "etc/$file"
 done <<< "$DEBLOAT_LIST"
 LOG_STEP_OUT
 
@@ -44,7 +44,7 @@ LOG_STEP_IN "- Removing camera libraries"
 DEBLOAT_LIST="$(find "$WORK_DIR/vendor" -type f -path '*/lib*/camera/*' -printf '%P\n' 2>/dev/null | sort || true)"
 while IFS= read -r file; do 
     [ -z "$file" ] && continue
-    [ ! -f "$MODPATH/M515F/vendor/$file" ] && DELETE_FROM_WORK_DIR "vendor" "$file"
+    [ ! -f "$MODPATH/vendor/$file" ] && DELETE_FROM_WORK_DIR "vendor" "$file"
 done <<< "$DEBLOAT_LIST"
 LOG_STEP_OUT
 
