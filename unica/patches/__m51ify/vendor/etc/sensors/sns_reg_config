@@ -1,0 +1,9 @@
+version=1
+file=hw_platform=/sys/devices/soc0/hw_platform
+file=platform_subtype=/sys/devices/soc0/platform_subtype
+file=platform_subtype_id=/sys/devices/soc0/platform_subtype_id
+file=platform_version=/sys/devices/soc0/platform_version
+file=soc_id=/sys/devices/soc0/soc_id
+file=revision=/sys/class/sensors/ssc_core/ssc_hw_rev
+file=output=/mnt/vendor/persist/sensors/registry/registry
+file=ssc_mode=/sys/class/sensors/ssc_core/ssc_mode

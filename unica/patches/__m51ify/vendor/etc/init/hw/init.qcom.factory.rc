@@ -1,0 +1,258 @@
+#
+# Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of The Linux Foundation nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+# Define fastmmi
+service fastmmi /system_ext/bin/mmi
+    user root
+    group root
+    disabled
+
+service vendor.mmid /vendor/bin/mmid
+    user root
+    group root
+    disabled
+
+service mmi_diag /system_ext/bin/mmi_diag
+        class main
+        user root
+        group root oem_2901
+        disabled
+
+on property:vendor.sys.boot_mode=ffbm
+    write ${persist.vendor.mmi.misc_dev_path} "ffbm-01"
+
+on property:vendor.sys.boot_mode=qmmi
+    write ${persist.vendor.mmi.misc_dev_path} "qmmi"
+
+on property:vendor.sys.boot_mode=normal
+    write ${persist.vendor.mmi.misc_dev_path} "normal"
+
+# Creating a scratch storage on /data for factory testing.
+on factory-fs && property:ro.bootmode=ffbm-00
+    mount tmpfs tmpfs /data
+
+on factory-fs && property:ro.bootmode=ffbm-01
+    mount tmpfs tmpfs /data
+
+# aligned the usb port with system standard, otherwise if only diag be added
+# Then in QMMI mode, the whole Andoid be booted, but due to the ro.bootmode is
+# not normal/unknow, then when it apply the default funcs, it will turn to MTP
+# which cause the diag/Wwan/modem port all be lost in qmmi mode. Details:
+# UsbDeviceManager.java---->getDefaultFunctions and trySetEnabledFunctions
+on property:persist.vendor.usb.config=*
+    setprop persist.sys.usb.qmmi.func ${persist.vendor.usb.config}
+
+on mmi && property:ro.bootmode=ffbm-00
+    # ========================================================
+    #              This is FFBM only settings.
+    # ========================================================
+    #mkdir for factory data files.
+    mkdir /mnt/vendor/persist/FTM_AP 0750 system system
+
+    start fastmmi
+    # start qcom-post-boot to set the misc partition path property value
+    start qcom-post-boot
+    start mmi_diag
+
+on mmi && property:ro.bootmode=ffbm-01
+    # ========================================================
+    #              This is FFBM only settings.
+    # ========================================================
+    #mkdir for factory data files.
+    mkdir /mnt/vendor/persist/FTM_AP 0750 system system
+
+    start fastmmi
+    ## start qcom-post-boot to set the misc partition path property value
+    start qcom-post-boot
+    start mmi_diag
+
+on property:persist.vendor.usb.config=* && property:ro.bootmode=ffbm-00
+    setprop sys.usb.config ${persist.vendor.usb.config}
+
+on property:persist.vendor.usb.config=* && property:ro.bootmode=ffbm-01
+    setprop sys.usb.config ${persist.vendor.usb.config}
+
+on property:persist.vendor.usb.config=* && property:ro.bootmode=ffbm-02
+    setprop sys.usb.config ${persist.vendor.usb.config}
+
+on property:persist.vendor.usb.config=* && property:ro.bootmode=qmmi
+    setprop sys.usb.config ${persist.vendor.usb.config}
+
+on ffbm
+    trigger early-fs
+    trigger factory-fs
+    trigger fs
+    trigger post-fs
+
+    # Mount fstab in init.{$device}.rc by mount_all with '--late' parameter
+    # to only mount entries with 'latemount'. This is needed if '--early' is
+    # specified in the previous mount_all command on the fs stage.
+    # With /system mounted and properties form /system + /factory available,
+    # some services can be started.
+    trigger late-fs
+
+    # Now we can mount /data. File encryption requires keymaster to decrypt
+    # /data, which in turn can only be loaded when system properties are present.
+    trigger post-fs-data
+
+    # Now we can start zygote for devices with file based encryption
+    trigger zygote-start
+
+    # Load persist properties and override properties (if enabled) from /data.
+    trigger load_persist_props_action
+
+    # Remove a file to wake up anything waiting for firmware.
+    trigger firmware_mounts_complete
+
+    trigger early-boot
+    trigger boot
+    trigger mmi
+
+
+# ========================================================
+#          Start for audio TC
+# ========================================================
+
+service vendor.audio_tc53 /vendor/bin/mm-audio-ftm -tc 53
+    user audio
+    group audio
+    disabled
+    oneshot
+
+
+service vendor.audio_tc51 /vendor/bin/mm-audio-ftm -tc 51
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc56 /vendor/bin/mm-audio-ftm -tc 56
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc222 /vendor/bin/mm-audio-ftm -tc 222
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc228 /vendor/bin/mm-audio-ftm -tc 228
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc229 /vendor/bin/mm-audio-ftm -tc 229
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc230 /vendor/bin/mm-audio-ftm -tc 230
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc225 /vendor/bin/mm-audio-ftm -tc 225
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc246 /vendor/bin/mm-audio-ftm -tc 246
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc247 /vendor/bin/mm-audio-ftm -tc 247
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc250 /vendor/bin/mm-audio-ftm -tc 250
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc251 /vendor/bin/mm-audio-ftm -tc 251
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc252 /vendor/bin/mm-audio-ftm -tc 252
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc253 /vendor/bin/mm-audio-ftm -tc 253
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc11 /vendor/bin/mm-audio-ftm -tc 11 -file /data/vendor/audio/ftm_headset_mic_record.wav
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc101 /vendor/bin/mm-audio-ftm -tc 101 -file /data/vendor/audio/ftm_mic1_record.wav
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc102 /vendor/bin/mm-audio-ftm -tc 102 -file /data/vendor/audio/ftm_mic2_record.wav
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc103 /vendor/bin/mm-audio-ftm -tc 103 -file /data/vendor/audio/ftm_mic3_record.wav
+    user audio
+    group audio
+    disabled
+    oneshot
+
+service vendor.audio_tc104 /vendor/bin/mm-audio-ftm -tc 104 -file /data/vendor/audio/ftm_mic4_record.wav
+    user audio
+    group audio
+    disabled
+    oneshot
+
+# ========================================================
+#           End for audio TC
+# ========================================================
