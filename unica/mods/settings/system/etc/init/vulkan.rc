@@ -1,2 +1,2 @@
-on early-init && property:persist.sys.unica.vulkan=true
+on zygote-start && property:persist.sys.unica.vulkan=true
     setprop debug.hwui.renderer skiavk
