@@ -1,0 +1,438 @@
+# Copyright (c) 2013-2018,2020, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+import /vendor/etc/init/hw/init.samsung.rc
+import /vendor/etc/init/hw/init.${ro.product.vendor.device}.rc
+import /vendor/etc/init/hw/init.${ro.product.vendor.name}.rc
+
+on early-init
+    write /proc/sys/kernel/sched_boost 1
+    mkdir /dsp 0771 media media
+    mkdir /firmware 0771 system system
+    mkdir /bt_firmware 0771 system system
+    symlink /data/tombstones /tombstones
+
+on init
+    write /dev/stune/foreground/schedtune.sched_boost_no_override 1
+    write /dev/stune/top-app/schedtune.sched_boost_no_override 1
+    write /dev/stune/schedtune.colocate 0
+    write /dev/stune/background/schedtune.colocate 0
+    write /dev/stune/system-background/schedtune.colocate 0
+    write /dev/stune/foreground/schedtune.colocate 0
+    write /dev/stune/top-app/schedtune.colocate 1
+    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+	symlink /dev/block/bootdevice/by-name/steady  /dev/block/steady
+
+	# Property used by vintf for sku specific manifests
+    setprop ro.boot.product.hardware.sku ${ro.boot.hardware.sku}
+	
+
+on early-fs
+    start vold
+
+on fs
+    mount_all --early
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon_recursive /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/data 0700 system system
+
+on post-fs
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+    write /dev/ipa 1
+
+on late-fs
+    wait_for_prop hwservicemanager.ready true
+    exec_start wait_for_keymaster
+    mount_all --late
+
+service sec_nvm /vendor/bin/sec_nvm
+    class core
+    user system
+    group system
+
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+    mkdir /tombstones/lpass 0771 system system
+    mkdir /tombstones/wcnss 0771 system system
+    mkdir /tombstones/dsps 0771 system system
+    mkdir /data/vendor/hbtp 0750 system system
+    mkdir /persist/qti_fp 0700 system system
+    mkdir /data/vendor/nnhal 0700 system system
+
+# For cpusets initialize for Silver Only first and then Silver + Gold
+# Silver Only configuration cannot work with 0-7
+on boot
+    chown system system /sys/kernel/hbtp/display_pwr
+    start rmt_storage
+    start rfs_access
+    write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
+    write /dev/cpuset/background/cpus 0-7
+    write /dev/cpuset/system-background/cpus 0-7
+
+# Add a cpuset for the camera daemon
+# We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+
+#Load WLAN driver
+  #  exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules/ qca_cld3_wlan
+  # exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules/5.4-gki qca_cld3_wlan
+
+
+
+# for WIFI MAC address
+    mkdir /mnt/vendor/efs/wifi 0755 wifi wifi
+    chown wifi wifi /mnt/vendor/efs/wifi/.mac.info
+    chmod 0644 /mnt/vendor/efs/wifi/.mac.info
+    chown wifi wifi /mnt/vendor/efs/wifi/.mac.cob
+    chmod 0644 /mnt/vendor/efs/wifi/.mac.cob
+
+# Permissions for audio
+    chown system radio /sys/class/audio/earjack/key_state
+    chown system radio /sys/class/audio/earjack/mic_adc
+    chown system radio /sys/class/audio/earjack/select_jack
+    chown system radio /sys/class/audio/earjack/state
+
+#USB controller configuration
+    setprop vendor.usb.rndis.func.name "gsi"
+    setprop vendor.usb.rmnet.func.name "gsi"
+    setprop vendor.usb.rmnet.inst.name "rmnet"
+    setprop vendor.usb.dpl.inst.name "dpl"
+    setprop vendor.usb.qdss.inst.name "qdss"
+    setprop sys.usb.configfs 1
+
+# access permissions for FPC service
+    chown system system /sys/bus/platform/devices/soc/soc:fpc1020/irq
+    chown system system /sys/bus/platform/devices/soc/soc:fpc1020/wakeup_enable
+
+on property:vendor.display.lcd_density=640
+   setprop dalvik.vm.heapgrowthlimit 512m
+
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=480
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=240
+   setprop dalvik.vm.heapgrowthlimit 96m
+
+on property:vendor.display.lcd_density=160
+   setprop dalvik.vm.heapgrowthlimit 96m
+
+#start camera server as daemon
+#service qcamerasvr /system/bin/mm-qcamera-daemon
+#    class late_start
+#    user camera
+#    group camera system inet input graphics
+#pd-mapper
+service vendor.pd_mapper /vendor/bin/pd-mapper
+    class core
+    user system
+    group system
+
+#Peripheral manager
+service vendor.per_mgr /vendor/bin/pm-service
+    class core
+    user system
+    group system
+    ioprio rt 4
+
+service vendor.per_proxy /vendor/bin/pm-proxy
+    class core
+    user system
+    group system
+    disabled
+
+on property:init.svc.vendor.per_mgr=running
+    start vendor.per_proxy
+
+on property:sys.shutdown.requested=*
+    stop vendor.per_proxy
+
+on charger
+    setprop sys.usb.controller a600000.dwc3
+    setprop sys.usb.configfs 1
+
+## import cne init file
+#on post-fs
+#    export LD_PRELOAD /vendor/lib/libNimsWrap.so
+#
+## Allow usb charging to be disabled peristently
+#on property:persist.usb.chgdisabled=1
+#    write /sys/class/power_supply/battery/charging_enabled 0
+#
+#on property:persist.usb.chgdisabled=0
+#    write /sys/class/power_supply/battery/charging_enabled 1
+
+service spdaemon /vendor/bin/spdaemon
+    class core
+    user system
+    group system
+
+#service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
+#   user system
+#   group system
+#   disabled
+#
+service thermal-engine /system/vendor/bin/thermal-engine
+   class main
+   user root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
+   socket thermal-send-rule stream 0660 system system
+   group root
+
+#service security-check1 /sbin/security_boot_check system
+#    class core
+#    oneshot
+#
+#service security-check2 /sbin/security_boot_check recovery
+#    class core
+#    oneshot
+#
+#service time_daemon /system/vendor/bin/time_daemon
+#   class late_start
+#   user root
+#   group root
+
+#service audiod /vendor/bin/audiod
+#   class late_start
+#   user system
+#   group system
+#
+#service usf_tester /vendor/bin/usf_tester
+#    user system
+#    group system inet
+#    disabled
+#
+#service usf_epos /vendor/bin/usf_epos
+#    user system
+#    group system inet
+#    disabled
+#
+#service usf_gesture /vendor/bin/usf_gesture
+#    user system
+#    group system inet
+#    disabled
+#
+
+#service usf_sync_gesture /system/bin/usf_sync_gesture
+#    user system
+#    group system inet
+#    disabled
+#
+
+#service usf_p2p /system/bin/usf_p2p
+#    user system
+#    group system inet
+#    disabled
+#
+#service usf_hovering /vendor/bin/usf_hovering
+#    user system
+#    group system inet
+#    disabled
+#
+#service usf_proximity /system/bin/usf_proximity
+#    user system
+#    group system inet
+#    disabled
+#
+#service usf-post-boot /system/vendor/bin/sh /system/etc/usf_post_boot.sh
+#    class late_start
+#    user root
+#    disabled
+#    oneshot
+#
+#on property:init.svc.bootanim=stopped
+#    start usf-post-boot
+#
+#
+#on boot
+#    insmod /system/lib/modules/adsprpc.ko
+#    insmod /system/lib/modules/mhi.ko
+## access permission for secure touch
+#    chmod 0660 /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch_enable
+#    chmod 0440 /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch
+#    chmod 0660 /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch_enable
+#    chmod 0440 /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch
+#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch_enable
+#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-004a/secure_touch
+#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch_enable
+#    chown system drmrpc /sys/devices/f9966000.i2c/i2c-1/1-0020/secure_touch
+#
+#
+#
+#service mdm_helper /system/bin/mdm_helper
+#    class core
+#    onrestart setprop ro.service.mdm_helper_restarted "true"
+#    disabled
+#
+#service mdm_helper_proxy /system/bin/mdm_helper_proxy
+#    class core
+#    disabled
+#
+#service mdm_launcher /system/bin/sh /init.mdm.sh
+#    class main
+#    oneshot
+#
+#service qcamerasvr /system/bin/mm-qcamera-daemon
+#    class late_start
+#    user camera
+#    group camera system inet input graphics
+#
+# Stop mdm_helper_proxy in case of shutdown
+#on property:sys.shutdown.requested=*
+#    stop mdm_helper_proxy
+#
+# Stop mdm_helper_proxy on APQ target
+#on property:ro.radio.noril=yes
+#    stop mdm_helper_proxy
+#
+#on property:persist.airplane.mode.pwr.svg=enabled
+#    setprop ro.mdm_helper_proxy_req false
+#
+#on property:init.svc.ril-daemon=running
+#    setprop ro.mdm_helper_proxy_req true
+#
+## Start mdm_helper_proxy
+#on property:ro.mdm_helper_proxy_req=true
+#    start mdm_helper_proxy
+#
+## QCA1530 SoC core detect
+#service gnss-detect /system/vendor/bin/gnss.qca1530.sh detect
+#   class core
+#   oneshot
+#
+## QCA1530 SoC late_start group trigger
+#service gnss-init /system/vendor/bin/gnss.qca1530.sh init
+#   class late_start
+#   oneshot
+#
+## QCA1530 SoC Service Daemon
+#service gnss-svcd /system/vendor/bin/gnss.qca1530.sh start
+#   class late_start
+#   user root
+#   group gps system qcom_diag diag log inet net_raw
+#   disabled
+
+on property:vold.decrypt=trigger_restart_framework
+   start vendor.cnss_diag
+
+service vendor.cnss_diag /system/vendor/bin/cnss_diag -q -f -t HELIUM
+   class main
+   user system
+   group system wifi inet sdcard_rw media_rw diag
+   oneshot
+
+service ppd /vendor/bin/mm-pp-dpps
+    class late_start
+    user system
+    group system graphics
+    socket pps stream 0660 system system
+    disabled
+
+on property:init.svc.hwcomposer-2-1=stopped
+    stop ppd
+
+on property:init.svc.hwcomposer-2-1=running
+    start ppd
+
+on property:init.svc.hwcomposer-2-1=restarting
+    stop ppd
+
+#service nqs /system/bin/nqs
+#    class late_start
+#    socket nqs_qsb_comm stream 660 system system
+#    user system
+#    group drmrpc
+#
+#service adsprpcd /system/vendor/bin/adsprpcd
+#   class main
+#   user media
+#   group media
+#
+##Start picture quality tuning service
+#service vqttoolservice /system/bin/vqttoolservice
+#    class late_start
+#    socket vqtss stream 0660 system system
+#    user system
+#    group system
+
+service hbtp /system/vendor/bin/hbtp_daemon
+     class main
+     user system
+     group system
+     disabled
+
+service qfp-daemon /vendor/bin/qfp-daemon
+    class late_start
+    user system
+    group system drmrpc diag input
+
+service energy-awareness /system/vendor/bin/energy-awareness
+    class main
+    user system
+    group system
+    oneshot
+
+service dcvs-sh /vendor/bin/init.qti.dcvs.sh
+    class late_start
+    user root
+    group root system
+    disabled
+    oneshot
+
+on property:vendor.dcvs.prop=1
+   start dcvs-sh
+
+service vendor.contexthub-hal-1-0 /vendor/bin/hw/android.hardware.contexthub@1.0-service
+    override
+    class hal
+    interface android.hardware.contexthub@1.0::IContexthub default
+    user system
+    group system
+    disabled

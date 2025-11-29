@@ -1,0 +1,12 @@
+{
+  "config": {
+    "hw_platform": ["MTP", "Dragon", "Surf", "HDK", "IDP"],
+    "soc_id": ["291", "246", "300", "301", "305", "321", "336", "339", "341", "355", "360", "365", "366", "393"]
+  },
+  "sns_hw_revision":{
+    "owner": "sns_hw_revision",
+    "hw_revision":{ "type": "int", "ver": "0",
+      "data": "1"
+    }
+  }
+}

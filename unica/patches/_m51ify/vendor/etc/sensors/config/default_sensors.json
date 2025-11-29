@@ -1,0 +1,37 @@
+{
+    "config":{
+        "hw_platform": ["MTP", "Dragon", "Surf", "QRD", "HDK", "IDP"],
+        "soc_id": ["291", "246", "300", "301", "305", "321", "336", "339", "341", "355", "365", "366"]
+    },
+
+    "default_sensors": {
+        "owner": "suid",
+        ".accel": {
+            "owner": "suid",
+            ".attr_0": {
+                "owner": "suid",
+                "id": { "type": "int", "ver": "0", "data": "19" },
+                "val": { "type": "int", "ver": "0", "data": "0" }
+            }
+        },
+
+        ".gyro": {
+            "owner": "suid",
+            ".attr_0": {
+                "owner": "suid",
+                "id": { "type": "int", "ver": "0", "data": "19" },
+                "val": { "type": "int", "ver": "0", "data": "0" }
+            }
+        },
+
+        ".mag": {
+            "owner": "suid",
+            ".attr_0": {
+                "owner": "suid",
+                "id": { "type": "int", "ver": "0", "data": "19" },
+                "val": { "type": "int", "ver": "0", "data": "0" }
+            }
+        }
+    }
+}
+

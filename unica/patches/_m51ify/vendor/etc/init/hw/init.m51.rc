@@ -1,0 +1,151 @@
+
+# Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+on boot
+# SSWAP
+    write /proc/sys/vm/swappiness 160
+
+# Performance
+    chown radio system /sys/power/cpufreq_min_limit
+    chmod 0664 /sys/power/cpufreq_min_limit
+    chown radio system /sys/power/cpufreq_max_limit
+    chmod 0664 /sys/power/cpufreq_max_limit
+    chown root system /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies
+    chmod 0664 /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies
+    chown system radio /sys/class/devfreq/soc:qcom,cpu6-cpu-ddr-latfloor/available_frequencies
+    chmod 0664 /sys/class/devfreq/soc:qcom,cpu6-cpu-ddr-latfloor/available_frequencies
+    chown root root /sys/class/input_booster/touch/level
+    chmod 0644 /sys/class/input_booster/touch/level
+    chown root system /dev/cpuset/restricted/cpus
+    chmod 0664 /dev/cpuset/restricted/cpus
+
+on post-fs
+
+on post-fs-data
+# setup cgroup freezer for freecess
+    mkdir /dev/freezer
+    mount cgroup none /dev/freezer freezer
+    mkdir /dev/freezer/frozen
+    mkdir /dev/freezer/thaw
+    write /dev/freezer/frozen/freezer.state FROZEN
+    write /dev/freezer/thaw/freezer.state THAWED
+
+# MARs for freecess
+    chown system system /dev/freezer
+    chown system system /dev/freezer/frozen
+    chown system system /dev/freezer/frozen/tasks
+    chown system system /dev/freezer/frozen/cgroup.procs
+    chown system system /dev/freezer/frozen/freezer.state
+    chown system system /dev/freezer/thaw
+    chown system system /dev/freezer/thaw/tasks
+    chown system system /dev/freezer/thaw/cgroup.procs
+
+# MARs for freecess
+    chmod 0644 /dev/freezer/frozen/tasks
+    chmod 0644 /dev/freezer/frozen/cgroup.procs
+    chmod 0644 /dev/freezer/frozen/freezer.state
+    chmod 0644 /dev/freezer/thaw/tasks
+    chmod 0644 /dev/freezer/thaw/cgroup.procs
+
+#olaf dex2oat freezer
+    mkdir /dev/freezer/olaf
+    write /dev/freezer/olaf/freezer.state THAWED
+    chown system system /dev/freezer/olaf
+    chown system system /dev/freezer/olaf/tasks
+    chown system system /dev/freezer/olaf/cgroup.procs
+    chown system system /dev/freezer/olaf/freezer.state
+    chmod 0644 /dev/freezer/olaf/tasks
+    chmod 0644 /dev/freezer/olaf/cgroup.procs
+    chmod 0644 /dev/freezer/olaf/freezer.state
+
+# Slowdown freezer
+    mkdir /dev/freezer/abnormal
+    write /dev/freezer/abnormal/freezer.state THAWED
+    chown system system /dev/freezer/abnormal
+    chown system system /dev/freezer/abnormal/tasks
+    chown system system /dev/freezer/abnormal/cgroup.procs
+    chown system system /dev/freezer/abnormal/freezer.state
+    chmod 0644 /dev/freezer/abnormal/tasks
+    chmod 0644 /dev/freezer/abnormal/cgroup.procs
+    chmod 0644 /dev/freezer/abnormal/freezer.state
+
+# Permissions for audio
+    chown system radio /sys/class/audio/earjack/key_state
+    chown system radio /sys/class/audio/earjack/mic_adc
+    chown system radio /sys/class/audio/earjack/select_jack
+    chown system radio /sys/class/audio/earjack/state
+
+# Qualcomm Amp Calibration
+    chown system audio /sys/class/spk_params/cal_data/initial_cal
+    chown system audio /sys/class/spk_params/cal_data/v_vali_flag
+    chown system audio /sys/class/spk_params/cal_data/spk_r0
+    chown system audio /sys/class/spk_params/cal_data/spk_t0
+    chown system audio /sys/class/spk_params/cal_data/spk_v_vali_status
+    mkdir /efs/qualcomm 0770 audioserver audio
+    chown audioserver audio /efs/qualcomm/audio.cal
+    chmod 0660 /efs/qualcomm/audio.cal
+
+# Amp Bigdata
+    chown system audio /sys/class/audio/amp/temperature_max_0
+    chown system audio /sys/class/audio/amp/temperature_keep_max_0
+    chown system audio /sys/class/audio/amp/temperature_overcount_0
+    chown system audio /sys/class/audio/amp/excursion_max_0
+    chown system audio /sys/class/audio/amp/excursion_overcount_0
+
+# Samsung Pay
+#    mkdir /efs/pfw_data 0760 vendor_spay vendor_spay
+
+# MST/NFC Switch
+#    chown vendor_spay system /dev/mst_ctrl
+#    chmod 0660 /dev/mst_ctrl    
+
+# Fingerprint sensor
+    chmod 0660 /dev/esfp0
+    chown system system /dev/esfp0
+
+    chown system radio /sys/class/fingerprint/fingerprint/type_check
+    chown system radio /sys/class/fingerprint/fingerprint/name
+    chown system radio /sys/class/fingerprint/fingerprint/vendor
+    chown system radio /sys/class/fingerprint/fingerprint/adm
+    chown system radio /sys/class/fingerprint/fingerprint/bfs_values
+    chown system radio /sys/class/fingerprint/fingerprint/hbm
+    chown system radio /sys/class/fingerprint/fingerprint/position
+    chown system radio /sys/class/fingerprint/fingerprint/intcnt
+    chown system radio /sys/class/fingerprint/fingerprint/resetcnt
+    chown system radio /sys/class/fingerprint/fingerprint/rb
+
+    mkdir /data/vendor/biometrics 0770 system system
+    mkdir /data/vendor/fpSnrTest 0770 system system
+    mkdir /efs/biometrics 0770 system system
+    mkdir /efs/biometrics/meta 0770 system system
+
+# tracking activation VNG
+#on property:ro.csc.sales_code=XXV
+#   tracking_activation_VNG

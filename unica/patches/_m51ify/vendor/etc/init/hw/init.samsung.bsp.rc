@@ -1,0 +1,129 @@
+
+# Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+on early-init
+
+on init
+    symlink /dev/block/bootdevice/by-name/param /dev/block/param
+
+    # GPIO
+    chown root system /sys/class/secgpio_check/secgpio_check_all/check_requested_gpio
+
+    # CONFIG_SEC_DEBUG ++
+    # reset_reason
+    chown system system /proc/reset_reason
+    chmod 0440 /proc/reset_reason
+    chown system system /proc/reset_reason_extra_info
+    chmod 0400 /proc/reset_reason_extra_info
+    chown system system /proc/reset_summary
+    chmod 0400 /proc/reset_summary
+    chown system system /proc/reset_klog
+    chmod 0400 /proc/reset_klog
+    chown system system /proc/reset_tzlog
+    chmod 0400 /proc/reset_tzlog
+    chown system system /proc/store_lastkmsg
+    chmod 0440 /proc/store_lastkmsg
+    chown system system /proc/auto_comment
+    chmod 0400 /proc/auto_comment
+    chown system system /proc/reset_rwc
+    chmod 0440 /proc/reset_rwc
+    chown system system /proc/reset_history
+    chmod 0400 /proc/reset_history
+
+    # ERR.p(extend rr.p)
+    chown system system /proc/extra
+    chmod 0440 /proc/extra
+
+    # hw param ap info
+    chown system system /sys/class/sec/sec_hw_param/ap_info
+    chmod 0400 /sys/class/sec/sec_hw_param/ap_info
+    # hw param ddr info
+    chown system system /sys/class/sec/sec_hw_param/ddr_info
+    chmod 0400 /sys/class/sec/sec_hw_param/ddr_info
+    # hw param eye read info
+    chown system system /sys/class/sec/sec_hw_param/eye_rd_info
+    chmod 0400 /sys/class/sec/sec_hw_param/eye_rd_info
+    # hw param eye write1 info
+    chown system system /sys/class/sec/sec_hw_param/eye_wr1_info
+    chmod 0400 /sys/class/sec/sec_hw_param/eye_wr1_info
+    # hw param eye write2 info
+    chown system system /sys/class/sec/sec_hw_param/eye_wr2_info
+    chmod 0400 /sys/class/sec/sec_hw_param/eye_wr2_info
+    # hw param eye dcc info
+    chown system system /sys/class/sec/sec_hw_param/eye_dcc_info
+    chmod 0400 /sys/class/sec/sec_hw_param/eye_dcc_info
+    # hw param ap health
+    chown system system /sys/class/sec/sec_hw_param/ap_health
+    chmod 0600 /sys/class/sec/sec_hw_param/ap_health
+    # hw param last dcvs
+    chown system system /sys/class/sec/sec_hw_param/last_dcvs
+    chmod 0400 /sys/class/sec/sec_hw_param/last_dcvs
+    # hw param extra info
+    chown system system /sys/class/sec/sec_hw_param/extra_info
+    chmod 0400 /sys/class/sec/sec_hw_param/extra_info
+    # hw param extrb info
+    chown system system /sys/class/sec/sec_hw_param/extrb_info
+    chmod 0400 /sys/class/sec/sec_hw_param/extrb_info
+    # hw param extrc info
+    chown system system /sys/class/sec/sec_hw_param/extrc_info
+    chmod 0400 /sys/class/sec/sec_hw_param/extrc_info
+    # hw param extrt info
+    chown system system /sys/class/sec/sec_hw_param/extrt_info
+    chmod 0400 /sys/class/sec/sec_hw_param/extrt_info
+    # hw param extrm info
+    chown system system /sys/class/sec/sec_hw_param/extrm_info
+    chmod 0400 /sys/class/sec/sec_hw_param/extrm_info
+
+    # sdcard ramdump
+    chown system system /sys/module/sec_debug/parameters/dump_sink
+    chmod 0640 /sys/module/sec_debug/parameters/dump_sink
+    chown system system /sys/module/sec_debug/parameters/reboot_multicmd
+    chmod 0400 /sys/module/sec_debug/parameters/reboot_multicmd
+    chown system system /proc/rdx_bootdev
+    chmod 0220 /proc/rdx_bootdev
+    # CONFIG_SEC_DEBUG --
+
+on late-init
+
+on post-fs
+
+on late-fs
+
+on post-fs-data
+
+on boot
+    # Permissions for sec_debug
+    chown root system /sys/class/sec/sec_debug/recovery_cause
+
+on shutdown
+
+# service definition
+
+# on property triggers

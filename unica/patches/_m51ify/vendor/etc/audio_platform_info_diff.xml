@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Copyright (c) 2014, 2016-2017, The Linux Foundation. All rights reserved. -->
+<!--                                                                        -->
+<!-- Redistribution and use in source and binary forms, with or without     -->
+<!-- modification, are permitted provided that the following conditions are -->
+<!-- met:                                                                   -->
+<!--     * Redistributions of source code must retain the above copyright   -->
+<!--       notice, this list of conditions and the following disclaimer.    -->
+<!--     * Redistributions in binary form must reproduce the above          -->
+<!--       copyright notice, this list of conditions and the following      -->
+<!--       disclaimer in the documentation and/or other materials provided  -->
+<!--       with the distribution.                                           -->
+<!--     * Neither the name of The Linux Foundation nor the names of its    -->
+<!--       contributors may be used to endorse or promote products derived  -->
+<!--       from this software without specific prior written permission.    -->
+<!--                                                                        -->
+<!-- THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED           -->
+<!-- WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF   -->
+<!-- MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT -->
+<!-- ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS -->
+<!-- BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR -->
+<!-- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF   -->
+<!-- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR        -->
+<!-- BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  -->
+<!-- OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN -->
+<!-- IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                          -->
+<audio_platform_info>
+    <acdb_ids>
+        <device name="SND_DEVICE_OUT_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_BT_SCO" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_BT_SCO_WB" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_CALL_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_CALL_SPEAKER_EVS" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_CALL_DEX_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_CALL_DEX_SPEAKER_EVS" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_SPEAKER_EVS" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_DEX_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_DEX_SPEAKER_EVS" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_VOIP_COMM_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_VOIP_COMM_DEX_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_VOIP_FMC_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_VOIP_FMC_DEX_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_FM_SPEAKER" acdb_id="15"/>
+        <device name="SND_DEVICE_OUT_CALL_SPEAKER_EX" acdb_id="72"/>
+        <device name="SND_DEVICE_OUT_CALL_SPEAKER_EX_EVS" acdb_id="72"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_SPEAKER_EX" acdb_id="72"/>
+        <device name="SND_DEVICE_OUT_WIFI_CALL_SPEAKER_EX_EVS" acdb_id="72"/>
+    </acdb_ids>
+    <backend_names>
+        <device name="SND_DEVICE_OUT_BT_A2DP" backend="bt-a2dp" interface="SLIMBUS_7_RX"/>
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_BT_A2DP" backend="speaker-and-bt-a2dp" interface="WSA_CDC_DMA_RX_0-and-SLIMBUS_7_RX"/>
+    </backend_names>
+</audio_platform_info>
