@@ -29,4 +29,4 @@ DELETE_FROM_WORK_DIR "vendor" "etc/singletake"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/singletake" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 
 LOG "- Patching /vendor/ueventd.rc"
-EVAL "cat \"$MODPATH/ueventd.rc.diff\" >> \"$WORK_DIR/vendor/ueventd.rc\""
+EVAL "cat \"$MODPATH/ueventd.rc.diff\" >> \"$WORK_DIR/vendor/etc/ueventd.rc\""
