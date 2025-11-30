@@ -33,13 +33,28 @@
 /sys/class/camera/rear    rear_frs_test             0444    system    system
 /sys/class/camera/rear    cam_ln_test               0444    system    system
 /sys/class/camera/rear    supported_cameraIds       0664    system    system
+/sys/class/camera/rear    rear_aperture_halltest    0444    system    system
 /sys/class/camera/rear    rear_tofcal               0444    system    system
 /sys/class/camera/rear    rear_tofcal_extra         0444    system    system
 /sys/class/camera/rear    rear_tofcal_size          0444    system    system
 /sys/class/camera/rear    rear_tofcal_uid           0444    system    system
 /sys/class/camera/rear    rear_tof_dual_cal         0444    system    system
 /sys/class/camera/rear    rear_actuator_power       0440    system    system
-
+/sys/class/camera/rear    rear_otp_bpc0             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc1             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc2             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc3             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc4             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc5             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc6             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc7             0664    system    system
+/sys/class/camera/rear    rear_otp_bpc8             0664    system    system
+/sys/class/camera/rear    cam_cdr_value             0664    system    system
+/sys/class/camera/rear    cam_cdr_result            0664    system    system
+/sys/class/camera/rear    cam_cdr_fastaec           0664    system    system
+/sys/class/camera/rear    rear_i2c_rfinfo           0664    system    system
+/sys/class/camera/rear    rear_eeprom_retry         0664    system    system
+/sys/class/camera/rear    cam_wifi_info             0664    system    system
 
 # Camera::Rear2
 /sys/class/camera/rear    rear2_camfw               0664    system    system
@@ -69,6 +84,7 @@
 /sys/class/camera/rear    rear2_hwparam             0664    system    system
 /sys/class/camera/rear    rear2_tilt                0444    system    system
 /sys/class/camera/rear    rear2_tof_tilt            0444    system    system
+/sys/class/camera/rear    rear2_eeprom_retry         0664    system    system
 
 # Camera::Rear3
 /sys/class/camera/rear    rear3_camfw               0664    system    system
@@ -97,6 +113,7 @@
 /sys/class/camera/rear    rear3_dualcal_size        0444    system    system
 /sys/class/camera/rear    rear3_hwparam             0664    system    system
 /sys/class/camera/rear    rear3_tilt                0444    system    system
+/sys/class/camera/rear    rear3_eeprom_retry         0664    system    system
 
 # Camera::Rear4
 /sys/class/camera/rear    rear4_camfw               0664    system    system
@@ -125,6 +142,7 @@
 /sys/class/camera/rear    rear4_dualcal_size        0444    system    system
 /sys/class/camera/rear    rear4_hwparam             0664    system    system
 /sys/class/camera/rear    rear4_tilt                0444    system    system
+/sys/class/camera/rear    rear4_eeprom_retry        0664    system    system
 
 # Camera::Rear End
 
@@ -149,15 +167,49 @@
 /sys/class/camera/front    front_tofcal_extra       0664    system    system
 /sys/class/camera/front    front_tofcal_size        0664    system    system
 /sys/class/camera/front    front_tofcal_uid         0664    system    system
+/sys/class/camera/front    front_eeprom_retry       0664    system    system
 
+# Camera::Front2
+/sys/class/camera/front    front2_camfw             0664    system    system
+/sys/class/camera/front    front2_camtype           0444    system    system
+/sys/class/camera/front    front2_caminfo           0664    system    system
+/sys/class/camera/front    front2_camfw_full        0664    system    system
+/sys/class/camera/front    front2_checkfw_user      0664    system    system
+/sys/class/camera/front    front2_checkfw_factory   0664    system    system
+/sys/class/camera/front    front2_moduleinfo        0664    system    system
+/sys/class/camera/front    front2_moduleid          0444    system    system
+/sys/class/camera/front    front2_mtf_exif          0664    system    system
+/sys/class/camera/front    front2_hwparam           0664    system    system
+/sys/class/camera/front    front2_dualcal           0444    system    system
+/sys/class/camera/front    front2_dualcal_size      0444    system    system
+/sys/class/camera/front    front2_tilt              0444    system    system
+
+# Camera::Front3
+/sys/class/camera/front    front3_camfw             0664    system    system
+/sys/class/camera/front    front3_camtype           0444    system    system
+/sys/class/camera/front    front3_caminfo           0664    system    system
+/sys/class/camera/front    front3_camfw_full        0664    system    system
+/sys/class/camera/front    front3_camfw_load        0664    system    system
+/sys/class/camera/front    front3_checkfw_user      0664    system    system
+/sys/class/camera/front    front3_checkfw_factory   0664    system    system
+/sys/class/camera/front    front3_moduleinfo        0664    system    system
+/sys/class/camera/front    front3_afcal             0444    system    system
+/sys/class/camera/front    front3_moduleid          0444    system    system
+/sys/class/camera/front    front3_mtf_exif          0664    system    system
+/sys/class/camera/front    front3_hwparam           0664    system    system
 
 # Camera::Front End
 
+# Camera::Secure
+/sys/class/camera/secure    iris_camfw             0664    system    system
+/sys/class/camera/secure    iris_camfw_full        0664    system    system
+/sys/class/camera/secure    iris_checkfw_factory   0664    system    system
+/sys/class/camera/secure    iris_checkfw_user      0664    system    system
+/sys/class/camera/secure    iris_caminfo           0664    system    system
+/sys/class/camera/secure    iris_hwparam           0664    system    system
+
 # Camera::Flash
-/sys/class/camera/flash                                 rear_flash                      0664    system  system
-/sys/class/camera/flash                                 rear_flash2                     0664    system  system
-/sys/class/leds/led:switch_0                            brightness                      0664    system  system
-/sys/class/leds/led:torch_0                             brightness                      0664    system  system
+/sys/class/camera/flash    rear_flash              0664    system    system
 
 # Camera::Ois
 /sys/class/camera/ois    selftest                       0444    system    system
@@ -183,7 +235,6 @@
 /sys/class/camera/ois    ois_ext_clk                    0664    system    system
 /sys/class/camera/ois    check_hall_cal                 0444    system    system
 
-
 # Camera::Ssm
 /sys/class/camera/ssm    ssm_frame_id                0664    system    system
 /sys/class/camera/ssm    ssm_flicker_max_r           0664    system    system
@@ -201,7 +252,7 @@
 /sys/class/camera/dual    fallback           0664    system    system
 
 # Camera::Adaptive mipi
-/sys/class/camera/test    adaptive_test           0664    system
+/sys/class/camera/test    adaptive_test           0664    system    system
 
 #Camera SVC
 /sys/devices/svc/Camera    SVC_rear_module            0444    system    system
@@ -213,6 +264,5 @@
 
 #Camera SETCAL
 /mnt/vendor/efs    camera           0775    system    system
-
 
 # Camera End

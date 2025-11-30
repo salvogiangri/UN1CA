@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# SEC Floating Feature configuration file for Qualcomm Snapdragon 778G devices (sm7325)
+# SEC Floating Feature configuration file for Qualcomm Snapdragon 8 gen 2 devices (sm8550)
 
 # ImageTagger version
-SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_TAGGER_VERSION=V701
+SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_TAGGER_VERSION=V901
