@@ -1,0 +1,10 @@
+ro.surface_flinger.set_display_power_timer_ms=1000
+vendor.display.disable_excl_rect_partial_fb=1
+debug.sf.auto_latch_unsignaled=1
+debug.sf.disable_client_composition_cache=0
+debug.graphics.game_default_frame_rate.disabled=1
+debug.sf.predict_hwc_composition_strategy=0
+debug.sf.treat_170m_as_sRGB=1
+debug.sf.latch_unsignaled=1
+vendor.display.enable_async_powermode=1
+debug.sf.frame_rate_multiple_threshold=120
