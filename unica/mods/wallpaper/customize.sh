@@ -61,10 +61,10 @@ ENCODE_MP4()
     CMD+=" -movflags use_metadata_tags -map_metadata 0"
     CMD+=" -vf \"fps=60,scale=$RES,setsar=1:1\""
     CMD+=" -video_track_timescale 360000 -movie_timescale 90000"
-    CMD+=" \"$FILE_PATH/temp.mp4\""
+    CMD+=" \"$FILE_PATH/temp-$FILE_NAME.mp4\""
 
     EVAL "$CMD" || return 1
-    EVAL "mv -f \"$FILE_PATH/temp.mp4\" \"$FILE_PATH/$FILE_NAME\"" || return 1
+    EVAL "mv -f \"$FILE_PATH/temp-$FILE_NAME.mp4\" \"$FILE_PATH/$FILE_NAME\"" || return 1
 }
 # ]
 
@@ -78,8 +78,12 @@ for f in "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk/res/drawa
     COMPRESS_WEBP "$f"
 done
 for f in "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk/res/raw/video_"*.mp4; do
-    ENCODE_MP4 "$f"
+    ENCODE_MP4 "$f" &
 done
+
+# shellcheck disable=SC2046
+wait $(jobs -p) || return 1
+
 APPLY_PATCH "system" "system/priv-app/wallpaper-res/wallpaper-res.apk" \
     "$MODPATH/wallpaper-res.apk/0001-Adjust-metadata-for-60fps-video-files.patch"
 
