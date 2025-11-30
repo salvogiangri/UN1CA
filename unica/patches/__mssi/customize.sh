@@ -82,7 +82,7 @@ ADD_JAR_TO_CLASSPATH()
 }
 # ]
 
-if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-A346"* ]] && [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-M536"* ]]; then
+if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-A346"* ]]; then
     LOGE "- Unsupported firmware for MediaTek Compatibility Module"
     exit 1
 fi
@@ -227,6 +227,8 @@ DELETE_FROM_WORK_DIR "system" "system/lib64/libtensorflowlite_inference_api.myfi
 DELETE_FROM_WORK_DIR "system" "system/lib64/libdualcam_portraitlighting_gallery_360_lite.so"
 
 LIBS="
+system/lib64/libStride.camera.samsung.so
+system/lib64/libStrideTensorflowLite.camera.samsung.so
 system/lib64/extractors/libsapeextractor.so
 system/lib64/extractors/libsdffextractor.so
 system/lib64/extractors/libsdsfextractor.so
@@ -325,24 +327,6 @@ done
     echo "libFaceRecognition.arcsoft.so"
     echo "libsuperresolution_raw.arcsoft.so"
 } >> "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
-
-if [[ "$SOURCE_EXTRA_FIRMWARES" == "SM-M536"* ]]; then
-    MISSING_LIBS="
-    system/lib64/libFaceRestoration.camera.samsung.so
-    system/lib64/libfacialrestoration.arcsoft.so
-    system/lib64/libVoiceCommandEngine.so
-    system/lib64/libtensorflowlite_jni_voicecommand.so
-    "
-    for lib in $MISSING_LIBS; do
-        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "$lib"
-    done
-
-    {
-        echo "libFaceRestoration.camera.samsung.so"
-    } >> "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
-
-    unset MISSING_LIBS
-fi
 
 # Frameworks
 ADD_TO_WORK_DIR "$MODEL/$REGION" "system" "system/framework/verizon.net.sip.jar"
