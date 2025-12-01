@@ -71,8 +71,13 @@ jobs:
           echo "::endgroup::"
           
           echo "::group::🔐 Setting up signing keys"
+          mkdir -p security/avb
           echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
           echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
+          echo -n "${{ secrets.OTA_KEY_PK8 }}" | base64 --decode > security/unica_ota.pk8
+          echo -n "${{ secrets.OTA_KEY_PEM }}" | base64 --decode > security/unica_ota.x509.pem
+          echo -n "${{ secrets.AVB_KEY_PEM }}" | base64 --decode > security/avb/unica_avb_rsa4096.pem
+          chmod 600 security/*.pk8 security/*.pem security/avb/*.pem
           echo "::endgroup::"
           
           echo "### ✅ Build environment configured" >> $GITHUB_STEP_SUMMARY
