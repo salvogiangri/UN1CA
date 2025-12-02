@@ -59,4 +59,6 @@ ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/vendor.qti.hardware.display.mapperexte
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/vendor.qti.hardware.display.mapperextensions@1.1.so" 0 0 644 "u:object_r:same_process_hal_file:s0"
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/hw/android.hardware.graphics.mapper@3.0-impl-qti-display.so" 0 0 644 "u:object_r:same_process_hal_file:s0"
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/hw/android.hardware.graphics.mapper@4.0-impl-qti-display.so" 0 0 644 "u:object_r:same_process_hal_file:s0"
+
+HEX_PATCH "$WORK_DIR/vendor/lib64/libsdmutils.so" "40F9F303012A3401" "40F9130080523401"
 LOG_STEP_OUT
