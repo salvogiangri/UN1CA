@@ -52,7 +52,6 @@ GET_HW_ACCEL()
     fi
 
     if [ "$GPU_VENDOR" = "nvidia" ]; then
-
         if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_nvenc"; then
             HAS_H264_ENC=true
         fi
@@ -62,33 +61,17 @@ GET_HW_ACCEL()
         if $HAS_H264_ENC && $HAS_H265_DEC; then
             HW_ACCEL="nvidia"
         fi
-    elif [ "$GPU_VENDOR" = "amd" ]; then
-        if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_amf"; then
-            HAS_H264_ENC=true
-        elif ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_vaapi" && [ -e /dev/dri/renderD128 ]; then
-            HAS_H264_ENC=true
-        fi
-        if ffmpeg -hide_banner -decoders 2>/dev/null | grep -q "hevc_amf"; then
-            HAS_H265_DEC=true
-        elif ffmpeg -hide_banner -decoders 2>/dev/null | grep -q "hevc_vaapi" && [ -e /dev/dri/renderD128 ]; then
-            HAS_H265_DEC=true
-        fi
-        if $HAS_H264_ENC && $HAS_H265_DEC; then
-            HW_ACCEL="amd"
-        fi
-    elif [ "$GPU_VENDOR" = "intel" ]; then
-        if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_qsv"; then
-            HAS_H264_ENC=true
-        elif ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_vaapi" && [ -e /dev/dri/renderD128 ]; then
-            HAS_H264_ENC=true
-        fi
-        if ffmpeg -hide_banner -decoders 2>/dev/null | grep -q "hevc_qsv"; then
-            HAS_H265_DEC=true
-        elif ffmpeg -hide_banner -decoders 2>/dev/null | grep -q "hevc_vaapi" && [ -e /dev/dri/renderD128 ]; then
-            HAS_H265_DEC=true
-        fi
-        if $HAS_H264_ENC && $HAS_H265_DEC; then
-            HW_ACCEL="intel"
+    elif [ "$GPU_VENDOR" = "amd" ] || [ "$GPU_VENDOR" = "intel" ]; then
+        if ffmpeg -hwaccels 2>/dev/null | grep -q "vaapi" && [ -e /dev/dri/renderD128 ]; then
+            if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_vaapi"; then
+                HAS_H264_ENC=true
+            fi
+            if ffmpeg -hide_banner -decoders 2>/dev/null | grep -q "hevc_vaapi"; then
+                HAS_H265_DEC=true
+            fi
+            if $HAS_H264_ENC && $HAS_H265_DEC; then
+                HW_ACCEL="vaapi"
+            fi
         fi
     fi
 
@@ -116,48 +99,29 @@ ENCODE_MP4()
 
     LOG "- Encoding $FILE_NAME"
 
-    CMD="ffmpeg"
+    CMD="ffmpeg -y"
 
     if [ "$HW_ACCEL" = "nvidia" ]; then
-        CMD+=" -hwaccel cuda -hwaccel_output_format cuda"
+        CMD+=" -hwaccel cuda -hwaccel_output_format cuda -c:v hevc_cuvid"
         CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-        CMD+=" -vf \"fps=60,scale_cuda=w=${RES_W}:h=${RES_H},setsar=1:1\""
-        CMD+=" -c:v h264_nvenc -preset p7 -cq 18 -g 1"
-    elif [ "$HW_ACCEL" = "amd" ]; then
-        if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_amf"; then
-            CMD+=" -hwaccel auto"
-            CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-            CMD+=" -vf \"fps=60,scale=${RES_W}:${RES_H},setsar=1:1\""
-            CMD+=" -c:v h264_amf -quality quality -qp_i 18 -qp_p 18 -g 1"
-        else
-            CMD+=" -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi"
-            CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-            CMD+=" -vf \"fps=60,scale_vaapi=w=${RES_W}:h=${RES_H},setsar=1:1\""
-            CMD+=" -c:v h264_vaapi -qp 18 -g 1"
-        fi
-    elif [ "$HW_ACCEL" = "intel" ]; then
-        if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_qsv"; then
-            CMD+=" -hwaccel qsv -hwaccel_output_format qsv"
-            CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-            CMD+=" -vf \"fps=60,scale_qsv=w=${RES_W}:h=${RES_H},setsar=1:1\""
-            CMD+=" -c:v h264_qsv -preset veryslow -global_quality 18 -g 1"
-        else
-            CMD+=" -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi"
-            CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-            CMD+=" -vf \"fps=60,scale_vaapi=w=${RES_W}:h=${RES_H},setsar=1:1\""
-            CMD+=" -c:v h264_vaapi -qp 18 -g 1"
-        fi
+        CMD+=" -vf \"fps=60,scale_cuda=w=${RES_W}:h=${RES_H}:format=yuv420p,hwdownload,format=yuv420p,setsar=1:1\""
+        CMD+=" -c:v h264_nvenc -preset p7 -cq 18 -g 60 -bf 0"
+    elif [ "$HW_ACCEL" = "vaapi" ]; then
+        CMD+=" -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi"
+        CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
+        CMD+=" -vf \"fps=60,scale_vaapi=w=${RES_W}:h=${RES_H}:format=nv12,setsar=1:1\""
+        CMD+=" -c:v h264_vaapi -qp 18 -g 60 -bf 0"
     else
         CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
         CMD+=" -vf \"fps=60,scale=${RES_W}:${RES_H},setsar=1:1\""
-        CMD+=" -c:v libx264 -pix_fmt yuv420p -crf 18 -g 1"
+        CMD+=" -c:v libx264 -pix_fmt yuv420p -crf 18 -g 60"
         CMD+=" -preset veryslow -tune zerolatency"
     fi
 
     CMD+=" -c:a copy"
     CMD+=" -movflags use_metadata_tags -map_metadata 0"
     CMD+=" -video_track_timescale 360000 -movie_timescale 90000"
-    CMD+=" \"$FILE_PATH/temp. mp4\""
+    CMD+=" \"$FILE_PATH/temp.mp4\""
 
     EVAL "$CMD" || return 1
     EVAL "mv -f \"$FILE_PATH/temp.mp4\" \"$FILE_PATH/$FILE_NAME\"" || return 1
