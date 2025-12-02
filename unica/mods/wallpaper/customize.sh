@@ -46,9 +46,11 @@ GET_HW_ACCEL()
         fi
     fi
 
-    if [ -z "$HW_ACCEL" ] && ffmpeg -hwaccels 2>/dev/null | grep -q "cuda"; then
+    if [ -z "$HW_ACCEL" ]; then
         if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
-            HW_ACCEL="cuda"
+            if ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "h264_nvenc"; then
+                HW_ACCEL="cuda"
+            fi
         fi
     fi
 
