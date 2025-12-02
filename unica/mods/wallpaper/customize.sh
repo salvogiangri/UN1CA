@@ -60,7 +60,8 @@ ENCODE_MP4()
     local FILE="$1"
     local FILE_PATH
     local FILE_NAME
-    local RES="-1:2400"
+    local RES_W="-1"
+    local RES_H="2400"
     local CMD
     local HW_ACCEL
 
@@ -69,7 +70,8 @@ ENCODE_MP4()
     HW_ACCEL="$(GET_HW_ACCEL)"
 
     if $TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
-        RES="1440:-1"
+        RES_W="1440"
+        RES_H="-1"
     fi
 
     LOG "- Encoding $FILE_NAME"
@@ -79,16 +81,16 @@ ENCODE_MP4()
     if [ "$HW_ACCEL" = "vaapi" ]; then
         CMD+=" -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi"
         CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-        CMD+=" -vf \"fps=60,scale_vaapi=w=$RES:h=-1,setsar=1:1\""
+        CMD+=" -vf \"fps=60,scale_vaapi=w=${RES_W}:h=${RES_H},setsar=1:1\""
         CMD+=" -c:v h264_vaapi -qp 18 -g 1"
     elif [ "$HW_ACCEL" = "cuda" ]; then
         CMD+=" -hwaccel cuda -hwaccel_output_format cuda"
         CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-        CMD+=" -vf \"fps=60,scale_cuda=$RES:-1,setsar=1:1\""
+        CMD+=" -vf \"fps=60,scale_cuda=w=${RES_W}:h=${RES_H},setsar=1:1\""
         CMD+=" -c:v h264_nvenc -preset p7 -cq 18 -g 1"
     else
         CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
-        CMD+=" -vf \"fps=60,scale=$RES,setsar=1:1\""
+        CMD+=" -vf \"fps=60,scale=${RES_W}:${RES_H},setsar=1:1\""
         CMD+=" -c:v libx264 -pix_fmt yuv420p -crf 18 -g 1"
         CMD+=" -preset veryslow -tune zerolatency"
     fi
