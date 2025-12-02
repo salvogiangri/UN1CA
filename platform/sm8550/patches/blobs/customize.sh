@@ -10,6 +10,10 @@ DELETE_FROM_WORK_DIR "system" "system/apex/com.android.bt.apex"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/apex/com.android.bt.apex" 0 0 644 "u:object_r:system_file:s0"
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Replacing GameDriver"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/priv-app/GameDriver-SM8550/GameDriver-SM8550.apk" 0 0 644 "u:object_r:system_file:s0"
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Adding stock WFD blobs"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/bin/insthk" 0 2000 755 "u:object_r:insthk_exec:s0"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libhdcp_client_aidl.so"
