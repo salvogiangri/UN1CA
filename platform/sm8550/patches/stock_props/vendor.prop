@@ -1,3 +1,26 @@
+# Platform properties
+ro.board.platform=kalama
+ro.board.api_level=33
+ro.board.first_api_level=33
+ro.product.board=kalama
+ro.soc.manufacturer=QTI
+
+# Camera properties
+ro.camera.notify_nfc=1
+ro.camera.enableCamera1MaxZsl=1
+ro.camera.disableJpegR=true
+ro.camera.disableHeicUltraHDR=true
+
+# Radio properties
+ro.radio.noril=no
+ro.telephony.default_cdma_sub=0
+ro.vendor.sec.radio.def_network=9
+ro.vendor.epdg.support=true
+ro.vendor.use_data_netmgrd=false
+persist.vendor.radio.atfwd.start=true
+persist.vendor.radio.enableadvancedscan=true
+persist.vendor.cne.feature=0
+
 # Display HAL properties
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
 ro.surface_flinger.has_HDR_display=true
