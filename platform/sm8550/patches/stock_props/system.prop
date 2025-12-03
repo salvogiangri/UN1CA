@@ -32,7 +32,3 @@ ro.nfc.port=I2C
 # WiFi Display properties
 persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
-
-# Backup NTP server
-persist.backup.ntpServer="0.pool.ntp.org"
-
