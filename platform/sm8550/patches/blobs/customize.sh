@@ -33,3 +33,41 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/vendor.samsung.hardwar
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/vendor.samsung.hardware.biometrics.face@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Adding QSEECOM blobs"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/qseecomd" 0 0 755 "u:object_r:tee_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.qseecom@1.0-service" 0 0 755 "u:object_r:hal_drm_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libQSEEComAPI.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/com.qti.qseeaon.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/com.qti.qseeutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.qseecom@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/hw/vendor.qti.hardware.qseecom@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libQSEEComAPI.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/com.qti.qseeaon.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/com.qti.qseeutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.qseecom@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/hw/vendor.qti.hardware.qseecom@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/qseecomd.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib/libQSEEComAPI_system.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib/vendor.qti.hardware.qseecom@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib/vendor.qti.hardware.qseecom-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib64/libQSEEComAPI_system.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib64/vendor.qti.hardware.qseecom@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "system_ext/lib64/vendor.qti.hardware.qseecom-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding VaultKeeper blobs"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/vaultkeeperd" 0 0 755 "u:object_r:vaultkeeper_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/vendor.samsung.hardware.security.vaultkeeper@2.0-service" 0 0 755 "u:object_r:hal_vaultkeeper_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardware.security.vaultkeeper@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vaultkeeper_common.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/vaultkeeper_manifest.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/vendor.samsung.hardware.security.vaultkeeper@2.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/vendor.samsung.hardware.security.vaultkeeper@2.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding Process Authenticator blobs"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/vendor.samsung.hardware.security.proca@2.0-service" 0 0 755 "u:object_r:hal_proca_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/pa_daemon_qsee.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+LOG_STEP_OUT
+
