@@ -339,3 +339,42 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/vendor.qti.hardware.memtrack
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/memtrack_qti.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/vintf/manifest/memtrack_qti.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding QCCSYSHAL service (system_ext)"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "bin/qccsyshal@1.2-service" 0 0 755 "u:object_r:qccsyshal_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "bin/qccsyshal_aidl-service" 0 0 755 "u:object_r:qccsyshal_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/init/vendor.qti.qccsyshal_aidl-service.rc" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.2.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.qccsyshal_aidl-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.hardware.qccsyshal@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.hardware.qccsyshal@1.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.hardware.qccsyshal@1.2.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.qccsyshal_aidl-halimpl.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.qccsyshal_aidl-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+# Vendor libraries
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/vendor.qti.hardware.qccsyshal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/vendor.qti.hardware.qccsyshal@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/vendor.qti.hardware.qccsyshal@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.qccsyshal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.qccsyshal@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.qccsyshal@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding QSPMHAL service (system_ext)"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "bin/qspmsvc" 0 0 755 "u:object_r:qspmsvc_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/init/qspmsvc.rc" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/libqspmsvc.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/libqspmsvc.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.qspmhal-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib64/vendor.qti.qspmhal-V1-ndk.so" 0 0 644 "u:object_r:system_lib_file:s0"
+# Vendor libraries and rc file
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/vendor.qti.qspmhal@1.0-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+LOG_STEP_OUT
