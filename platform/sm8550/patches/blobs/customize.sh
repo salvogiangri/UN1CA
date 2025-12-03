@@ -378,3 +378,12 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/vendor.qti.qspmhal@1.0-ser
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.qspmhal@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding Camera ISP (Image Signal Processor) blobs"
+# SwIsp (Software ISP) libraries - required for camera Super Night mode
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libSwIsp_core.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libSwIsp_wrapper_v1.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+# AIQ (Auto Image Quality) Solution libraries - required for camera AI processing
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libAIQSolution_MPI.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libAIQSolution_MPISingleRGB40.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+LOG_STEP_OUT

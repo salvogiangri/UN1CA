@@ -65,3 +65,9 @@ vendor.gralloc.enable_logs=0
 # Debug properties
 debug.sf.enable_hwc_vds=0
 debug.sf.predict_hwc_composition_strategy=0
+
+# Build information (from dm2q S916BXXS8EYK2)
+ro.vendor.build.date=Mon Nov 10 09:29:08 KST 2025
+ro.vendor.build.date.utc=1762734548
+ro.vendor.build.fingerprint=samsung/dm2qxxx/dm2q:13/TP1A.220624.014/S916BXXS8EYK2:user/release-keys
+ro.vendor.build.security_patch=2025-11-01
