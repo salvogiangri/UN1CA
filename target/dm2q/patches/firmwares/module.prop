@@ -1,2 +1,4 @@
-# Firmware patch for dm2q (Galaxy S23)
-# Adds GPU (Adreno 740), Camera (ICP), and Display (EVASS) firmwares
+id=firmwares
+name=GPU/Camera/Display firmwares
+author=Eduardob3677
+description=Adds Adreno 740 GPU, Camera ICP, and EVASS display firmwares for dm2q
