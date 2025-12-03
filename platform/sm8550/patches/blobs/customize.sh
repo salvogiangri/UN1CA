@@ -347,6 +347,9 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "bin/qccsyshal_aidl-service" 0 0
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/init/vendor.qti.qccsyshal_aidl-service.rc" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "etc/vintf/manifest/vendor.qti.qccsyshal_aidl-service.xml" 0 0 644 "u:object_r:system_file:s0"
+# Fix incorrect path in qccsyshal rc file
+LOG "- Fixing qccsyshal service path in rc file"
+sed -i 's|/system/system_ext/bin/qccsyshal@1.2-service|/system_ext/bin/qccsyshal@1.2-service|g' "$WORK_DIR/system_ext/etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "lib/vendor.qti.hardware.qccsyshal@1.2.so" 0 0 644 "u:object_r:system_lib_file:s0"
