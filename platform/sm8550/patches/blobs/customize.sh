@@ -409,20 +409,27 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.esepowermanager@1.
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding Security (KeyMint/KeyMaster) blobs"
-# Remove legacy keymaster services (if present)
+# Remove legacy keymaster services @3.0 and @4.1 only (keep @4.0-strongbox)
 LOG "- Removing legacy keymaster services (if present)"
 DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@3.0-service"
-DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@4.0-service"
 DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@4.1-service"
 DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@3.0-service.rc"
-DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@4.0-service.rc"
 DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@4.1-service.rc"
 DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@3.0.xml"
-DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@4.0.xml"
 DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@4.1.xml"
-# Remove legacy gatekeeper services (if present)
-DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.gatekeeper@1.0-service"
-DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.gatekeeper@1.0-service.rc"
+# Add Gatekeeper blobs
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/android.hardware.gatekeeper@1.0-service" 0 0 755 "u:object_r:hal_gatekeeper_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/vendor.qti.hardware.secureprocessor@1.0" 0 0 755 "u:object_r:vendor_qti_secure_processor_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/android.hardware.gatekeeper@1.0-service-qti.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/android.hardware.gatekeeper@1.0-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/vendor.qti.hardware.secureprocessor@1.0.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/hw/android.hardware.gatekeeper@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/hw/android.hardware.gatekeeper@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/hw/gatekeeper.mdfpp.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.secureprocessor.common@1.0-helper.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.secureprocessor.common@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.secureprocessor.config@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.secureprocessor.device@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
 # KeyMint service
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/android.hardware.security.keymint-service" 0 0 755 "u:object_r:hal_keymint_default_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/android.hardware.security.keymint-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
@@ -445,11 +452,6 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/libspcom.so" 0 0 644 "u:objec
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding FM Radio blobs"
-# Remove legacy FM radio services (if present)
-LOG "- Removing legacy FM radio services (if present)"
-DELETE_FROM_WORK_DIR "vendor" "bin/hw/vendor.qti.hardware.fm@1.0-service"
-DELETE_FROM_WORK_DIR "vendor" "etc/init/vendor.qti.hardware.fm@1.0-service.rc"
-DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/vendor.qti.hardware.fm@1.0.xml"
 # Add FM radio HAL and libraries
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/hw/vendor.qti.hardware.fm@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/libdsutils.so" 0 0 644 "u:object_r:vendor_file:s0"
@@ -470,9 +472,6 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.fm@1.0.so
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding Display Configuration Files"
-# Remove old/incompatible display configs (if present)
-LOG "- Removing old display configuration files (if present)"
-DELETE_FROM_WORK_DIR "vendor" "etc/display"
 # Display DPU configs
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/display/DPU660.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/display/DPU670.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
