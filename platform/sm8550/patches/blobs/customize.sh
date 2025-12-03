@@ -112,6 +112,12 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardwar
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding display HAL services and blobs"
+# Remove legacy display composer if present
+LOG "- Removing legacy display composer (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.graphics.composer@2.4-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.graphics.composer@2.4-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer-qti-display.xml"
+
 # Display composer service
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.composer-service" 0 2000 755 "u:object_r:hal_graphics_composer_default_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.display.composer-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
