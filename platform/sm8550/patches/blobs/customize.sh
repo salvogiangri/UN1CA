@@ -59,6 +59,7 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Adding VaultKeeper blobs"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/vaultkeeperd" 0 0 755 "u:object_r:vaultkeeper_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/vendor.samsung.hardware.security.vaultkeeper@2.0-service" 0 0 755 "u:object_r:hal_vaultkeeper_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/libhwvault.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.samsung.hardware.security.vaultkeeper@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/vaultkeeper_common.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/vintf/manifest/vaultkeeper_manifest.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
