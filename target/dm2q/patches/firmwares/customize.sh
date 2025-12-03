@@ -1,12 +1,39 @@
-LOG "- Adding GPU (Adreno 740) firmware"
-LOG "- Adding Camera ICP firmware"  
-LOG "- Adding Display EVASS firmware"
+LOG_STEP_IN "- Adding GPU (Adreno 740) firmwares"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.mdt" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.b00" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.b01" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.b02" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_sqe.fw" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.elf" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/a740_zap.mbn" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+LOG_STEP_OUT
 
-# Firmware files are automatically included from the vendor/firmware directory
-# and configured via fs_config-vendor and file_context-vendor
+LOG_STEP_IN "- Adding Camera/DSP firmwares"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b00" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b01" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b02" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b03" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b04" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b05" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b06" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b07" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b08" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b09" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b10" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b11" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b12" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b13" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b14" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b15" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b16" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b17" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b18" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b19" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.b20" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/CAMERA_ICP.mdt" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+LOG_STEP_OUT
 
-# Patch SELinux to allow firmware mounting
-if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil" ]; then
-    LOG "- Patching /vendor/etc/selinux/vendor_sepolicy.cil for firmware mounting"
-    EVAL "echo \"(allow init_30_0 vendor_firmware_file (file (mounton)))\" >> \"$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil\""
-fi
+LOG_STEP_IN "- Adding Display EVASS firmwares"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/evass.mbn" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/firmware/evass.mdt" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+LOG_STEP_OUT
