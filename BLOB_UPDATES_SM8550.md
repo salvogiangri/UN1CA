@@ -18,19 +18,16 @@ Source: [dm2q log](https://gist.githubusercontent.com/Eduardob3677/719f0e0773047
    - Error: `vaultkeeper: VaultKeeper service preparation is failed`
    - Impact: Secure storage and authentication features unavailable
 
-3. **Process Authenticator Config Missing**
-   - Error: `PA_DAEMON: [ReadConfig:343] Cannot read config file.`
-   - Impact: Process authentication and integrity verification may be compromised
-
 ### Non-Critical Errors (Not Addressed)
 - **libpenguin.so missing**: This is a third-party Instagram/Facebook library, not a system component
 - **Phenotype API errors**: Google Play Services related, not device-specific
 - **imsupdate.json not found**: Carrier-specific IMS configuration, not critical
+- **Process Authenticator (PA_DAEMON) config errors**: UN1CA intentionally disables PROCA in the kernel (see `unica/patches/proca/customize.sh`) and removes the PROCA database (`unica/debloat.sh`), so adding PROCA blobs would be counterproductive
 
 ## Files Modified
 
 ### platform/sm8550/patches/blobs/customize.sh
-Added three new blob sections to fix the identified errors:
+Added two new blob sections to fix the identified errors:
 
 #### 1. QSEECOM Blobs (Lines 36-57)
 **Purpose**: Qualcomm Secure Execution Environment Communication - Required for TEE (Trusted Execution Environment)
@@ -77,16 +74,23 @@ Added three new blob sections to fix the identified errors:
 
 **Reasoning**: VaultKeeper provides secure storage for Samsung-specific security features including Knox, Samsung Pass, and secure folder functionality. The log errors show it's failing to initialize due to missing TA and supporting infrastructure.
 
-#### 3. Process Authenticator Blobs (Lines 69-72)
-**Purpose**: Samsung's process integrity verification system
+## Why Process Authenticator (PROCA) Was NOT Added
 
-**Binaries Added:**
-- `vendor/bin/vendor.samsung.hardware.security.proca@2.0-service` - Process Authenticator service
+Although the log shows PA_DAEMON errors (`PA_DAEMON: [ReadConfig:343] Cannot read config file.`), adding PROCA blobs would be counterproductive because:
 
-**Configuration Files:**
-- `vendor/etc/init/pa_daemon_qsee.rc` - Init script for Process Authenticator
+1. **UN1CA intentionally disables PROCA** in the kernel through `unica/patches/proca/customize.sh`:
+   - Patches the kernel to replace "proca_config" string with "fuck_u_sammy"
+   - This prevents PROCA from loading even if binaries are present
 
-**Reasoning**: Process Authenticator (PROCA) verifies the integrity of running processes and works with VaultKeeper. The log shows PA_DAEMON errors related to missing configuration, which is resolved by adding the proper service and init files.
+2. **UN1CA removes PROCA database** in `unica/debloat.sh`:
+   - Deletes `system/etc/proca.db`
+
+3. **PROCA's purpose conflicts with UN1CA's goals**:
+   - PROCA (Process Authenticator) verifies process integrity and prevents modifications
+   - UN1CA is a modified ROM that requires the ability to modify system processes
+   - Enabling PROCA would potentially break UN1CA's modifications
+
+Therefore, PA_DAEMON errors in the log are **expected** and **by design** in UN1CA.
 
 ## SELinux Contexts Used
 
@@ -95,7 +99,6 @@ Added three new blob sections to fix the identified errors:
   - `u:object_r:hal_drm_default_exec:s0` for QSEECOM service
   - `u:object_r:vaultkeeper_exec:s0` for vaultkeeperd
   - `u:object_r:hal_vaultkeeper_default_exec:s0` for VaultKeeper service
-  - `u:object_r:hal_proca_default_exec:s0` for PROCA service
 
 - Libraries: 644 permissions
   - `u:object_r:vendor_file:s0` for vendor partition libraries
