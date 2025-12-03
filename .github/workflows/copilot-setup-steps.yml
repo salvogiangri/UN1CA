@@ -18,7 +18,7 @@ env:
 jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
   copilot-setup-steps:
-    runs-on: ubuntu-latest
+    runs-on: rom2
 
     # Set the permissions to the lowest permissions possible needed for your steps.
     # Copilot will be given its own token for its operations.
@@ -28,7 +28,9 @@ jobs:
 
     # Steps run before the agent starts working
     steps:
-    
+      - name: Checkout
+        uses: actions/checkout@master # v6.0.0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -45,4 +47,12 @@ jobs:
             npm install -g "$package" || echo "Warning: Failed to install $package"
           done
           
-    
+      - name: Clone Dump dm2q
+        run: | 
+          cd ${GITHUB_WORKSPACE}
+          git clone https://gitlab.com/Eduardob3677/samsung_dm2q_dump.git dump
+          cd dump
+          rm -rf .git
+          rm -rf twrp-device-tree
+          rm -rf aosp-device-tree
+          cd ..
