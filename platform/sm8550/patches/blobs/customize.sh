@@ -111,11 +111,198 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsnapmw.so" 0 0 644 
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardware.snap-V1-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Adding AIDL display composer"
+LOG_STEP_IN "- Adding display HAL services and blobs"
+# Display composer service
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.composer-service" 0 2000 755 "u:object_r:hal_graphics_composer_default_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.display.composer-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/vendor.qti.hardware.display.composer-service.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+# Display allocator service
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.allocator-service" 0 2000 755 "u:object_r:hal_graphics_allocator_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.display.allocator-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/vendor.qti.hardware.display.allocator-service.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+# Display demura service
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.demura-service" 0 2000 755 "u:object_r:hal_display_demura_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.display.demura-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/vendor.qti.hardware.display.demura-service.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+# Display init files
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/hw/init.samsung.display.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/init.qti.display_boot.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+# Display config and color
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/snapdragon_color_libs_config.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+# Graphics mapper
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/android.hardware.graphics.mapper-impl-qti-display.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/hw/android.hardware.graphics.mapper@4.0-impl-qti-display.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/hw/android.hardware.graphics.mapper@4.0-impl-qti-display.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display composer libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.composer@3.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.composer@3.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.composer@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.composer@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/android.hardware.graphics.composer@2.4.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/android.hardware.graphics.composer@2.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/android.hardware.graphics.composer@2.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/android.hardware.graphics.composer@2.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display composer libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.composer@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.composer@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/android.hardware.graphics.composer@2.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/android.hardware.graphics.composer@2.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/android.hardware.graphics.composer@2.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display allocator libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.allocator@4.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.allocator@3.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.allocator@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display allocator libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.allocator@4.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.allocator@3.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.allocator@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display mapper libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapper@4.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapper@3.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapper@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapper@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapper@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapperextensions@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapperextensions@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapperextensions@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.mapperextensions@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display mapper libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapper@4.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapper@3.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapper@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapper@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapper@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapperextensions@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapperextensions@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapperextensions@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.mapperextensions@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display demura libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.demura@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display demura libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.demura@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display config libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V6-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V5-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V4-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V3-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V2-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.qti.hardware.display.config-V1-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.11.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.10.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.9.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.8.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.7.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.6.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.5.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.4.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.config@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display config libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V6-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V5-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V4-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V3-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V2-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.qti.hardware.display.config-V1-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@2.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.11.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.10.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.9.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.8.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.7.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.6.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.5.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.4.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.config@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display color libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.7.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.6.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.5.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.4.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.color@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.display.postproc@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsnapdragoncolor-manager.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsnapdragoncolor-qdcm.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display color libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.7.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.6.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.5.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.4.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.3.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.2.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.1.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.color@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/vendor.display.postproc@1.0.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsnapdragoncolor-manager.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsnapdragoncolor-qdcm.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display core libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdmcore.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdmutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdmdal.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdmextension.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdm-color.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdm-colormgr-algo.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsdm-disp-vndapis.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libdisplayconfig.qti.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libdisplaydebug.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libdisplayqos.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libdisplayskuutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Display core libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdmcore.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdmutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdmdal.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdmextension.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdm-color.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdm-colormgr-algo.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libsdm-disp-vndapis.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libdisplayconfig.qti.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libdisplaydebug.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libdisplayqos.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libdisplayskuutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Gralloc libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libgralloc.qti.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libgralloccore.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libgrallocutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libgralloc_helper.unifunc.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libgrallocusage.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libqdMetaData.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libdrmutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+
+# Gralloc libraries (lib)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libgralloc.qti.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libgralloccore.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libgrallocutils.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libqdMetaData.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib/libdrmutils.so" 0 0 644 "u:object_r:vendor_file:s0"
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding memtrack service"
