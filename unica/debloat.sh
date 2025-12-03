@@ -140,18 +140,18 @@ system/app/PlayAutoInstallConfig
 "
 
 # HwModuleTest
-SYSTEM_DEBLOAT+="
-system/app/Cameralyzer
-system/app/FactoryAirCommandManager
-system/app/FactoryCameraFB
-system/app/HMT
-system/app/WlanTest
-system/etc/default-permissions/default-permissions-com.sec.factory.cameralyzer.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.providers.factory.xml
-system/etc/permissions/privapp-permissions-com.sec.facatfunction.xml
-system/priv-app/FacAtFunction
-system/priv-app/FactoryTestProvider
-"
+#SYSTEM_DEBLOAT+="
+#system/app/Cameralyzer
+#system/app/FactoryAirCommandManager
+#system/app/FactoryCameraFB
+#system/app/HMT
+#system/app/WlanTest
+#system/etc/default-permissions/default-permissions-com.sec.factory.cameralyzer.xml
+#system/etc/permissions/privapp-permissions-com.samsung.android.providers.factory.xml
+#system/etc/permissions/privapp-permissions-com.sec.facatfunction.xml
+#system/priv-app/FacAtFunction
+#system/priv-app/FactoryTestProvider
+#"
 
 # Language packs
 SYSTEM_DEBLOAT+="$(find "$WORK_DIR/system" -type d -name "*TTSVoice*" | sed "s|$WORK_DIR/system/||g")"
@@ -351,33 +351,4 @@ PRODUCT_DEBLOAT+="
 app/YouTube
 "
 
-# ====== CUSTOM DEBLOAT TO SAVE SPACE ======
 
-# Samsung Internet/Browser
-SYSTEM_DEBLOAT+="
-system/preload/SBrowser
-"
-
-# Bixby
-SYSTEM_DEBLOAT+="
-system/app/BixbyWakeup
-system/priv-app/Bixby
-system/priv-app/BixbyVisionFramework3.5
-system/priv-app/BixbyInterpreter
-"
-
-# Unused fonts
-SYSTEM_DEBLOAT+="$(find "$WORK_DIR/system" -type f -path "*/fonts/*" | grep -iE "(Chinese|Japanese|Korean|Arabic|Thai|Hindi)" | sed "s|$WORK_DIR/system/||g")"
-
-# Unused wallpapers
-SYSTEM_DEBLOAT+="$(find "$WORK_DIR/system" -type f -path "*/wallpaper/*" | tail -n +5 | sed "s|$WORK_DIR/system/||g")"
-
-# Samsung Health stub
-SYSTEM_DEBLOAT+="
-system/app/SHealth
-"
-
-# Samsung Notes
-SYSTEM_DEBLOAT+="
-system/app/Notes
-"
