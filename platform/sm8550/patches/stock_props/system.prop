@@ -1,2 +1,6 @@
 # Disable WAV 32-bit PCM support
 media.extractor.sec.pcm-32bit=
+
+# Display properties
+debug.sf.enable_hwc_vds=0
+

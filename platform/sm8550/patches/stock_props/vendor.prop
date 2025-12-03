@@ -1,0 +1,44 @@
+# Display HAL properties
+ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
+ro.surface_flinger.has_HDR_display=true
+ro.surface_flinger.has_wide_color_display=true
+ro.surface_flinger.max_virtual_display_dimension=4096
+
+# Vendor display properties
+vendor.display.allow_3d_adaptive_tm_external=1
+vendor.display.comp_mask=0
+vendor.display.defer_fps_frame_count=4
+vendor.display.disable_3d_adaptive_tm=0
+vendor.display.disable_dynamic_fps=1
+vendor.display.disable_excl_rect=0
+vendor.display.disable_excl_rect_partial_fb=1
+vendor.display.disable_ext_anim=1
+vendor.display.disable_hw_recovery_dump=1
+vendor.display.disable_offline_rotator=1
+vendor.display.disable_scaler=0
+vendor.display.disable_sdr_dimming=1
+vendor.display.disable_sdr_histogram=1
+vendor.display.disable_stc_dimming=1
+vendor.display.disable_system_load_check=1
+vendor.display.enable_async_powermode=0
+vendor.display.enable_async_vds_creation=0
+vendor.display.enable_display_extensions=1
+vendor.display.enable_dpps_dynamic_fps=0
+vendor.display.enable_early_wakeup=1
+vendor.display.enable_hdr10_gpu_target=1
+vendor.display.enable_optimize_refresh=0
+vendor.display.enable_rc_support=0
+vendor.display.enable_rounded_corner=0
+vendor.display.idle_time=0
+vendor.display.idle_time_inactive=0
+vendor.display.use_frame_scheduler_extension=1
+vendor.display.use_smooth_motion=0
+vendor.display.vds_allow_hwc=1
+
+# Gralloc properties
+vendor.gralloc.disable_ubwc=0
+vendor.gralloc.enable_logs=0
+
+# Debug properties
+debug.sf.enable_hwc_vds=0
+debug.sf.predict_hwc_composition_strategy=0
