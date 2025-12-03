@@ -111,3 +111,16 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsnapmw.so" 0 0 644 
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardware.snap-V1-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Adding AIDL display composer"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.composer-service" 0 2000 755 "u:object_r:hal_graphics_composer_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/vendor.qti.hardware.display.composer-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/vendor.qti.hardware.display.composer-service.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/snapdragon_color_libs_config.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding memtrack service"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.memtrack-service" 0 2000 755 "u:object_r:hal_memtrack_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/init/memtrack_qti.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/etc/vintf/manifest/memtrack_qti.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+LOG_STEP_OUT
+
