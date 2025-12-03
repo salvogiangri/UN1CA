@@ -27,7 +27,7 @@ Source: [dm2q log](https://gist.githubusercontent.com/Eduardob3677/719f0e0773047
 ## Files Modified
 
 ### platform/sm8550/patches/blobs/customize.sh
-Added two new blob sections to fix the identified errors:
+Added three new blob sections to fix the identified errors:
 
 #### 1. QSEECOM Blobs (Lines 36-57)
 **Purpose**: Qualcomm Secure Execution Environment Communication - Required for TEE (Trusted Execution Environment)
@@ -73,6 +73,27 @@ Added two new blob sections to fix the identified errors:
 - `vendor/etc/vintf/manifest/vaultkeeper_manifest.xml` - VINTF manifest for VaultKeeper HAL
 
 **Reasoning**: VaultKeeper provides secure storage for Samsung-specific security features including Knox, Samsung Pass, and secure folder functionality. The log errors show it's failing to initialize due to missing TA and supporting infrastructure.
+
+#### 3. VexFwk (Video Expert Framework) Blobs (Lines 68-89)
+**Purpose**: Samsung's Video Expert Framework for image/video processing in Gallery and Camera apps
+
+**Libraries Added (32-bit and 64-bit):**
+- `libandroid.vexfwk.samsung.so` - Android VexFwk integration
+- `libcommon-jni.vexfwk.samsung.so` - Common JNI bindings (fixes the copyIntArrayToBitmapNative error)
+- `libimgproc.vexfwk.samsung.so` - Image processing functions
+- `libmetadata.vexfwk.samsung.so` - Metadata handling
+- `libndk.vexfwk.samsung.so` - NDK interface
+- `libruntime.vexfwk.samsung.so` - Runtime support
+- `libsdk-v2-jni.vexfwk.samsung.so` - SDK v2 JNI bindings
+- `vexfwk_service_aidl-ndk.so` - AIDL service interface
+
+**Framework & Service:**
+- `system/framework/vexfwk_service_lib.jar` - VexFwk service framework
+- `system/etc/permissions/vexfwk_service_lib.xml` - Permissions manifest
+- `system/etc/public.libraries-vexfwk.samsung.txt` - Public libraries list
+- `system/priv-app/vexfwk_service/vexfwk_service.apk` - VexFwk service app
+
+**Reasoning**: The log shows Gallery failing with `Failed to register native method com.samsung.android.vexfwk.bitmap.VexFwkBitmap.copyIntArrayToBitmapNative`. VexFwk is Samsung's image/video processing framework used by Gallery and Camera. While the `__mssi` patch includes VexFwk for MediaTek devices, dm2q uses QSII (Qualcomm Single System Image), so VexFwk must be added specifically for sm8550/QSII devices.
 
 ## Why Process Authenticator (PROCA) Was NOT Added
 
