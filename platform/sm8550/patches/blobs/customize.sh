@@ -389,6 +389,15 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libAIQSolution_MPISing
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding Secure Element blobs"
+# Remove legacy secure element services (if present)
+LOG "- Removing legacy secure element services (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.secure_element@1.0-service"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.secure_element@1.1-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.secure_element@1.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.secure_element@1.1-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.secure_element@1.0.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.secure_element@1.1.xml"
+# Add secure element @1.2 service and libraries
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/android.hardware.secure_element@1.2-service" 0 0 755 "u:object_r:hal_secure_element_default_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/android.hardware.secure_element@1.2-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/libsec_semRil.so" 0 0 644 "u:object_r:vendor_file:s0"
@@ -400,6 +409,20 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.esepowermanager@1.
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding Security (KeyMint/KeyMaster) blobs"
+# Remove legacy keymaster services (if present)
+LOG "- Removing legacy keymaster services (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@3.0-service"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@4.0-service"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.keymaster@4.1-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@3.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@4.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.keymaster@4.1-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@3.0.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@4.0.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.keymaster@4.1.xml"
+# Remove legacy gatekeeper services (if present)
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.gatekeeper@1.0-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.gatekeeper@1.0-service.rc"
 # KeyMint service
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "bin/hw/android.hardware.security.keymint-service" 0 0 755 "u:object_r:hal_keymint_default_exec:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/init/android.hardware.security.keymint-service.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
@@ -422,6 +445,12 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/libspcom.so" 0 0 644 "u:objec
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding FM Radio blobs"
+# Remove legacy FM radio services (if present)
+LOG "- Removing legacy FM radio services (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/vendor.qti.hardware.fm@1.0-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/vendor.qti.hardware.fm@1.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/vendor.qti.hardware.fm@1.0.xml"
+# Add FM radio HAL and libraries
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/hw/vendor.qti.hardware.fm@1.0-impl.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/libdsutils.so" 0 0 644 "u:object_r:vendor_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib/libidl.so" 0 0 644 "u:object_r:vendor_file:s0"
@@ -441,6 +470,9 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "lib64/vendor.qti.hardware.fm@1.0.so
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding Display Configuration Files"
+# Remove old/incompatible display configs (if present)
+LOG "- Removing old display configuration files (if present)"
+DELETE_FROM_WORK_DIR "vendor" "etc/display"
 # Display DPU configs
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/display/DPU660.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/display/DPU670.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
