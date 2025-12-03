@@ -5,18 +5,6 @@ ro.board.first_api_level=33
 ro.product.board=kalama
 ro.soc.manufacturer=QTI
 
-# Hardware properties
-ro.hardware.egl=adreno
-ro.hardware.vulkan=adreno
-ro.hardware.gatekeeper=mdfpp
-ro.hardware.keystore=mdfpp
-ro.hardware.keystore_desede=true
-
-# Security properties
-ro.vendor.build.security_patch=2025-11-01
-ro.security.fips_skc.ver=2.3
-ro.security.fips_scrypto.ver=2.7
-
 # Camera properties
 ro.camera.notify_nfc=1
 ro.camera.enableCamera1MaxZsl=1
