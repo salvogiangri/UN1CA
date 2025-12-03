@@ -111,6 +111,29 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/libsnapmw.so" 0 0 644 
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardware.snap-V1-ndk.so" 0 0 644 "u:object_r:vendor_file:s0"
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Adding keymaster 4.0 libs"
+# Add keymaster 4.0 libraries (lib64)
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/android.hardware.keymaster@3.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/android.hardware.keymaster@4.0.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/android.hardware.keymaster@4.1.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libkeymaster4support.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libkeymaster4_1support.so" 0 0 644 "u:object_r:system_lib_file:s0"
+
+# Remove legacy keymint libraries if present (lib)
+DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.keymint-V1-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.security.secureclock-V1-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/libdk_native_keymint.so"
+DELETE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.keymint-V1-ndk.so"
+
+# Remove legacy keymint libraries if present (lib64)
+DELETE_FROM_WORK_DIR "system" "system/lib64/android.hardware.security.keymint-V1-ndk.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/libdk_native_keymint.so"
+DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V1-ndk.so"
+
+# Note: dm2q uses keymint (newer) instead of keymaster 4.0
+# These libraries are kept for compatibility with older firmware
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Adding display HAL services and blobs"
 # Remove legacy display composer services (all versions)
 LOG "- Removing legacy display composer services (if present)"
