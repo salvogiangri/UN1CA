@@ -112,11 +112,33 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/lib64/vendor.samsung.hardwar
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding display HAL services and blobs"
-# Remove legacy display composer if present
-LOG "- Removing legacy display composer (if present)"
+# Remove legacy display composer services (all versions)
+LOG "- Removing legacy display composer services (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.graphics.composer@2.1-service"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.graphics.composer@2.2-service"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.graphics.composer@2.3-service"
 DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.graphics.composer@2.4-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.graphics.composer@2.1-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.graphics.composer@2.2-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.graphics.composer@2.3-service.rc"
 DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.graphics.composer@2.4-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer@2.1.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer@2.2.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer@2.3.xml"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer@2.4.xml"
 DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.graphics.composer-qti-display.xml"
+
+# Remove legacy memtrack service (HIDL version)
+LOG "- Removing legacy memtrack service (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/android.hardware.memtrack@1.0-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/android.hardware.memtrack@1.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/android.hardware.memtrack@1.0.xml"
+
+# Remove legacy display color service
+LOG "- Removing legacy display color service (if present)"
+DELETE_FROM_WORK_DIR "vendor" "bin/hw/vendor.display.color@1.0-service"
+DELETE_FROM_WORK_DIR "vendor" "etc/init/vendor.display.color@1.0-service.rc"
+DELETE_FROM_WORK_DIR "vendor" "etc/vintf/manifest/vendor.display.color@1.0.xml"
 
 # Display composer service
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "vendor/bin/hw/vendor.qti.hardware.display.composer-service" 0 2000 755 "u:object_r:hal_graphics_composer_default_exec:s0"
