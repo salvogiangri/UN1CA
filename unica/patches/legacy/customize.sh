@@ -258,10 +258,9 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
     VBOOT_MISSING=true
     KERNEL_MISSING=true
 
-    if [ "$TARGET_PRODUCT_SHIPPING_API_LEVEL" -ge "30" ]; then
+    if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
         # Check for GKI devices
         EXTRACT_KERNEL_MODULES
-        find "$TMP_DIR/out/"
         if grep -q "SKY_DEFAULT" "$TMP_DIR/out/vendor_ramdisk"*; then
             VBOOT_MISSING=false
         fi

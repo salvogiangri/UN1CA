@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Platform configuration file for for Qualcomm Snapdragon 778G devices (sm7325)
+# Platform configuration file for Qualcomm Snapdragon 778G devices (sm7325)
 TARGET_BOARD_API_LEVEL=30
 
 # Partitions
