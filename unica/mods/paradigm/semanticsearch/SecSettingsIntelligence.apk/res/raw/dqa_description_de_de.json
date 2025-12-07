@@ -109,7 +109,7 @@
     "key": "vision_enhancements_preference",
     "authority": "com.android.settings",
     "title": "Relumino",
-    "description": "Relumino, Das Galaxy verfügt über eine Vielzahl von Funktionen für sehbehinderte Benutzer.\nGrundsätzlich gibt es die Funktionen 'Textgröße und Stil', 'Bildschirm vergrößern/verkleinern', mit denen die Schriftgröße angepasst werden kann.\nDie Funktion 'Vergrößerung', die den tatsächlich angezeigten Bildschirm selbst vergrößert.\nDie Funktion 'Lupe', mit der durch die Kamera Dokumente oder Speisekarten vergrößert angezeigt werden können.\nDie Funktion 'Relumino', die die Umrisse von Objekten in Videos oder Bildern dicker zeichnet, um das Erkennen von Objekten zu erleichtern.\n\n1. Starten Sie die 'Einstellungen'-App des Geräts.\n2. Suchen und wählen Sie das Menü 'Eingabehilfen' > 'Sehhilfen'.\n3. Hier können Sie verschiedene Eingabehilfen für sehbehinderte Benutzer überprüfen.\n\nWeitere Erläuterungen zu den verschiedenen Eingabehilfen, die das Galaxy bietet, finden Sie auch auf der Samsung Accessibility-Website.\nhttp://www.samsung.com/accessibility"
+    "description": "Relumino, Das Galaxy verfügt über eine Vielzahl von Funktionen für sehbehinderte Benutzer.\nGrundsätzlich gibt es die Funktionen 'Textgröße und Stil', 'Bildschirm vergrößern/verkleinern', mit denen die Schriftgröße angepasst werden kann.\nDie Funktion 'Vergrößerung', die den tatsächlich angezeigten Bildschirm selbst vergrößert.\nDie Funktion 'Lupe', mit der durch die Kamera Dokumente oder Speisekarten vergrößert angezeigt werden können.\nDie Funktion 'Relumino', die Umrisse von Objekten in Videos oder Bildern dicker zeichnet, um das Erkennen von Objekten zu erleichtern.\n\n1. Starten Sie die 'Einstellungen'-App des Geräts.\n2. Suchen und wählen Sie das Menü 'Eingabehilfen' > 'Sehhilfen'.\n3. Hier können Sie verschiedene Eingabehilfen für sehbehinderte Benutzer überprüfen.\n\nWeitere Erläuterungen zu den verschiedenen Eingabehilfen, die das Galaxy bietet, finden Sie auch auf der Samsung Accessibility-Website.\nhttp://www.samsung.com/accessibility"
   },
   {
     "id": "11083",
@@ -1033,7 +1033,7 @@
     "key": "wifi_bluetooth_reset_pref",
     "authority": "com.android.settings",
     "title": "Wi-Fi- und Bluetooth-Einstellungen zurücksetzen",
-    "description": "Wi-Fi- und Bluetooth-Einstellungen zurücksetzen, Dies ist eine Funktion, die die Einstellungen für Wi-Fi und Bluetooth auf den ursprünglichen Zustand zurücksetzt. Wenn Sie diese Funktion verwenden, werden alle Netzwerkprofile, gespeicherten Wi-Fi-Passwörter und gepaarten Bluetooth-Gerätelisten gelöscht.\n\n1. Öffnen Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Allgemein' > 'Zurücksetzen'.\n3. Hier finden Sie das Menü 'Wi-Fi- und Bluetooth-Einstellungen zurücksetzen'.\n\nAlle Wi-Fi- und Bluetooth-Einstellungen werden zurückgesetzt. Nach dem Zurücksetzen kann dies nicht rückgängig gemacht werden."
+    "description": "Wi-Fi- und Bluetooth-Einstellungen zurücksetzen, Dies ist eine Funktion, die Einstellungen für Wi-Fi und Bluetooth auf den ursprünglichen Zustand zurücksetzt. Wenn Sie diese Funktion verwenden, werden alle Netzwerkprofile, gespeicherten Wi-Fi-Passwörter und gepaarten Bluetooth-Gerätelisten gelöscht.\n\n1. Öffnen Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Allgemein' > 'Zurücksetzen'.\n3. Hier finden Sie das Menü 'Wi-Fi- und Bluetooth-Einstellungen zurücksetzen'.\n\nAlle Wi-Fi- und Bluetooth-Einstellungen werden zurückgesetzt. Nach dem Zurücksetzen kann dies nicht rückgängig gemacht werden."
   },
   {
     "id": "11620",
@@ -1453,7 +1453,7 @@
     "key": "onehand_operation_settings",
     "authority": "com.android.settings",
     "title": "Einhändiger Modus",
-    "description": "Einhändiger Modus, 'Einhandbedienungsmodus' ist eine Funktion, die die Bildschirmgröße verkleinert, um die Bedienung des Geräts mit einer Hand zu erleichtern. Mit diesem Modus wird die Bildschirmgröße verkleinert, sodass es auch für Benutzer mit kleinen Händen oder in engen Räumen bequem verwendet werden kann.\n\nSo aktivieren Sie den 'Einhandbedienungsmodus':\n\n1. Öffnen Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Nützliche Funktionen'.\n3. Hier finden Sie das Menü 'Einhandbedienungsmodus'.\n\nDie Bedienungsmethoden können wie folgt eingestellt werden:\n\n##Gesten\nWenn Sie die Option 'Gesten' wählen, können Sie den 'Einhandbedienungsmodus' aktivieren, indem Sie vom unteren Rand der Mitte des Bildschirms nach unten wischen.\n\n##Tasten\nWenn Sie die Option 'Tasten' wählen, können Sie 'Einhändiger Modus' aktivieren, indem Sie die Home-Taste zweimal drücken."
+    "description": "Einhändiger Modus, 'Einhandbedienungsmodus' ist eine Funktion, die Bildschirmgröße verkleinert, um die Bedienung des Geräts mit einer Hand zu erleichtern. Mit diesem Modus wird die Bildschirmgröße verkleinert, sodass es auch für Benutzer mit kleinen Händen oder in engen Räumen bequem verwendet werden kann.\n\nSo aktivieren Sie den 'Einhandbedienungsmodus':\n\n1. Öffnen Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Nützliche Funktionen'.\n3. Hier finden Sie das Menü 'Einhandbedienungsmodus'.\n\nDie Bedienungsmethoden können wie folgt eingestellt werden:\n\n##Gesten\nWenn Sie die Option 'Gesten' wählen, können Sie den 'Einhandbedienungsmodus' aktivieren, indem Sie vom unteren Rand der Mitte des Bildschirms nach unten wischen.\n\n##Tasten\nWenn Sie die Option 'Tasten' wählen, können Sie 'Einhändiger Modus' aktivieren, indem Sie die Home-Taste zweimal drücken."
   },
   {
     "id": "10224",
@@ -1495,7 +1495,7 @@
     "key": "vtcamera_setting",
     "authority": "com.android.settings",
     "title": "Videoanrufeffekte",
-    "description": "Videoanrufeffekte, In Apps, die die Funktion 'Videoanruf-Effekte' unterstützen, können Sie die nützlichen Funktionen der Samsung-Kamera nutzen.\n\n## Verwendung in der Standard-Videoanruf-App\n1. Bitte starten Sie einen Videoanruf.\n2. Bitte wählen Sie 'Filter' aus.\n3. Hier können Sie verschiedene Filter wie Hintergrundeffekte und Farbton-Effekte einstellen.\n\n## Verwendung in anderen Videoanruf-Apps\n1. Starten Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Nützliche Funktionen' aus.\n3. Hier können Sie das Menü 'Videoanruf-Effekte' finden.\n\nWenn Sie die Kamera in einer unterstützten App verwenden, können Sie durch Aufrufen des 'Schnellzugriffs'-Panels verschiedene Kameraeffekte wie Hintergrundeffekten und automatische Bilderrahmen, Farbtönen und Hautkorrekturen ein- und ausschalten, die in der App 'Einstellungen' ausgewählt wurden."
+    "description": "Videoanrufeffekte, In Apps, die Funktion 'Videoanruf-Effekte' unterstützen, können Sie die nützlichen Funktionen der Samsung-Kamera nutzen.\n\n## Verwendung in der Standard-Videoanruf-App\n1. Bitte starten Sie einen Videoanruf.\n2. Bitte wählen Sie 'Filter' aus.\n3. Hier können Sie verschiedene Filter wie Hintergrundeffekte und Farbton-Effekte einstellen.\n\n## Verwendung in anderen Videoanruf-Apps\n1. Starten Sie die 'Einstellungen'-App.\n2. Wählen Sie das Menü 'Nützliche Funktionen' aus.\n3. Hier können Sie das Menü 'Videoanruf-Effekte' finden.\n\nWenn Sie die Kamera in einer unterstützten App verwenden, können Sie durch Aufrufen des 'Schnellzugriffs'-Panels verschiedene Kameraeffekte wie Hintergrundeffekten und automatische Bilderrahmen, Farbtönen und Hautkorrekturen ein- und ausschalten, die in der App 'Einstellungen' ausgewählt wurden."
   },
   {
     "id": "20002",
@@ -1845,7 +1845,7 @@
     "key": "nfc_payment_settings",
     "authority": "com.android.settings",
     "title": "Kontaktloses Bezahlen",
-    "description": "Kontaktloses Bezahlen, Nachdem Sie eine Zahlungs-App heruntergeladen haben, die die NFC-Funktion nutzt, können Sie diese auch als Zahlungsmittel für öffentliche Verkehrsmittel verwenden.\n\nUm mit der NFC-Funktion des Geräts zu bezahlen, müssen Sie sich zuerst beim entsprechenden mobilen Zahlungsdienst registrieren. Für detaillierte Informationen zur Registrierung wenden Sie sich bitte an den Dienstanbieter.\n\nSo verwenden Sie kontaktlose Zahlungen:\n1. Wählen Sie im Einstellungsbildschirm Verbindung → NFC und kontaktlose Zahlungen und drücken Sie dann den Schalter, um die Funktion zu aktivieren.\n2. Halten Sie den NFC-Antennenbereich auf der Rückseite des Geräts nahe an das NFC-Kartenlesegerät.\nUm die Standard-Zahlungs-App einzustellen, wählen Sie im Einstellungsbildschirm Verbindung → NFC und kontaktlose Zahlungen → Kontaktlose Zahlung → Zahlung und wählen Sie dann die gewünschte App aus."
+    "description": "Kontaktloses Bezahlen, Nachdem Sie eine Zahlungs-App heruntergeladen haben, die NFC-Funktion nutzt, können Sie diese auch als Zahlungsmittel für öffentliche Verkehrsmittel verwenden.\n\nUm mit der NFC-Funktion des Geräts zu bezahlen, müssen Sie sich zuerst beim entsprechenden mobilen Zahlungsdienst registrieren. Für detaillierte Informationen zur Registrierung wenden Sie sich bitte an den Dienstanbieter.\n\nSo verwenden Sie kontaktlose Zahlungen:\n1. Wählen Sie im Einstellungsbildschirm Verbindung → NFC und kontaktlose Zahlungen und drücken Sie dann den Schalter, um die Funktion zu aktivieren.\n2. Halten Sie den NFC-Antennenbereich auf der Rückseite des Geräts nahe an das NFC-Kartenlesegerät.\nUm die Standard-Zahlungs-App einzustellen, wählen Sie im Einstellungsbildschirm Verbindung → NFC und kontaktlose Zahlungen → Kontaktlose Zahlung → Zahlung und wählen Sie dann die gewünschte App aus."
   },
   {
     "id": "10079",
@@ -2286,7 +2286,7 @@
     "key": "manage_conversations",
     "authority": "com.android.settings",
     "title": "Konversationen",
-    "description": "Konversationen, In der App können Sie die Benachrichtigungskategorien überprüfen, die für Gespräche festgelegt wurden.\nSie können die Einstellungen für jede Unterhaltung ändern.\n\n1. Starten Sie die App 'Einstellungen'.\n2. Wählen Sie das Menü 'Benachrichtigungen' > 'Erweiterte Einstellungen'.\n3. Hier finden Sie das Menü 'Konversationen'.\n\nWenn Sie einen Eintrag auswählen, können Sie die Liste der Gespräche sehen, für die die Benachrichtigungseinstellungen geändert wurden.\nSie können die detaillierten Benachrichtigungseinstellungen für jedes Gespräch ändern."
+    "description": "Konversationen, In der App können Sie die Benachrichtigungskategorien überprüfen, die für Gespräche festgelegt wurden.\nSie können die Einstellungen für jede Unterhaltung ändern.\n\n1. Starten Sie die App 'Einstellungen'.\n2. Wählen Sie das Menü 'Benachrichtigungen' > 'Erweiterte Einstellungen'.\n3. Hier finden Sie das Menü 'Konversationen'.\n\nWenn Sie einen Eintrag auswählen, können Sie die Liste der Gespräche sehen, für die Benachrichtigungseinstellungen geändert wurden.\nSie können die detaillierten Benachrichtigungseinstellungen für jedes Gespräch ändern."
   },
   {
     "id": "10527",
@@ -2643,7 +2643,7 @@
     "key": "SamsungPrivacyWebSite",
     "authority": "com.osp.app.signin.globalsearch.GlobalSearchProvider",
     "title": "Samsung Personal Information Website",
-    "description": "Samsung Personal Information Website, Es ist eine Website, die die Sammlung und Verwendung der persönlichen Daten von Samsung offenlegt.\n\n1. Führen Sie die App \"Einstellungen\" aus.\n2. Wählen Sie das Menü \"Samsung-Konto\"> \"Sicherheit und Schutz persönlicher Informationen\".\n3. Das Menü \"Samsung Personal Information Website\" finden Sie hier.\n\nOder\n\n1. Führen Sie die App \"Einstellungen\" aus.\n2. Wählen Sie das Menü \"Sicherheit und Schutz persönlicher Informationen\"> \"Andere Einstellungen für persönliche Informationen\".\n3. Das Menü \"Samsung Personal Information Website\" finden Sie hier.\n\nWenn Sie sich auf der Website anmelden, können Sie Ihre persönlichen Daten über kontobasierte Dienste von Samsung verwalten."
+    "description": "Samsung Personal Information Website, Es ist eine Website, die Sammlung und Verwendung der persönlichen Daten von Samsung offenlegt.\n\n1. Führen Sie die App \"Einstellungen\" aus.\n2. Wählen Sie das Menü \"Samsung-Konto\"> \"Sicherheit und Schutz persönlicher Informationen\".\n3. Das Menü \"Samsung Personal Information Website\" finden Sie hier.\n\nOder\n\n1. Führen Sie die App \"Einstellungen\" aus.\n2. Wählen Sie das Menü \"Sicherheit und Schutz persönlicher Informationen\"> \"Andere Einstellungen für persönliche Informationen\".\n3. Das Menü \"Samsung Personal Information Website\" finden Sie hier.\n\nWenn Sie sich auf der Website anmelden, können Sie Ihre persönlichen Daten über kontobasierte Dienste von Samsung verwalten."
   },
   {
     "id": "11070",
@@ -2965,7 +2965,7 @@
     "key": "key_enhanced_data_protection",
     "authority": "com.android.settings",
     "title": "Erweiterter Datenschutz",
-    "description": "Erweiterter Datenschutz, Erweiterter Datenschutz ist eine Sicherheitsfunktion von Samsung, die großen Wert auf den Schutz der Privatsphäre der Benutzer legt. Mit dieser Funktion werden bestimmte Daten des Benutzers mithilfe der End-to-End-Verschlüsselungstechnologie gespeichert. End-to-End-verschlüsselte Daten können nur auf Benutzergeräten, die die erweiterte Datenschutzfunktion unterstützen, abgerufen werden und sind für niemanden zugänglich, einschließlich Samsung.\n\n1. Starten Sie die App 'Einstellungen'.\n2. Wählen Sie das Menü 'Sicherheit und Datenschutz' > 'Weitere Sicherheitseinstellungen'.\n3. Hier finden Sie das Menü 'Erweiterter Datenschutz'."
+    "description": "Erweiterter Datenschutz, Erweiterter Datenschutz ist eine Sicherheitsfunktion von Samsung, die großen Wert auf den Schutz der Privatsphäre der Benutzer legt. Mit dieser Funktion werden bestimmte Daten des Benutzers mithilfe der End-to-End-Verschlüsselungstechnologie gespeichert. End-to-End-verschlüsselte Daten können nur auf Benutzergeräten, die erweiterte Datenschutzfunktion unterstützen, abgerufen werden und sind für niemanden zugänglich, einschließlich Samsung.\n\n1. Starten Sie die App 'Einstellungen'.\n2. Wählen Sie das Menü 'Sicherheit und Datenschutz' > 'Weitere Sicherheitseinstellungen'.\n3. Hier finden Sie das Menü 'Erweiterter Datenschutz'."
   },
   {
     "id": "11771",
@@ -3014,7 +3014,7 @@
     "key": "privacy_app_data_sharing_updates",
     "authority": "com.android.settings",
     "title": "Datenfreigabe-Updates für Standort",
-    "description": "Datenfreigabe-Updates für Standort, So können Sie Apps anzeigen, für die die Art der Weitergabe Ihrer Standortdaten geändert wurde:\n\n1. \"\"Einstellungen\"\" öffnen\n2. \"\"Sicherheit und Datenschutz\"\" > \"\"Weitere Datenschutzeinstellungen\"\" wählen\n3. Hier finden Sie die Option \"\"Datenfreigabe-Updates für Standort\"\".\n\nAuf diesem Bildschirm sehen Sie die Apps, für die die Art der Weitergabe Ihrer Standortdaten geändert wurde. Das können Apps sein, die zuvor keine Standortdaten weitergegeben haben oder die aktuell Ihre Daten für Werbezwecke weitergeben."
+    "description": "Datenfreigabe-Updates für Standort, So können Sie Apps anzeigen, für die Art der Weitergabe Ihrer Standortdaten geändert wurde:\n\n1. \"\"Einstellungen\"\" öffnen\n2. \"\"Sicherheit und Datenschutz\"\" > \"\"Weitere Datenschutzeinstellungen\"\" wählen\n3. Hier finden Sie die Option \"\"Datenfreigabe-Updates für Standort\"\".\n\nAuf diesem Bildschirm sehen Sie die Apps, für die Art der Weitergabe Ihrer Standortdaten geändert wurde. Das können Apps sein, die zuvor keine Standortdaten weitergegeben haben oder die aktuell Ihre Daten für Werbezwecke weitergeben."
   },
   {
     "id": "11788",
@@ -3868,7 +3868,7 @@
     "key": "top_level_photoeditor_settings_main_screen",
     "authority": "com.sec.android.mimage.photoretouching.settings.SearchProvider",
     "title": "Foto-Editor Einstellungen",
-    "description": "Foto-Editor Einstellungen, Der Foto-Editor ist eine App, mit der Sie Fotos bearbeiten können. Foto-Editor bietet die Einstellungen über ein Menü an. In den Foto-Editor Einstellungen können Sie Menüs zu Fotoassistent, Zeichenassistent sowie Informationen zu den Berechtigungen, die die App verwendet, und Informationen zum Foto-Editor einsehen. Sie können wie folgt auf die Foto-Editor Einstellungen zugreifen.\n#Zugriff auf Foto-Editor Einstellungen\n Foto-Editor App > Mehr Optionen (⁝) > Einstellungen"
+    "description": "Foto-Editor Einstellungen, Der Foto-Editor ist eine App, mit der Sie Fotos bearbeiten können. Foto-Editor bietet die Einstellungen über ein Menü an. In den Foto-Editor Einstellungen können Sie Menüs zu Fotoassistent, Zeichenassistent sowie Informationen zu den Berechtigungen, die App verwendet, und Informationen zum Foto-Editor einsehen. Sie können wie folgt auf die Foto-Editor Einstellungen zugreifen.\n#Zugriff auf Foto-Editor Einstellungen\n Foto-Editor App > Mehr Optionen (⁝) > Einstellungen"
   },
   {
     "id": "11892",
@@ -4827,7 +4827,7 @@
     "key": "SETTINGS_WRITING_ASSIST_CHAT_TRANSLATION",
     "authority": "com.samsung.android.honeyboard.settings.provider.HoneyIndexableSearchProvider",
     "title": "Chat-Übersetzung",
-    "description": "Chat-Übersetzung, Sie können die Chat-Übersetzung, eine Funktion der künstlichen Intelligenz der Samsung-Tastatur, ein- oder ausschalten. Sie können die Sprache auswählen, die angezeigt werden soll\n um festzulegen, ob der Originaltext und die Übersetzung zusammen oder nur die Übersetzung angezeigt werden soll.\nSie können die App-Verwaltung auswählen, um die App festzulegen, für die die Chat-Übersetzung funktionieren soll.\nSie können ein Sprachpaket für die Übersetzung auswählen und die Sprache, die Sie für die Übersetzung verwenden möchten, im Voraus herunterladen."
+    "description": "Chat-Übersetzung, Sie können die Chat-Übersetzung, eine Funktion der künstlichen Intelligenz der Samsung-Tastatur, ein- oder ausschalten. Sie können die Sprache auswählen, die angezeigt werden soll\n um festzulegen, ob der Originaltext und die Übersetzung zusammen oder nur die Übersetzung angezeigt werden soll.\nSie können die App-Verwaltung auswählen, um die App festzulegen, für die Chat-Übersetzung funktionieren soll.\nSie können ein Sprachpaket für die Übersetzung auswählen und die Sprache, die Sie für die Übersetzung verwenden möchten, im Voraus herunterladen."
   },
   {
     "id": "10831",
@@ -5156,7 +5156,7 @@
     "key": "switch_preference_discover",
     "authority": "com.samsung.android.visionintelligence.main.setting.provider.VisionIntelligenceSettingSearchProvider",
     "title": "Suche",
-    "description": "Suche, Mit der Bildsuchfunktion von Bixby Vision können Sie ähnliche Bilder in Pinterest finden, basierend auf Bildern auf der Kamera oder Fotos auf dem Gerät. Auf diese Weise können Sie interessantere Bilder finden oder neue Ideen und notwendige Informationen erhalten.\n\n# Wie zu benutzen\n1. Start der App \"Bixby Vision\"\n2. Wählen Sie das Menü \"Suche\" unten\n3. Die Bildsuche basiert auf Objekten, die die Kamera beleuchtet.\n4. Wenn Sie ein bereits gespeichertes Bild finden möchten, wählen Sie das Galeriesymbol.\n\n# Einstellungsmethode\nSie können diese Funktion bei Bedarf ein- oder ausschalten.\n\n1. 'Einstellungen' App ausführen\n2. Wählen Sie \"Bewerbung\"\n3. Wählen Sie \"Samsung App Einstellungen\"\n4. Bixby Vision\n5. Option \"Suche\" festlegen"
+    "description": "Suche, Mit der Bildsuchfunktion von Bixby Vision können Sie ähnliche Bilder in Pinterest finden, basierend auf Bildern auf der Kamera oder Fotos auf dem Gerät. Auf diese Weise können Sie interessantere Bilder finden oder neue Ideen und notwendige Informationen erhalten.\n\n# Wie zu benutzen\n1. Start der App \"Bixby Vision\"\n2. Wählen Sie das Menü \"Suche\" unten\n3. Die Bildsuche basiert auf Objekten, die Kamera beleuchtet.\n4. Wenn Sie ein bereits gespeichertes Bild finden möchten, wählen Sie das Galeriesymbol.\n\n# Einstellungsmethode\nSie können diese Funktion bei Bedarf ein- oder ausschalten.\n\n1. 'Einstellungen' App ausführen\n2. Wählen Sie \"Bewerbung\"\n3. Wählen Sie \"Samsung App Einstellungen\"\n4. Bixby Vision\n5. Option \"Suche\" festlegen"
   },
   {
     "id": "11195",
@@ -5387,7 +5387,7 @@
     "key": "settings_family_reminder_notification",
     "authority": "com.samsung.android.app.reminder.ui.settings.search.SettingSearchProvider",
     "title": "Benachrichtigungen",
-    "description": "Benachrichtigungen, Einstellungen für gemeinsame Erinnerungsbenachrichtigungen. Sie können Benachrichtigungen erhalten, wenn eine andere Person, die die gemeinsame Erinnerung verwendet, die Erinnerung hinzufügt oder vervollständigt.\n\n1. Gehen Sie zu \"Einstellungen\" > Suchen Sie nach \"Erinnerungseinstellungen\".\n2. Wählen Sie \"Benachrichtigungen\"."
+    "description": "Benachrichtigungen, Einstellungen für gemeinsame Erinnerungsbenachrichtigungen. Sie können Benachrichtigungen erhalten, wenn eine andere Person, die gemeinsame Erinnerung verwendet, die Erinnerung hinzufügt oder vervollständigt.\n\n1. Gehen Sie zu \"Einstellungen\" > Suchen Sie nach \"Erinnerungseinstellungen\".\n2. Wählen Sie \"Benachrichtigungen\"."
   },
   {
     "id": "11036",
@@ -5723,7 +5723,7 @@
     "key": "enhance_transfer_security",
     "authority": "com.sec.android.easyMover.settingsSearchProvider",
     "title": "Übertragungssicherheit erhöhen",
-    "description": "Übertragungssicherheit erhöhen, 'Übertragungs-Sicherheit verstärken' ist eine Funktion, die die zu übertragenden Daten über eine Sicherheitscode-Verifizierung schützt.\n\n1. Überprüfen Sie 'Übertragungs-Sicherheit verstärken' in den 'Smart Switch-Einstellungen'.\n2. Sie können die Funktion ein- oder ausschalten, indem Sie den Schalter betätigen."
+    "description": "Übertragungssicherheit erhöhen, 'Übertragungs-Sicherheit verstärken' ist eine Funktion, die zu übertragenden Daten über eine Sicherheitscode-Verifizierung schützt.\n\n1. Überprüfen Sie 'Übertragungs-Sicherheit verstärken' in den 'Smart Switch-Einstellungen'.\n2. Sie können die Funktion ein- oder ausschalten, indem Sie den Schalter betätigen."
   },
   {
     "id": "11781",
@@ -6136,7 +6136,7 @@
     "key": "NotifyAppUpdates",
     "authority": "com.sec.android.app.samsungapps.settingsearch",
     "title": "Benachrichtigung",
-    "description": "Benachrichtigung, Für Benachrichtigungen, die vom Galaxy Store gesendet werden, können Sie die Ton- und Benachrichtigungsmethode auswählen und festlegen, ob der Benachrichtigungsinhalt auf dem Sperrbildschirm angezeigt werden soll oder nicht. \n\n1. Wählen Sie die Registerkarte „Galaxy Store“ und dann das Zahnradsymbol aus.\n2. Wählen Sie das Menü „Benachrichtigungen” aus. \n\n*Wichtige Aktualisierungsbenachrichtigungen des Galaxy Store können nicht deaktiviert werden. Um Sicherheitsprobleme oder wichtige Probleme einzelner Apps schnell beheben zu können, unterstützt das Gerät eine Funktion namens „Wichtige Aktualisierung“, die die Benutzer über den Betrieb der Funktion benachrichtigt."
+    "description": "Benachrichtigung, Für Benachrichtigungen, die vom Galaxy Store gesendet werden, können Sie die Ton- und Benachrichtigungsmethode auswählen und festlegen, ob der Benachrichtigungsinhalt auf dem Sperrbildschirm angezeigt werden soll oder nicht. \n\n1. Wählen Sie die Registerkarte „Galaxy Store“ und dann das Zahnradsymbol aus.\n2. Wählen Sie das Menü „Benachrichtigungen” aus. \n\n*Wichtige Aktualisierungsbenachrichtigungen des Galaxy Store können nicht deaktiviert werden. Um Sicherheitsprobleme oder wichtige Probleme einzelner Apps schnell beheben zu können, unterstützt das Gerät eine Funktion namens „Wichtige Aktualisierung“, die Benutzer über den Betrieb der Funktion benachrichtigt."
   },
   {
     "id": "20151",

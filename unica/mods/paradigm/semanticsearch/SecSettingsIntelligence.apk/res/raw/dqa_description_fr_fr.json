@@ -711,7 +711,7 @@
     "key": "sns_excluded_device",
     "authority": "com.android.settings",
     "title": "Exceptions de réseau",
-    "description": "Exceptions de réseau, Même si la connexion est instable, continuez à utiliser ce réseau sur votre téléphone. \n \n1. Ouvrez l'application 'Paramètres' de votre téléphone. \n2. Sélectionnez 'Connexion' > 'Wi-Fi' > Plus > 'Intelligent Wi-Fi' > 'Basculement sur données mobiles'. \n3. Vous trouverez le menu 'Exceptions de réseau'. \n4. Vous pouvez vérifier la liste des réseaux enregistrés dans 'Exceptions de réseau'. \n \nSi vous vous connectez manuellement à un réseau sans internet et sélectionnez toujours la connexion dans la fenêtre contextuelle indiquant une connexion internet incertaine, il sera automatiquement ajouté au 'Exceptions de réseau'."
+    "description": "Exceptions de réseau, Même si la connexion est instable, continuez à utiliser ce réseau sur votre téléphone. \n \n1. Ouvrez l'application 'Paramètres' de votre téléphone. \n2. Sélectionnez 'Connexion' > 'Wi-Fi' > Plus > 'Intelligent Wi-Fi' > 'Basculement sur données mobiles'. \n3. Vous trouverez le menu 'Exceptions de réseau'. \n4. Vous pouvez vérifier la liste des réseaux enregistrés dans 'Exceptions de réseau'. \n \nSi vous connectez manuellement à un réseau sans internet et sélectionnez toujours la connexion dans la fenêtre contextuelle indiquant une connexion internet incertaine, il sera automatiquement ajouté au 'Exceptions de réseau'."
   },
   {
     "id": "10388",
@@ -2552,7 +2552,7 @@
     "key": "Menu_DeleteAccount",
     "authority": "com.osp.app.signin.globalsearch.GlobalSearchProvider",
     "title": "Supprimer le compte",
-    "description": "Supprimer le compte, Ceci est le menu pour se désinscrire du compte Samsung. \nLorsque vous vous désinscrivez, les données des services de sauvegarde ou de synchronisation peuvent être supprimées. \n \n1. Lancez l'application 'Paramètres'. \n2. Sélectionnez le menu 'Compte Samsung' > 'Informations du profil'. \n3. Dans la section 'Plus', vous pouvez trouver le menu 'Se désinscrire du compte'."
+    "description": "Supprimer le compte, Ceci est le menu pour se désinscrire du compte Samsung. \nLorsque vous désinscrivez, les données des services de sauvegarde ou de synchronisation peuvent être supprimées. \n \n1. Lancez l'application 'Paramètres'. \n2. Sélectionnez le menu 'Compte Samsung' > 'Informations du profil'. \n3. Dans la section 'Plus', vous pouvez trouver le menu 'Se désinscrire du compte'."
   },
   {
     "id": "11124",
@@ -2643,7 +2643,7 @@
     "key": "SamsungPrivacyWebSite",
     "authority": "com.osp.app.signin.globalsearch.GlobalSearchProvider",
     "title": "Site Web d'informations personnelles Samsung",
-    "description": "Site Web d'informations personnelles Samsung, Il s'agit d'un site web qui divulgue la collecte et l'utilisation des informations personnelles de Samsung.\n\n1. Exécutez l'application \"Paramètres\".\n2. Choisissez le menu \"Compte Samsung\"> \"Securité et protection des informations personnelles\".\n3. Vous trouverez le menu \"Samsung Personal Information Site\" ici.\n\nOu\n\n1. Exécutez l'application \"Paramètres\".\n2. Choisissez le menu \"Securité et protection des informations personnelles\"> \"Autres paramètres d'informations personnelles\".\n3. Vous trouverez le menu \"Samsung Personal Information Site\" ici.\n\nSi vous vous connectez au site Web, vous pouvez gérer vos informations personnelles sur les services basés sur les comptes Samsung."
+    "description": "Site Web d'informations personnelles Samsung, Il s'agit d'un site web qui divulgue la collecte et l'utilisation des informations personnelles de Samsung.\n\n1. Exécutez l'application \"Paramètres\".\n2. Choisissez le menu \"Compte Samsung\"> \"Securité et protection des informations personnelles\".\n3. Vous trouverez le menu \"Samsung Personal Information Site\" ici.\n\nOu\n\n1. Exécutez l'application \"Paramètres\".\n2. Choisissez le menu \"Securité et protection des informations personnelles\"> \"Autres paramètres d'informations personnelles\".\n3. Vous trouverez le menu \"Samsung Personal Information Site\" ici.\n\nSi vous connectez au site Web, vous pouvez gérer vos informations personnelles sur les services basés sur les comptes Samsung."
   },
   {
     "id": "11070",
@@ -4274,7 +4274,7 @@
     "key": "high_bitrate_video",
     "authority": "com.sec.android.app.camera",
     "title": "Vidéos haut débit",
-    "description": "Vidéos haut débit, Enregistre les vidéos prises en mode vidéo ou vidéo professionnel à un débit débit élevé. Les vidéos avec des débits débits élevés ont une capacité plus grande que les vidéos ordinaires."
+    "description": "Vidéos haut débit, Enregistre les vidéos prises en mode vidéo ou vidéo professionnel à un débit élevé. Les vidéos avec des débits élevés ont une capacité plus grande que les vidéos ordinaires."
   },
   {
     "id": "10329",
@@ -5044,7 +5044,7 @@
     "key": "pref.privacy.reset_bixby",
     "authority": "com.samsung.android.bixby.settings.search.GlobalSettingSearchProvider",
     "title": "Arrêter Bixby",
-    "description": "Arrêter Bixby, Vous pouvez demander à vous désinscrire de Bixby. Lorsque vous vous désinscrivez de Bixby, toutes les données personnelles collectées seront complètement supprimées et ne pourront pas être restaurées.\n1. Veuillez accéder à l'application 'Paramètres'.\n2. Dans le menu, trouvez et sélectionnez 'Fonctions avancés'.\n3. Dans 'Fonctions avancés', sélectionnez 'Bixby'.\n4. Dans 'Bixby', sélectionnez 'Désinscription de Bixby'."
+    "description": "Arrêter Bixby, Vous pouvez demander à vous désinscrire de Bixby. Lorsque vous désinscrivez de Bixby, toutes les données personnelles collectées seront complètement supprimées et ne pourront pas être restaurées.\n1. Veuillez accéder à l'application 'Paramètres'.\n2. Dans le menu, trouvez et sélectionnez 'Fonctions avancés'.\n3. Dans 'Fonctions avancés', sélectionnez 'Bixby'.\n4. Dans 'Bixby', sélectionnez 'Désinscription de Bixby'."
   },
   {
     "id": "11317",
@@ -5450,7 +5450,7 @@
     "key": "settings_graph_sync",
     "authority": "com.samsung.android.app.reminder.ui.settings.search.SettingSearchProvider",
     "title": "Synchronisation avec Microsoft To Do",
-    "description": "Synchronisation avec Microsoft To Do, Lorsque vous vous connectez à votre compte Microsoft et activez la synchronisation, vous pouvez synchroniser et utiliser les listes de Microsoft To Do. \n \n##Accéder au menu de configuration de la synchronisation avec Microsoft To Do \nApplication Rappels > Menu en haut à gauche > 'Paramètres des rappels' > 'Synchronisation avec Microsoft To Do'"
+    "description": "Synchronisation avec Microsoft To Do, Lorsque vous connectez à votre compte Microsoft et activez la synchronisation, vous pouvez synchroniser et utiliser les listes de Microsoft To Do. \n \n##Accéder au menu de configuration de la synchronisation avec Microsoft To Do \nApplication Rappels > Menu en haut à gauche > 'Paramètres des rappels' > 'Synchronisation avec Microsoft To Do'"
   },
   {
     "id": "11053",
@@ -5646,7 +5646,7 @@
     "key": "seamless_control_pref",
     "authority": "com.samsung.android.oneconnect.ui.settings",
     "title": "Fonctions utiles",
-    "description": "Fonctions utiles, ## Télécommande rapide \nUtilisez votre téléphone portable comme une télécommande rapide. Lorsque vous êtes à proximité de l'appareil, vous pouvez le contrôler facilement via la fenêtre de notification de votre téléphone. \n* Appareils pris en charge : TV, aspirateur robot, climatiseur, purificateur d'air \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'\n2. Activez 'Télécommande rapide' ici. \n \n## Utiliser le téléphone comme clavier TV \nLorsque vous devez saisir du texte sur la TV, une notification vous informe que vous pouvez utiliser le clavier de votre téléphone pour saisir le texte. \n* Certains TV peuvent ne pas être compatibles. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'.\n2. Activez 'Utiliser le téléphone comme clavier TV' ici. \n \n## Utiliser le téléphone comme caméra TV \nLorsque vous devez utiliser une caméra sur la TV, une notification vous informe que vous pouvez utiliser la caméra de votre téléphone. \n* Certains TV peuvent ne pas être compatibles. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'.\n2. Activez 'Utiliser le téléphone comme caméra TV' ici. \n \n## Changement automatique de Magic Screen \nMagic Screen s'allume automatiquement lorsque vous vous approchez de la TV et s'éteint pour économiser l'énergie lorsque vous vous éloignez. \n* Sur The Sero, le mode portrait s'active automatiquement à la place de Magic Screen. \n* Sur les moniteurs, Mon Contenu s'active automatiquement à la place de Magic Screen. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'. \n2. Activez 'Changement automatique de Magic Screen' ici. \n \n## Démarrer Smart View depuis un autre appareil \nVous pouvez démarrer la mise en miroir de l'écran de votre téléphone sur un appareil à proximité. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles' > 'Démarrer Smart View depuis un autre appareil'. \n2. Activez l'interrupteur de l'appareil souhaité dans la liste des appareils. \n \n## Garder l'écran allumé en utilisant l'application \nLorsque vous utilisez l'application SmartThings, vous pouvez garder l'écran allumé. \n* Cette fonctionnalité est expérimentale. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'. \n2. Activez 'Garder l'écran allumé en utilisant l'application' ici."
+    "description": "Fonctions utiles, ## Télécommande rapide \nUtilisez votre téléphone portable comme une télécommande rapide. Lorsque vous êtes à proximité de l'appareil, vous pouvez le contrôler facilement via la fenêtre de notification de votre téléphone. \n* Appareils pris en charge : TV, aspirateur robot, climatiseur, purificateur d'air \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'\n2. Activez 'Télécommande rapide' ici. \n \n## Utiliser le téléphone comme clavier TV \nLorsque vous devez saisir du texte sur la TV, une notification vous informe que vous pouvez utiliser le clavier de votre téléphone pour saisir le texte. \n* Certains TV peuvent ne pas être compatibles. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'.\n2. Activez 'Utiliser le téléphone comme clavier TV' ici. \n \n## Utiliser le téléphone comme caméra TV \nLorsque vous devez utiliser une caméra sur la TV, une notification vous informe que vous pouvez utiliser la caméra de votre téléphone. \n* Certains TV peuvent ne pas être compatibles. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'.\n2. Activez 'Utiliser le téléphone comme caméra TV' ici. \n \n## Changement automatique de Magic Screen \nMagic Screen s'allume automatiquement lorsque vous approchez de la TV et s'éteint pour économiser l'énergie lorsque vous éloignez. \n* Sur The Sero, le mode portrait s'active automatiquement à la place de Magic Screen. \n* Sur les moniteurs, Mon Contenu s'active automatiquement à la place de Magic Screen. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'. \n2. Activez 'Changement automatique de Magic Screen' ici. \n \n## Démarrer Smart View depuis un autre appareil \nVous pouvez démarrer la mise en miroir de l'écran de votre téléphone sur un appareil à proximité. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles' > 'Démarrer Smart View depuis un autre appareil'. \n2. Activez l'interrupteur de l'appareil souhaité dans la liste des appareils. \n \n## Garder l'écran allumé en utilisant l'application \nLorsque vous utilisez l'application SmartThings, vous pouvez garder l'écran allumé. \n* Cette fonctionnalité est expérimentale. \n1. Sélectionnez 'Paramètres SmartThings' > 'Fonctions utiles'. \n2. Activez 'Garder l'écran allumé en utilisant l'application' ici."
   },
   {
     "id": "11874",
