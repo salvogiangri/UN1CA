@@ -1,0 +1,1 @@
+verify_no_downgrade(getprop("ro.boot.bootloader"), "A736BXXUAFYE6") && abort("E3003: This package requires Android 15 firmware.");
