@@ -47,12 +47,4 @@ jobs:
             npm install -g "$package" || echo "Warning: Failed to install $package"
           done
           
-      - name: Clone Dump dm2q
-        run: | 
-          cd ${GITHUB_WORKSPACE}
-          git clone https://gitlab.com/Eduardob3677/samsung_dm2q_dump.git dump
-          cd dump
-          rm -rf .git
-          rm -rf twrp-device-tree
-          rm -rf aosp-device-tree
-          cd ..
+      
