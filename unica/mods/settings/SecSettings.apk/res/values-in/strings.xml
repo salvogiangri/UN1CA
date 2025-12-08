@@ -31,7 +31,7 @@
     <string name="unica_keybox_toast_not_valid">Berkas Keybox tidak valid.</string>
     <string name="unica_launcher_anim_type_title">Jenis animasi peluncur</string>
     <string name="unica_max_refresh_rate_title">Paksa penyegaran layar tinggi</string>
-    <string name="unica_menu_item_reboot_download_title">Mulai ulang ke Download Mode</string>
+    <string name="unica_menu_item_reboot_download_title">Mulai ulang ke Download</string>
     <string name="unica_menu_item_reboot_fastboot_title">Mulai ulang ke Fastboot</string>
     <string name="unica_menu_item_reboot_recovery_title">Mulai ulang ke Recovery</string>
     <string name="unica_menu_item_reboot_title">Mulai ulang</string>
@@ -40,14 +40,14 @@
     <string name="unica_pif_attest_key_title">Blokir atestasi kunci DroidGuard</string>
     <string name="unica_pif_custom_title">Impor properti PIF khusus dari berkas</string>
     <string name="unica_pif_summary">Memalsukan perangkat Anda untuk lolos atestasi Google Play.</string>
-    <string name="unica_pif_title">Perbaikan Play Integrity</string>
+    <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Mengecek pembaruan…</string>
     <string name="unica_pif_toast_custom">Properti kustom dimuat.</string>
     <string name="unica_pif_toast_error">Terjadi kesalahan.</string>
     <string name="unica_pif_toast_error_custom">Berkas tidak sesuai.</string>
     <string name="unica_pif_toast_up_to_date">"Anda menjalankan versi terbaru."</string>
     <string name="unica_pif_toast_updated">Pembaruan berhasil.</string>
-    <string name="unica_pif_update_title">Perbarui Perbaikan Play Integrity</string>
+    <string name="unica_pif_update_title">Perbarui Play Integrity Fix</string>
     <string name="unica_rom_version_title">Versi ROM</string>
     <string name="unica_secure_ss_title">Izinkan tangkapan layar aman</string>
     <string name="unica_settings_title">Pengaturan UN1CA</string>

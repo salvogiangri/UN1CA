@@ -1,4 +1,4 @@
-From 94b8b491fd029dac2292d2962e9d2355c76a2403 Mon Sep 17 00:00:00 2001
+From 893e40ff17c8334e4d6a4cea55b07c872c995df1 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 13 Sep 2025 09:32:25 +0200
 Subject: [PATCH] Hardcode fingerprint sensor position value
@@ -8,7 +8,7 @@ Subject: [PATCH] Hardcode fingerprint sensor position value
  1 file changed, 1 insertion(+), 21 deletions(-)
 
 diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
-index d29cbc6ca..f2d59838d 100644
+index d29cbc6ca..e397bf8c8 100644
 --- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
 +++ b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
 @@ -4256,28 +4256,8 @@
@@ -37,10 +37,10 @@ index d29cbc6ca..f2d59838d 100644
 -    invoke-virtual {v0}, Ljava/lang/String;->trim()Ljava/lang/String;
 -
 -    move-result-object p0
-+    const-string p0, "53.45,13.25"
++    const-string p0, "53.05,13.95"
  
      new-instance v0, Ljava/util/ArrayList;
  
 -- 
-2.51.2
+2.52.0
 

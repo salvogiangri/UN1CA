@@ -15,20 +15,20 @@
     <string name="unica_hma_summary">Запобігти виявленню інстальованих програм іншими програмами.</string>
     <string name="unica_hma_title">Приховати встановлені програми</string>
     <string name="unica_hide_dev_title">Приховати статус розробника</string>
-    <string name="unica_keybox_clear_title">Видалити дані кейбоксу</string>
-    <string name="unica_keybox_load_title">Імпортувати файл XML кейбоксу</string>
+    <string name="unica_keybox_clear_title">Видалити дані сертифіката</string>
+    <string name="unica_keybox_load_title">Імпортувати файл XML сертифікату</string>
     <string name="unica_keybox_status_checking">Перевірка дійсності…</string>
-    <string name="unica_keybox_status_loaded">Кейбокс завантажено</string>
-    <string name="unica_keybox_status_no_data">Немає даних кейбоксу</string>
-    <string name="unica_keybox_status_revoked">Відкликаний кейбокс</string>
-    <string name="unica_keybox_status_valid">Дійсний кейбок</string>
+    <string name="unica_keybox_status_loaded">Сертифікат завантажено</string>
+    <string name="unica_keybox_status_no_data">Немає даних сертифіката</string>
+    <string name="unica_keybox_status_revoked">Відкликаний сертифікат</string>
+    <string name="unica_keybox_status_valid">Дійсний сертифікат</string>
     <string name="unica_keybox_title">Підробити атестацію обладнання</string>
-    <string name="unica_keybox_toast_cleared">Дані кейбоксу очищено.</string>
+    <string name="unica_keybox_toast_cleared">Дані сертифікату очищено.</string>
     <string name="unica_keybox_toast_error">Сталася помилка.</string>
     <string name="unica_keybox_toast_error_xml">Не вдалося проаналізувати файл XML.</string>
-    <string name="unica_keybox_toast_loaded">Файл кейбоксу завантажено.</string>
-    <string name="unica_keybox_toast_not_gak">Кейбокс не підписаний Google.</string>
-    <string name="unica_keybox_toast_not_valid">Файл кейбоксу недійсний.</string>
+    <string name="unica_keybox_toast_loaded">Файл сертифікату завантажено.</string>
+    <string name="unica_keybox_toast_not_gak">Сертифікат не підписаний Google.</string>
+    <string name="unica_keybox_toast_not_valid">Файл сертифікату недійсний.</string>
     <string name="unica_launcher_anim_type_title">Тип анімації Головного екрану</string>
     <string name="unica_max_refresh_rate_title">Примусова максимальна частота оновлення екрану</string>
     <string name="unica_menu_item_reboot_download_title">Перезавантажити у Download</string>
@@ -56,5 +56,5 @@
     <string name="unica_ui_settings_title">Налаштування інтерфейсу</string>
     <string name="unica_updates_title">Оновлення UN1CA</string>
     <string name="unica_vulkan_summary">Це нестабільно і може спричинити проблеми!</string>
-    <string name="unica_vulkan_title">Увімкнути рендерер Vulkan</string>
+    <string name="unica_vulkan_title">Увімкнути графічний api Vulkan</string>
 </resources>
