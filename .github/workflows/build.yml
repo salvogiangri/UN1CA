@@ -92,6 +92,36 @@ jobs:
           echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
+          
+      - name: 🔨 Build dependencies
+        id: build-dependencies
+        run: |
+          echo "### 🔨 Building Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Building build system dependencies"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/build_dependencies.sh
+          echo "::endgroup::"
+          echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📥 Download stock firmware
+        id: download-firmware
+        run: |
+          echo "### 📥 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Downloading firmware files for ${{ matrix.target }}"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/download_fw.sh
+          echo "::endgroup::"
+          echo "✅ **Firmware downloaded successfully**" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📦 Extract stock firmware
+        id: extract-firmware
+        run: |
+          echo "### 📦 Extracting Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Extracting firmware components"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/extract_fw.sh
+          echo "::endgroup::"
+          echo "✅ **Firmware extracted successfully**" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔨 Build ROM
         id: build-rom
