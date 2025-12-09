@@ -109,10 +109,10 @@ jobs:
           echo "### 🧹 Cleaning Old Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Removing old firmware and build artifacts"
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/clean.sh all 
-          ./scripts/clean.sh fw
-          ./scripts/clean.sh tools
-          ./scripts/clean.sh work_dir
+          ./scripts/cleanup.sh all 
+          ./scripts/cleanup.sh fw
+          ./scripts/cleanup.sh tools
+          ./scripts/cleanup.sh work_dir
           echo "::endgroup::"
           echo "✅ **Old firmware cleaned**" >> $GITHUB_STEP_SUMMARY
 
