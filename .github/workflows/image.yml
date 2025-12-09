@@ -65,6 +65,16 @@ jobs:
         run: |
           echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
           
+          echo "::group::📦 Installing system packages"
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            7zip attr ccache clang ffmpeg zram-config \
+            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "::endgroup::"
+          
           echo "::group::⚡ Configuring zRAM (8GB minimum)"
           # Configure zRAM for Ubuntu 24.04
           # Remove default zram configuration if exists
@@ -94,45 +104,26 @@ jobs:
           echo "✅ zRAM configured: $ZRAM_SIZE_HUMAN with priority 1000" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
-          echo "::group::📦 Installing system packages"
-          sudo apt update
-          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            7zip attr ccache clang ffmpeg \
-            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
-          sudo apt update
-          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            7zip attr ccache clang ffmpeg \
-            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          echo "::endgroup::"
-          
           echo "::group::🚀 Configuring ccache"
           # Configure ccache for build acceleration
           export USE_CCACHE=1
-          export CCACHE_EXEC=$(which ccache)
-          export CCACHE_DIR=$HOME/.ccache
-          export CCACHE_MAXSIZE=50G
-          export CCACHE_COMPRESS=1
-          export CCACHE_COMPRESSLEVEL=6
-          
-          # Set ccache configuration persistently
-          ccache --set-config=max_size=50G
-          ccache --set-config=compression=true
-          ccache --set-config=compression_level=6
-          ccache --set-config=cache_dir=$HOME/.ccache
+          export CCACHE_EXEC=/usr/bin/ccache
+          ccache --max-size=50G
+          ccache -o compression=true
+          export CC="ccache gcc"
+          export CXX="ccache g++"
           
           # Add ccache configuration to bashrc for persistence
           echo 'export USE_CCACHE=1' >> $HOME/.bashrc
-          echo 'export CCACHE_EXEC=$(which ccache)' >> $HOME/.bashrc
-          echo 'export CCACHE_DIR=$HOME/.ccache' >> $HOME/.bashrc
-          echo 'export CCACHE_MAXSIZE=50G' >> $HOME/.bashrc
-          echo 'export CCACHE_COMPRESS=1' >> $HOME/.bashrc
+          echo 'export CCACHE_EXEC=/usr/bin/ccache' >> $HOME/.bashrc
+          echo 'export CC="ccache gcc"' >> $HOME/.bashrc
+          echo 'export CXX="ccache g++"' >> $HOME/.bashrc
           
-          ccache -z  # Zero statistics
-          echo "ccache configured: max_size=50G, compression=enabled" >> $GITHUB_STEP_SUMMARY
+          # Initialize ccache statistics
+          ccache -z
+          ccache -s
+          
+          echo "✅ ccache configured: max_size=50G, compression=enabled" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
