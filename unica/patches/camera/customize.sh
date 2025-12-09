@@ -302,6 +302,28 @@ if [ -f "$WORK_DIR/system/system/lib64/libImageSegmenter_v1.camera.samsung.so" ]
     DELETE_FROM_WORK_DIR "system" "system/lib64/libImageSegmenter_v1.camera.samsung.so"
 fi
 
+# Fix object capture
+if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
+    if {
+        [[ "$(GET_PROP "system" "ro.product.device")" =~ r0|g0|b0 ]] && \
+            ! [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" =~ r0|g0|b0 ]]
+    } || {
+        [[ "$(GET_PROP "system" "ro.product.device")" == "a56"* ]] && \
+            [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" != "a56"* ]]
+    }; then
+        HEX_PATCH "$WORK_DIR/system/system/lib64/libobjectcapture_jni.arcsoft.so" \
+            "e503162a47020094e022009121008052e203162a" "8500805247020094e02200912100805282008052"
+    elif ! [[ "$(GET_PROP "system" "ro.product.device")" =~ r0|g0|b0 ]] && \
+            [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" =~ r0|g0|b0 ]]; then
+        HEX_PATCH "$WORK_DIR/system/system/lib64/libobjectcapture_jni.arcsoft.so" \
+            "e503162a47020094e022009121008052e203162a" "4500805247020094e02200912100805242008052"
+    elif [[ "$(GET_PROP "system" "ro.product.device")" != "a56"* ]] && \
+            [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" == "a56"* ]]; then
+        HEX_PATCH "$WORK_DIR/system/system/lib64/libobjectcapture_jni.arcsoft.so" \
+            "e503162a47020094e022009121008052e203162a" "c500805247020094e022009121008052c2008052"
+    fi
+fi
+
 # Fix portrait mode
 if [ -f "$WORK_DIR/vendor/lib64/libDualCamBokehCapture.camera.samsung.so" ]; then
     if grep -q "ro.build.flavor" "$WORK_DIR/vendor/lib64/libDualCamBokehCapture.camera.samsung.so" 2> /dev/null; then
