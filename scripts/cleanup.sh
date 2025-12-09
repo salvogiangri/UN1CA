@@ -67,11 +67,10 @@ while [ "$#" != 0 ]; do
             LOG "- Cleaning ROM work dir..."
             if [ -d "$(dirname "$WORK_DIR")" ]; then
                 rm -rf "$(dirname "$WORK_DIR")"
-                mkdir -p "$(dirname "$WORK_DIR")"
             else
                 LOGW "Directory not found: $(dirname "$WORK_DIR")"
-                mkdir -p "$(dirname "$WORK_DIR")"
             fi
+            mkdir -p "$(dirname "$WORK_DIR")"
             ;;
         "logs")
             LOG "- Cleaning log files..."
