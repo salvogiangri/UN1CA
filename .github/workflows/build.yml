@@ -29,14 +29,6 @@ jobs:
         target: [dm2q]
 
     steps:
-      - name: 📥 Checkout repository
-        id: checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-tags: '0'
-          submodules: 'false'
-          fetch-depth: '0'
-
       - name: 🔄 Update repository
         id: update-repo
         run: |
