@@ -8,7 +8,7 @@ The workflow requires two repository secrets to be configured:
 
 ### 1. `GOOGLE_DRIVE_CREDENTIALS`
 
-This secret should contain the service account credentials JSON for Google Drive API access.
+This secret should contain the **base64-encoded** service account credentials JSON for Google Drive API access.
 
 **Steps to create:**
 
@@ -30,12 +30,15 @@ This secret should contain the service account credentials JSON for Google Drive
    - Click "Add Key" > "Create new key"
    - Select "JSON" as the key type
    - Click "Create" - the JSON file will be downloaded
-6. Copy the entire contents of the downloaded JSON file
+6. Base64 encode the JSON file:
+   - On Linux/Mac: `base64 credentials.json -w0` (or just `base64 credentials.json` on Mac)
+   - On Windows PowerShell: `[Convert]::ToBase64String([System.IO.File]::ReadAllBytes("credentials.json"))`
+   - Copy the output (it will be a long string)
 7. In your GitHub repository:
    - Go to Settings > Secrets and variables > Actions
    - Click "New repository secret"
    - Name: `GOOGLE_DRIVE_CREDENTIALS`
-   - Value: Paste the JSON content
+   - Value: Paste the base64-encoded string
    - Click "Add secret"
 
 ### 2. `GOOGLE_DRIVE_FOLDER_ID`

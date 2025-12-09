@@ -100,7 +100,7 @@ jobs:
 
       - name: ☁️ Upload ROM to Google Drive
         id: upload-gdrive
-        uses: adityak74/google-drive-upload-git-action@main
+        uses: adityak74/google-drive-upload-git-action@v0.3
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
           filename: ${{ steps.rom_info.outputs.zip_file }}
@@ -166,12 +166,13 @@ jobs:
 
       - name: ☁️ Upload all ROMs to Google Drive
         id: upload-all-gdrive
-        uses: adityak74/google-drive-upload-git-action@main
+        uses: adityak74/google-drive-upload-git-action@v0.3
         with:
           credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
           filename: "release-artifacts/**/*.zip"
           folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
           overwrite: "true"
+          mirrorDirectoryStructure: "false"
 
       - name: 🚀 Create GitHub release
         id: create-release
