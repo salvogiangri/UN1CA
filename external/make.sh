@@ -235,7 +235,6 @@ fi
 if $SAMLOADER; then
     SAMLOADER_CMDS=(
         "git reset --hard"
-        "git apply \"$SRC_DIR/external/patches/samloader/0001-Add-timeout-to-version.xml-request.patch\""
         "python3 -m venv \"$TOOLS_DIR/venv\""
         "source \"$TOOLS_DIR/venv/bin/activate\"; pip3 install ."
     )
