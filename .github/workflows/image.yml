@@ -17,6 +17,7 @@ jobs:
     runs-on: unica
     snapshot: 
         image-name: unica-linux
+        version: 1.*
     
     environment:
       name: production
