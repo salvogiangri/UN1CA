@@ -98,25 +98,15 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-      - name: ☁️ Upload ROM to Google Drive
-        id: upload-gdrive
-        uses: adityak74/google-drive-upload-git-action@v0.3
-        with:
-          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
-          filename: ${{ steps.rom_info.outputs.zip_file }}
-          folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
-          name: ${{ steps.rom_info.outputs.zip_name }}
-          overwrite: "true"
-
       - name: 🎉 Build completed
         id: build-summary
         if: success()
         run: |
           echo "### 🎊 ROM Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **The ROM build has been completed and uploaded to Google Drive.**" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **The ROM build has been completed and the artifact has been uploaded.**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📥 Download link: ${{ steps.upload-gdrive.outputs.fileUrl }}" >> $GITHUB_STEP_SUMMARY
+          echo "📥 Download the artifact from the workflow run page." >> $GITHUB_STEP_SUMMARY
 
   release:
     name: 📦 Create Release
@@ -164,23 +154,6 @@ jobs:
         with:
           path: release-artifacts
 
-      - name: 📝 Prepare file list for upload
-        id: prepare-files
-        run: |
-          echo "### 📝 Preparing files for Google Drive" >> $GITHUB_STEP_SUMMARY
-          FILES=$(find release-artifacts -type f -name "*.zip" -printf "%p\n" | tr '\n' ' ')
-          echo "files_found=$FILES" >> "$GITHUB_OUTPUT"
-          
-          # Create a list of files for the release notes
-          FILE_LIST=""
-          for file in $(find release-artifacts -type f -name "*.zip"); do
-            filename=$(basename "$file")
-            FILE_LIST="${FILE_LIST}- ${filename}\n"
-          done
-          echo "file_list<<EOF" >> "$GITHUB_OUTPUT"
-          echo -e "$FILE_LIST" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
       - name: ☁️ Upload all ROMs to Google Drive
         id: upload-all-gdrive
         uses: adityak74/google-drive-upload-git-action@v0.3
@@ -190,6 +163,34 @@ jobs:
           folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
           overwrite: "true"
           mirrorDirectoryStructure: "false"
+
+      - name: 📝 Generate download links
+        id: generate-links
+        run: |
+          echo "### 📝 Generating Google Drive download links" >> $GITHUB_STEP_SUMMARY
+          
+          # Create download link for the folder
+          FOLDER_URL="https://drive.google.com/drive/folders/${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}"
+          echo "folder_url=$FOLDER_URL" >> "$GITHUB_OUTPUT"
+          
+          # Create a list of files with links for the release notes
+          FILE_LIST=""
+          for file in $(find release-artifacts -type f -name "*.zip"); do
+            filename=$(basename "$file")
+            # Format: - filename (link to folder since we don't have individual file IDs)
+            FILE_LIST="${FILE_LIST}- ${filename}\n"
+          done
+          
+          # Save the file list
+          echo "file_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo -e "$FILE_LIST" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📂 Folder URL: $FOLDER_URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Files uploaded:" >> $GITHUB_STEP_SUMMARY
+          echo -e "$FILE_LIST" >> $GITHUB_STEP_SUMMARY
 
       - name: 🚀 Create GitHub release
         id: create-release
@@ -209,9 +210,9 @@ jobs:
             📥 **Download ROMs from Google Drive**
             
             The following ROM files are available in the Google Drive folder:
-            ${{ steps.prepare-files.outputs.file_list }}
+            ${{ steps.generate-links.outputs.file_list }}
             
-            🔗 [Open Google Drive Folder](https://drive.google.com/drive/folders/${{ secrets.GOOGLE_DRIVE_FOLDER_ID }})
+            🔗 [Open Google Drive Folder](${{ steps.generate-links.outputs.folder_url }})
 
             ### Supported Devices
             - Galaxy S23+ (dm2qxxx)
