@@ -1,0 +1,7 @@
+service vendor.face_hal /vendor/bin/hw/vendor.samsung.hardware.biometrics.face@3.0-service
+    # "class hal" causes a race condition on some devices due to files created
+    # in /data. As a workaround, postpone startup until later in boot once
+    # /data is mounted.
+    class late_start
+    user system
+    group system input uhid

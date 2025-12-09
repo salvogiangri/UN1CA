@@ -1,0 +1,8 @@
+service uwb_hal_service /vendor/bin/hw/vendor.samsung.hardware.uwb@1.0-service
+    class hal
+    user uwb
+    group uwb
+	
+#service vendor.uwb_hal /vendor/bin/hw/nxp.android.hardware.uwb-service
+#    class hal
+#    user uwb
