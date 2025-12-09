@@ -154,6 +154,44 @@ jobs:
         with:
           path: release-artifacts
 
+      - name: ☁️ Upload all ROMs to Google Drive
+        id: upload-all-gdrive
+        uses: adityak74/google-drive-upload-git-action@v0.3
+        with:
+          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+          filename: "release-artifacts/**/*.zip"
+          folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+          overwrite: "true"
+          mirrorDirectoryStructure: "false"
+
+      - name: 📝 Generate download links
+        id: generate-links
+        run: |
+          echo "### 📝 Generating Google Drive download links" >> $GITHUB_STEP_SUMMARY
+          
+          # Create download link for the folder
+          FOLDER_URL="https://drive.google.com/drive/folders/${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}"
+          echo "folder_url=$FOLDER_URL" >> "$GITHUB_OUTPUT"
+          
+          # Create a list of files with links for the release notes
+          FILE_LIST=""
+          for file in $(find release-artifacts -type f -name "*.zip"); do
+            filename=$(basename "$file")
+            # Format: - filename (link to folder since we don't have individual file IDs)
+            FILE_LIST="${FILE_LIST}- ${filename}\n"
+          done
+          
+          # Save the file list
+          echo "file_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo -e "$FILE_LIST" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📂 Folder URL: $FOLDER_URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Files uploaded:" >> $GITHUB_STEP_SUMMARY
+          echo -e "$FILE_LIST" >> $GITHUB_STEP_SUMMARY
+
       - name: 🚀 Create GitHub release
         id: create-release
         uses: softprops/action-gh-release@v2
@@ -168,11 +206,19 @@ jobs:
             - **Build Date**: ${{ steps.version.outputs.release_date }}
             - **Commit**: ${{ github.sha }}
 
+            ### Download
+            📥 **Download ROMs from Google Drive**
+            
+            The following ROM files are available in the Google Drive folder:
+            ${{ steps.generate-links.outputs.file_list }}
+            
+            🔗 [Open Google Drive Folder](${{ steps.generate-links.outputs.folder_url }})
+
             ### Supported Devices
             - Galaxy S23+ (dm2qxxx)
 
             ### Installation
-            1. Download the appropriate ZIP file for your device
+            1. Download the appropriate ZIP file for your device from Google Drive
             2. Boot into recovery mode
             3. Flash the ZIP file
             4. Reboot and enjoy!
@@ -183,7 +229,6 @@ jobs:
 
           draft: false
           prerelease: false
-          files: release-artifacts/**/*.zip
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🎉 Release completed
