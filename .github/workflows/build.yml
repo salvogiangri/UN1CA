@@ -112,7 +112,7 @@ jobs:
     name: 📦 Create Release
     needs: build
     runs-on: Unica
-    if: github.event_name == 'push' && github.ref == 'refs/heads/sixteen'
+    if: github.ref_name == 'sixteen'
     
     environment:
       name: release
