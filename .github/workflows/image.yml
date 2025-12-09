@@ -108,7 +108,7 @@ jobs:
           echo "### 📦 Updating Repository" >> $GITHUB_STEP_SUMMARY
           echo "::group::Pulling latest changes"
           git pull --no-tags --depth=1
-          git submodule update --init --recursive --depth=1 --no-tags
+          git submodule update --init --recursive
           echo "::endgroup::"
           echo "✅ **Repository updated**" >> $GITHUB_STEP_SUMMARY
    
