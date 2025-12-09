@@ -34,13 +34,45 @@ jobs:
         run: |
           echo "### 🔄 Updating Repository" >> $GITHUB_STEP_SUMMARY
           echo "::group::Pulling latest changes"
-          git pull
+          git pull --depth=1 --no-tags || git pull
+          git submodule update --init --depth=1 || git submodule update --init
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
+
+      - name: ✅ Verify snapshot environment
+        id: verify-env
+        run: |
+          echo "### ✅ Verifying Pre-configured Environment" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Checking pre-installed components"
+          
+          # Check if firmware is pre-downloaded
+          if [ -d "out/fw" ] && [ "$(ls -A out/fw 2>/dev/null)" ]; then
+            echo "✅ Firmware directory found and populated" >> $GITHUB_STEP_SUMMARY
+            echo "  - Firmware files: $(du -sh out/fw 2>/dev/null | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Firmware directory not found - may need to download" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check if tools are pre-built
+          if [ -d "out/tools" ] && [ "$(ls -A out/tools 2>/dev/null)" ]; then
+            echo "✅ Build tools found" >> $GITHUB_STEP_SUMMARY
+            echo "  - Tools directory: $(du -sh out/tools 2>/dev/null | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Build tools not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check for ccache
+          if command -v ccache &> /dev/null; then
+            echo "✅ ccache available: $(ccache --version | head -n1)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "::endgroup::"
+          echo "✅ **Environment verification complete**" >> $GITHUB_STEP_SUMMARY
 
       - name: 🎯 Display workflow information
         id: workflow-info
         run: |
+          echo "BUILD_START_TIME=$(date +%s)" >> $GITHUB_ENV
           echo "### 🔨 ROM Build Started" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
@@ -57,10 +89,39 @@ jobs:
         run: |
           echo "### 🔨 Building UN1CA ROM" >> $GITHUB_STEP_SUMMARY
           echo "::group::Compiling ROM for ${{ matrix.target }}"
+          
+          # Configure build optimizations
+          export USE_CCACHE=1
+          export CCACHE_EXEC=$(which ccache)
+          export CCACHE_DIR=$HOME/.ccache
+          export CCACHE_MAXSIZE=50G
+          export CCACHE_COMPRESS=1
+          
+          # Configure parallel builds based on CPU cores
+          NPROC=$(nproc)
+          export MAKEFLAGS="-j$((NPROC + 1))"
+          
+          # Show build configuration
+          echo "Build configuration:" >> $GITHUB_STEP_SUMMARY
+          echo "- Parallel jobs: $((NPROC + 1))" >> $GITHUB_STEP_SUMMARY
+          if command -v ccache &> /dev/null; then
+            echo "- ccache: enabled" >> $GITHUB_STEP_SUMMARY
+            ccache -s 2>/dev/null | head -5 >> $GITHUB_STEP_SUMMARY || true
+          fi
+          
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/make_rom.sh
           echo "::endgroup::"
           echo "✅ **ROM built successfully**" >> $GITHUB_STEP_SUMMARY
+          
+          # Show final ccache stats
+          if command -v ccache &> /dev/null; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📊 Build Cache Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            ccache -s 2>/dev/null >> $GITHUB_STEP_SUMMARY || true
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: 📋 Get ROM version and filename
         id: rom_info
@@ -102,8 +163,22 @@ jobs:
         id: build-summary
         if: success()
         run: |
-          echo "### 🎊 ROM Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          # Calculate build time
+          if [ -n "$BUILD_START_TIME" ]; then
+            BUILD_END_TIME=$(date +%s)
+            BUILD_DURATION=$((BUILD_END_TIME - BUILD_START_TIME))
+            BUILD_HOURS=$((BUILD_DURATION / 3600))
+            BUILD_MINUTES=$(((BUILD_DURATION % 3600) / 60))
+            BUILD_SECONDS=$((BUILD_DURATION % 60))
+            
+            echo "### 🎊 ROM Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⏱️ **Total Build Time**: ${BUILD_HOURS}h ${BUILD_MINUTES}m ${BUILD_SECONDS}s" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### 🎊 ROM Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "✅ **The ROM build has been completed and the artifact has been uploaded.**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📥 Download the artifact from the workflow run page." >> $GITHUB_STEP_SUMMARY
