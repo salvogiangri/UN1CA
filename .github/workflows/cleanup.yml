@@ -128,43 +128,68 @@ jobs:
           echo "⏭️ **Skipped $total_skipped_running running workflow runs**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-      - name: 🔒 Close all pull requests
+      - name: 🔒 Close and delete all pull requests
         id: close-prs
         if: inputs.close_pull_requests == true
         env:
           GH_TOKEN: ${{ secrets.TEST }}
           REPO: ${{ github.repository }}
         run: |
-          echo "### 🔒 Closing Pull Requests" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Fetching open pull requests"
+          echo "### 🔒 Closing and Deleting Pull Requests" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Fetching all pull requests"
           
-          # Get only open PRs
-          prs=$(gh api repos/$REPO/pulls?state=open --paginate --jq '.[] | .number')
+          # Get all PRs (both open and closed) with their state and head branch
+          prs=$(gh api repos/$REPO/pulls?state=all --paginate --jq '.[] | "\(.number)|\(.state)|\(.head.ref)"')
           
           total_closed=0
+          total_already_closed=0
+          total_branches_deleted=0
           
-          for pr_number in $prs; do
-            echo "Closing PR #$pr_number"
+          for pr_info in $prs; do
+            pr_number=$(echo "$pr_info" | cut -d'|' -f1)
+            pr_state=$(echo "$pr_info" | cut -d'|' -f2)
+            pr_branch=$(echo "$pr_info" | cut -d'|' -f3)
             
-            # Add a comment to the PR first
-            gh api repos/$REPO/issues/$pr_number/comments \
-              -f body="🤖 This pull request was automatically closed by the cleanup workflow." \
-              2>/dev/null && \
-              echo "✅ Added comment to PR #$pr_number" || \
-              echo "⚠️ Failed to add comment to PR #$pr_number"
+            echo "Processing PR #$pr_number (state: $pr_state, branch: $pr_branch)"
             
-            # Close the PR
-            if gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed 2>/dev/null; then
-              total_closed=$((total_closed + 1))
-              echo "✅ Closed PR #$pr_number"
+            # Close the PR if it's open
+            if [ "$pr_state" = "open" ]; then
+              # Add a comment to the PR first
+              gh api repos/$REPO/issues/$pr_number/comments \
+                -f body="🤖 This pull request was automatically closed by the cleanup workflow." \
+                2>/dev/null && \
+                echo "✅ Added comment to PR #$pr_number" || \
+                echo "⚠️ Failed to add comment to PR #$pr_number"
+              
+              # Close the PR
+              if gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed 2>/dev/null; then
+                total_closed=$((total_closed + 1))
+                echo "✅ Closed PR #$pr_number"
+              else
+                echo "⚠️ Failed to close PR #$pr_number"
+              fi
             else
-              echo "⚠️ Failed to close PR #$pr_number"
+              echo "⏭️ PR #$pr_number already closed"
+              total_already_closed=$((total_already_closed + 1))
+            fi
+            
+            # Delete the head branch
+            if [ -n "$pr_branch" ]; then
+              echo "Deleting branch: $pr_branch"
+              if gh api repos/$REPO/git/refs/heads/$pr_branch -X DELETE 2>/dev/null; then
+                total_branches_deleted=$((total_branches_deleted + 1))
+                echo "✅ Deleted branch: $pr_branch"
+              else
+                echo "⚠️ Failed to delete branch: $pr_branch (may not exist or protected)"
+              fi
             fi
           done
           
           echo "::endgroup::"
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Closed $total_closed pull requests**" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ **$total_already_closed pull requests were already closed**" >> $GITHUB_STEP_SUMMARY
+          echo "🗑️ **Deleted $total_branches_deleted branches**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔒 Close all issues
@@ -175,36 +200,47 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           echo "### 🔒 Closing Issues" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Fetching open issues"
+          echo "::group::Fetching all issues"
           
-          # Get only open issues (excluding PRs)
-          issues=$(gh api repos/$REPO/issues?state=open --paginate --jq '.[] | select(.pull_request == null) | .number')
+          # Get all issues (both open and closed, excluding PRs) with their state
+          issues=$(gh api repos/$REPO/issues?state=all --paginate --jq '.[] | select(.pull_request == null) | "\(.number)|\(.state)"')
           
           total_closed=0
+          total_already_closed=0
           
-          for issue_number in $issues; do
-            echo "Closing issue #$issue_number"
+          for issue_info in $issues; do
+            issue_number=$(echo "$issue_info" | cut -d'|' -f1)
+            issue_state=$(echo "$issue_info" | cut -d'|' -f2)
             
-            # Add a comment to the issue first
-            gh api repos/$REPO/issues/$issue_number/comments \
-              -f body="🤖 This issue was automatically closed by the cleanup workflow." \
-              2>/dev/null && \
-              echo "✅ Added comment to issue #$issue_number" || \
-              echo "⚠️ Failed to add comment to issue #$issue_number"
+            echo "Processing issue #$issue_number (state: $issue_state)"
             
-            # Close the issue
-            if gh api repos/$REPO/issues/$issue_number -X PATCH \
-              -f state=closed -f state_reason=not_planned 2>/dev/null; then
-              total_closed=$((total_closed + 1))
-              echo "✅ Closed issue #$issue_number"
+            # Close the issue if it's open
+            if [ "$issue_state" = "open" ]; then
+              # Add a comment to the issue first
+              gh api repos/$REPO/issues/$issue_number/comments \
+                -f body="🤖 This issue was automatically closed by the cleanup workflow." \
+                2>/dev/null && \
+                echo "✅ Added comment to issue #$issue_number" || \
+                echo "⚠️ Failed to add comment to issue #$issue_number"
+              
+              # Close the issue
+              if gh api repos/$REPO/issues/$issue_number -X PATCH \
+                -f state=closed -f state_reason=not_planned 2>/dev/null; then
+                total_closed=$((total_closed + 1))
+                echo "✅ Closed issue #$issue_number"
+              else
+                echo "⚠️ Failed to close issue #$issue_number"
+              fi
             else
-              echo "⚠️ Failed to close issue #$issue_number"
+              echo "⏭️ Issue #$issue_number already closed"
+              total_already_closed=$((total_already_closed + 1))
             fi
           done
           
           echo "::endgroup::"
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Closed $total_closed issues**" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ **$total_already_closed issues were already closed**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🌿 Delete copilot branches
