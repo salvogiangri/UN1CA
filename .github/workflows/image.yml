@@ -14,7 +14,7 @@ permissions:
 jobs:
   build-image:
     name: 🖼️ Build Custom Image for ${{ matrix.target }}
-    runs-on: rom5
+    runs-on: rom9
     snapshot: 
         image-name: unica-linux
         version: 1.*
@@ -206,7 +206,7 @@ jobs:
         run: |
           echo "### 🔨 Building Dependencies" >> $GITHUB_STEP_SUMMARY
           echo "::group::Building build system dependencies"
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
           echo "::endgroup::"
           echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
