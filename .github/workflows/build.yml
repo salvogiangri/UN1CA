@@ -71,7 +71,8 @@ jobs:
           # Check zRAM status
           if [ -b /dev/zram0 ]; then
             ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
-            echo "✅ zRAM configured: $ZRAM_SIZE" >> $GITHUB_STEP_SUMMARY
+            ZRAM_PRIORITY=$(swapon --show=NAME,PRIO --noheadings 2>/dev/null | grep zram0 | awk '{print $2}' || echo "unknown")
+            echo "✅ zRAM configured: $ZRAM_SIZE (priority: $ZRAM_PRIORITY)" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "::endgroup::"

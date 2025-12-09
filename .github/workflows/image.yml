@@ -65,13 +65,33 @@ jobs:
         run: |
           echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
           
-          echo "::group::⚡ Configuring zRAM (8GB)"
-          # Configure zRAM for build performance
-          sudo modprobe zram
-          sudo bash -c 'echo 8G > /sys/block/zram0/disksize'
+          echo "::group::⚡ Configuring zRAM (8GB minimum)"
+          # Configure zRAM for Ubuntu 24.04
+          # Remove default zram configuration if exists
+          sudo systemctl stop systemd-zram-setup@zram0.service 2>/dev/null || true
+          sudo swapoff /dev/zram0 2>/dev/null || true
+          sudo rmmod zram 2>/dev/null || true
+          
+          # Load zram module and configure
+          sudo modprobe zram num_devices=1
+          
+          # Set size to 8GB (or 90% of RAM if RAM > 9GB)
+          TOTAL_RAM=$(free -b | awk '/^Mem:/{print $2}')
+          ZRAM_SIZE=$((TOTAL_RAM * 90 / 100))
+          MIN_ZRAM_SIZE=$((8 * 1024 * 1024 * 1024))  # 8GB in bytes
+          
+          # Use the larger of 8GB or 90% of RAM
+          if [ $ZRAM_SIZE -lt $MIN_ZRAM_SIZE ]; then
+            ZRAM_SIZE=$MIN_ZRAM_SIZE
+          fi
+          
+          echo $ZRAM_SIZE | sudo tee /sys/block/zram0/disksize
           sudo mkswap /dev/zram0
-          sudo swapon -p 100 /dev/zram0
-          echo "zRAM configured: $(cat /sys/block/zram0/disksize | numfmt --to=iec-i --suffix=B)" >> $GITHUB_STEP_SUMMARY
+          sudo swapon -p 1000 /dev/zram0  # High priority (1000)
+          
+          # Verify configuration
+          ZRAM_SIZE_HUMAN=$(cat /sys/block/zram0/disksize | numfmt --to=iec-i --suffix=B)
+          echo "✅ zRAM configured: $ZRAM_SIZE_HUMAN with priority 1000" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
           echo "::group::📦 Installing system packages"
@@ -203,6 +223,12 @@ jobs:
             ccache -s
           fi
           
+          # Show zRAM configuration
+          if [ -b /dev/zram0 ]; then
+            ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
+            echo "zRAM configured: $ZRAM_SIZE with priority 1000"
+          fi
+          
           echo "Custom image 'unica-linux' will be saved automatically by the runner"
           echo "All dependencies, firmware, and build tools are now ready"
           echo "::endgroup::"
@@ -211,7 +237,7 @@ jobs:
           echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| System Packages | ✅ Installed |" >> $GITHUB_STEP_SUMMARY
-          echo "| zRAM (8GB) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
+          echo "| zRAM (≥8GB, priority 1000) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
           echo "| ccache (50GB) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
           echo "| Build Dependencies | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
           echo "| Stock Firmware | ✅ Downloaded & Extracted |" >> $GITHUB_STEP_SUMMARY
