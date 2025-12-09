@@ -64,6 +64,14 @@ jobs:
           # Check for ccache
           if command -v ccache &> /dev/null; then
             echo "✅ ccache available: $(ccache --version | head -n1)" >> $GITHUB_STEP_SUMMARY
+            echo "  - Cache directory: $HOME/.ccache" >> $GITHUB_STEP_SUMMARY
+            echo "  - Max size: $(ccache -s | grep 'max cache size' || echo '50.0 GB')" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check zRAM status
+          if [ -b /dev/zram0 ]; then
+            ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
+            echo "✅ zRAM configured: $ZRAM_SIZE" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "::endgroup::"
@@ -89,32 +97,12 @@ jobs:
         run: |
           echo "### 🔨 Building UN1CA ROM" >> $GITHUB_STEP_SUMMARY
           echo "::group::Compiling ROM for ${{ matrix.target }}"
-          
-          # Configure build optimizations
-          export USE_CCACHE=1
-          export CCACHE_EXEC=$(which ccache)
-          export CCACHE_DIR=$HOME/.ccache
-          export CCACHE_MAXSIZE=50G
-          export CCACHE_COMPRESS=1
-          
-          # Configure parallel builds based on CPU cores
-          NPROC=$(nproc)
-          export MAKEFLAGS="-j$((NPROC + 1))"
-          
-          # Show build configuration
-          echo "Build configuration:" >> $GITHUB_STEP_SUMMARY
-          echo "- Parallel jobs: $((NPROC + 1))" >> $GITHUB_STEP_SUMMARY
-          if command -v ccache &> /dev/null; then
-            echo "- ccache: enabled" >> $GITHUB_STEP_SUMMARY
-            ccache -s 2>/dev/null | head -5 >> $GITHUB_STEP_SUMMARY || true
-          fi
-          
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/make_rom.sh
           echo "::endgroup::"
           echo "✅ **ROM built successfully**" >> $GITHUB_STEP_SUMMARY
           
-          # Show final ccache stats
+          # Show ccache statistics after build
           if command -v ccache &> /dev/null; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📊 Build Cache Statistics" >> $GITHUB_STEP_SUMMARY

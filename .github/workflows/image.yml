@@ -64,6 +64,16 @@ jobs:
         id: setup-environment
         run: |
           echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
+          
+          echo "::group::⚡ Configuring zRAM (8GB)"
+          # Configure zRAM for build performance
+          sudo modprobe zram
+          sudo bash -c 'echo 8G > /sys/block/zram0/disksize'
+          sudo mkswap /dev/zram0
+          sudo swapon -p 100 /dev/zram0
+          echo "zRAM configured: $(cat /sys/block/zram0/disksize | numfmt --to=iec-i --suffix=B)" >> $GITHUB_STEP_SUMMARY
+          echo "::endgroup::"
+          
           echo "::group::📦 Installing system packages"
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
@@ -77,6 +87,32 @@ jobs:
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "::endgroup::"
+          
+          echo "::group::🚀 Configuring ccache"
+          # Configure ccache for build acceleration
+          export USE_CCACHE=1
+          export CCACHE_EXEC=$(which ccache)
+          export CCACHE_DIR=$HOME/.ccache
+          export CCACHE_MAXSIZE=50G
+          export CCACHE_COMPRESS=1
+          export CCACHE_COMPRESSLEVEL=6
+          
+          # Set ccache configuration persistently
+          ccache --set-config=max_size=50G
+          ccache --set-config=compression=true
+          ccache --set-config=compression_level=6
+          ccache --set-config=cache_dir=$HOME/.ccache
+          
+          # Add ccache configuration to bashrc for persistence
+          echo 'export USE_CCACHE=1' >> $HOME/.bashrc
+          echo 'export CCACHE_EXEC=$(which ccache)' >> $HOME/.bashrc
+          echo 'export CCACHE_DIR=$HOME/.ccache' >> $HOME/.bashrc
+          echo 'export CCACHE_MAXSIZE=50G' >> $HOME/.bashrc
+          echo 'export CCACHE_COMPRESS=1' >> $HOME/.bashrc
+          
+          ccache -z  # Zero statistics
+          echo "ccache configured: max_size=50G, compression=enabled" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
@@ -160,6 +196,13 @@ jobs:
         run: |
           echo "### 💾 Saving Custom Image" >> $GITHUB_STEP_SUMMARY
           echo "::group::Creating snapshot of configured environment"
+          
+          # Show final ccache stats
+          if command -v ccache &> /dev/null; then
+            echo "Final ccache statistics:"
+            ccache -s
+          fi
+          
           echo "Custom image 'unica-linux' will be saved automatically by the runner"
           echo "All dependencies, firmware, and build tools are now ready"
           echo "::endgroup::"
@@ -168,6 +211,8 @@ jobs:
           echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| System Packages | ✅ Installed |" >> $GITHUB_STEP_SUMMARY
+          echo "| zRAM (8GB) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
+          echo "| ccache (50GB) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
           echo "| Build Dependencies | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
           echo "| Stock Firmware | ✅ Downloaded & Extracted |" >> $GITHUB_STEP_SUMMARY
           echo "| Signing Keys | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
