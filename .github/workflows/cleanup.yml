@@ -18,11 +18,6 @@ on:
         required: false
         default: 'true'
         type: boolean
-      skip_confirmation:
-        description: 'Skip confirmation (use with caution!)'
-        required: false
-        default: 'false'
-        type: boolean
 
 permissions:
   actions: write
@@ -72,8 +67,11 @@ jobs:
             
             for run_id in $runs; do
               echo "Deleting run ID: $run_id"
-              gh api repos/$REPO/actions/runs/$run_id -X DELETE || true
-              ((total_deleted++))
+              if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
+                ((total_deleted++))
+              else
+                echo "⚠️ Failed to delete run ID: $run_id"
+              fi
             done
           done
           
@@ -99,12 +97,21 @@ jobs:
           
           for pr_number in $prs; do
             echo "Closing PR #$pr_number"
-            gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed -f body="🤖 Automatically closed by cleanup workflow" || true
             
-            # Add a comment to the PR
-            gh api repos/$REPO/issues/$pr_number/comments -f body="🤖 This pull request was automatically closed by the cleanup workflow." || true
+            # Add a comment to the PR first
+            if gh api repos/$REPO/issues/$pr_number/comments -f body="🤖 This pull request was automatically closed by the cleanup workflow." 2>/dev/null; then
+              echo "✅ Added comment to PR #$pr_number"
+            else
+              echo "⚠️ Failed to add comment to PR #$pr_number"
+            fi
             
-            ((total_closed++))
+            # Close the PR
+            if gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed 2>/dev/null; then
+              ((total_closed++))
+              echo "✅ Closed PR #$pr_number"
+            else
+              echo "⚠️ Failed to close PR #$pr_number"
+            fi
           done
           
           echo "::endgroup::"
@@ -129,12 +136,21 @@ jobs:
           
           for issue_number in $issues; do
             echo "Closing issue #$issue_number"
-            gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=completed || true
             
-            # Add a comment to the issue
-            gh api repos/$REPO/issues/$issue_number/comments -f body="🤖 This issue was automatically closed by the cleanup workflow." || true
+            # Add a comment to the issue first
+            if gh api repos/$REPO/issues/$issue_number/comments -f body="🤖 This issue was automatically closed by the cleanup workflow." 2>/dev/null; then
+              echo "✅ Added comment to issue #$issue_number"
+            else
+              echo "⚠️ Failed to add comment to issue #$issue_number"
+            fi
             
-            ((total_closed++))
+            # Close the issue
+            if gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=completed 2>/dev/null; then
+              ((total_closed++))
+              echo "✅ Closed issue #$issue_number"
+            else
+              echo "⚠️ Failed to close issue #$issue_number"
+            fi
           done
           
           echo "::endgroup::"
