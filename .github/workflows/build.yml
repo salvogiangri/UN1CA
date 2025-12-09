@@ -111,7 +111,7 @@ jobs:
   release:
     name: 📦 Create Release
     needs: build
-    runs-on: Unica
+    runs-on: ubuntu-latest
     if: github.ref_name == 'sixteen'
     
     environment:
