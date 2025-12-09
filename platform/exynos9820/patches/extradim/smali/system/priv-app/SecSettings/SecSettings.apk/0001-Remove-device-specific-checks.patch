@@ -1,0 +1,45 @@
+From e91d4b6774dc41fb26fd8152e4b583d7261d4780 Mon Sep 17 00:00:00 2001
+From: Ocin4ever <85343782+Ocin4ever@users.noreply.github.com>
+Date: Wed, 7 May 2025 23:22:48 +0200
+Subject: [PATCH] Remove device specific checks
+
+
+diff --git a/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali b/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
+index eb9ab6deca..845d490688 100644
+--- a/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
++++ b/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
+@@ -21,15 +21,7 @@
+ 
+     sput-object v0, Lcom/samsung/android/settings/accessibility/SecAccessibilityUtils;->excludeDeviceNameSet:Ljava/util/HashSet;
+ 
+-    const-string v1, "beyond"
+-
+-    invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+-
+-    const-string v1, "d1"
+-
+-    invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+-
+-    const-string v1, "d2"
++    const-string v1, "fck"
+ 
+     invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+ 
+@@ -1485,13 +1477,7 @@
+ 
+     sget-boolean v1, Lcom/samsung/android/settings/accessibility/AccessibilityRune;->FEATURE_ACCESSIBILITY_SETTINGS_HOME_APPLIANCE_BACKUP:Z
+ 
+-    const-string/jumbo v1, "ro.surface_flinger.protected_contents"
+-
+-    const/4 v2, 0x0
+-
+-    invoke-static {v1, v2}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    move-result v1
++    const/4 v2, 0x1
+ 
+     const/4 v3, 0x1
+ 
+-- 
+2.43.0
+

@@ -1,0 +1,35 @@
+# Copyright (C) 2012 The Android Open Source Project
+#
+# IMPORTANT: Do not create world writable files or directories.
+# This is a common source of Android security bugs.
+#
+
+# service can not be overwritten except SPRINT
+# Thus, rilcarrier is imported before common rc, like init.rilchip.rc
+
+on post-fs-data
+    mkdir /data/vendor/secradio 0770 radio radio
+
+on property:vts.native_server.on=*
+    setprop vendor.vts.native_server.on ${vts.native_server.on}
+
+service network_config /vendor/bin/secril_config_svc NetworkConfig
+    user radio
+    group radio
+    oneshot
+    disabled
+
+service sim_config /vendor/bin/secril_config_svc SimConfig
+    user radio
+    group radio
+    oneshot
+    disabled
+
+on fs
+    chown radio radio /mnt/vendor/efs/factory.prop
+    chmod 0600 /mnt/vendor/efs/factory.prop
+    exec_start sim_config
+
+on post-fs-data
+    exec_start network_config
+    setprop ro.telephony.default_network ${ro.vendor.radio.default_network}

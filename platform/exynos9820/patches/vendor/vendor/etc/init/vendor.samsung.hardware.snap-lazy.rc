@@ -1,0 +1,7 @@
+service snapaidl /vendor/bin/hw/vendor.samsung.hardware.snap-service
+    interface aidl vendor.samsung.hardware.snap.ISehSnap/default
+    class hal
+    user system
+    group system
+    oneshot
+    disabled
