@@ -5,6 +5,7 @@ security/unica_platform.x509.pem
 security/unica_platform.pk8
 out.zip
 dump/
+out/
 
 # Generated build config
 out/config.sh
