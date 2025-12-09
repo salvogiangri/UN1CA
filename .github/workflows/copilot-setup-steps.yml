@@ -20,9 +20,6 @@ jobs:
 
     # Steps run before the agent starts working
     steps:
-      - name: Checkout
-        uses: actions/checkout@master # v6.0.0
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
