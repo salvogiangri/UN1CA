@@ -1,0 +1,181 @@
+name: 🧹 Cleanup - Actions History, PRs & Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      clean_workflow_runs:
+        description: 'Clean workflow runs history'
+        required: false
+        default: 'true'
+        type: boolean
+      close_pull_requests:
+        description: 'Close all open pull requests'
+        required: false
+        default: 'true'
+        type: boolean
+      close_issues:
+        description: 'Close all open issues'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  actions: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  cleanup:
+    name: 🧹 Cleanup Repository
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📋 Display cleanup plan
+        id: cleanup-plan
+        run: |
+          echo "### 🧹 Cleanup Plan" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Task | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Clean Workflow Runs | ${{ inputs.clean_workflow_runs && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Close Pull Requests | ${{ inputs.close_pull_requests && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Close Issues | ${{ inputs.close_issues && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🗑️ Clean workflow runs history
+        id: clean-workflows
+        if: inputs.clean_workflow_runs == true
+        env:
+          GH_TOKEN: ${{ secrets.TEST }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "### 🗑️ Cleaning Workflow Runs" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Fetching workflow runs"
+          
+          # Get all workflows
+          workflows=$(gh api repos/$REPO/actions/workflows --jq '.workflows[] | .id')
+          
+          total_deleted=0
+          total_skipped=0
+          
+          for workflow_id in $workflows; do
+            echo "Processing workflow ID: $workflow_id"
+            
+            # Get all runs for this workflow
+            runs=$(gh api repos/$REPO/actions/workflows/$workflow_id/runs --paginate --jq '.workflow_runs[] | .id')
+            
+            for run_id in $runs; do
+              # Check if this run has artifacts
+              artifacts_count=$(gh api repos/$REPO/actions/runs/$run_id/artifacts --jq '.total_count' 2>/dev/null || echo "0")
+              
+              if [ "$artifacts_count" -gt 0 ]; then
+                echo "⏭️ Skipping run ID: $run_id (has $artifacts_count artifact(s))"
+                ((total_skipped++))
+              else
+                echo "Deleting run ID: $run_id"
+                if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
+                  ((total_deleted++))
+                else
+                  echo "⚠️ Failed to delete run ID: $run_id"
+                fi
+              fi
+            done
+          done
+          
+          echo "::endgroup::"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Deleted $total_deleted workflow runs**" >> $GITHUB_STEP_SUMMARY
+          echo "⏭️ **Skipped $total_skipped workflow runs with artifacts**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🔒 Close all pull requests
+        id: close-prs
+        if: inputs.close_pull_requests == true
+        env:
+          GH_TOKEN: ${{ secrets.TEST }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "### 🔒 Closing Pull Requests" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Fetching open pull requests"
+          
+          # Get all open PRs
+          prs=$(gh api repos/$REPO/pulls --paginate --jq '.[] | .number')
+          
+          total_closed=0
+          
+          for pr_number in $prs; do
+            echo "Closing PR #$pr_number"
+            
+            # Add a comment to the PR first
+            if gh api repos/$REPO/issues/$pr_number/comments -f body="🤖 This pull request was automatically closed by the cleanup workflow." 2>/dev/null; then
+              echo "✅ Added comment to PR #$pr_number"
+            else
+              echo "⚠️ Failed to add comment to PR #$pr_number"
+            fi
+            
+            # Close the PR
+            if gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed 2>/dev/null; then
+              ((total_closed++))
+              echo "✅ Closed PR #$pr_number"
+            else
+              echo "⚠️ Failed to close PR #$pr_number"
+            fi
+          done
+          
+          echo "::endgroup::"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Closed $total_closed pull requests**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🔒 Close all issues
+        id: close-issues
+        if: inputs.close_issues == true
+        env:
+          GH_TOKEN: ${{ secrets.TEST }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "### 🔒 Closing Issues" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Fetching open issues"
+          
+          # Get all open issues (excluding PRs)
+          issues=$(gh api repos/$REPO/issues --paginate --jq '.[] | select(.pull_request == null) | .number')
+          
+          total_closed=0
+          
+          for issue_number in $issues; do
+            echo "Closing issue #$issue_number"
+            
+            # Add a comment to the issue first
+            if gh api repos/$REPO/issues/$issue_number/comments -f body="🤖 This issue was automatically closed by the cleanup workflow." 2>/dev/null; then
+              echo "✅ Added comment to issue #$issue_number"
+            else
+              echo "⚠️ Failed to add comment to issue #$issue_number"
+            fi
+            
+            # Close the issue
+            if gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=not_planned 2>/dev/null; then
+              ((total_closed++))
+              echo "✅ Closed issue #$issue_number"
+            else
+              echo "⚠️ Failed to close issue #$issue_number"
+            fi
+          done
+          
+          echo "::endgroup::"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Closed $total_closed issues**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🎉 Cleanup completed
+        id: cleanup-summary
+        if: success()
+        run: |
+          echo "### 🎊 Cleanup Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **All requested cleanup tasks have been completed.**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Note:** This workflow used the TEST token for authentication." >> $GITHUB_STEP_SUMMARY
