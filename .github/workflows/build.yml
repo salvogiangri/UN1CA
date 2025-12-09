@@ -164,6 +164,23 @@ jobs:
         with:
           path: release-artifacts
 
+      - name: 📝 Prepare file list for upload
+        id: prepare-files
+        run: |
+          echo "### 📝 Preparing files for Google Drive" >> $GITHUB_STEP_SUMMARY
+          FILES=$(find release-artifacts -type f -name "*.zip" -printf "%p\n" | tr '\n' ' ')
+          echo "files_found=$FILES" >> "$GITHUB_OUTPUT"
+          
+          # Create a list of files for the release notes
+          FILE_LIST=""
+          for file in $(find release-artifacts -type f -name "*.zip"); do
+            filename=$(basename "$file")
+            FILE_LIST="${FILE_LIST}- ${filename}\n"
+          done
+          echo "file_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo -e "$FILE_LIST" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: ☁️ Upload all ROMs to Google Drive
         id: upload-all-gdrive
         uses: adityak74/google-drive-upload-git-action@v0.3
@@ -189,13 +206,18 @@ jobs:
             - **Commit**: ${{ github.sha }}
 
             ### Download
-            📥 **Download from Google Drive**: ${{ steps.upload-all-gdrive.outputs.fileUrl }}
+            📥 **Download ROMs from Google Drive**
+            
+            The following ROM files are available in the Google Drive folder:
+            ${{ steps.prepare-files.outputs.file_list }}
+            
+            🔗 [Open Google Drive Folder](https://drive.google.com/drive/folders/${{ secrets.GOOGLE_DRIVE_FOLDER_ID }})
 
             ### Supported Devices
             - Galaxy S23+ (dm2qxxx)
 
             ### Installation
-            1. Download the appropriate ZIP file for your device from the link above
+            1. Download the appropriate ZIP file for your device from Google Drive
             2. Boot into recovery mode
             3. Flash the ZIP file
             4. Reboot and enjoy!
