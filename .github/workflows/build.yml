@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: 🔨 Build ROM for ${{ matrix.target }}
-    runs-on: rom2
+    runs-on: Unica
     
     environment:
       name: production
@@ -89,12 +89,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 💾 Set up swap space
-        id: setup-swap
-        uses: pierotofy/set-swap-space@master
-        with:
-          swap-size-gb: 4
-
       - name: 🏗️ Build dependencies
         id: build-dependencies
         run: |
@@ -104,26 +98,6 @@ jobs:
           ./scripts/build_dependencies.sh
           echo "::endgroup::"
           echo "✅ Dependencies built successfully" >> $GITHUB_STEP_SUMMARY
-
-      - name: 📥 Download stock firmwares
-        id: download-firmware
-        run: |
-          echo "### 📲 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Downloading firmware files for ${{ matrix.target }}"
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/download_fw.sh
-          echo "::endgroup::"
-          echo "✅ Firmware downloaded successfully" >> $GITHUB_STEP_SUMMARY
-
-      - name: 📦 Extract stock firmwares
-        id: extract-firmware
-        run: |
-          echo "### 🗜️ Extracting Firmware" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Extracting firmware components"
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/extract_fw.sh
-          echo "::endgroup::"
-          echo "✅ Firmware extracted successfully" >> $GITHUB_STEP_SUMMARY
 
       - name: 🚀 Build ROM
         id: build-rom
