@@ -34,6 +34,12 @@ jobs:
         target: [dm2q]
 
     steps:
+      - name: ⚙️ Configure git
+        id: configure-git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: 📥 Checkout repository
         id: checkout
         uses: actions/checkout@v6
@@ -75,11 +81,6 @@ jobs:
           
           echo "::group::🔌 Loading kernel modules"
           sudo modprobe erofs f2fs
-          echo "::endgroup::"
-          
-          echo "::group::⚙️ Configuring git"
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           echo "::endgroup::"
           
           echo "::group::🔐 Setting up signing keys"
