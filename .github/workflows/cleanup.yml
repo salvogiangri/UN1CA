@@ -138,12 +138,16 @@ jobs:
           echo "### 🔒 Closing and Deleting Pull Requests" >> $GITHUB_STEP_SUMMARY
           echo "::group::Fetching all pull requests"
           
+          # Get the default branch to avoid deleting it
+          default_branch=$(gh api repos/$REPO --jq '.default_branch')
+          
           # Get all PRs (both open and closed) with their state and head branch
-          prs=$(gh api repos/$REPO/pulls?state=all --paginate --jq '.[] | "\(.number)|\(.state)|\(.head.ref)"')
+          prs=$(gh api repos/$REPO/pulls?state=all --paginate --jq '.[] | "\(.number)|\(.state)|\(.head.ref // \"\")"')
           
           total_closed=0
           total_already_closed=0
           total_branches_deleted=0
+          total_branches_skipped=0
           
           for pr_info in $prs; do
             pr_number=$(echo "$pr_info" | cut -d'|' -f1)
@@ -173,14 +177,20 @@ jobs:
               total_already_closed=$((total_already_closed + 1))
             fi
             
-            # Delete the head branch
-            if [ -n "$pr_branch" ]; then
-              echo "Deleting branch: $pr_branch"
-              if gh api repos/$REPO/git/refs/heads/$pr_branch -X DELETE 2>/dev/null; then
-                total_branches_deleted=$((total_branches_deleted + 1))
-                echo "✅ Deleted branch: $pr_branch"
+            # Delete the head branch if it exists and is not the default branch
+            if [ -n "$pr_branch" ] && [ "$pr_branch" != "null" ]; then
+              # Skip if it's the default branch
+              if [ "$pr_branch" = "$default_branch" ]; then
+                echo "⏭️ Skipping branch: $pr_branch (default branch)"
+                total_branches_skipped=$((total_branches_skipped + 1))
               else
-                echo "⚠️ Failed to delete branch: $pr_branch (may not exist or protected)"
+                echo "Deleting branch: $pr_branch"
+                if gh api repos/$REPO/git/refs/heads/$pr_branch -X DELETE 2>/dev/null; then
+                  total_branches_deleted=$((total_branches_deleted + 1))
+                  echo "✅ Deleted branch: $pr_branch"
+                else
+                  echo "⚠️ Failed to delete branch: $pr_branch (may not exist or protected)"
+                fi
               fi
             fi
           done
@@ -190,6 +200,9 @@ jobs:
           echo "✅ **Closed $total_closed pull requests**" >> $GITHUB_STEP_SUMMARY
           echo "ℹ️ **$total_already_closed pull requests were already closed**" >> $GITHUB_STEP_SUMMARY
           echo "🗑️ **Deleted $total_branches_deleted branches**" >> $GITHUB_STEP_SUMMARY
+          if [ $total_branches_skipped -gt 0 ]; then
+            echo "⏭️ **Skipped $total_branches_skipped branches**" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔒 Close all issues
