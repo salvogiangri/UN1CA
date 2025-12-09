@@ -18,6 +18,11 @@ on:
         required: false
         default: 'true'
         type: boolean
+      delete_copilot_branches:
+        description: 'Delete branches with "copilot" in the name'
+        required: false
+        default: 'true'
+        type: boolean
 
 permissions:
   actions: write
@@ -41,6 +46,7 @@ jobs:
           echo "| Clean Workflow Runs | ${{ inputs.clean_workflow_runs && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Close Pull Requests | ${{ inputs.close_pull_requests && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Close Issues | ${{ inputs.close_issues && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Delete Copilot Branches | ${{ inputs.delete_copilot_branches && '✅ Enabled' || '❌ Disabled' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
@@ -61,14 +67,19 @@ jobs:
           
           total_deleted=0
           total_skipped=0
+          total_skipped_running=0
           
           for workflow_id in $workflows; do
             echo "Processing workflow ID: $workflow_id"
             
-            # Get all runs for this workflow
-            runs=$(gh api repos/$REPO/actions/workflows/$workflow_id/runs --paginate --jq '.workflow_runs[] | .id')
+            # Get all runs for this workflow with their status and conclusion
+            runs=$(gh api repos/$REPO/actions/workflows/$workflow_id/runs --paginate --jq '.workflow_runs[] | "\(.id)|\(.status)|\(.conclusion)"')
             
-            for run_id in $runs; do
+            for run_info in $runs; do
+              run_id=$(echo "$run_info" | cut -d'|' -f1)
+              run_status=$(echo "$run_info" | cut -d'|' -f2)
+              run_conclusion=$(echo "$run_info" | cut -d'|' -f3)
+              
               # Skip the current run
               if [ "$run_id" = "$CURRENT_RUN_ID" ]; then
                 echo "⏭️ Skipping run ID: $run_id (current workflow run)"
@@ -76,19 +87,35 @@ jobs:
                 continue
               fi
               
-              # Check if this run has artifacts
-              artifacts_count=$(gh api repos/$REPO/actions/runs/$run_id/artifacts --jq '.total_count' 2>/dev/null || echo "0")
+              # Skip running workflows
+              if [ "$run_status" = "in_progress" ] || [ "$run_status" = "queued" ] || [ "$run_status" = "waiting" ]; then
+                echo "⏭️ Skipping run ID: $run_id (status: $run_status - still running)"
+                total_skipped_running=$((total_skipped_running + 1))
+                continue
+              fi
               
-              if [ "$artifacts_count" -gt 0 ]; then
-                echo "⏭️ Skipping run ID: $run_id (has $artifacts_count artifact(s))"
-                total_skipped=$((total_skipped + 1))
-              else
-                echo "Deleting run ID: $run_id"
-                # Try to delete the run, don't fail the script if it doesn't exist
+              # Delete workflows with cancelled or skipped status regardless of artifacts
+              if [ "$run_conclusion" = "cancelled" ] || [ "$run_conclusion" = "skipped" ]; then
+                echo "Deleting run ID: $run_id (conclusion: $run_conclusion)"
                 if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
                   total_deleted=$((total_deleted + 1))
                 else
                   echo "⚠️ Failed to delete run ID: $run_id (may already be deleted)"
+                fi
+              else
+                # For other statuses, check if it has artifacts before deleting
+                artifacts_count=$(gh api repos/$REPO/actions/runs/$run_id/artifacts --jq '.total_count' 2>/dev/null || echo "0")
+                
+                if [ "$artifacts_count" -gt 0 ]; then
+                  echo "⏭️ Skipping run ID: $run_id (has $artifacts_count artifact(s))"
+                  total_skipped=$((total_skipped + 1))
+                else
+                  echo "Deleting run ID: $run_id (conclusion: $run_conclusion)"
+                  if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
+                    total_deleted=$((total_deleted + 1))
+                  else
+                    echo "⚠️ Failed to delete run ID: $run_id (may already be deleted)"
+                  fi
                 fi
               fi
             done
@@ -98,6 +125,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Deleted $total_deleted workflow runs**" >> $GITHUB_STEP_SUMMARY
           echo "⏭️ **Skipped $total_skipped workflow runs with artifacts**" >> $GITHUB_STEP_SUMMARY
+          echo "⏭️ **Skipped $total_skipped_running running workflow runs**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔒 Close all pull requests
@@ -177,6 +205,52 @@ jobs:
           echo "::endgroup::"
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Closed $total_closed issues**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🌿 Delete copilot branches
+        id: delete-copilot-branches
+        if: inputs.delete_copilot_branches == true
+        env:
+          GH_TOKEN: ${{ secrets.TEST }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "### 🌿 Deleting Copilot Branches" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Fetching branches with 'copilot' in name"
+          
+          # Get all branches that contain "copilot" in the name
+          branches=$(gh api repos/$REPO/git/refs/heads --paginate --jq '.[] | select(.ref | contains("copilot")) | .ref' | sed 's/refs\/heads\///')
+          
+          total_deleted=0
+          total_skipped=0
+          
+          # Get the default branch to avoid deleting it
+          default_branch=$(gh api repos/$REPO --jq '.default_branch')
+          
+          for branch in $branches; do
+            # Skip if it's the default branch
+            if [ "$branch" = "$default_branch" ]; then
+              echo "⏭️ Skipping branch: $branch (default branch)"
+              total_skipped=$((total_skipped + 1))
+              continue
+            fi
+            
+            echo "Deleting branch: $branch"
+            
+            # Delete the branch
+            if gh api repos/$REPO/git/refs/heads/$branch -X DELETE 2>/dev/null; then
+              total_deleted=$((total_deleted + 1))
+              echo "✅ Deleted branch: $branch"
+            else
+              echo "⚠️ Failed to delete branch: $branch (may not exist or protected)"
+            fi
+          done
+          
+          echo "::endgroup::"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Deleted $total_deleted branches with 'copilot' in name**" >> $GITHUB_STEP_SUMMARY
+          if [ $total_skipped -gt 0 ]; then
+            echo "⏭️ **Skipped $total_skipped branches**" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🎉 Cleanup completed
