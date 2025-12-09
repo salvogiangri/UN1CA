@@ -19,7 +19,6 @@ Este workflow automatiza la limpieza del repositorio, incluyendo:
    - ✅ **Clean workflow runs history**: Limpiar historial de workflows
    - ✅ **Close all open pull requests**: Cerrar todos los PRs
    - ✅ **Close all open issues**: Cerrar todos los issues
-   - ⚠️ **Skip confirmation**: Saltar confirmación (usar con precaución)
 5. Haz clic en **Run workflow** para ejecutar
 
 ### Requisitos

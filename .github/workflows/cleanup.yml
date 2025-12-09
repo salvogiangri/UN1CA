@@ -145,7 +145,7 @@ jobs:
             fi
             
             # Close the issue
-            if gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=completed 2>/dev/null; then
+            if gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=not_planned 2>/dev/null; then
               ((total_closed++))
               echo "✅ Closed issue #$issue_number"
             else
