@@ -28,7 +28,7 @@ permissions:
 jobs:
   cleanup:
     name: 🧹 Cleanup Repository
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-latest
     
     steps:
       - name: 📋 Display cleanup plan
@@ -50,10 +50,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TEST }}
           REPO: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
         run: |
           echo "### 🗑️ Cleaning Workflow Runs" >> $GITHUB_STEP_SUMMARY
           echo "::group::Fetching workflow runs"
-          
+          echo "Current run ID: $CURRENT_RUN_ID (will be excluded from deletion)"
+
           # Get all workflows
           workflows=$(gh api repos/$REPO/actions/workflows --jq '.workflows[] | .id')
           
@@ -67,18 +69,26 @@ jobs:
             runs=$(gh api repos/$REPO/actions/workflows/$workflow_id/runs --paginate --jq '.workflow_runs[] | .id')
             
             for run_id in $runs; do
+              # Skip the current run
+              if [ "$run_id" = "$CURRENT_RUN_ID" ]; then
+                echo "⏭️ Skipping run ID: $run_id (current workflow run)"
+                total_skipped=$((total_skipped + 1))
+                continue
+              fi
+              
               # Check if this run has artifacts
               artifacts_count=$(gh api repos/$REPO/actions/runs/$run_id/artifacts --jq '.total_count' 2>/dev/null || echo "0")
               
               if [ "$artifacts_count" -gt 0 ]; then
                 echo "⏭️ Skipping run ID: $run_id (has $artifacts_count artifact(s))"
-                ((total_skipped++))
+                total_skipped=$((total_skipped + 1))
               else
                 echo "Deleting run ID: $run_id"
+                # Try to delete the run, don't fail the script if it doesn't exist
                 if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
-                  ((total_deleted++))
+                  total_deleted=$((total_deleted + 1))
                 else
-                  echo "⚠️ Failed to delete run ID: $run_id"
+                  echo "⚠️ Failed to delete run ID: $run_id (may already be deleted)"
                 fi
               fi
             done
@@ -109,15 +119,15 @@ jobs:
             echo "Closing PR #$pr_number"
             
             # Add a comment to the PR first
-            if gh api repos/$REPO/issues/$pr_number/comments -f body="🤖 This pull request was automatically closed by the cleanup workflow." 2>/dev/null; then
-              echo "✅ Added comment to PR #$pr_number"
-            else
+            gh api repos/$REPO/issues/$pr_number/comments \
+              -f body="🤖 This pull request was automatically closed by the cleanup workflow." \
+              2>/dev/null && \
+              echo "✅ Added comment to PR #$pr_number" || \
               echo "⚠️ Failed to add comment to PR #$pr_number"
-            fi
             
             # Close the PR
             if gh api repos/$REPO/pulls/$pr_number -X PATCH -f state=closed 2>/dev/null; then
-              ((total_closed++))
+              total_closed=$((total_closed + 1))
               echo "✅ Closed PR #$pr_number"
             else
               echo "⚠️ Failed to close PR #$pr_number"
@@ -148,15 +158,16 @@ jobs:
             echo "Closing issue #$issue_number"
             
             # Add a comment to the issue first
-            if gh api repos/$REPO/issues/$issue_number/comments -f body="🤖 This issue was automatically closed by the cleanup workflow." 2>/dev/null; then
-              echo "✅ Added comment to issue #$issue_number"
-            else
+            gh api repos/$REPO/issues/$issue_number/comments \
+              -f body="🤖 This issue was automatically closed by the cleanup workflow." \
+              2>/dev/null && \
+              echo "✅ Added comment to issue #$issue_number" || \
               echo "⚠️ Failed to add comment to issue #$issue_number"
-            fi
             
             # Close the issue
-            if gh api repos/$REPO/issues/$issue_number -X PATCH -f state=closed -f state_reason=not_planned 2>/dev/null; then
-              ((total_closed++))
+            if gh api repos/$REPO/issues/$issue_number -X PATCH \
+              -f state=closed -f state_reason=not_planned 2>/dev/null; then
+              total_closed=$((total_closed + 1))
               echo "✅ Closed issue #$issue_number"
             else
               echo "⚠️ Failed to close issue #$issue_number"
