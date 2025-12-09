@@ -1,6 +1,9 @@
 name: 🏗️ Build UN1CA ROM
 
 on:
+  schedule:
+    - cron: "0 21 * * 1-5"  # 04:00 AM Thailand/Vietnam (UTC+7)
+    - cron: "0 9 * * 1-5"
   workflow_dispatch:
 
 permissions:
@@ -34,9 +37,7 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
         with:
-          fetch-tags: '0'
-          submodules: 'false'
-          fetch-depth: '0'
+          submodules: 'true'
 
       - name: 🎯 Display workflow information
         id: workflow-info
@@ -90,6 +91,28 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          
+      - name: 🏗️ Build dependencies
+        id: update
+        run: |
+          echo "### 📦 Update Repository" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Update Repository"
+          git pull
+          echo "::endgroup::"
+          echo "✅ Update Repository" >> $GITHUB_STEP_SUMMARY
+   
+      - name: 🏗️ Clean old firmware
+        id: clean
+        run: |
+          echo "### 📦 Clean old firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Clean old firmware"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/clean.sh all 
+          ./scripts/clean.sh fw
+          ./scripts/clean.sh tools
+          ./scripts/clean.sh work_dir
+          echo "::endgroup::"
+          echo "✅ Clean old firmware" >> $GITHUB_STEP_SUMMARY
 
       - name: 🏗️ Build dependencies
         id: build-dependencies
