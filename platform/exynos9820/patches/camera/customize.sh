@@ -38,6 +38,10 @@ wait $(jobs -p) || exit 1
 
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Removing HDR10+ check"
+ADD_TO_WORK_DIR "pa3qzcx" "system" "system/lib64/libstagefright.so" 0 0 644 "u:object_r:system_lib_file:s0"
+HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" "010140f9cf390594a0500034" "010140f91f2003d51f2003d5"
+
 BLOBS_LIST="
 system/lib64/libeden_wrapper_system.so
 system/lib64/libsnap_aidl.snap.samsung.so
