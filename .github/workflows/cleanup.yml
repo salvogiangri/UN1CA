@@ -138,8 +138,8 @@ jobs:
           echo "### 🔒 Closing Pull Requests" >> $GITHUB_STEP_SUMMARY
           echo "::group::Fetching open pull requests"
           
-          # Get all open PRs
-          prs=$(gh api repos/$REPO/pulls --paginate --jq '.[] | .number')
+          # Get only open PRs
+          prs=$(gh api repos/$REPO/pulls?state=open --paginate --jq '.[] | .number')
           
           total_closed=0
           
@@ -177,8 +177,8 @@ jobs:
           echo "### 🔒 Closing Issues" >> $GITHUB_STEP_SUMMARY
           echo "::group::Fetching open issues"
           
-          # Get all open issues (excluding PRs)
-          issues=$(gh api repos/$REPO/issues --paginate --jq '.[] | select(.pull_request == null) | .number')
+          # Get only open issues (excluding PRs)
+          issues=$(gh api repos/$REPO/issues?state=open --paginate --jq '.[] | select(.pull_request == null) | .number')
           
           total_closed=0
           
