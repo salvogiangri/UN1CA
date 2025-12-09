@@ -50,55 +50,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
-      - name: 🔧 Set up build environment
-        id: setup-environment
-        run: |
-          echo "::group::📦 Installing system packages"
-          sudo apt update
-          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            7zip attr ccache clang ffmpeg \
-            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
-          echo "::endgroup::"
-          
-          echo "::group::🔌 Loading kernel modules"
-          sudo modprobe erofs f2fs
-          echo "::endgroup::"
-          
-          echo "::group::⚙️ Configuring git"
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          echo "::endgroup::"
-          
-          echo "::group::🔐 Setting up signing keys"
-          mkdir -p security/avb
-          echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
-          echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
-          echo -n "${{ secrets.OTA_KEY_PK8 }}" | base64 --decode > security/unica_ota.pk8
-          echo -n "${{ secrets.OTA_KEY_PEM }}" | base64 --decode > security/unica_ota.x509.pem
-          echo -n "${{ secrets.AVB_KEY_PEM }}" | base64 --decode > security/avb/unica_avb_rsa4096.pem
-          chmod 600 security/*.pk8 security/*.pem security/avb/*.pem
-          echo "::endgroup::"
-          
-          echo "### ✅ Build environment configured" >> $GITHUB_STEP_SUMMARY
-
-      - name: ☕ Set up JDK 17
-        id: setup-jdk
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: 🏗️ Build dependencies
-        id: build-dependencies
-        run: |
-          echo "### 📦 Building Dependencies" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Building build system dependencies"
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/build_dependencies.sh
-          echo "::endgroup::"
-          echo "✅ Dependencies built successfully" >> $GITHUB_STEP_SUMMARY
-
       - name: 🚀 Build ROM
         id: build-rom
         run: |
