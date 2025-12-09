@@ -142,7 +142,7 @@ jobs:
           default_branch=$(gh api repos/$REPO --jq '.default_branch')
           
           # Get all PRs (both open and closed) with their state and head branch
-          prs=$(gh api repos/$REPO/pulls?state=all --paginate --jq '.[] | "\(.number)|\(.state)|\(.head.ref // \"\")"')
+          prs=$(gh api repos/$REPO/pulls?state=all --paginate --jq '.[] | (.number|tostring) + "|" + .state + "|" + (.head.ref // "")')
           
           total_closed=0
           total_already_closed=0
