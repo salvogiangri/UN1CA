@@ -65,17 +65,32 @@ jobs:
         run: |
           echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
           
-          echo "::group::📦 Installing system packages"
+          echo "::group::📦 Installing build dependencies"
           sudo apt update
+          # Install essential build tools and dependencies for Android ROM compilation
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             7zip attr ccache clang ffmpeg zram-config \
+            gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib \
+            libc6-dev x11proto-core-dev libx11-dev tree lib32z-dev \
+            libgl1-mesa-dev libxml2-utils xsltproc bc lib32readline-dev \
+            lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev lz4 tar \
+            libxml2 lzop pngcrush schedtool squashfs-tools imagemagick \
+            libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev python3 \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          
+          # Configure git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Display installed versions
+          echo "✅ Build dependencies installed" >> $GITHUB_STEP_SUMMARY
+          echo "  - GCC: $(gcc --version | head -n1)" >> $GITHUB_STEP_SUMMARY
+          echo "  - Python: $(python3 --version)" >> $GITHUB_STEP_SUMMARY
+          echo "  - ccache: $(ccache --version | head -n1)" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
-          echo "::group::⚡ Configuring zRAM (8GB minimum)"
+          echo "::group::⚡ Configuring zRAM for Ubuntu 24.04 (8GB minimum)"
           # Configure zRAM for Ubuntu 24.04
           # Remove default zram configuration if exists
           sudo systemctl stop systemd-zram-setup@zram0.service 2>/dev/null || true
@@ -101,10 +116,18 @@ jobs:
           
           # Verify configuration
           ZRAM_SIZE_HUMAN=$(cat /sys/block/zram0/disksize | numfmt --to=iec-i --suffix=B)
+          ZRAM_ACTUAL=$(swapon --show=NAME,SIZE,PRIO --noheadings 2>/dev/null | grep zram0 || echo "zram0 configured")
           echo "✅ zRAM configured: $ZRAM_SIZE_HUMAN with priority 1000" >> $GITHUB_STEP_SUMMARY
+          echo "  - Details: $ZRAM_ACTUAL" >> $GITHUB_STEP_SUMMARY
           echo "::endgroup::"
           
-          echo "::group::🚀 Configuring ccache"
+          echo "::group::🚀 Configuring ccache for Ubuntu 24.04"
+          # Ensure ccache is properly installed
+          if ! command -v ccache &> /dev/null; then
+            echo "ERROR: ccache not found after installation"
+            exit 1
+          fi
+          
           # Configure ccache for build acceleration
           export USE_CCACHE=1
           export CCACHE_EXEC=/usr/bin/ccache
@@ -121,9 +144,15 @@ jobs:
           
           # Initialize ccache statistics
           ccache -z
-          ccache -s
           
-          echo "✅ ccache configured: max_size=50G, compression=enabled" >> $GITHUB_STEP_SUMMARY
+          # Display ccache configuration
+          echo "✅ ccache configured for Ubuntu 24.04" >> $GITHUB_STEP_SUMMARY
+          echo "  - Executable: /usr/bin/ccache" >> $GITHUB_STEP_SUMMARY
+          echo "  - Max size: 50G" >> $GITHUB_STEP_SUMMARY
+          echo "  - Compression: enabled" >> $GITHUB_STEP_SUMMARY
+          echo "  - CC wrapper: ccache gcc" >> $GITHUB_STEP_SUMMARY
+          echo "  - CXX wrapper: ccache g++" >> $GITHUB_STEP_SUMMARY
+          ccache -s
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
@@ -140,7 +169,7 @@ jobs:
           chmod 600 security/*.pk8 security/*.pem security/avb/*.pem
           echo "::endgroup::"
           
-          echo "✅ **Environment configured successfully**" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Environment configured successfully for Ubuntu 24.04**" >> $GITHUB_STEP_SUMMARY
 
       - name: ☕ Set up JDK 17
         id: setup-jdk
@@ -218,19 +247,22 @@ jobs:
           if [ -b /dev/zram0 ]; then
             ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
             echo "zRAM configured: $ZRAM_SIZE with priority 1000"
+            swapon --show 2>/dev/null || true
           fi
           
+          echo ""
           echo "Custom image 'unica-linux' will be saved automatically by the runner"
           echo "All dependencies, firmware, and build tools are now ready"
           echo "::endgroup::"
-          echo "✅ **Custom image snapshot created**" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Custom image snapshot created for Ubuntu 24.04**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| System Packages | ✅ Installed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ubuntu Version | ✅ 24.04 LTS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build Dependencies | ✅ All installed (gcc, g++, python3, etc.) |" >> $GITHUB_STEP_SUMMARY
           echo "| zRAM (≥8GB, priority 1000) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
-          echo "| ccache (50GB) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build Dependencies | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
+          echo "| ccache (50GB) | ✅ Configured with wrappers |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build Tools | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
           echo "| Stock Firmware | ✅ Downloaded & Extracted |" >> $GITHUB_STEP_SUMMARY
           echo "| Signing Keys | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
 
