@@ -4,7 +4,7 @@ Este workflow automatiza la limpieza del repositorio, incluyendo:
 
 ## Funcionalidades
 
-- **🗑️ Limpiar Historial de Actions**: Elimina todas las ejecuciones de workflows anteriores
+- **🗑️ Limpiar Historial de Actions**: Elimina todas las ejecuciones de workflows anteriores (excepto las que tienen artefactos guardados)
 - **🔒 Cerrar Pull Requests**: Cierra automáticamente todos los PRs abiertos
 - **🔒 Cerrar Issues**: Cierra automáticamente todos los issues abiertos
 
@@ -38,7 +38,7 @@ Este workflow requiere que el secret `TEST` esté configurado en el repositorio 
 
 ⚠️ **ADVERTENCIA**: Este workflow realiza acciones destructivas:
 
-- La eliminación del historial de workflows es **permanente**
+- La eliminación del historial de workflows es **permanente** (pero preserva los workflows con artefactos)
 - El cierre de PRs e issues es **permanente** (aunque se pueden reabrir manualmente)
 - Asegúrate de que realmente quieres ejecutar estas acciones antes de proceder
 
@@ -55,6 +55,14 @@ permissions:
 ```
 
 ## Personalización
+
+### Preservación de Artefactos
+
+El workflow automáticamente **preserva** las ejecuciones de workflows que contienen artefactos. Esto significa que:
+
+- Los workflows que subieron archivos (como ROMs, builds, etc.) no serán eliminados
+- Solo se borran las ejecuciones sin artefactos asociados
+- Esto protege los builds importantes mientras limpia el historial innecesario
 
 Puedes modificar el workflow para:
 

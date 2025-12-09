@@ -58,6 +58,7 @@ jobs:
           workflows=$(gh api repos/$REPO/actions/workflows --jq '.workflows[] | .id')
           
           total_deleted=0
+          total_skipped=0
           
           for workflow_id in $workflows; do
             echo "Processing workflow ID: $workflow_id"
@@ -66,11 +67,19 @@ jobs:
             runs=$(gh api repos/$REPO/actions/workflows/$workflow_id/runs --paginate --jq '.workflow_runs[] | .id')
             
             for run_id in $runs; do
-              echo "Deleting run ID: $run_id"
-              if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
-                ((total_deleted++))
+              # Check if this run has artifacts
+              artifacts_count=$(gh api repos/$REPO/actions/runs/$run_id/artifacts --jq '.total_count' 2>/dev/null || echo "0")
+              
+              if [ "$artifacts_count" -gt 0 ]; then
+                echo "⏭️ Skipping run ID: $run_id (has $artifacts_count artifact(s))"
+                ((total_skipped++))
               else
-                echo "⚠️ Failed to delete run ID: $run_id"
+                echo "Deleting run ID: $run_id"
+                if gh api repos/$REPO/actions/runs/$run_id -X DELETE 2>/dev/null; then
+                  ((total_deleted++))
+                else
+                  echo "⚠️ Failed to delete run ID: $run_id"
+                fi
               fi
             done
           done
@@ -78,6 +87,7 @@ jobs:
           echo "::endgroup::"
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Deleted $total_deleted workflow runs**" >> $GITHUB_STEP_SUMMARY
+          echo "⏭️ **Skipped $total_skipped workflow runs with artifacts**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔒 Close all pull requests
