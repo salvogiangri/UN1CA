@@ -40,29 +40,54 @@ while [ "$#" != 0 ]; do
     case "$1" in
         "all")
             LOG "- Cleaning everything..."
-            rm -rf "$OUT_DIR"
+            if [ -d "$OUT_DIR" ]; then
+                rm -rf "$OUT_DIR"
+            else
+                LOGW "Directory not found: $OUT_DIR"
+            fi
             break
             ;;
         "odin")
             LOG "- Cleaning Odin firmwares dir..."
-            rm -rf "$ODIN_DIR"
+            if [ -d "$ODIN_DIR" ]; then
+                rm -rf "$ODIN_DIR"
+            else
+                LOGW "Directory not found: $ODIN_DIR"
+            fi
             ;;
         "fw")
             LOG "- Cleaning extracted firmwares dir..."
-            rm -rf "$FW_DIR"
+            if [ -d "$FW_DIR" ]; then
+                rm -rf "$FW_DIR"
+            else
+                LOGW "Directory not found: $FW_DIR"
+            fi
             ;;
         "work_dir")
             LOG "- Cleaning ROM work dir..."
-            rm -rf "$(dirname "$WORK_DIR")"
-            mkdir -p "$(dirname "$WORK_DIR")"
+            if [ -d "$(dirname "$WORK_DIR")" ]; then
+                rm -rf "$(dirname "$WORK_DIR")"
+                mkdir -p "$(dirname "$WORK_DIR")"
+            else
+                LOGW "Directory not found: $(dirname "$WORK_DIR")"
+                mkdir -p "$(dirname "$WORK_DIR")"
+            fi
             ;;
         "logs")
             LOG "- Cleaning log files..."
-            find "$OUT_DIR" -type f -name "*.log" -delete
+            if [ -d "$OUT_DIR" ]; then
+                find "$OUT_DIR" -type f -name "*.log" -delete
+            else
+                LOGW "Directory not found: $OUT_DIR"
+            fi
             ;;
         "tools")
             LOG "- Cleaning dependencies dir..."
-            rm -rf "$TOOLS_DIR"
+            if [ -d "$TOOLS_DIR" ]; then
+                rm -rf "$TOOLS_DIR"
+            else
+                LOGW "Directory not found: $TOOLS_DIR"
+            fi
             git submodule foreach --recursive "git clean -f -d -x" &> /dev/null
             ;;
         *)
