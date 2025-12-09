@@ -64,6 +64,13 @@ jobs:
             7zip attr ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            7zip attr ccache clang ffmpeg \
+            libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
@@ -122,7 +129,7 @@ jobs:
         run: |
           echo "### 🔨 Building Dependencies" >> $GITHUB_STEP_SUMMARY
           echo "::group::Building build system dependencies"
-          source ./buildenv.sh ${{ matrix.target }}
+          source ./buildenv.sh a52sxq
           ./scripts/build_dependencies.sh
           echo "::endgroup::"
           echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
