@@ -1,4 +1,4 @@
-name: 🏗️ Build UN1CA ROM
+name: 🖼️ Build Custom Runner Image
 
 on:
   schedule:
@@ -12,8 +12,8 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    name: 🔨 Build ROM for ${{ matrix.target }}
+  build-image:
+    name: 🖼️ Build Custom Image for ${{ matrix.target }}
     runs-on: unica
     snapshot: 
         image-name: unica-linux
@@ -42,7 +42,7 @@ jobs:
       - name: 🎯 Display workflow information
         id: workflow-info
         run: |
-          echo "### 🚀 Build Workflow Started" >> $GITHUB_STEP_SUMMARY
+          echo "### 🖼️ Custom Image Build Started" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -56,6 +56,7 @@ jobs:
       - name: 🔧 Set up build environment
         id: setup-environment
         run: |
+          echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
           echo "::group::📦 Installing system packages"
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
@@ -83,7 +84,7 @@ jobs:
           chmod 600 security/*.pk8 security/*.pem security/avb/*.pem
           echo "::endgroup::"
           
-          echo "### ✅ Build environment configured" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Environment configured successfully**" >> $GITHUB_STEP_SUMMARY
 
       - name: ☕ Set up JDK 17
         id: setup-jdk
@@ -92,54 +93,117 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           
-      - name: 🏗️ Build dependencies
-        id: update
+      - name: 📦 Update repository
+        id: update-repo
         run: |
-          echo "### 📦 Update Repository" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Update Repository"
+          echo "### 📦 Updating Repository" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Pulling latest changes"
           git pull
           echo "::endgroup::"
-          echo "✅ Update Repository" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Repository updated**" >> $GITHUB_STEP_SUMMARY
    
-      - name: 🏗️ Clean old firmware
-        id: clean
+      - name: 🧹 Clean old firmware
+        id: clean-firmware
         run: |
-          echo "### 📦 Clean old firmware" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Clean old firmware"
+          echo "### 🧹 Cleaning Old Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Removing old firmware and build artifacts"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/clean.sh all 
           ./scripts/clean.sh fw
           ./scripts/clean.sh tools
           ./scripts/clean.sh work_dir
           echo "::endgroup::"
-          echo "✅ Clean old firmware" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Old firmware cleaned**" >> $GITHUB_STEP_SUMMARY
 
-      - name: 🏗️ Build dependencies
+      - name: 🔨 Build dependencies
         id: build-dependencies
         run: |
-          echo "### 📦 Building Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔨 Building Dependencies" >> $GITHUB_STEP_SUMMARY
           echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
           echo "::endgroup::"
-          echo "✅ Dependencies built successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
 
-      - name: 📥 Download stock firmwares
+      - name: 📥 Download stock firmware
         id: download-firmware
         run: |
-          echo "### 📲 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
           echo "::endgroup::"
-          echo "✅ Firmware downloaded successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Firmware downloaded successfully**" >> $GITHUB_STEP_SUMMARY
 
-      - name: 📦 Extract stock firmwares
+      - name: 📦 Extract stock firmware
         id: extract-firmware
         run: |
-          echo "### 🗜️ Extracting Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Extracting Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
           echo "::endgroup::"
-          echo "✅ Firmware extracted successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Firmware extracted successfully**" >> $GITHUB_STEP_SUMMARY
+
+      - name: 💾 Save custom image snapshot
+        id: save-snapshot
+        run: |
+          echo "### 💾 Saving Custom Image" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Creating snapshot of configured environment"
+          echo "Custom image 'unica-linux' will be saved automatically by the runner"
+          echo "All dependencies, firmware, and build tools are now ready"
+          echo "::endgroup::"
+          echo "✅ **Custom image snapshot created**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| System Packages | ✅ Installed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build Dependencies | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
+          echo "| Stock Firmware | ✅ Downloaded & Extracted |" >> $GITHUB_STEP_SUMMARY
+          echo "| Signing Keys | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🎉 Image build completed
+        id: image-summary
+        if: success()
+        run: |
+          echo "### 🎊 Custom Image Build Completed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The custom runner image has been built and is ready for ROM compilation." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🚀 **Next: Triggering ROM build workflow...**" >> $GITHUB_STEP_SUMMARY
+
+  trigger-build:
+    name: 🚀 Trigger ROM Build
+    needs: build-image
+    runs-on: ubuntu-latest
+    if: success()
+    
+    permissions:
+      contents: read
+      actions: write
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 🚀 Trigger build.yml workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('Triggering build.yml workflow...');
+            
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build.yml',
+              ref: context.ref,
+            });
+            
+            console.log('Build workflow triggered successfully!');
+            
+            core.summary
+              .addHeading('🚀 ROM Build Triggered', 3)
+              .addRaw('The ROM build workflow has been triggered automatically.')
+              .addEOL()
+              .addRaw('Check the [Actions tab](/' + context.repo.owner + '/' + context.repo.repo + '/actions) to monitor the build progress.')
+              .write();

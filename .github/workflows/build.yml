@@ -1,7 +1,8 @@
-name: 🏗️ Build UN1CA ROM
+name: 🔨 Build UN1CA ROM
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write
@@ -36,10 +37,19 @@ jobs:
           submodules: 'false'
           fetch-depth: '0'
 
+      - name: 🔄 Update repository
+        id: update-repo
+        run: |
+          echo "### 🔄 Updating Repository" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Pulling latest changes"
+          git pull
+          echo "::endgroup::"
+          echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
+
       - name: 🎯 Display workflow information
         id: workflow-info
         run: |
-          echo "### 🚀 Build Workflow Started" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔨 ROM Build Started" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -50,19 +60,21 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
-      - name: 🚀 Build ROM
+      - name: 🔨 Build ROM
         id: build-rom
         run: |
           echo "### 🔨 Building UN1CA ROM" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Building ROM for ${{ matrix.target }}"
+          echo "::group::Compiling ROM for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/make_rom.sh
           echo "::endgroup::"
-          echo "✅ ROM built successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **ROM built successfully**" >> $GITHUB_STEP_SUMMARY
 
       - name: 📋 Get ROM version and filename
         id: rom_info
         run: |
+          echo "### 📋 ROM Information" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Reading ROM version and file information"
           source ./buildenv.sh ${{ matrix.target }}
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
@@ -70,9 +82,9 @@ jobs:
           if [ -n "$ZIP_FILE" ]; then
             echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zip_name=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
+            echo "::endgroup::"
             
             # Add to summary
-            echo "### 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
             echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -80,6 +92,7 @@ jobs:
             echo "| **Filename** | \`$(basename "$ZIP_FILE")\` |" >> $GITHUB_STEP_SUMMARY
             echo "| **File Size** | \`$(du -h "$ZIP_FILE" | cut -f1)\` |" >> $GITHUB_STEP_SUMMARY
           else
+            echo "::endgroup::"
             echo "::error::No ZIP file found in out/ directory"
             exit 1
           fi
@@ -97,11 +110,11 @@ jobs:
         id: build-summary
         if: success()
         run: |
-          echo "### 🎊 Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎊 ROM Build Completed Successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The ROM build has been completed and the artifact has been uploaded." >> $GITHUB_STEP_SUMMARY
+          echo "✅ **The ROM build has been completed and the artifact has been uploaded.**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✨ **Download the artifact from the workflow run page.**" >> $GITHUB_STEP_SUMMARY
+          echo "📥 Download the artifact from the workflow run page." >> $GITHUB_STEP_SUMMARY
 
   release:
     name: 📦 Create Release
@@ -128,6 +141,7 @@ jobs:
       - name: 📋 Get version information
         id: version
         run: |
+          echo "### 📋 Release Information" >> $GITHUB_STEP_SUMMARY
           echo "::group::Reading version information"
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
@@ -135,7 +149,6 @@ jobs:
           echo "release_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
           echo "::endgroup::"
           
-          echo "### 📊 Release Information" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -187,4 +200,6 @@ jobs:
         run: |
           echo "### 🎊 Release Published Successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 **[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.release_tag }})**" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **The release has been published to GitHub.**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.release_tag }})" >> $GITHUB_STEP_SUMMARY
