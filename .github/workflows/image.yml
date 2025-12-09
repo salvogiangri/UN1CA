@@ -14,7 +14,7 @@ permissions:
 jobs:
   build-image:
     name: 🖼️ Build Custom Image for ${{ matrix.target }}
-    runs-on: rom10
+    runs-on: rom11
     snapshot: 
         image-name: unica-linux
         version: 1.*
@@ -44,7 +44,7 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
         with:
-          submodules: 'true'
+          submodules: 'recursive'
 
       - name: 🎯 Display workflow information
         id: workflow-info
@@ -275,39 +275,3 @@ jobs:
           echo "The custom runner image has been built and is ready for ROM compilation." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🚀 **Next: Triggering ROM build workflow...**" >> $GITHUB_STEP_SUMMARY
-
-  trigger-build:
-    name: 🚀 Trigger ROM Build
-    needs: build-image
-    runs-on: ubuntu-latest
-    if: success()
-    
-    permissions:
-      contents: read
-      actions: write
-    
-    steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v6
-
-      - name: 🚀 Trigger build.yml workflow
-        uses: actions/github-script@v7
-        with:
-          script: |
-            console.log('Triggering build.yml workflow...');
-            
-            const result = await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'build.yml',
-              ref: context.ref,
-            });
-            
-            console.log('Build workflow triggered successfully!');
-            
-            core.summary
-              .addHeading('🚀 ROM Build Triggered', 3)
-              .addRaw('The ROM build workflow has been triggered automatically.')
-              .addEOL()
-              .addRaw('Check the [Actions tab](/' + context.repo.owner + '/' + context.repo.repo + '/actions) to monitor the build progress.')
-              .write();
