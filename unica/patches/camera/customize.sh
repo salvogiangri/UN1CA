@@ -324,6 +324,12 @@ if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
     fi
 fi
 
+# Fix Photo Remaster
+EVAL "echo \"ro.midas.device u:object_r:build_prop:s0 exact string\"  >> \"$WORK_DIR/system/system/etc/selinux/plat_property_contexts\""
+SET_PROP "system" "ro.midas.device" "$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/build.prop" "ro.product.system.device")"
+HEX_PATCH "$WORK_DIR/system/system/lib64/libmidas_core.camera.samsung.so" \
+    "726f2e70726f647563742e646576696365" "726f2e6d696461732e6465766963650000"
+
 # Fix portrait mode
 if [ -f "$WORK_DIR/vendor/lib64/libDualCamBokehCapture.camera.samsung.so" ]; then
     if grep -q "ro.build.flavor" "$WORK_DIR/vendor/lib64/libDualCamBokehCapture.camera.samsung.so" 2> /dev/null; then
