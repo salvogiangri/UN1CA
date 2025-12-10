@@ -14,7 +14,7 @@ permissions:
 jobs:
   build-image:
     name: 🖼️ Build Custom Image for ${{ matrix.target }}
-    runs-on: rom11
+    runs-on: rom3
     snapshot: 
         image-name: unica-linux
         version: 1.*
