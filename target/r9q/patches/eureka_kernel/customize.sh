@@ -16,6 +16,7 @@ find "$WORK_DIR/kernel" -mindepth 1 -exec "$SRC_DIR/scripts/unsign_bin.sh" {} \;
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Deleting stock kernel modules"
+DELETE_FROM_WORK_DIR "vendor" "bin/vendor_modprobe.sh"
 DELETE_FROM_WORK_DIR "vendor" "lib/modules"
 LOG_STEP_OUT
 
