@@ -16,7 +16,7 @@ concurrency:
 jobs:
   build:
     name: 🔨 Build ROM for ${{ matrix.target }}
-    runs-on: rom4
+    runs-on: rom7
     
     environment:
       name: production
@@ -33,9 +33,15 @@ jobs:
         target: [dm2q]
 
     steps:
-      - name: 📥 Checkout repository
-        id: checkout
-        uses: actions/checkout@v6
+      - name: 🔄 Update repository
+        id: update-repo
+        run: |
+          echo "### 🔄 Updating Repository" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Pulling latest changes"
+          git pull --depth=1 --no-tags || git pull
+          git submodule update --init --depth=1 || git submodule update --init
+          echo "::endgroup::"
+          echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
       - name: ✅ Verify snapshot environment
         id: verify-env
