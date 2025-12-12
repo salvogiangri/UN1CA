@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "### 🔄 Updating Repository" >> $GITHUB_STEP_SUMMARY
           echo "::group::Pulling latest changes"
-          git config --global pull.rebase false
+          git config --global pull.rebase true
           git pull --depth=1 --no-tags || git pull
           git submodule update --init --depth=1 || git submodule update --init
           echo "::endgroup::"
