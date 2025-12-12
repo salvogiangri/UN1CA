@@ -1,1 +1,1 @@
-verify_no_downgrade(getprop("ro.boot.bootloader"), "A736BXXUAFYE6") && abort("E3003: This package requires Android 15 firmware.");
+getprop("ro.boot.rp") == "10" || abort("E3003: This package requires bit/binary A.");
