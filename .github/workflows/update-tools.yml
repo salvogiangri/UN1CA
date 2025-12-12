@@ -66,11 +66,15 @@ jobs:
       - name: Build external tools
         run: |
           echo "=== Starting build process ==="
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh dm2q
           ./scripts/build_dependencies.sh
           echo "TOOLS_VERSION=$(date -u +"%Y%m%d")" >> "$GITHUB_ENV"
           
           echo "=== Git status after build ==="
+          rm -rf out
+          git rm out
+          git add -A
+          git commit -m "deleted prev tools"
           git status
           git diff --name-status
           git add out
