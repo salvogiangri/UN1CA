@@ -492,9 +492,33 @@ DOWNLOAD_FILE()
     local URL="$1"
     local OUTPUT="$2"
 
+    local CACHE_DIR="$OUT_DIR/.cache/downloads"
+    local CACHE_KEY
+
+    if [[ "$URL" == *"samsungapps.com"* ]]; then
+        CACHE_KEY="$(basename "${URL%%\?*}")"
+    else
+        CACHE_KEY="$(echo -n "$URL" | sha256sum | cut -d ' ' -f 1)"
+    fi
+    local CACHE_FILE="$CACHE_DIR/$CACHE_KEY"
+
+    mkdir -p "$CACHE_DIR"
     mkdir -p "$(dirname "$OUTPUT")"
+
+    if [ -f "$CACHE_FILE" ]; then
+        LOG "- Using cached download for $(basename "$OUTPUT")"
+        cp "$CACHE_FILE" "$OUTPUT"
+        return 0
+    fi
+
     curl -L -# -o "$OUTPUT" "$URL"
-    return $?
+    local RET=$?
+
+    if [ $RET -eq 0 ] && [ -f "$OUTPUT" ]; then
+        cp "$OUTPUT" "$CACHE_FILE"
+    fi
+
+    return $RET
 }
 
 # EVAL <cmd>

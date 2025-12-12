@@ -28,6 +28,7 @@ PRINT_USAGE()
     echo " - work_dir ($WORK_DIR)" >&2
     echo " - logs ($OUT_DIR/**.log)" >&2
     echo " - tools ($TOOLS_DIR)" >&2
+    echo " - cache ($OUT_DIR/.cache)" >&2
 }
 # ]
 
@@ -64,6 +65,10 @@ while [ "$#" != 0 ]; do
             LOG "- Cleaning dependencies dir..."
             rm -rf "$TOOLS_DIR"
             git submodule foreach --recursive "git clean -f -d -x" &> /dev/null
+            ;;
+            "cache")
+            LOG "- Cleaning cache dir..."
+            rm -rf "$OUT_DIR/.cache"
             ;;
         *)
             LOGE "\"$1\" is not valid."
