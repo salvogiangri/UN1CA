@@ -1,1 +1,1 @@
-getprop("ro.boot.rp") == "10" || abort("E3003: This package requires bit/binary A.");
+getprop("ro.boot.rp") == "10" || abort("E3003: This package requires bit/binary 10 (A).");

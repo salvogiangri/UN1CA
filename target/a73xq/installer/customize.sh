@@ -9,7 +9,7 @@ DOWNLOAD_FILE \
 
 while IFS= read -r f; do
     FILE_NAME="$(basename "$f")"
-    LOG "- Verifying $FILE_NAME"
+    LOG_STEP_IN "- Verifying $FILE_NAME"
 
     FILE_NAME="${FILE_NAME%.md5}"
 
@@ -31,6 +31,8 @@ while IFS= read -r f; do
         LOG "\033[0;31m! File is damaged\033[0m"
         return 1
     fi
+
+    LOG_STEP_OUT
 
     FILE_NAME="$(basename "$f")"
     LOG "- Extracting $FILE_NAME"
