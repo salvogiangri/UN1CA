@@ -1,0 +1,2 @@
+getprop("ro.boot.em.model") == "SM-M526B" && verify_no_downgrade(getprop("ro.boot.bootloader"), "M526BXXU1CVJ7") && abort("E3003: This package requires Android 13 firmware.");
+getprop("ro.boot.em.model") == "SM-M526BR" && verify_no_downgrade(getprop("ro.boot.bootloader"), "M526BRXXU1CVJ7") && abort("E3003: This package requires Android 13 firmware.");
