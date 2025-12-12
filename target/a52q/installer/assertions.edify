@@ -1,0 +1,2 @@
+getprop("ro.boot.em.model") == "SM-A525F" && verify_no_downgrade(getprop("ro.boot.bootloader"), "A525FXXU6EWL3") && abort("E3003: This package requires Android 14 firmware.");
+getprop("ro.boot.em.model") == "SM-A525M" && verify_no_downgrade(getprop("ro.boot.bootloader"), "A525MUBU6EWL3") && abort("E3003: This package requires Android 14 firmware.");
