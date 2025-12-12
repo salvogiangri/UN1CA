@@ -76,21 +76,6 @@ DECODE_APK()
     return 0
 }
 
-# DOWNLOAD_FILE "<url>" "<output path>"
-# Downloads the file from the provided URL and stores it in the desidered output path.
-DOWNLOAD_FILE()
-{
-    _CHECK_NON_EMPTY_PARAM "URL" "$1" || return 1
-    _CHECK_NON_EMPTY_PARAM "OUTPUT" "$2" || return 1
-
-    local URL="$1"
-    local OUTPUT="$2"
-
-    mkdir -p "$(dirname "$OUTPUT")"
-    curl -L -# -o "$OUTPUT" "$URL"
-    return $?
-}
-
 # GET_GALAXY_STORE_DOWNLOAD_URL "<package name>"
 # Returns a URL to download the desidered app from Samsung servers.
 GET_GALAXY_STORE_DOWNLOAD_URL()

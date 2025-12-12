@@ -482,6 +482,21 @@ DELETE_FROM_WORK_DIR()
     return 0
 }
 
+# DOWNLOAD_FILE "<url>" "<output path>"
+# Downloads the file from the provided URL and stores it in the desidered output path.
+DOWNLOAD_FILE()
+{
+    _CHECK_NON_EMPTY_PARAM "URL" "$1" || return 1
+    _CHECK_NON_EMPTY_PARAM "OUTPUT" "$2" || return 1
+
+    local URL="$1"
+    local OUTPUT="$2"
+
+    mkdir -p "$(dirname "$OUTPUT")"
+    curl -L -# -o "$OUTPUT" "$URL"
+    return $?
+}
+
 # EVAL <cmd>
 # Executes the provided command and prints its output if it returns a non-zero exit code.
 EVAL()

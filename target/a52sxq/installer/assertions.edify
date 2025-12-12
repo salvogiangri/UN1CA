@@ -1,3 +1,3 @@
-is_substring(getprop("ro.boot.bootloader"), "A528BXX") && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528BXXU5FWK4") && abort("E3003: This package requires Android 14 firmware.");
-is_substring(getprop("ro.boot.bootloader"), "A528BZT") && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528BZTU5FWK6") && abort("E3003: This package requires Android 14 firmware.");
-is_substring(getprop("ro.boot.bootloader"), "A528NKS") && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528NKSU2FWL2") && abort("E3003: This package requires Android 14 firmware.");
+is_substring("A528BXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528BXXU5FWK4") && abort("E3003: This package requires Android 14 firmware.");
+is_substring("A528BZT", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528BZTU5FWK6") && abort("E3003: This package requires Android 14 firmware.");
+is_substring("A528NKS", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A528NKSU2FWL2") && abort("E3003: This package requires Android 14 firmware.");

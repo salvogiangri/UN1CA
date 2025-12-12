@@ -575,6 +575,19 @@ GENERATE_BUILD_INFO
 LOG "- Generating OTA metadata"
 GENERATE_OTA_METADATA
 
+if [ -d "$SRC_DIR/target/$TARGET_CODENAME/installer/root" ]; then
+    LOG "- Copying target custom install files"
+    EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/installer/root/\"* \"$TMP_DIR\"" || exit 1
+fi
+
+if [ -f "$SRC_DIR/target/$TARGET_CODENAME/installer/customize.sh" ]; then
+    LOG_STEP_IN "- Running target custom install script"
+    (
+    . "$SRC_DIR/target/$TARGET_CODENAME/installer/customize.sh"
+    ) || exit 1
+    LOG_STEP_OUT
+fi
+
 LOG "- Creating zip"
 EVAL "rm -f \"$TMP_DIR/rom.zip\"" || exit 1
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/tools/releasetools/common.py#3601
