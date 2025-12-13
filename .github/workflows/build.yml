@@ -36,12 +36,9 @@ jobs:
           echo "::group::Pulling latest changes"
           # Crear .gitignore si no existe
           source ./buildenv.sh ${{ matrix.target }}
-          [ -f .gitignore ] || touch .gitignore
-          for dir in "$TOOLS_DIR" "$OUT_DIR" "$FW_DIR" "$WORK_DIR"; do
-              if [ -n "$dir" ] && [ -d "$dir" ] && ! grep -qx "$dir/" .gitignore; then
-                  echo "$dir/" >> .gitignore
-              fi
-          done
+          git config --global rebase.autoStash true
+          git config --global submodule.recurse false
+          git pull --no-recurse-submodules --rebase
           git pull --no-recurse-submodules
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
