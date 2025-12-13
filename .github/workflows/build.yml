@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: rom45
+    runs-on: rom4
     
     permissions: write-all
     strategy:
