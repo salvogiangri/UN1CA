@@ -9,10 +9,6 @@ permissions:
   actions: write
   id-token: write
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   build:
     name: 🔨 Build ROM for ${{ matrix.target }}
@@ -38,11 +34,15 @@ jobs:
         run: |
           echo "### 🔄 Updating Repository" >> $GITHUB_STEP_SUMMARY
           echo "::group::Pulling latest changes"
-          git config --global pull.rebase true
-          git add -A
-          git commit -m "chore: stage changes before repository update" || true
-          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          git pull --no-edit --no-tags origin "$CURRENT_BRANCH"
+          # Crear .gitignore si no existe
+          source ./buildenv.sh ${{ matrix.target }}
+          [ -f .gitignore ] || touch .gitignore
+          for dir in "$TOOLS_DIR" "$OUT_DIR" "$FW_DIR" "$WORK_DIR"; do
+              if [ -n "$dir" ] && [ -d "$dir" ] && ! grep -qx "$dir/" .gitignore; then
+                  echo "$dir/" >> .gitignore
+              fi
+          done
+          git pull --no-edit --no-tags origin
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
