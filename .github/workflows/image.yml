@@ -77,11 +77,7 @@ jobs:
             libxml2 lzop pngcrush schedtool squashfs-tools imagemagick \
             libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev python3 \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
-            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
-          
-          # Configure git
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp zram-tools
           
           # Display installed versions
           echo "✅ Build dependencies installed" >> $GITHUB_STEP_SUMMARY
@@ -93,40 +89,15 @@ jobs:
           echo "::group::⚡ Configuring zRAM for Ubuntu 24.04 (8GB minimum)"
           # Configure zRAM for Ubuntu 24.04
           # Remove default zram configuration if exists
-          sudo systemctl stop systemd-zram-setup@zram0.service 2>/dev/null || true
-          sudo swapoff /dev/zram0 2>/dev/null || true
-          sudo rmmod zram 2>/dev/null || true
-          
-          # Load zram module and configure
-          sudo modprobe zram num_devices=1
-          
-          # Set size to 8GB (or 90% of RAM if RAM > 9GB)
-          TOTAL_RAM=$(free -b | awk '/^Mem:/{print $2}')
-          ZRAM_SIZE=$((TOTAL_RAM * 90 / 100))
-          MIN_ZRAM_SIZE=$((8 * 1024 * 1024 * 1024))  # 8GB in bytes
-          
-          # Use the larger of 8GB or 90% of RAM
-          if [ $ZRAM_SIZE -lt $MIN_ZRAM_SIZE ]; then
-            ZRAM_SIZE=$MIN_ZRAM_SIZE
-          fi
-          
-          echo $ZRAM_SIZE | sudo tee /sys/block/zram0/disksize
-          sudo mkswap /dev/zram0
-          sudo swapon -p 1000 /dev/zram0  # High priority (1000)
-          
-          # Verify configuration
-          ZRAM_SIZE_HUMAN=$(cat /sys/block/zram0/disksize | numfmt --to=iec-i --suffix=B)
-          ZRAM_ACTUAL=$(swapon --show=NAME,SIZE,PRIO --noheadings 2>/dev/null | grep zram0 || echo "zram0 configured")
-          echo "✅ zRAM configured: $ZRAM_SIZE_HUMAN with priority 1000" >> $GITHUB_STEP_SUMMARY
-          echo "  - Details: $ZRAM_ACTUAL" >> $GITHUB_STEP_SUMMARY
-          echo "::endgroup::"
-          
-          echo "::group::🚀 Configuring ccache for Ubuntu 24.04"
-          # Ensure ccache is properly installed
-          if ! command -v ccache &> /dev/null; then
-            echo "ERROR: ccache not found after installation"
-            exit 1
-          fi
+          sudo sh -c 'cat > /etc/default/zramswap <<EOF
+          ENABLED=true
+          ALGO=zstd
+          PERCENTAGE=50
+          PRIORITY=100
+          EOF'
+          sudo systemctl enable zramswap
+          sudo systemctl start zramswap
+          sudo zramctl
           
           # Configure ccache for build acceleration
           export USE_CCACHE=1
@@ -186,7 +157,7 @@ jobs:
           git rm -r --cached out/
           git add -A 
           git commit -m "Ignore out directory"
-          git pull --no-tags --depth=1
+          git pull
           git submodule update --init --recursive
           echo "::endgroup::"
           echo "✅ **Repository updated**" >> $GITHUB_STEP_SUMMARY
@@ -201,6 +172,8 @@ jobs:
           ./scripts/cleanup.sh fw
           ./scripts/cleanup.sh tools
           ./scripts/cleanup.sh work_dir
+          git add -A
+          git commit -m "cleanup"
           echo "::endgroup::"
           echo "✅ **Old firmware cleaned**" >> $GITHUB_STEP_SUMMARY
 
@@ -211,6 +184,8 @@ jobs:
           echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
+          git add -A
+          git commit -m "dependencies"
           echo "::endgroup::"
           echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
 
@@ -221,6 +196,8 @@ jobs:
           echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
+          git add -A
+          git commit -m "fw"
           echo "::endgroup::"
           echo "✅ **Firmware downloaded successfully**" >> $GITHUB_STEP_SUMMARY
 
@@ -231,6 +208,8 @@ jobs:
           echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
+          git add -A
+          git commit -m "extract"
           echo "::endgroup::"
           echo "✅ **Firmware extracted successfully**" >> $GITHUB_STEP_SUMMARY
 
@@ -247,11 +226,8 @@ jobs:
           fi
           
           # Show zRAM configuration
-          if [ -b /dev/zram0 ]; then
-            ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
-            echo "zRAM configured: $ZRAM_SIZE with priority 1000"
-            swapon --show 2>/dev/null || true
-          fi
+          sudo zramctl
+
           
           echo ""
           echo "Custom image 'unica-linux' will be saved automatically by the runner"
