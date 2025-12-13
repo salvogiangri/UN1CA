@@ -42,7 +42,7 @@ jobs:
                   echo "$dir/" >> .gitignore
               fi
           done
-          git pull --no-edit --no-tags origin
+          git pull --no-recurse-submodules
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
