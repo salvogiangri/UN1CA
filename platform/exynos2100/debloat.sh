@@ -15,23 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Debloat list for Galaxy S21 FE 5G (Exynos) (r9s)
+# Debloat list for Samsung Exynos 2100 devices (exynos2100)
 # - Add entries inside the specific partition containing that file (<PARTITION>_DEBLOAT+="")
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
 # Overlays
 SYSTEM_DEBLOAT+="
-system/app/WifiRROverlayAppH2E
+system/app/WifiRROverlayAppLls
 "
-
-# mAFPC
-SYSTEM_DEBLOAT+="
-system/bin/mafpc_write
-"
-
-# Apps debloat
-SYSTEM_DEBLOAT+="
-system/etc/permissions/privapp-permissions-com.sec.android.cover.ledcover.xml
-system/priv-app/LedCoverService
+PRODUCT_DEBLOAT+="
+overlay/SoftapOverlayQC
 "
