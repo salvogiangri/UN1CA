@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# SEC Floating Feature configuration file for Galaxy S21 FE 5G (r9s)
+# SEC Floating Feature configuration file for Galaxy S21 FE 5G (Exynos) (r9s)
 
 # Enable seamless refresh rate feature
 SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=2
