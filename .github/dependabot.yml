@@ -1,13 +1,38 @@
 version: 2
 updates:
-  - package-ecosystem: "gitsubmodule"
-    directory: "/"
-    schedule:
-        interval: "daily"
-    ignore:
-        - dependency-name: "external/erofs-utils"
-
+  # Update GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-        interval: "daily"
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "Eduardob3677"
+
+  # Update git submodules
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "submodules"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "Eduardob3677"
+    ignore:
+      # Ignore erofs-utils as it may have breaking changes
+      - dependency-name: "external/erofs-utils"
