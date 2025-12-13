@@ -40,7 +40,7 @@ jobs:
           echo "::group::Pulling latest changes"
           git config --global pull.rebase true
           git add -A
-          git commit -m "temp" || true
+          git commit -m "chore: stage changes before repository update" || true
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           git pull --no-edit --no-tags origin "$CURRENT_BRANCH" || git pull --no-edit --no-tags origin HEAD
           echo "::endgroup::"
