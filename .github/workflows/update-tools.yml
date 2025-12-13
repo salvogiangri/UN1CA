@@ -92,7 +92,7 @@ jobs:
 
       - name: Upload build logs on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-logs-${{ env.TOOLS_VERSION }}-${{ github.run_id }}
           path: |
