@@ -89,7 +89,7 @@ jobs:
       - name: 📋 Get version information
         id: get-version
         run: |
-          source ./unica/configs/version.sh
+          source ./buildenv.sh dm2q
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
           echo "release_tag=v$ROM_VERSION" >> "$GITHUB_OUTPUT"
           echo "release_date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
