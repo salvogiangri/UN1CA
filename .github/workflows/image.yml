@@ -154,7 +154,6 @@ jobs:
         run: |
           echo "### 📦 Updating Repository" >> $GITHUB_STEP_SUMMARY
           echo "::group::Pulling latest changes"
-          git rm -r --cached out/
           git add -A 
           git commit -m "Ignore out directory"
           git pull
