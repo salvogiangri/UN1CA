@@ -160,11 +160,11 @@ PARSE_FIRMWARE_STRING()
         LOGE "No IMEI/SN value found in \"$STRING\""
         return 1
     elif [[ "${#THIRD}" == "11" ]] && [[ "$THIRD" == "R"* ]]; then
-        # shellcheck disable=SC2034
+        # shellcheck disable=SC2034  # SERIAL_NO is set for use by calling script
         SERIAL_NO="$THIRD"
     elif [[ "${#THIRD}" -ge "8" ]] && [[ "${#THIRD}" -le "15" ]] && [[ "$THIRD" =~ ^[+-]?[0-9]+$ ]]; then
         # Allow uncomplete IMEIs as samloader can generate them by providing the first 8 numbers (TAC)
-        # shellcheck disable=SC2034
+        # shellcheck disable=SC2034  # IMEI is set for use by calling script
         IMEI="$THIRD"
     else
         LOGE "No valid IMEI/SN in \"$STRING\": $THIRD"
