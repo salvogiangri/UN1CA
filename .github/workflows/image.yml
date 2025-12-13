@@ -130,15 +130,6 @@ jobs:
           sudo modprobe erofs f2fs
           echo "::endgroup::"
           
-          echo "::group::🔐 Setting up signing keys"
-          mkdir -p security/avb
-          echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
-          echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
-          echo -n "${{ secrets.OTA_KEY_PK8 }}" | base64 --decode > security/unica_ota.pk8
-          echo -n "${{ secrets.OTA_KEY_PEM }}" | base64 --decode > security/unica_ota.x509.pem
-          echo -n "${{ secrets.AVB_KEY_PEM }}" | base64 --decode > security/avb/unica_avb_rsa4096.pem
-          chmod 600 security/*.pk8 security/*.pem security/avb/*.pem
-          echo "::endgroup::"
           
           echo "✅ **Environment configured successfully for Ubuntu 24.04**" >> $GITHUB_STEP_SUMMARY
 
@@ -148,19 +139,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          
-      - name: 📦 Update repository
-        id: update-repo
-        run: |
-          echo "### 📦 Updating Repository" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Pulling latest changes"
-          git add -A 
-          git commit -m "Ignore out directory"
-          git pull
-          git submodule update --init --recursive
-          echo "::endgroup::"
-          echo "✅ **Repository updated**" >> $GITHUB_STEP_SUMMARY
-   
+             
       - name: 🧹 Clean old firmware
         id: clean-firmware
         run: |
