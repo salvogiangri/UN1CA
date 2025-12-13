@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2025 Fred
+# Copyright (C) 2025 Salvo Giangreco
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@ TARGET_OS_SINGLE_SYSTEM_IMAGE="essi"
 TARGET_OS_BUILD_SYSTEM_EXT_PARTITION=false
 
 # SEC Product Feature
-TARGET_RIL_SUPPORT_WATERPROOF_SIM_TRAY_MSG=true
-
 TARGET_WLAN_CONFIG_CONNECTION_PERSONALIZATION="0"
 TARGET_WLAN_CONFIG_CPU_CSTATE_DISABLE_THRESHOLD="100"
 TARGET_WLAN_CONFIG_DATA_ACTIVITY_AFFINITY_BOOSTER_THRESHOLD="150"

@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# SEC Floating Feature configuration file for Galaxy S21+ 5G (t2s)
+# SEC Floating Feature configuration file for Galaxy S21+ 5G (Exynos) (t2s)
 
 # Rainbow LED Cover level
 SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NFC_LED_COVER_LEVEL=100
