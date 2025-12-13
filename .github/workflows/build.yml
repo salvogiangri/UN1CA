@@ -61,6 +61,9 @@ jobs:
           if [ -n "$ZIP_FILE" ]; then
             echo "zipfile=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zipname=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
+          else
+            echo "ERROR: No ROM ZIP file found" >&2
+            exit 1
           fi
 
       - name: ⬆️ Upload ROM artifact
