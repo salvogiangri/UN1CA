@@ -36,6 +36,8 @@ jobs:
           echo "::group::Pulling latest changes"
           # Crear .gitignore si no existe
           source ./buildenv.sh ${{ matrix.target }}
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global rebase.autoStash true
           git config --global submodule.recurse false
           git pull --no-recurse-submodules --rebase
