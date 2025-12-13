@@ -1,0 +1,51 @@
+#
+# Copyright (C) 2025 Salvo Giangreco
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+# Device configuration file for Galaxy S21 5G (o1s)
+TARGET_NAME="Galaxy S21 5G"
+TARGET_CODENAME="o1s"
+TARGET_ASSERT_MODEL=("SM-G991B")
+TARGET_PLATFORM="exynos2100"
+TARGET_FIRMWARE="SM-G991B/AUT/350261971234566"
+TARGET_EXTRA_FIRMWARES=()
+
+# SEC Product Feature
+TARGET_AUDIO_CONFIG_RECORDALIVE_LIB_VERSION="08020"
+TARGET_AUDIO_SUPPORT_ACH_RINGTONE=false
+TARGET_AUDIO_SUPPORT_DUAL_SPEAKER=true
+TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION=true
+TARGET_CAMERA_SUPPORT_CAMERAX_EXTENSION=true
+TARGET_CAMERA_SUPPORT_CUTOUT_PROTECTION=false
+TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR=false
+TARGET_CAMERA_SUPPORT_SDK_SERVICE=true
+TARGET_COMMON_CONFIG_MDNIE_MODE="65303"
+TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL=false
+TARGET_COMMON_SUPPORT_EMBEDDED_SIM=true
+TARGET_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME="dvfs_policy_exynos2100_xx"
+TARGET_DVFSAPP_CONFIG_SSRM_POLICY_FILENAME="siop_o1s_exynos2100"
+TARGET_FINGERPRINT_CONFIG_SENSOR="google_touch_display_ultrasonic"
+TARGET_LCD_CONFIG_COLOR_WEAKNESS_SOLUTION="3"
+TARGET_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS="5"
+TARGET_LCD_SUPPORT_MDNIE_HW=true
+
+# HFR
+TARGET_LCD_CONFIG_HFR_DEFAULT_REFRESH_RATE="120"
+TARGET_LCD_CONFIG_HFR_MODE="2"
+TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE="60,48,96,120"
+TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE_NS="60"
+TARGET_LCD_CONFIG_SEAMLESS_BRT="108,110"
+TARGET_LCD_CONFIG_SEAMLESS_LUX="200,2500"
