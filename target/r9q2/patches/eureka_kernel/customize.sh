@@ -1,4 +1,6 @@
-EUREKA_ZIP="https://github.com/saadelasfur/eureka_releases/releases/download/20251118/Eureka_Vanilla_20251118_r9q2.zip"
+EUREKA_ZIP="$(curl -s "https://api.github.com/repos/saadelasfur/eureka_releases/releases/latest" \
+    | jq -r ".assets[] | .browser_download_url" \
+    | grep "Vanilla" | grep "r9q2.zip")"
 
 [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR"
