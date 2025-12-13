@@ -17,5 +17,8 @@
 
 # SEC Floating Feature configuration file for Galaxy S21 Ultra 5G (p3s)
 
-# Enable seamless refresh rate feature
-SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=3
+# Rainbow LED Cover level
+SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NFC_LED_COVER_LEVEL=100
+
+# Enable extra brightness feature
+SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS=TRUE
