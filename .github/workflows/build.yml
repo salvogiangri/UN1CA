@@ -46,13 +46,10 @@ jobs:
           source ./buildenv.sh ${{ matrix.target }}
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
-          ZIP_FILE=$(find out/ -maxdepth 1 -type f -name "UN1CA_*.zip" -print -quit)
+          ZIP_FILE=$(find out/ -maxdepth 1 -type f -name "*.zip" -print -quit)
           if [ -n "$ZIP_FILE" ]; then
             echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zip_name=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
-            else
-            echo "No ZIP file found in out/ directory"
-            exit 1
           fi
 
       - name: ⬆️ Upload ROM artifact
