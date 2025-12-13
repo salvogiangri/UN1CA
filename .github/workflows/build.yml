@@ -38,27 +38,40 @@ jobs:
           source ./buildenv.sh ${{ matrix.target }}
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-          git add -A
-          git commit -m "Ignore out directory" || true
-          git pull --no-recurse-submodules --rebase
+          git pull --no-recurse-submodules --rebase || true
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
-      
-      - name: 🎯 Display workflow information
-        id: workflow-info
+      - name: 🏗️ Build dependencies
+        id: build-dependencies
         run: |
-          echo "BUILD_START_TIME=$(date +%s)" >> $GITHUB_ENV
-          echo "### 🔨 ROM Build Started" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Target Device** | \`${{ matrix.target }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Workflow Run** | [\#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Triggered by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Building Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Building build system dependencies"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/build_dependencies.sh
+          echo "::endgroup::"
+          echo "✅ Dependencies built successfully" >> $GITHUB_STEP_SUMMARY
+          
+      - name: 📥 Download stock firmwares
+        id: download-firmware
+        run: |
+          echo "### 📲 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Downloading firmware files for ${{ matrix.target }}"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/download_fw.sh
+          echo "::endgroup::"
+          echo "✅ Firmware downloaded successfully" >> $GITHUB_STEP_SUMMARY
+          
+      - name: 📦 Extract stock firmwares
+        id: extract-firmware
+        run: |
+          echo "### 🗜️ Extracting Firmware" >> $GITHUB_STEP_SUMMARY
+          echo "::group::Extracting firmware components"
+          source ./buildenv.sh ${{ matrix.target }}
+          ./scripts/extract_fw.sh
+          echo "::endgroup::"
+          echo "✅ Firmware extracted successfully" >> $GITHUB_STEP_SUMMARY
+
           
       - name: 🔨 Build ROM
         id: build-rom
@@ -74,8 +87,6 @@ jobs:
       - name: 📋 Get ROM version and filename
         id: rom_info
         run: |
-          echo "### 📋 ROM Information" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Reading ROM version and file information"
           source ./buildenv.sh ${{ matrix.target }}
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
