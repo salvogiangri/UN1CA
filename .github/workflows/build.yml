@@ -45,19 +45,22 @@ jobs:
         id: rom
         run: |
           # Cargar entorno de compilación con el target de la matriz
-          source ./buildenv.sh "${{ matrix.target }}"
+          source ./buildenv.sh ${{ matrix.target }}
 
           # Cargar versión de la ROM
-          source ./unica/configs/version.sh
+          # source ./unica/configs/version.sh
 
           # Exportar variables al contexto de GitHub Actions
-          echo "romversion=$ROMVERSION" >> "$GITHUB_OUTPUT"
+          echo "romversion=$ROM_VERSION" >> "$GITHUB_OUTPUT"
 
+          ls
+          pwd
+          
           # Detectar archivo ZIP generado
-          ZIP_FILE=$(find out/ -maxdepth 1 -type f -name "*.zip" -print -quit)
+          ZIP_FILE=$(find out/ -maxdepth 1 -type f -name "UN1CA_*.zip" -print -quit)
           if [ -n "$ZIP_FILE" ]; then
-            echo "zipfile=$ZIPFILE" >> "$GITHUB_OUTPUT"
-            echo "zipname=$(basename "$ZIPFILE")" >> "$GITHUB_OUTPUT"
+            echo "zipfile=$ZIP_FILE" >> "$GITHUB_OUTPUT"
+            echo "zipname=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
           fi
 
       - name: ⬆️ Upload ROM artifact
