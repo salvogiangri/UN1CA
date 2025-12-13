@@ -64,7 +64,7 @@ jobs:
           fi
 
       - name: ⬆️ Upload ROM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: UN1CA-${{ matrix.target }}-${{ steps.rom.outputs.romversion }}
           path: ${{ steps.rom.outputs.zipfile }}
