@@ -36,56 +36,15 @@ jobs:
           echo "::group::Pulling latest changes"
           # Crear .gitignore si no existe
           source ./buildenv.sh ${{ matrix.target }}
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global rebase.autoStash true
-          git config --global submodule.recurse false
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git add -A
-          git commit -m "Ignore out directory"
+          git commit -m "Ignore out directory" || true
           git pull --no-recurse-submodules --rebase
-          git pull --no-recurse-submodules
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
-      - name: ✅ Verify snapshot environment
-        id: verify-env
-        run: |
-          echo "### ✅ Verifying Pre-configured Environment" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Checking pre-installed components"
-          
-          # Check if firmware is pre-downloaded
-          if [ -d "out/fw" ] && [ "$(ls -A out/fw 2>/dev/null)" ]; then
-            echo "✅ Firmware directory found and populated" >> $GITHUB_STEP_SUMMARY
-            echo "  - Firmware files: $(du -sh out/fw 2>/dev/null | cut -f1)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⚠️ Firmware directory not found - may need to download" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Check if tools are pre-built
-          if [ -d "out/tools" ] && [ "$(ls -A out/tools 2>/dev/null)" ]; then
-            echo "✅ Build tools found" >> $GITHUB_STEP_SUMMARY
-            echo "  - Tools directory: $(du -sh out/tools 2>/dev/null | cut -f1)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⚠️ Build tools not found" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Check for ccache
-          if command -v ccache &> /dev/null; then
-            echo "✅ ccache available: $(ccache --version | head -n1)" >> $GITHUB_STEP_SUMMARY
-            echo "  - Cache directory: $HOME/.ccache" >> $GITHUB_STEP_SUMMARY
-            echo "  - Max size: $(ccache -s | grep 'max cache size' || echo '50.0 GB')" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Check zRAM status
-          if [ -b /dev/zram0 ]; then
-            ZRAM_SIZE=$(cat /sys/block/zram0/disksize 2>/dev/null | numfmt --to=iec-i --suffix=B 2>/dev/null || echo "unknown")
-            ZRAM_PRIORITY=$(swapon --show=NAME,PRIO --noheadings 2>/dev/null | grep zram0 | awk '{print $2}' || echo "unknown")
-            echo "✅ zRAM configured: $ZRAM_SIZE (priority: $ZRAM_PRIORITY)" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "::endgroup::"
-          echo "✅ **Environment verification complete**" >> $GITHUB_STEP_SUMMARY
-
+      
       - name: 🎯 Display workflow information
         id: workflow-info
         run: |
@@ -111,15 +70,7 @@ jobs:
           echo "::endgroup::"
           echo "✅ **ROM built successfully**" >> $GITHUB_STEP_SUMMARY
           
-          # Show ccache statistics after build
-          if command -v ccache &> /dev/null; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 📊 Build Cache Statistics" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            ccache -s 2>/dev/null >> $GITHUB_STEP_SUMMARY || true
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          fi
-
+        
       - name: 📋 Get ROM version and filename
         id: rom_info
         run: |
