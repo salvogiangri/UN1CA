@@ -41,7 +41,8 @@ jobs:
           git config --global pull.rebase true
           git add -A
           git commit -m "temp" || true
-          git pull --no-edit --no-tags origin $(git rev-parse --abbrev-ref HEAD) || git pull --no-edit --no-tags
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git pull --no-edit --no-tags origin "$CURRENT_BRANCH" || git pull --no-edit --no-tags origin HEAD
           echo "::endgroup::"
           echo "✅ **Repository updated with latest changes**" >> $GITHUB_STEP_SUMMARY
         
