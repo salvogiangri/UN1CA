@@ -122,8 +122,6 @@ jobs:
           ./scripts/cleanup.sh fw
           ./scripts/cleanup.sh tools
           ./scripts/cleanup.sh work_dir
-          git add -A
-          git commit -m "cleanup"
           echo "::endgroup::"
           echo "✅ **Old firmware cleaned**" >> $GITHUB_STEP_SUMMARY
 
@@ -134,8 +132,6 @@ jobs:
           echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
-          git add -A
-          git commit -m "dependencies"
           echo "::endgroup::"
           echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
 
@@ -146,8 +142,6 @@ jobs:
           echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
-          git add -A
-          git commit -m "fw"
           echo "::endgroup::"
           echo "✅ **Firmware downloaded successfully**" >> $GITHUB_STEP_SUMMARY
 
@@ -158,8 +152,6 @@ jobs:
           echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
-          git add -A
-          git commit -m "extract"
           echo "::endgroup::"
           echo "✅ **Firmware extracted successfully**" >> $GITHUB_STEP_SUMMARY
 
