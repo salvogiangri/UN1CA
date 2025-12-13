@@ -1,0 +1,32 @@
+name: 🔍 Code Quality Check
+
+on:
+  pull_request:
+    paths:
+      - '**.sh'
+      - '.shellcheckrc'
+  push:
+    branches:
+      - sixteen
+    paths:
+      - '**.sh'
+      - '.shellcheckrc'
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v6
+        
+      - name: 🔍 Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: warning
+          scandir: './scripts'
+          ignore_paths: './external'
+          
+      - name: ✅ Code quality check passed
+        run: echo "All shell scripts passed ShellCheck validation"
