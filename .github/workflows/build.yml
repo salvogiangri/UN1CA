@@ -40,8 +40,6 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global rebase.autoStash true
           git config --global submodule.recurse false
-          echo "out/" >> .gitignore
-          git rm -r --cached out/
           git add -A
           git commit -m "Ignore out directory"
           git pull --no-recurse-submodules --rebase
@@ -134,9 +132,9 @@ jobs:
           if [ -n "$ZIP_FILE" ]; then
             echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zip_name=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
-            echo "::endgroup::"
             
             # Add to summary
+            echo "### 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
             echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -144,7 +142,6 @@ jobs:
             echo "| **Filename** | \`$(basename "$ZIP_FILE")\` |" >> $GITHUB_STEP_SUMMARY
             echo "| **File Size** | \`$(du -h "$ZIP_FILE" | cut -f1)\` |" >> $GITHUB_STEP_SUMMARY
           else
-            echo "::endgroup::"
             echo "::error::No ZIP file found in out/ directory"
             exit 1
           fi
