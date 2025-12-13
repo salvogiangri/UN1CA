@@ -1,0 +1,8 @@
+# LSI CDMA project daemon support dun function
+service VC-daemon /vendor/bin/vcd
+    class main
+    user root
+    group system
+    disabled
+    seclabel u:r:vcd:s0
+    override
