@@ -1,33 +1,15 @@
 name: 🖼️ Build Custom Runner Image
 
 on:
-  schedule:
-    - cron: "0 21 * * 1-5"  # 04:00 AM Thailand/Vietnam (UTC+7)
-    - cron: "0 9 * * 1-5"
   workflow_dispatch:
-
-permissions:
-  contents: write
-  actions: write
-  id-token: write
-
+  
 jobs:
   build-image:
-    name: 🖼️ Build Custom Image for ${{ matrix.target }}
     runs-on: rom4
     snapshot: 
       image-name: unica-linux
       version: 1.*
-    
-    environment:
-      name: production
-      url: https://github.com/${{ github.repository }}/releases
-    
-    permissions:
-      contents: write
-      actions: write
-      id-token: write
-
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
@@ -35,29 +17,24 @@ jobs:
 
     steps:
       - name: 📥 Checkout repository
-        id: checkout
         uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
       - name: ⚙️ Configure git
-        id: configure-git
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
 
       - name: 🔧 Set up build environment
-        id: setup-environment
         run: |      
-          echo "::group::📦 Installing build dependencies"
           sudo apt update
           # Install essential build tools and dependencies for Android ROM compilation
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             7zip attr ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp zram-tools
-          
           
           # Crear/reescribir configuración de zramswap
           sudo tee /etc/default/zramswap > /dev/null <<'EOF'
@@ -75,47 +52,33 @@ jobs:
           # Mostrar estado
           sudo zramctl
           sudo modprobe erofs f2fs
-          echo "::endgroup::"
           
       - name: ☕ Set up JDK 17
-        id: setup-jdk
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
              
       - name: 🧹 Clean old firmware
-        id: clean-firmware
         run: |
-          echo "::group::Removing old firmware and build artifacts"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/cleanup.sh all 
           ./scripts/cleanup.sh fw
           ./scripts/cleanup.sh tools
           ./scripts/cleanup.sh work_dir
-          echo "::endgroup::"
 
       - name: 🔨 Build dependencies
-        id: build-dependencies
         run: |
-          echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
-          echo "::endgroup::"
           
       - name: 📥 Download stock firmware
-        id: download-firmware
         run: |
-          echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
-          echo "::endgroup::"
           
       - name: 📦 Extract stock firmware
-        id: extract-firmware
         run: |
-          echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
-          echo "::endgroup::"
           
