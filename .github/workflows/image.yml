@@ -34,17 +34,17 @@ jobs:
         target: [dm2q]
 
     steps:
-      - name: ⚙️ Configure git
-        id: configure-git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
       - name: 📥 Checkout repository
         id: checkout
         uses: actions/checkout@v6
         with:
           submodules: 'recursive'
+
+      - name: ⚙️ Configure git
+        id: configure-git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
       - name: 🎯 Display workflow information
         id: workflow-info
@@ -79,51 +79,23 @@ jobs:
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp zram-tools
           
-          # Display installed versions
-          echo "✅ Build dependencies installed" >> $GITHUB_STEP_SUMMARY
-          echo "  - GCC: $(gcc --version | head -n1)" >> $GITHUB_STEP_SUMMARY
-          echo "  - Python: $(python3 --version)" >> $GITHUB_STEP_SUMMARY
-          echo "  - ccache: $(ccache --version | head -n1)" >> $GITHUB_STEP_SUMMARY
-          echo "::endgroup::"
           
-          echo "::group::⚡ Configuring zRAM for Ubuntu 24.04 (8GB minimum)"
-          # Configure zRAM for Ubuntu 24.04
-          # Remove default zram configuration if exists
-          sudo sh -c 'cat > /etc/default/zramswap <<EOF
+          # Crear/reescribir configuración de zramswap
+          sudo tee /etc/default/zramswap > /dev/null <<'EOF'
           ENABLED=true
-          ALGO=zstd
-          PERCENTAGE=50
-          PRIORITY=100
-          EOF'
+          ALGO=lz4
+          SIZE=8192
+          PERCENTAGE=90
+          PRIORITY=1000
+          EOF
+
+          # Habilitar y arrancar el servicio
           sudo systemctl enable zramswap
-          sudo systemctl start zramswap
+          sudo systemctl restart zramswap
+
+          # Mostrar estado
           sudo zramctl
           
-          # Configure ccache for build acceleration
-          export USE_CCACHE=1
-          export CCACHE_EXEC=/usr/bin/ccache
-          ccache --max-size=50G
-          ccache -o compression=true
-          export CC="ccache gcc"
-          export CXX="ccache g++"
-          
-          # Add ccache configuration to bashrc for persistence
-          echo 'export USE_CCACHE=1' >> $HOME/.bashrc
-          echo 'export CCACHE_EXEC=/usr/bin/ccache' >> $HOME/.bashrc
-          echo 'export CC="ccache gcc"' >> $HOME/.bashrc
-          echo 'export CXX="ccache g++"' >> $HOME/.bashrc
-          
-          # Initialize ccache statistics
-          ccache -z
-          
-          # Display ccache configuration
-          echo "✅ ccache configured for Ubuntu 24.04" >> $GITHUB_STEP_SUMMARY
-          echo "  - Executable: /usr/bin/ccache" >> $GITHUB_STEP_SUMMARY
-          echo "  - Max size: 50G" >> $GITHUB_STEP_SUMMARY
-          echo "  - Compression: enabled" >> $GITHUB_STEP_SUMMARY
-          echo "  - CC wrapper: ccache gcc" >> $GITHUB_STEP_SUMMARY
-          echo "  - CXX wrapper: ccache g++" >> $GITHUB_STEP_SUMMARY
-          ccache -s
           echo "::endgroup::"
           
           echo "::group::🔌 Loading kernel modules"
@@ -196,15 +168,6 @@ jobs:
         run: |
           echo "### 💾 Saving Custom Image" >> $GITHUB_STEP_SUMMARY
           echo "::group::Creating snapshot of configured environment"
-          
-          # Show final ccache stats
-          if command -v ccache &> /dev/null; then
-            echo "Final ccache statistics:"
-            ccache -s
-          fi
-          
-          # Show zRAM configuration
-          sudo zramctl
 
           
           echo ""
