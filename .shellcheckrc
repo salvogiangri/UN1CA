@@ -1,0 +1,12 @@
+# ShellCheck configuration for UN1CA build scripts
+
+# Disable SC1090: Can't follow non-constant source
+# Justification: Dynamic sourcing of device-specific configs is intentional
+disable=SC1090
+
+# Disable SC1091: Not following sourced files
+# Justification: Sourced files are generated or device-specific
+disable=SC1091
+
+# Set shell to bash
+shell=bash

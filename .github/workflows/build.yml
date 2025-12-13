@@ -61,6 +61,9 @@ jobs:
           if [ -n "$ZIP_FILE" ]; then
             echo "zipfile=$ZIP_FILE" >> "$GITHUB_OUTPUT"
             echo "zipname=$(basename "$ZIP_FILE")" >> "$GITHUB_OUTPUT"
+          else
+            echo "ERROR: No ROM ZIP file found" >&2
+            exit 1
           fi
 
       - name: ⬆️ Upload ROM artifact
@@ -84,6 +87,7 @@ jobs:
           fetch-depth: 0
 
       - name: 📋 Get version information
+        id: get-version
         run: |
           source ./unica/configs/version.sh
           echo "rom_version=$ROM_VERSION" >> "$GITHUB_OUTPUT"
@@ -105,6 +109,7 @@ jobs:
           mirrorDirectoryStructure: "false"
 
       - name: 📝 Generate download links
+        id: gen-links
         run: |
           # Create download link for the folder
           FOLDER_URL="https://drive.google.com/drive/folders/${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}"
@@ -126,23 +131,23 @@ jobs:
       - name: 🚀 Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.release_tag }}
-          name: UN1CA ${{ steps.version.outputs.rom_version }} - ${{ steps.version.outputs.release_date }}
+          tag_name: ${{ steps.get-version.outputs.release_tag }}
+          name: UN1CA ${{ steps.get-version.outputs.rom_version }} - ${{ steps.get-version.outputs.release_date }}
           body: |
-            ## UN1CA ${{ steps.version.outputs.rom_version }}
+            ## UN1CA ${{ steps.get-version.outputs.rom_version }}
 
             ### Build Information
-            - **Version**: ${{ steps.version.outputs.rom_version }}
-            - **Build Date**: ${{ steps.version.outputs.release_date }}
+            - **Version**: ${{ steps.get-version.outputs.rom_version }}
+            - **Build Date**: ${{ steps.get-version.outputs.release_date }}
             - **Commit**: ${{ github.sha }}
 
             ### Download
             📥 **Download ROMs from Google Drive**
             
             The following ROM files are available in the Google Drive folder:
-            ${{ steps.generate-links.outputs.file_list }}
+            ${{ steps.gen-links.outputs.file_list }}
             
-            🔗 [Open Google Drive Folder](${{ steps.generate-links.outputs.folder_url }})
+            🔗 [Open Google Drive Folder](${{ steps.gen-links.outputs.folder_url }})
 
             ### Supported Devices
             - Galaxy S23+ (dm2qxxx)
