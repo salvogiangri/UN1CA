@@ -16,8 +16,8 @@ jobs:
     name: 🖼️ Build Custom Image for ${{ matrix.target }}
     runs-on: rom4
     snapshot: 
-        image-name: unica-linux
-        version: 1.*
+      image-name: unica-linux
+      version: 1.*
     
     environment:
       name: production
@@ -46,36 +46,15 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
-      - name: 🎯 Display workflow information
-        id: workflow-info
-        run: |
-          echo "### 🖼️ Custom Image Build Started" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Target Device** | \`${{ matrix.target }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Workflow Run** | [\#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Triggered by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "---" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔧 Set up build environment
         id: setup-environment
-        run: |
-          echo "### 🔧 Setting Up Build Environment" >> $GITHUB_STEP_SUMMARY
-          
+        run: |      
           echo "::group::📦 Installing build dependencies"
           sudo apt update
           # Install essential build tools and dependencies for Android ROM compilation
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            7zip attr ccache clang ffmpeg zram-config \
-            gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib \
-            libc6-dev x11proto-core-dev libx11-dev tree lib32z-dev \
-            libgl1-mesa-dev libxml2-utils xsltproc bc lib32readline-dev \
-            lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev lz4 tar \
-            libxml2 lzop pngcrush schedtool squashfs-tools imagemagick \
-            libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev python3 \
+            7zip attr ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp zram-tools
           
@@ -95,16 +74,9 @@ jobs:
 
           # Mostrar estado
           sudo zramctl
-          
-          echo "::endgroup::"
-          
-          echo "::group::🔌 Loading kernel modules"
           sudo modprobe erofs f2fs
           echo "::endgroup::"
           
-          
-          echo "✅ **Environment configured successfully for Ubuntu 24.04**" >> $GITHUB_STEP_SUMMARY
-
       - name: ☕ Set up JDK 17
         id: setup-jdk
         uses: actions/setup-java@v5
@@ -115,7 +87,6 @@ jobs:
       - name: 🧹 Clean old firmware
         id: clean-firmware
         run: |
-          echo "### 🧹 Cleaning Old Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Removing old firmware and build artifacts"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/cleanup.sh all 
@@ -123,67 +94,28 @@ jobs:
           ./scripts/cleanup.sh tools
           ./scripts/cleanup.sh work_dir
           echo "::endgroup::"
-          echo "✅ **Old firmware cleaned**" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔨 Build dependencies
         id: build-dependencies
         run: |
-          echo "### 🔨 Building Dependencies" >> $GITHUB_STEP_SUMMARY
           echo "::group::Building build system dependencies"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
           echo "::endgroup::"
-          echo "✅ **Dependencies built successfully**" >> $GITHUB_STEP_SUMMARY
-
+          
       - name: 📥 Download stock firmware
         id: download-firmware
         run: |
-          echo "### 📥 Downloading Stock Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Downloading firmware files for ${{ matrix.target }}"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/download_fw.sh
           echo "::endgroup::"
-          echo "✅ **Firmware downloaded successfully**" >> $GITHUB_STEP_SUMMARY
-
+          
       - name: 📦 Extract stock firmware
         id: extract-firmware
         run: |
-          echo "### 📦 Extracting Firmware" >> $GITHUB_STEP_SUMMARY
           echo "::group::Extracting firmware components"
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/extract_fw.sh
           echo "::endgroup::"
-          echo "✅ **Firmware extracted successfully**" >> $GITHUB_STEP_SUMMARY
-
-      - name: 💾 Save custom image snapshot
-        id: save-snapshot
-        run: |
-          echo "### 💾 Saving Custom Image" >> $GITHUB_STEP_SUMMARY
-          echo "::group::Creating snapshot of configured environment"
-
           
-          echo ""
-          echo "Custom image 'unica-linux' will be saved automatically by the runner"
-          echo "All dependencies, firmware, and build tools are now ready"
-          echo "::endgroup::"
-          echo "✅ **Custom image snapshot created for Ubuntu 24.04**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Ubuntu Version | ✅ 24.04 LTS |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build Dependencies | ✅ All installed (gcc, g++, python3, etc.) |" >> $GITHUB_STEP_SUMMARY
-          echo "| zRAM (≥8GB, priority 1000) | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
-          echo "| ccache (50GB) | ✅ Configured with wrappers |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build Tools | ✅ Compiled |" >> $GITHUB_STEP_SUMMARY
-          echo "| Stock Firmware | ✅ Downloaded & Extracted |" >> $GITHUB_STEP_SUMMARY
-          echo "| Signing Keys | ✅ Configured |" >> $GITHUB_STEP_SUMMARY
-
-      - name: 🎉 Image build completed
-        id: image-summary
-        if: success()
-        run: |
-          echo "### 🎊 Custom Image Build Completed!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The custom runner image has been built and is ready for ROM compilation." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🚀 **Next: Triggering ROM build workflow...**" >> $GITHUB_STEP_SUMMARY
