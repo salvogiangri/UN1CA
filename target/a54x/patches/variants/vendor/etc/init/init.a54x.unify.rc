@@ -1,0 +1,8 @@
+on early-fs
+    mount none /vendor/firmware/${ro.boot.em.model}/AIE.bin /vendor/firmware/AIE.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/calliope_sram.bin /vendor/firmware/calliope_sram.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/mfc_fw.bin /vendor/firmware/mfc_fw.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/os.checked.bin /vendor/firmware/os.checked.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/pablo_icpufw.bin /vendor/firmware/pablo_icpufw.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/vts.bin /vendor/firmware/vts.bin bind
+    mount none /vendor/tee_${ro.boot.em.model} /vendor/tee bind
