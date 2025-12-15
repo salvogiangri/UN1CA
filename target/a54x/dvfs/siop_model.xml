@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE siop_document [
+<!ELEMENT siop_document (temperatures, levels, components, scenarios?)>
+<!ELEMENT temperatures (temp+)>
+<!ELEMENT temp EMPTY>
+<!ATTLIST temp
+          type (AP|BAT|USB|CHG|PA|WIFI) #REQUIRED
+          default CDATA "1"
+          min CDATA "1"
+          max CDATA "1"
+          step CDATA "1"
+          init CDATA "5"
+          hold CDATA "1"
+          gap CDATA "0">
+<!ELEMENT levels (level+)>
+<!ELEMENT level EMPTY>
+<!ATTLIST level
+          id CDATA #REQUIRED
+          temp CDATA #REQUIRED>
+<!ELEMENT components (component+)>
+<!ELEMENT component (limiter+)>
+<!ATTLIST component
+          name CDATA #REQUIRED
+          tempType CDATA #REQUIRED>
+<!ELEMENT scenarios (scenario*, scenario_group*)>
+<!ELEMENT scenario (limiter+)>
+<!-- you can use below delimiter on scenario name -->
+<!-- "!" : intent, ":" : package, "," : plural    -->
+<!ATTLIST scenario
+          name CDATA #REQUIRED
+          tempType CDATA #REQUIRED
+          priority CDATA "0">
+<!ELEMENT scenario_group (scenario+)>
+<!ELEMENT scenario EMPTY>
+<!ATTLIST scenario
+          name CDATA #REQUIRED
+          limiter CDATA #REQUIRED
+          step CDATA "-1"
+          delay CDATA "0"
+          cond (sensor_check|for_request|for_temporary) #IMPLIED
+          temp CDATA "370"
+          gap CDATA "20"
+          value CDATA #REQUIRED>
+<!ELEMENT limiter EMPTY>
+<!ATTLIST limiter
+          name CDATA #REQUIRED
+          step CDATA "-1"
+          delay CDATA "0"
+          cond (sensor_check|for_request|for_temporary) #IMPLIED
+          temp CDATA "370"
+          gap CDATA "20"
+          value CDATA #REQUIRED>
+]>
+
+<siop_document>
+
+    <overheatcontrol>
+        <complex>
+            <DEX    formula="LRP"         temp="470" />
+            <LTB    formula="AP*SKIN*PA"  temp="550.480.535" />
+            <LCD    formula="AP*SKIN*PA"  temp="530.465.515" />
+            <GDM    formula="AP*SKIN*PA"  temp="495.440.483" />
+            <GDMLTB formula="AP*SKIN*PA"  temp="510.460.500" />
+            <SS     formula="AP*BAT*PA"   temp="715.500.660" />
+            <SS     formula="AP*SKIN*PA"  temp="595.480.630" region="JP" />
+        </complex>
+    </overheatcontrol>
+
+    <modelsettings>
+       <Skin type="LRP2"/>
+        <sensors>
+            <LTB_SENSOR type="PALM" />
+        </sensors>
+    </modelsettings>
+
+    <components>
+
+        <component name="AP" tempType="SKIN" >
+            <limiter name="OverLimit" temp="380:400:420:450" value="2208000:2016000:1632000:-1" />
+
+            <limiter name="CPUFreqMax" multistage="1" 
+                     temp="380:400:420:450" p="50" i="1" d="30" unit="1000"
+                     load_gap="2:2:2:2"
+                     min_high="1920000:1824000:1632000:1536000"
+                     min="1728000:1632000:1344000:1248000" />
+
+            <limiter name="GPUFreqMax" multistage="1" 
+                     temp="380:400:420:450" p="50" i="1" d="30" unit="400"
+                     min="949000:845000:650000:351000" />
+        </component>
+
+        <component name="CP" tempType="SKIN">
+            <limiter name="CpLowMode" temp="340:360:410:430" value="-1:2:2:1" />
+            <limiter name="CpLowMode" temp="410:430" value="-1:1" region="China" />
+            <limiter name="NrCCDrop"  temp="410:420" value="-1:1" />
+            <limiter name="SADisable" temp="410:440" value="-1:1" />
+            <limiter name="LteCCDrop" temp="430:450" value="-1:1" />
+        </component>
+
+        <component name="CP" tempType="SKIN" region="XSG">
+            <limiter name="CpLowMode" temp="410:430" value="-1:1" />
+            <limiter name="SADisable" temp="410:440" value="-1:1" />
+        </component>
+
+        <component name="CP" tempType="SKIN" region="KSA">
+            <limiter name="CpLowMode" temp="410:430" value="-1:1" />
+            <limiter name="SADisable" temp="410:440" value="-1:1" />
+        </component>
+
+        <component name="DISPLAY" tempType="SKIN">
+            <limiter name="Brightness" temp="380:400:420:450:470" value="-1:215:172:126:101" />
+        </component>
+
+    </components>
+
+    <scenarios>
+
+        <scenario name="SmartSwitchTransfer" tempType="SKIN" priority="2" >
+            <limiter name="Charging"                    temp="300"                     value="-1:70"       />
+            <limiter name="JobRestriction"              temp="340"                     value="1"           />
+            <limiter name="WifiP2pTput" tempType="SKIN" temp="380" p="50" i="2" d="50" unit="0.1" min="300"/>
+        </scenario>
+
+        <scenario name="SmartSwitchAppInstall" tempType="SKIN" priority="1" >
+            <limiter name="Charging" temp="300" value="-1:70" />
+            <limiter name="DexOptCpuset" temp="350" value="-1:1" />
+            <limiter name="JobRestriction" temp="340" value="1" />
+        </scenario>
+
+       <scenario name="CameraControl" tempType="SKIN" priority="2" >
+            <limiter name="CameraFps" temp="360:380:430:450" value="-1:24:24:15" />
+        </scenario>
+
+        <scenario name="Navigation" tempType="SKIN" >
+            <limiter name="Brightness" temp="430" gap="20" value="152:126:101" />
+        </scenario>
+
+        <scenario name="SpkHeatControl" tempType="SKIN" priority="2">
+            <limiter name="CPUFreqMax" step="0"     temp="360:380:400:420"     value="-1:1728000:1632000:1056000" />
+            <limiter name="SpeakerControl"          temp="340"         value="-1:1" />
+            <limiter name="Charging"                temp="410:430"     value="-1:0" />
+        </scenario>
+
+         <scenario name="HighBrightness"  tempType="SKIN" priority="1" region="XSG" >
+            <limiter name="CpLowMode" temp="440:450:470" value="-1:1:1" delay="0:1800:0" />
+            <limiter name="SADisable" temp="440:450:470" value="-1:1:1" delay="0:1800:0" />
+        </scenario>
+
+         <scenario name="HighBrightness"  tempType="SKIN" priority="1" region="KSA" >
+            <limiter name="CpLowMode" temp="440:450:470" value="-1:1:1" delay="0:1800:0" />
+            <limiter name="SADisable" temp="440:450:470" value="-1:1:1" delay="0:1800:0" />
+        </scenario>
+
+    </scenarios>
+
+</siop_document>
