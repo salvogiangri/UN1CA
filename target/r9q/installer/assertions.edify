@@ -1,1 +1,2 @@
-verify_no_downgrade(getprop("ro.boot.bootloader"), "G990BXXUCHYDB") && abort("E3003: This package requires Android 15 firmware.");
+getprop("ro.boot.em.model") == "SM-G990B" && verify_no_downgrade(getprop("ro.boot.bootloader"), "G990BXXUCHYDB") && abort("E3003: This package requires Android 15 firmware.");
+getprop("ro.boot.em.model") == "SM-G990B2" && verify_no_downgrade(getprop("ro.boot.bootloader"), "G990B2XXUBHYDB") && abort("E3003: This package requires Android 15 firmware.");
