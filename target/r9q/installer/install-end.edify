@@ -1,0 +1,7 @@
+
+if getprop("ro.boot.em.model") == "SM-G990B2" then
+  package_extract_file("dtbo_r9q2.img", "/dev/block/bootdevice/by-name/dtbo");
+  package_extract_file("vendor_boot_r9q2.img", "/dev/block/bootdevice/by-name/vendor_boot");
+  package_extract_file("boot_r9q2.img", "/dev/block/bootdevice/by-name/boot");
+endif;
+
