@@ -2,7 +2,7 @@ if is_substring("G991BXX", getprop("ro.boot.bootloader")) && verify_no_downgrade
   ui_print("Full Patching modem.bin img...");
   package_extract_file("modem.bin", "/dev/block/by-name/radio");
   ui_print("Full Patching modem_debug.bin img...");
-  package_extract_file("modem.bin", "/dev/block/by-name/cp_debug");
+  package_extract_file("modem_debug.bin", "/dev/block/by-name/cp_debug");
   ui_print("Full Patching vbmeta.img img...");
   package_extract_file("vbmeta.img", "/dev/block/by-name/vbmeta"); 
   assert(mark_header_bt("/dev/block/by-name/bota", 0, 0, "000"));
