@@ -52,8 +52,10 @@ APPLY_MODULE()
         [ -d "$MODPATH/odm" ] && ADD_TO_WORK_DIR "$MODPATH" "odm" "." 0 0 755 "u:object_r:vendor_file:s0"
         [ -d "$MODPATH/product" ] && ADD_TO_WORK_DIR "$MODPATH" "product" "." 0 0 755 "u:object_r:system_file:s0"
         [ -d "$MODPATH/system" ] && ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
+        [ -d "$MODPATH/system_dlkm" ] && ADD_TO_WORK_DIR "$MODPATH" "system_dlkm" "." 0 0 755 "u:object_r:system_dlkm_file:s0"
         [ -d "$MODPATH/system_ext" ] && ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
         [ -d "$MODPATH/vendor" ] && ADD_TO_WORK_DIR "$MODPATH" "vendor" "." 0 2000 755 "u:object_r:vendor_file:s0"
+        [ -d "$MODPATH/vendor_dlkm" ] && ADD_TO_WORK_DIR "$MODPATH" "vendor_dlkm" "." 0 0 755 "u:object_r:vendor_file:s0"
     fi
 
     READ_AND_APPLY_PROPS "$MODPATH"
