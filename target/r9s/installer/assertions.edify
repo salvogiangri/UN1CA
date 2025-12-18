@@ -1,1 +1,1 @@
-is_substring("G990EXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G990EXXSIGYI3") && getprop("ro.boot.rp") != "18" && abort("E3003: This package requires Android 15 firmware.");
+verify_no_downgrade(getprop("ro.boot.bootloader"), "G990EXXSIGYI3") && getprop("ro.boot.rp") != "18" && abort("E3003: This package requires the \"G990EXXSIGYI3\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");

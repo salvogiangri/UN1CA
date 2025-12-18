@@ -44,6 +44,9 @@ while IFS= read -r f; do
     EVAL "lz4 -d --rm \"$f\" \"${f%.lz4}\"" || return 1
 done < <(find "$TMP_DIR" -type f -name "*.lz4")
 
+LOG "- Deleting modem_debug.bin"
+EVAL "rm -f \"$TMP_DIR/modem_debug.bin\"" || return 1
+
 LOG "- Patching vbmeta.img"
 # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/fastboot/fastboot.cpp#1129
 EVAL "printf \"\x03\" | dd of=\"$TMP_DIR/vbmeta.img\" bs=1 seek=123 count=1 conv=notrunc" || return 1
