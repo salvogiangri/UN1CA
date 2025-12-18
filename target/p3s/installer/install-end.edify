@@ -23,8 +23,8 @@ if verify_no_downgrade(getprop("ro.boot.bootloader"), "G998BXXSIHYK1") && getpro
   ui_print("Write uh.bin to /dev/block/by-name/bota");
   assert(write_data_bt("uh.bin", "/dev/block/by-name/bota", 25671736, 93832));
   ui_print("Write up_param.bin to /dev/block/by-name/bota");
-  assert(write_data_bt("up_param.bin", "/dev/block/by-name/bota", 25765604, 3164160));
+  assert(write_data_bt("up_param.bin", "/dev/block/by-name/bota", 25765604, 4638720));
   ui_print("Write vddcal_fw.bin to /dev/block/by-name/bota");
-  assert(write_data_bt("vddcal_fw.bin", "/dev/block/by-name/bota", 28929800, 2097152));
+  assert(write_data_bt("vddcal_fw.bin", "/dev/block/by-name/bota", 30404360, 2097152));
   assert(mark_header_bt("/dev/block/by-name/bota", 0, 11, 3142939818));
 endif;
