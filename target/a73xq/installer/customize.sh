@@ -1,10 +1,10 @@
 LOG "- Downloading BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
 DOWNLOAD_FILE \
-    "https://github.com/nicodotgit/proprietary_vendor_samsung_a73xq/releases/download/A736BXXSAFYH2_OXE/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
+    "https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download/A736BXXSAFYH2_SEK_OXE/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
     "$TMP_DIR/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" || return 1
 LOG "- Downloading CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
 DOWNLOAD_FILE \
-    "https://github.com/nicodotgit/proprietary_vendor_samsung_a73xq/releases/download/A736BXXSAFYH2_OXE/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
+    "https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download/A736BXXSAFYH2_SEK_OXE/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
     "$TMP_DIR/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" || return 1
 
 while IFS= read -r f; do
