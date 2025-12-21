@@ -1,7 +1,5 @@
 echo "Add stock camera libs"
 BLOBS_LIST="
-system/etc/public.libraries-arcsoft.txt
-system/etc/public.libraries-camera.samsung.txt
 system/lib64/libAEBHDR_wrapper.camera.samsung.so
 system/lib64/libBeauty_v4.camera.samsung.so
 system/lib64/libDualCamBokehCapture.camera.samsung.so
