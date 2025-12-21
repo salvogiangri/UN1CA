@@ -328,6 +328,7 @@ fi
 #     Boolean which describes whether the device supports hardware mDNIe.
 #     It can be checked in the following ways:
 #       - `A11Y_COLOR_BOOL_SUPPORT_MDNIE_HW` value in the `android.view.accessibility.A11yRune` class inside `framework.jar`
+#       - "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" value in floating_feature.xml
 #
 #   [SOURCE/TARGET]_RIL_FEATURES
 #     String containing the device RIL feature string.
