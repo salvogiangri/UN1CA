@@ -43,7 +43,7 @@ done < <(find "$TMP_DIR" -type f -name "*.md5")
 
 while IFS= read -r f; do
     LOG "- Decompressing $(basename "$f")"
-    EVAL "lz4 -d --rm \"$f\"" || return 1
+    EVAL "lz4 -d --rm \"$f\" \"${f%.lz4}\"" || return 1
 done < <(find "$TMP_DIR" -type f -name "*.lz4")
 
 LOG "- Deleting quest.fv"
