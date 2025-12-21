@@ -507,7 +507,7 @@ DOWNLOAD_FILE()
 
     if [ -f "$CACHE_FILE" ]; then
         LOG "- Using cached download for $(basename "$OUTPUT")"
-        cp "$CACHE_FILE" "$OUTPUT"
+        EVAL "cp \"$CACHE_FILE\" \"$OUTPUT\""
         return 0
     fi
 
@@ -515,7 +515,7 @@ DOWNLOAD_FILE()
     local RET=$?
 
     if [ $RET -eq 0 ] && [ -f "$OUTPUT" ]; then
-        cp "$OUTPUT" "$CACHE_FILE"
+        EVAL "cp \"$OUTPUT\" \"$CACHE_FILE\""
     fi
 
     return $RET
