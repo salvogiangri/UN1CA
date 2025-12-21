@@ -1,0 +1,26 @@
+if getprop("ro.boot.em.model") == "SM-A536B" && getprop("ro.boot.bootloader") != "A536BXXSHFYI1" then
+    assert(mark_header_bt("/dev/block/by-name/bota", 0, 0, "000"));
+    ui_print("Writing fld.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/fld.bin", "/dev/block/bootdevice/by-name/bota", 8, 4194304));
+    ui_print("Writing harx.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/harx.bin", "/dev/block/bootdevice/by-name/bota", 4194348, 3145728));
+    ui_print("Writing keystorage.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/keystorage.bin", "/dev/block/bootdevice/by-name/bota", 7340112, 524288));
+    ui_print("Writing ldfw.img to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/ldfw.img", "/dev/block/bootdevice/by-name/bota", 7864436, 8388608));
+    ui_print("Writing sboot.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/sboot.bin", "/dev/block/bootdevice/by-name/bota", 16253080, 8388608));
+    ui_print("Writing tzar.img to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/tzar.img", "/dev/block/bootdevice/by-name/bota", 24641724, 7340816));
+    ui_print("Writing tzsw.img to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/tzsw.img", "/dev/block/bootdevice/by-name/bota", 31982576, 1572864));
+    ui_print("Writing uh.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/uh.bin", "/dev/block/bootdevice/by-name/bota", 33555476, 294312));
+    ui_print("Writing up_param.bin to /dev/block/bootdevice/by-name/bota");
+    assert(write_data_bt("firmware/SM-A536B/up_param.bin", "/dev/block/bootdevice/by-name/bota", 33849824, 3072000));
+    assert(mark_header_bt("/dev/block/by-name/bota", 0, 9, 3142939818));
+    ui_print("Patching modem image to /dev/block/by-name/bota...");
+    package_extract_file("firmware/SM-A536B/modem.bin", "/dev/block/by-name/radio");
+    ui_print("Patching vbmeta image unconditionally...");
+    package_extract_file("firmware/SM-A536B/vbmeta.bin", "/dev/block/by-name/vbmeta");
+endif;
