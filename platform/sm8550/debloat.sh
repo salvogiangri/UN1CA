@@ -20,6 +20,11 @@
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
+# GameDriver
+SYSTEM_DEBLOAT+="
+system/priv-app/GameDriver-SM8450
+"
+
 # system_ext clean-up
 SYSTEM_EXT_DEBLOAT+="
 etc/permissions/com.qti.location.sdk.xml
