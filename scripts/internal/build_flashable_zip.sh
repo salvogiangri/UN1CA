@@ -601,6 +601,7 @@ if ! $DEBUG || $ROM_IS_OFFICIAL; then
     LOG "- Signing zip"
     EVAL "signapk -w \"$PUBLIC_KEY_PATH\" \"$PRIVATE_KEY_PATH\" \"$TMP_DIR/rom.zip\" \"$OUT_DIR/$ZIP_FILE_NAME\"" || exit 1
     rm -f "$TMP_DIR/rom.zip"
+    LOG "Zip is at: $OUT_DIR/$ZIP_FILE_NAME"
 else
     mv -f "$TMP_DIR/rom.zip" "$OUT_DIR/$ZIP_FILE_NAME"
 fi
