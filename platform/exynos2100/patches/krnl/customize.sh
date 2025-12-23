@@ -1,5 +1,5 @@
-KERNEL_API_URL="https://api.github.com/repos/xfwdrev/android_kernel_samsung_ex2100/releases/tags/v5.5"
-KERNEL_DL_BASE="https://github.com/xfwdrev/android_kernel_samsung_ex2100/releases/download/v5.5"
+KERNEL_API_URL="https://api.github.com/repos/UN1CA/kernel_samsung_exynos2100/releases/tags/v5.5"
+KERNEL_DL_BASE="https://github.com/UN1CA/kernel_samsung_exynos2100/releases/download/v5.5"
 
 LOG_STEP_IN "- Downloading vanilla kernel variant"
 if [[ -d "$TMP_DIR" ]]; then
