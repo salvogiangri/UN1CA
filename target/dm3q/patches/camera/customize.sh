@@ -3,7 +3,6 @@ BLOBS_LIST="
 system/lib64/libAEBHDR_wrapper.camera.samsung.so
 system/lib64/libBeauty_v4.camera.samsung.so
 system/lib64/libDualCamBokehCapture.camera.samsung.so
-system/lib64/libDualCamBokehCapture.camera.samsung.so
 system/lib64/libEventDetector.camera.samsung.so
 system/lib64/libFace_Landmark_API.camera.samsung.so
 system/lib64/libFace_Landmark_Engine.camera.samsung.so
@@ -17,8 +16,6 @@ system/lib64/libSceneDetector_v1.camera.samsung.so
 system/lib64/libSmartScan.camera.samsung.so
 system/lib64/libWideDistortionCorrection.camera.samsung.so
 system/lib64/libaiclearzoom_raw.arcsoft.so
-system/lib64/libaiclearzoom_raw.arcsoft.so
-system/lib64/libaiclearzoomraw_wrapper_v1.camera.samsung.so
 system/lib64/libaiclearzoomraw_wrapper_v1.camera.samsung.so
 system/lib64/libbeautyshot.arcsoft.so
 system/lib64/libface_landmark.arcsoft.so
@@ -29,13 +26,8 @@ system/lib64/libhumantracking.arcsoft.so
 system/lib64/libhybridHDR_wrapper.camera.samsung.so
 system/lib64/libimage_enhancement.arcsoft.so
 system/lib64/libmacroclearshot_raw.arcsoft.so
-system/lib64/libmacroclearshot_raw.arcsoft.so
-system/lib64/libmacroclearshot_raw_wrapper_v1.camera.samsung.so
 system/lib64/libmacroclearshot_raw_wrapper_v1.camera.samsung.so
 system/lib64/libsimba.media.samsung.so
-system/lib64/libsuperresolution_raw.arcsoft.so
-system/lib64/libsuperresolution_raw.arcsoft.so
-system/lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so
 "
 for blob in $BLOBS_LIST
 do
