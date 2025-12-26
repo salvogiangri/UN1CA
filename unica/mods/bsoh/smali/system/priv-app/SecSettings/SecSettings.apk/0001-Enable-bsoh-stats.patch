@@ -1,0 +1,111 @@
+From 4c473406b2945526bfa3846294e012cf798f8f8e Mon Sep 17 00:00:00 2001
+From: Samuel Pascua <pascua.samuel.14@gmail.com>
+Date: Wed, 15 Oct 2025 22:13:36 +0800
+Subject: [PATCH] Enable bsoh stats
+
+Signed-off-by: Samuel Pascua <pascua.samuel.14@gmail.com>
+---
+ ...atteryRegulatoryPreferenceController.smali | 14 +---------
+ ...teryFirstUseDatePreferenceController.smali | 14 +---------
+ .../batteryinfo/SecBatteryInfoFragment.smali  | 28 ++-----------------
+ 3 files changed, 4 insertions(+), 52 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/BatteryRegulatoryPreferenceController.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/BatteryRegulatoryPreferenceController.smali
+index 869c0616..e480ebee 100644
+--- a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/BatteryRegulatoryPreferenceController.smali
++++ b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/BatteryRegulatoryPreferenceController.smali
+@@ -148,19 +148,7 @@
+ .method public getAvailabilityStatus()I
+     .locals 3
+ 
+-    sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "SM-A236B"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
++    const/4 v0, 0x1
+ 
+     const/4 v1, 0x0
+ 
+diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryFirstUseDatePreferenceController.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryFirstUseDatePreferenceController.smali
+index 49a48dd3..d46f5fe7 100644
+--- a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryFirstUseDatePreferenceController.smali
++++ b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryFirstUseDatePreferenceController.smali
+@@ -104,19 +104,7 @@
+ .method public getAvailabilityStatus()I
+     .locals 2
+ 
+-    sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "SM-A236B"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
++    const/4 v0, 0x1
+ 
+     if-eqz v0, :cond_0
+ 
+diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
+index 227bd46e..de30f27e 100644
+--- a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
++++ b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
+@@ -225,19 +225,7 @@
+ .method public final onCreateOptionsMenu(Landroid/view/Menu;Landroid/view/MenuInflater;)V
+     .locals 4
+ 
+-    sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "SM-A236B"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
++    const/4 v0, 0x1
+ 
+     const/4 v1, 0x1
+ 
+@@ -373,19 +361,7 @@
+ 
+     move-result-object p0
+ 
+-    sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v2, "SM-A236B"
+-
+-    invoke-virtual {v2, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
++    const/4 v0, 0x1
+ 
+     if-eqz v0, :cond_0
+ 
+-- 
+2.50.1
+
