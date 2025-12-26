@@ -1,0 +1,28 @@
+{
+  "config": {
+    "hw_platform": ["MTP", "Dragon", "Surf", "QRD", "HDK", "IDP"],
+    "soc_id": ["291", "246", "300", "301", "305", "321", "336", "339", "341", "355", "360", "365", "366", "393"]
+  },
+  "sns_geomag_rv": {
+    "owner": "sns_geomag_rv",
+    ".config": {
+      "owner": "sns_geomag_rv",
+      "gamerv_cfg_param1": {"type": "int","ver": "0","data": "300"
+      },
+      "gamerv_cfg_param2": {"type": "int","ver": "0","data": "300"
+      },
+      "fusion_min_samp_rate": {"type": "flt","ver": "0","data": "1.0"
+      },
+      "gamerv_def_rpt_rate": {"type": "flt","ver": "0","data": "1.0"
+      },
+      "gamerv_def_sample_rate": {"type": "flt","ver": "0","data": "5.0"
+      },
+      "amd_int_cfg_param1": {"type": "flt","ver": "0","data": "0.06"
+      },
+      "amd_int_cfg_param2": {"type": "flt","ver": "0","data": "0.5"
+      },
+     "game_rv_c_sys": {"type": "int","ver": "0","data": "0"
+      }
+    }
+  }
+}

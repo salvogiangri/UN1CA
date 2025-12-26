@@ -98,12 +98,12 @@ jobs:
 
       - name: Build dependencies
         run: |
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh m51
           ./scripts/build_dependencies.sh
 
       - name: Update prebuilt blobs
         run: |
-          source ./buildenv.sh a52sxq
+          source ./buildenv.sh m51
           ./scripts/internal/update_prebuilt_blobs.sh "${{ matrix.device }}" "${{ matrix.firmware }}"
           echo "PDA_BUILD=$(cat "./prebuilts/samsung/${{ matrix.device }}/.current" | cut -d "/" -f "1")" >> "$GITHUB_ENV"
 

@@ -1,0 +1,18 @@
+{
+  "config":{
+    "hw_platform": ["MTP", "Dragon", "Surf", "QRD", "HDK", "IDP"],
+    "soc_id": ["291", "246", "300", "301", "305", "321", "336", "339", "341", "347", "355", "360", "365", "366", "393"]
+  },
+"sns_cm":{
+    "owner": "sns_cm",
+    "heap_size":{ "type": "int", "ver": "0",
+          "data": "1572864"
+    },
+    "max_batch_disabled":{ "type": "int", "ver": "0",
+          "data": "0"
+    },
+    "min_batch_period_thrshld_ms":{ "type": "int", "ver": "0",
+          "data": "10"
+    }
+  }
+}

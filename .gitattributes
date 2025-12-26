@@ -16,6 +16,7 @@
 *.png binary
 *.qmg binary
 *.webp binary
+*.img binary
 
 # ROM-specific prebuilt blobs
 prebuilts/bootable/deprecated-ota/updater binary
@@ -27,3 +28,4 @@ target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a73xq/patches/wpss/vendor/firmware/** binary
 target/m52xq/patches/wpss/vendor/firmware/** binary
 target/r9s/patches/vendor/vendor/** binary
+target/m51/patches/_m51ify/vendor/** binary
