@@ -1,0 +1,11 @@
+system 0 0 755 capabilities=0x0
+system/etc 0 0 755 capabilities=0x0
+system/etc/permissions 0 0 755 capabilities=0x0
+system/etc/permissions/privapp-permissions-com.jndapp.oneui.widgets.pack.xml 0 0 644 capabilities=0x0
+system/priv-app 0 0 755 capabilities=0x0
+system/priv-app/OneUIWidgets 0 0 755 capabilities=0x0
+system/priv-app/OneUIWidgets/lib 0 0 755 capabilities=0x0
+system/priv-app/OneUIWidgets/lib/arm64 0 0 755 capabilities=0x0
+system/priv-app/OneUIWidgets/lib/arm64/libandroidx.graphics.path.so 0 0 644 capabilities=0x0
+system/priv-app/OneUIWidgets/lib/arm64/libdatastore_shared_counter.so 0 0 644 capabilities=0x0
+system/priv-app/OneUIWidgets/OneUIWidgets.apk 0 0 644 capabilities=0x0
