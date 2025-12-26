@@ -3,7 +3,6 @@ if $DEBUG; then
     return 0
 fi
 
-# [
 COMPRESS_WEBP()
 {
     local FILE="$1"
@@ -28,6 +27,7 @@ COMPRESS_WEBP()
 
     CMD="cwebp"
     CMD+=" -q 100"
+    CMD+=" -mt"                    
     CMD+=" -resize $RES $RES"
     CMD+=" \"$FILE_PATH/$FILE_NAME\""
     CMD+=" -o \"$FILE_PATH/temp.webp\""
@@ -57,7 +57,7 @@ ENCODE_MP4()
     CMD+=" -i \"$FILE_PATH/$FILE_NAME\""
     CMD+=" -c:v libx264 -c:a copy"
     CMD+=" -pix_fmt yuv420p -crf 18 -g 1"
-    CMD+=" -preset veryslow -tune zerolatency"
+    CMD+=" -preset fast -tune zerolatency -threads 0"  
     CMD+=" -movflags use_metadata_tags -map_metadata 0"
     CMD+=" -vf \"fps=60,scale=$RES,setsar=1:1\""
     CMD+=" -video_track_timescale 360000 -movie_timescale 90000"
@@ -66,7 +66,6 @@ ENCODE_MP4()
     EVAL "$CMD" || return 1
     EVAL "mv -f \"$FILE_PATH/temp.mp4\" \"$FILE_PATH/$FILE_NAME\"" || return 1
 }
-# ]
 
 ADD_TO_WORK_DIR "pa2qxxx" "system" \
     "system/priv-app/wallpaper-res/wallpaper-res.apk" 0 0 644 "u:object_r:system_file:s0"
