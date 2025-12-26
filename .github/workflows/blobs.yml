@@ -2,12 +2,6 @@ name: Update prebuilt blobs
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 12 * * *"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   update:
