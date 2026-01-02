@@ -19,13 +19,13 @@
     <!-- RESOLUTION MAP -->
 
     <!-- We recommend that you obtain all the resolutions of your sensors and put them here for easier use (CTRL + F and change).
-    1. Back Camera (Main) | 4:3 = 4000x3000   | 16:9 = 4000x2250  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1800
-    2. Back Hi-Res        | 4:3 = 12000x9000  | 16:9 = 12000x6752 | 1:1 = 8992x8992 | Full (~20:9) = 12000x5400
-    3. Back Ultra-Wide    | 4:3 = 4000x3000   | 16:9 = 4000x2250  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1800
-    4. Back Macro         | 4:3 = 2576x1932   | 16:9 = 2560x1440  | 1:1 = 1920x1920 | Full (~20:9) = 2576x1160
-    5. Front Camera       | 4:3 = 4000x3000   | 16:9 = 4000x2250  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1800
-    6. Front Hi-Res       | 4:3 = 6528x4896   | 16:9 = 6528x3672  | 1:1 = 4896x4896 | Full (~20:9) = 6528x2936
-    7. Front Crop (~1.2255x) | 4:3 = 3264x2448 | 16:9 = 3264x1836 | 1:1 = 2448x2448 | Full (~20:9) = 3264x1472
+    1. Back Camera (Main)    | 4:3 = 4000x3000   | 16:9 = 4000x2252  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1868
+    2. Back Hi-Res           | 4:3 = 12000x9000  | 16:9 = 12000x6752 | 1:1 = 8992x8992 | Full (~20:9) = 12000x5400
+    3. Back Ultra-Wide       | 4:3 = 4000x3000   | 16:9 = 4000x2250  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1800
+    4. Back Macro            | 4:3 = 2576x1932   | 16:9 = 2560x1440  | 1:1 = 1920x1920 | Full (~20:9) = 2576x1160
+    5. Front Camera          | 4:3 = 4000x3000   | 16:9 = 4000x2250  | 1:1 = 2992x2992 | Full (~20:9) = 4000x1800
+    6. Front Hi-Res          | 4:3 = 6528x4896   | 16:9 = 6528x3672  | 1:1 = 4896x4896 | Full (~20:9) = 6528x2936
+    7. Front Crop (~1.2255x) | 4:3 = 3264x2448   | 16:9 = 3264x1836  | 1:1 = 2448x2448 | Full (~20:9) = 3264x1472
     -->
 
 
@@ -328,15 +328,6 @@
     <local name="SUPPORT_SELFIE_TONE_MODE"              value="false"/>
 
 
-    <!-- CUTOUT ANIMATION FEATURES -->
-    <!-- This corresponds to the animation in the notch when switching to the front camera.
-    This MUST match what you have in your stock XML.
-    -->
-
-    <local name="DISPLAY_CUTOUT_ANIMATION_INFO"     num-of-display-cutout="1"   display-cutout-0-type="0"   display-cutout-0-left="160"     display-cutout-0-top="0"    display-cutout-0-right="200"    display-cutout-0-bottom="37"/>
-    <local name="DISPLAY_CUTOUT_POSITION"   value="1"/>
-
-
     <!-- AUTO FRAMING FEATURES -->
     <!-- This is a video feature that uses the UW/Selfie lens and tracks the person within the frame.
     The quality is not good. This appears when you are in Video mode as a rounded square icon with a dot in the middle.
@@ -537,8 +528,6 @@
     <local name="MIN_RECORDING_TIME_TO_ENABLE_LOW_POWER_MODE"                   value="300"/>
     <local name="SUPPORT_FLASH_IN_WIDE_LENS"                                    value="true"/>
     <local name="SUPPORT_FRAME_WATERMARK"                                       value="true"/>
-
-    Samsung XR related stuff. You also need to enable the Cam Assistant related feature to (maybe) make it work.
     <local name="SUPPORT_STEREO_CAPTURE"                                        value="true"/>
     <local name="SUPPORT_STEREO_CAPTURE_UHD_30"                                 value="true"/>
     -->
@@ -548,26 +537,25 @@
 
     <local name="SUPPORT_CAMERA_ASSISTANT"                              value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_ADAPTIVE_PIXEL"               value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS"              value="false"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS_HW_SCALER"    value="false"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_AUDIO_MONITORING"             value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_AUTO_LENS_SWITCHING"          value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X2"                 value="false"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X10"                value="false"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_DIGITAL_ZOOM_UPSCALE"         value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_DOF_ADAPTER"                  value="false"/>
-	<local name="SUPPORT_CAMERA_ASSISTANT_ZOOM_X100"                    value="false"/>
-    <!-- This one is from OneUI 8.5. It's enabled, but not available yet! -->
-    <local name="SUPPORT_CAMERA_ASSISTANT_PRO_MODE_PRESETS"             value="true"/>
 
     <!--
-    <local name="SUPPORT_CAMERA_ASSISTANT_ADDITIONAL_MODE_SINGLE_TAKE"      value="true"/>
+	<local name="SUPPORT_CAMERA_ASSISTANT_ADDITIONAL_MODE_SINGLE_TAKE"      value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS"              	value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS_HW_SCALER"    	value="true"/>
+	<local name="SUPPORT_CAMERA_ASSISTANT_AUTO_LENS_SWITCHING"          	value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X2"                 	value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X10"                	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_CUSTOMIZE_INDICATORS"             value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_DOF_ADAPTER"                  	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_FOCUS_PEAKING"                    value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_OPTICAL_IMAGE_STABILIZATION"      value="true"/>
+	<local name="SUPPORT_CAMERA_ASSISTANT_PRO_MODE_PRESETS"             	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_STEREO_CAPTURE"                   value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_TOUCH_AF_AE_IN_PRO_VIDEO_MODE"    value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_TILTA_WIRELESS_LENS_CONTROLLER"   value="true"/>
+    <local name="SUPPORT_CAMERA_ASSISTANT_TOUCH_AF_AE_IN_PRO_VIDEO_MODE"    value="true"/>
+	<local name="SUPPORT_CAMERA_ASSISTANT_ZOOM_X100"                    	value="true"/>
     -->
 
 </resources>
