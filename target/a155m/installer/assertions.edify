@@ -1,0 +1,1 @@
+is_substring("A155MUBS", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A155MUBS7CYH1") && abort("E3003: This package requires A155MUBS7CYH1 (Binary 7) firmware or newer.");
