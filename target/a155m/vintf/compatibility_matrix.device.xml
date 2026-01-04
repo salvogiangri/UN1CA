@@ -1,0 +1,1648 @@
+<!--
+    Input:
+        device/mediatek/system/common/device_framework_matrix.xml
+        vendor/samsung/interfaces/camera/provider/4.0/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/engmode/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/vaultkeeper/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/hdcp/wifidisplay/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/sysinput/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/widevine/keyprov/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/wifi/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/wifi/nan/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/hyper/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/thermal/1.0/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/vibrator/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/tlc/payment/1.0/tlc_payment_compatibility_matrix.xml
+        vendor/samsung/interfaces/tlc/iccc/1.0/vendor.samsung.hardware.tlc.iccc@1.0-matrix.xml
+        vendor/samsung/interfaces/tlc/kg/aidl/vendor.samsung.hardware.tlc.kg-matrix.xml
+        vendor/samsung/interfaces/audio/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/audio/framework_compatibility_matrix.xml
+        vendor/samsung/system/security/drk/drk_hidl_framework_compatibility_matrix.xml
+        vendor/samsung/system/security/drk/drk_aidl_framework_compatibility_matrix.xml
+        vendor/samsung/system/security/skeymaster/common/configs/skeymint_v100_framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/authfw/1.0/vendor.samsung.hardware.authfw@1.0-matrix.xml
+        vendor/samsung/interfaces/authfw/aidl/vendor.samsung.hardware.authfw-matrix.xml
+        vendor/samsung/interfaces/biometrics/face/aidl/face_compatibility_matrix.xml
+        vendor/samsung/interfaces/biometrics/fingerprint/3.0/fingerprint_compatibility_matrix.xml
+        vendor/samsung/external/fingerprint/fingerprint_nontz_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/hermes/aidl/hermes_framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/fkeymaster/aidl/fkeymaster_framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/rtts/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/ssu/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/frameworks/av/media/vendor/mpp/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/snap/aidl/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/nfc/2.0/device_framework_compatibility_matrix.xml
+        vendor/samsung/hardware/ril/URC/fcm/radio_framework_compatibility_matrix.xml
+-->
+<compatibility-matrix version="8.0" type="framework">
+    <hal format="aidl" optional="true">
+        <name>android.hardware.biometrics.face</name>
+        <interface>
+            <name>IFace</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>3</version>
+        <interface>
+            <name>IFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <interface>
+            <name>IFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>2</version>
+        <interface>
+            <name>IFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.bluetooth</name>
+        <interface>
+            <name>IBluetoothHci</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.camera.provider</name>
+        <version>2.6</version>
+        <interface>
+            <name>ICameraProvider</name>
+            <instance>legacy/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.nfc</name>
+        <version>1.2</version>
+        <interface>
+            <name>INfc</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.radio</name>
+        <version>1.2</version>
+        <version>1.6</version>
+        <interface>
+            <name>IRadio</name>
+            <instance>em1</instance>
+            <instance>em2</instance>
+            <instance>em3</instance>
+            <instance>em4</instance>
+            <instance>imsAospSlot1</instance>
+            <instance>imsAospSlot2</instance>
+            <instance>imsAospSlot3</instance>
+            <instance>imsAospSlot4</instance>
+            <instance>se1</instance>
+            <instance>se2</instance>
+            <instance>se3</instance>
+            <instance>se4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+        <interface>
+            <name>ISap</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.radio</name>
+        <version>1.2</version>
+        <interface>
+            <name>ISap</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.radio.config</name>
+        <version>1.3</version>
+        <interface>
+            <name>IRadioConfig</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.config</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioConfig</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.data</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioData</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.ims</name>
+        <version>1-2</version>
+        <interface>
+            <name>IRadioIms</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.messaging</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioMessaging</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.modem</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioModem</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>se1</instance>
+            <instance>se2</instance>
+            <instance>se3</instance>
+            <instance>se4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.network</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioNetwork</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.sap</name>
+        <interface>
+            <name>ISap</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.sim</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioSim</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>se1</instance>
+            <instance>se2</instance>
+            <instance>se3</instance>
+            <instance>se4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.radio.voice</name>
+        <version>1-3</version>
+        <interface>
+            <name>IRadioVoice</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.soundtrigger3</name>
+        <version>2</version>
+        <interface>
+            <name>ISoundTriggerHw</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.vibrator</name>
+        <interface>
+            <name>IVibrator</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>arm.mali.platform</name>
+        <version>1-2</version>
+        <interface>
+            <name>ICompression</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.egistec.hardware.fingerprint</name>
+        <interface>
+            <name>IBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.egistec_optical.hardware.fingerprint</name>
+        <interface>
+            <name>IBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.goodix.hardware.biometrics.fingerprint</name>
+        <interface>
+            <name>IGoodixFingerprintDaemon</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.goodix.hardware.biometrics.fingerprint.cap</name>
+        <interface>
+            <name>IGoodixFingerprintDaemon</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.aee</name>
+        <version>1.1</version>
+        <interface>
+            <name>IAee</name>
+            <instance>AEE</instance>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.aee</name>
+        <interface>
+            <name>IAee</name>
+            <instance>AEE</instance>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apmonitor</name>
+        <version>2.0</version>
+        <interface>
+            <name>IApmService</name>
+            <instance>apm_hidl_service</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.apmonitor</name>
+        <interface>
+            <name>IApmService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.apusys</name>
+        <version>1.0</version>
+        <version>2.0</version>
+        <version>2.1</version>
+        <interface>
+            <name>INeuronApusys</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.apusys</name>
+        <version>1</version>
+        <version>2</version>
+        <version>3</version>
+        <version>4</version>
+        <version>5</version>
+        <interface>
+            <name>INeuronApusys</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.hmp</name>
+        <version>1.0</version>
+        <interface>
+            <name>IApuwareHmp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.utils</name>
+        <version>1.0</version>
+        <version>2.0</version>
+        <interface>
+            <name>IApuwareUtils</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.utils</name>
+        <interface>
+            <name>IApuwareUtils</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.xrp</name>
+        <version>1.0</version>
+        <version>2.0</version>
+        <interface>
+            <name>INeuronXrp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.apuware.xrp</name>
+        <interface>
+            <name>INeuronXrp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.atci</name>
+        <version>1.0</version>
+        <interface>
+            <name>IAtcid</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.atci</name>
+        <interface>
+            <name>IAtcid</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.audio</name>
+        <interface>
+            <name>IMtkAudio</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.avm</name>
+        <version>1.0</version>
+        <interface>
+            <name>IAvmDvrService</name>
+            <instance>instance0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.bluetooth.audio</name>
+        <version>2.1</version>
+        <version>2.2</version>
+        <interface>
+            <name>IBluetoothAudioProvidersFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.bluetooth.audio</name>
+        <interface>
+            <name>IBluetoothAudioProviderFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.aovservice</name>
+        <version>1-2</version>
+        <interface>
+            <name>IAovService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.atms</name>
+        <version>1.0</version>
+        <interface>
+            <name>IATMs</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.atms</name>
+        <interface>
+            <name>IATMs</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.bgservice</name>
+        <version>1.1</version>
+        <interface>
+            <name>IBGService</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.bgservice</name>
+        <interface>
+            <name>IBGService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.ccap</name>
+        <version>1.0</version>
+        <interface>
+            <name>ICCAPControl</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.isphal</name>
+        <version>1.1</version>
+        <interface>
+            <name>IISPModule</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.isphal</name>
+        <interface>
+            <name>IISPModule</name>
+            <instance>internal/1</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.postproc</name>
+        <interface>
+            <name>IPostDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.camera.uievent</name>
+        <interface>
+            <name>IUIEvent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.clientapi</name>
+        <version>1.0</version>
+        <interface>
+            <name>IClientapi</name>
+            <instance>clientapi_hal_service</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.clientapi</name>
+        <interface>
+            <name>IClientApi</name>
+            <instance>clientapi_aidl_service</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.composer_ext</name>
+        <version>1.0</version>
+        <interface>
+            <name>IComposerExt</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.composer_ext</name>
+        <interface>
+            <name>IComposerExt</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.dfps</name>
+        <version>1.0</version>
+        <interface>
+            <name>IFpsPolicyService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.dmc</name>
+        <version>1.2</version>
+        <interface>
+            <name>IDmcService</name>
+            <instance>dmc_hidl_service</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.dmc</name>
+        <interface>
+            <name>IDmcService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.dplanner</name>
+        <version>2.0</version>
+        <interface>
+            <name>IDPlanner</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.dplanner2</name>
+        <interface>
+            <name>IDPlanner</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.engineermode</name>
+        <version>1.3</version>
+        <interface>
+            <name>IEmd</name>
+            <instance>EmHidlServer</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.engineermode</name>
+        <version>1-2</version>
+        <interface>
+            <name>IEmds</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.gnss</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkGnss</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.gnss.batching</name>
+        <interface>
+            <name>IMtkGnssBatching</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.gpu</name>
+        <version>1.0</version>
+        <interface>
+            <name>IGraphicExt</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.gpuserv</name>
+        <interface>
+            <name>IGpuService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.hdcpwifidisplay</name>
+        <version>1.0</version>
+        <interface>
+            <name>IHDCPWIFIDisplay</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.hdcpwifidisplay</name>
+        <interface>
+            <name>IHDCPWIFIDisplay</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.hdmi</name>
+        <version>1.4</version>
+        <interface>
+            <name>IMtkHdmiService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.hdmi_aidl</name>
+        <interface>
+            <name>IMtkHdmiService_AIDL</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.imsa</name>
+        <version>1.0</version>
+        <interface>
+            <name>IImsa</name>
+            <instance>imsa</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.interfaces_tc1.mtkradioex_tc1</name>
+        <version>3.0</version>
+        <interface>
+            <name>IMtkRadioEx</name>
+            <instance>mtkAssist1</instance>
+            <instance>mtkAssist2</instance>
+            <instance>mtkCap1</instance>
+            <instance>mtkCap2</instance>
+            <instance>mtkEm1</instance>
+            <instance>mtkEm2</instance>
+            <instance>mtkSe1</instance>
+            <instance>mtkSe2</instance>
+            <instance>mtkSlot1</instance>
+            <instance>mtkSlot2</instance>
+            <instance>mtkSmartRatSwitch1</instance>
+            <instance>mtkSmartRatSwitch2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.keymanage</name>
+        <version>1.0</version>
+        <interface>
+            <name>IKeymanage</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.keymaster_attestation</name>
+        <version>1.1</version>
+        <interface>
+            <name>IKeymasterDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.lbs</name>
+        <version>1.0</version>
+        <interface>
+            <name>ILbs</name>
+            <instance>mtk_lbs_log_v2s</instance>
+            <instance>mtk_mnld2mtklogger</instance>
+            <instance>mtk_mtklogger2mnld</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.lbs</name>
+        <interface>
+            <name>ILbs</name>
+            <instance>mtk_lbs_log_v2s</instance>
+            <instance>mtk_mnld2mtklogger</instance>
+            <instance>mtk_mtklogger2mnld</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.log</name>
+        <version>1.0</version>
+        <interface>
+            <name>ILog</name>
+            <instance>ATMWiFiHidlServer</instance>
+            <instance>ConnsysFWHidlServer</instance>
+            <instance>LoggerHidlServer</instance>
+            <instance>MobileLogHidlServer</instance>
+            <instance>ModemLogHidlServer</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.log</name>
+        <interface>
+            <name>ILog</name>
+            <instance>ATMWiFiHidlServer</instance>
+            <instance>ConnsysFWHidlServer</instance>
+            <instance>LoggerHidlServer</instance>
+            <instance>MobileLogHidlServer</instance>
+            <instance>ModemLogHidlServer</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mbrain</name>
+        <version>1</version>
+        <version>2</version>
+        <version>3</version>
+        <version>5</version>
+        <version>6</version>
+        <interface>
+            <name>IMBrain</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mbrainj</name>
+        <interface>
+            <name>IMBrainJava</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mdmonitor</name>
+        <version>1.0</version>
+        <interface>
+            <name>IMDMonitorService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mdmonitor</name>
+        <interface>
+            <name>IMDMonitorService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.meta</name>
+        <version>1.0</version>
+        <interface>
+            <name>IMetaTst</name>
+            <instance>MetaATDHidlServer</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.meta</name>
+        <interface>
+            <name>IMetaTst</name>
+            <instance>MetaATDHidlServer</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mmagent</name>
+        <version>1.1</version>
+        <interface>
+            <name>IMMAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mmagent</name>
+        <interface>
+            <name>IMMAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mmlpq</name>
+        <version>2-3</version>
+        <interface>
+            <name>IMmlpq</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mms</name>
+        <version>1.6-7</version>
+        <interface>
+            <name>IMms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mms</name>
+        <interface>
+            <name>IMms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkcodecservice</name>
+        <version>1.1</version>
+        <interface>
+            <name>IMtkCodecService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkpower</name>
+        <version>1.2</version>
+        <interface>
+            <name>IMtkPerf</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IMtkPower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkpower</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkPowerService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkpower_applist</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkpower_applist</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex</name>
+        <version>2.5</version>
+        <interface>
+            <name>IMtkRadioEx</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>mtkAssist1</instance>
+            <instance>mtkAssist2</instance>
+            <instance>mtkAssist3</instance>
+            <instance>mtkAssist4</instance>
+            <instance>mtkCap1</instance>
+            <instance>mtkCap2</instance>
+            <instance>mtkCap3</instance>
+            <instance>mtkCap4</instance>
+            <instance>mtkEm1</instance>
+            <instance>mtkEm2</instance>
+            <instance>mtkEm3</instance>
+            <instance>mtkEm4</instance>
+            <instance>mtkRcs1</instance>
+            <instance>mtkRcs2</instance>
+            <instance>mtkRcs3</instance>
+            <instance>mtkRcs4</instance>
+            <instance>mtkSe1</instance>
+            <instance>mtkSe2</instance>
+            <instance>mtkSe3</instance>
+            <instance>mtkSe4</instance>
+            <instance>mtkSlot1</instance>
+            <instance>mtkSlot2</instance>
+            <instance>mtkSlot3</instance>
+            <instance>mtkSlot4</instance>
+            <instance>mtkSmartRatSwitch1</instance>
+            <instance>mtkSmartRatSwitch2</instance>
+            <instance>mtkSmartRatSwitch3</instance>
+            <instance>mtkSmartRatSwitch4</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex</name>
+        <version>3.0</version>
+        <interface>
+            <name>IMtkRadioEx</name>
+            <instance>imsSlot1</instance>
+            <instance>imsSlot2</instance>
+            <instance>imsSlot3</instance>
+            <instance>imsSlot4</instance>
+            <instance>mtkAssist1</instance>
+            <instance>mtkAssist2</instance>
+            <instance>mtkAssist3</instance>
+            <instance>mtkAssist4</instance>
+            <instance>mtkCap1</instance>
+            <instance>mtkCap2</instance>
+            <instance>mtkCap3</instance>
+            <instance>mtkCap4</instance>
+            <instance>mtkEm1</instance>
+            <instance>mtkEm2</instance>
+            <instance>mtkEm3</instance>
+            <instance>mtkEm4</instance>
+            <instance>mtkRcs1</instance>
+            <instance>mtkRcs2</instance>
+            <instance>mtkRcs3</instance>
+            <instance>mtkRcs4</instance>
+            <instance>mtkRsu1</instance>
+            <instance>mtkRsu2</instance>
+            <instance>mtkRsu3</instance>
+            <instance>mtkRsu4</instance>
+            <instance>mtkSe1</instance>
+            <instance>mtkSe2</instance>
+            <instance>mtkSe3</instance>
+            <instance>mtkSe4</instance>
+            <instance>mtkSlot1</instance>
+            <instance>mtkSlot2</instance>
+            <instance>mtkSlot3</instance>
+            <instance>mtkSlot4</instance>
+            <instance>mtkSmartRatSwitch1</instance>
+            <instance>mtkSmartRatSwitch2</instance>
+            <instance>mtkSmartRatSwitch3</instance>
+            <instance>mtkSmartRatSwitch4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.data</name>
+        <version>1-3</version>
+        <interface>
+            <name>IMtkRadioExData</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.dch</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkRadioExDc</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.ims</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkRadioExIms</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.messaging</name>
+        <interface>
+            <name>IMtkRadioExMessaging</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.modem</name>
+        <version>1-3</version>
+        <interface>
+            <name>IMtkRadioExModem</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.network</name>
+        <interface>
+            <name>IMtkRadioExNetwork</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.rcs</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkRadioExRcs</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.sim</name>
+        <version>1-2</version>
+        <interface>
+            <name>IMtkRadioExSim</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.mtkradioex.voice</name>
+        <interface>
+            <name>IMtkRadioExVoice</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.netdagent</name>
+        <version>1.0</version>
+        <interface>
+            <name>INetdagent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.netdagent</name>
+        <interface>
+            <name>INetdagents</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.neuropilot.agent</name>
+        <version>1.2</version>
+        <interface>
+            <name>IAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.neuropilot.agent</name>
+        <interface>
+            <name>IAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.nps.nos.fastswitch</name>
+        <interface>
+            <name>INativeFastSwitch</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.nvram</name>
+        <interface>
+            <name>INvram</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.nvram</name>
+        <version>1.1</version>
+        <interface>
+            <name>INvram</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.nwk_opt</name>
+        <version>1.0</version>
+        <interface>
+            <name>INwkOpt</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.nwk_opt_new</name>
+        <interface>
+            <name>INwkOptNew</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.power</name>
+        <version>2.1</version>
+        <interface>
+            <name>IPower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.pplagent</name>
+        <version>1.0</version>
+        <interface>
+            <name>IPplAgent</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.pq</name>
+        <version>2.3-15</version>
+        <interface>
+            <name>IPictureQuality</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.pq_aidl</name>
+        <version>1-7</version>
+        <interface>
+            <name>IPictureQuality_AIDL</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.presence</name>
+        <version>1.0</version>
+        <interface>
+            <name>IPresence</name>
+            <instance>presence_hal_service</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.radio_op</name>
+        <version>2.0</version>
+        <version>3.0</version>
+        <interface>
+            <name>IRadioOp</name>
+            <instance>OpImsRILd1</instance>
+            <instance>OpImsRILd2</instance>
+            <instance>OpImsRILd3</instance>
+            <instance>OpImsRILd4</instance>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+            <instance>slot3</instance>
+            <instance>slot4</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.rcs</name>
+        <version>2.0</version>
+        <interface>
+            <name>IRcs</name>
+            <instance>rcs_hal_service</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.rcs</name>
+        <interface>
+            <name>IRcs</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.sfs</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISFs</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.thp</name>
+        <version>1.0</version>
+        <interface>
+            <name>ITHP</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.touchll</name>
+        <version>1.0</version>
+        <interface>
+            <name>ITouchll</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.videotelephony</name>
+        <version>1.0</version>
+        <interface>
+            <name>IVideoTelephony</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.mediatek.hardware.videotelephony</name>
+        <interface>
+            <name>IVideoTelephony</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.vpu</name>
+        <version>1.0</version>
+        <interface>
+            <name>Ivpu</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.wifi.supplicant</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISupplicant</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.mediatek.hardware.wifi.supplicant</name>
+        <version>2.2</version>
+        <interface>
+            <name>ISupplicant</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.qti.hardware.fingerprint</name>
+        <interface>
+            <name>IQfpExtendedFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.audio</name>
+        <interface>
+            <name>ISecAudioHal</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>ISecEffectFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.audio</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehDevicesFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.authfw</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehAuthenticationFramework</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.authfw</name>
+        <interface>
+            <name>ISehAuthenticationFramework</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.biometrics.fingerprint</name>
+        <version>3.0</version>
+        <interface>
+            <name>ISehBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.camera.provider</name>
+        <version>4.0</version>
+        <interface>
+            <name>ISehCameraProvider</name>
+            <instance>legacy/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.camera.provider</name>
+        <version>4.0</version>
+        <interface>
+            <name>ISehCameraProvider</name>
+            <regex-instance>[^/]+/[0-9]+</regex-instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.gnss</name>
+        <version>3-4</version>
+        <interface>
+            <name>ISehGnss</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.hyper</name>
+        <version>2</version>
+        <interface>
+            <name>ISehHyPer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.keymint</name>
+        <interface>
+            <name>ISehKeyMintExtension</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.keymint</name>
+        <interface>
+            <name>ISehKeyMintFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.media.mpp</name>
+        <version>5</version>
+        <interface>
+            <name>ISehMppStore</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.nfc</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISehNfc</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.radio</name>
+        <version>2.2</version>
+        <interface>
+            <name>ISehRadio</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.radio.bridge</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISehBridge</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.bridge</name>
+        <interface>
+            <name>ISehRadioBridge</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.radio.channel</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISehChannel</name>
+            <instance>epdgd</instance>
+            <instance>epdgd2</instance>
+            <instance>imsd</instance>
+            <instance>imsd2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.channel</name>
+        <interface>
+            <name>ISehRadioChannel</name>
+            <instance>epdgd</instance>
+            <instance>epdgd2</instance>
+            <instance>imsd</instance>
+            <instance>imsd2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.data</name>
+        <interface>
+            <name>ISehRadioData</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.messaging</name>
+        <version>1-2</version>
+        <interface>
+            <name>ISehRadioMessaging</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.network</name>
+        <interface>
+            <name>ISehRadioNetwork</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.satellite</name>
+        <interface>
+            <name>ISehRadioSatellite</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.radio.sim</name>
+        <interface>
+            <name>ISehRadioSim</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.security.drk</name>
+        <version>2.0</version>
+        <interface>
+            <name>ISehDrk</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.drk</name>
+        <interface>
+            <name>ISehDrk</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.engmode</name>
+        <interface>
+            <name>ISehEngmode</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.fkeymaster</name>
+        <interface>
+            <name>ISehFkeymaster</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.hdcp.wifidisplay</name>
+        <version>1-2</version>
+        <interface>
+            <name>ISehHdcp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.hermes</name>
+        <interface>
+            <name>ISehHermesCommand</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.rtts</name>
+        <interface>
+            <name>ISehRealTimeToken</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.ssu</name>
+        <interface>
+            <name>ISehSSUTEECL</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.vaultkeeper</name>
+        <interface>
+            <name>ISehVaultKeeper</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.security.widevine.keyprov</name>
+        <interface>
+            <name>ISehWidevineKeyProv</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.snap</name>
+        <version>3</version>
+        <interface>
+            <name>ISehSnap</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.sysinput</name>
+        <version>2</version>
+        <interface>
+            <name>ISehSysInputCallback</name>
+        </interface>
+        <interface>
+            <name>ISehSysInputDev</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.thermal</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehThermal</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.tlc.iccc</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehIccc</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.tlc.kg</name>
+        <version>2</version>
+        <interface>
+            <name>ISehKg</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.samsung.hardware.tlc.payment</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISehTlcPayment</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.wifi</name>
+        <interface>
+            <name>ISehWifi</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.samsung.hardware.wifi.nan</name>
+        <interface>
+            <name>IWifiVendorNan</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.tesiai.hardware.hdcpconnection</name>
+        <version>1.0</version>
+        <interface>
+            <name>IHDCPConnection</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.trustonic.tee</name>
+        <version>1.1</version>
+        <interface>
+            <name>ITee</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.trustonic.tee</name>
+        <interface>
+            <name>ITee</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>vendor.trustonic.tee.tui</name>
+        <version>1.0</version>
+        <interface>
+            <name>ITui</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.trustonic.tui</name>
+        <interface>
+            <name>ITui</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>vendor.tsa.hdcp</name>
+        <interface>
+            <name>IHDCPInterface</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <sepolicy>
+        <kernel-sepolicy-version>30</kernel-sepolicy-version>
+        <sepolicy-version>29.0</sepolicy-version>
+        <sepolicy-version>30.0</sepolicy-version>
+        <sepolicy-version>31.0</sepolicy-version>
+        <sepolicy-version>32.0</sepolicy-version>
+        <sepolicy-version>33.0</sepolicy-version>
+        <sepolicy-version>34.0</sepolicy-version>
+        <sepolicy-version>202404</sepolicy-version>
+    </sepolicy>
+    <avb>
+        <vbmeta-version>1.0</vbmeta-version>
+    </avb>
+</compatibility-matrix>
