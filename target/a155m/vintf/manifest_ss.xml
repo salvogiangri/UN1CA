@@ -1,0 +1,70 @@
+<!--
+    Input:
+        odm_manifest_ss.xml
+        odm_manifest_op_ss.xml
+-->
+<manifest version="4.0" type="device">
+    <hal format="hidl" override="true">
+        <name>android.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <version>1.2</version>
+        <interface>
+            <name>IRadio</name>
+            <instance>em1</instance>
+            <instance>imsAospSlot1</instance>
+            <instance>se1</instance>
+            <instance>slot1</instance>
+        </interface>
+        <interface>
+            <name>ISap</name>
+            <instance>slot1</instance>
+        </interface>
+        <fqname>@1.2::IRadio/em1</fqname>
+        <fqname>@1.2::IRadio/imsAospSlot1</fqname>
+        <fqname>@1.2::IRadio/se1</fqname>
+        <fqname>@1.2::IRadio/slot1</fqname>
+        <fqname>@1.2::ISap/slot1</fqname>
+        <fqname>@1.6::IRadio/em1</fqname>
+        <fqname>@1.6::IRadio/imsAospSlot1</fqname>
+        <fqname>@1.6::IRadio/se1</fqname>
+        <fqname>@1.6::IRadio/slot1</fqname>
+    </hal>
+    <hal format="hidl" override="true">
+        <name>vendor.mediatek.hardware.mtkradioex</name>
+        <transport>hwbinder</transport>
+        <version>3.0</version>
+        <interface>
+            <name>IMtkRadioEx</name>
+            <instance>imsSlot1</instance>
+            <instance>mtkAssist1</instance>
+            <instance>mtkCap1</instance>
+            <instance>mtkEm1</instance>
+            <instance>mtkRcs1</instance>
+            <instance>mtkRsu1</instance>
+            <instance>mtkSe1</instance>
+            <instance>mtkSlot1</instance>
+            <instance>mtkSmartRatSwitch1</instance>
+        </interface>
+        <fqname>@3.0::IMtkRadioEx/imsSlot1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkAssist1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkCap1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkEm1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkRcs1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkRsu1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkSe1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkSlot1</fqname>
+        <fqname>@3.0::IMtkRadioEx/mtkSmartRatSwitch1</fqname>
+    </hal>
+    <hal format="hidl" override="true">
+        <name>vendor.mediatek.hardware.radio_op</name>
+        <transport>hwbinder</transport>
+        <version>3.0</version>
+        <interface>
+            <name>IRadioOp</name>
+            <instance>OpImsRILd1</instance>
+            <instance>slot1</instance>
+        </interface>
+        <fqname>@3.0::IRadioOp/OpImsRILd1</fqname>
+        <fqname>@3.0::IRadioOp/slot1</fqname>
+    </hal>
+</manifest>
