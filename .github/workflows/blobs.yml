@@ -17,6 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - module: "Galaxy A15 4G (a155m)"
+            device: "a155m"
+            firmware: "SM-A155M/ZTO/356123456789012"
           - module: "Galaxy A17 5G (a17xxx)"
             device: "a17xxx"
             firmware: "SM-A176B/INS/350042791234568"
