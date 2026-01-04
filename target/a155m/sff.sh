@@ -17,8 +17,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import_vendor_file "lib64/android.hardware.nfc@1.0.so"
-import_vendor_file "lib64/android.hardware.nfc@1.1.so"
-import_vendor_file "lib64/android.hardware.nfc@1.2.so"
-import_vendor_file "lib64/vendor.samsung.hardware.nfc@2.0.so"
-import_vendor_file "lib64/nfc_nci_nxpsn.so"
+# SEC Floating Feature configuration file for Galaxy A15 4G (a155m)
+
+# Enable high refresh rate (90Hz) support
+SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=2
+
+# Enable extra brightness feature (Vision Booster support)
+SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS=TRUE
+
+# Enable virtual proximity sensor if applicable (Common on A series)
+SEC_FLOATING_FEATURE_SENSOR_SUPPORT_VIRTUAL_PROXIMITY=TRUE
+
+# Gallery AI features (Remaster/Eraser)
+SEC_FLOATING_FEATURE_SAIV_CONFIG_AI_REVITAL_VERSION=1.7,1
