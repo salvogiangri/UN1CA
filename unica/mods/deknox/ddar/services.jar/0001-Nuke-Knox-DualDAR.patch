@@ -30478,7 +30478,7 @@ index 68b39d716..29030c236 100644
 -    goto :goto_0
 -
 -    :cond_4
--    const-string/jumbo p1, "onPassword2Auth completed sucessfully"
+-    const-string/jumbo p1, "onPassword2Auth completed successfully"
 -
 -    invoke-static {v0, p1}, Landroid/util/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
