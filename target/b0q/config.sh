@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Device configuration file for Galaxy S22 Ultra 5G (Qualcomm) (b0q)
-TARGET_NAME="Galaxy S22 Ultra 5G (Qualcomm)"
+# Device configuration file for Galaxy S22 Ultra (Qualcomm) (b0q)
+TARGET_NAME="Galaxy S22 Ultra (Qualcomm)"
 TARGET_CODENAME="b0q"
 TARGET_PLATFORM="sm8450"
 TARGET_FIRMWARE="SM-S908E/INS/350272251234564"
