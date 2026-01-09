@@ -16,7 +16,7 @@
 #
 
 # Device configuration file for Galaxy S22 (Qualcomm) (r0q)
-TARGET_NAME="Galaxy S22 5G (Qualcomm)"
+TARGET_NAME="Galaxy S22 (Qualcomm)"
 TARGET_CODENAME="r0q"
 TARGET_PLATFORM="sm8450"
 TARGET_FIRMWARE="SM-S901E/INS/350999641234561"
