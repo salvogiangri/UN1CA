@@ -80,7 +80,7 @@ index 53068a016..c1c3450dc 100644
 -
 -    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
 -
--    const v2, 0x1040f8f
+-    const v2, 0x1040f97
 -
 -    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
 -

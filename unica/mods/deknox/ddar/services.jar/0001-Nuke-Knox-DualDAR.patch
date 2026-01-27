@@ -1370,7 +1370,7 @@ index 5fd472f46..b879c75ba 100644
 +    :cond_d
 +    iget-object v5, v1, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
  
-     const v12, 0x1040902
+     const v12, 0x104090a
  
 -    invoke-virtual {v6, v12}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 +    invoke-virtual {v5, v12}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -28807,7 +28807,7 @@ index 2f77f62ca..000000000
 -
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x104107c
+-    const v0, 0x1041084
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -28818,7 +28818,7 @@ index 2f77f62ca..000000000
 -    :pswitch_0
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x1040cb2
+-    const v0, 0x1040cba
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -28829,7 +28829,7 @@ index 2f77f62ca..000000000
 -    :pswitch_1
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x1040cc3
+-    const v0, 0x1040ccb
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -28840,7 +28840,7 @@ index 2f77f62ca..000000000
 -    :pswitch_2
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x1040cb6
+-    const v0, 0x1040cbe
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -28851,7 +28851,7 @@ index 2f77f62ca..000000000
 -    :pswitch_3
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x1040cc5
+-    const v0, 0x1040ccd
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -
@@ -28862,7 +28862,7 @@ index 2f77f62ca..000000000
 -    :pswitch_4
 -    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mContext:Landroid/content/Context;
 -
--    const v0, 0x104107d
+-    const v0, 0x1041085
 -
 -    invoke-virtual {p0, v0}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 -

@@ -683,8 +683,8 @@ index c50ee3767..59fd3dd1f 100644
  
      iget-object v0, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v3, 0x1040da6
-+    const v1, 0x1040da6
+-    const v3, 0x1040dae
++    const v1, 0x1040dae
  
 -    invoke-virtual {v0, v3}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 +    invoke-virtual {v0, v1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
@@ -700,8 +700,8 @@ index c50ee3767..59fd3dd1f 100644
 -    iget-object v3, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +    iget-object v1, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v4, 0x1040da5
-+    const v2, 0x1040da5
+-    const v4, 0x1040dad
++    const v2, 0x1040dad
  
      filled-new-array {v0}, [Ljava/lang/Object;
  
@@ -718,8 +718,8 @@ index c50ee3767..59fd3dd1f 100644
 -    iget-object v3, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
 +    iget-object v1, p0, Lcom/android/server/accessibility/AccessibilityManagerService;->mContext:Landroid/content/Context;
  
--    const v4, 0x1040da4
-+    const v2, 0x1040da4
+-    const v4, 0x1040dac
++    const v2, 0x1040dac
  
      filled-new-array {v0}, [Ljava/lang/Object;
  
