@@ -1,4 +1,4 @@
-From 604084d1768a6b20cc3faead94cbe4495b9ab5c1 Mon Sep 17 00:00:00 2001
+From 1fc6def2ee2be7eb6c55ccced3891f715b67b919 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 30 Aug 2025 13:18:53 +0200
 Subject: [PATCH] Nuke Knox DualDAR
@@ -158,7 +158,7 @@ UN1CA: this patch is not complete! Please check unica/mods/deknox/customize.sh f
  delete mode 100644 smali_classes2/vendor/samsung/hardware/tlc/ddar/ISehDdar.smali
 
 diff --git a/smali/com/android/server/am/ActivityManagerService.smali b/smali/com/android/server/am/ActivityManagerService.smali
-index 5fd472f46..b879c75ba 100644
+index 6ab57942f..554f77a5e 100644
 --- a/smali/com/android/server/am/ActivityManagerService.smali
 +++ b/smali/com/android/server/am/ActivityManagerService.smali
 @@ -32957,88 +32957,88 @@
@@ -5187,7 +5187,7 @@ index 174dffdb7..0d679da87 100644
  
      :goto_8
 diff --git a/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali b/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
-index 6798bf57a..afdd74077 100644
+index b1dde7dc7..94df90951 100644
 --- a/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
 +++ b/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
 @@ -4902,20 +4902,16 @@
@@ -6008,7 +6008,7 @@ index 6798bf57a..afdd74077 100644
  
      return-void
  .end method
-@@ -46292,524 +46011,312 @@
+@@ -46205,524 +45924,312 @@
  .end method
  
  .method public final onCreateAndProvisionManagedProfileStarted(Landroid/app/admin/ManagedProfileProvisioningParams;)V
@@ -6693,7 +6693,7 @@ index 6798bf57a..afdd74077 100644
  .end method
  
  .method public final onLockSettingsReady()V
-@@ -47218,540 +46725,35 @@
+@@ -47131,540 +46638,35 @@
      throw p0
  .end method
  
@@ -7244,7 +7244,7 @@ index 6798bf57a..afdd74077 100644
  .end method
  
  .method public final onShellCommand(Ljava/io/FileDescriptor;Ljava/io/FileDescriptor;Ljava/io/FileDescriptor;[Ljava/lang/String;Landroid/os/ShellCallback;Landroid/os/ResultReceiver;)V
-@@ -48328,7 +47330,9 @@
+@@ -48241,7 +47243,9 @@
  
      invoke-virtual {p0, v5, v1}, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->setDemoDeviceStateUnchecked(IZ)V
  
@@ -7255,7 +7255,7 @@ index 6798bf57a..afdd74077 100644
  
      invoke-virtual {p1}, Landroid/app/admin/FullyManagedDeviceProvisioningParams;->isLeaveAllSystemAppsEnabled()Z
  
-@@ -49771,7 +48775,7 @@
+@@ -49684,7 +48688,7 @@
  .end method
  
  .method public final removeNonRequiredAppsForManagedDevice(ILandroid/content/ComponentName;Z)Z
@@ -7264,7 +7264,7 @@ index 6798bf57a..afdd74077 100644
  
      if-eqz p3, :cond_0
  
-@@ -49853,43 +48857,8 @@
+@@ -49766,43 +48770,8 @@
      :cond_3
      iget-object p3, p0, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mInjector:Lcom/android/server/devicepolicy/DevicePolicyManagerService$Injector;
  
@@ -7308,7 +7308,7 @@ index 6798bf57a..afdd74077 100644
      :try_start_0
      iget-object p3, p0, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mInjector:Lcom/android/server/devicepolicy/DevicePolicyManagerService$Injector;
  
-@@ -49928,7 +48897,7 @@
+@@ -49841,7 +48810,7 @@
  
      move-result v2
  
@@ -7317,7 +7317,7 @@ index 6798bf57a..afdd74077 100644
  
      invoke-interface {p2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
  
-@@ -49968,7 +48937,7 @@
+@@ -49881,7 +48850,7 @@
  
      goto :goto_3
  
@@ -7326,7 +7326,7 @@ index 6798bf57a..afdd74077 100644
      const-string/jumbo p0, "Waiting for non required apps to be deleted"
  
      invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -49986,11 +48955,11 @@
+@@ -49899,11 +48868,11 @@
  
      move-result p1
  
@@ -7340,7 +7340,7 @@ index 6798bf57a..afdd74077 100644
  
      const-string p1, "All non-required system apps with launcher icon, and all disallowed apps have been uninstalled."
  
-@@ -50003,7 +48972,7 @@
+@@ -49916,7 +48885,7 @@
  
      goto :goto_5
  
@@ -7349,7 +7349,7 @@ index 6798bf57a..afdd74077 100644
      :goto_4
      iget-boolean p0, p3, Lcom/android/server/devicepolicy/NonRequiredPackageDeleteObserver;->mFailed:Z
  
-@@ -50011,7 +48980,7 @@
+@@ -49924,7 +48893,7 @@
  
      goto :goto_6
  
@@ -7358,7 +7358,7 @@ index 6798bf57a..afdd74077 100644
      const-string/jumbo p1, "Waiting time elapsed before all package deletion finished"
  
      invoke-static {v1, p1}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -52444,30 +51413,6 @@
+@@ -52357,30 +51326,6 @@
  
      invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
  
@@ -8229,7 +8229,7 @@ index 4d038fa4f..e7d71cd3a 100644
 +    return p0
  .end method
 diff --git a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-index a8e02ef66..fdfedca73 100644
+index 8d063c6d2..45050cae6 100644
 --- a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
 +++ b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
 @@ -4445,89 +4445,75 @@
@@ -28763,7 +28763,7 @@ index 64f279f84..167171845 100644
      .end packed-switch
 diff --git a/smali/com/android/server/locksettings/LockSettingsService$$ExternalSyntheticLambda8.smali b/smali/com/android/server/locksettings/LockSettingsService$$ExternalSyntheticLambda8.smali
 deleted file mode 100644
-index 2f77f62ca..000000000
+index 7f2ee79aa..000000000
 --- a/smali/com/android/server/locksettings/LockSettingsService$$ExternalSyntheticLambda8.smali
 +++ /dev/null
 @@ -1,114 +0,0 @@
@@ -32083,7 +32083,7 @@ index 417d8513a..a4aa74c41 100644
  
      invoke-virtual {p0, p1}, Lcom/android/server/locksettings/LockSettingsStorage;->removeUser(I)V
 diff --git a/smali/com/android/server/locksettings/LockSettingsService.smali b/smali/com/android/server/locksettings/LockSettingsService.smali
-index d40038499..871ba4648 100644
+index 92d10eb6f..858f46258 100644
 --- a/smali/com/android/server/locksettings/LockSettingsService.smali
 +++ b/smali/com/android/server/locksettings/LockSettingsService.smali
 @@ -38,11 +38,11 @@
@@ -41356,7 +41356,7 @@ index dffa32888..ae9d1855d 100644
  .end method
  
 diff --git a/smali_classes2/com/android/server/pm/PersonaManagerService$2.smali b/smali_classes2/com/android/server/pm/PersonaManagerService$2.smali
-index aed628364..edee41442 100644
+index 7d7cdedff..a16384673 100644
 --- a/smali_classes2/com/android/server/pm/PersonaManagerService$2.smali
 +++ b/smali_classes2/com/android/server/pm/PersonaManagerService$2.smali
 @@ -1816,7 +1816,7 @@
@@ -42902,7 +42902,7 @@ index dc198ae8e..01a829d7e 100644
      .locals 1
  
 diff --git a/smali_classes2/com/android/server/pm/UserManagerService.smali b/smali_classes2/com/android/server/pm/UserManagerService.smali
-index a92241e28..0778d27b8 100644
+index 7362c5d9a..ffb261519 100644
 --- a/smali_classes2/com/android/server/pm/UserManagerService.smali
 +++ b/smali_classes2/com/android/server/pm/UserManagerService.smali
 @@ -2911,45 +2911,6 @@
@@ -47706,5 +47706,5 @@ index 0c4e82415..000000000
 -    return-void
 -.end method
 -- 
-2.51.1
+2.52.0
 

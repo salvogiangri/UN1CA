@@ -1,4 +1,4 @@
-From 49e5e377669c29a11b6c759f5417ef64c68c8b6c Mon Sep 17 00:00:00 2001
+From 166371261b0cb5e34ca46e7c48bbe2a22a1192d3 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 30 Aug 2025 15:50:08 +0200
 Subject: [PATCH] Disable HW mDNIe
@@ -12,7 +12,7 @@ Subject: [PATCH] Disable HW mDNIe
  5 files changed, 203 insertions(+), 946 deletions(-)
 
 diff --git a/smali/com/android/server/accessibility/AccessibilityManagerService$2.smali b/smali/com/android/server/accessibility/AccessibilityManagerService$2.smali
-index efc6008f7..59a0caa69 100644
+index 9df614efb..64fd0f8d9 100644
 --- a/smali/com/android/server/accessibility/AccessibilityManagerService$2.smali
 +++ b/smali/com/android/server/accessibility/AccessibilityManagerService$2.smali
 @@ -79,28 +79,14 @@
@@ -448,7 +448,7 @@ index efc6008f7..59a0caa69 100644
      return-void
  
 diff --git a/smali/com/android/server/accessibility/AccessibilityManagerService$AODStateContentObserver.smali b/smali/com/android/server/accessibility/AccessibilityManagerService$AODStateContentObserver.smali
-index c132f25ed..bfab60bff 100644
+index dc3577349..cae820ce4 100644
 --- a/smali/com/android/server/accessibility/AccessibilityManagerService$AODStateContentObserver.smali
 +++ b/smali/com/android/server/accessibility/AccessibilityManagerService$AODStateContentObserver.smali
 @@ -83,7 +83,7 @@
@@ -540,7 +540,7 @@ index c132f25ed..bfab60bff 100644
  
      :pswitch_3
 diff --git a/smali/com/android/server/accessibility/AccessibilityManagerService.smali b/smali/com/android/server/accessibility/AccessibilityManagerService.smali
-index c50ee3767..59fd3dd1f 100644
+index 6130fdcbb..f9c139a51 100644
 --- a/smali/com/android/server/accessibility/AccessibilityManagerService.smali
 +++ b/smali/com/android/server/accessibility/AccessibilityManagerService.smali
 @@ -1026,100 +1026,6 @@
@@ -892,7 +892,7 @@ index c50ee3767..59fd3dd1f 100644
  .end method
  
 diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-index 6af0ec708..a5d488f0e 100644
+index ea58c4118..1fdf59d40 100644
 --- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 +++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 @@ -36,8 +36,6 @@
@@ -1449,7 +1449,7 @@ index 6af0ec708..a5d488f0e 100644
      const/4 p0, 0x0
  
 diff --git a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
-index 9bf7e32d5..854481d2b 100644
+index d7d0a3b9b..3b579d913 100644
 --- a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
 +++ b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
 @@ -27517,60 +27517,51 @@
@@ -1755,5 +1755,5 @@ index 9bf7e32d5..854481d2b 100644
  
  .method public final setScreenOffOnHomeLongPressState(Z)I
 -- 
-2.51.0
+2.52.0
 
