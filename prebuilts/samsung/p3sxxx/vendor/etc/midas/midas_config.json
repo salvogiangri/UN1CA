@@ -1,0 +1,1331 @@
+{
+  "version": "3.1.1",
+  "device_types": "flagships, innovative",
+  "description": "Configurations file for Midas PhotoRemaster IPs",
+  "comment": "Midas Lite v100",
+  "dnn_models_path": "/vendor/etc/midas/",
+  "device_property": "ro.product.device",
+  "chipset_property": "ril.modem.chipset",
+  "midasSR_devices" : [
+    "e1q", "e2q", "e3q", "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+    "e1s", "e2s", "r12s", "SCG30",
+    "q6q", "q6aq", "b6q", "v6q", "e6q", "SC-54E", "SC-55E", "SCG28", "SCG29",
+    "gts10p", "gts10pwifi", "gts10u", "gts10uwifi",
+    "a55x", "SC-53E", "SCG27", "a56x",
+    "m53x", "a34x", "a35x", "m54x", "a53x", "a33x", "a73xq", "gts10fe", "gts10fep", "a54x", "m44x",
+    "gtact5pro", "gtact5prowifi",
+    "p3q", "t2q", "o1q", "t2s", "p3s", "o1s", "r9s",
+    "m33x", "SC-53C", "SCG15", "SM-A536D", "m34x",
+    "dm1q", "dm2q", "dm3q",
+    "SC-51D", "SC-52D", "SCG19", "SCG20",
+    "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+    "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+    "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23",
+    "r0q", "g0q", "b0q", "r11q", "SCG24",
+    "gts8", "gts8p", "gts8u", "gts8wifi", "gts8pwifi", "gts8uwifi",
+    "SC-51C", "SC-52C", "SCG13", "SCG14", "SGH-N086", "SGH-N244", "KBZ", "MEY",
+    "q4q", "b4q", "e4q", "v4q",
+    "SC-54C", "SC-55C", "SCG17", "SCG16",
+    "q2q", "b2q", "v2q"
+  ],
+  "midasMoire950_devices":[
+	"pa1q", "pa2q", "pa3q",
+    "e1q", "e2q", "e3q", "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+    "q6q", "q6aq", "b6q", "v6q", "e6q", "SC-54E", "SC-55E", "SCG28", "SCG29",
+    "e1s", "e2s", "r12s", "SCG30",
+    "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+  ],
+  "enhancements": [
+    {
+      "type": "deblur",
+      "inference_dim": [
+        768,
+        768
+      ],
+      "nChannel": 12,      
+      "dnn_model_info": [
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q",
+                "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
+          "compatible_models": [
+            {
+              "id": "LSI",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_INT16_root_eden611.nnc"
+              ],
+              "models_list": [
+                "e1s", "e2s", "r12s", "SCG30"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "QASYMM16"
+        },
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "2.2.4",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_sm8750_snpe224.dlc"
+              ],
+              "models_list": [
+                "pa1q", "pa2q", "pa3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_INT16_sm8550_snpe231.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            },
+            {
+              "id": "2.10.6",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_sm8450_snpe210.dlc"
+              ],
+              "models_list": [
+                "gts8", "gts8p", "gts8u", "gts8wifi", "gts8pwifi", "gts8uwifi",
+                "r0q", "g0q", "b0q", "r11q", "SCG24",
+                "SC-51C", "SC-52C", "SCG13", "SCG14", "SGH-N086", "SGH-N244", "KBZ", "MEY",
+                "q4q", "b4q", "e4q", "v4q",
+                "SC-54C", "SC-55C", "SCG17", "SCG16", "SM-F721C", "SM-F721D", "SM-F936D", "SM-F721J", "SM-F936J"
+              ]
+            },
+            {
+              "id": "1.50.2",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_INT16_V0132_sm8350_snpe1502.dlc"
+              ],
+              "models_list": [
+                
+              ]
+            },
+            {
+              "id": "1.50.2",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_INT16_V0132_sm7325_snpe1502.dlc"
+              ],
+              "models_list": [
+                
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "QASYMM16"
+        },
+        {
+          "version": "132",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
+          "compatible_models": [
+            {
+              "id": "olympus",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_INT16_V0132_olympus_eden167.nnc"
+              ],
+              "models_list": [
+                
+              ]
+            },
+            {
+              "id": "pamir",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_INT16_V0132_parmir_eden411.nnc"
+              ],
+              "models_list": [
+                
+              ]
+            },
+            {
+              "id": "rose",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_INT16_rose.nnc"
+              ],
+              "models_list": [
+                "a55x", "SC-53E", "SCG27"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "140",
+          "input_node": ["input"],
+          "output_node": ["output_192"],
+          "compatible_models": [
+            {
+              "id": "mtk504",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            },
+            {
+              "id": "mtk705",
+              "model_file": [
+                "SRIBMidas_aiDEBLUR_V140_FP16_mtk705.dla"
+              ],
+              "models_list": [
+                "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["input.13"],
+          "output_node": ["116"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIBMidas_aiDEBLUR_V140_FP32.tflite"
+            ],
+            "models_list": [
+            ]
+          }
+        ],
+        "compute_unit": "GPU",
+        "model_format": "SNAPLITE",
+        "exec_type": "FLOAT16"
+        }
+      ]
+    },
+    {
+      "type": "hdr",
+      "inference_dim": [
+        512,
+        512
+      ],
+      "nChannel": 12,
+      "dnn_model_info": [
+        {
+          "version": "650",
+          "input_node": ["serving_default_input:0"],
+          "output_node": ["StatefulPartitionedCall:0"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIBMidas_aiHDR_V650_FP16_eden611.nnc"
+            ],
+            "models_list": [
+              "e1s", "e2s", "r12s", "SCG30"
+            ]
+          }
+        ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "600",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiHDR_V600_FP16_sm8550_snpe231.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            },
+            {
+              "id": "1.50.2",
+              "model_file": [
+                "SRIBMidas_aiHDR_Global_INT16_V430_sm7325_snpe1502.dlc",
+                "SRIBMidas_aiHDR_Local_INT16_V430_sm7325_snpe1502.dlc"
+              ],
+              "models_list": [
+                "a73xq", "a52sxq", "m52xq", "gts7fewifi", "xcoverpro2", "gtact4pro", "gtact4prowifi"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "QASYMM8"
+        },
+        {
+          "version": "430",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "olympus",
+              "model_file": [
+                "SRIBMidas_aiHDR_Global_INT16_V430_1024_olympus_eden167.nnc",
+                "SRIBMidas_aiHDR_Local_INT16_V430_1024_olympus_eden167.nnc"
+              ],
+              "models_list": [
+                "t2s", "p3s", "o1s", "r9s",
+                "a33x", "a53x", "m33x", "SC-53C", "SCG15", "SM-A536D", "m34x"
+              ]
+            },
+            {
+              "id": "pamir",
+              "model_file": [
+                "SRIBMidas_aiHDR_Global_INT16_V430_1024_parmir_eden411.nnc",
+                "SRIBMidas_aiHDR_Local_INT16_V430_1024_parmir_eden411.nnc"
+              ],
+              "models_list": [
+                "r0s", "g0s", "b0s", "r11s"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "430",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "mtk",
+              "model_file": [
+                "SRIBMidas_aiHDR_Global_V430_1024_FP16_mtk02.dla",
+                "SRIBMidas_aiHDR_Local_V430_1024_FP16_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIB_aiHDR_Global_V430_1024.caffemodel",
+              "SRIB_aiHDR_Local_V430_1024.caffemodel"
+            ],
+            "models_list": [
+            ]
+          }
+        ],
+          "compute_unit": "GPU",
+          "model_format": "CAFFE",
+          "exec_type": "FLOAT16"
+        }
+      ]
+    },
+    {
+      "type": "camera-demoire",
+      "inference_dim": [
+        512,
+        512
+      ],
+      "nChannel": 12,      
+      "dnn_model_info": [
+        {
+          "version": "100",
+          "input_node": ["input_layer","input_layer"],
+          "output_node": ["output_layer","output_layer"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiCAMERADEMOIRE_Coarse_V100_FP16_sm8550_snpe231.dlc",
+                "SRIBMidas_aiCAMERADEMOIRE_Fine_V100_FP16_sm8550_snpe231.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            }
+        ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["input_layer","input_layer"],
+          "output_node": ["output_layer","output_layer"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIBMidas_aiCAMERADEMOIRE_Coarse_V100_FP32.caffemodel",
+              "SRIBMidas_aiCAMERADEMOIRE_Fine_V100_FP32.caffemodel"
+            ],
+            "models_list": [
+            ]
+          }
+        ],
+          "compute_unit": "GPU",
+          "model_format": "CAFFE",
+          "exec_type": "FLOAT32"
+        }
+      ]
+    },
+    {
+      "type": "moire",
+      "inference_dim": [
+        512,
+        512
+      ],
+      "nChannel": 12,
+      "dnn_model_info": [
+        {
+          "version": "950",
+          "input_node": ["input_layer", "input_layer", "input_layer", "input_layer", "input_layer"],
+          "output_node": ["output_layer", "output_layer", "output_layer", "output_layer", "output_layer"],
+          "compatible_models": [
+            {
+              "id": "dlc",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V950_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V950_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiMOIREREMOVE_Coarse2_V950_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiMOIREREMOVE_Fine2_V950_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiMOIREREMOVE_Comb_V950_FP16_sm8750_snpe224.dlc"
+              ],
+              "models_list": [
+			          "pa1q", "pa2q", "pa3q"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "950",
+          "input_node": ["input_layer", "input_layer", "input_layer", "input_layer", "input_layer"],
+          "output_node": ["output_layer", "output_layer", "output_layer", "output_layer", "output_layer"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V950_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V950_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiMOIREREMOVE_Coarse2_V950_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiMOIREREMOVE_Fine2_V950_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiMOIREREMOVE_Comb_V950_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q",
+                "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "950",
+          "input_node":  ["data", "input", "input", "input", "input"],
+          "output_node": ["output_179", "output_186", "output_179", "output_187", "output_6"],
+          "compatible_models": [
+            {
+              "id": "LSI",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V950_FP16_root_eden611.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V950_INT16_root_eden611.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Coarse2_V950_FP16_root_eden611.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine2_V950_FP16_root_eden611.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Comb_V950_FP16_root_eden611.nnc"
+              ],
+              "models_list": [
+                "e1s", "e2s", "r12s", "SCG30"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "950",
+          "input_node":  ["data", "input", "input", "input", "input"],
+          "output_node": ["output_179", "output_186", "output_179", "output_187", "output_6"],
+          "compatible_models": [
+            {
+              "id": "MTK",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V950_mtk705.dla",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V950_mtk705.dla",
+                "SRIBMidas_aiMOIREREMOVE_Coarse2_V950_mtk705.dla",
+                "SRIBMidas_aiMOIREREMOVE_Fine2_V950_mtk705.dla",
+                "SRIBMidas_aiMOIREREMOVE_Comb_V950_mtk705.dla"
+              ],
+              "models_list": [
+                "gts10p", "gts10p", "gts10u", "gts10uwifi"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "900",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_sm8550_snpe231.dlc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_sm8550_snpe231.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            },
+            {
+            "id": "2.10.6",
+            "model_file": [
+              "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_sm8450_snpe210.dlc",
+              "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_sm8450_snpe210.dlc"
+            ],
+            "models_list": [              
+              "r0q", "g0q", "b0q", "r11q", "SCG24",
+              "gts8", "gts8p", "gts8u", "gts8wifi", "gts8pwifi", "gts8uwifi",
+              "SC-51C", "SC-52C", "SCG13", "SCG14", "SGH-N086", "SGH-N244", "KBZ", "MEY",
+              "q4q", "b4q", "e4q", "v4q",
+              "SC-54C", "SC-55C", "SCG17", "SCG16", "SM-F721C", "SM-F721D", "SM-F936D", "SM-F721J", "SM-F936J"
+            ]
+          }
+        ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "132",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
+          "compatible_models": [
+            {
+              "id": "mtk",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_mtk02.dla",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "900",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "rose",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_INT16_rose.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_INT16_rose.nnc"
+              ],
+              "models_list": [
+                "a55x", "SC-53E", "SCG27"
+              ]
+            },
+            {
+              "id": "pamir",
+              "model_file": [
+                "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP16_pamir_eden411.nnc",
+                "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP16_pamir_eden411.nnc"
+              ],
+              "models_list": [
+                "r0s", "g0s", "b0s", "r11s"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "QASYMM16"
+        },
+        {
+          "version": "default",
+          "input_node": ["input","input"],
+          "output_node": ["output_179","output"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIBMidas_aiMOIREREMOVE_Coarse_V900_FP32.caffemodel",
+              "SRIBMidas_aiMOIREREMOVE_Fine_V900_FP32.caffemodel"
+            ],
+            "models_list": [
+            ]
+          }
+        ],
+          "compute_unit": "GPU",
+          "model_format": "CAFFE",
+          "exec_type": "FLOAT16"
+        }
+      ]
+    },
+    {
+      "type": "clarity",
+      "inference_dim": [
+        256,
+        256
+      ],
+      "nChannel": 12,      
+      "dnn_model_info": [
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_FP16_sm8650_qnn2143.tvm.so"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q",
+                "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "snpe224",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_FP16_sm8750_snpe224.dlc"
+              ],
+              "models_list": [
+                "pa1q", "pa2q", "pa3q"
+              ]
+            },
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_FP16_sm8550_snpe231.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            },
+            {
+              "id": "2.10.6",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_FP16_sm8450_snpe210.dlc"
+              ],
+              "models_list": [
+                "r0q", "g0q", "b0q", "r11q", "SCG24",
+                "gts8", "gts8p", "gts8u", "gts8wifi", "gts8pwifi", "gts8uwifi",
+                "SC-51C", "SC-52C", "SCG13", "SCG14", "SGH-N086", "SGH-N244", "KBZ", "MEY",
+                "q4q", "b4q", "e4q", "v4q",
+                "SC-54C", "SC-55C", "SCG17", "SCG16", "SM-F721C", "SM-F721D", "SM-F936D", "SM-F721J", "SM-F936J"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "eureka",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_FP16_eden511.nnc"
+              ],
+              "models_list": [
+                "e1s", "e2s", "r12s", "SCG30"
+              ]
+            },
+            {
+              "id": "rose",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_INT16_rose.nnc"
+              ],
+              "models_list": [
+                "a55x", "SC-53E", "SCG27"
+              ]
+            },
+            {
+              "id": "pamir",
+              "model_file": [
+                "SRIBMidas_aiCLARITY_2X_V200_FP16_pamir_eden411.nnc"
+              ],
+              "models_list": [
+                "r0s", "g0s", "b0s", "r11s"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "mtk504",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            },
+            {
+              "id": "mtk705",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_mtk705.dla"
+              ],
+              "models_list": [
+                "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            {
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMidas_aiCLARITY2.0_2X_V200_FP32.caffemodel"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "compute_unit": "GPU",
+          "model_format": "CAFFE",
+          "exec_type": "FLOAT16"
+        }
+      ]
+    },
+    {
+      "type": "upscale",
+      "inference_dim": [
+        256,
+        256
+      ],
+      "nChannel": 12,      
+      "dnn_model_info": [
+        {
+          "version": "200",
+          "input_node": ["x.1","input","input","input"],
+          "output_node": ["1966","output","output","output"],
+          "compatible_models": [
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_root_eden611.nnc",
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_root_eden611.nnc",
+                "SRIBMidas_aiUPSCALER_3X_V210_INT16_root_eden611.nnc",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_root_eden611.nnc"
+              ],
+              "models_list": [
+                "e1s", "e2s", "r12s", "SCG30"
+              ]
+            },
+            {
+              "id": "rose",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V210_FP16_rose.nnc",
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_rose.nnc",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_rose.nnc",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_rose.nnc"
+              ],
+              "models_list": [
+                "a55x", "SC-53E", "SCG27"
+              ]
+            }
+          ],
+          "residual_value": 0.7,
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input","input","input.122","input"],
+          "output_node": ["output","output","908","output"],
+          "compatible_models": [
+            {
+              "id": "lite",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_root_eden611.nnc",
+                "SRIBMidas_aiUPSCALER_2X_V270_FP16_pamir_eden681.nnc",
+                "SRIBMidas_aiUPSCALER_3X_V270_INT8.tflite",
+                "SRIBMidas_aiUPSCALER_4X_V270_FP16_pamir_eden681.nnc"
+              ],
+              "models_list": [
+                "r0s", "g0s", "b0s", "r11s"
+              ]
+            }
+          ],
+          "residual_value": 0.7,
+          "compute_unit": ["NPU", "NPU", "GPU", "NPU"],
+          "model_format": ["EDEN", "EDEN", "SNAPLITE", "EDEN"],
+          "exec_type": ["FLOAT16", "FLOAT16", "QASYMM8", "FLOAT16"]
+        },
+        {
+          "version": "lite",
+          "input_node": ["input","x.1","x.1","x.1"],
+          "output_node": ["output","451","456","451"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V270_FP16_sm8550_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_2X_LITE_V100_FP16_sm8550_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_3X_LITE_V100_FP16_sm8550_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_4X_LITE_V100_FP16_sm8550_snpe210.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi",
+                "q5q", "b5q", "v5q", "e5q", "SC-54D", "SC-55D", "SCG22", "SCG23"
+              ]
+            },
+            {
+              "id": "2.10.6",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V270_FP16_sm8450_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_2X_LITE_V100_FP16_sm8450_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_3X_LITE_V100_FP16_sm8450_snpe210.dlc",
+                "SRIBMidas_aiUPSCALER_4X_LITE_V100_FP16_sm8450_snpe210.dlc"
+              ],
+              "models_list": [
+                "r0q", "g0q", "b0q", "r11q", "SCG24",
+                "gts8", "gts8p", "gts8u", "gts8wifi", "gts8pwifi", "gts8uwifi",
+                "SC-51C", "SC-52C", "SCG13", "SCG14", "SGH-N086", "SGH-N244", "KBZ", "MEY",
+                "q4q", "b4q", "e4q", "v4q",
+                "SC-54C", "SC-55C", "SCG17", "SCG16"
+              ]
+            },
+            {
+              "id": "2.24.0",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V270_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiUPSCALER_2X_LITE_V100_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiUPSCALER_3X_LITE_V100_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiUPSCALER_4X_LITE_V100_FP16_sm8750_snpe224.dlc"
+              ],
+              "models_list": [
+                "pa1q", "pa2q", "pa3q"
+              ]
+            },
+            {
+              "id": "TVM",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiUPSCALER_2X_LITE_V100_FP16_sm8650_snpe223.dlc",
+                "SRIBMidas_aiUPSCALER_3X_LITE_V100_FP16_sm8650_snpe223.dlc",
+                "SRIBMidas_aiUPSCALER_4X_LITE_V100_FP16_sm8650_snpe223.dlc"
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q",
+                "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "residual_value": 0.7,
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "200",
+          "input_node": ["input","input","input","input"],
+          "output_node": ["output","output","output","output"],
+          "compatible_models": [
+            {
+              "id": "mtk504",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V200_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_mtk02.dla",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_mtk02.dla"
+              ],
+              "models_list": [
+                "m53x", "a34x"
+              ]
+            },
+            {
+              "id": "mtk705",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_V210_FP16_mtk705.dla",
+                "SRIBMidas_aiUPSCALER_2X_V210_FP16_mtk705.dla",
+                "SRIBMidas_aiUPSCALER_3X_V210_FP16_mtk705.dla",
+                "SRIBMidas_aiUPSCALER_4X_V210_FP16_mtk705.dla"
+              ],
+              "models_list": [
+                "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+              ]
+            }
+          ],
+          "residual_value": 0.7,
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["x.1","x.1","x.1","x.1"],
+          "output_node": ["1938","451","456","451"],
+          "compatible_models": [
+            {
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_LITE_V100_INT8.tflite",
+                "SRIBMidas_aiUPSCALER_2X_LITE_V100_INT8.tflite",
+                "SRIBMidas_aiUPSCALER_3X_LITE_V100_INT8.tflite",
+                "SRIBMidas_aiUPSCALER_4X_LITE_V100_INT8.tflite"
+                
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "residual_value": 0.7,
+          "compute_unit": "GPU",
+          "model_format": "SNAPLITE",
+          "exec_type": "QASYMM8"
+        }
+      ]
+    },
+    {
+      "type": "upscale-pro",
+      "inference_dim": [
+        256,
+        256
+      ],
+      "nChannel": 12,      
+      "dnn_model_info": [
+        {
+          "version": "pro",
+          "input_node": ["input","input","input","input"],
+          "output_node": ["output","output","output","output"],
+          "compatible_models": [
+            {
+              "id": "snpe220",
+              "model_file": [
+                "SRIBMidas_aiUPSCALER_1X_PRO_V100_INT16_sm8650_snpe216.dlc",
+                "SRIBMidas_aiUPSCALER_2X_PRO_V100_INT16_sm8650_snpe216.dlc",
+                "SRIBMidas_aiUPSCALER_3X_PRO_V100_INT16_sm8650_snpe216.dlc",
+                "SRIBMidas_aiUPSCALER_4X_PRO_V100_INT16_sm8650_snpe216.dlc"
+              ],
+              "models_list": [
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "QASYMM16"
+        }
+      ]
+    },
+    {
+      "type": "face-restore",
+      "inference_dim": [
+        512,
+        512
+      ],
+      "nChannel": 7,
+      "dnn_model_info": [
+        {
+          "version": "1.0.0",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "2.3.1",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_sm8550_snpe210.dlc",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_sm8550_snpe210.dlc"
+              ],
+              "models_list": [
+                "dm1q", "dm2q", "dm3q", "q5q", "b5q",
+                "SC-51D", "SC-52D", "SCG19", "SCG20", "SM-S911D", "SM-S918D", "SM-S911J", "SM-S918J", "SM-S911C", "SM-S918Q",
+                "SGH-N795", "SGH-N667", "BNS", "GSY", "SM-S911C",
+                "gts9", "gts9wifi", "gts9p", "gts9pwifi", "gts9u", "gts9uwifi"
+              ]
+            },
+            {
+              "id": "2.2.4",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_sm8750_snpe224.dlc",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_sm8750_snpe224.dlc"
+              ],
+              "models_list": [
+               "pa1q", "pa2q", "pa3q"
+              ]
+            }
+        ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "tvm",
+          "input_node": ["1","1"],
+          "output_node": ["879","1040"],
+          "compatible_models": [
+            {
+              "id": "2.14.3",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_sm8650_qnn2143.tvm.so",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_sm8650_qnn2143.tvm.so"
+                
+              ],
+              "models_list": [
+                "e1q", "e2q", "e3q", "mu1q", "mu2q", "mu3q",
+                "SM-K758", "SM-K751", "SC-51E", "SC-52E", "SCG25", "SCG26",
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+        ],
+          "compute_unit": "DSP",
+          "model_format": "TVM",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "LSI",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "6.11.1",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_eden611.nnc",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_eden611.nnc"
+                
+              ],
+              "models_list": [
+                "e1s", "e2s", "r12s", "SCG30"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "EDEN",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "LSI",
+          "input_node": ["input","input"],
+          "output_node": ["output","output"],
+          "compatible_models": [
+            {
+              "id": "6.11.1",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP16_mtk705.dla",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP16_mtk705.dla"
+                
+              ],
+              "models_list": [
+                "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+              ]
+            }
+          ],
+          "compute_unit": "NPU",
+          "model_format": "MNP",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["argument_1.1","input.11"],
+          "output_node": ["879","1040"],
+          "compatible_models": [
+            {
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMidas_aiFACERESTORE_V200_FP32.tflite",
+                "SRIBMidas_aiFACESEMANTICS_V200_FP32.tflite"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "inference_type": "SNAP",
+          "compute_unit": "GPU",
+          "model_format": "SNAPLITE",
+          "exec_type": "FLOAT16"
+        }
+      ]
+    }
+  ],
+  "detection": [
+  {
+      "type": "noise-detect",
+      "inference_dim": [
+        1024,
+        1024
+      ],
+      "nChannel": 3,      
+      "dnn_model_info": [
+        {
+          "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output_154"],
+          "compatible_models": [
+            {
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMQA_aiNOISEDETECT_V100_FP32.tflite"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "inference_type": "TFLITE",
+          "compute_unit": "XNNPACK",
+          "model_format": "TENSORFLOWLITE",
+          "exec_type": "FLOAT32"
+        }
+      ]
+    },
+    {
+      "type": "blur-estimate",
+      "inference_dim": [
+        896,
+        896
+      ],
+      "nChannel": 3,
+      "dnn_model_info": [
+        {
+          "version": "default",
+          "input_node": ["x.1"],
+          "output_node": ["26"],
+          "compatible_models": [
+            {
+            "id": "adreno,amd",
+            "model_file": [
+              "SRIBMQA_aiBLURESTIMATE_V100_FP32.tflite"
+            ],
+            "models_list": [
+              ]
+            }
+          ],
+          "inference_type": "TFLITE",
+          "compute_unit": "XNNPACK",
+          "model_format": "TENSORFLOWLITE",
+          "exec_type": "FLOAT32"
+        }
+      ]
+    },
+    {
+      "type": "iqa-score",
+      "inference_dim": [
+        448,
+        448
+      ],
+      "nChannel": 3,
+      
+      "dnn_model_info": [
+        {
+          "version": "default",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            { 
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMQA_aiIQA_V100_FP32.tflite"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "inference_type": "TFLITE",
+          "compute_unit": "XNNPACK",
+          "model_format": "TENSORFLOWLITE",
+          "exec_type": "FLOAT32"
+        }
+      ]
+    },
+    {
+      "type": "FIQA",
+      "inference_dim": [
+        512,
+        512
+      ],
+      "nChannel": 3,
+      "dnn_model_info": [
+        {
+          "version": "sm8650",
+          "input_node": ["input"],
+          "output_node": ["output"],
+          "compatible_models": [
+            { 
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMQA_aiFiQA_V200_FP32_snpe2170.dlc"
+              ],
+              "models_list": [
+                "q6q", "q6aq", "b6q", "v6q", "e6q",
+                "SC-54E", "SC-55E", "SCG28", "SCG29"
+              ]
+            }
+          ],
+          "compute_unit": "DSP",
+          "model_format": "SNPE",
+          "exec_type": "FLOAT16"
+        },
+        {
+          "version": "default",
+          "input_node": ["serving_default_input:0"],
+          "output_node": ["StatefulPartitionedCall:0"],
+          "compatible_models": [
+            { 
+              "id": "adreno,amd",
+              "model_file": [
+                "SRIBMQA_aiFiQA_V100_FP32.tflite"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+          "inference_type": "TFLITE",
+          "compute_unit": "XNNPACK",
+          "model_format": "TENSORFLOWLITE",
+          "exec_type": "FLOAT32"
+        }
+      ]
+    },
+    {
+      "type": "moire-detect",
+      "inference_dim": [
+      256,
+      256
+    ],
+    "nChannel": 3,
+    "noOfModels": 1,
+    "input_node": ["input_1"],
+    "output_node": ["dense_2/Softmax"],
+      "dnn_model_info": [
+        {
+          "version": "default",
+          "compatible_models": [
+            { 
+              "id": "adreno,amd",
+              "model_file": [
+                "moire_detection/moire_detection.tflite"
+              ],
+              "models_list": [
+              ]
+            }
+          ],
+        "inference_type": "TFLITE",
+        "compute_unit": "XNNPACK",
+        "model_format": "TENSORFLOWLITE",
+        "exec_type": "FLOAT32"
+        }
+      ]
+    }
+  ]
+}

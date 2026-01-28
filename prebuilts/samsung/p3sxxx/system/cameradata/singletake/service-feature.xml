@@ -1,0 +1,64 @@
+<?xml version= "1.0" encoding= "UTF-8"?>
+<resources>
+    <!-- STP -->
+    <local name="PREVIEW_BUFFER_POOL_SIZE" value="10"  />
+    <local name="MASTER_BUFFER_POOL_SIZE" value="2"  />
+    <local name="SLAVE_BUFFER_POOL_SIZE" value="2"  />
+    <local name="CAPTURE_FRAME_GAP_THRESHOLD_NS" value="100000000"  />
+    <local name="SAFE_INTERNAL_STORAGE_REQUIRED_BYTES" value="536870912"  />
+    <local name="SAFE_OUTPUT_STORAGE_REQUIRED_BYTES" value="209715200"  />
+    <local name="WORST_CASE_OUTPUT_STORAGE_REQUIRED_BYTES" value="157286400"  />
+    <local name="FULL_MODE_MIN_INTERNAL_STORAGE_REQUIRED_BYTES" value="1073741824"  />
+    <local name="IDEAL_TIME_GAP_BETWEEN_CAPTURED_FRAMES_NS" value="400000000"  />
+
+    
+    <!-- Polarr Features -->
+    <local name="POLARR_SCENEKIT_LITE_MODE" value="false"  />
+    
+    <!-- ESTPP -->
+    <local name="SUPPORT_PET_DETECTION" value="true"  />
+    
+    <!-- STC -->
+    <local name="MAX_BEST_MOMENTS_FRONT_CAM" value="3"  />
+    <local name="MAX_BEST_MOMENTS_REAR_CAM" value="4"  />
+    <local name="RUN_STC_SCENE_DETECTOR" value="false"  />
+    
+    <local name="SUPPORT_SINGLE_BOKEH_PROCESSING" value="true"  />
+    <local name="SUPPORT_BEAUTY_PROCESSING" value="true"  />
+    <local name="SUPPORT_AI_FILTER" value="true"  />
+    <local name="SUPPORT_SMART_CROP" value="true"  />
+    <local name="SUPPORT_COLOR_PICKER" value="false" />
+    <local name="SUPPORT_FRONT_CAPTURE_FOV_CROP" enable="true" width="2944" height="2208"/>
+    <local name="SUPPORT_DISTORTION_CORRECTION" value="true" />
+    <local name="SUPPORT_USER_FILTERS" value="false"  />
+
+    <!-- ST2.0 features -->
+    <local name="SUPPORT_COLLAGE" value="true"  />
+    <local name="VIDEO_GENERATION_HIGHLIGHTS_VIDEO" value="true"  />
+    <local name="VIDEO_GENERATION_DYNAMIC_VIDEO" value="true"  />
+    <local name="VIDEO_GENERATION_HIDT_VIDEO" value="false"  />
+    <local name="PHOTO_MAPPER_VERSION" value="3"  />
+    <local name="VIDEO_MAPPER_VERSION" value="3"  />
+    
+    <!-- RAPID MOMENT -->
+    <local name="SUPPORT_RAPID_MOMENT" value="false"  />
+    
+    <!-- ST2.0 Enhancements in S-OS  -->
+    <local name="SUPPORT_GYRO_DEVICE_MOTION_INFO" value="true"  />
+    <local name="NEW_ACTIVITY_SELECTION" value="true"  />
+    
+    <!-- Video -->
+    <local name="VIDEO_FF_ENABLE" value="true"  />
+    <local name="VIDEO_FRONT_REVERSE_ENABLE" value="false"  />
+    <local name="VIDEO_REAR_REVERSE_ENABLE" value="true"  />
+    <local name="VIDEO_GENERATION_PARALLEL_ENABLE" value="true"  />
+    
+    <!-- ST3.0 features  -->
+    <local name="SUPPORT_HV_BASIC_REELS" value="true" />
+    
+    <!-- State Machine Feature -->
+    <local name="ABORT_POST_PROCESSING_FOR_EXTERNAL_EVENTS" value="true"  />
+		
+	<!-- CustomHV feature  -->    
+    <local name="ENABLE_HIGHLIGHT_VIDEO_CUSTOMIZATION" value="true"  />
+</resources>

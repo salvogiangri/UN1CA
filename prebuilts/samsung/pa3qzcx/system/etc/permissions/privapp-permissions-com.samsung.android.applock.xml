@@ -1,0 +1,17 @@
+<!--
+    This XML file declares which signature|privileged permissions should be granted to privileged
+    applications that come with the platform
+    -->
+<permissions>
+    <privapp-permissions package="com.samsung.android.applock">
+        <permission name="android.permission.STATUS_BAR"/>
+        <permission name="android.permission.SET_PROCESS_LIMIT"/>
+        <permission name="android.permission.REAL_GET_TASKS" />
+        <permission name="android.permission.MANAGE_USERS" />
+        <permission name="android.permission.ACCESS_NETWORK_STATE" />
+        <permission name="android.permission.FORCE_STOP_PACKAGES" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+        <permission name="android.permission.USE_FINGERPRINT" />
+        <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    </privapp-permissions>
+</permissions>
