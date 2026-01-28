@@ -1,0 +1,6 @@
+<manifest version="1.0" type="device">
+    <hal override="true" format="hidl">
+        <name>vendor.samsung_slsi.hardware.radio</name>
+        <transport>hwbinder</transport>
+    </hal>
+</manifest>

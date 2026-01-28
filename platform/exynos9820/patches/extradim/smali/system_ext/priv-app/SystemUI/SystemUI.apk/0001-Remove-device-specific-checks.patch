@@ -1,0 +1,43 @@
+From 7ecb4444e2352e60ae446967009f7bc8b214ad1c Mon Sep 17 00:00:00 2001
+From: Ocin4ever <85343782+Ocin4ever@users.noreply.github.com>
+Date: Wed, 7 May 2025 23:31:58 +0200
+Subject: [PATCH] Remove device specific checks
+
+
+diff --git a/smali_classes2/com/android/systemui/qs/tiles/ReduceBrightColorsTile.smali b/smali_classes2/com/android/systemui/qs/tiles/ReduceBrightColorsTile.smali
+index 3c3229fb0d..9dee0fd2fc 100644
+--- a/smali_classes2/com/android/systemui/qs/tiles/ReduceBrightColorsTile.smali
++++ b/smali_classes2/com/android/systemui/qs/tiles/ReduceBrightColorsTile.smali
+@@ -26,15 +26,7 @@
+ 
+     sput-object v0, Lcom/android/systemui/qs/tiles/ReduceBrightColorsTile;->excludeDeviceNameSet:Ljava/util/HashSet;
+ 
+-    const-string v1, "beyond"
+-
+-    invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+-
+-    const-string v1, "d1"
+-
+-    invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+-
+-    const-string v1, "d2"
++    const-string v1, "fck"
+ 
+     invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+ 
+@@ -392,11 +384,7 @@
+ 
+     move-result v0
+ 
+-    const-string/jumbo v2, "ro.surface_flinger.protected_contents"
+-
+-    invoke-static {v2, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    move-result v2
++    const/4 v2, 0x1
+ 
+     const/4 v3, 0x1
+ 
+-- 
+2.43.0
+
