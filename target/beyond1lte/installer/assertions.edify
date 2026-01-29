@@ -1,1 +1,0 @@
-verify_no_downgrade(getprop("ro.boot.bootloader"), "G991NKSSCHZA5") && getprop("ro.boot.rp") != "18" && abort("E3003: This package requires the \"G991NKSSCHZA5\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
