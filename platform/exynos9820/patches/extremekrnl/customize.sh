@@ -6,7 +6,7 @@ REPLACE_KERNEL_BINARIES()
     [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
     mkdir -p "$TMP_DIR"
 
-    ZIP_LINK="$EXTREMEKRNL_REPO/download/${TARGET_CODENAME}_UNOFFICIAL.zip"
+    ZIP_LINK="$EXTREMEKRNL_REPO/download/ksun/${TARGET_CODENAME}_UNOFFICIAL.zip"
 
     LOG "Downloading $(basename "$ZIP_LINK")"
     curl -L -s -o "$TMP_DIR/krnl.zip" "$ZIP_LINK"

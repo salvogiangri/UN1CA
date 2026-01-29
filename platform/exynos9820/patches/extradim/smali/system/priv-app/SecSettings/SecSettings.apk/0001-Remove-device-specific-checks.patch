@@ -21,7 +21,7 @@ index eb9ab6deca..845d490688 100644
 -    invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
 -
 -    const-string v1, "d2"
-+    const-string v1, "fck"
++    const-string v1, "no"
  
      invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
  
