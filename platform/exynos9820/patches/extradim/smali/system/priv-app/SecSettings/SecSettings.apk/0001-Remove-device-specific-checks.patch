@@ -1,11 +1,15 @@
-From e91d4b6774dc41fb26fd8152e4b583d7261d4780 Mon Sep 17 00:00:00 2001
+From e1c1b4ba1fd252cfccfcb81868e2c631b0c77b46 Mon Sep 17 00:00:00 2001
 From: Ocin4ever <85343782+Ocin4ever@users.noreply.github.com>
-Date: Wed, 7 May 2025 23:22:48 +0200
+Date: Sat, 13 Sep 2025 12:09:21 +0200
 Subject: [PATCH] Remove device specific checks
 
+Signed-off-by: dupazlasu <dupazlasu66@gmail.com>
+---
+ .../accessibility/SecAccessibilityUtils.smali  | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali b/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
-index eb9ab6deca..845d490688 100644
+index 838985b3..0d8fc204 100644
 --- a/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
 +++ b/smali_classes4/com/samsung/android/settings/accessibility/SecAccessibilityUtils.smali
 @@ -21,15 +21,7 @@
@@ -25,9 +29,9 @@ index eb9ab6deca..845d490688 100644
  
      invoke-virtual {v0, v1}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
  
-@@ -1485,13 +1477,7 @@
+@@ -1472,13 +1464,7 @@
  
-     sget-boolean v1, Lcom/samsung/android/settings/accessibility/AccessibilityRune;->FEATURE_ACCESSIBILITY_SETTINGS_HOME_APPLIANCE_BACKUP:Z
+     move-result v0
  
 -    const-string/jumbo v1, "ro.surface_flinger.protected_contents"
 -
@@ -41,5 +45,4 @@ index eb9ab6deca..845d490688 100644
      const/4 v3, 0x1
  
 -- 
-2.43.0
-
+2.51.0
