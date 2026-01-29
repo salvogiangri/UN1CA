@@ -45,6 +45,12 @@ hal_dsms_service
 uwb_regulation_skip_prop
 "
 
+# One UI 5.0.0 additions
+ENTRIES+="
+perf_prop
+qb_id_prop
+teeregistryd_app
+
 # [
 GET_SYSTEM_EXT()
 {
