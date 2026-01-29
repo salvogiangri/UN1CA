@@ -30,9 +30,9 @@ fi
 # Disable VaultKeeper support
 # Before: [tbnz w8, #0, #0xXXXXXX]
 # After: [b #0xXXXXXX]
-if xxd -p -c 0 "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" | grep -q "289765394805003736008052"; then
+if xxd -p -c 0 "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" | grep -q "2897773948050037"; then
     HEX_PATCH "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" \
-        "289765394805003736008052" "289765392a00001436008052"
+        "2897773948050037" "289777392a000014"
 elif xxd -p -c 0 "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" | grep -q "183a009048050037"; then
     HEX_PATCH "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" \
         "183a009048050037" "183a00902a000014"
