@@ -50,6 +50,7 @@ ENTRIES+="
 perf_prop
 qb_id_prop
 teeregistryd_app
+"
 
 # [
 GET_SYSTEM_EXT()
