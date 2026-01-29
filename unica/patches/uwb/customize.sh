@@ -48,7 +48,7 @@ if ! $SOURCE_HAS_UWB; then
     else
         LOG "\033[0;33m! Nothing to do\033[0m"
     fi
-else
+# else
     # if ! $TARGET_HAS_UWB; then
     #     ABORT "Missing patch for condition (SOURCE_HAS_UWB: [$SOURCE_HAS_UWB], TARGET_HAS_UWB: [$TARGET_HAS_UWB]). Aborting"
     # fi
