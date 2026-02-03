@@ -12,6 +12,3 @@ DELETE_FROM_WORK_DIR "vendor" "firmware/yupik_ipa_fws.b03"
 DELETE_FROM_WORK_DIR "vendor" "firmware/yupik_ipa_fws.b04"
 DELETE_FROM_WORK_DIR "vendor" "firmware/yupik_ipa_fws.elf"
 DELETE_FROM_WORK_DIR "vendor" "firmware/yupik_ipa_fws.mdt"
-
-LOG "- Patching /vendor/etc/selinux/vendor_sepolicy.cil"
-EVAL "echo \"(allow init_30_0 vendor_firmware_file (file (mounton)))\" >> \"$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil\""
