@@ -1,0 +1,4 @@
+id=selinux
+name=Update SELinux policy for a05s vendor
+author=furbanoramos21
+description=Modify selinux policy .cil files from vendor partition to avoid conflicts with One UI 8 requirements.
