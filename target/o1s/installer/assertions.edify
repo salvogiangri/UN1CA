@@ -1,1 +1,1 @@
-verify_no_downgrade(getprop("ro.boot.bootloader"), "G991BXXSIHYK1") && getprop("ro.boot.rp") != "18" && abort("E3003: This package requires the \"G991BXXSIHYK1\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
+getprop("ro.boot.bootloader") != "G991BXXSJHZA6" && greater_than_int(getprop("ro.boot.rp"), "19") && abort("E3003: This package requires the \"G991BXXSJHZA6\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");

@@ -1,5 +1,12 @@
-KERNEL_API_URL="https://api.github.com/repos/UN1CA/kernel_samsung_exynos2100/releases/tags/v5.5"
-KERNEL_DL_BASE="https://github.com/UN1CA/kernel_samsung_exynos2100/releases/download/v5.5"
+KERNEL_API_URL="https://api.github.com/repos/UN1CA/kernel_samsung_exynos2100/releases/latest"
+
+LATEST_TAG="$(
+    curl -s "$KERNEL_API_URL" \
+    | grep -m1 '"tag_name"' \
+    | cut -d '"' -f4
+)"
+
+KERNEL_DL_BASE="https://github.com/UN1CA/kernel_samsung_exynos2100/releases/download/$LATEST_TAG"
 
 LOG_STEP_IN "- Downloading vanilla kernel variant"
 if [[ -d "$TMP_DIR" ]]; then
