@@ -1,10 +1,5 @@
 SKIPUNZIP=1
 
-if ! $ROM_IS_OFFICIAL; then
-    LOG "\033[0;33m! Build is not official. Skipping\033[0m"
-    return 0
-fi
-
 if [ ! "$(GET_PROP "system" "ro.unica.version")" ]; then
     SET_PROP "system" "ro.unica.version" "$ROM_VERSION"
 fi
@@ -17,9 +12,11 @@ fi
 
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
+DECODE_APK "system" "system/priv-app/ChoiDujour/ChoiDujour.apk"
+
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
-EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/unica_ota.x509.pem\""
+EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/aosp_testkey.x509.pem\""
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
