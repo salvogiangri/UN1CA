@@ -1,0 +1,2 @@
+LOG "- Replacing all occurrences of \"16\" with \"8_24\" on line 26 in /vendor/etc/audio_policy_configuration_sec.xml"
+EVAL "sed -i \"26s/16/8_24/g\" \"$WORK_DIR/vendor/etc/audio_policy_configuration_sec.xml\""
