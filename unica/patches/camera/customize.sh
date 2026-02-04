@@ -42,6 +42,8 @@ if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml" ]; then
 elif [[ "$SOURCE_PLATFORM_SDK_VERSION" == "$TARGET_PLATFORM_SDK_VERSION" ]]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/camera-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+elif [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/camera-feature.xml"
 else
     _LOG "File not found: $SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml"
 fi
@@ -69,6 +71,23 @@ else
     if ! $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
         # TODO handle this condition
         LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_MASS_APP_FLAVOR" "TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR"
+    fi
+fi
+
+# Samsung Camera JDM app flavor
+SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR="$(test -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/priv-app/SamSungCamera" && echo "true" || echo "false")"
+TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR="$(test -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/SamSungCamera" && echo "true" || echo "false")"
+if ! $SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+    if $TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+        DELETE_FROM_WORK_DIR "system" "system/priv-app/SamsungCamera"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/priv-app/SamSungCamera" 0 0 755 "u:object_r:system_file:s0"
+    fi
+else
+    if $TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/priv-app/SamSungCamera" 0 0 755 "u:object_r:system_file:s0"
+    else
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR" "TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR"
     fi
 fi
 
@@ -439,6 +458,7 @@ if [ ! "$(find "$WORK_DIR/product/overlay" -maxdepth 1 -type f -name "SystemUI*"
 fi
 
 unset SOURCE_FIRMWARE_PATH TARGET_FIRMWARE_PATH \
+    SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR \
     SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER \
     SOURCE_CAMERA_CONFIG_GPPM_SOLUTIONS TARGET_CAMERA_CONFIG_GPPM_SOLUTIONS \
     SOURCE_GALLERY_CONFIG_PET_CLUSTER_VERSION TARGET_GALLERY_CONFIG_PET_CLUSTER_VERSION \
