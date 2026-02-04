@@ -1,4 +1,6 @@
 /system u:object_r:system_file:s0
+/system/bin u:object_r:system_file:s0
+/system/bin/cameraserver u:object_r:cameraserver_exec:s0
 /system/priv-app u:object_r:system_file:s0
 /system/priv-app/BlueLightFilter u:object_r:system_file:s0
 /system/priv-app/BlueLightFilter/BlueLightFilter\.apk u:object_r:system_file:s0
