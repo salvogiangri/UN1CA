@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [o1sksx, beyond1lte]
+        target: [o1sksx]
 
     steps:
       - name: Checkout repo
