@@ -102,7 +102,6 @@ unset -f _GET_SRC_DIR
 export DEBUG=false
 export SRC_DIR
 export OUT_DIR="$SRC_DIR/out"
-export TMP_DIR="$OUT_DIR/tmp"
 export ODIN_DIR="$OUT_DIR/odin"
 export FW_DIR="$OUT_DIR/fw"
 export TOOLS_DIR="$OUT_DIR/tools"
@@ -153,6 +152,7 @@ unset -f _PRINT_USAGE
 
 export APKTOOL_DIR="$OUT_DIR/target/$SELECTED_TARGET/apktool"
 export WORK_DIR="$OUT_DIR/target/$SELECTED_TARGET/work_dir"
+export TMP_DIR="$OUT_DIR/target/$SELECTED_TARGET/tmp"
 
 mkdir -p "$OUT_DIR/target/$SELECTED_TARGET"
 # shellcheck disable=SC2046
