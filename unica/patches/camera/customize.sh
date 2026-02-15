@@ -21,9 +21,11 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/cameradata/portrait_data" 0 
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/singletake/service-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/singletake/service-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/singletake/service-feature.xml\" \"$WORK_DIR/system/system/cameradata/singletake/service-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/singletake/service-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/singletake/service-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+else
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/singletake"
 fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/aremoji-feature.xml"
@@ -79,43 +81,46 @@ else
     fi
 fi
 
-# Single take "stp1-release" app flavor
-if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
-        ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
-    ADD_TO_WORK_DIR "a73xqxx" "system" "system/priv-app/SingleTakeService/SingleTakeService.apk" 0 0 644 "u:object_r:system_file:s0"
-elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
-        grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
-    # TODO handle this condition
-    # shellcheck disable=SC2034
-    SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
-    # shellcheck disable=SC2034
-    TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
-    LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
-    unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS
-fi
-
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
-if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null && \
-        ! grep -q "SUPPORT_SMART_CROP.*false" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
-    if [ -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/singletake/SmartCrop" ]; then
-        if [ ! -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ] || \
-                [ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]; then
-            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-                "etc/singletake/SmartCrop/SmartCrop.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/singletake/service-feature.xml" ] && \
+        [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/SingleTakeService/SingleTakeService.apk" ]; then
+    if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null && \
+            ! grep -q "SUPPORT_SMART_CROP.*false" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
+        if [ -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/singletake/SmartCrop" ]; then
+            if [ ! -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ] || \
+                    [ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]; then
+                ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+                    "etc/singletake/SmartCrop/SmartCrop.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+            fi
+        else
+            # TODO handle this condition
+            # shellcheck disable=SC2034
+            SOURCE_SUPPORT_SMART_CROP=false
+            # shellcheck disable=SC2034
+            TARGET_SUPPORT_SMART_CROP=true
+            LOG_MISSING_PATCHES "SOURCE_SUPPORT_SMART_CROP" "TARGET_SUPPORT_SMART_CROP"
+            unset SOURCE_SUPPORT_SMART_CROP TARGET_SUPPORT_SMART_CROP
         fi
-    else
+    fi
+
+    # Single take "stp1-release" app flavor
+    if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
+            ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
+        ADD_TO_WORK_DIR "a73xqxx" "system" "system/priv-app/SingleTakeService/SingleTakeService.apk" 0 0 644 "u:object_r:system_file:s0"
+    elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
+            grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
         # TODO handle this condition
         # shellcheck disable=SC2034
-        SOURCE_SUPPORT_SMART_CROP=false
+        SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
         # shellcheck disable=SC2034
-        TARGET_SUPPORT_SMART_CROP=true
-        LOG_MISSING_PATCHES "SOURCE_SUPPORT_SMART_CROP" "TARGET_SUPPORT_SMART_CROP"
-        unset SOURCE_SUPPORT_SMART_CROP TARGET_SUPPORT_SMART_CROP
+        TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
+        LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
+        unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS
     fi
 else
-    if [ -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ]; then
-        DELETE_FROM_WORK_DIR "vendor" "etc/singletake/SmartCrop"
-    fi
+    DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.samsung.android.singletake.service.xml"
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.singletake.service.xml"
+    DELETE_FROM_WORK_DIR "system" "system/priv-app/SingleTakeService"
 fi
 
 # SEC_PRODUCT_FEATURE_CAMERA_CONFIG_ACTION_CLASSIFIER
