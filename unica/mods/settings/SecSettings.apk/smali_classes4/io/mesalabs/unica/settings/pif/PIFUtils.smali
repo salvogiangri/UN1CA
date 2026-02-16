@@ -35,7 +35,7 @@
 
     const-string v0, "persist.sys.pif.version"
 
-    const-string v1, "20251212"
+    const-string v1, "20260213"
 
     invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
@@ -140,7 +140,7 @@
     :try_start_0
     const-string v1, "persist.sys.pif.version"
 
-    const-string v2, "20251212"
+    const-string v2, "20260213"
 
     invoke-static {v1, v2}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 

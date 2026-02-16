@@ -1,4 +1,4 @@
-From 136d78d0aa2b2a08034a9fa7ca87e72359febe23 Mon Sep 17 00:00:00 2001
+From 413662894fcc7742e04c4f01345d6b2fc06992d0 Mon Sep 17 00:00:00 2001
 From: Kofua <1638183271zjn@gmail.com>
 Date: Sat, 30 Mar 2024 22:18:41 +0800
 Subject: [PATCH] feat: support aapt optimization
@@ -6,14 +6,14 @@ Subject: [PATCH] feat: support aapt optimization
 ---
  .../src/main/java/brut/apktool/Main.java      | 27 ++++++++++++
  .../src/main/java/brut/androlib/Config.java   | 37 ++++++++++++++++
- .../java/brut/androlib/res/AaptInvoker.java   | 44 +++++++++++++++++++
- 3 files changed, 108 insertions(+)
+ .../java/brut/androlib/res/AaptInvoker.java   | 43 +++++++++++++++++++
+ 3 files changed, 107 insertions(+)
 
 diff --git a/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java b/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
-index f69373ed..fd97bf28 100644
+index f59c5ea6..c1b16a33 100644
 --- a/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
 +++ b/brut.apktool/apktool-cli/src/main/java/brut/apktool/Main.java
-@@ -157,6 +157,21 @@ public class Main {
+@@ -162,6 +162,21 @@ public class Main {
          .desc("Disable repacking of the built files into a new apk.")
          .get();
  
@@ -35,7 +35,7 @@ index f69373ed..fd97bf28 100644
      private static final Option buildNoCrunchOption = Option.builder()
          .longOpt("no-crunch")
          .desc("Disable crunching of resource files during the build step.")
-@@ -262,6 +277,9 @@ public class Main {
+@@ -268,6 +283,9 @@ public class Main {
                  buildOptions.addOption(buildDebuggableOption);
                  buildOptions.addOption(buildNetSecConfOption);
                  buildOptions.addOption(buildNoApkOption);
@@ -45,7 +45,7 @@ index f69373ed..fd97bf28 100644
                  buildOptions.addOption(buildNoCrunchOption);
              }
          }
-@@ -540,6 +558,15 @@ public class Main {
+@@ -553,6 +571,15 @@ public class Main {
          if (cli.hasOption(buildNoApkOption)) {
              config.setNoApk(true);
          }
@@ -62,10 +62,10 @@ index f69373ed..fd97bf28 100644
              config.setNoCrunch(true);
          }
 diff --git a/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java b/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
-index 42d73103..e6a883d1 100644
+index d67f0ece..62d1dc07 100644
 --- a/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
 +++ b/brut.apktool/apktool-lib/src/main/java/brut/androlib/Config.java
-@@ -49,6 +49,12 @@ public class Config {
+@@ -50,6 +50,12 @@ public class Config {
      private boolean mNetSecConf;
      private String mAaptBinary;
  
@@ -78,7 +78,7 @@ index 42d73103..e6a883d1 100644
      public Config(String version) {
          mVersion = version;
  
-@@ -76,6 +82,10 @@ public class Config {
+@@ -78,6 +84,10 @@ public class Config {
          mDebuggable = false;
          mNetSecConf = false;
          mAaptBinary = null;
@@ -89,7 +89,7 @@ index 42d73103..e6a883d1 100644
      }
  
      public String getVersion() {
-@@ -243,4 +253,31 @@ public class Config {
+@@ -269,4 +279,31 @@ public class Config {
      public void setAaptBinary(String aaptBinary) {
          mAaptBinary = aaptBinary;
      }
@@ -122,10 +122,10 @@ index 42d73103..e6a883d1 100644
 +    }
  }
 diff --git a/brut.apktool/apktool-lib/src/main/java/brut/androlib/res/AaptInvoker.java b/brut.apktool/apktool-lib/src/main/java/brut/androlib/res/AaptInvoker.java
-index 2844b58d..83adf005 100644
+index 67696402..78e554c9 100644
 --- a/brut.apktool/apktool-lib/src/main/java/brut/androlib/res/AaptInvoker.java
 +++ b/brut.apktool/apktool-lib/src/main/java/brut/androlib/res/AaptInvoker.java
-@@ -25,6 +25,10 @@ import brut.common.BrutException;
+@@ -25,6 +25,10 @@ import brut.common.Log;
  import brut.util.OS;
  
  import java.io.File;
@@ -136,7 +136,7 @@ index 2844b58d..83adf005 100644
  import java.util.ArrayList;
  import java.util.List;
  import java.util.Map;
-@@ -180,6 +184,46 @@ public class AaptInvoker {
+@@ -184,6 +188,45 @@ public class AaptInvoker {
          } catch (BrutException ex) {
              throw new AndrolibException(ex);
          }
@@ -174,8 +174,7 @@ index 2844b58d..83adf005 100644
 +
 +            try {
 +                OS.exec(cmd.toArray(new String[0]));
-+                LOGGER.fine("aapt2 optimize command ran: ");
-+                LOGGER.fine(cmd.toString());
++                Log.d(TAG, "aapt2 optimize command ran: " + cmd.toString());
 +            } catch (BrutException ex) {
 +                throw new AndrolibException(ex);
 +            }
@@ -184,5 +183,5 @@ index 2844b58d..83adf005 100644
  
      private List<File> getIncludeFiles() throws AndrolibException {
 -- 
-2.52.0
+2.53.0
 

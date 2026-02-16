@@ -31,6 +31,7 @@
 /system/lib64/libhdcp2\.so u:object_r:system_lib_file:s0
 /system/lib64/libmdf\.so u:object_r:system_lib_file:s0
 /system/lib64/libsec_semRil\.so u:object_r:system_lib_file:s0
+/system/lib64/libsecimaging_pdk.camera.samsung\.so u:object_r:system_lib_file:s0
 /system/lib64/libsqlite\.so u:object_r:system_lib_file:s0
 /system/lib64/libstagefright_hdcp\.so u:object_r:system_lib_file:s0
 /system/lib64/libtlc_blockchain_keystore\.so u:object_r:system_lib_file:s0
