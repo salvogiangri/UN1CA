@@ -1,0 +1,4 @@
+system 0 0 755 capabilities=0x0
+system/lib64 0 0 755 capabilities=0x0
+system/lib64/libMyFilter.camera.samsung.so 0 0 644 capabilities=0x0
+system/lib64/libtflite2.myfilters.camera.samsung.so 0 0 644 capabilities=0x0
