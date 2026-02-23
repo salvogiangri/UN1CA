@@ -404,8 +404,9 @@ if [ -f "$WORK_DIR/system/system/bin/sbauth" ] && \
     DELETE_FROM_WORK_DIR "system" "system/etc/init/sbauth.rc"
 fi
 
-# Ensure PASS support (pre-API 35)
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+# Ensure PASS support (pre-API 35/JDM)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] || \
+        [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
     if ! grep -q "sec_pass_data_file" "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"; then
         PATCHED=true
         SMALI_PATCH "system" "system/framework/services.jar" \
