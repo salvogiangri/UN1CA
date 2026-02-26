@@ -1,0 +1,22 @@
+LOG "- Fixing NFC for G781B"
+{
+    echo ""
+    echo "on property:ro.boot.em.model=SM-G781B"
+    echo "    setprop ro.boot.product.hardware.sku \"s3fwrn5\""
+    echo "    setprop ro.vendor.nfc.feature.chipname \"SLSI\""
+    echo ""
+    echo "on property:ro.boot.em.model=SM-G7810"
+    echo "    setprop ro.boot.product.hardware.sku \"s3fwrn5\""
+    echo "    setprop ro.vendor.nfc.feature.chipname \"SLSI\""
+    echo ""
+    echo "on property:ro.boot.em.model=SM-G781N"
+    echo "    setprop ro.boot.product.hardware.sku \"s3fwrn5\""
+    echo "    setprop ro.vendor.nfc.feature.chipname \"SLSI\""
+} >> "$WORK_DIR/vendor/etc/init/init.nfc.samsung.rc"
+
+LOG "- Fixing NFC config"
+{
+    echo ""
+    echo "on property:ro.vendor.nfc.feature.chipname=*"
+    echo "    setprop persist.nfc_cfg.config_file_name libnfc-nci-\${ro.vendor.nfc.feature.chipname}.conf"
+} >> "$WORK_DIR/system/system/etc/init/init.nfc.samsung.rc"
