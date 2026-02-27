@@ -30,9 +30,11 @@ fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/aremoji-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml\" \"$WORK_DIR/system/system/cameradata/aremoji-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/aremoji-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+else
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/aremoji-feature.xml"
 fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/camera-feature.xml"
@@ -79,6 +81,14 @@ else
     if grep -q "SHOOTING_MODE_FUN" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/app/FunModeSDK" 0 0 755 "u:object_r:system_file:s0"
     fi
+fi
+
+# AR Emoji
+if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ] && \
+        [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/AREmoji/AREmoji.apk" ]; then
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.samsung.feature.aremoji_v2.xml"
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aremoji.xml"
+    DELETE_FROM_WORK_DIR "system" "system/priv-app/AREmoji"
 fi
 
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
