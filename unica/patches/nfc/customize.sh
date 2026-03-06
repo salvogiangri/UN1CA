@@ -1,3 +1,7 @@
+# [
+_LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
+# ]
+
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 
 if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci.conf" ]; then
@@ -25,7 +29,8 @@ fi
 
 if [ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" ] && \
         ! [[ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" =~ NXP_SN100U|SLSI|STM_ST21 ]]; then
-    ABORT "Unknown NFC chip name: $(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")"
+    _LOG "Unknown NFC chip name: $(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")"
+    return 0
 fi
 
 # SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=NXP_SN100U
@@ -44,7 +49,8 @@ elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_nci_jni.so" ];
      ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/libnfc_vendor_extn.so" 0 0 644 "u:object_r:system_lib_file:s0"
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ]; then
     # TODO
-    ABORT "Missing prebuilt blobs for NXP_SN100U NFC chip"
+    _LOG "Missing prebuilt blobs for NXP_SN100U NFC chip"
+    return 0
 fi
 if [ -f "$WORK_DIR/system/system/lib64/libnfc_nci_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nci_jni.so" ] && \
@@ -59,7 +65,8 @@ elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nci_jni.so" 
      ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libnfc_vendor_extn.so" 0 0 644 "u:object_r:system_lib_file:s0"
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ]; then
     # TODO
-    ABORT "Missing prebuilt blobs for NXP_SN100U NFC chip"
+    _LOG "Missing prebuilt blobs for NXP_SN100U NFC chip"
+    return 0
 fi
 
 # SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=STM_ST21
@@ -120,3 +127,4 @@ elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" 
 fi
 
 unset TARGET_FIRMWARE_PATH
+unset -f _LOG
