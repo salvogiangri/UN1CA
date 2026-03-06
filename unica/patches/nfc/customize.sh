@@ -38,7 +38,12 @@ fi
 # - API 36: libnfc_nci_jni.so
 if [ -f "$WORK_DIR/system/system/lib/libnfc_nci_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_nci_jni.so" ] && \
-            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ]; then
+            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxppn_jni.so" ] && \
+            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_nxpsn.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_nxp.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_nci_jni.so"
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_prop_extn.so"
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_vendor_extn.so"
@@ -54,7 +59,10 @@ elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so
 fi
 if [ -f "$WORK_DIR/system/system/lib64/libnfc_nci_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nci_jni.so" ] && \
-            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ]; then
+            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxppn_jni.so" ] && \
+            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_nci_jni.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_prop_extn.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_vendor_extn.so"
