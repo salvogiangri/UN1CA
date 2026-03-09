@@ -4,15 +4,12 @@
 
 # [
 source "$SRC_DIR/scripts/utils/firmware_utils.sh" || exit 1
-source "$TOOLS_DIR/venv/bin/activate" || exit 1
 
 FORCE=false
 
 FIRMWARES=()
 MODEL=""
 CSC=""
-IMEI=""
-SERIAL_NO=""
 LATEST_FIRMWARE=""
 ZIP_FILE=""
 
@@ -152,10 +149,10 @@ for i in "${FIRMWARES[@]}"; do
     [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ] && rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
     mkdir -p "$ODIN_DIR/${MODEL}_${CSC}"
     # shellcheck disable=SC2164
-    # Anan's samloader stores its logs in the current working directory, let's move into OUT_DIR just for this time
+    # Topjohnwu's samloader stores its logs in the current working directory, let's move into OUT_DIR just for this time
     (
     cd "$OUT_DIR"
-    samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
+    samloader -m "$MODEL" -r "$CSC" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
     )
 
     ZIP_FILE="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "*.zip" | sort -r | head -n 1)"
@@ -173,7 +170,5 @@ for i in "${FIRMWARES[@]}"; do
 
     LOG_STEP_OUT; LOG_STEP_OUT
 done
-
-deactivate
 
 exit 0

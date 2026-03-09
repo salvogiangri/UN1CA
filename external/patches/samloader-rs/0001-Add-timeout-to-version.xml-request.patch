@@ -1,0 +1,37 @@
+From 6b009ac3bb13dc3b7ce4801bfe708241003b57c3 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Mon, 9 Mar 2026 16:06:56 +0100
+Subject: [PATCH] Add timeout to version.xml request
+
+Change-Id: I66b27c0eefe97e6aeb0ce7424de62a58909597d3
+---
+ src/versionfetch.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/versionfetch.rs b/src/versionfetch.rs
+index 692c3b1..9242671 100644
+--- a/src/versionfetch.rs
++++ b/src/versionfetch.rs
+@@ -14,6 +14,7 @@
+ 
+ use reqwest::blocking::Client;
+ use roxmltree::Document;
++use std::time::Duration;
+ 
+ pub fn normalizevercode(vercode: &str) -> String {
+     let mut parts: Vec<&str> = vercode.split('/').collect();
+@@ -27,7 +28,10 @@ pub fn normalizevercode(vercode: &str) -> String {
+ }
+ 
+ pub fn getlatestver(model: &str, region: &str) -> String {
+-    let client = Client::new();
++    let client = Client::builder()
++        .timeout(Duration::from_secs(3))
++        .build()
++        .unwrap();
+     let url = format!(
+         "https://fota-cloud-dn.ospserver.net/firmware/{}/{}/version.xml",
+         region, model
+-- 
+2.53.0
+

@@ -19,43 +19,43 @@ jobs:
         include:
           - module: "Galaxy A17 5G (a17xxx)"
             device: "a17xxx"
-            firmware: "SM-A176B/INS/350042791234568"
+            firmware: "SM-A176B/INS"
           - module: "Galaxy A54 5G (a54xnsxx)"
             device: "a54xnsxx"
-            firmware: "SM-A546E/EGY/350090711234564"
+            firmware: "SM-A546E/EGY"
           - module: "Galaxy A56 5G (a56xnaxx)"
             device: "a56xnaxx"
-            firmware: "SM-A566B/EUX/352371191234565"
+            firmware: "SM-A566B/EUX"
           - module: "Galaxy A73 5G (a73xqxx)"
             device: "a73xqxx"
-            firmware: "SM-A736B/XME/352828291234563"
+            firmware: "SM-A736B/XME"
           - module: "Galaxy S22 Ultra (Snapdragon) (b0qxxx)"
             device: "b0qxxx"
-            firmware: "SM-S908E/INS/350280381234560"
+            firmware: "SM-S908E/INS"
           - module: "Galaxy S22 Ultra (Exynos) (b0sxxx)"
             device: "b0sxxx"
-            firmware: "SM-S908B/EUX/353074281234565"
+            firmware: "SM-S908B/EUX"
           - module: "Galaxy Z Flip4 (b4qxxx)"
             device: "b4qxxx"
-            firmware: "SM-F721B/BTE/350525851234569"
+            firmware: "SM-F721B/BTE"
           - module: "Galaxy S23 (dm1qxxx)"
             device: "dm1qxxx"
-            firmware: "SM-S911B/EUX/352404911234563"
+            firmware: "SM-S911B/EUX"
           - module: "Galaxy Tab S11 5G (gts11xx)"
             device: "gts11xx"
-            firmware: "SM-X736B/EUX/R52Y8065XJM"
+            firmware: "SM-X736B/EUX"
           - module: "Galaxy S25+ (pa2qxxx)"
             device: "pa2qxxx"
-            firmware: "SM-S936B/EUX/350634601234562"
+            firmware: "SM-S936B/EUX"
           - module: "Galaxy S21 FE 5G (Snapdragon) (r9qxxx)"
             device: "r9qxxx"
-            firmware: "SM-G990B/EUX/353718681234563"
+            firmware: "SM-G990B/EUX"
           - module: "Galaxy S21 FE 5G (Exynos) (r9sxxx)"
             device: "r9sxxx"
-            firmware: "SM-G990E/THL/355798871234563"
+            firmware: "SM-G990E/THL"
           - module: "Galaxy S23 FE (r11sxxx)"
             device: "r11sxxx"
-            firmware: "SM-S711B/EUX/358615311234564"
+            firmware: "SM-S711B/EUX"
 
     steps:
       - name: Checkout repo
@@ -83,7 +83,7 @@ jobs:
         run: |
           sudo apt update
           DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
-            7zip attr ccache clang ffmpeg \
+            7zip attr cargo ccache clang ffmpeg \
             libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp
           sudo modprobe erofs f2fs
