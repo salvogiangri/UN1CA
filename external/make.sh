@@ -224,6 +224,7 @@ if $SAMLOADER; then
         "git apply \"$SRC_DIR/external/patches/samloader/0001-Update-decryption-keys.patch\""
         "git apply \"$SRC_DIR/external/patches/samloader/0002-Fix-client-request-params.patch\""
         "git apply \"$SRC_DIR/external/patches/samloader/0003-Add-timeout-to-version.xml-request.patch\""
+        "git apply \"$SRC_DIR/external/patches/samloader/0004-Work-around-random-FUS-failure.patch\""
         "python3 -m venv \"$TOOLS_DIR/venv\""
         "source \"$TOOLS_DIR/venv/bin/activate\"; pip3 install ."
     )

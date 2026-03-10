@@ -1,0 +1,103 @@
+From caf85ddbac488bb36af02d85ba85c4ea692ea5ce Mon Sep 17 00:00:00 2001
+From: Majaahh <maja.blaszczak@proton.me>
+Date: Tue, 10 Mar 2026 18:36:06 +0100
+Subject: [PATCH] Work around random FUS failure
+
+Co-authored-by: ExtremeXT <extremextdev@gmail.com>
+---
+ samloader/main.py | 79 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 52 insertions(+), 27 deletions(-)
+
+diff --git a/samloader/main.py b/samloader/main.py
+index 9e71759..77a0be3 100644
+--- a/samloader/main.py
++++ b/samloader/main.py
+@@ -94,33 +94,58 @@ def download(args):
+             # Auto decrypt
+             auto_decrypt(args, out, filename)
+         return
+-    fd = open(out, "ab" if args.resume else "wb")
+-    initdownload(client, filename)
+-    r = client.downloadfile(path+filename, dloffset)
+-    if args.show_md5 and "Content-MD5" in r.headers:
+-        print("MD5:", base64.b64decode(r.headers["Content-MD5"]).hex())
+-
+-    log_interval = size // 10  # Log every 10%
+-    progress = dloffset
+-
+-    # Download and log progress
+-    with tqdm(total=size, initial=dloffset, unit="B", unit_scale=True) as pbar:
+-        for chunk in r.iter_content(chunk_size=0x10000):
+-            if chunk:
+-                fd.write(chunk)
+-                fd.flush()
+-                pbar.update(len(chunk))
+-                
+-                # Update progress
+-                progress += len(chunk)
+-                
+-                # Check if it's time to log the progress
+-                if progress >= log_interval:
+-                    log_to_file(f"Download progress: {progress / (1024**2):.2f} MB / {size / (1024**2):.2f} MB")
+-                    log_interval += size // 10
+-
+-    fd.close()
+-    log_to_file("Download completed.")
++
++    max_retries = 5
++    attempt = 0
++
++    while attempt < max_retries:
++        try:
++            fd = open(out, "ab" if args.resume else "wb")
++            initdownload(client, filename)
++            r = client.downloadfile(path+filename, dloffset)
++
++            if args.show_md5 and "Content-MD5" in r.headers:
++                print("MD5:", base64.b64decode(r.headers["Content-MD5"]).hex())
++
++            log_interval = size // 10  # Log every 10%
++            progress = dloffset
++
++            # Download and log progress
++            with tqdm(total=size, initial=dloffset, unit="B", unit_scale=True) as pbar:
++                for chunk in r.iter_content(chunk_size=0x10000):
++                    if chunk:
++                        fd.write(chunk)
++                        fd.flush()
++                        pbar.update(len(chunk))
++
++                        # Update progress
++                        progress += len(chunk)
++
++                        # Check if it's time to log the progress
++                        if progress >= log_interval:
++                            log_to_file(f"Download progress: {progress / (1024**2):.2f} MB / {size / (1024**2):.2f} MB")
++                            log_interval += size // 10
++
++            fd.close()
++            log_to_file("Download completed.")
++            break
++
++        except Exception as e:
++            attempt += 1
++            log_to_file(f"Download error (attempt {attempt}/{max_retries}): {e}")
++            print(f"Download failed (attempt {attempt}/{max_retries}), retrying...")
++
++            try:
++                fd.close()
++            except:
++                pass
++
++            if attempt >= max_retries:
++                raise
++
++            args.resume = True
++            dloffset = os.stat(out).st_size if os.path.exists(out) else 0
++
+     # Auto decrypt
+     auto_decrypt(args, out, filename)
+ 
+-- 
+2.53.0
+
