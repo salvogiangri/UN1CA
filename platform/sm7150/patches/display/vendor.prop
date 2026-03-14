@@ -1,0 +1,13 @@
+debug.sf.latch_unsignaled=1
+debug.sf.auto_latch_unsignaled=1
+debug.sf.enable_advanced_sf_phase_offset=1
+debug.sf.disable_client_composition_cache=0
+debug.sf.treat_170m_as_sRGB=1
+debug.sf.enable_advanced_sf_phase_offset=1
+debug.sf.gpu_freq_index=6
+debug.graphics.game_default_frame_rate.disabled=1
+vendor.display.disable_excl_rect_partial_fb=1
+vendor.display.use_smooth_motion=0
+vendor.display.disable_offline_rotator=1
+vendor.display.enable_async_powermode=0
+vendor.display.enable_early_wakeup=0
