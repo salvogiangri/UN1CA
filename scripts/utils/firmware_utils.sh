@@ -84,7 +84,7 @@ EXTRACT_FILE_FROM_TAR()
     return 0
 }
 
-# EXTRACT_FILE_FROM_TAR <tar> <file>
+# FILE_EXISTS_IN_TAR <tar> <file>
 # Returns whether or not the desidered file exists in the supplied tar archive.
 FILE_EXISTS_IN_TAR()
 {
