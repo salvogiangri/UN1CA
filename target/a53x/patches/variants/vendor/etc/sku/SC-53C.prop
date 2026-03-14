@@ -1,0 +1,9 @@
+# Copyright (c) 2026 Majaahh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+ro.boot.product.hardware.sku=NXP
+ro.product.vendor.model=SC-53C
+ro.product.vendor.name=a53xdcm
+ro.vendor.build.fingerprint=samsung/a53xdcm/a53x:12/SP1A.210812.016/SC53COMU1DYF2:user/release-keys
+ro.vendor.build.version.incremental=SC53COMU1DYF2
+ro.vendor.nfc.feature.chipname=NXP_SN100U

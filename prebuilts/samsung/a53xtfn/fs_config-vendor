@@ -1,0 +1,15 @@
+0 0 755 capabilities=0x0
+vendor/bin 0 2000 751 capabilities=0x0
+vendor/bin/hw 0 2000 751 capabilities=0x0
+vendor/bin/hw/nxp.android.hardware.nfc@1.2-service 0 2000 755 capabilities=0x0
+vendor/etc 0 2000 755 capabilities=0x0
+vendor/etc/libese-nxp.conf 0 0 644 capabilities=0x0
+vendor/etc/libnfc-nxp.conf 0 0 644 capabilities=0x0
+vendor/etc/nfc 0 2000 755 capabilities=0x0
+vendor/etc/nfc/libnfc-nxp_RF.conf 0 0 644 capabilities=0x0
+vendor/firmware 0 2000 755 capabilities=0x0
+vendor/firmware/nfc 0 2000 755 capabilities=0x0
+vendor/firmware/nfc/libsn100u_fw.so 0 0 644 capabilities=0x0
+vendor/lib64 0 2000 755 capabilities=0x0
+vendor/lib64/ese_spi_nxp.so 0 0 644 capabilities=0x0
+vendor/lib64/nfc_nci_nxpsn.so 0 0 644 capabilities=0x0

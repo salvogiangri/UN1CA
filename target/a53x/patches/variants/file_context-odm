@@ -1,0 +1,9 @@
+/odm u:object_r:vendor_file:s0
+/odm/etc u:object_r:vendor_configs_file:s0
+/odm/etc/sku u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SC-53C\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SCG15\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SM-A5360\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SM-A536B\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SM-A536E\.prop u:object_r:vendor_configs_file:s0
+/odm/etc/sku/SM-A536N\.prop u:object_r:vendor_configs_file:s0
