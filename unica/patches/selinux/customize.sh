@@ -56,7 +56,7 @@ GET_SYSTEM_EXT()
 }
 
 CIL_NAME="$(head -n 1 "$WORK_DIR/vendor/etc/selinux/plat_sepolicy_vers.txt")"
-
+PATCHED=false
 VENDOR_API_LIST="$(find "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping" -type f -printf "%f\n" | \
                     sed '/.compat./d' | sed 's/.cil//' | sed 's/\./_/' | sort)"
 # ]
@@ -66,6 +66,7 @@ for e in $ENTRIES; do
          grep -q -F "${e}_${CIL_NAME//./_}" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"; then
         # the problematic entry is currently present in system_ext, check if we need to remove it
         if ! grep -q -F "(type $e)" "$WORK_DIR/vendor/etc/selinux/plat_pub_versioned.cil"; then
+            PATCHED=true
             # the problematic entry is not supported by the target device
             LOG "- \"$e\" SELinux entry not supported. Removing"
             sed -i "/($e)/d" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/mapping/$CIL_NAME.cil"
@@ -86,6 +87,7 @@ for e in $DUPLICATES; do
     if grep -q "^$e.*" "$WORK_DIR/$(GET_SYSTEM_EXT)/etc/selinux/system_ext_property_contexts"; then
         # the problematic entry is currently present in system_ext, check if we need to remove it
         if grep -q "^$e.*" "$WORK_DIR/vendor/etc/selinux/vendor_property_contexts"; then
+            PATCHED=true
             # the problematic entry is found in target vendor
             LOG "- \"$e\" SELinux duplicate entry found. Removing"
             sed -i "s/^$e/#SEC_DUPLICATE: $e/g" "$WORK_DIR/vendor/etc/selinux/vendor_property_contexts"
@@ -93,5 +95,9 @@ for e in $DUPLICATES; do
     fi
 done
 
-unset ENTRIES DUPLICATES CIL_NAME VENDOR_API_LIST
+if ! $PATCHED; then
+    LOG "\033[0;33m! Nothing to do\033[0m"
+fi
+
+unset ENTRIES DUPLICATES CIL_NAME PATCHED VENDOR_API_LIST
 unset -f GET_SYSTEM_EXT
