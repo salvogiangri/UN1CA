@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
@@ -27,7 +28,7 @@ COPY_SOURCE_FIRMWARE()
                 LOG_STEP_OUT
             fi
         else
-            [ -d "$WORK_DIR/$f" ] && rm -rf "$WORK_DIR/$f"
+            [ -d "$WORK_DIR/$f" ] && EVAL "rm -rf \"$WORK_DIR/$f\""
             [ -f "$WORK_DIR/configs/file_context-$f" ] && rm -f "$WORK_DIR/configs/file_context-$f"
             [ -f "$WORK_DIR/configs/fs_config-$f" ] && rm -f "$WORK_DIR/configs/fs_config-$f"
         fi
@@ -128,7 +129,7 @@ COPY_TARGET_FIRMWARE()
                 LOG_STEP_OUT
             fi
         else
-            [ -d "$WORK_DIR/$f" ] && rm -rf "$WORK_DIR/$f"
+            [ -d "$WORK_DIR/$f" ] && EVAL "rm -rf \"$WORK_DIR/$f\""
             [ -f "$WORK_DIR/configs/file_context-$f" ] && rm -f "$WORK_DIR/configs/file_context-$f"
             [ -f "$WORK_DIR/configs/fs_config-$f" ] && rm -f "$WORK_DIR/configs/fs_config-$f"
         fi

@@ -5,6 +5,7 @@
 set -e
 
 #[
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/module_utils.sh" || exit 1
 
 APPLY_MODULE()
@@ -44,6 +45,7 @@ APPLY_MODULE()
 
     READ_AND_APPLY_PROPS "$MODPATH"
 
+    # shellcheck disable=SC1091
     [ -f "$MODPATH/customize.sh" ] && . "$MODPATH/customize.sh"
 
     if [ -d "$MODPATH/smali" ]; then

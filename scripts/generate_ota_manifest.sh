@@ -5,6 +5,7 @@
 shopt -s nullglob
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 GENERATE_OTA_INFO()
@@ -19,7 +20,7 @@ GENERATE_OTA_INFO()
 
     DATE="$(date +"%s")"
     ID="$(sha256sum "$FILE" | cut -d " " -f 1 -s)"
-    ID="$(echo "$ID $DATE")"
+    ID="$ID $DATE"
     ID="$(sha256sum <<< "$ID" | cut -d " " -f 1 -s)"
 
     {

@@ -1,10 +1,14 @@
+# shellcheck shell=bash
 # Copyright (c) 2026 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/build_utils.sh" || return 1
 
+# shellcheck disable=SC2034
 KERNEL_BINS="dt dtbo init_boot vendor_boot"
+# shellcheck disable=SC2034
 PARTITIONS_LIST="system vendor product system_ext odm vendor_dlkm odm_dlkm system_dlkm"
 
 _GET_PARTITION_SIZE()

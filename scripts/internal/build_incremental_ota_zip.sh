@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/install_utils.sh" || exit 1
 
 TMP_DIR="$OUT_DIR/target/$TARGET_CODENAME/zip"
@@ -536,6 +537,7 @@ fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/installer/customize.sh" ]; then
     LOG_STEP_IN "- Running target custom install script"
     (
+    # shellcheck disable=SC1090
     . "$SRC_DIR/target/$TARGET_CODENAME/installer/customize.sh"
     ) || exit 1
     LOG_STEP_OUT

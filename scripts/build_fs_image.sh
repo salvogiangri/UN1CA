@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 FORCE=false

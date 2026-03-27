@@ -2,9 +2,8 @@
 # Copyright (c) 2023 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# shellcheck disable=SC2001
-
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/log_utils.sh"
 
 PRINT_MODULE_INFO()

@@ -70,6 +70,7 @@ GENERATE_BUILD_INFO()
     {
         echo -n "device="
         [ "$(GET_PROP "system" "ro.unica.device")" ] && GET_PROP "system" "ro.unica.device" || echo "$TARGET_CODENAME"
+        # shellcheck disable=SC2128
         [ "$TARGET_ASSERT_MODEL" ] && echo "model=${TARGET_ASSERT_MODEL//:/;}"
         echo "name=$TARGET_NAME"
         echo -n "version="

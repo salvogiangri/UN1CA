@@ -1,7 +1,9 @@
+# shellcheck shell=bash
 # Copyright (c) 2025 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/log_utils.sh"
 
 _CHECK_NON_EMPTY_PARAM()

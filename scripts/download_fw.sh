@@ -3,7 +3,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/firmware_utils.sh" || exit 1
+# shellcheck disable=SC1091
 source "$TOOLS_DIR/venv/bin/activate" || exit 1
 
 FORCE=false

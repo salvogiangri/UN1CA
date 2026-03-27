@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # [
+# shellcheck disable=SC1091
 source "$SRC_DIR/scripts/utils/firmware_utils.sh" || exit 1
 
 FORCE=false
@@ -244,7 +245,7 @@ STORE_KERNEL_IMAGE_METADATA()
             EVAL "unpack_bootimg --boot_img \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" --out \"$TMP_DIR\""
             exit 1
         fi
-        rm -rf "$TMP_DIR/"*
+        EVAL "rm -rf \"$TMP_DIR\"" && EVAL "mkdir -p \"$TMP_DIR\""
 
         while IFS= read -r l; do
             if [[ "$l" == *"command line args"* ]]; then

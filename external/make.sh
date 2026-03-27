@@ -2,7 +2,7 @@
 # Copyright (c) 2025 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# shellcheck disable=SC1007,SC2164,SC2181,SC2291
+# shellcheck disable=SC1007,SC1091,SC2164,SC2181,SC2291
 
 # [
 BUILD()
