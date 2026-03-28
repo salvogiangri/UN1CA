@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 LOG_STEP_IN "- Adding OK Google Hotword Enrollment blobs"
 DELETE_FROM_WORK_DIR "product" "priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON"
 DELETE_FROM_WORK_DIR "product" "priv-app/HotwordEnrollmentXGoogleEx4HEXAGON"

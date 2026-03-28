@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 LOG_STEP_IN "- Adding stock SoundBooster libs"
 if [[ "$TARGET_CODENAME" == "r9s" ]]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/lib_SoundBooster_ver1070.so" 0 0 644 "u:object_r:system_lib_file:s0"

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 KERNEL_API_URL="https://api.github.com/repos/UN1CA/kernel_samsung_exynos2100/releases/latest"
 
 LATEST_TAG="$(

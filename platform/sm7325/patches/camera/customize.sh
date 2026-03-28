@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Add ImageTagger lib
 ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libImageTagger.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
