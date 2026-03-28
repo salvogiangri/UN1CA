@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 LOG "- Downloading A528NKSS7GYI1_kernel.tar"
 DOWNLOAD_FILE \
     "https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download/A528NKSS7GYI1_KOO_OKR/A528NKSS7GYI1_kernel.tar" \

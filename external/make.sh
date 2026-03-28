@@ -107,6 +107,7 @@ if [ ! "$SRC_DIR" ]; then
     echo "Couldn't locate the top of the tree. Try setting SRC_DIR." >&2
     exit 1
 else
+    # shellcheck disable=SC1091
     source "$SRC_DIR/scripts/utils/log_utils.sh" || exit 1
 fi
 OUT_DIR="$SRC_DIR/out"

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 LOG "- Downloading BL_G991BXXSJHZC2_G991BXXSJHZC2_MQB107294787_REV01_user_low_ship_MULTI_CERT.tar.md5"
 DOWNLOAD_FILE \
     "https://github.com/UN1CA/proprietary_vendor_samsung_exynos2100/releases/download/G991BXXSJHZC2_XEO_OXM/BL_G991BXXSJHZC2_G991BXXSJHZC2_MQB107294787_REV01_user_low_ship_MULTI_CERT.tar.md5" \

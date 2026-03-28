@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Set default SIM count to 1
 # Before: [mov w8, #0x2]
 # After: [mov w8, #0x1]

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Fix camera lock for devices with a rear SLSI sensor
 HEX_PATCH "$WORK_DIR/vendor/lib/hw/camera.qcom.so" \
     "726f2e626f6f742e666c6173682e6c6f636b656400" \

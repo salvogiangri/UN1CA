@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 DELETE_FROM_WORK_DIR "vendor" "firmware/ipa_fws.b00"
 DELETE_FROM_WORK_DIR "vendor" "firmware/ipa_fws.b01"
 DELETE_FROM_WORK_DIR "vendor" "firmware/ipa_fws.b02"
