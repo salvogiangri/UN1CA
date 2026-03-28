@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Samsung Internet Browser
 # https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser
 LOG "- Downloading Samsung Internet app"

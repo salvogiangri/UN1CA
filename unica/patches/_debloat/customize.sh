@@ -1,3 +1,5 @@
+# shellcheck disable=SC2016 shell=bash
+
 # Dexpreopt
 find "$WORK_DIR/product" -type d -name "oat" -print0 | xargs -0 -I "{}" -P "$(nproc)" \
     bash -c 'source "$SRC_DIR/scripts/utils/module_utils.sh"; DELETE_FROM_WORK_DIR "product" "${1//$WORK_DIR\/product\//}"' "bash" "{}"
@@ -16,12 +18,15 @@ fi
 
 # ROM & device-specific debloat list
 if [ -f "$SRC_DIR/unica/debloat.sh" ]; then
+    # shellcheck disable=SC1091
     source "$SRC_DIR/unica/debloat.sh"
 fi
 if [ -f "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh" ]; then
+    # shellcheck disable=SC1090
     source "$SRC_DIR/platform/$TARGET_PLATFORM/debloat.sh"
 fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh" ]; then
+    # shellcheck disable=SC1090
     source "$SRC_DIR/target/$TARGET_CODENAME/debloat.sh"
 fi
 

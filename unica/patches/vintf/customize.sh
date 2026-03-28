@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 _LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
 
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/vintf/compatibility_matrix.device.xml" ]; then

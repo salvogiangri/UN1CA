@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 DECODE_APK "system" "system/priv-app/SecSetupWizard_Global/SecSetupWizard_Global.apk"
 
 LOG "- Enabling navigation bar type settings step"

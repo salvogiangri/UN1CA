@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 DELETE_FROM_WORK_DIR "system" "system/etc/ldu_blocklist.xml"
 
 APPLY_PATCH "system" "system/framework/services.jar" \

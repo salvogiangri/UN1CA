@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # [
 _LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
 
@@ -86,7 +87,9 @@ if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWAR
 elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
         grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
     # TODO handle this condition
+    # shellcheck disable=SC2034
     SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
+    # shellcheck disable=SC2034
     TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
     LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
     unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS

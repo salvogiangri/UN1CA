@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Enable Power off lock feature
 SMALI_PATCH "system" "system/framework/framework.jar" \
     "smali_classes6/com/samsung/android/globalactions/util/SystemPropertiesWrapper.smali" "return" \

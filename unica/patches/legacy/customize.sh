@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # [
 BACKPORT_SF_PROPS()
 {

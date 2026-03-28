@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # UN1CA SELinux entries removal list
 # - Append new type entries to the ENTRIES list
 # - Add the EXACT type entry, DO NOT just add a common pattern (eg. "fabriccrypto", "fabriccrypto_exec" and NOT just "fabriccrypto")

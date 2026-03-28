@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 SET_PROP_IF_DIFF "vendor" "ro.oem_unlock_supported" "0"
 
 # Better device/model detection in CoreRune
@@ -13,6 +14,7 @@ SMALI_PATCH "system" "system/framework/framework.jar" \
     'ro.product.vendor.device'
 
 # Disable RescueParty
+# shellcheck disable=SC2016
 SMALI_PATCH "system" "system/framework/services.jar" \
     "smali/com/android/server/RescueParty.smali" "return" \
     '-$$Nest$smisDisabled()Z' \

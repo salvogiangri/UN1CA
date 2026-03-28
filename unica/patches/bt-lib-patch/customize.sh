@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 if [ ! -f "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" ]; then
     LOG_STEP_IN "- Extracting libbluetooth_jni.so from com.android.bt.apex"
 

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 
 TARGET_SCREEN_RESOLUTION="$(printf "%d" "0x$(READ_BYTES_AT "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/media/bootsamsung.qmg" "6" "2")")"

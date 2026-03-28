@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Disable app compaction
 # Guard the patch as the source firmware might have this already disabled
 LOG "- Applying \"Disable app compaction\" to /system/system/framework/services.jar"

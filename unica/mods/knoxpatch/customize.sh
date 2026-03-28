@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Nuke WSM
 DELETE_FROM_WORK_DIR "system" "system/etc/public.libraries-wsm.samsung.txt"
 DELETE_FROM_WORK_DIR "system" "system/lib/libhal.wsm.samsung.so"

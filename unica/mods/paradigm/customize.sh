@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 if [ ! "$(GET_PROP "system" "ro.unica.codename")" ]; then
     # Match latest Samsung's flagship device codename
     ROM_CODENAME="$(basename "$MODPATH")"

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 if [ "$TARGET_PRODUCT_SHIPPING_API_LEVEL" -ge "33" ]; then
     LOG "\033[0;33m! Nothing to do\033[0m"
     return 0
@@ -14,10 +15,11 @@ PATCH_FSTAB()
         if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
             continue
         fi
-        sed -E -i \
+        if sed -E -i \
             '/^(system|vendor|product|system_ext|odm|vendor_dlkm|odm_dlkm|system_dlkm)\s+/ s/(\s+\S+\s+)\S+/\1erofs/' \
-            "$f" && LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")" \
-            || true
+            "$f" || true; then
+            LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
+        fi
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
     done < <(find "$1" -type f -name "fstab.*")
 }

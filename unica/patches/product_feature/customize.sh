@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # [
 GET_FINGERPRINT_SENSOR_TYPE()
 {

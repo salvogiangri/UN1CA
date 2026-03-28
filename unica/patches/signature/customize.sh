@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 CERT_PREFIX="aosp"
 $ROM_IS_OFFICIAL && CERT_PREFIX="unica"
 

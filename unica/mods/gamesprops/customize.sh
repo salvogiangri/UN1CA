@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 SMALI_PATCH "system" "system/framework/framework.jar" \
     "smali/android/app/Instrumentation.smali" "replace" \
     'newApplication(Ljava/lang/Class;Landroid/content/Context;)Landroid/app/Application;' \

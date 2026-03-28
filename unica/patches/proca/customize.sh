@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 if [ ! -f "$WORK_DIR/kernel/boot.img" ]; then
     ABORT "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/boot.img"
 fi

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 APPLY_PATCH "system" "system/framework/framework.jar" \
     "$MODPATH/framework.jar/0001-Introduce-PlayIntegrityHooks.patch"
 SMALI_PATCH "system" "system/framework/framework.jar" \

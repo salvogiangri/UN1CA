@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Only enable on debug builds
 if ! $DEBUG; then
     LOG "\033[0;33m! Non-debug build detected. Skipping\033[0m"

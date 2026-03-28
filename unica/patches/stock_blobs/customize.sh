@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # [
 MATCH_TARGET_FEATURES()
 {

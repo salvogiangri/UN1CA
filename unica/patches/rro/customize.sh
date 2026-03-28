@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 SOURCE_PRODUCT_NAME="$(GET_PROP "system" "ro.product.system.name")"
 TARGET_PRODUCT_NAME="$(GET_PROP "vendor" "ro.product.vendor.name")"
 

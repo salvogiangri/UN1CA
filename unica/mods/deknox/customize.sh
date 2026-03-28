@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 SET_PROP_IF_DIFF "vendor" "ro.security.fips.ux" "Disabled"
 
 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
@@ -5,7 +6,7 @@ if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
 elif [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
     DONOR="a54xnsxx"
 elif [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "mssi" ]]; then
-    IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
+    IFS=':' read -r -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
     MODEL=$(cut -d "/" -f 1 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
     REGION=$(cut -d "/" -f 2 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
     DONOR="$MODEL/$REGION"

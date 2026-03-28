@@ -1,3 +1,4 @@
+# shellcheck disable=SC2094 shell=bash
 # UN1CA floating_feature patch
 # - Add deprecated features in the $DEPRECATED variable
 # - Add features to ignore in the $BLACKLIST variable
@@ -127,7 +128,8 @@ SEC_FLOATING_FEATURE_SAIV_CONFIG_ARDOODLE_LIB=IMG_PICKING
 # [
 APPLY_TARGET_FEATURE()
 {
-    local TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
+    local TARGET_FIRMWARE_PATH
+    TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 
     local SOURCE_FILE="$WORK_DIR/system/system/etc/floating_feature.xml"
     local TARGET_FILE="$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/floating_feature.xml"
