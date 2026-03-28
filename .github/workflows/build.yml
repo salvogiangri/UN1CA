@@ -8,7 +8,7 @@ on:
       - 'sixteen'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-build
   cancel-in-progress: true
 
 jobs:
