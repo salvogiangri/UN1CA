@@ -1,0 +1,7 @@
+0 2000 755 capabilities=0x0
+vendor/lib 0 2000 755 capabilities 0x0
+vendor/lib/egl 0 2000 755 capabilities 0x0
+vendor/lib/egl/libGLES_mali.so 0 0 644 capabilities 0x0 
+vendor/lib64 0 2000 755 capabilities 0x0
+vendor/lib64/egl 0 2000 755 capabilities 0x0
+vendor/lib64/egl/libGLES_mali.so 0 0 644 capabilities 0x0
