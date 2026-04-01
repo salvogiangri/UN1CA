@@ -1,0 +1,5 @@
+ 0 0 755 capabilities=0x0
+vendor/firmware 0 2000 755 capabilities=0x0
+vendor/firmware/wifi 0 2000 755 capabilities=0x0
+vendor/firmware/wifi/mx140.bin 0 0 644 capabilities=0x0
+vendor/firmware/wifi/mx140_t.bin 0 0 644 capabilities=0x0
