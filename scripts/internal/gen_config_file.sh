@@ -11,16 +11,24 @@ GET_BUILD_VAR()
 {
     if [ "$2" ]; then
         if [ ! "${!1}" ]; then
-            echo "${1}=\"${2}\""
-            return 0
+            val="$2"
+        else
+            val="${!1}"
         fi
     else
         _CHECK_NON_EMPTY_PARAM "$1" "${!1}" || exit 1
+        val="${!1}"
     fi
 
-    echo "${1}=\"${!1}\""
+    if [ "$val" = "true" ] || [ "$val" = "false" ] || [ "$val" = "0" ] || [ "$val" = "1" ]; then
+        echo "${1}=${val}"
+    else
+        echo "${1}=\"${val}\""
+    fi
+
     return 0
 }
+
 
 IS_UNICA_CERT_AVAILABLE()
 {
@@ -442,9 +450,9 @@ fi
     GET_BUILD_VAR "TARGET_PLATFORM_SDK_VERSION"
     GET_BUILD_VAR "TARGET_PRODUCT_SHIPPING_API_LEVEL"
     GET_BUILD_VAR "TARGET_BOARD_API_LEVEL"
-    GET_BUILD_VAR "TARGET_DISABLE_AVB_SIGNING" "false"
-    GET_BUILD_VAR "TARGET_INCLUDE_PATCHED_VBMETA" "false"
-    GET_BUILD_VAR "TARGET_KEEP_ORIGINAL_SIGN" "false"
+    GET_BUILD_VAR "TARGET_DISABLE_AVB_SIGNING" false
+    GET_BUILD_VAR "TARGET_INCLUDE_PATCHED_VBMETA" false
+    GET_BUILD_VAR "TARGET_KEEP_ORIGINAL_SIGN" false
     GET_BUILD_VAR "TARGET_BOOT_PARTITION_SIZE" "none"
     GET_BUILD_VAR "TARGET_DTBO_PARTITION_SIZE" "none"
     GET_BUILD_VAR "TARGET_INIT_BOOT_PARTITION_SIZE" "none"
