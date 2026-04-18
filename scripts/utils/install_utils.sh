@@ -36,7 +36,7 @@ GET_DEVICE_FROM_MOUNTPOINT()
         fi
     fi
     if [ ! -f "$FSTAB_FILE" ]; then
-        LOGW "File not found: target/$TARGET_CODENAME/installer/recovery.fstab"
+        LOGE "File not found: target/$TARGET_CODENAME/installer/recovery.fstab"
         exit 1
     fi
 
