@@ -80,7 +80,7 @@ jobs:
       - name: Build ROM
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh
+          ./scripts/make_rom.sh --build-rom-zip
 
       - name: Download PixelDrain CLI (pd)
         run: |
@@ -91,10 +91,10 @@ jobs:
           
       - name: Upload ROM to PixelDrain
         env:
-          PIXELDRAIN_API_KEY: ${{ secrets.PIXELDRAIN_API_KEY }}
+         PIXELDRAIN_API_KEY: ${{ secrets.PIXELDRAIN_API_KEY }}
         run: |
           cd out
-          ROM_FILE=$(ls *.zip | head -n 1)
+          ROM_FILE=$(ls UN1CA*.zip 2>/dev/null | head -n 1)
 
           if [ -z "$ROM_FILE" ]; then
             echo "No ROM zip found!"
