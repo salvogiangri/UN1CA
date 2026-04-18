@@ -112,11 +112,25 @@ SMALI_PATCH "system" "system/priv-app/SecSettingsIntelligence/SecSettingsIntelli
     '    const-string v36, "top_level_unica"\n\n    filled-new-array/range {v1 .. v36}, [Ljava/lang/String;' \
     > /dev/null
 
+# Fetch and set PIF version
+PIF_VERSION="$(curl -sL "https://github.com/UN1CA/static_resources/raw/refs/heads/sixteen/pif/pif.json" | jq -r '.VERSION')"
+
+if [ ! "$PIF_VERSION" ]; then
+    LOGE "Failed to fetch pif.json"
+    return 1
+fi
+
+SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "smali_classes4/io/mesalabs/unica/settings/pif/PIFUtils.smali" "replaceall" \
+    'CONFIG_PIF_VERSION' \
+    "$PIF_VERSION" \
+    > /dev/null
+
 # Show Vulkan renderer toggle if required
 if [[ "$(GET_PROP "ro.hwui.use_vulkan")" != "true" ]]; then
     SET_PROP "system" "persist.sys.unica.vulkan" "false"
 fi
 
-unset PATCH_INST CONTENT
+unset PATCH_INST CONTENT PIF_VERSION
 
 LOG_STEP_OUT
