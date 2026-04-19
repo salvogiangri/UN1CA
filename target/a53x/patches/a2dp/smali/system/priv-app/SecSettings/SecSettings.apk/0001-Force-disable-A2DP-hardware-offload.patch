@@ -1,0 +1,80 @@
+From 87029a0db2f1dd6aeddafaebf3ec0835f03fe708 Mon Sep 17 00:00:00 2001
+From: Majaahh <maja.blaszczak@proton.me>
+Date: Sun, 19 Apr 2026 16:49:28 +0200
+Subject: [PATCH] Force disable A2DP hardware offload
+
+---
+ ...othA2dpHwOffloadPreferenceController.smali | 41 +++++--------------
+ 1 file changed, 10 insertions(+), 31 deletions(-)
+
+diff --git a/smali_classes2/com/android/settings/development/BluetoothA2dpHwOffloadPreferenceController.smali b/smali_classes2/com/android/settings/development/BluetoothA2dpHwOffloadPreferenceController.smali
+index b8ba02cb..b3c0c3f6 100644
+--- a/smali_classes2/com/android/settings/development/BluetoothA2dpHwOffloadPreferenceController.smali
++++ b/smali_classes2/com/android/settings/development/BluetoothA2dpHwOffloadPreferenceController.smali
+@@ -90,35 +90,10 @@
+ .end method
+ 
+ .method public final onPreferenceChange(Landroidx/preference/Preference;Ljava/lang/Object;)Z
+-    .locals 1
++    .locals 0
+ 
+     const/4 p1, 0x1
+ 
+-    iput-boolean p1, p0, Lcom/android/settings/development/BluetoothA2dpHwOffloadPreferenceController;->mChanged:Z
+-
+-    const/4 p2, 0x0
+-
+-    const-string v0, "persist.bluetooth.a2dp_offload.disabled"
+-
+-    invoke-static {v0, p2}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    move-result p2
+-
+-    xor-int/2addr p2, p1
+-
+-    invoke-static {p2}, Ljava/lang/Boolean;->toString(Z)Ljava/lang/String;
+-
+-    move-result-object p2
+-
+-    invoke-static {v0, p2}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    iget-object p0, p0, Lcom/android/settings/development/BluetoothA2dpHwOffloadPreferenceController;->mBluetoothA2dp:Landroid/bluetooth/BluetoothA2dp;
+-
+-    if-eqz p0, :cond_0
+-
+-    invoke-virtual {p0}, Landroid/bluetooth/BluetoothA2dp;->setA2dpOffloadMode()V
+-
+-    :cond_0
+     return p1
+ .end method
+ 
+@@ -129,17 +104,21 @@
+ 
+     const-string p1, "persist.bluetooth.a2dp_offload.disabled"
+ 
+-    const/4 v0, 0x0
+-
+-    invoke-static {p1, v0}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    const-string v0, "true"
+ 
+-    move-result p1
++    invoke-static {p1, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+ 
+     iget-object p0, p0, Lcom/android/settingslib/development/DeveloperOptionsPreferenceController;->mPreference:Landroidx/preference/Preference;
+ 
+     check-cast p0, Landroidx/preference/TwoStatePreference;
+ 
+-    invoke-virtual {p0, p1}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
++    const/4 v0, 0x1
++
++    invoke-virtual {p0, v0}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p0, v0}, Landroidx/preference/Preference;->setEnabled(Z)V
+ 
+     return-void
+ .end method
+-- 
+2.53.0
+
