@@ -1,0 +1,71 @@
+From 581279b46a0824ce7a6facd88c61f1956e12cd51 Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Sun, 19 Apr 2026 15:36:21 +0200
+Subject: [PATCH] Always show all parts of SecBatteryInfoFragment
+
+---
+ .../batteryinfo/SecBatteryInfoFragment.smali  | 41 +------------------
+ 1 file changed, 2 insertions(+), 39 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
+index 7c8b830d..3a3ed6e6 100644
+--- a/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
++++ b/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
+@@ -226,18 +226,8 @@
+     .locals 4
+ 
+     sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+-
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "SM-A236B"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
++
++    const/4 v0, 0x1
+ 
+     const/4 v1, 0x1
+ 
+@@ -375,33 +365,6 @@
+ 
+     sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+ 
+-    const-string/jumbo v0, "ro.product.model"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v2, "SM-A236B"
+-
+-    invoke-virtual {v2, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    const v0, 0x7f0a0688
+-
+-    invoke-virtual {p0, v0}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+-
+-    move-result-object v0
+-
+-    check-cast v0, Landroid/widget/LinearLayout;
+-
+-    const/16 v2, 0x8
+-
+-    invoke-virtual {v0, v2}, Landroid/widget/LinearLayout;->setVisibility(I)V
+-
+-    :cond_0
+     invoke-virtual {p1, p0}, Landroidx/appcompat/app/AlertDialog$Builder;->setView(Landroid/view/View;)V
+ 
+     invoke-virtual {p1}, Landroidx/appcompat/app/AlertDialog$Builder;->create()Landroidx/appcompat/app/AlertDialog;
+-- 
+2.53.0
+
