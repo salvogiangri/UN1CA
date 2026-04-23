@@ -66,8 +66,8 @@ PREPARE_SCRIPT()
         if $INCREMENTAL; then
             local SOURCE_BUILD_INFO
 
-            EVAL "unzip -p \"$TARGET_ZIP\" \"build_info.txt\"" || exit 1
-            SOURCE_BUILD_INFO="$(unzip -p "$TARGET_ZIP" "build_info.txt")"
+            EVAL "unzip -p \"$SOURCE_ZIP\" \"build_info.txt\"" || exit 1
+            SOURCE_BUILD_INFO="$(unzip -p "$SOURCE_ZIP" "build_info.txt")"
 
             OUTPUT_FILE+="-INCREMENTAL_"
             OUTPUT_FILE+="$(grep "^timestamp" <<< "$SOURCE_BUILD_INFO" | cut -d "=" -f 2 -s)"
