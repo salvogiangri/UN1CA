@@ -5,7 +5,7 @@
 -->
 <resources>
   <!-- ESTPP -->
-  <local name="SUPPORT_PET_DETECTION" value="false" />
+  <local name="SUPPORT_PET_DETECTION" value="true" />
 
   <!-- Polarr Features -->
   <local name="POLARR_SCENEKIT_LITE_MODE" value="true" />
