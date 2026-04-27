@@ -1,0 +1,8 @@
+system 0 0 755 capabilities=0x0
+system/saiv 0 0 755 capabilities=0x0
+system/saiv/image_understanding 0 0 755 capabilities=0x0
+system/saiv/image_understanding/db 0 0 755 capabilities=0x0
+system/saiv/image_understanding/db/slens_classifier 0 0 755 capabilities=0x0
+system/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn.sni 0 0 644 capabilities=0x0
+system/saiv/image_understanding/db/slens_detector 0 0 755 capabilities=0x0
+system/saiv/image_understanding/db/slens_detector/slens_detector_cnn.sni 0 0 644 capabilities=0x0

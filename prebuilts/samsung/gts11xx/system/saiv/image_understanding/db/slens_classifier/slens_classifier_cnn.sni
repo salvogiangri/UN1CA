@@ -1,0 +1,13 @@
+{
+    "SERVICE_NAME": "BIXBYVISION",
+    "SERVICE_VERSION": "3.5",
+    "MODEL_TYPE": "classifier",
+    "COMPILER_NAME": "SNAPLITE",
+    "COMPUTE_UNIT": "CPU",
+    "COMPILER_OPTION": "CPU",
+    "COMPILER_VERSION": "none",
+    "MODEL_VERSION": "7.0.0",
+    "MODEL_FOLDER": "/vendor/etc/saiv/image_understanding/db/",
+    "MODEL_TYPE_ABBR": "CLS",
+    "MODEL_FILES": "slens_classifier_cnn.tflite"
+}
