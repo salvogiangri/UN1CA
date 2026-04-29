@@ -111,7 +111,9 @@ fi
 # - Same lib name as before, check for TARGET_PLATFORM_SDK_VERSION instead
 if [ -f "$WORK_DIR/system/system/lib/libnfc_sec_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_sec_jni.so" ] && \
-            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ]; then
+            [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_sec.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_sec.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_sec_jni.so"
     fi
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_sec_jni.so" ] || \
@@ -123,7 +125,8 @@ elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_sec_jni.so" ] 
     fi
 fi
 if [ -f "$WORK_DIR/system/system/lib64/libnfc_sec_jni.so" ]; then
-    if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ]; then
+    if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_sec.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_sec_jni.so"
     fi
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ]; then
