@@ -22,6 +22,12 @@
   <local name="SINGLE_TAKE_LITE_USE_CAMERA_FILTERS" value="true" />
   <local name="HIDT_VIDEO_DURATION" value="6" />
 
+  <!-- ST1.5 features  -->
+  <local name="SUPPORT_COLLAGE" value="true" />
+  <local name="VIDEO_GENERATION_HIGHLIGHTS_VIDEO" value="true" />
+  <local name="ENABLE_HV_LITE" value="true" />
+  <local name="ENABLE_HIGHLIGHT_VIDEO_CUSTOMIZATION" value="true" />
+
   <!-- STP -->
   <local name="PREVIEW_BUFFER_POOL_SIZE" value="10" />
   <local name="MASTER_BUFFER_POOL_SIZE" value="2" />

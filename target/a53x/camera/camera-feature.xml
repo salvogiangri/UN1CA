@@ -151,7 +151,8 @@
   <local name="SHOOTING_MODE_QR" back="QR" enable="true" more="false" order="100" preview-size="2400x1080" />
 
   <!-- SingleTake - Features -->
-  <local name="SUPPORT_SINGLE_TAKE_COLLAGES" value="false" />
+  <local name="SUPPORT_SINGLE_TAKE_COLLAGES" value="true" />
+  <local name="SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" value="true" />
   <local name="SINGLE_TAKE_CAPTURE_INTERVAL" value="1000" />
   <local name="REAR_SINGLE_TAKE_CAPTURE_INTERVAL" value="1200" />
   <local name="SINGLE_TAKE_FRONT_CAMERA_DYNAMIC_FOV" value="false" />
