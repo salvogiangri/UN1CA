@@ -61,6 +61,26 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "$FW_DIR/$TARGET_FIRMWARE_PATH/system/syste
     ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/pet_mypetsearch" 0 2000 755 "u:object_r:vendor_snap_file:s0"
 fi
 
+# SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
+if [[ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]]; then
+    if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
+        if [[ ! -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ]] || \
+                [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+            if [[ -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ]]; then
+                DELETE_FROM_WORK_DIR "vendor" "etc/singletake/SmartCrop"
+            fi
+            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/SmartCrop" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        fi
+    fi
+    if [[ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]] || \
+            [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+        if [[ -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/ClarityScorer"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_CONFIG_ACTION_CLASSIFIER
 if [[ -f "$WORK_DIR/system/system/lib64/libVideoClassifier.camera.samsung.so" ]]; then
     if [[ ! -d "$WORK_DIR/vendor/etc/singletake/dynamic_viewing" ]] || \
