@@ -152,6 +152,7 @@
 
   <!-- SingleTake - Features -->
   <local name="SUPPORT_SINGLE_TAKE_COLLAGES" value="true" />
+  <local name="SUPPORT_SINGLE_TAKE_EXTENDED_CAPTURE" value="true" />
   <local name="SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" value="true" />
   <local name="SINGLE_TAKE_CAPTURE_INTERVAL" value="1000" />
   <local name="REAR_SINGLE_TAKE_CAPTURE_INTERVAL" value="1200" />
