@@ -163,9 +163,6 @@
   <local name="REAR_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MIN" value="15" />
   <local name="FRONT_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MAX" value="24" />
 
-  <!-- Slow Motion - Features -->
-  <local name="LIMITATION_SLOWMOTION_DURING_SMARTVIEW" value="true" />
-
   <!-- Special - Features -->
   <local name="SUPPORT_TAP_AND_HOLD_CAMERA_BUTTON" value="true" />
   <local name="CAMERA_QUICK_LAUNCH_USING_POWER_KEY" value="true" />
@@ -188,7 +185,6 @@
   <!-- Super Slow Motion - Features -->
   <local name="SUPPORT_SUPER_SLOW_MOTION_AUTO_DETECTION" value="false" />
   <local name="SUPER_SLOW_MOTION_MAX_FRC_TIME" value="400" />
-  <local name="LIMITATION_SUPER_SLOWMOTION_DURING_SMARTVIEW" value="true" />
 
   <!-- Temporary enable for QC -->
   <local name="SUPPORT_SAVE_AS_FLIPPED_IN_MEDIA_RECORDER" value="true" />
@@ -212,8 +208,6 @@
   <local name="SUPPORT_VIDEO_HDR" value="false" />
   <local name="SUPPORT_HDR10_PLUS_RECORDING" value="false" />
   <local name="SUPPORT_RECORDING_LENS_CHANGE" value="true" />
-  <local name="LIMITATION_FHD_60FPS_RECORDING_DURING_SMARTVIEW" value="true" />
-  <local name="LIMITATION_UHD_RECORDING_DURING_SMARTVIEW" value="true" />
 
   <!-- Pro Video - Features -->
   <local name="SUPPORT_PRO_AE_PRIORITY_MODE" value="true" />
