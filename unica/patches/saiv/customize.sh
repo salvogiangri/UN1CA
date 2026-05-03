@@ -17,5 +17,12 @@ else
 fi
 
 # SEC_PRODUCT_FEATURE_CAMERA_CONFIG_STRIDE_OCR_VERSION
-DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
+if [[ -d "$WORK_DIR/system/system/saiv/textrecognition" ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
+fi
 ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/saiv/textrecognition" 0 0 755 "u:object_r:system_file:s0"
+
+if [[ -d "$WORK_DIR/system/system/saiv/str" ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/saiv/str"
+fi
+ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/saiv/str" 0 0 755 "u:object_r:system_file:s0"
