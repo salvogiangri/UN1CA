@@ -87,6 +87,17 @@ if [[ -f "$WORK_DIR/system/system/priv-app/BixbyVisionFramework3.5/BixbyVisionFr
     fi
 fi
 
+if [[ -f "$WORK_DIR/system/system/priv-app/PhotoEditor_AIFull/PhotoEditor_AIFull.apk" ]]; then
+    if [[ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/hs_segmenter" ]] || \
+            [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+        if [[ -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/hs_segmenter" ]]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/saiv/image_understanding/db/hs_segmenter"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/saiv/image_understanding/db/hs_segmenter/hs_segmenter.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/saiv/image_understanding/db/hs_segmenter/hs_segmenter.info" 0 0 644 "u:object_r:vendor_configs_file:s0"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
 if [[ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]]; then
     if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
