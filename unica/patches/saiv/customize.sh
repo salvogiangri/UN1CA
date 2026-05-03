@@ -61,6 +61,17 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "$FW_DIR/$TARGET_FIRMWARE_PATH/system/syste
     ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/pet_mypetsearch" 0 2000 755 "u:object_r:vendor_snap_file:s0"
 fi
 
+# SEC_PRODUCT_FEATURE_CAMERA_CONFIG_ACTION_CLASSIFIER
+if [[ -f "$WORK_DIR/system/system/lib64/libVideoClassifier.camera.samsung.so" ]]; then
+    if [[ ! -d "$WORK_DIR/vendor/etc/singletake/dynamic_viewing" ]] || \
+            [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+        if [[ -d "$WORK_DIR/vendor/etc/singletake/dynamic_viewing" ]]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/dynamic_viewing"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/dynamic_viewing" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_CONFIG_STRIDE_OCR_VERSION
 if [[ -d "$WORK_DIR/system/system/saiv/textrecognition" ]]; then
     DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
