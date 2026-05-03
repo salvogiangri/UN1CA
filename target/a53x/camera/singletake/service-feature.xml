@@ -1,0 +1,44 @@
+<?xml version= "1.0" encoding= "UTF-8"?>
+<resources>
+	<!-- Single take Full/Lite version -->
+	<local name="ENABLE_SINGLE_TAKE_LITE" value="true"  />
+
+	<!-- STP -->
+	<local name="PREVIEW_BUFFER_POOL_SIZE" value="10"  />
+	<local name="MASTER_BUFFER_POOL_SIZE" value="2"  />
+	<local name="SLAVE_BUFFER_POOL_SIZE" value="2"  />
+	<local name="CAPTURE_FRAME_GAP_THRESHOLD_NS" value="100000000"  />
+	<local name="SAFE_INTERNAL_STORAGE_REQUIRED_BYTES" value="536870912"  />
+	<local name="SAFE_OUTPUT_STORAGE_REQUIRED_BYTES" value="262144000"  />
+	<local name="WORST_CASE_OUTPUT_STORAGE_REQUIRED_BYTES" value="209715200"  />
+	<local name="FULL_MODE_MIN_INTERNAL_STORAGE_REQUIRED_BYTES" value="1073741824"  />
+	<local name="IDEAL_TIME_GAP_BETWEEN_CAPTURED_FRAMES_NS" value="1000000000"  />
+	
+	<!-- Polarr Features -->
+	
+	<local name="POLARR_SCENEKIT_LITE_MODE" value="true"  />
+	<local name="SUPPORT_LOWER_THRESHOLD_BM" value="true"  />
+	
+	<!-- ESTPP -->
+	<local name="SUPPORT_PET_DETECTION" value="false"  />
+	
+	<!-- STC -->
+	<local name="SUPPORT_SINGLE_BOKEH_PROCESSING" value="false"  />
+	<local name="SUPPORT_BEAUTY_PROCESSING" value="false"  />
+	<local name="SUPPORT_AI_FILTER" value="false"  />
+	<local name="SUPPORT_SMART_CROP" value="true"  />
+	<local name="SINGLE_TAKE_LITE_USE_CAMERA_FILTERS" value="true"  />
+	<local name="HIDT_VIDEO_DURATION" value="6"  />
+	
+	
+	<!-- RAPID MOMENT -->
+	<local name="SUPPORT_RAPID_MOMENT" value="false"  />
+	
+	<!-- Video -->
+	<local name="VIDEO_FF_ENABLE" value="true"  />
+	<local name="VIDEO_FRONT_REVERSE_ENABLE" value="false"  />
+	<local name="VIDEO_REAR_REVERSE_ENABLE" value="true"  />
+	<local name="VIDEO_GENERATION_PARALLEL_ENABLE" value="false"  />
+	<local name="PHOTO_MAPPER_VERSION" value="3"  />
+	<local name="VIDEO_MAPPER_VERSION" value="3"  />
+</resources>
