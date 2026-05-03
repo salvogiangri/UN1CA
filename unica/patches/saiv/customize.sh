@@ -48,6 +48,19 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "$FW_DIR/$TARGET_FIRMWARE_PATH/system/syste
     ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/saiv/image_understanding/db/aig" 0 0 755 "u:object_r:system_file:s0"
 fi
 
+# SEC_PRODUCT_FEATURE_GALLERY_CONFIG_PET_CLUSTER_VERSION
+if [[ "$(GET_FLOATING_FEATURE_CONFIG "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/floating_feature.xml" "SEC_FLOATING_FEATURE_GALLERY_CONFIG_PET_CLUSTER_VERSION")" != "V1001" ]] && \
+        [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_PET_CLUSTER_VERSION")" == "V1001" ]]; then
+    if [[ -d "$WORK_DIR/vendor/saiv/image_understanding/db/pet_detector" ]]; then
+        DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/pet_detector"
+    fi
+    ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/pet_detector" 0 2000 755 "u:object_r:vendor_snap_file:s0"
+    if [[ -d "$WORK_DIR/vendor/saiv/image_understanding/db/pet_mypetsearch" ]]; then
+        DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/pet_mypetsearch"
+    fi
+    ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/pet_mypetsearch" 0 2000 755 "u:object_r:vendor_snap_file:s0"
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_CONFIG_STRIDE_OCR_VERSION
 if [[ -d "$WORK_DIR/system/system/saiv/textrecognition" ]]; then
     DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
