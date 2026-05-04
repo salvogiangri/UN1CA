@@ -98,6 +98,17 @@ if [[ -f "$WORK_DIR/system/system/priv-app/PhotoEditor_AIFull/PhotoEditor_AIFull
     fi
 fi
 
+if [[ -f "$WORK_DIR/system/system/lib64/libsmart_cropping.camera.samsung.so" ]]; then
+    if [[ ! -d "$WORK_DIR/system/system/saiv/smartcropping_2.0" ]] || \
+            [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+        if [[ -d "$WORK_DIR/system/system/saiv/smartcropping_2.0" ]]; then
+            DELETE_FROM_WORK_DIR "system" "system/saiv/smartcropping_2.0"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/saiv/smartcropping_2.0/db/smartcrop_saliency_deploy.prototxt" 0 0 644 "u:object_r:system_file:s0"
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/saiv/smartcropping_2.0/db/smartcrop_saliency_train" 0 0 644 "u:object_r:system_file:s0"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
 if [[ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]]; then
     if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
