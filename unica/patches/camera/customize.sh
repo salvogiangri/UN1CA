@@ -301,6 +301,11 @@ if [ -f "$WORK_DIR/system/system/lib64/libImageSegmenter_v1.camera.samsung.so" ]
         [ ! -d "$WORK_DIR/vendor/etc/portrait_data/LF_segmenter" ]; then
     DELETE_FROM_WORK_DIR "system" "system/lib64/libImageSegmenter_v1.camera.samsung.so"
 fi
+if [ -f "$WORK_DIR/system/system/lib64/libSceneDetector_v1.camera.samsung.so" ]; then
+    if [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_classifier" ] || [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_detector" ]; then
+        DELETE_FROM_WORK_DIR "system" "system/lib64/libSceneDetector_v1.camera.samsung.so"
+    fi
+fi
 
 # Fix object capture
 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
