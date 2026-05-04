@@ -109,6 +109,16 @@ if [[ -f "$WORK_DIR/system/system/lib64/libsmart_cropping.camera.samsung.so" ]];
     fi
 fi
 
+if [[ -f "$WORK_DIR/system/system/lib64/libImageCropper.camera.samsung.so" ]]; then
+    if [[ ! -d "$WORK_DIR/vendor/saiv/image_understanding/db/sce_detector" ]] || \
+            [[ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]]; then
+        if [[ -d "$WORK_DIR/vendor/saiv/image_understanding/db/sce_detector" ]]; then
+            DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/sce_detector"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/sce_detector/sce_detector_cnn.tflite" 0 0 644 "u:object_r:vendor_snap_file:s0"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
 if [[ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]]; then
     if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
