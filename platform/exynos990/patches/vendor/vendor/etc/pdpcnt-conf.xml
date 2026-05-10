@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Copyright 2006, Google Inc.
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<!--
+mtuTableEntry attributes:
+	numeric:MCC+MNC from IMSI
+	context2G: 2G pdp context count
+	context3G: 3G pdp context count
+-->
+<pdpContextTableEntry>
+
+<!-- Voda (Operator) -->
+    <pdpContextTableEntry numeric="53001" context2G="4" context3G="11"/><!-- New Zealand -->
+    <pdpContextTableEntry numeric="27201" context2G="4" context3G="11"/><!-- Ireland -->
+    <pdpContextTableEntry numeric="26801" context2G="3" context3G="3"/> <!-- Portugal -->
+    <pdpContextTableEntry numeric="21670" context2G="4" context3G="3"/> <!-- Hungary -->
+    <pdpContextTableEntry numeric="20404" context2G="5" context3G="2"/> <!-- Netherlands -->
+    <pdpContextTableEntry numeric="20205" context2G="7" context3G="2"/> <!-- Greece -->
+    <pdpContextTableEntry numeric="26202" context2G="6" context3G="2"/> <!-- Germany -->
+    <pdpContextTableEntry numeric="23415" context2G="6" context3G="3"/> <!-- UK -->
+    <pdpContextTableEntry numeric="22210" context2G="3" context3G="3"/> <!-- Italy -->
+    <pdpContextTableEntry numeric="21401" context2G="7" context3G="2"/> <!-- Spain -->
+    <pdpContextTableEntry numeric="27801" context2G="4" context3G="1"/> <!-- Malta -->
+    <pdpContextTableEntry numeric="50503" context2G="2" context3G="2"/> <!-- Australia -->
+    <pdpContextTableEntry numeric="60202" context2G="1" context3G="1"/> <!-- Egypt -->
+    <pdpContextTableEntry numeric="23003" context2G="7" context3G="1"/> <!-- Czech -->
+    <pdpContextTableEntry numeric="22601" context2G="1" context3G="1"/> <!-- Romania -->
+    <pdpContextTableEntry numeric="27402" context2G="1" context3G="1"/> <!-- IceLand 1 -->
+    <pdpContextTableEntry numeric="27403" context2G="1" context3G="1"/> <!-- IceLand 2 -->
+    <pdpContextTableEntry numeric="28001" context2G="1" context3G="1"/> <!-- Cyprus(CYTA) -->
+    <pdpContextTableEntry numeric="22801" context2G="7" context3G="2"/> <!-- Switzerland -->
+    <pdpContextTableEntry numeric="20810" context2G="3" context3G="3"/> <!-- France(SFR) -->
+    <pdpContextTableEntry numeric="23201" context2G="2" context3G="2"/> <!-- Austria(mobilkom) -->
+    <pdpContextTableEntry numeric="21910" context2G="2" context3G="3"/> <!-- Croatia(VIPnet) -->
+    <pdpContextTableEntry numeric="29340" context2G="3" context3G="3"/> <!-- Slovenia(si.mobil) -->
+    <pdpContextTableEntry numeric="20601" context2G="3" context3G="3"/> <!-- Belgium(Proximus) -->
+    <pdpContextTableEntry numeric="65501" context2G="10" context3G="10"/> <!-- South Africa -->
+    <pdpContextTableEntry numeric="28401" context2G="1" context3G="1"/> <!-- Bulgaria(Mobiltel) -->
+    
+<!-- Germany -->
+    <pdpContextTableEntry numeric="26203" context2G="1" context3G="2"/> <!-- E-Plus -->
+    <pdpContextTableEntry numeric="26207" context2G="4" context3G="4"/> <!-- o2 - de -->
+    <pdpContextTableEntry numeric="26208" context2G="4" context3G="4"/> <!-- o2 - de -->
+
+<!-- UK -->
+    <pdpContextTableEntry numeric="23410" context2G="3" context3G="3"/> <!-- O2 - UK -->
+    <pdpContextTableEntry numeric="23420" context2G="2" context3G="2"/> <!-- 3 UK -->
+    <pdpContextTableEntry numeric="23433" context2G="11" context3G="11"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="23486" context2G="11" context3G="11"/> <!-- Orange -->
+
+<!-- Italy -->
+    <pdpContextTableEntry numeric="22201" context2G="11" context3G="11"/> <!-- TIM -->
+    <pdpContextTableEntry numeric="22299" context2G="1" context3G="1"/> <!-- H3G(HUI) -->
+    <pdpContextTableEntry numeric="22288" context2G="4" context3G="11"/> <!-- WIND -->
+
+<!-- France -->
+    <pdpContextTableEntry numeric="20801" context2G="3" context3G="3"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="20820" context2G="2" context3G="2"/> <!-- Bouygues -->
+
+<!-- Spain -->
+    <pdpContextTableEntry numeric="21402" context2G="3" context3G="2"/> <!-- Telefonica 1 -->
+    <pdpContextTableEntry numeric="21407" context2G="3" context3G="2"/> <!-- Telefonica 2 -->
+    <pdpContextTableEntry numeric="21403" context2G="7" context3G="7"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="21404" context2G="3" context3G="2"/> <!-- YOIGO -->
+
+<!-- Portugal -->
+    <pdpContextTableEntry numeric="26806" context2G="3" context3G="3"/> <!-- TMN -->
+    <pdpContextTableEntry numeric="26803" context2G="3" context3G="3"/> <!-- Optimus -->
+
+<!-- Netherlands -->
+    <pdpContextTableEntry numeric="20408" context2G="11" context3G="3"/> <!-- KPN -->
+    <pdpContextTableEntry numeric="20412" context2G="11" context3G="3"/> <!-- NL Telfort -->
+
+<!-- Switzerland -->
+    <pdpContextTableEntry numeric="22803" context2G="2" context3G="2"/> <!-- Orange -->
+
+<!-- Poland -->
+    <pdpContextTableEntry numeric="26001" context2G="4" context3G="4"/> <!-- Plus -->
+    <pdpContextTableEntry numeric="26003" context2G="4" context3G="4"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="26006" context2G="4" context3G="4"/> <!-- Play -->
+    <pdpContextTableEntry numeric="26012" context2G="4" context3G="4"/> <!-- Cyfrowy Polsat -->
+
+<!-- Denmark -->
+    <pdpContextTableEntry numeric="23801" context2G="1" context3G="2"/> <!-- Plus -->
+    <pdpContextTableEntry numeric="23802" context2G="11" context3G="11"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="23877" context2G="11" context3G="11"/> <!-- Play -->
+    <pdpContextTableEntry numeric="23866" context2G="11" context3G="11"/> <!-- Cyfrowy Polsat -->
+    <pdpContextTableEntry numeric="23806" context2G="1" context3G="1"/> <!-- Plus -->
+    <pdpContextTableEntry numeric="23820" context2G="1" context3G="2"/> <!-- Orange -->
+    <pdpContextTableEntry numeric="23830" context2G="1" context3G="2"/> <!-- Play -->
+    <pdpContextTableEntry numeric="23801381" context2G="1" context3G="2"/> <!-- Cyfrowy Polsat -->
+
+<!-- Sweden -->
+    <pdpContextTableEntry numeric="24001" context2G="4" context3G="11"/> <!-- Telia -->
+    <pdpContextTableEntry numeric="24002" context2G="4" context3G="4"/> <!-- "3" -->
+    <pdpContextTableEntry numeric="24004" context2G="2" context3G="2"/> <!-- SWEDEN -->
+    <pdpContextTableEntry numeric="24005" context2G="1" context3G="2"/> <!-- Sweden 3G -->
+    <pdpContextTableEntry numeric="24007" context2G="1" context3G="2"/> <!-- Tele2comviq -->
+    <pdpContextTableEntry numeric="24008" context2G="2" context3G="2"/> <!-- Telenor SE -->
+
+<!-- Norway -->
+    <pdpContextTableEntry numeric="24201" context2G="11" context3G="11"/> <!-- TELENOR -->
+    <pdpContextTableEntry numeric="24202" context2G="5" context3G="5"/> <!-- NETCOM -->
+    <pdpContextTableEntry numeric="24205" context2G="2" context3G="2"/> <!-- Network N -->
+    <pdpContextTableEntry numeric="2400768" context2G="1" context3G="2"/> <!-- Norway -->
+    <pdpContextTableEntry numeric="23801710" context2G="1" context3G="2"/> <!-- Norway -->
+
+<!-- Finland -->
+    <pdpContextTableEntry numeric="24405" context2G="4" context3G="4"/> <!-- ELISA -->
+    <pdpContextTableEntry numeric="24412" context2G="4" context3G="11"/> <!-- DNA -->
+    <pdpContextTableEntry numeric="24421" context2G="1" context3G="2"/> <!-- Saunalahti -->
+    <pdpContextTableEntry numeric="24491" context2G="4" context3G="4"/> <!-- FIN SORENA -->
+
+<!-- Ireland -->
+    <pdpContextTableEntry numeric="27203" context2G="1" context3G="1"/> <!-- MET -->
+    <pdpContextTableEntry numeric="27205" context2G="1" context3G="1"/> <!-- 3IE -->
+
+<!-- Austria -->
+    <pdpContextTableEntry numeric="23210" context2G="1" context3G="1"/> <!-- DRE -->
+
+<!-- Iceland -->
+    <pdpContextTableEntry numeric="27401" context2G="1" context3G="2"/> <!-- SIMINN -->
+    <pdpContextTableEntry numeric="27411" context2G="1" context3G="2"/> <!-- NOVA IS -->
+
+<!-- China -->
+    <pdpContextTableEntry numeric="46000" context2G="3" context3G="3"/> <!-- CMCC -->
+    <pdpContextTableEntry numeric="46002" context2G="3" context3G="3"/> <!-- CMCC -->
+    <pdpContextTableEntry numeric="46007" context2G="3" context3G="3"/> <!-- CMCC -->
+    <pdpContextTableEntry numeric="46001" context2G="3" context3G="3"/> <!-- China Unicom -->
+    <pdpContextTableEntry numeric="46006" context2G="3" context3G="3"/> <!-- China Unicom -->
+    <pdpContextTableEntry numeric="46009" context2G="3" context3G="3"/> <!-- China Unicom -->
+
+<!-- HongKong -->
+    <pdpContextTableEntry numeric="45400" context2G="3" context3G="3"/> <!-- CSL -->
+    <pdpContextTableEntry numeric="45402" context2G="3" context3G="3"/> <!-- CSL -->
+    <pdpContextTableEntry numeric="45403" context2G="3" context3G="3"/> <!-- "3" -->
+    <pdpContextTableEntry numeric="45404" context2G="3" context3G="3"/> <!-- "3"(2G) -->
+    <pdpContextTableEntry numeric="4540480" context2G="3" context3G="3"/> <!-- "3" -->
+    <pdpContextTableEntry numeric="45406" context2G="3" context3G="3"/> <!-- HK smarTone -->
+    <pdpContextTableEntry numeric="45407" context2G="3" context3G="3"/> <!-- "3"(2G) -->
+    <pdpContextTableEntry numeric="45410" context2G="3" context3G="3"/> <!-- CSL -->
+    <pdpContextTableEntry numeric="45412" context2G="3" context3G="3"/> <!-- CMHK -->
+    <pdpContextTableEntry numeric="45414" context2G="3" context3G="3"/> <!-- "3"(2G) -->
+    <pdpContextTableEntry numeric="45416" context2G="3" context3G="3"/> <!-- PCCW (2G) -->
+    <pdpContextTableEntry numeric="45418" context2G="3" context3G="3"/> <!-- CSL -->
+    <pdpContextTableEntry numeric="45419" context2G="3" context3G="3"/> <!-- PCCW 3G -->
+    <pdpContextTableEntry numeric="45500" context2G="3" context3G="3"/> <!-- Macao SmarTone -->
+    <pdpContextTableEntry numeric="45501" context2G="3" context3G="3"/> <!-- Macao CTM -->
+    <pdpContextTableEntry numeric="45503" context2G="3" context3G="3"/> <!-- Macao 3(2G) -->
+    <pdpContextTableEntry numeric="45505" context2G="3" context3G="3"/> <!-- Macao 3 -->
+
+<!-- Taiwan -->
+    <pdpContextTableEntry numeric="46601" context2G="3" context3G="3"/> <!-- FET -->
+    <pdpContextTableEntry numeric="46688" context2G="3" context3G="3"/> <!-- KGT -->
+    <pdpContextTableEntry numeric="46689" context2G="3" context3G="3"/> <!-- VIVO -->
+    <pdpContextTableEntry numeric="46692" context2G="3" context3G="3"/> <!-- CHT -->
+    <pdpContextTableEntry numeric="46693" context2G="3" context3G="3"/> <!-- TWM -->
+    <pdpContextTableEntry numeric="46697" context2G="3" context3G="3"/> <!-- TWM -->
+    <pdpContextTableEntry numeric="24099" context2G="1" context3G="1"/> <!-- ERP -->
+    <pdpContextTableEntry numeric="24499" context2G="1" context3G="1"/> <!-- ERP -->
+
+<!-- Vietnam -->
+    <pdpContextTableEntry numeric="45201" context2G="2" context3G="2"/> <!-- VN Mobifone -->
+    <pdpContextTableEntry numeric="45202" context2G="2" context3G="2"/> <!-- Vinaphone -->
+    <pdpContextTableEntry numeric="45204" context2G="2" context3G="2"/> <!-- VNM and VIETTEL -->
+
+<!-- Cambodia -->
+    <pdpContextTableEntry numeric="45601" context2G="1" context3G="1"/> <!-- MOBITEL - KHM -->
+    <pdpContextTableEntry numeric="45602" context2G="1" context3G="1"/> <!-- KHM-Hello GSM -->
+    <pdpContextTableEntry numeric="45604" context2G="1" context3G="1"/> <!-- CADCOMM -->
+    <pdpContextTableEntry numeric="45605" context2G="1" context3G="1"/> <!-- STAR CELL -->
+    <pdpContextTableEntry numeric="45606" context2G="1" context3G="1"/> <!-- SMART -->
+
+<!-- LAO PEOPLE'S DEMOCRATIC REPUBLIC -->
+    <pdpContextTableEntry numeric="45701" context2G="1" context3G="1"/> <!-- LAO GSM -->
+    <pdpContextTableEntry numeric="45702" context2G="1" context3G="1"/> <!-- ETL MOBILE -->
+    <pdpContextTableEntry numeric="45703" context2G="1" context3G="1"/> <!-- LATMOBIL -->
+    <pdpContextTableEntry numeric="45708" context2G="1" context3G="1"/> <!-- TANGO LAO -->
+
+<!-- Malaysia -->
+    <pdpContextTableEntry numeric="50212" context2G="2" context3G="1"/> <!-- MY MAXIS 2G -->
+    <pdpContextTableEntry numeric="50213" context2G="1" context3G="11"/> <!-- MY CELCOM  3G -->
+    <pdpContextTableEntry numeric="50216" context2G="3" context3G="2"/> <!-- DiGi 2G -->
+    <pdpContextTableEntry numeric="50217" context2G="1" context3G="2"/> <!-- MY MAXIS 3G -->
+    <pdpContextTableEntry numeric="50218" context2G="1" context3G="1"/> <!-- U Mobile -->
+    <pdpContextTableEntry numeric="50219" context2G="1" context3G="1"/> <!-- MY CELCOM  2G -->
+
+<!-- Indonesia -->
+    <pdpContextTableEntry numeric="51000" context2G="1" context3G="1"/> <!-- AceS -->
+    <pdpContextTableEntry numeric="51001" context2G="11" context3G="11"/> <!-- INDOSAT -->
+    <pdpContextTableEntry numeric="51008" context2G="4" context3G="4"/> <!-- AXIS -->
+    <pdpContextTableEntry numeric="51010" context2G="11" context3G="11"/> <!-- TELKOMSEL -->
+    <pdpContextTableEntry numeric="51011" context2G="8" context3G="8"/> <!-- XL -->
+    <pdpContextTableEntry numeric="51021" context2G="11" context3G="11"/> <!-- INDOSAT -->
+    <pdpContextTableEntry numeric="51051" context2G="1" context3G="1"/> <!-- IDNM8/Mobile-8 -->
+    <pdpContextTableEntry numeric="51089" context2G="4" context3G="4"/> <!-- "3" -->
+
+<!-- Philippines -->
+    <pdpContextTableEntry numeric="51501" context2G="1" context3G="1"/> <!-- ISLACOM -->
+    <pdpContextTableEntry numeric="51502" context2G="1" context3G="1"/> <!-- Globe -->
+    <pdpContextTableEntry numeric="51503" context2G="3" context3G="3"/> <!-- Smart -->
+    <pdpContextTableEntry numeric="51505" context2G="1" context3G="1"/> <!-- SUN -->
+    <pdpContextTableEntry numeric="51511" context2G="1" context3G="1"/> <!-- ACeS -->
+    <pdpContextTableEntry numeric="51518" context2G="1" context3G="2"/> <!-- red mobile -->
+
+<!-- Thailand -->
+    <pdpContextTableEntry numeric="52001" context2G="11" context3G="11"/> <!-- TH GSM -->
+    <pdpContextTableEntry numeric="52015" context2G="1" context3G="1"/> <!-- TH ACT 1900 -->
+    <pdpContextTableEntry numeric="52018" context2G="4" context3G="1"/> <!-- DTAC -->
+    <pdpContextTableEntry numeric="52020" context2G="1" context3G="1"/> <!-- Aces -->
+    <pdpContextTableEntry numeric="52023" context2G="1" context3G="1"/> <!-- TH GSM 1800 -->
+    <pdpContextTableEntry numeric="52099" context2G="8" context3G="8"/> <!-- True -->
+
+<!-- Singapore -->
+    <pdpContextTableEntry numeric="52501" context2G="13" context3G="13"/> <!-- SingTel -->
+    <pdpContextTableEntry numeric="52502" context2G="13" context3G="13"/> <!-- SingTel-G18 -->
+    <pdpContextTableEntry numeric="52503" context2G="3" context3G="3"/> <!-- SGP-M1-3GSM -->
+    <pdpContextTableEntry numeric="52504" context2G="3" context3G="3"/> <!-- SGP-M1-3GSM -->
+    <pdpContextTableEntry numeric="52505" context2G="2" context3G="2"/> <!-- StarHub -->
+
+<!-- Australia -->
+    <pdpContextTableEntry numeric="50501" context2G="3" context3G="3"/> <!-- Telstra -->
+    <pdpContextTableEntry numeric="50502" context2G="2" context3G="2"/> <!-- YES OPTUS -->
+    <pdpContextTableEntry numeric="50503" context2G="4" context3G="2"/> <!-- vodafone AU -->
+    <pdpContextTableEntry numeric="50506" context2G="2" context3G="2"/> <!-- "3" -->
+    <pdpContextTableEntry numeric="50508" context2G="2" context3G="2"/> <!-- One.Tel -->
+    <pdpContextTableEntry numeric="50510" context2G="2" context3G="2"/> <!-- Norfolk Telecom -->
+
+<!-- Turkey -->
+    <pdpContextTableEntry numeric="28601" context2G="3" context3G="1"/> <!-- TR Turkcell -->
+    <pdpContextTableEntry numeric="28602" context2G="2" context3G="2"/> <!-- VODAFONE TR -->
+    <pdpContextTableEntry numeric="28603" context2G="1" context3G="1"/> <!-- TR AVEA -->
+    <pdpContextTableEntry numeric="28604" context2G="1" context3G="1"/> <!-- AYCELL -->
+
+<!-- Pakistan -->
+    <pdpContextTableEntry numeric="41003" context2G="1" context3G="1"/> <!-- PK-UFONE -->
+    <pdpContextTableEntry numeric="41004" context2G="1" context3G="1"/> <!-- PAKTEL -->
+    <pdpContextTableEntry numeric="41006" context2G="1" context3G="1"/> <!-- Telenor PK -->
+    <pdpContextTableEntry numeric="41007" context2G="1" context3G="1"/> <!-- WaridTel -->
+
+<!-- Lebanon -->
+    <pdpContextTableEntry numeric="41501" context2G="1" context3G="1"/> <!-- alfa -->
+    <pdpContextTableEntry numeric="41503" context2G="1" context3G="1"/> <!-- MTC Touch -->
+
+<!-- Jordan -->
+    <pdpContextTableEntry numeric="41601" context2G="1" context3G="1"/> <!-- Fastlink -->
+    <pdpContextTableEntry numeric="41603" context2G="1" context3G="1"/> <!-- UMNIAH -->
+    <pdpContextTableEntry numeric="41677" context2G="1" context3G="1"/> <!-- Orange JO -->
+
+<!-- Syria -->
+    <pdpContextTableEntry numeric="41701" context2G="1" context3G="1"/> <!-- SYRIATEL -->
+    <pdpContextTableEntry numeric="41702" context2G="1" context3G="1"/> <!-- Areeba -->
+    <pdpContextTableEntry numeric="41709" context2G="1" context3G="1"/> <!-- SYR MOBILE SYR -->
+
+<!-- Iraq -->
+    <pdpContextTableEntry numeric="41802" context2G="1" context3G="1"/> <!-- SanaTel -->
+    <pdpContextTableEntry numeric="41805" context2G="1" context3G="1"/> <!-- ASIACELL -->
+    <pdpContextTableEntry numeric="41808" context2G="1" context3G="1"/> <!-- SanaTel -->
+    <pdpContextTableEntry numeric="41820" context2G="1" context3G="1"/> <!-- Atheer Iraq -->
+    <pdpContextTableEntry numeric="41830" context2G="1" context3G="1"/> <!-- IRAQNA -->
+
+<!-- Kuwait -->
+    <pdpContextTableEntry numeric="41902" context2G="1" context3G="1"/> <!-- MTCNet -->
+    <pdpContextTableEntry numeric="41903" context2G="1" context3G="1"/> <!-- WATANIYA -->
+
+<!-- Saudi Arabia -->
+    <pdpContextTableEntry numeric="42001" context2G="1" context3G="1"/> <!-- ALJAWAL -->
+    <pdpContextTableEntry numeric="42003" context2G="2" context3G="2"/> <!-- molily-KSA -->
+    <pdpContextTableEntry numeric="42007" context2G="1" context3G="1"/> <!-- EAE -->
+
+<!-- Yemen -->
+    <pdpContextTableEntry numeric="42101" context2G="1" context3G="1"/> <!-- SabaFon -->
+    <pdpContextTableEntry numeric="42102" context2G="1" context3G="1"/> <!-- SPACETEL -->
+
+<!-- Oman -->
+    <pdpContextTableEntry numeric="42202" context2G="1" context3G="1"/> <!-- OMAN MOBILE -->
+    <pdpContextTableEntry numeric="42203" context2G="1" context3G="1"/> <!-- nawras -->
+
+<!-- UAE -->
+    <pdpContextTableEntry numeric="42402" context2G="11" context3G="11"/> <!-- ETISALAT -->
+    <pdpContextTableEntry numeric="42403" context2G="1" context3G="1"/> <!-- du -->
+
+<!-- Israel -->
+    <pdpContextTableEntry numeric="42502" context2G="1" context3G="2"/> <!-- Cellcom -->
+
+<!-- Bahrain -->
+    <pdpContextTableEntry numeric="42601" context2G="1" context3G="1"/> <!-- BATELCO -->
+    <pdpContextTableEntry numeric="42602" context2G="1" context3G="1"/> <!-- MTC Vodafone BH -->
+
+<!-- Qatar -->
+    <pdpContextTableEntry numeric="42701" context2G="1" context3G="1"/> <!-- Qat - Qtel -->
+
+<!-- Iran -->
+    <pdpContextTableEntry numeric="43211" context2G="1" context3G="1"/> <!-- IR-TCI -->
+    <pdpContextTableEntry numeric="43214" context2G="1" context3G="1"/> <!-- IR KISH -->
+    <pdpContextTableEntry numeric="43219" context2G="1" context3G="1"/> <!-- IR MTCE -->
+    <pdpContextTableEntry numeric="43232" context2G="1" context3G="1"/> <!-- Iran Taliya -->
+    <pdpContextTableEntry numeric="43235" context2G="1" context3G="1"/> <!-- Irancell -->
+
+<!-- Japan -->
+    <pdpContextTableEntry numeric="44010" context2G="5" context3G="5"/> <!-- NTT Volte docomo -->
+    <pdpContextTableEntry numeric="44020" context2G="1" context3G="1"/> <!-- Softbank mobile -->
+
+<!-- Korea -->
+    <pdpContextTableEntry numeric="45005" context2G="3" context3G="3"/> <!-- SK Telecom -->
+    <pdpContextTableEntry numeric="4500103" context2G="3" context3G="3"/> <!-- Test Bed 3G -->
+    <pdpContextTableEntry numeric="4500180" context2G="3" context3G="3"/> <!-- Test Bed 2G -->
+
+<!-- Brazil -->
+    <pdpContextTableEntry numeric="72406" context2G="3" context3G="3"/> <!-- VIVO -->
+    <pdpContextTableEntry numeric="72410" context2G="3" context3G="3"/> <!-- VIVO -->
+    <pdpContextTableEntry numeric="72411" context2G="3" context3G="3"/> <!-- VIVO -->
+    <pdpContextTableEntry numeric="72423" context2G="3" context3G="3"/> <!-- VIVO -->
+    <pdpContextTableEntry numeric="72405" context2G="3" context3G="3"/> <!-- CLARO -->
+    <pdpContextTableEntry numeric="72402" context2G="3" context3G="3"/> <!-- TIM -->
+    <pdpContextTableEntry numeric="72403" context2G="3" context3G="3"/> <!-- TIM -->
+    <pdpContextTableEntry numeric="72404" context2G="3" context3G="3"/> <!-- TIM -->
+
+<!-- Latin Movistar (Operator) -->
+    <pdpContextTableEntry numeric="732123" context2G="3" context3G="3"/> <!-- Colombia -->
+    <pdpContextTableEntry numeric="74000" context2G="3" context3G="3"/> <!-- Equador -->
+    <pdpContextTableEntry numeric="71606" context2G="3" context3G="3"/> <!-- Peru -->
+    <pdpContextTableEntry numeric="73404" context2G="3" context3G="3"/> <!-- Venezuela -->
+    <pdpContextTableEntry numeric="73002" context2G="3" context3G="3"/> <!-- Chile -->
+    <pdpContextTableEntry numeric="72207" context2G="3" context3G="3"/> <!-- Argentina -->
+    <pdpContextTableEntry numeric="74807" context2G="3" context3G="3"/> <!-- Uruguay -->
+    <pdpContextTableEntry numeric="70403" context2G="3" context3G="3"/> <!-- Guatemala -->
+    <pdpContextTableEntry numeric="70604" context2G="3" context3G="3"/> <!-- Elsalvador -->
+    <pdpContextTableEntry numeric="71030" context2G="3" context3G="3"/> <!-- Nicuaragua -->
+    <pdpContextTableEntry numeric="710300" context2G="3" context3G="3"/> <!-- Nicuaragua -->
+    <pdpContextTableEntry numeric="33403" context2G="3" context3G="3"/> <!-- Mexico -->
+    <pdpContextTableEntry numeric="71402" context2G="3" context3G="3"/> <!-- Panama -->
+    <pdpContextTableEntry numeric="714020" context2G="3" context3G="3"/> <!-- Panama -->
+    <pdpContextTableEntry numeric="70401" context2G="3" context3G="3"/> <!-- Guatemala -->
+
+<!-- Colombia -->
+    <pdpContextTableEntry numeric="732103" context2G="3" context3G="3"/> <!-- TIGO -->
+    <pdpContextTableEntry numeric="732111" context2G="3" context3G="3"/> <!-- TIGO -->
+    <pdpContextTableEntry numeric="732101" context2G="3" context3G="3"/> <!-- Comcel -->
+
+<!-- Mexico -->
+    <pdpContextTableEntry numeric="33402" context2G="2" context3G="3"/> <!-- Telcel -->
+    <pdpContextTableEntry numeric="334020" context2G="2" context3G="3"/> <!-- Telcel -->
+
+<!-- Peru -->
+    <pdpContextTableEntry numeric="71610" context2G="3" context3G="3"/> <!-- Claro -->
+
+<!-- Venezuela -->
+    <pdpContextTableEntry numeric="73401" context2G="3" context3G="3"/> <!-- Digitel -->
+    <pdpContextTableEntry numeric="73402" context2G="3" context3G="3"/> <!-- Digitel -->
+    <pdpContextTableEntry numeric="73403" context2G="3" context3G="3"/> <!-- Digitel -->
+    <pdpContextTableEntry numeric="73406" context2G="3" context3G="3"/> <!-- Movilnet -->
+
+<!-- Argentina -->
+    <pdpContextTableEntry numeric="722310" context2G="3" context3G="3"/> <!-- Claro -->
+    <pdpContextTableEntry numeric="74810" context2G="3" context3G="3"/> <!-- Claro -->
+    <pdpContextTableEntry numeric="74402" context2G="3" context3G="3"/> <!-- Claro -->
+    <pdpContextTableEntry numeric="72234" context2G="3" context3G="3"/> <!-- Personal -->
+
+<!-- Chile -->
+    <pdpContextTableEntry numeric="73003" context2G="3" context3G="3"/> <!-- Claro -->
+    <pdpContextTableEntry numeric="73001" context2G="3" context3G="3"/> <!-- Movistar -->
+    <pdpContextTableEntry numeric="73010" context2G="3" context3G="3"/> <!-- Movistar -->
+
+<!-- PuertoRico -->
+    <pdpContextTableEntry numeric="330110" context2G="3" context3G="3"/> <!-- Claro -->
+
+<!-- Guatemala -->
+    <pdpContextTableEntry numeric="732111" context2G="3" context3G="3"/> <!-- Tigo -->
+    <pdpContextTableEntry numeric="73603" context2G="3" context3G="3"/> <!-- Tigo -->
+    <pdpContextTableEntry numeric="70402" context2G="3" context3G="3"/> <!-- Tigo -->
+    <pdpContextTableEntry numeric="70603" context2G="3" context3G="3"/> <!-- Tigo -->
+    <pdpContextTableEntry numeric="70802" context2G="3" context3G="3"/> <!-- Tigo -->
+    <pdpContextTableEntry numeric="74404" context2G="3" context3G="3"/> <!-- Tigo -->
+
+<!-- Digicel (Operator) -->
+    <pdpContextTableEntry numeric="363020" context2G="3" context3G="3"/> <!-- Aruba -->
+    <pdpContextTableEntry numeric="342750" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="338050" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="36269" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="362695" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="352030" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="358050" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="360070" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="372020" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="708040" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="53988" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="54105" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="348770" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="53703" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="71404" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="34020" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="73801" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="70602" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="374130" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="74603" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="33805" context2G="3" context3G="3"/> <!-- Miami -->
+    <pdpContextTableEntry numeric="310380" context2G="3" context3G="3"/> <!-- Miami -->
+
+<!-- Panama -->
+    <pdpContextTableEntry numeric="71403" context2G="3" context3G="3"/> <!-- Claro -->
+
+<!-- USA -->
+    <pdpContextTableEntry numeric="31041" context2G="3" context3G="3"/> <!-- AT&T -->
+    <pdpContextTableEntry numeric="310150" context2G="3" context3G="3"/> <!-- AT&T -->
+    <pdpContextTableEntry numeric="310170" context2G="3" context3G="3"/> <!-- AT&T -->
+    <pdpContextTableEntry numeric="310410" context2G="3" context3G="3"/> <!-- AT&T -->
+    <pdpContextTableEntry numeric="310980" context2G="3" context3G="3"/> <!-- AT&T -->
+    <pdpContextTableEntry numeric="311180" context2G="3" context3G="3"/> <!-- AT&T -->
+
+<!-- Canada -->
+    <pdpContextTableEntry numeric="30261" context2G="3" context3G="3"/> <!-- BMC -->
+    <pdpContextTableEntry numeric="30222" context2G="3" context3G="3"/> <!-- TELUS -->
+    <pdpContextTableEntry numeric="30272" context2G="3" context3G="3"/> <!-- ROGERS -->
+
+</pdpContextTableEntry>

@@ -1,0 +1,45 @@
+From f3cabce2e31d97f107ce3fa0b254a3767a851800 Mon Sep 17 00:00:00 2001
+From: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
+Date: Fri, 12 Sep 2025 15:35:50 +0300
+Subject: [PATCH] Fix Color Format for OMX
+
+* In OneUI 7 Samsung Switched to a separate APK for motion photo instead of native blobs (libamex)
+* Since there are no OneUI 7 devices with an OMX-only hardware encoder configuration, they switched to Codec2 only
+* Codec2 uses COLOR_FormatYUV420Flexible / 2135033992 / 0x7F420888
+* OMX uses COLOR_FormatSurface / 2130708361 / 0x7F000789
+* So we will patch the color format to the legacy OMX one for the devices that require this
+
+Relevant logs:
+```
+07-31 20:13:47.391  7480  7480 D CodecSolution_Logging: dma : false, feature: VENC, extra: SEC_HW_H265, value: -1
+07-31 20:13:47.392  7330  7477 W OMXNodeInstance: getConfig(0xf55012e0:Exynos.HEVC.Encoder, ??(0x7f030010)) (0x80001019)
+07-31 20:13:47.392  7330  7523 W OMXNodeInstance: [0xf55012e0:Exynos.HEVC.Encoder] createInputSurface requires COLOR_FormatSurface (AndroidOpaque) color format instead of COLOR_FormatYUV420Planar(0x13)
+07-31 20:13:47.392  7330  7523 E TWGraphicBufferSource: Unable to set input surface: -38
+07-31 20:13:47.392 14985 21344 E ACodec  : [OMX.Exynos.HEVC.Encoder] Unable to configure for node (err -38)
+07-31 20:13:47.392 14985 21344 E ACodec  : [OMX.Exynos.HEVC.Encoder] onCreateInputSurface returning error -38
+07-31 20:13:47.394 14985 19498 W MediaCodec: createInputSurface failed, err=-38
+07-31 20:13:47.394 14985 19498 E Sum@CBMFGraphUnitFactory: [[MAKER]com.samsung.android.sum.core.filter.EncoderFilter@84959581] error:
+```
+
+Change-Id: Ifc974c5548ed43b74311371efa786ee12e4b0c17
+Signed-off-by: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
+---
+ smali/com/samsung/android/sum/core/filter/EncoderFilter.smali | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali b/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali
+index cb136bf..b927ff6 100644
+--- a/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali
++++ b/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali
+@@ -1785,7 +1785,7 @@
+     invoke-virtual {v2, v5, v3}, Landroid/media/MediaFormat;->setInteger(Ljava/lang/String;I)V
+ 
+     :cond_15
+-    const v3, 0x7f420888
++    const v3, 0x7f000789
+ 
+     invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,8 @@
+/ 0 2000 755 capabilities=0x0
+vendor/lib64 0 2000 755 capabilities=0x0
+vendor/lib64/android.hardware.audio.common@6.0-util.so 0 0 644 capabilities=0x0
+vendor/lib64/hw/android.hardware.audio@6.0-impl.so 0 0 644 capabilities=0x0
+vendor/lib64/hw/android.hardware.audio.effect@6.0-impl.so 0 0 644 capabilities=0x0
+vendor/lib/android.hardware.audio.common@6.0-util.so 0 0 644 capabilities=0x0
+vendor/lib/hw/android.hardware.audio@6.0-impl.so 0 0 644 capabilities=0x0
+vendor/lib/hw/android.hardware.audio.effect@6.0-impl.so 0 0 644 capabilities=0x0
