@@ -1,0 +1,6 @@
+
+# target/y2s/postinstall.edify
+if is_substring("G985F", getprop("ro.bootloader")) then
+    package_extract_file("dtbo_lte.img", "/dev/block/by-name/dtbo");
+endif;
+
