@@ -267,6 +267,90 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Support schedtune cgroup controller (pre-API 36)
+# - Check for TARGET_PLATFORM_SDK_VERSION < 36 as 4.19 kernel support has been deprecated in Android B
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+    EXTRACT_KERNEL_IMAGE
+    KERNEL_VERSION="$(grep -a -o -m 1 "Linux version [0-9]*\.[0-9]*" "$TMP_DIR/out/kernel" | awk '{print $3}')"
+    LEGACY_KERNEL=false
+    if [ "$KERNEL_VERSION" ]; then
+        if [ "${KERNEL_VERSION%%.*}" -lt "4" ] || \
+                { [[ "${KERNEL_VERSION%%.*}" == "4" ]] && [ "${KERNEL_VERSION#*.}" -le "19" ]; }; then
+            LEGACY_KERNEL=true
+        fi
+    fi
+
+    if $LEGACY_KERNEL; then
+        PATCHED=true
+
+        if ! grep -q "# Create energy-aware scheduler tuning nodes" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
+            LOG "- Adding stune cgroup nodes to /system/system/etc/init/hw/init.rc"
+            EVAL "sed -i \"/mkdir \/dev\/socket\/ot-daemon 0770 thread_network thread_network/a\\\\
+\\\\
+    # Create energy-aware scheduler tuning nodes\\\\
+    mkdir /dev/stune/foreground\\\\
+    mkdir /dev/stune/background\\\\
+    mkdir /dev/stune/top-app\\\\
+    mkdir /dev/stune/rt\\\\
+    chown system system /dev/stune\\\\
+    chown system system /dev/stune/foreground\\\\
+    chown system system /dev/stune/background\\\\
+    chown system system /dev/stune/top-app\\\\
+    chown system system /dev/stune/rt\\\\
+    chown system system /dev/stune/tasks\\\\
+    chown system system /dev/stune/foreground/tasks\\\\
+    chown system system /dev/stune/background/tasks\\\\
+    chown system system /dev/stune/top-app/tasks\\\\
+    chown system system /dev/stune/rt/tasks\\\\
+    chown system system /dev/stune/cgroup.procs\\\\
+    chown system system /dev/stune/foreground/cgroup.procs\\\\
+    chown system system /dev/stune/background/cgroup.procs\\\\
+    chown system system /dev/stune/top-app/cgroup.procs\\\\
+    chown system system /dev/stune/rt/cgroup.procs\\\\
+    chmod 0664 /dev/stune/tasks\\\\
+    chmod 0664 /dev/stune/foreground/tasks\\\\
+    chmod 0664 /dev/stune/background/tasks\\\\
+    chmod 0664 /dev/stune/top-app/tasks\\\\
+    chmod 0664 /dev/stune/rt/tasks\\\\
+    chmod 0664 /dev/stune/cgroup.procs\\\\
+    chmod 0664 /dev/stune/foreground/cgroup.procs\\\\
+    chmod 0664 /dev/stune/background/cgroup.procs\\\\
+    chmod 0664 /dev/stune/top-app/cgroup.procs\\\\
+    chmod 0664 /dev/stune/rt/cgroup.procs\" \"$WORK_DIR/system/system/etc/init/hw/init.rc\""
+        fi
+
+        if ! grep -q "/dev/stune/nnapi-hal" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
+            LOG "- Adding nnapi-hal stune group to /system/system/etc/init/hw/init.rc"
+            EVAL "sed -i \"/chmod 0664 \/dev\/stune\/camera-daemon\/cgroup.procs/a\\\\
+\\\\
+    # Create an stune group for NNAPI HAL processes\\\\
+    mkdir /dev/stune/nnapi-hal\\\\
+    chown system system /dev/stune/nnapi-hal\\\\
+    chown system system /dev/stune/nnapi-hal/tasks\\\\
+    chown system system /dev/stune/nnapi-hal/cgroup.procs\\\\
+    chmod 0664 /dev/stune/nnapi-hal/tasks\\\\
+    chmod 0664 /dev/stune/nnapi-hal/cgroup.procs\\\\
+    write /dev/stune/nnapi-hal/schedtune.boost 1\\\\
+    write /dev/stune/nnapi-hal/schedtune.prefer_idle 1\" \"$WORK_DIR/system/system/etc/init/hw/init.rc\""
+        fi
+
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/cgroups_28.json" 0 0 644 "u:object_r:cgroup_desc_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/cgroups_29.json" 0 0 644 "u:object_r:cgroup_desc_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/cgroups_30.json" 0 0 644 "u:object_r:cgroup_desc_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/task_profiles_28.json" 0 0 644 "u:object_r:task_profiles_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/task_profiles_29.json" 0 0 644 "u:object_r:task_profiles_file:s0"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/task_profiles/task_profiles_30.json" 0 0 644 "u:object_r:task_profiles_file:s0"
+    fi
+
+    unset KERNEL_VERSION LEGACY_KERNEL
+fi
+
 # Ensure sbauth support in target firmware
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 if [ -f "$WORK_DIR/system/system/bin/sbauth" ] && \
