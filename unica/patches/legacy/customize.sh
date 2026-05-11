@@ -355,6 +355,91 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    PATCHED=true
+    LOG_STEP_IN "Adding stune cgroup nodes to init.rc"
+    if ! grep -q "# Create energy-aware scheduler tuning nodes" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
+        sed -i '/chmod 0664 \/dev\/stune\/audio-app\/tasks/a\
+\
+    # Create energy-aware scheduler tuning nodes\
+    mkdir /dev/stune/foreground\
+    mkdir /dev/stune/background\
+    mkdir /dev/stune/top-app\
+    mkdir /dev/stune/rt\
+    chown system system /dev/stune\
+    chown system system /dev/stune/foreground\
+    chown system system /dev/stune/background\
+    chown system system /dev/stune/top-app\
+    chown system system /dev/stune/rt\
+    chown system system /dev/stune/tasks\
+    chown system system /dev/stune/foreground/tasks\
+    chown system system /dev/stune/background/tasks\
+    chown system system /dev/stune/top-app/tasks\
+    chown system system /dev/stune/rt/tasks\
+    chown system system /dev/stune/cgroup.procs\
+    chown system system /dev/stune/foreground/cgroup.procs\
+    chown system system /dev/stune/background/cgroup.procs\
+    chown system system /dev/stune/top-app/cgroup.procs\
+    chown system system /dev/stune/rt/cgroup.procs\
+    chmod 0664 /dev/stune/tasks\
+    chmod 0664 /dev/stune/foreground/tasks\
+    chmod 0664 /dev/stune/background/tasks\
+    chmod 0664 /dev/stune/top-app/tasks\
+    chmod 0664 /dev/stune/rt/tasks\
+    chmod 0664 /dev/stune/cgroup.procs\
+    chmod 0664 /dev/stune/foreground/cgroup.procs\
+    chmod 0664 /dev/stune/background/cgroup.procs\
+    chmod 0664 /dev/stune/top-app/cgroup.procs\
+    chmod 0664 /dev/stune/rt/cgroup.procs\
+\
+    # Create an stune group for camera-specific processes\
+    mkdir /dev/stune/camera-daemon\
+    chown system system /dev/stune/camera-daemon\
+    chown system system /dev/stune/camera-daemon/tasks\
+    chown system system /dev/stune/camera-daemon/cgroup.procs\
+    chmod 0664 /dev/stune/camera-daemon/tasks\
+    chmod 0664 /dev/stune/camera-daemon/cgroup.procs\
+\
+    # Create an stune group for NNAPI HAL processes\
+    mkdir /dev/stune/nnapi-hal\
+    chown system system /dev/stune/nnapi-hal\
+    chown system system /dev/stune/nnapi-hal/tasks\
+    chown system system /dev/stune/nnapi-hal/cgroup.procs\
+    chmod 0664 /dev/stune/nnapi-hal/tasks\
+    chmod 0664 /dev/stune/nnapi-hal/cgroup.procs\
+    write /dev/stune/nnapi-hal/schedtune.boost 1\
+    write /dev/stune/nnapi-hal/schedtune.prefer_idle 1' "$WORK_DIR/system/system/etc/init/hw/init.rc"
+    fi
+
+    sed -i '/task_profiles ProcessCapacityHigh HighPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks' "$WORK_DIR/system/system/etc/init/audioserver.rc"
+    sed -i '/task_profiles HighPerformance ProcessCapacityHigh/a\
+    writepid /dev/stune/foreground/tasks /dev/cpuset/foreground/tasks' "$WORK_DIR/system/system/etc/init/kumihodecoder.rc"
+    sed -i '/task_profiles ProcessCapacityHigh HighPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks' "$WORK_DIR/system/system/etc/init/mediametrics.rc"
+    sed -i '/task_profiles ProcessCapacityHigh HighPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks' "$WORK_DIR/system/system/etc/init/mediaserver.rc"
+    sed -i '/task_profiles HighPerformance GpisSfCpusetJoin/a\
+    writepid /dev/stune/foreground/tasks /dev/cpuset/sf/tasks' "$WORK_DIR/system/system/etc/init/mediaserver.rc"
+    sed -i '/task_profiles ProcessCapacityHigh MaxPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/top-app/tasks' "$WORK_DIR/system/system/etc/init/hw/init.zygote32.rc"
+    sed -i '/task_profiles ProcessCapacityHigh SystemServiceCapacityHigh MaxPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/top-app/tasks' "$WORK_DIR/system/system/etc/init/hw/init.zygote64_32.rc"
+    sed -i '/task_profiles ProcessCapacityHigh SystemServiceCapacityHigh MaxPerformance/a\
+    writepid /dev/cpuset/foreground/tasks /dev/stune/top-app/tasks' "$WORK_DIR/system/system/etc/init/hw/init.zygote64.rc"
+    sed -i '/task_profiles ServiceCapacityLow HighPerformance/a\
+    writepid /dev/cpuset/system-background/tasks /dev/stune/foreground/tasks' "$WORK_DIR/system/system/system_ext/etc/init/hwservicemanager.rc"
+
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/cgroups_28.json" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/cgroups_29.json" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/cgroups_30.json" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/task_profiles_28.json" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/task_profiles_29.json" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/task_profiles/task_profiles_30.json" 0 0 644 "u:object_r:system_file:s0"
+
+    LOG_STEP_OUT
+fi
+
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi
