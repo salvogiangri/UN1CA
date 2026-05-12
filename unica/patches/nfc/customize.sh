@@ -37,17 +37,19 @@ if [ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" ]; then
     fi
 fi
 
-# SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=NXP_SN100U
-# - API 35 and below: libnfc_nxpsn_jni.so
+# SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=NXP_SN100U/NXP_PN553
+# - API 35 and below: libnfc_nxpsn_jni.so/libnfc_nxppn_jni.so
 # - API 36: libnfc_nci_jni.so
+#
+# Use NXP_SN100U blobs for devices with legacy NXP_PN553 impl.
 if [ -f "$WORK_DIR/system/system/lib/libnfc_nci_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_nci_jni.so" ] && \
             [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxppn_jni.so" ] && \
             [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ] && \
             [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_nxpsn.so" ] && \
             [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_nxp.so" ] && \
-            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ] && \
-            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ]; then
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_nci_jni.so"
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_prop_extn.so"
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_vendor_extn.so"
@@ -65,8 +67,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libnfc_nci_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nci_jni.so" ] && \
             [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxppn_jni.so" ] && \
             [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_nxpsn_jni.so" ] && \
-            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ] && \
-            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ]; then
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxpsn.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_nxp.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_nci_jni.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_prop_extn.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libnfc_vendor_extn.so"
