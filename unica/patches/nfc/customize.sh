@@ -27,10 +27,14 @@ if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/libnfc-nci-STM_ST21.con
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/libnfc-nci-STM_ST21.conf" 0 0 644 "u:object_r:system_file:s0"
 fi
 
-if [ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" ] && \
-        ! [[ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" =~ NXP_SN100U|SLSI|STM_ST21 ]]; then
-    _LOG "Unknown NFC chip name: $(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")"
-    return 0
+if [ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" ]; then
+    if [[ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" == "NXP_PN553" ]]; then
+        SET_PROP "vendor" "ro.vendor.nfc.feature.chipname" "NXP_SN100U"
+    fi
+    if ! [[ "$(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")" =~ NXP_SN100U|SLSI|STM_ST21 ]]; then
+        _LOG "Unknown NFC chip name: $(GET_PROP "vendor" "ro.vendor.nfc.feature.chipname")"
+        return 0
+    fi
 fi
 
 # SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=NXP_SN100U
