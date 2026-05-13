@@ -1,0 +1,7 @@
+system 0 0 755 capabilities=0x0
+system/bin 0 2000 751 capabilities=0x0
+system/bin/audioserver 0 2000 755 capabilities=0x0
+system/lib 0 0 755 capabilities=0x0
+system/lib/libaudioflinger.so 0 0 644 capabilities=0x0
+system/lib64 0 0 755 capabilities=0x0
+system/lib64/libaudioflinger.so 0 0 644 capabilities=0x0

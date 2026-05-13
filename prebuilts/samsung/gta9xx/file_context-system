@@ -1,0 +1,7 @@
+/system u:object_r:system_file:s0
+/system/bin u:object_r:system_file:s0
+/system/bin/audioserver u:object_r:audioserver_exec:s0
+/system/lib64 u:object_r:system_lib_file:s0
+/system/lib64/libaudioflinger\.so u:object_r:system_lib_file:s0
+/system/lib u:object_r:system_lib_file:s0
+/system/lib/libaudioflinger\.so u:object_r:system_lib_file:s0

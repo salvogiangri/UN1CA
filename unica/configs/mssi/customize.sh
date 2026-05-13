@@ -68,17 +68,28 @@ ADD_JAR_TO_CLASSPATH()
 }
 # ]
 
-if [[ "$SOURCE_EXTRA_FIRMWARES" != "SM-A346"* ]]; then
-    LOGE "- Unsupported firmware for MediaTek Compatibility Module"
-    exit 1
-fi
-
 # UN1CA: this patch is not complete! It relies on the whole build system and modules to produce a working
 # MediaTek-compatible image.
 
 IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
 MODEL=$(cut -d "/" -f 1 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
 REGION=$(cut -d "/" -f 2 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
+
+if [[ "$MODEL" != "SM-A346"* ]] && [[ "$MODEL" != "SM-M536"* ]]; then
+    LOGE "- Unsupported firmware for MediaTek Compatibility Module."
+    exit 1
+fi
+
+if [[ "$(GET_PROP "$FW_DIR/${MODEL}_${REGION}/system/system/build.prop" "ro.system.build.version.sdk_full")" != "$(GET_PROP "system" "ro.system.build.version.sdk_full")"  ]]; then
+    LOGE "- Unsupported firmware for MediaTek Compatibility Module. Android SDK version mismatch"
+    exit 1
+fi
+
+if [[ "$(GET_PROP "$FW_DIR/${MODEL}_${REGION}/system/system/build.prop" "ro.build.version.oneui")" != "$(GET_PROP "system" "ro.build.version.oneui")"  ]]; then
+    LOGE "- Unsupported firmware for MediaTek Compatibility Module. One UI version mismatch"
+    exit 1
+fi
+
 
 LOG_STEP_IN "- Patching system_ext"
 # bin, lib64, lib
@@ -179,6 +190,11 @@ DELETE_FROM_WORK_DIR "system" "system/lib"
 ADD_TO_WORK_DIR "$MODEL/$REGION" "system" "system/bin"
 ADD_TO_WORK_DIR "$MODEL/$REGION" "system" "system/lib64"
 ADD_TO_WORK_DIR "$MODEL/$REGION" "system" "system/lib"
+if $TARGET_AUDIO_SUPPORT_DUAL_SPEAKER && [[ "$MODEL" == "SM-M536"* ]]; then
+    ADD_TO_WORK_DIR "gta9xx" "system" "system/bin/audioserver"
+    ADD_TO_WORK_DIR "gta9xx" "system" "system/lib/libaudioflinger.so"
+    ADD_TO_WORK_DIR "gta9xx" "system" "system/lib64/libaudioflinger.so"
+fi
 
 VEX_LIBS="
 system/lib64/libandroid.vexfwk.samsung.so
@@ -313,6 +329,24 @@ done
     echo "libFaceRecognition.arcsoft.so"
     echo "libsuperresolution_raw.arcsoft.so"
 } >> "$WORK_DIR/system/system/etc/public.libraries-arcsoft.txt"
+
+if [[ "$MODEL" == "SM-M536"* ]]; then
+    MISSING_LIBS="
+    system/lib64/libFaceRestoration.camera.samsung.so
+    system/lib64/libfacialrestoration.arcsoft.so
+    system/lib64/libVoiceCommandEngine.so
+    system/lib64/libtensorflowlite_jni_voicecommand.so
+    "
+    for lib in $MISSING_LIBS; do
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "$lib"
+    done
+
+    {
+        echo "libFaceRestoration.camera.samsung.so"
+    } >> "$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+
+    unset MISSING_LIBS
+fi
 
 # Frameworks
 ADD_TO_WORK_DIR "$MODEL/$REGION" "system" "system/framework/verizon.net.sip.jar"
