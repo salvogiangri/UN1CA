@@ -1,5 +1,5 @@
 {
-    echo -e "\n"
+    echo
     cat "$MODPATH/ueventd"
 } >> "$WORK_DIR/vendor/ueventd.rc"
 
@@ -111,3 +111,5 @@ ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libsamsung_videoengine_9_0.so"
 ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libtensorflowLite.camera.samsung.so"
 ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libtensorflowlite_inference_api.camera.samsung.so"
 LOG_STEP_OUT
+
+unset BLOBS_LIST
