@@ -1,4 +1,4 @@
-From f33a536d4bf7cf2f8acbb087951c8a298cfc76da Mon Sep 17 00:00:00 2001
+From 8f1cdc7e56d5a7f91f3b9183be615e7814a0e931 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 8 Sep 2025 22:24:01 +0200
 Subject: [PATCH] Disable virtual vibration support
@@ -11,7 +11,7 @@ Subject: [PATCH] Disable virtual vibration support
  4 files changed, 509 insertions(+), 617 deletions(-)
 
 diff --git a/smali_classes4/com/samsung/android/settings/asbase/audio/SoundSettings$3.smali b/smali_classes4/com/samsung/android/settings/asbase/audio/SoundSettings$3.smali
-index af3751efd..01d0f0ab2 100644
+index 790363cf4..27acb42a0 100644
 --- a/smali_classes4/com/samsung/android/settings/asbase/audio/SoundSettings$3.smali
 +++ b/smali_classes4/com/samsung/android/settings/asbase/audio/SoundSettings$3.smali
 @@ -168,28 +168,28 @@
@@ -56,7 +56,7 @@ index af3751efd..01d0f0ab2 100644
      return-object p0
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/asbase/reset/ResetSoundSystemFeedbackSettings$1.smali b/smali_classes4/com/samsung/android/settings/asbase/reset/ResetSoundSystemFeedbackSettings$1.smali
-index 4e283a861..88afcad0d 100644
+index 293ca5226..bf4a9a453 100644
 --- a/smali_classes4/com/samsung/android/settings/asbase/reset/ResetSoundSystemFeedbackSettings$1.smali
 +++ b/smali_classes4/com/samsung/android/settings/asbase/reset/ResetSoundSystemFeedbackSettings$1.smali
 @@ -349,9 +349,5 @@
@@ -70,7 +70,7 @@ index 4e283a861..88afcad0d 100644
      return-void
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/asbase/vibration/VirtualVibrationSoundPreferenceController.smali b/smali_classes4/com/samsung/android/settings/asbase/vibration/VirtualVibrationSoundPreferenceController.smali
-index b37d7eae7..137c6fff1 100644
+index 4067c0e24..69fb2612a 100644
 --- a/smali_classes4/com/samsung/android/settings/asbase/vibration/VirtualVibrationSoundPreferenceController.smali
 +++ b/smali_classes4/com/samsung/android/settings/asbase/vibration/VirtualVibrationSoundPreferenceController.smali
 @@ -131,7 +131,7 @@
@@ -131,10 +131,10 @@ index b37d7eae7..137c6fff1 100644
  
      invoke-direct {p0, v0}, Lcom/samsung/android/settings/cube/ControlResult;-><init>(Lcom/samsung/android/settings/cube/ControlResult$Builder;)V
 diff --git a/smali_classes4/com/samsung/android/settings/eternal/provider/items/SoundItem.smali b/smali_classes4/com/samsung/android/settings/eternal/provider/items/SoundItem.smali
-index 78b59eb5f..17707b374 100644
+index ab0d08338..48a7f1432 100644
 --- a/smali_classes4/com/samsung/android/settings/eternal/provider/items/SoundItem.smali
 +++ b/smali_classes4/com/samsung/android/settings/eternal/provider/items/SoundItem.smali
-@@ -937,7 +937,7 @@
+@@ -925,7 +925,7 @@
  
      packed-switch v1, :pswitch_data_0
  
@@ -143,7 +143,7 @@ index 78b59eb5f..17707b374 100644
  
      :pswitch_0
      invoke-static {p1}, Lcom/samsung/android/settings/asbase/utils/VibUtils;->hasSystemVibrationMenu(Landroid/content/Context;)Z
-@@ -954,10 +954,18 @@
+@@ -942,10 +942,18 @@
  
      sget-object v1, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
  
@@ -163,7 +163,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {p1, v4, v3}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
      invoke-virtual {p1, v1, v0}, Lcom/samsung/android/lib/episode/Scene$Builder;->addAttribute(Ljava/lang/Object;Ljava/lang/String;)V
-@@ -985,10 +993,18 @@
+@@ -973,10 +981,18 @@
  
      sget-object v1, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
  
@@ -183,7 +183,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {p1, v4, v3}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
      invoke-virtual {p1, v1, v0}, Lcom/samsung/android/lib/episode/Scene$Builder;->addAttribute(Ljava/lang/Object;Ljava/lang/String;)V
-@@ -1010,10 +1026,18 @@
+@@ -998,10 +1014,18 @@
  
      sget-object v1, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
  
@@ -203,7 +203,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {p1, v4, v3}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
      invoke-virtual {p1, v1, v0}, Lcom/samsung/android/lib/episode/Scene$Builder;->addAttribute(Ljava/lang/Object;Ljava/lang/String;)V
-@@ -1183,7 +1207,7 @@
+@@ -1171,7 +1195,7 @@
      goto :goto_0
  
      :cond_0
@@ -212,7 +212,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1199,7 +1223,7 @@
+@@ -1187,7 +1211,7 @@
      goto :goto_0
  
      :cond_1
@@ -221,7 +221,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1215,7 +1239,7 @@
+@@ -1203,7 +1227,7 @@
      goto :goto_0
  
      :cond_2
@@ -230,7 +230,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1231,7 +1255,7 @@
+@@ -1219,7 +1243,7 @@
      goto :goto_0
  
      :cond_3
@@ -239,7 +239,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1247,7 +1271,7 @@
+@@ -1235,7 +1259,7 @@
      goto :goto_0
  
      :cond_4
@@ -248,7 +248,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1263,7 +1287,7 @@
+@@ -1251,7 +1275,7 @@
      goto :goto_0
  
      :cond_5
@@ -257,7 +257,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1279,7 +1303,7 @@
+@@ -1267,7 +1291,7 @@
      goto :goto_0
  
      :cond_6
@@ -266,7 +266,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1295,7 +1319,7 @@
+@@ -1283,7 +1307,7 @@
      goto :goto_0
  
      :cond_7
@@ -275,7 +275,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1311,7 +1335,7 @@
+@@ -1299,7 +1323,7 @@
      goto :goto_0
  
      :cond_8
@@ -284,7 +284,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1327,7 +1351,7 @@
+@@ -1315,7 +1339,7 @@
      goto/16 :goto_0
  
      :cond_9
@@ -293,7 +293,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1343,7 +1367,7 @@
+@@ -1331,7 +1355,7 @@
      goto/16 :goto_0
  
      :cond_a
@@ -302,7 +302,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1359,7 +1383,7 @@
+@@ -1347,7 +1371,7 @@
      goto/16 :goto_0
  
      :cond_b
@@ -311,7 +311,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1375,7 +1399,7 @@
+@@ -1363,7 +1387,7 @@
      goto/16 :goto_0
  
      :cond_c
@@ -320,7 +320,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1391,7 +1415,7 @@
+@@ -1379,7 +1403,7 @@
      goto/16 :goto_0
  
      :cond_d
@@ -329,7 +329,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1407,7 +1431,7 @@
+@@ -1395,7 +1419,7 @@
      goto/16 :goto_0
  
      :cond_e
@@ -338,7 +338,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1423,7 +1447,7 @@
+@@ -1411,7 +1435,7 @@
      goto/16 :goto_0
  
      :cond_f
@@ -347,7 +347,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1439,7 +1463,7 @@
+@@ -1427,7 +1451,7 @@
      goto/16 :goto_0
  
      :cond_10
@@ -356,7 +356,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1455,7 +1479,7 @@
+@@ -1443,7 +1467,7 @@
      goto/16 :goto_0
  
      :cond_11
@@ -365,7 +365,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1471,7 +1495,7 @@
+@@ -1459,7 +1483,7 @@
      goto/16 :goto_0
  
      :cond_12
@@ -374,7 +374,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1487,7 +1511,7 @@
+@@ -1475,7 +1499,7 @@
      goto/16 :goto_0
  
      :cond_13
@@ -383,7 +383,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1503,7 +1527,7 @@
+@@ -1491,7 +1515,7 @@
      goto/16 :goto_0
  
      :cond_14
@@ -392,7 +392,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1519,7 +1543,7 @@
+@@ -1507,7 +1531,7 @@
      goto/16 :goto_0
  
      :cond_15
@@ -401,7 +401,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1535,7 +1559,7 @@
+@@ -1523,7 +1547,7 @@
      goto/16 :goto_0
  
      :cond_16
@@ -410,7 +410,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1551,7 +1575,7 @@
+@@ -1539,7 +1563,7 @@
      goto/16 :goto_0
  
      :cond_17
@@ -419,7 +419,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1567,7 +1591,7 @@
+@@ -1555,7 +1579,7 @@
      goto/16 :goto_0
  
      :cond_18
@@ -428,7 +428,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1583,7 +1607,7 @@
+@@ -1571,7 +1595,7 @@
      goto/16 :goto_0
  
      :cond_19
@@ -437,7 +437,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1599,7 +1623,7 @@
+@@ -1587,7 +1611,7 @@
      goto/16 :goto_0
  
      :cond_1a
@@ -446,7 +446,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1615,7 +1639,7 @@
+@@ -1603,7 +1627,7 @@
      goto/16 :goto_0
  
      :cond_1b
@@ -455,7 +455,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1631,7 +1655,7 @@
+@@ -1619,7 +1643,7 @@
      goto/16 :goto_0
  
      :cond_1c
@@ -464,7 +464,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1647,7 +1671,7 @@
+@@ -1635,7 +1659,7 @@
      goto/16 :goto_0
  
      :cond_1d
@@ -473,7 +473,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1663,7 +1687,7 @@
+@@ -1651,7 +1675,7 @@
      goto/16 :goto_0
  
      :cond_1e
@@ -482,7 +482,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1679,7 +1703,7 @@
+@@ -1667,7 +1691,7 @@
      goto/16 :goto_0
  
      :cond_1f
@@ -491,7 +491,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_1
  
-@@ -1695,12 +1719,12 @@
+@@ -1683,12 +1707,12 @@
      goto/16 :goto_0
  
      :cond_20
@@ -506,7 +506,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1711,12 +1735,12 @@
+@@ -1699,12 +1723,12 @@
      goto/16 :goto_0
  
      :cond_21
@@ -521,7 +521,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1727,12 +1751,12 @@
+@@ -1715,12 +1739,12 @@
      goto/16 :goto_0
  
      :cond_22
@@ -536,7 +536,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1743,12 +1767,12 @@
+@@ -1731,12 +1755,12 @@
      goto/16 :goto_0
  
      :cond_23
@@ -551,7 +551,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1759,12 +1783,12 @@
+@@ -1747,12 +1771,12 @@
      goto/16 :goto_0
  
      :cond_24
@@ -567,7 +567,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1775,12 +1799,12 @@
+@@ -1763,12 +1787,12 @@
      goto/16 :goto_0
  
      :cond_25
@@ -582,7 +582,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1791,12 +1815,12 @@
+@@ -1779,12 +1803,12 @@
      goto/16 :goto_0
  
      :cond_26
@@ -597,7 +597,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1807,12 +1831,12 @@
+@@ -1795,12 +1819,12 @@
      goto/16 :goto_0
  
      :cond_27
@@ -612,7 +612,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1823,12 +1847,12 @@
+@@ -1811,12 +1835,12 @@
      goto/16 :goto_0
  
      :cond_28
@@ -627,7 +627,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1839,12 +1863,12 @@
+@@ -1827,12 +1851,12 @@
      goto/16 :goto_0
  
      :cond_29
@@ -642,7 +642,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1855,12 +1879,12 @@
+@@ -1843,12 +1867,12 @@
      goto/16 :goto_0
  
      :cond_2a
@@ -657,7 +657,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -1871,22 +1895,6 @@
+@@ -1859,22 +1883,6 @@
      goto/16 :goto_0
  
      :cond_2b
@@ -680,7 +680,7 @@ index 78b59eb5f..17707b374 100644
      move v1, v2
  
      :goto_1
-@@ -1899,19 +1907,19 @@
+@@ -1887,19 +1895,19 @@
  
      move-result v0
  
@@ -703,7 +703,7 @@ index 78b59eb5f..17707b374 100644
      move v0, v2
  
      :goto_2
-@@ -1927,11 +1935,11 @@
+@@ -1915,11 +1923,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -717,7 +717,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -1941,7 +1949,7 @@
+@@ -1929,7 +1937,7 @@
  
      move-result v1
  
@@ -726,7 +726,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v14}, Landroid/media/AudioSystem;->getDefaultStreamVolume(I)I
  
-@@ -1957,11 +1965,11 @@
+@@ -1945,11 +1953,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -740,7 +740,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -1979,7 +1987,7 @@
+@@ -1967,7 +1975,7 @@
  
      move-result v1
  
@@ -749,7 +749,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v3}, Landroid/media/AudioSystem;->getDefaultStreamVolume(I)I
  
-@@ -1995,11 +2003,11 @@
+@@ -1983,11 +1991,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -763,7 +763,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2007,7 +2015,7 @@
+@@ -1995,7 +2003,7 @@
      :pswitch_3
      sget-boolean v1, Lcom/samsung/android/settings/asbase/rune/AudioRune;->SUPPORT_MULTI_SOUND_SELECT_MULTIPLE_APPLICATIONS:Z
  
@@ -772,7 +772,7 @@ index 78b59eb5f..17707b374 100644
  
      new-instance v1, Lcom/samsung/android/media/SemSoundAssistantManager;
  
-@@ -2017,7 +2025,7 @@
+@@ -2005,7 +2013,7 @@
  
      move-result v0
  
@@ -781,7 +781,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v0, -0x1
  
-@@ -2029,7 +2037,7 @@
+@@ -2017,7 +2025,7 @@
  
      goto :goto_3
  
@@ -790,7 +790,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v0, -0x1
  
      move v1, v0
-@@ -2041,11 +2049,11 @@
+@@ -2029,11 +2037,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -804,7 +804,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2067,11 +2075,11 @@
+@@ -2055,11 +2063,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -818,7 +818,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2079,7 +2087,7 @@
+@@ -2067,7 +2075,7 @@
      :pswitch_5
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -827,7 +827,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "sync_vibration_with_notification"
  
-@@ -2093,11 +2101,11 @@
+@@ -2081,11 +2089,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -841,7 +841,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v1, Ljava/lang/StringBuilder;
-@@ -2123,11 +2131,11 @@
+@@ -2111,11 +2119,11 @@
  
      move-result v0
  
@@ -855,7 +855,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
  
      move-result-object v1
-@@ -2136,11 +2144,11 @@
+@@ -2124,11 +2132,11 @@
  
      const v1, 0xc373
  
@@ -869,7 +869,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v1, Ljava/lang/StringBuilder;
-@@ -2164,13 +2172,13 @@
+@@ -2152,13 +2160,13 @@
  
      move-result v1
  
@@ -885,7 +885,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static/range {v19 .. v19}, Landroid/media/AudioSystem;->getDefaultStreamVolume(I)I
  
-@@ -2188,11 +2196,11 @@
+@@ -2176,11 +2184,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -899,7 +899,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2210,11 +2218,11 @@
+@@ -2198,11 +2206,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -913,7 +913,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v1, Ljava/lang/StringBuilder;
-@@ -2236,7 +2244,7 @@
+@@ -2224,7 +2232,7 @@
      :pswitch_9
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -922,7 +922,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "sync_vibration_with_ringtone"
  
-@@ -2250,11 +2258,11 @@
+@@ -2238,11 +2246,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -936,7 +936,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v1, Ljava/lang/StringBuilder;
-@@ -2290,11 +2298,11 @@
+@@ -2278,11 +2286,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -950,7 +950,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2302,7 +2310,7 @@
+@@ -2290,7 +2298,7 @@
      :pswitch_b
      sget-boolean v1, Lcom/samsung/android/settings/asbase/rune/AudioRune;->SUPPORT_MULTI_SOUND_SELECT_MULTIPLE_APPLICATIONS:Z
  
@@ -959,7 +959,7 @@ index 78b59eb5f..17707b374 100644
  
      new-instance v1, Lcom/samsung/android/media/SemSoundAssistantManager;
  
-@@ -2312,22 +2320,22 @@
+@@ -2300,22 +2308,22 @@
  
      move-result v0
  
@@ -986,7 +986,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2337,7 +2345,7 @@
+@@ -2325,7 +2333,7 @@
  
      move-result v0
  
@@ -995,7 +995,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {}, Lcom/android/settings/Utils;->getSalesCode()Ljava/lang/String;
  
-@@ -2349,16 +2357,16 @@
+@@ -2337,16 +2345,16 @@
  
      move-result v0
  
@@ -1015,7 +1015,7 @@ index 78b59eb5f..17707b374 100644
      :goto_4
      const/4 v0, 0x1
  
-@@ -2375,11 +2383,11 @@
+@@ -2363,11 +2371,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1029,7 +1029,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2399,11 +2407,11 @@
+@@ -2387,11 +2395,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1043,7 +1043,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2423,11 +2431,11 @@
+@@ -2411,11 +2419,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1057,7 +1057,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2449,11 +2457,11 @@
+@@ -2437,11 +2445,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1071,7 +1071,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2461,7 +2469,7 @@
+@@ -2449,7 +2457,7 @@
      :pswitch_10
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -1080,7 +1080,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "sync_vibration_with_ringtone_2"
  
-@@ -2475,11 +2483,11 @@
+@@ -2463,11 +2471,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1094,7 +1094,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v1, Ljava/lang/StringBuilder;
-@@ -2503,7 +2511,7 @@
+@@ -2491,7 +2499,7 @@
  
      move-result v1
  
@@ -1103,7 +1103,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static/range {v18 .. v18}, Landroid/media/AudioSystem;->getDefaultStreamVolume(I)I
  
-@@ -2521,11 +2529,11 @@
+@@ -2509,11 +2517,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1117,7 +1117,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2543,11 +2551,11 @@
+@@ -2531,11 +2539,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1131,7 +1131,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2573,7 +2581,7 @@
+@@ -2561,7 +2569,7 @@
  
      const-string v5, "content://com.android.settings.personalvibration.PersonalVibrationProvider/"
  
@@ -1140,7 +1140,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v1, "ringtone_vibration_sep_index"
  
-@@ -2581,11 +2589,11 @@
+@@ -2569,11 +2577,11 @@
  
      move-result v1
  
@@ -1154,7 +1154,7 @@ index 78b59eb5f..17707b374 100644
      sget-object v3, Lcom/samsung/android/settings/asbase/vibration/PatternRestoreHelper;->sPatternLookupTable:Ljava/util/HashMap;
  
      invoke-virtual {v3}, Ljava/util/HashMap;->keySet()Ljava/util/Set;
-@@ -2596,12 +2604,12 @@
+@@ -2584,12 +2592,12 @@
  
      move-result-object v3
  
@@ -1169,7 +1169,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
  
-@@ -2619,7 +2627,7 @@
+@@ -2607,7 +2615,7 @@
  
      iget v8, v8, Lcom/samsung/android/settings/asbase/vibration/PatternRestoreHelper$PatternLookupInfo;->mSepIndex:I
  
@@ -1178,7 +1178,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v6}, Ljava/lang/Integer;->intValue()I
  
-@@ -2630,13 +2638,13 @@
+@@ -2618,13 +2626,13 @@
  
      goto :goto_7
  
@@ -1194,7 +1194,7 @@ index 78b59eb5f..17707b374 100644
  
      new-instance v3, Ljava/lang/StringBuilder;
  
-@@ -2658,7 +2666,7 @@
+@@ -2646,7 +2654,7 @@
  
      const/4 v3, 0x1
  
@@ -1203,7 +1203,7 @@ index 78b59eb5f..17707b374 100644
      new-instance v6, Ljava/lang/StringBuilder;
  
      invoke-direct {v6, v5}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-@@ -2689,15 +2697,15 @@
+@@ -2677,15 +2685,15 @@
  
      move-result v0
  
@@ -1222,7 +1222,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v0, Ljava/lang/StringBuilder;
-@@ -2714,7 +2722,7 @@
+@@ -2702,7 +2710,7 @@
  
      return-object v7
  
@@ -1231,7 +1231,7 @@ index 78b59eb5f..17707b374 100644
      const/16 v3, 0x2f
  
      invoke-virtual {v1, v3}, Ljava/lang/String;->lastIndexOf(I)I
-@@ -2793,19 +2801,19 @@
+@@ -2781,19 +2789,19 @@
  
      move-result v1
  
@@ -1254,7 +1254,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static/range {p2 .. p2}, Landroid/media/AudioSystem;->getDefaultStreamVolume(I)I
  
-@@ -2823,11 +2831,11 @@
+@@ -2811,11 +2819,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1268,7 +1268,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2835,7 +2843,7 @@
+@@ -2823,7 +2831,7 @@
      :pswitch_16
      sget-boolean v1, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SEC_VIBRATION_PICKER:Z
  
@@ -1277,7 +1277,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
  
-@@ -2881,13 +2889,13 @@
+@@ -2869,13 +2877,13 @@
  
      move-result v0
  
@@ -1294,7 +1294,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      new-instance v0, Ljava/lang/StringBuilder;
-@@ -2921,18 +2929,18 @@
+@@ -2909,18 +2917,18 @@
  
      const-string v3, "Galaxy"
  
@@ -1316,7 +1316,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string v1, "Custom"
  
-@@ -2940,7 +2948,7 @@
+@@ -2928,7 +2936,7 @@
  
      move-result v1
  
@@ -1325,7 +1325,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v7, v0, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
-@@ -2957,7 +2965,7 @@
+@@ -2945,7 +2953,7 @@
  
      move-result v1
  
@@ -1334,7 +1334,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v1, 0x1
  
-@@ -2975,11 +2983,11 @@
+@@ -2963,11 +2971,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1348,7 +1348,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -2991,7 +2999,7 @@
+@@ -2979,7 +2987,7 @@
  
      move-result v0
  
@@ -1357,7 +1357,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "volumelimit_secure_password"
  
-@@ -2999,16 +3007,16 @@
+@@ -2987,16 +2995,16 @@
  
      move-result-object v16
  
@@ -1377,7 +1377,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3020,7 +3028,7 @@
+@@ -3008,7 +3016,7 @@
  
      const-string/jumbo v1, "supportDC"
  
@@ -1386,7 +1386,7 @@ index 78b59eb5f..17707b374 100644
  
      sget-object v0, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
  
-@@ -3030,7 +3038,7 @@
+@@ -3018,7 +3026,7 @@
  
      goto :goto_8
  
@@ -1395,7 +1395,7 @@ index 78b59eb5f..17707b374 100644
      sget-object v0, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
  
      invoke-virtual {v7, v0, v1}, Lcom/samsung/android/lib/episode/Scene$Builder;->addAttribute(Ljava/lang/Object;Ljava/lang/String;)V
-@@ -3048,11 +3056,11 @@
+@@ -3036,11 +3044,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1409,7 +1409,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3070,7 +3078,7 @@
+@@ -3058,7 +3066,7 @@
  
      move-result v1
  
@@ -1418,7 +1418,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string v1, "AIO"
  
-@@ -3078,16 +3086,16 @@
+@@ -3066,16 +3074,16 @@
  
      move-result v0
  
@@ -1438,7 +1438,7 @@ index 78b59eb5f..17707b374 100644
      :goto_9
      move v0, v2
  
-@@ -3104,11 +3112,11 @@
+@@ -3092,11 +3100,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1452,7 +1452,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3126,11 +3134,11 @@
+@@ -3114,11 +3122,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1466,7 +1466,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3150,11 +3158,11 @@
+@@ -3138,11 +3146,11 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1480,7 +1480,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3195,11 +3203,11 @@
+@@ -3183,11 +3191,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1494,7 +1494,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3207,7 +3215,7 @@
+@@ -3195,7 +3203,7 @@
      :pswitch_20
      sget-boolean v1, Lcom/samsung/android/settings/asbase/rune/AudioRune;->SUPPORT_MULTI_SOUND_SELECT_MULTIPLE_APPLICATIONS:Z
  
@@ -1503,7 +1503,7 @@ index 78b59eb5f..17707b374 100644
  
      new-instance v1, Lcom/samsung/android/media/SemSoundAssistantManager;
  
-@@ -3217,7 +3225,7 @@
+@@ -3205,7 +3213,7 @@
  
      move-result v0
  
@@ -1512,7 +1512,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v0, -0x1
  
-@@ -3227,7 +3235,7 @@
+@@ -3215,7 +3223,7 @@
  
      goto :goto_b
  
@@ -1521,7 +1521,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v0, -0x1
  
      move v1, v0
-@@ -3239,52 +3247,16 @@
+@@ -3227,52 +3235,16 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1576,7 +1576,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0}, Lcom/samsung/android/settings/asbase/utils/VibUtils;->hasSystemVibrationMenu(Landroid/content/Context;)Z
  
      move-result v0
-@@ -3301,16 +3273,16 @@
+@@ -3289,16 +3261,16 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1596,7 +1596,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "VIB_RECVCALL_MAGNITUDE"
  
      const/4 v3, 0x5
-@@ -3325,16 +3297,16 @@
+@@ -3313,16 +3285,16 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1616,7 +1616,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "dtmf_tone"
  
      const/4 v1, 0x1
-@@ -3349,16 +3321,16 @@
+@@ -3337,16 +3309,16 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1636,7 +1636,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "media_vibration_intensity"
  
      const/4 v3, 0x5
-@@ -3373,16 +3345,16 @@
+@@ -3361,16 +3333,16 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1656,7 +1656,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0}, Lcom/samsung/android/settings/asbase/utils/VibUtils;->hasSystemVibrationMenu(Landroid/content/Context;)Z
  
      move-result v0
-@@ -3399,16 +3371,16 @@
+@@ -3387,16 +3359,16 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1676,7 +1676,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v8, v6, v14}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
  
      move-result v0
-@@ -3419,19 +3391,19 @@
+@@ -3407,19 +3379,19 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1700,7 +1700,7 @@ index 78b59eb5f..17707b374 100644
  
      new-instance v1, Lcom/samsung/android/media/SemSoundAssistantManager;
  
-@@ -3441,29 +3413,29 @@
+@@ -3429,29 +3401,29 @@
  
      move-result v0
  
@@ -1736,7 +1736,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "SEM_VIBRATION_FORCE_TOUCH_INTENSITY"
  
      const/4 v3, 0x4
-@@ -3478,16 +3450,16 @@
+@@ -3466,16 +3438,16 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1756,7 +1756,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0}, Lcom/samsung/android/settings/asbase/utils/VibUtils;->hasSystemVibrationMenu(Landroid/content/Context;)Z
  
      move-result v0
-@@ -3504,23 +3476,23 @@
+@@ -3492,23 +3464,23 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1784,7 +1784,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "volume_limiter_value"
  
-@@ -3532,7 +3504,7 @@
+@@ -3520,7 +3492,7 @@
  
      goto :goto_d
  
@@ -1793,7 +1793,7 @@ index 78b59eb5f..17707b374 100644
      move v0, v2
  
      :goto_d
-@@ -3542,16 +3514,16 @@
+@@ -3530,16 +3502,16 @@
  
      invoke-virtual {v7, v1, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1813,7 +1813,7 @@ index 78b59eb5f..17707b374 100644
      const-string/jumbo v0, "sip_key_feedback_sound"
  
      const/4 v1, 0x1
-@@ -3566,11 +3538,11 @@
+@@ -3554,11 +3526,11 @@
  
      invoke-virtual {v7, v3, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setValue(Ljava/lang/Object;Z)V
  
@@ -1827,7 +1827,7 @@ index 78b59eb5f..17707b374 100644
      invoke-virtual {v7, v2}, Lcom/samsung/android/lib/episode/Scene$Builder;->setDefault(Z)V
  
      return-object v7
-@@ -3579,18 +3551,17 @@
+@@ -3567,18 +3539,17 @@
  
      :sswitch_data_0
      .sparse-switch
@@ -1857,7 +1857,7 @@ index 78b59eb5f..17707b374 100644
          -0x1ddcc5dc -> :sswitch_20
          -0x1047e935 -> :sswitch_1f
          -0x738eff9 -> :sswitch_1e
-@@ -3628,7 +3599,6 @@
+@@ -3616,7 +3587,6 @@
  
      :pswitch_data_0
      .packed-switch 0x0
@@ -1865,7 +1865,7 @@ index 78b59eb5f..17707b374 100644
          :pswitch_2b
          :pswitch_2a
          :pswitch_29
-@@ -4336,7 +4306,11 @@
+@@ -4324,7 +4294,11 @@
      goto :goto_1
  
      :pswitch_3
@@ -1878,7 +1878,7 @@ index 78b59eb5f..17707b374 100644
  
      goto :goto_1
  
-@@ -4507,9 +4481,9 @@
+@@ -4495,9 +4469,9 @@
  
      invoke-virtual {p2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
  
@@ -1890,7 +1890,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string v2, "com.android.settings.Settings$SoundSettingsActivity"
  
-@@ -4537,7 +4511,7 @@
+@@ -4525,7 +4499,7 @@
      goto/16 :goto_0
  
      :cond_0
@@ -1899,7 +1899,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4553,7 +4527,7 @@
+@@ -4541,7 +4515,7 @@
      goto/16 :goto_0
  
      :cond_1
@@ -1908,7 +1908,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4569,7 +4543,7 @@
+@@ -4557,7 +4531,7 @@
      goto/16 :goto_0
  
      :cond_2
@@ -1917,7 +1917,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4585,7 +4559,7 @@
+@@ -4573,7 +4547,7 @@
      goto/16 :goto_0
  
      :cond_3
@@ -1926,7 +1926,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4601,7 +4575,7 @@
+@@ -4589,7 +4563,7 @@
      goto/16 :goto_0
  
      :cond_4
@@ -1935,7 +1935,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4617,7 +4591,7 @@
+@@ -4605,7 +4579,7 @@
      goto/16 :goto_0
  
      :cond_5
@@ -1944,7 +1944,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4633,7 +4607,7 @@
+@@ -4621,7 +4595,7 @@
      goto/16 :goto_0
  
      :cond_6
@@ -1953,7 +1953,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4649,7 +4623,7 @@
+@@ -4637,7 +4611,7 @@
      goto/16 :goto_0
  
      :cond_7
@@ -1962,7 +1962,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4665,7 +4639,7 @@
+@@ -4653,7 +4627,7 @@
      goto/16 :goto_0
  
      :cond_8
@@ -1971,7 +1971,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4681,7 +4655,7 @@
+@@ -4669,7 +4643,7 @@
      goto/16 :goto_0
  
      :cond_9
@@ -1980,7 +1980,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4697,7 +4671,7 @@
+@@ -4685,7 +4659,7 @@
      goto/16 :goto_0
  
      :cond_a
@@ -1989,7 +1989,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4713,7 +4687,7 @@
+@@ -4701,7 +4675,7 @@
      goto/16 :goto_0
  
      :cond_b
@@ -1998,7 +1998,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4729,7 +4703,7 @@
+@@ -4717,7 +4691,7 @@
      goto/16 :goto_0
  
      :cond_c
@@ -2007,7 +2007,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4745,7 +4719,7 @@
+@@ -4733,7 +4707,7 @@
      goto/16 :goto_0
  
      :cond_d
@@ -2016,7 +2016,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4761,7 +4735,7 @@
+@@ -4749,7 +4723,7 @@
      goto/16 :goto_0
  
      :cond_e
@@ -2025,7 +2025,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4777,7 +4751,7 @@
+@@ -4765,7 +4739,7 @@
      goto/16 :goto_0
  
      :cond_f
@@ -2034,7 +2034,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4793,7 +4767,7 @@
+@@ -4781,7 +4755,7 @@
      goto/16 :goto_0
  
      :cond_10
@@ -2043,7 +2043,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4809,7 +4783,7 @@
+@@ -4797,7 +4771,7 @@
      goto/16 :goto_0
  
      :cond_11
@@ -2052,7 +2052,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4825,7 +4799,7 @@
+@@ -4813,7 +4787,7 @@
      goto/16 :goto_0
  
      :cond_12
@@ -2061,7 +2061,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4841,7 +4815,7 @@
+@@ -4829,7 +4803,7 @@
      goto/16 :goto_0
  
      :cond_13
@@ -2070,7 +2070,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4857,7 +4831,7 @@
+@@ -4845,7 +4819,7 @@
      goto/16 :goto_0
  
      :cond_14
@@ -2079,7 +2079,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4873,7 +4847,7 @@
+@@ -4861,7 +4835,7 @@
      goto/16 :goto_0
  
      :cond_15
@@ -2088,7 +2088,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4889,7 +4863,7 @@
+@@ -4877,7 +4851,7 @@
      goto/16 :goto_0
  
      :cond_16
@@ -2097,7 +2097,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_0
  
-@@ -4905,12 +4879,12 @@
+@@ -4893,12 +4867,12 @@
      goto/16 :goto_0
  
      :cond_17
@@ -2112,7 +2112,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -4921,12 +4895,12 @@
+@@ -4909,12 +4883,12 @@
      goto/16 :goto_0
  
      :cond_18
@@ -2127,7 +2127,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -4937,12 +4911,12 @@
+@@ -4925,12 +4899,12 @@
      goto/16 :goto_0
  
      :cond_19
@@ -2142,7 +2142,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -4953,12 +4927,12 @@
+@@ -4941,12 +4915,12 @@
      goto/16 :goto_0
  
      :cond_1a
@@ -2157,7 +2157,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -4966,15 +4940,15 @@
+@@ -4954,15 +4928,15 @@
  
      if-nez p2, :cond_1b
  
@@ -2177,7 +2177,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -4985,12 +4959,12 @@
+@@ -4973,12 +4947,12 @@
      goto :goto_0
  
      :cond_1c
@@ -2192,7 +2192,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5001,12 +4975,12 @@
+@@ -4989,12 +4963,12 @@
      goto :goto_0
  
      :cond_1d
@@ -2207,7 +2207,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5017,12 +4991,12 @@
+@@ -5005,12 +4979,12 @@
      goto :goto_0
  
      :cond_1e
@@ -2222,7 +2222,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5033,12 +5007,12 @@
+@@ -5021,12 +4995,12 @@
      goto :goto_0
  
      :cond_1f
@@ -2237,7 +2237,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5049,12 +5023,12 @@
+@@ -5037,12 +5011,12 @@
      goto :goto_0
  
      :cond_20
@@ -2252,7 +2252,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5065,12 +5039,12 @@
+@@ -5053,12 +5027,12 @@
      goto :goto_0
  
      :cond_21
@@ -2267,7 +2267,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {p2, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -5081,22 +5055,6 @@
+@@ -5069,22 +5043,6 @@
      goto :goto_0
  
      :cond_22
@@ -2290,7 +2290,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v4, 0x0
  
      :goto_0
-@@ -5109,9 +5067,9 @@
+@@ -5097,9 +5055,9 @@
  
      move-result p2
  
@@ -2302,7 +2302,7 @@ index 78b59eb5f..17707b374 100644
  
      goto :goto_1
  
-@@ -5132,7 +5090,7 @@
+@@ -5120,7 +5078,7 @@
  
      move-result p2
  
@@ -2311,7 +2311,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v3, v2, p0}, Lcom/android/settings/DefaultRingtonePreference$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Landroid/content/Intent;)V
  
-@@ -5143,38 +5101,33 @@
+@@ -5131,38 +5089,33 @@
  
      move-result p2
  
@@ -2355,7 +2355,7 @@ index 78b59eb5f..17707b374 100644
      const-string p2, "com.samsung.android.setting.multisound"
  
      const-string v0, "com.samsung.android.setting.multisound.MultiSoundSettingsActivity"
-@@ -5183,33 +5136,33 @@
+@@ -5171,33 +5124,33 @@
  
      goto :goto_1
  
@@ -2398,7 +2398,7 @@ index 78b59eb5f..17707b374 100644
      :goto_1
      :try_start_0
      invoke-virtual {p1, p0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
-@@ -5229,18 +5182,17 @@
+@@ -5217,18 +5170,17 @@
  
      :sswitch_data_0
      .sparse-switch
@@ -2428,7 +2428,7 @@ index 78b59eb5f..17707b374 100644
          -0x1ddcc5dc -> :sswitch_17
          -0x1047e935 -> :sswitch_16
          -0x738eff9 -> :sswitch_15
-@@ -5269,42 +5221,41 @@
+@@ -5257,42 +5209,41 @@
  
      :pswitch_data_0
      .packed-switch 0x0
@@ -2486,7 +2486,7 @@ index 78b59eb5f..17707b374 100644
      .end packed-switch
  .end method
  
-@@ -5409,7 +5360,7 @@
+@@ -5397,7 +5348,7 @@
      goto/16 :goto_1
  
      :cond_1
@@ -2495,7 +2495,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5427,7 +5378,7 @@
+@@ -5415,7 +5366,7 @@
      goto/16 :goto_1
  
      :cond_2
@@ -2504,7 +2504,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5445,7 +5396,7 @@
+@@ -5433,7 +5384,7 @@
      goto/16 :goto_1
  
      :cond_3
@@ -2513,7 +2513,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5463,7 +5414,7 @@
+@@ -5451,7 +5402,7 @@
      goto/16 :goto_1
  
      :cond_4
@@ -2522,7 +2522,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5481,7 +5432,7 @@
+@@ -5469,7 +5420,7 @@
      goto/16 :goto_1
  
      :cond_5
@@ -2531,7 +2531,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5499,7 +5450,7 @@
+@@ -5487,7 +5438,7 @@
      goto/16 :goto_1
  
      :cond_6
@@ -2540,7 +2540,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5517,7 +5468,7 @@
+@@ -5505,7 +5456,7 @@
      goto/16 :goto_1
  
      :cond_7
@@ -2549,7 +2549,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5535,7 +5486,7 @@
+@@ -5523,7 +5474,7 @@
      goto/16 :goto_1
  
      :cond_8
@@ -2558,7 +2558,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5553,7 +5504,7 @@
+@@ -5541,7 +5492,7 @@
      goto/16 :goto_1
  
      :cond_9
@@ -2567,7 +2567,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5571,7 +5522,7 @@
+@@ -5559,7 +5510,7 @@
      goto/16 :goto_1
  
      :cond_a
@@ -2576,7 +2576,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5589,7 +5540,7 @@
+@@ -5577,7 +5528,7 @@
      goto/16 :goto_1
  
      :cond_b
@@ -2585,7 +2585,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5607,7 +5558,7 @@
+@@ -5595,7 +5546,7 @@
      goto/16 :goto_1
  
      :cond_c
@@ -2594,7 +2594,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5625,7 +5576,7 @@
+@@ -5613,7 +5564,7 @@
      goto/16 :goto_1
  
      :cond_d
@@ -2603,7 +2603,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5643,7 +5594,7 @@
+@@ -5631,7 +5582,7 @@
      goto/16 :goto_1
  
      :cond_e
@@ -2612,7 +2612,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5661,7 +5612,7 @@
+@@ -5649,7 +5600,7 @@
      goto/16 :goto_1
  
      :cond_f
@@ -2621,7 +2621,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5679,7 +5630,7 @@
+@@ -5667,7 +5618,7 @@
      goto/16 :goto_1
  
      :cond_10
@@ -2630,7 +2630,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5697,7 +5648,7 @@
+@@ -5685,7 +5636,7 @@
      goto/16 :goto_1
  
      :cond_11
@@ -2639,7 +2639,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5715,7 +5666,7 @@
+@@ -5703,7 +5654,7 @@
      goto/16 :goto_1
  
      :cond_12
@@ -2648,7 +2648,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5733,7 +5684,7 @@
+@@ -5721,7 +5672,7 @@
      goto/16 :goto_1
  
      :cond_13
@@ -2657,7 +2657,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5751,7 +5702,7 @@
+@@ -5739,7 +5690,7 @@
      goto/16 :goto_1
  
      :cond_14
@@ -2666,7 +2666,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5769,7 +5720,7 @@
+@@ -5757,7 +5708,7 @@
      goto/16 :goto_1
  
      :cond_15
@@ -2675,7 +2675,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5787,7 +5738,7 @@
+@@ -5775,7 +5726,7 @@
      goto/16 :goto_1
  
      :cond_16
@@ -2684,7 +2684,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5805,7 +5756,7 @@
+@@ -5793,7 +5744,7 @@
      goto/16 :goto_1
  
      :cond_17
@@ -2693,7 +2693,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5823,7 +5774,7 @@
+@@ -5811,7 +5762,7 @@
      goto/16 :goto_1
  
      :cond_18
@@ -2702,7 +2702,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5841,7 +5792,7 @@
+@@ -5829,7 +5780,7 @@
      goto/16 :goto_1
  
      :cond_19
@@ -2711,7 +2711,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5859,7 +5810,7 @@
+@@ -5847,7 +5798,7 @@
      goto/16 :goto_1
  
      :cond_1a
@@ -2720,7 +2720,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5877,7 +5828,7 @@
+@@ -5865,7 +5816,7 @@
      goto/16 :goto_1
  
      :cond_1b
@@ -2729,7 +2729,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5895,7 +5846,7 @@
+@@ -5883,7 +5834,7 @@
      goto/16 :goto_1
  
      :cond_1c
@@ -2738,7 +2738,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5913,7 +5864,7 @@
+@@ -5901,7 +5852,7 @@
      goto/16 :goto_1
  
      :cond_1d
@@ -2747,7 +2747,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5931,7 +5882,7 @@
+@@ -5919,7 +5870,7 @@
      goto/16 :goto_1
  
      :cond_1e
@@ -2756,7 +2756,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5949,7 +5900,7 @@
+@@ -5937,7 +5888,7 @@
      goto/16 :goto_1
  
      :cond_1f
@@ -2765,7 +2765,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5967,7 +5918,7 @@
+@@ -5955,7 +5906,7 @@
      goto/16 :goto_1
  
      :cond_20
@@ -2774,7 +2774,7 @@ index 78b59eb5f..17707b374 100644
  
      goto/16 :goto_2
  
-@@ -5985,14 +5936,14 @@
+@@ -5973,14 +5924,14 @@
      goto/16 :goto_1
  
      :cond_21
@@ -2791,7 +2791,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6003,14 +5954,14 @@
+@@ -5991,14 +5942,14 @@
      goto/16 :goto_1
  
      :cond_22
@@ -2808,7 +2808,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6021,14 +5972,14 @@
+@@ -6009,14 +5960,14 @@
      goto/16 :goto_1
  
      :cond_23
@@ -2825,7 +2825,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6039,14 +5990,14 @@
+@@ -6027,14 +5978,14 @@
      goto/16 :goto_1
  
      :cond_24
@@ -2842,7 +2842,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6057,14 +6008,14 @@
+@@ -6045,14 +5996,14 @@
      goto/16 :goto_1
  
      :cond_25
@@ -2859,7 +2859,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6072,17 +6023,17 @@
+@@ -6060,17 +6011,17 @@
  
      if-nez v1, :cond_26
  
@@ -2881,7 +2881,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6093,14 +6044,14 @@
+@@ -6081,14 +6032,14 @@
      goto :goto_1
  
      :cond_27
@@ -2898,7 +2898,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6111,14 +6062,14 @@
+@@ -6099,14 +6050,14 @@
      goto :goto_1
  
      :cond_28
@@ -2915,7 +2915,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6129,14 +6080,14 @@
+@@ -6117,14 +6068,14 @@
      goto :goto_1
  
      :cond_29
@@ -2932,7 +2932,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6147,14 +6098,14 @@
+@@ -6135,14 +6086,14 @@
      goto :goto_1
  
      :cond_2a
@@ -2949,7 +2949,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-virtual {v1, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
  
-@@ -6165,29 +6116,11 @@
+@@ -6153,29 +6104,11 @@
      goto :goto_1
  
      :cond_2b
@@ -2980,7 +2980,7 @@ index 78b59eb5f..17707b374 100644
      move-object/from16 v21, v8
  
      const-string v8, "/Settings/Sound/KeyboardSound"
-@@ -6196,12 +6129,12 @@
+@@ -6184,12 +6117,12 @@
  
      move-result v1
  
@@ -2995,7 +2995,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v1, 0x0
  
      :goto_2
-@@ -6256,7 +6189,7 @@
+@@ -6244,7 +6177,7 @@
      :pswitch_4
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -3004,7 +3004,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
-@@ -6356,7 +6289,7 @@
+@@ -6344,7 +6277,7 @@
      :pswitch_8
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -3013,7 +3013,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
-@@ -6448,7 +6381,7 @@
+@@ -6436,7 +6369,7 @@
      :pswitch_e
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -3022,7 +3022,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "sync_vibration_with_ringtone_2"
  
-@@ -6509,7 +6442,7 @@
+@@ -6497,7 +6430,7 @@
  
      const-string v8, "default_vibration_pattern"
  
@@ -3031,7 +3031,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v1, -0x1
  
-@@ -6517,7 +6450,7 @@
+@@ -6505,7 +6438,7 @@
  
      move-result v4
  
@@ -3040,7 +3040,7 @@ index 78b59eb5f..17707b374 100644
  
      const/16 v10, 0x2f
  
-@@ -6543,7 +6476,7 @@
+@@ -6531,7 +6464,7 @@
  
      move-result v10
  
@@ -3049,7 +3049,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "skip restoration ringtone pattern by legacyId"
  
-@@ -6551,7 +6484,7 @@
+@@ -6539,7 +6472,7 @@
  
      return-object v16
  
@@ -3058,7 +3058,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0, v6, v10}, Lcom/samsung/android/settings/asbase/vibration/PatternRestoreHelper;->getSepIndexById(Landroid/content/Context;II)I
  
      move-result v1
-@@ -6566,14 +6499,14 @@
+@@ -6554,14 +6487,14 @@
  
      goto :goto_3
  
@@ -3075,7 +3075,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "skip restoration ringtone pattern by sepIndex"
  
-@@ -6581,7 +6514,7 @@
+@@ -6569,7 +6502,7 @@
  
      return-object v16
  
@@ -3084,7 +3084,7 @@ index 78b59eb5f..17707b374 100644
      :goto_3
      sget-object v1, Lcom/samsung/android/settings/asbase/vibration/VibPickerConstants;->SIMPLE_RINGTONE_PATTERN:Ljava/util/List;
  
-@@ -6607,15 +6540,15 @@
+@@ -6595,15 +6528,15 @@
  
      add-int/2addr v7, v6
  
@@ -3103,7 +3103,7 @@ index 78b59eb5f..17707b374 100644
      check-cast v1, Ljava/util/ArrayList;
  
      invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
-@@ -6626,20 +6559,20 @@
+@@ -6614,20 +6547,20 @@
  
      add-int/lit8 v1, v1, 0x1
  
@@ -3128,7 +3128,7 @@ index 78b59eb5f..17707b374 100644
      new-instance v0, Ljava/lang/StringBuilder;
  
      const-string v1, "content://com.android.settings.personalvibration.PersonalVibrationProvider/registerinfo/"
-@@ -6670,7 +6603,7 @@
+@@ -6658,7 +6591,7 @@
  
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -3137,7 +3137,7 @@ index 78b59eb5f..17707b374 100644
  
      iget-object v0, v3, Lcom/samsung/android/lib/episode/SourceInfo;->mOneUIVersion:Ljava/lang/String;
  
-@@ -6680,7 +6613,7 @@
+@@ -6668,7 +6601,7 @@
  
      move-result v1
  
@@ -3146,7 +3146,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v0}, Ljava/lang/Float;->parseFloat(Ljava/lang/String;)F
  
-@@ -6688,15 +6621,15 @@
+@@ -6676,15 +6609,15 @@
  
      cmpg-float v0, v0, v17
  
@@ -3166,7 +3166,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v6, 0x0
  
      invoke-static {v14, v5, v6}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
-@@ -6707,7 +6640,7 @@
+@@ -6695,7 +6628,7 @@
  
      return-object v16
  
@@ -3175,7 +3175,7 @@ index 78b59eb5f..17707b374 100644
      const/16 v10, 0x2f
  
      invoke-virtual {v6, v10}, Ljava/lang/String;->lastIndexOf(I)I
-@@ -6736,19 +6669,19 @@
+@@ -6724,19 +6657,19 @@
  
      add-int/lit8 v2, v2, 0x1
  
@@ -3198,7 +3198,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v14, v8, v6}, Landroid/provider/Settings$System;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
  
      const-string/jumbo v0, "restore ringtone pattern uri="
-@@ -6788,7 +6721,7 @@
+@@ -6776,7 +6709,7 @@
  
      sget-boolean v5, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SEC_VIBRATION_PICKER:Z
  
@@ -3207,7 +3207,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v5, -0x1
  
-@@ -6796,7 +6729,7 @@
+@@ -6784,7 +6717,7 @@
  
      move-result v4
  
@@ -3216,7 +3216,7 @@ index 78b59eb5f..17707b374 100644
  
      const/16 v8, 0x2f
  
-@@ -6820,7 +6753,7 @@
+@@ -6808,7 +6741,7 @@
  
      move-result v6
  
@@ -3225,7 +3225,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "skip restoration notification pattern by legacyId"
  
-@@ -6828,7 +6761,7 @@
+@@ -6816,7 +6749,7 @@
  
      return-object v16
  
@@ -3234,7 +3234,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v0, v8, v6}, Lcom/samsung/android/settings/asbase/vibration/PatternRestoreHelper;->getSepIndexById(Landroid/content/Context;II)I
  
      move-result v5
-@@ -6843,14 +6776,14 @@
+@@ -6831,14 +6764,14 @@
  
      goto :goto_4
  
@@ -3251,7 +3251,7 @@ index 78b59eb5f..17707b374 100644
  
      const-string/jumbo v0, "skip restoration notification pattern by sepIndex"
  
-@@ -6858,7 +6791,7 @@
+@@ -6846,7 +6779,7 @@
  
      return-object v16
  
@@ -3260,7 +3260,7 @@ index 78b59eb5f..17707b374 100644
      :goto_4
      sget-object v5, Lcom/samsung/android/settings/asbase/vibration/VibPickerConstants;->SIMPLE_NOTIFICATION_PATTERN:Ljava/util/List;
  
-@@ -6882,15 +6815,15 @@
+@@ -6870,15 +6803,15 @@
  
      add-int/2addr v8, v7
  
@@ -3279,7 +3279,7 @@ index 78b59eb5f..17707b374 100644
      check-cast v5, Ljava/util/ArrayList;
  
      invoke-virtual {v5}, Ljava/util/ArrayList;->size()I
-@@ -6901,20 +6834,20 @@
+@@ -6889,20 +6822,20 @@
  
      add-int/lit8 v5, v5, 0x1
  
@@ -3304,7 +3304,7 @@ index 78b59eb5f..17707b374 100644
      new-instance v0, Ljava/lang/StringBuilder;
  
      const-string v5, "content://com.android.settings.personalvibration.PersonalVibrationProvider/notification/"
-@@ -6947,7 +6880,7 @@
+@@ -6935,7 +6868,7 @@
  
      sget-boolean v0, Lcom/samsung/android/settings/asbase/rune/VibRune;->SUPPORT_SYNC_WITH_HAPTIC:Z
  
@@ -3313,7 +3313,7 @@ index 78b59eb5f..17707b374 100644
  
      iget-object v0, v3, Lcom/samsung/android/lib/episode/SourceInfo;->mOneUIVersion:Ljava/lang/String;
  
-@@ -6955,7 +6888,7 @@
+@@ -6943,7 +6876,7 @@
  
      move-result v1
  
@@ -3322,7 +3322,7 @@ index 78b59eb5f..17707b374 100644
  
      invoke-static {v0}, Ljava/lang/Float;->parseFloat(Ljava/lang/String;)F
  
-@@ -6963,11 +6896,11 @@
+@@ -6951,11 +6884,11 @@
  
      cmpg-float v0, v0, v17
  
@@ -3337,7 +3337,7 @@ index 78b59eb5f..17707b374 100644
      const/4 v6, 0x0
  
      invoke-static {v14, v10, v6}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
-@@ -6976,7 +6909,7 @@
+@@ -6964,7 +6897,7 @@
  
      invoke-static {v13, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -3346,7 +3346,7 @@ index 78b59eb5f..17707b374 100644
      :goto_5
      return-object v16
  
-@@ -7026,59 +6959,59 @@
+@@ -7014,59 +6947,59 @@
  
      move-result v0
  
@@ -3419,7 +3419,7 @@ index 78b59eb5f..17707b374 100644
      move v9, v2
  
      :goto_6
-@@ -7189,35 +7122,6 @@
+@@ -7177,35 +7110,6 @@
      return-object v16
  
      :pswitch_1f
@@ -3455,7 +3455,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "dialing_keypad_vibrate"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7228,7 +7132,7 @@
+@@ -7216,7 +7120,7 @@
  
      return-object v16
  
@@ -3464,7 +3464,7 @@ index 78b59eb5f..17707b374 100644
      move-object/from16 v1, v20
  
      const-string v0, "VIB_RECVCALL_MAGNITUDE"
-@@ -7257,7 +7161,7 @@
+@@ -7245,7 +7149,7 @@
  
      return-object v16
  
@@ -3473,7 +3473,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "dtmf_tone"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7268,7 +7172,7 @@
+@@ -7256,7 +7160,7 @@
  
      return-object v16
  
@@ -3482,7 +3482,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "media_vibration_intensity"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7297,7 +7201,7 @@
+@@ -7285,7 +7189,7 @@
  
      return-object v16
  
@@ -3491,7 +3491,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "charging_vibration_enabled"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7308,7 +7212,7 @@
+@@ -7296,7 +7200,7 @@
  
      return-object v16
  
@@ -3500,7 +3500,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
      move-result v0
-@@ -7319,7 +7223,7 @@
+@@ -7307,7 +7211,7 @@
  
      return-object v16
  
@@ -3509,7 +3509,7 @@ index 78b59eb5f..17707b374 100644
      const-string/jumbo v1, "restore_multisound_app"
  
      invoke-static {v14, v1, v6}, Landroid/provider/Settings$System;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
-@@ -7328,7 +7232,7 @@
+@@ -7316,7 +7220,7 @@
  
      return-object v16
  
@@ -3518,7 +3518,7 @@ index 78b59eb5f..17707b374 100644
      const-string v0, "SEM_VIBRATION_FORCE_TOUCH_INTENSITY"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7357,14 +7261,14 @@
+@@ -7345,14 +7249,14 @@
  
      return-object v16
  
@@ -3535,7 +3535,7 @@ index 78b59eb5f..17707b374 100644
  
      const/4 v0, 0x0
  
-@@ -7372,7 +7276,7 @@
+@@ -7360,7 +7264,7 @@
  
      return-object v16
  
@@ -3544,7 +3544,7 @@ index 78b59eb5f..17707b374 100644
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
  
      move-result v0
-@@ -7381,7 +7285,7 @@
+@@ -7369,7 +7273,7 @@
  
      return-object v16
  
@@ -3553,7 +3553,7 @@ index 78b59eb5f..17707b374 100644
      move-object/from16 v15, v19
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7404,7 +7308,7 @@
+@@ -7392,7 +7296,7 @@
  
      return-object v16
  
@@ -3562,7 +3562,7 @@ index 78b59eb5f..17707b374 100644
      const-string/jumbo v0, "sip_key_feedback_sound"
  
      invoke-static {v6}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
-@@ -7415,20 +7319,21 @@
+@@ -7403,20 +7307,21 @@
  
      return-object v16
  
@@ -3596,7 +3596,7 @@ index 78b59eb5f..17707b374 100644
          -0x1ddcc5dc -> :sswitch_20
          -0x1047e935 -> :sswitch_1f
          -0x738eff9 -> :sswitch_1e
-@@ -7466,7 +7371,6 @@
+@@ -7454,7 +7359,6 @@
  
      :pswitch_data_0
      .packed-switch 0x0
@@ -3604,7 +3604,7 @@ index 78b59eb5f..17707b374 100644
          :pswitch_29
          :pswitch_28
          :pswitch_27
-@@ -7499,7 +7403,7 @@
+@@ -7487,7 +7391,7 @@
          :pswitch_c
          :pswitch_b
          :pswitch_a
@@ -3614,5 +3614,5 @@ index 78b59eb5f..17707b374 100644
          :pswitch_8
          :pswitch_7
 -- 
-2.51.0
+2.54.0
 

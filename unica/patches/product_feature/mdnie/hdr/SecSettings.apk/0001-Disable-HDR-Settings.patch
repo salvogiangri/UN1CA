@@ -1,4 +1,4 @@
-From 303a513809bc25f3aaddb0aac0c37b97102bd803 Mon Sep 17 00:00:00 2001
+From b8b74397ab6a7121fa5e56c29a29a27e4dcb21df Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 13 Oct 2025 14:51:26 +0200
 Subject: [PATCH] Disable HDR Settings
@@ -12,7 +12,7 @@ Subject: [PATCH] Disable HDR Settings
  5 files changed, 825 insertions(+), 1362 deletions(-)
 
 diff --git a/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureReset$1.smali b/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureReset$1.smali
-index 75a0d9fca..3e093104a 100644
+index e471bd38c..831626ad0 100644
 --- a/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureReset$1.smali
 +++ b/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureReset$1.smali
 @@ -1243,105 +1243,32 @@
@@ -35,7 +35,7 @@ index 75a0d9fca..3e093104a 100644
 -
 -    move-result-object v6
 -
--    const v7, 0x1070088
+-    const v7, 0x1070089
 -
 -    invoke-virtual {v6, v7}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -45,7 +45,7 @@ index 75a0d9fca..3e093104a 100644
 -
 -    move-result-object v7
 -
--    const v8, 0x107006f
+-    const v8, 0x1070070
 -
 -    invoke-virtual {v7, v8}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -213,7 +213,7 @@ index 75a0d9fca..3e093104a 100644
      return-void
  .end method
 diff --git a/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureUtils.smali b/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureUtils.smali
-index 056497446..75b2fd021 100644
+index 78e2472ca..a64ae6ff7 100644
 --- a/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureUtils.smali
 +++ b/smali_classes3/com/samsung/android/settings/usefulfeature/UsefulfeatureUtils.smali
 @@ -1127,160 +1127,6 @@
@@ -235,7 +235,7 @@ index 056497446..75b2fd021 100644
 -
 -    move-result-object v1
 -
--    const v2, 0x1070088
+-    const v2, 0x1070089
 -
 -    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -245,7 +245,7 @@ index 056497446..75b2fd021 100644
 -
 -    move-result-object p0
 -
--    const v2, 0x107006f
+-    const v2, 0x1070070
 -
 -    invoke-virtual {p0, v2}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -396,7 +396,7 @@ index 056497446..75b2fd021 100644
 -
 -    move-result-object v1
 -
--    const v2, 0x1070088
+-    const v2, 0x1070089
 -
 -    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -406,7 +406,7 @@ index 056497446..75b2fd021 100644
 -
 -    move-result-object v2
 -
--    const v3, 0x107006f
+-    const v3, 0x1070070
 -
 -    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 -
@@ -605,7 +605,7 @@ index 056497446..75b2fd021 100644
      .locals 8
  
 diff --git a/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/SecBrightenUpVideoPreferenceController.smali b/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/SecBrightenUpVideoPreferenceController.smali
-index 30bbee8ca..6db8454fd 100644
+index 094df75ff..9116b89e9 100644
 --- a/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/SecBrightenUpVideoPreferenceController.smali
 +++ b/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/SecBrightenUpVideoPreferenceController.smali
 @@ -130,20 +130,7 @@
@@ -631,7 +631,7 @@ index 30bbee8ca..6db8454fd 100644
      return p0
  .end method
 diff --git a/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/VideoEnhancerPreferenceController.smali b/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/VideoEnhancerPreferenceController.smali
-index bc15d4843..b7f123915 100644
+index bec6b7c77..41872c914 100644
 --- a/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/VideoEnhancerPreferenceController.smali
 +++ b/smali_classes3/com/samsung/android/settings/usefulfeature/videoenhancer/VideoEnhancerPreferenceController.smali
 @@ -132,20 +132,7 @@
@@ -657,7 +657,7 @@ index bc15d4843..b7f123915 100644
      return p0
  .end method
 diff --git a/smali_classes4/com/samsung/android/settings/eternal/provider/items/AdvancedFeatureItem.smali b/smali_classes4/com/samsung/android/settings/eternal/provider/items/AdvancedFeatureItem.smali
-index 543237653..63299c46d 100644
+index b732b4030..4abdc5396 100644
 --- a/smali_classes4/com/samsung/android/settings/eternal/provider/items/AdvancedFeatureItem.smali
 +++ b/smali_classes4/com/samsung/android/settings/eternal/provider/items/AdvancedFeatureItem.smali
 @@ -958,36 +958,11 @@
@@ -4531,5 +4531,5 @@ index 543237653..63299c46d 100644
      goto/16 :goto_10
  
 -- 
-2.51.0
+2.54.0
 
