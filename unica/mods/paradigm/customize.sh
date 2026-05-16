@@ -53,8 +53,13 @@ else
         "$MODPATH/ead_mdnie/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
 fi
 if $TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
-    APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-        "$MODPATH/ead_resolution/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+    if [ "$TARGET_PLATFORM_SDK_VERSION" -ge "36" ]; then
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+            "$MODPATH/ead_resolution/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+    else
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+            "$MODPATH/ead_resolution_legacy/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+    fi
 else
     APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
         "$MODPATH/ead/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
