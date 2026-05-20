@@ -361,6 +361,15 @@ if [ ! "$(find "$WORK_DIR/product/overlay" -maxdepth 1 -type f -name "SystemUI*"
     fi
 fi
 
+# Workaround video metadata model
+# - ro.product.model > ro.boot.em.model
+HEX_PATCH "$WORK_DIR/system/system/lib/libstagefright.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+
 unset SOURCE_FIRMWARE_PATH TARGET_FIRMWARE_PATH \
     SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER \
     SOURCE_CAMERA_CONFIG_GPPM_SOLUTIONS TARGET_CAMERA_CONFIG_GPPM_SOLUTIONS \
