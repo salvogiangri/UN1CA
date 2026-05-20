@@ -170,6 +170,9 @@ HEX_PATCH()
         return 1
     fi
 
+    FROM="${FROM// /}"
+    TO="${TO// /}"
+
     FROM="$(tr "[:upper:]" "[:lower:]" <<< "$FROM")"
     TO="$(tr "[:upper:]" "[:lower:]" <<< "$TO")"
 
