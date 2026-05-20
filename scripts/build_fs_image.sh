@@ -116,7 +116,7 @@ BUILD_IMAGE_MKFS()
             BUILD_CMD+="--readonly "
             BUILD_CMD+="-b \"4096\""
 
-            # Usual f2fs f***-ups
+            # Usual f2fs issues
             if [[ "$PARTITION" != "system" ]] && ! grep -q "^/$PARTITION/$PARTITION " "$FILE_CONTEXT_FILE"; then
                 echo "/$PARTITION/$PARTITION $(head -n 1 "$FILE_CONTEXT_FILE" | cut -d " " -f 2)" >> "$FILE_CONTEXT_FILE"
             fi
