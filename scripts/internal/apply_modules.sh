@@ -35,16 +35,28 @@ APPLY_MODULE()
     LOG_STEP_IN "- Processing \"$MODNAME\" by @$MODAUTH"
 
     if ! grep -q "^SKIPUNZIP=1$" "$MODPATH/customize.sh" 2> /dev/null; then
-        [ -d "$MODPATH/odm" ] && ADD_TO_WORK_DIR "$MODPATH" "odm" "." 0 0 755 "u:object_r:vendor_file:s0"
-        [ -d "$MODPATH/product" ] && ADD_TO_WORK_DIR "$MODPATH" "product" "." 0 0 755 "u:object_r:system_file:s0"
-        [ -d "$MODPATH/system" ] && ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
-        [ -d "$MODPATH/system_ext" ] && ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
-        [ -d "$MODPATH/vendor" ] && ADD_TO_WORK_DIR "$MODPATH" "vendor" "." 0 2000 755 "u:object_r:vendor_file:s0"
+        if [ -d "$MODPATH/odm" ]; then
+            ADD_TO_WORK_DIR "$MODPATH" "odm" "." 0 0 755 "u:object_r:vendor_file:s0"
+        fi
+        if [ -d "$MODPATH/product" ]; then
+            ADD_TO_WORK_DIR "$MODPATH" "product" "." 0 0 755 "u:object_r:system_file:s0"
+        fi
+        if [ -d "$MODPATH/system" ]; then
+            ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
+        fi
+        if [ -d "$MODPATH/system_ext" ]; then
+            ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
+        fi
+        if [ -d "$MODPATH/vendor" ]; then
+            ADD_TO_WORK_DIR "$MODPATH" "vendor" "." 0 2000 755 "u:object_r:vendor_file:s0"
+        fi
     fi
 
     READ_AND_APPLY_PROPS "$MODPATH"
 
-    [ -f "$MODPATH/customize.sh" ] && . "$MODPATH/customize.sh"
+    if [ -f "$MODPATH/customize.sh" ]; then
+        . "$MODPATH/customize.sh"
+    fi
 
     if [ -d "$MODPATH/smali" ]; then
         while IFS= read -r f; do
@@ -72,7 +84,9 @@ APPLY_SMALI_PATCHES()
 
     while IFS= read -r p; do
         local FILE="$TARGET"
-        [[ "$PARTITION" != "system" ]] && FILE="$(cut -d "/" -f 2- -s <<< "$FILE")"
+        if [[ "$PARTITION" != "system" ]]; then
+            FILE="$(cut -d "/" -f 2- -s <<< "$FILE")"
+        fi
 
         APPLY_PATCH "$PARTITION" "$FILE" "$p"
     done < <(find "$PATCHES_PATH/$TARGET" -type f -name "*.patch" | sort -n)
@@ -90,8 +104,9 @@ READ_AND_APPLY_PROPS()
         IS_VALID_PARTITION_NAME "$PARTITION" || continue
 
         while read -r l; do
-            [[ "$l" == "#"* ]] && continue
-            [ ! "$l" ] && continue
+            if [[ "$l" == "#"* ]] || [ ! "$l" ]; then
+                continue
+            fi
 
             if grep -q -F "=" <<< "$l"; then
                 if [ ! "$(cut -d "=" -f 2- -s <<< "$l")" ]; then
