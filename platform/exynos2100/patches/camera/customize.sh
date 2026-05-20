@@ -54,6 +54,15 @@ if [[ "$TARGET_CODENAME" == "p3s" ]]; then
 fi
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libveengine.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
+# Workaround EXIF metadata model
+# - ro.product.model > ro.boot.em.model
+HEX_PATCH "$WORK_DIR/vendor/lib/libexynoscamera3.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+HEX_PATCH "$WORK_DIR/vendor/lib64/libexynoscamera3.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
     # Upgrade midas blobs
     ADD_TO_WORK_DIR "r9sxxx" "vendor" "etc/midas/midas_config.json" 0 0 644 "u:object_r:vendor_configs_file:s0"

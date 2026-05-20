@@ -19,6 +19,15 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libsaiv_HprFace_cmh_su
 ADD_TO_WORK_DIR "a73xqxx" "system" "system/lib64/libsecimaging_pdk.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libveengine.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
+# Workaround EXIF metadata model
+# - ro.product.model > ro.boot.em.model
+HEX_PATCH "$WORK_DIR/vendor/lib/hw/camera.qcom.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+HEX_PATCH "$WORK_DIR/vendor/lib64/hw/camera.qcom.so" \
+    "726f2e70726f647563742e6d6f64656c" \
+    "726f2e626f6f742e656d2e6d6f64656c"
+
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
     # Upgrade midas blobs
     DELETE_FROM_WORK_DIR "vendor" "etc/midas"
