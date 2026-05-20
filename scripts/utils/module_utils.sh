@@ -178,6 +178,11 @@ HEX_PATCH()
         return 1
     fi
 
+    if [[ "$(echo -n "$FROM" | wc -c)" != "$(echo -n "$TO" | wc -c)" ]]; then
+        LOGE "Byte strings length must be equal"
+        return 1
+    fi
+
     LOG "- Patching \"$FROM\" to \"$TO\" in ${FILE//$WORK_DIR/}"
     xxd -p -c 0 "$FILE" | sed "s/$FROM/$TO/" | xxd -r -p > "$FILE.tmp"
     mv "$FILE.tmp" "$FILE"
