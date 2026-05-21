@@ -76,7 +76,7 @@ fi
 # UN1CA: this patch is not complete! It relies on the whole build system and modules to produce a working
 # MediaTek-compatible image.
 
-IFS=':' read -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
+IFS=":" read -r -a SOURCE_EXTRA_FIRMWARES <<< "$SOURCE_EXTRA_FIRMWARES"
 MODEL=$(cut -d "/" -f 1 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
 REGION=$(cut -d "/" -f 2 -s <<< "${SOURCE_EXTRA_FIRMWARES[0]}")
 
