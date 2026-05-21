@@ -1,0 +1,4 @@
+is_substring("S9060ZC", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "S9060ZCU9FYDA") && abort("E3003: This package requires Android 15 firmware.");
+is_substring("S9060ZH", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "S9060ZHU9FYD9") && abort("E3003: This package requires Android 15 firmware.");
+is_substring("S906EXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "S906EXXUCFYDA") && abort("E3003: This package requires Android 15 firmware.");
+is_substring("S906NKS", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "S906NKSU7FYD9") && abort("E3003: This package requires Android 15 firmware.");
