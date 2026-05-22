@@ -1,2 +1,3 @@
 is_substring("afaneh92", getprop("ro.twrp.version")) && abort("E3000: This package does not support afaneh92's recovery.");
-getprop("ro.boot.bootloader") != "G991BXXSJHZC2" && greater_than_int(getprop("ro.boot.rp"), "19") && abort("E3003: This package requires the \"G991BXXSJHZC2\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
+getprop("ro.boot.em.model") == "SM-G991B" && getprop("ro.boot.bootloader") != "G991BXXSJHZC2" && greater_than_int(getprop("ro.boot.rp"), "19") && abort("E3003: This package requires the \"G991BXXSJHZC2\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
+getprop("ro.boot.em.model") == "SM-G991N" && getprop("ro.boot.bootloader") != "G991NKSSCHZA9" && greater_than_int(getprop("ro.boot.rp"), "12") && abort("E3003: This package requires the \"G991NKSSCHZA9\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
