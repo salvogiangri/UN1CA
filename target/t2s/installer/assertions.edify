@@ -1,1 +1,2 @@
+is_substring("afaneh92", getprop("ro.twrp.version")) && abort("E3000: This package does not support afaneh92's recovery.");
 getprop("ro.boot.bootloader") != "G996BXXSJHZC2" && greater_than_int(getprop("ro.boot.rp"), "19") && abort("E3003: This package requires the \"G996BXXSJHZC2\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
