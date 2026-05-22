@@ -1,0 +1,289 @@
+<?xml version="1.0" ?>
+<!--Revision: $872ea Created: 2020-05-07 01:15:58.116387-->
+<!--Enable chip level RF reconfiguration for BRCM Chipset-->
+<brcmconfig>
+  <!--"target" attribute can be defined as per hcd target and host will match the value against getprop of "persist.bluetooth.module" -->
+  <module chipname="BCM4389C1" target="murata" version="1">
+    <!--Each config corresponds to one HCI command along with its parameters-->
+    <!-- Config parameters:
+        1. disable : When set to true, host shall ignore config
+        2. format  : Data type of the configured value. Currently supported values are "int8" and "uint8"
+    -->
+    <!--<Max Target power values for Antenna(0/1) and Mode (BR/EDR/LE1/LE2), (12 * 1) = 12 Bytes
+        255 is reserved value for this config -->
+    <config cmd="1" subcmd="0" disable="false">
+      <values format="uint8" info="Max_Target_Power" length="12">
+        19, 15,  12,  12, 255, 255,
+        19, 21, 255, 255, 255, 255
+      </values>
+    </config>
+    <!--PADGC Offset for 9 Bins for Antenna(0/1), PA(IPA/EPA) and Mode(BR/EDR/LE), (2 * 2 * 3 * 9 - 2*1*1*9) = 90 Bytes
+        LE EPA is not there hence removed 2*1*1*9 = 18 bytes in above calculation -->
+    <config cmd="1" subcmd="1" disable="false">
+      <values format="int8" info="PADGC_Offset" length="90">
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+      </values>
+    </config>
+    <!--Power Control Step Correction for 8 steps for Antenna(0/1), Mode (BR/EDR/LE)  (2 * 3 * 8) = 48 Bytes
+        -128 is reserved value for this config -->
+    <config cmd="1" subcmd="2" disable="false">
+      <values format="int8" info="Index_Offset" length="48">
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128
+      </values>
+    </config>
+    <!-- Enable TxOp configuration -->
+    <config cmd="1" subcmd="6" disable="false">
+      <values format="uint8" info="Tx Op update enable" length="1">
+       1
+      </values>
+    </config>
+    <!--SAR TxOP for different Configurations in (Index, Value, Coarse Adjustment BDR,
+        Coarse Adjustment EDR, Coarse Adjustment LE1M, Coarse Adjustment LE2M) format.
+        In Coarse Adjustment fields (BDR, EDR, LE1M, LE2M),
+        To increase power, "-number" (-ve number) has to be specified,
+        To decrease power, "number" (+ve number) has to be specified.
+        127 is reserved value for this config. -->
+    <config cmd="1" subcmd="3" disable="false">
+      <values format="int8" info="Sar_Txop" length="66">
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127
+      </values>
+    </config>
+    <!--RSSI Offset for different Configurations in core(maincore0/maincore1/scancore) format.
+        Each core requires RSSI offset for 6 bins(2402, 2416, 2426, 2450, 2465 and 2480) in order.-->
+    <config cmd="1" subcmd="4" disable="false">
+      <values format="int8" info="RSSI_Offset" length="18">
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0
+      </values>
+    </config>
+    <!--Default Antenna for different Configurations. -->
+    <config cmd="1" subcmd="5" disable="false">
+      <values format="uint8" info="Default_Antenna" length="1">
+       1
+      </values>
+    </config>
+  </module>
+  <module chipname="BCM4389C1" target="semco" version="1">
+    <config cmd="1" subcmd="0" disable="false">
+      <values format="uint8" info="Max_Target_Power" length="12">
+        19, 15,  12,  12, 255, 255,
+        19, 21, 255, 255, 255, 255
+      </values>
+    </config>
+    <config cmd="1" subcmd="1" disable="false">
+      <values format="int8" info="PADGC_Offset" length="90">
+        7, 0, 2, 4, 3, 2, 5, 8, 10,
+        9, 0, -2, -1, -1, -2, -3, 2, 3,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        7, 8, 0, -5, -3, -3, -3, -3, 1,
+        10, 10, 2, -8, -6, 1, 0, 0, 5,
+        10, 7, 0, 0, 0, 0, 0, 6, 10,
+        10, 10, 0, 0, 0, 0, 0, 4, 4,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        10, 10, 0, 0, 0, 0, 0, 0, 5,
+        10, 10, 0, 0, 0, 0, 0, 2, 7
+      </values>
+    </config>
+    <config cmd="1" subcmd="2" disable="false">
+      <values format="int8" info="Index_Offset" length="48">
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128
+      </values>
+    </config>
+    <!-- Enable TxOp configuration -->
+    <config cmd="1" subcmd="6" disable="false">
+      <values format="uint8" info="Tx Op update enable" length="1">
+       1
+      </values>
+    </config>
+    <config cmd="1" subcmd="3" disable="false">
+      <values format="int8" info="Sar_Txop" length="66">
+       1,  15,    0,    0,    0,    0,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127
+      </values>
+    </config>
+    <config cmd="1" subcmd="4" disable="false">
+      <values format="int8" info="RSSI_Offset" length="18">
+       5,  5,   5,   5,   5,   5,
+       5,  5,   5,   5,   5,   5,
+       5,  5,   5,   5,   5,   5
+      </values>
+    </config>
+    <!--Default Antenna for different Configurations. -->
+    <config cmd="1" subcmd="5" disable="false">
+      <values format="uint8" info="Default_Antenna" length="1">
+       1
+      </values>
+    </config>
+  </module>
+  <module chipname="BCM4389C0" target="murata" version="1">
+    <config cmd="1" subcmd="0" disable="false">
+      <values format="uint8" info="Max_Target_Power" length="12">
+        19, 15,  12,  12, 255, 255,
+        19, 21, 255, 255, 255, 255
+      </values>
+    </config>
+    <config cmd="1" subcmd="1" disable="false">
+      <values format="int8" info="PADGC_Offset" length="90">
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+      </values>
+    </config>
+    <config cmd="1" subcmd="2" disable="false">
+      <values format="int8" info="Index_Offset" length="48">
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128
+      </values>
+    </config>
+    <!-- Enable TxOp configuration -->
+    <config cmd="1" subcmd="6" disable="false">
+      <values format="uint8" info="Tx Op update enable" length="1">
+       1
+      </values>
+    </config>
+    <config cmd="1" subcmd="3" disable="false">
+      <values format="int8" info="Sar_Txop" length="66">
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127
+      </values>
+    </config>
+    <config cmd="1" subcmd="4" disable="false">
+      <values format="int8" info="RSSI_Offset" length="18">
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0
+      </values>
+    </config>
+    <!--Default Antenna for different Configurations. -->
+    <config cmd="1" subcmd="5" disable="false">
+      <values format="uint8" info="Default_Antenna" length="1">
+       1
+      </values>
+    </config>
+  </module>
+  <module chipname="BCM4389C0" target="semco" version="1">
+    <config cmd="1" subcmd="0" disable="false">
+      <values format="uint8" info="Max_Target_Power" length="12">
+        19, 15,  12,  12, 255, 255,
+        19, 21, 255, 255, 255, 255
+      </values>
+    </config>
+    <config cmd="1" subcmd="1" disable="false">
+      <values format="int8" info="PADGC_Offset" length="90">
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+      </values>
+    </config>
+    <config cmd="1" subcmd="2" disable="false">
+      <values format="int8" info="Index_Offset" length="48">
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0,    0,    0,    0,    0,    0,    0,
+        0,   0, -128, -128, -128, -128, -128, -128
+      </values>
+    </config>
+    <!-- Enable TxOp configuration -->
+    <config cmd="1" subcmd="6" disable="false">
+      <values format="uint8" info="Tx Op update enable" length="1">
+       1
+      </values>
+    </config>
+    <config cmd="1" subcmd="3" disable="false">
+      <values format="int8" info="Sar_Txop" length="66">
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127,
+     127, 127,  127,  127,  127,  127
+      </values>
+    </config>
+    <config cmd="1" subcmd="4" disable="false">
+      <values format="int8" info="RSSI_Offset" length="18">
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0,
+       0,   0,    0,    0,    0,    0
+      </values>
+    </config>
+    <!--Default Antenna for different Configurations. -->
+    <config cmd="1" subcmd="5" disable="false">
+      <values format="uint8" info="Default_Antenna" length="1">
+       1
+      </values>
+    </config>
+  </module>
+</brcmconfig>
