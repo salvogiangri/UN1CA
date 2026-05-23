@@ -1,0 +1,25 @@
+# Firmware
+on early-init
+    mount none /vendor/firmware/${ro.boot.em.model}/nfc/libsn100u_fw.so /vendor/firmware/nfc/libsn100u_fw.so bind
+    mount none /vendor/firmware/${ro.boot.em.model}/AP_AUDIO_SLSI.bin /vendor/firmware/AP_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/APDV_AUDIO_SLSI.bin /vendor/firmware/APDV_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/bcm4375B1_murata.hcd /vendor/firmware/bcm4375B1_murata.hcd bind
+    mount none /vendor/firmware/${ro.boot.em.model}/bcm4375B1_semco.hcd /vendor/firmware/bcm4375B1_semco.hcd bind
+    mount none /vendor/firmware/${ro.boot.em.model}/bcm4375B1_semco_sem.hcd /vendor/firmware/bcm4375B1_semco_sem.hcd bind
+    mount none /vendor/firmware/${ro.boot.em.model}/calliope_sram.bin /vendor/firmware/calliope_sram.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/dsp_master.bin /vendor/firmware/dsp_master.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/is_rta.bin /vendor/firmware/is_rta.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/mfc_fw.bin /vendor/firmware/mfc_fw.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/NPU.bin /vendor/firmware/NPU.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/nvram.txt_1rh_es43_b1 /vendor/firmware/nvram.txt_1rh_es43_b1 bind
+    mount none /vendor/firmware/${ro.boot.em.model}/nvram.txt_CS01_semco_b1 /vendor/firmware/nvram.txt_CS01_semco_b1 bind
+    mount none /vendor/firmware/${ro.boot.em.model}/rxse.bin /vendor/firmware/rxse.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/SoundBoosterParam.bin /vendor/firmware/SoundBoosterParam.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/vts.bin /vendor/firmware/vts.bin bind
+
+# TEEgris - Firmware - o1sksx (kor_single)
+on early-init && property:ro.boot.em.model=SM-G991N
+    mount none /vendor/tee_SM-G991N /vendor/tee bind
+
+on boot
+    restart audioserver

@@ -1,0 +1,32 @@
+# Firmware
+on early-init
+    mount none /vendor/firmware/${ro.boot.em.model}/nfc/libsn100u_fw.so /vendor/firmware/nfc/libsn100u_fw.so bind
+    mount none /vendor/firmware/${ro.boot.em.model}/AP_AUDIO_SLSI.bin /vendor/firmware/AP_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/APDV_AUDIO_SLSI.bin /vendor/firmware/APDV_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/bt_vendor_rf.xml /vendor/firmware/calliope_sram.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/calliope_sram.bin /vendor/firmware/calliope_sram.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/dsp_master.bin /vendor/firmware/dsp_master.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/is_rta.bin /vendor/firmware/is_rta.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/mfc_fw.bin /vendor/firmware/mfc_fw.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/NPU.bin /vendor/firmware/NPU.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/rxse.bin /vendor/firmware/rxse.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/SoundBoosterParam.bin /vendor/firmware/SoundBoosterParam.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/vts.bin /vendor/firmware/vts.bin bind
+
+# TEEgris - Firmware - p3sksx (kor_single)
+on early-init && property:ro.boot.em.model=SM-G998N
+    mount none /vendor/firmware/SM-G998N/wifi/nvram.txt_ES32_semco_c0 /vendor/firmware/wifi/nvram.txt_ES32_semco_c0 bind
+    mount none /vendor/firmware/SM-G998N/wifi/nvram.txt_ES40_semco_c1 /vendor/firmware/wifi/nvram.txt_ES40_semco_c1 bind
+    mount none /vendor/firmware/SM-G998N/wifi/nvram_ES40_semco_c1 /vendor/firmware/wifi/nvram_ES40_semco_c1 bind
+    mount none /vendor/tee_SM-G998N /vendor/tee bind
+
+# Firmware - p3sxxx (eur_open)
+on early-init && property:ro.boot.em.model=SM-G998B
+    mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_1wk_es40_c0 /vendor/firmware/wifi/nvram.txt_1wk_es40_c0 bind
+    mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_1wk_es41_c0 /vendor/firmware/wifi/nvram.txt_1wk_es41_c0 bind
+    mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_4389_3321 /vendor/firmware/wifi/nvram.txt_4389_3321 bind
+    mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_ES32_semco_c0 /vendor/firmware/wifi/nvram.txt_ES32_semco_c0 bind
+    mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_ES40_semco_c1 /vendor/firmware/wifi/nvram.txt_ES40_semco_c1 bind
+
+on boot
+    restart audioserver
