@@ -400,6 +400,11 @@ GENERATE_UPDATER_SCRIPT()
             cat "$SRC_DIR/target/$TARGET_CODENAME/installer/install-end.edify"
         fi
 
+        if [ -f "$SRC_DIR/target/$TARGET_CODENAME/installer/install-end.sh" ]; then
+            # shellcheck disable=SC1090
+            . "$SRC_DIR/target/$TARGET_CODENAME/installer/install-end.sh"
+        fi
+
         echo    'set_progress(1.000000);'
 
         PRINT_SEPARATOR

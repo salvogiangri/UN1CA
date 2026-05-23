@@ -104,6 +104,11 @@ PRINT_ASSERTIONS()
     if [ -f "$SRC_DIR/target/$DEVICE/installer/assertions.edify" ]; then
         cat "$SRC_DIR/target/$DEVICE/installer/assertions.edify"
     fi
+
+    if [ -f "$SRC_DIR/target/$DEVICE/installer/assertions.sh" ]; then
+        # shellcheck disable=SC1090
+        . "$SRC_DIR/target/$DEVICE/installer/assertions.sh"
+    fi
 }
 
 # PRINT_BUILD_INFO <info> [info]
