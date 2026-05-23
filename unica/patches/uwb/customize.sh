@@ -6,10 +6,6 @@ TARGET_HAS_UWB="$(test -f "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/permissions/
 
 if ! $SOURCE_HAS_UWB; then
     if $TARGET_HAS_UWB; then
-        if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "mssi" ]]; then
-            ABORT "\"mssi\" system image does not support targets with UWB. Aborting"
-        fi
-
         LOG "- Adding \"ro.boot.uwbcountrycode\" prop with \"ff\" in /product/etc/build.prop"
         EVAL "sed -i \"/usb.config/a ro.boot.uwbcountrycode=ff\" \"$WORK_DIR/product/etc/build.prop\""
 

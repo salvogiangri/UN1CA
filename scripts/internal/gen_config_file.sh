@@ -201,7 +201,7 @@ fi
 #
 #   TARGET_OS_SINGLE_SYSTEM_IMAGE
 #     String containing the target device SSI, it must match the `ro.build.product` prop.
-#     Currently, only "qssi", "essi" and "mssi" are supported.
+#     Currently, only "qssi" and "essi" are supported.
 #
 #   TARGET_OS_FILE_SYSTEM_TYPE
 #     String containing the target device firmware file system.
