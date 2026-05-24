@@ -15,6 +15,95 @@ ABORT()
     return 1
 }
 
+# ADD_JAR_TO_CLASSPATH "<system classpath/file>" "<classpath scope>" "<jar path>" [--min-sdk/-m <minimum sdk>] [--max-sdk/-m <maximum sdk>]
+# Adds the given jar to the classpath and with the given scope and, optionally, sdk versions.
+#
+# System classpath can be any value from: bootclasspath, systemserverclasspath. Alternatively, an arbitrary Proto-encoded classpath file can be provided.
+# Scope can be any value from: UNKNOWN, BOOTCLASSPATH, SYSTEMSERVERCLASSPATH, DEX2OATBOOTCLASSPATH or STANDALONE_SYSTEMSERVER_JARS.
+# Jar path is the absolute path on the Android device filesystem of the jar file to load.
+#
+# "--min-sdk <minimum sdk>" or "-m <minimum sdk>" can be used to specify the minimum API level that the jar file supports.
+# "--max-sdk <maximum sdk>" or "-M <maximum sdk>" can be used to specify the maximum API level that the jar file supports.
+ADD_JAR_TO_CLASSPATH()
+{
+    # Check the required parameters
+    _CHECK_NON_EMPTY_PARAM "FILE" "$1"
+    _CHECK_NON_EMPTY_PARAM "SCOPE" "$2"
+    _CHECK_NON_EMPTY_PARAM "JAR_PATH" "$3"
+
+    local FILE="$1"; shift
+    local SCOPE="$1"; shift
+    local JAR_PATH="$1"; shift
+    local MIN_SDK
+    local MAX_SDK
+    local PROTO="$SRC_DIR/prebuilts/proto/classpaths.proto"
+    local CMD
+
+    # Handle file parameter
+    if [[ "$FILE" == "bootclasspath" ]]; then
+        FILE="$WORK_DIR/system/system/etc/classpaths/bootclasspath.pb"
+    elif [[ "$FILE" == "systemserverclasspath" ]]; then
+        FILE="$WORK_DIR/system/system/etc/classpaths/systemserverclasspath.pb"
+    fi
+
+    if [ ! -f "$FILE" ]; then
+        LOGE "File not found: ${FILE//$WORK_DIR/}"
+        return 1
+    fi
+
+    # Handle scope parameter
+    if [[ "$SCOPE" != "UNKNOWN" ]] && [[ "$SCOPE" != "BOOTCLASSPATH" ]] && [[ "$SCOPE" != "SYSTEMSERVERCLASSPATH" ]] && \
+            [[ "$SCOPE" != "DEX2OATBOOTCLASSPATH" ]] && [[ "$SCOPE" != "STANDALONE_SYSTEMSERVER_JARS" ]]; then
+        LOGE "\"$SCOPE\" is not a valid scope"
+        return 1
+    fi
+
+    # Handle SDK parameters
+    while [[ "$1" == "-"* ]]; do
+        if [[ "$1" == "--min-sdk" ]] || [[ "$1" == "-m" ]]; then
+            shift; MIN_SDK="$1"
+        elif [[ "$1" == "--max-sdk" ]] || [[ "$1" == "-M" ]]; then
+            shift; MAX_SDK="$1"
+        else
+            LOGE "Unknown option: $1"
+            return 1
+        fi
+        shift
+    done
+
+    if [ -n "$MIN_SDK" ] && ! echo "$MIN_SDK" | grep -qE '^[0-9]+$'; then
+        LOGE "Minimum sdk is not a valid integer: $MIN_SDK"
+    fi
+
+    if [ -n "$MAX_SDK" ] && ! echo "$MAX_SDK" | grep -qE '^[0-9]+$'; then
+        LOGE "Maximum sdk is not a valid integer: $MAX_SDK"
+    fi
+
+    LOG "- Adding \"$JAR_PATH\" classpath entry to \"${FILE//$WORK_DIR/}\""
+
+    # Decode given binary file to text
+    EVAL "cd \"$(dirname "$FILE")\"; protoc --decode=ExportedClasspathsJars --proto_path=\"$(dirname "$PROTO")\" \"$(basename "$PROTO")\" < \"$(basename "$FILE")\" > \"$(basename "$FILE").txt\""
+
+    # Add to the text file
+    {
+        echo "jars {"
+        echo "  path: \"$JAR_PATH\""
+        echo "  classpath: $SCOPE"
+        if [ "$MIN_SDK" ]; then
+            echo "  min_sdk_version: \"$MIN_SDK\""
+        fi
+        if [ "$MAX_SDK" ]; then
+        echo "  max_sdk_version: \"$MAX_SDK\""
+        fi
+        echo "}"
+    } >> "$(dirname "$FILE")/$(basename "$FILE").txt"
+
+    # Encode back text file to binary
+    CMD="cd \"$(dirname "$FILE")\"; protoc --encode=ExportedClasspathsJars --proto_path=\"$(dirname "$PROTO")\" \"$(basename "$PROTO")\" < \"$(basename "$FILE").txt\" > \"$(basename "$FILE")\""
+    EVAL "$CMD"
+    EVAL "rm \"$(dirname "$FILE")/$(basename "$FILE").txt\""
+}
+
 # APPLY_PATCH <partition> <apk/jar> <patch>
 # Applies a unified diff patch to the provided APK/JAR decoded directory.
 APPLY_PATCH()

@@ -13,8 +13,6 @@ if ! $SOURCE_HAS_UWB; then
             "overlay/UwbRROverlay.apk" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
             "system/app/UwbTest/UwbTest.apk" 0 0 644 "u:object_r:system_file:s0"
-        ADD_TO_WORK_DIR "$([[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && echo "b0qxxx" || echo "b0sxxx")" \
-            "system" "system/etc/classpaths/bootclasspath.pb" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
             "system/etc/init/init.system.uwb.rc" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
@@ -31,6 +29,10 @@ if ! $SOURCE_HAS_UWB; then
             "system/etc/pp_model.tflite" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
             "system/framework/com.samsung.android.uwb_extras.jar" 0 0 644 "u:object_r:system_file:s0"
+        ADD_JAR_TO_CLASSPATH "bootclasspath" "BOOTCLASSPATH" \
+            "/system/framework/com.samsung.android.uwb_extras.jar"
+        ADD_JAR_TO_CLASSPATH "bootclasspath" "DEX2OATBOOTCLASSPATH" \
+            "/system/framework/com.samsung.android.uwb_extras.jar"
         ADD_TO_WORK_DIR "b0qxxx" "system" \
             "system/framework/semuwb-service.jar" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" \

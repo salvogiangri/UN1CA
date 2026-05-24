@@ -1,0 +1,58 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+enum Classpath {
+  UNKNOWN = 0;
+  BOOTCLASSPATH = 1;
+  SYSTEMSERVERCLASSPATH = 2;
+  DEX2OATBOOTCLASSPATH = 3;
+  STANDALONE_SYSTEMSERVER_JARS = 4;
+}
+
+// Individual entry in a classpath variable.
+message Jar {
+
+  // Path on the filesystem for the jar.
+  string path = 1;
+
+  // Environ classpath variable this jar belongs to.
+  // Must be set to a known classpath.
+  Classpath classpath = 2;
+
+  // Minimum API level required for the jar to be included on the classpath.
+  // If the system's API level is lower than the value specified in this
+  // attribute, the jar will not be included in the classpath.
+  // Not setting this attribute implies the jar can be used on all API levels.
+  string min_sdk_version = 3;
+
+  // Maximum API level that the jar file supports.
+  // If the system's API level is higher than the value specified in this
+  // attribute, the jar will not be included in the classpath.
+  // Not setting this attribute implies unbound maximum.
+  string max_sdk_version = 4;
+}
+
+// Jars exported by a single partition.
+message ExportedClasspathsJars {
+
+  // All jars that are exported as part of any classpath environ variable
+  // (according to API level restrictions).
+  // The relative order of the jars is preserved upon final merging.
+  repeated Jar jars = 1;
+
+}

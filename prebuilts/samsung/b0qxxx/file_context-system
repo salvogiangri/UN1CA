@@ -10,8 +10,6 @@
 /system/bin/bootanimation u:object_r:bootanim_exec:s0
 /system/bin/surfaceflinger u:object_r:surfaceflinger_exec:s0
 /system/etc u:object_r:system_file:s0
-/system/etc/classpaths u:object_r:system_file:s0
-/system/etc/classpaths/bootclasspath\.pb u:object_r:system_file:s0
 /system/etc/init u:object_r:system_file:s0
 /system/etc/init/init\.system\.uwb\.rc u:object_r:system_file:s0
 /system/etc/permissions u:object_r:system_file:s0
