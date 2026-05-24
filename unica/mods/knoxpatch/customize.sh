@@ -31,16 +31,14 @@ APPLY_PATCH "system" "system/framework/services.jar" \
     "$MODPATH/services.jar/0001-Bypass-ICD-verification.patch"
 
 # Disable SAK in DarManagerService
-APPLY_PATCH "system" "system/framework/services.jar" \
-    "$MODPATH/services.jar/0002-Disable-SAK-in-DarManagerService.patch"
 SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali/com/android/server/knox/dar/AttestedCertParser.smali" 'remove'
+    "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
+    'checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z' 'true'
+
+# Disable DRK in DarManagerService
 SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali/com/android/server/knox/dar/IntegrityStatus.smali" 'remove'
-SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali/com/android/server/knox/dar/Asn1Utils.smali" 'remove'
-SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali/com/android/server/knox/dar/AuthResult.smali" 'remove'
+    "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
+    'isDeviceRootKeyInstalled()Z' 'true'
 
 # Disable root checks in StorageManagerService
 SMALI_PATCH "system" "system/framework/services.jar" \
