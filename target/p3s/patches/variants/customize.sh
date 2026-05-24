@@ -49,7 +49,7 @@ done
 
 LOG "- Creating dummy /vendor/firmware/wifi/nvram_ES40_semco_c1"
 EVAL "touch \"$WORK_DIR/vendor/firmware/wifi/nvram_ES40_semco_c1\""
-SET_METADATA "vendor" "firmware/SM-G998B/wifi/nvram_ES40_semco_c1" 0 0 644 "u:object_r:vendor_firmware_file:s0"
+SET_METADATA "vendor" "firmware/wifi/nvram_ES40_semco_c1" 0 0 644 "u:object_r:vendor_firmware_file:s0"
 
 # SELinux
 LOG "- Adding SELinux entries"
