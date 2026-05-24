@@ -39,8 +39,8 @@ SET_METADATA "vendor" "firmware/SM-G998B/wifi" 0 2000 755 "u:object_r:vendor_fir
 
 for f in "nvram.txt_1wk_es40_c0" "nvram.txt_1wk_es41_c0" \
         "nvram.txt_4389_3321" "nvram.txt_ES32_semco_c0" "nvram.txt_ES40_semco_c1"; do
-    LOG "- Moving /vendor/firmware/wifi/$f to /vendor/firmware/SM-G998B/wifi/$BLOB"
-    EVAL "mv \"$WORK_DIR/vendor/firmware/$f\" \"$WORK_DIR/vendor/firmware/SM-G998B/wifi/$f\""
+    LOG "- Moving /vendor/firmware/wifi/$f to /vendor/firmware/SM-G998B/wifi/$f"
+    EVAL "mv \"$WORK_DIR/vendor/firmware/wifi/$f\" \"$WORK_DIR/vendor/firmware/SM-G998B/wifi/$f\""
     SET_METADATA "vendor" "firmware/SM-G998B/wifi/$f" 0 0 644 "u:object_r:vendor_firmware_file:s0"
 
     LOG "- Creating dummy /vendor/firmware/wifi/$f"
