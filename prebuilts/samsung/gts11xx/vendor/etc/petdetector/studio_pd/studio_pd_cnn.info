@@ -1,0 +1,9 @@
+{
+	"version_id": "V1",
+	"tag" : "1.16",
+	"model_type" : "cpu",
+	"precision" : "float16",
+	"latency" : "0",
+	"compiler" : "snapcpu",
+	"model_path" : "/vendor/etc/petdetector/studio_pd/studio_pd_cnn.tflite"
+}

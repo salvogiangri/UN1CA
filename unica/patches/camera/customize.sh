@@ -96,7 +96,12 @@ fi
 SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER="$(GET_FLOATING_FEATURE_CONFIG "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/etc/floating_feature.xml" "SEC_FLOATING_FEATURE_CAMERA_CONFIG_ACTION_CLASSIFIER")"
 TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER="$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_ACTION_CLASSIFIER")"
 if [ "$SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER" ]; then
-    if [ ! "$TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER" ]; then
+    if [ "$TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER" ]; then
+        if [ -d "$WORK_DIR/vendor/etc/singletake/dynamic_viewing" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/dynamic_viewing"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/dynamic_viewing" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+    else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libVideoClassifier.camera.samsung.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libtensorflowLite2_11_0_dynamic_camera.so"
     fi
@@ -270,6 +275,14 @@ if [[ "$SOURCE_CAMERA_CONFIG_VENDOR_LIB_INFO" == *"pro_single_rgb.mpi.v1"* ]] &&
     DELETE_FROM_WORK_DIR "system" "system/lib64/libAIQSolution_MPISingleRGB40.camera.samsung.so"
     DELETE_FROM_WORK_DIR "system" "system/lib64/libMPISingleRGB40.camera.samsung.so"
     DELETE_FROM_WORK_DIR "system" "system/lib64/libMPISingleRGB40Tuning.camera.samsung.so"
+fi
+if [[ "$SOURCE_CAMERA_CONFIG_VENDOR_LIB_INFO" == *"scene_detection.samsung.v1"* ]] && \
+        [[ "$TARGET_CAMERA_CONFIG_VENDOR_LIB_INFO" != *"scene_detection.samsung.v1"* ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/lib64/libSceneDetector_v1.camera.samsung.so"
+fi
+if [[ "$SOURCE_CAMERA_CONFIG_VENDOR_LIB_INFO" == *"smart_scan.samsung"* ]] && \
+        [[ "$TARGET_CAMERA_CONFIG_VENDOR_LIB_INFO" != *"smart_scan.samsung"* ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/lib64/libSmartScan.camera.samsung.so"
 fi
 if [[ "$SOURCE_CAMERA_CONFIG_VENDOR_LIB_INFO" == *"super_night.mpi.v2"* ]] && \
         [[ "$TARGET_CAMERA_CONFIG_VENDOR_LIB_INFO" != *"super_night.mpi.v2"* ]]; then

@@ -1,0 +1,14 @@
+ 0 2000 755 capabilities=0x0
+vendor/etc 0 2000 755 capabilities=0x0
+vendor/etc/petdetector 0 2000 755 capabilities=0x0
+vendor/etc/petdetector/studio_pd 0 2000 755 capabilities=0x0
+vendor/etc/petdetector/studio_pd/config_thresholds.json 0 0 644 capabilities=0x0
+vendor/etc/petdetector/studio_pd/studio_pd_cnn.info 0 0 644 capabilities=0x0
+vendor/etc/petdetector/studio_pd/studio_pd_cnn.tflite 0 0 644 capabilities=0x0
+vendor/etc/saiv 0 2000 755 capabilities=0x0
+vendor/etc/saiv/image_understanding 0 2000 755 capabilities=0x0
+vendor/etc/saiv/image_understanding/db 0 2000 755 capabilities=0x0
+vendor/etc/saiv/image_understanding/db/slens_classifier 0 2000 755 capabilities=0x0
+vendor/etc/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn.tflite 0 0 644 capabilities=0x0
+vendor/etc/saiv/image_understanding/db/slens_detector 0 2000 755 capabilities=0x0
+vendor/etc/saiv/image_understanding/db/slens_detector/slens_detector_cnn.tflite 0 0 644 capabilities=0x0

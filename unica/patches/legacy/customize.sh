@@ -334,8 +334,23 @@ fi
 if [ -f "$WORK_DIR/system/system/priv-app/LedCoverService/LedCoverService.apk" ]; then
     if [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NFC_LED_COVER_LEVEL")" -ge "30" ] && \
             [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NFC_LED_COVER_LEVEL")" -lt "100" ]; then
+        PATCHED=true
         APPLY_PATCH "system" "system/priv-app/LedCoverService/LedCoverService.apk" \
             "$MODPATH/ledcover/LedCoverService.apk/0001-Switch-to-ISamsungNfcAdapter-interface.patch"
+    fi
+fi
+
+# Upgrade Single Take models (pre-API 35)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
+        PATCHED=true
+        DELETE_FROM_WORK_DIR "vendor" "etc/singletake"
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+            "etc/singletake/ClarityScorer/ClarityScorer.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+        if ! grep -q "SUPPORT_SMART_CROP.*false" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
+            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+                "etc/singletake/SmartCrop/SmartCrop.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+        fi
     fi
 fi
 

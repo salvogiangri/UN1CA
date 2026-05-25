@@ -17,8 +17,3 @@
 /vendor/etc/midas/SRIBMidas_aiUPSCALER_3X_LITE_V100_INT8\.tflite u:object_r:vendor_configs_file:s0
 /vendor/etc/midas/SRIBMidas_aiUPSCALER_4X_LITE_V100_INT8\.tflite u:object_r:vendor_configs_file:s0
 /vendor/etc/midas/midas_config\.json u:object_r:vendor_configs_file:s0
-/vendor/etc/singletake u:object_r:vendor_configs_file:s0
-/vendor/etc/singletake/ClarityScorer u:object_r:vendor_configs_file:s0
-/vendor/etc/singletake/ClarityScorer/ClarityScorer\.tflite u:object_r:vendor_configs_file:s0
-/vendor/etc/singletake/SmartCrop u:object_r:vendor_configs_file:s0
-/vendor/etc/singletake/SmartCrop/SmartCrop\.tflite u:object_r:vendor_configs_file:s0

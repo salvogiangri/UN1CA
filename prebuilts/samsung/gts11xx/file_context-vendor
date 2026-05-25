@@ -1,0 +1,14 @@
+/vendor u:object_r:vendor_file:s0
+/vendor/etc u:object_r:vendor_configs_file:s0
+/vendor/etc/petdetector u:object_r:vendor_configs_file:s0
+/vendor/etc/petdetector/studio_pd u:object_r:vendor_configs_file:s0
+/vendor/etc/petdetector/studio_pd/config_thresholds\.json u:object_r:vendor_configs_file:s0
+/vendor/etc/petdetector/studio_pd/studio_pd_cnn\.info u:object_r:vendor_configs_file:s0
+/vendor/etc/petdetector/studio_pd/studio_pd_cnn\.tflite u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/slens_classifier u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn\.tflite u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/slens_detector u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/slens_detector/slens_detector_cnn\.tflite u:object_r:vendor_configs_file:s0

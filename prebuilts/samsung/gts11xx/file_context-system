@@ -1,0 +1,8 @@
+/system u:object_r:system_file:s0
+/system/saiv u:object_r:system_file:s0
+/system/saiv/image_understanding u:object_r:system_file:s0
+/system/saiv/image_understanding/db u:object_r:system_file:s0
+/system/saiv/image_understanding/db/slens_classifier u:object_r:system_file:s0
+/system/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn\.sni u:object_r:system_file:s0
+/system/saiv/image_understanding/db/slens_detector u:object_r:system_file:s0
+/system/saiv/image_understanding/db/slens_detector/slens_detector_cnn\.sni u:object_r:system_file:s0
