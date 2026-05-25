@@ -79,12 +79,79 @@ ADD_JAR_TO_CLASSPATH()
         LOGE "Maximum sdk is not a valid integer: $MAX_SDK"
     fi
 
-    LOG "- Adding \"$JAR_PATH\" classpath entry to \"${FILE//$WORK_DIR/}\""
-
     # Decode given binary file to text
     EVAL "cd \"$(dirname "$FILE")\"; protoc --decode=ExportedClasspathsJars --proto_path=\"$(dirname "$PROTO")\" \"$(basename "$PROTO")\" < \"$(basename "$FILE")\" > \"$(basename "$FILE").txt\""
 
+    local TXT_FILE="$(dirname "$FILE")/$(basename "$FILE").txt"
+
+    # Handle locations which can be written in two different ways
+    # system_ext/vendor/product are both present via symlink to / and /system
+    local NORMALIZED_JAR_PATH="$JAR_PATH"
+    if [[ "$NORMALIZED_JAR_PATH" == "/system/vendor/"* ]]; then
+        NORMALIZED_JAR_PATH="/vendor${NORMALIZED_JAR_PATH#/system/vendor}"
+    elif [[ "$NORMALIZED_JAR_PATH" == "/system/product/"* ]]; then
+        NORMALIZED_JAR_PATH="/product${NORMALIZED_JAR_PATH#/system/product}"
+    elif [[ "$NORMALIZED_JAR_PATH" == "/system/system_ext/"* ]]; then
+        NORMALIZED_JAR_PATH="/system_ext${NORMALIZED_JAR_PATH#/system/system_ext}"
+    fi
+
+    # Search the decoded file line by line for a block whose path+scope matches what we are adding.
+    # For each block we track: whether we are inside a block, the start line, the parsed path and scope.
+    local LINE_NUMBER=0
+    local IN_BLOCK="false"
+    local BLOCK_START_LINE=0
+    local BLOCK_END_LINE=0
+    local CURRENT_PATH=""
+    local CURRENT_SCOPE=""
+    local MATCH_START_LINE=0
+    local MATCH_END_LINE=0
+
+    while IFS= read -r LINE; do
+        LINE_NUMBER=$(( LINE_NUMBER + 1 ))
+
+        if [[ "$LINE" == "jars {"* ]]; then
+            IN_BLOCK="true"
+            BLOCK_START_LINE=$LINE_NUMBER
+            CURRENT_PATH=""
+            CURRENT_SCOPE=""
+            continue
+        fi
+
+        if [[ "$IN_BLOCK" == "true" ]] && [[ "$LINE" == "}" ]]; then
+            IN_BLOCK="false"
+            BLOCK_END_LINE=$LINE_NUMBER
+
+            # Normalize the path found in this block the same way we normalized JAR_PATH above
+            local NORMALIZED_CURRENT_PATH="$CURRENT_PATH"
+            if [[ "$NORMALIZED_CURRENT_PATH" == "/system/vendor/"* ]]; then
+                NORMALIZED_CURRENT_PATH="/vendor${NORMALIZED_CURRENT_PATH#/system/vendor}"
+            elif [[ "$NORMALIZED_CURRENT_PATH" == "/system/product/"* ]]; then
+                NORMALIZED_CURRENT_PATH="/product${NORMALIZED_CURRENT_PATH#/system/product}"
+            elif [[ "$NORMALIZED_CURRENT_PATH" == "/system/system_ext/"* ]]; then
+                NORMALIZED_CURRENT_PATH="/system_ext${NORMALIZED_CURRENT_PATH#/system/system_ext}"
+            fi
+
+            if [[ "$NORMALIZED_CURRENT_PATH" == "$NORMALIZED_JAR_PATH" ]] && [[ "$CURRENT_SCOPE" == "$SCOPE" ]]; then
+                MATCH_START_LINE=$BLOCK_START_LINE
+                MATCH_END_LINE=$BLOCK_END_LINE
+                break
+            fi
+            continue
+        fi
+
+        if [[ "$IN_BLOCK" == "true" ]]; then
+            if [[ "$LINE" == "  path:"* ]];            then CURRENT_PATH="$(echo "$LINE" | cut -d'"' -f2)"; fi
+            if [[ "$LINE" == "  classpath:"* ]];       then CURRENT_SCOPE="$(echo "$LINE" | awk '{print $2}')"; fi
+        fi
+    done < "$TXT_FILE"
+
+    if [[ "$MATCH_START_LINE" -gt 0 ]]; then
+        LOG "- Entry already present, removing it."
+        sed -i "${MATCH_START_LINE},${MATCH_END_LINE}d" "$TXT_FILE"
+    fi
+
     # Add to the text file
+    LOG "- Adding \"$JAR_PATH\" classpath entry to \"${FILE//$WORK_DIR/}\" with \"$SCOPE\" scope"
     {
         echo "jars {"
         echo "  path: \"$JAR_PATH\""
