@@ -302,7 +302,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libImageSegmenter_v1.camera.samsung.so" ]
     DELETE_FROM_WORK_DIR "system" "system/lib64/libImageSegmenter_v1.camera.samsung.so"
 fi
 if [ -f "$WORK_DIR/system/system/lib64/libSceneDetector_v1.camera.samsung.so" ]; then
-    if [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_classifier" ] || [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_detector" ]; then
+    if [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_classifier" ] \
+            || [ ! -d "$WORK_DIR/vendor/etc/saiv/image_understanding/db/aic_detector" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib64/libSceneDetector_v1.camera.samsung.so"
     fi
 fi
