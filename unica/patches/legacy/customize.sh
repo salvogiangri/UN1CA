@@ -241,9 +241,9 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
         PATCHED=true
         # [b.eq #0xXXXXXX] -> [nop]
         # - android::net::MobileBBController::hotspotOn(const std::string)
-        HEX_PATCH "$WORK_DIR/system/system/bin/netd" "e0010054" "1f2003d5"
+        HEX_PATCH "$WORK_DIR/system/system/bin/netd" "1f01096be0010054" "1f01096b1f2003d5"
         # - android::net::MobileBBController::isMBBPathsPresent()
-        HEX_PATCH "$WORK_DIR/system/system/bin/netd" "20010054" "1f2003d5"
+        HEX_PATCH "$WORK_DIR/system/system/bin/netd" "1f01096b20010054" "1f01096b1f2003d5"
     fi
 fi
 
