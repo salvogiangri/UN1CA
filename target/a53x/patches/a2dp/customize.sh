@@ -1,3 +1,5 @@
+ADD_TO_WORK_DIR "a54xnsxx" "system" "system/apex/com.android.bt.apex"
+
 # https://github.com/salvogiangri/UN1CA/blob/3.0.7/unica/patches/bt-lib-patch/customize.sh#L1-L28
 if [ ! -f "$WORK_DIR/system/system/lib64/libbluetooth_jni.so" ]; then
     LOG_STEP_IN "- Extracting libbluetooth_jni.so from com.android.bt.apex"
