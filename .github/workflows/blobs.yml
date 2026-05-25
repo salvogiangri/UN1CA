@@ -47,6 +47,9 @@ jobs:
           - module: "Galaxy S21 FE 5G (Exynos) (r9sxxx)"
             device: "r9sxxx"
             firmware: "SM-G990E/THL/355798871234563"
+          - module: "Galaxy S24 (e1qzcx)"
+            device: "e1qzcx"
+            firmware: "SM-S9210/CHC/356724910402671"
 
     steps:
       - name: Checkout repo
