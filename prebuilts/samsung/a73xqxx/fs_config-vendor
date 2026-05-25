@@ -17,8 +17,3 @@ vendor/etc/midas/SRIBMidas_aiUPSCALER_2X_LITE_V100_INT8.tflite 0 0 644 capabilit
 vendor/etc/midas/SRIBMidas_aiUPSCALER_3X_LITE_V100_INT8.tflite 0 0 644 capabilities=0x0
 vendor/etc/midas/SRIBMidas_aiUPSCALER_4X_LITE_V100_INT8.tflite 0 0 644 capabilities=0x0
 vendor/etc/midas/midas_config.json 0 0 644 capabilities=0x0
-vendor/etc/singletake 0 2000 755 capabilities=0x0
-vendor/etc/singletake/ClarityScorer 0 2000 755 capabilities=0x0
-vendor/etc/singletake/ClarityScorer/ClarityScorer.tflite 0 0 644 capabilities=0x0
-vendor/etc/singletake/SmartCrop 0 2000 755 capabilities=0x0
-vendor/etc/singletake/SmartCrop/SmartCrop.tflite 0 0 644 capabilities=0x0
