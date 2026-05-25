@@ -44,7 +44,7 @@ Any form of contribution, suggestions, bug report or feature request for the pro
   - Transcript assist
   - Writing assist
 - High end animations
-- Native/live blur support*
+- Native/live blur support
 - AOD clock transition support
 - Adaptive color tone support
 - Adaptive refresh rate support
@@ -53,7 +53,7 @@ Any form of contribution, suggestions, bug report or feature request for the pro
 - Object, shadow and reflection eraser support
 - Image clipper support
 - Multi user support
-- Samsung DeX support**
+- Samsung DeX support*
 - Camera privacy toggle support
 - Debloated from useless system services/additional apps
 - Dual Messenger available for all apps
@@ -64,8 +64,7 @@ Any form of contribution, suggestions, bug report or feature request for the pro
 - [KnoxPatch](https://github.com/salvogiangri/KnoxPatch) integrated
 - Extra CSC features enabled (Call recording, Hiya, Network speed in status bar, AltZLife)
 
-\* Not available on MediaTek devices<br>
-\*\* DeX via HDMI not available for devices without USB-C DP support
+\* DeX via HDMI not available for devices without USB-C DP support
 
 ### UN1CA-exclusive features:
 - Integrated OTA updates app
