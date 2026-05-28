@@ -21,11 +21,18 @@ done
 
 # TEEgris - Firmware
 TEEGRIS_ZIPS=(
-    "SCG15KDU1DYF1_KDI_QDI/SCG15KDU1DYF1_tee.zip"
-    "SC53COMU1DYF2_DCM_DCM/SC53COMU1DYF2_tee.zip"
+    # a53xzc (chn_open)
+    "A5360ZCSHFYH1_CHC_CHC/A5360ZCSHFYH1_tee.zip"
+    # a53xzc (chn_hk)
     "A5360ZHSHFYI1_TGY_OZS/A5360ZHSHFYI1_tee.zip"
+    # a53xnsxx (cis_open)
     "A536EXXSHFYI4_INS_ODM/A536EXXSHFYI4_tee.zip"
+    # a53xksx (kor_singlex)
     "A536NKSSCFYH1_KOO_OKR/A536NKSSCFYH1_tee.zip"
+    # a53xkdi (jpn_kdi)
+    "SCG15KDU1DYF1_KDI_QDI/SCG15KDU1DYF1_tee.zip"
+    # a53xdcm (jpn_dcm)
+    "SC53COMU1DYF2_DCM_DCM/SC53COMU1DYF2_tee.zip"
 )
 
 if [ -d "$TMP_DIR" ]; then
@@ -53,32 +60,34 @@ for f in "${TEEGRIS_ZIPS[@]}"; do
         fi
     fi
 
-    if [ -d "$WORK_DIR/vendor/firmware/tee/$MODEL" ]; then
-        EVAL "rm -rf \"$WORK_DIR/vendor/firmware/tee/$MODEL\""
+    TEE_DIR="$WORK_DIR/vendor/firmware/tee/$(echo "$FILE_NAME" | cut -c1-13)"
+
+    if [ -d "$TEE_DIR" ]; then
+        EVAL "rm -rf \"$TEE_DIR\""
     fi
-    EVAL "mkdir -p \"$WORK_DIR/vendor/firmware/tee/$MODEL\""
-    SET_METADATA "vendor" "firmware/tee/$MODEL" 0 2000 755 "u:object_r:tee_file:s0"
+    EVAL "mkdir -p \"$TEE_DIR\""
+    SET_METADATA "vendor" "firmware/tee/$(basename "$TEE_DIR")" 0 2000 755 "u:object_r:tee_file:s0"
 
-    LOG "- Extracting ${TMP_DIR//$SRC_DIR\//}/$FILE_NAME to /vendor/firmware/tee/$MODEL"
-    EVAL "unzip \"$TMP_DIR/$FILE_NAME\" -d \"$WORK_DIR/vendor/firmware/tee/$MODEL\""
+    LOG "- Extracting ${TMP_DIR//$SRC_DIR\//}/$FILE_NAME to /${TEE_DIR//$WORK_DIR\//}"
+    EVAL "unzip \"$TMP_DIR/$FILE_NAME\" -d \"$TEE_DIR\""
 
-    LOG "- Adding SEPolicy for TAs in /vendor/firmware/tee/$MODEL"
+    LOG "- Adding SEPolicy for TAs in /${TEE_DIR//$WORK_DIR\//}"
     while IFS= read -r t; do
         GROUP=0
         MODE="644"
-        if [ -d "$WORK_DIR/vendor/firmware/tee/$MODEL/$t" ]; then
+        if [ -d "$TEE_DIR/$t" ]; then
             GROUP="2000"
             MODE="755"
         fi
 
-        SET_METADATA "vendor" "firmware/tee/$MODEL/$t" 0 "$GROUP" "$MODE" "u:object_r:tee_file:s0" > /dev/null
+        SET_METADATA "vendor" "firmware/tee/$(basename "$TEE_DIR")/$t" 0 "$GROUP" "$MODE" "u:object_r:tee_file:s0" > /dev/null
 
         unset GROUP MODE
-    done < <(find "$WORK_DIR/vendor/firmware/tee/$MODEL" | sed "s|$WORK_DIR/vendor/firmware/tee/$MODEL||g" | sed "s/^\///g" | sed "/^\$/d")
+    done < <(find "$TEE_DIR" | sed "s|$TEE_DIR||g" | sed "s/^\///g" | sed "/^\$/d")
 
     EVAL "rm -f \"$TMP_DIR/$FILE_NAME\""
 
-    unset FILE_NAME MODEL
+    unset FILE_NAME MODEL TEE_DIR
 done
 
 # NXP NFC Support

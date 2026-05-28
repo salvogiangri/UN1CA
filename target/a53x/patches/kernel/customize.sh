@@ -11,7 +11,6 @@ GET_URL()
 
 KERNEL_ARCHIVE_URL="$(GET_URL "^UN1CA_Kernel-.*-a53x\.tar$")"
 DTBO_ARCHIVE_URL="$(GET_URL "^UN1CA_DTBO-.*-a53x\.tar$")"
-DTBO_JPN_ARCHIVE_URL="$(GET_URL "^UN1CA_DTBO-.*-a53x_jpn\.tar$")"
 
 if [ -d "$TMP_DIR" ]; then
     EVAL "rm -rf \"$TMP_DIR\""
@@ -20,17 +19,12 @@ EVAL "mkdir -p \"$TMP_DIR\""
 
 DOWNLOAD_FILE "$KERNEL_ARCHIVE_URL" "$TMP_DIR/$(basename "$KERNEL_ARCHIVE_URL")"
 DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$(basename "$DTBO_ARCHIVE_URL")"
-DOWNLOAD_FILE "$DTBO_JPN_ARCHIVE_URL" "$TMP_DIR/$(basename "$DTBO_JPN_ARCHIVE_URL")"
 
 while IFS= read -r f; do
     TAR="$(basename "$f")"
 
     LOG "- Extracting $TAR"
-    if [[ "$TAR" == "$(basename "$DTBO_JPN_ARCHIVE_URL")" ]]; then
-        EVAL "tar -xvf \"$TMP_DIR/$TAR\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\" -C \"$TMP_DIR\""
-    else
-        EVAL "tar -xvf \"$TMP_DIR/$TAR\" -C \"$TMP_DIR\""
-    fi
+    EVAL "tar -xvf \"$TMP_DIR/$TAR\" -C \"$TMP_DIR\""
     EVAL "rm -f \"$TMP_DIR/$TAR\""
 
     unset TAR
@@ -55,5 +49,5 @@ done < <(find "$TMP_DIR" -maxdepth 1 -type f -name "*.img.lz4")
 
 EVAL "rm -rf \"$TMP_DIR\""
 
-unset KERNEL_ARCHIVE_URL DTBO_ARCHIVE_URL DTBO_JPN_ARCHIVE_URL
+unset KERNEL_ARCHIVE_URL DTBO_ARCHIVE_URL
 unset -f GET_URL

@@ -1,4 +1,10 @@
 /vendor u:object_r:vendor_file:s0
+/vendor/firmware u:object_r:vendor_fw_file:s0
+/vendor/firmware/wifi u:object_r:vendor_fw_file:s0
+/vendor/firmware/wifi/mx140\.bin u:object_r:vendor_fw_file:s0
+/vendor/firmware/wifi/mx140_t\.bin u:object_r:vendor_fw_file:s0
+/vendor/lib64 u:object_r:vendor_file:s0
+/vendor/lib64/libsec-ril\.so u:object_r:vendor_file:s0
 /vendor/tee u:object_r:tee_file:s0
 /vendor/tee/driver u:object_r:tee_file:s0
 /vendor/tee/driver/00000000-0000-0000-0000-494363447256 u:object_r:tee_file:s0
