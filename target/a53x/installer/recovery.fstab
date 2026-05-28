@@ -52,7 +52,7 @@ odm	/odm	f2fs	ro	avb,logical,first_stage_mount
 /dev/block/by-name/keydata     /keydata        ext4        defaults                  recoveryonly
 /dev/block/by-name/keyrefuge	/keyrefuge	f2fs	defaults	recoveryonly
 
-# Auto-generated code by FOTA Portal
+#Auto-generated code by FOTA Portal
 /dev/block/by-name/dtbo       /dtbo       emmc        default        recoveryonly
 /dev/block/by-name/prism	/prism	ext4	ro	recoveryonly
 /dev/block/by-name/optics	/optics	ext4	ro	recoveryonly
@@ -61,3 +61,11 @@ odm	/odm	f2fs	ro	avb,logical,first_stage_mount
 /dev/block/by-name/vbmeta_samsung	/vbmeta_samsung	emmc	default	recoveryonly
 system_ext	/system_ext	f2fs	ro	avb,logical,first_stage_mount
 vendor_dlkm	/vendor_dlkm	f2fs	ro	avb,logical,first_stage_mount
+
+
+
+
+
+
+
+

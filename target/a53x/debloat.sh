@@ -6,10 +6,13 @@
 # - DO NOT add the partition name at the start of any entry (eg. "/system/dpolicy_system")
 # - DO NOT add a slash at the start of any entry (eg. "/dpolicy_system")
 
-# GPU Drivers
+# Overlays
 SYSTEM_DEBLOAT+="
-system/priv-app/DevGPUDriver-EX2200
-system/priv-app/GameDriver-EX2200
+system/app/WifiRROverlayAppLls
+system/app/WifiRROverlayAppWifiLock
+"
+PRODUCT_DEBLOAT+="
+overlay/SoftapOverlayQC
 "
 
 # mAFPC
@@ -17,7 +20,17 @@ SYSTEM_DEBLOAT+="
 system/bin/mafpc_write
 "
 
-# Unnecessary blobs - Vendor
+# DevGPUDriver
+SYSTEM_DEBLOAT+="
+system/priv-app/DevGPUDriver-EX2200
+"
+
+# GameDriver
+SYSTEM_DEBLOAT+="
+system/priv-app/GameDriver-EX2200
+"
+
+# vendor clean-up
 VENDOR_DEBLOAT+="
 etc/somxreg.conf
 etc/init/fingerprint_common.rc

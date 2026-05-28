@@ -1,5 +1,13 @@
 /vendor u:object_r:vendor_file:s0
 /vendor/tee u:object_r:tee_file:s0
+/vendor/tee/driver u:object_r:tee_file:s0
+/vendor/tee/driver/00000000-0000-0000-0000-494363447256 u:object_r:tee_file:s0
+/vendor/tee/driver/00000000-0000-0000-0000-4d53546d7374 u:object_r:tee_file:s0
+/vendor/tee/driver/00000000-0000-0000-0000-53626f786476 u:object_r:tee_file:s0
+/vendor/tee/driver/00000000-0000-0000-0000-564c544b4456 u:object_r:tee_file:s0
+/vendor/tee/tui u:object_r:tee_file:s0
+/vendor/tee/tui/resolution_common u:object_r:tee_file:s0
+/vendor/tee/tui/resolution_common/ID00000100 u:object_r:tee_file:s0
 /vendor/tee/00000000-0000-0000-0000-000000010081 u:object_r:tee_file:s0
 /vendor/tee/00000000-0000-0000-0000-000000020081 u:object_r:tee_file:s0
 /vendor/tee/00000000-0000-0000-0000-000000534b4d u:object_r:tee_file:s0
@@ -30,12 +38,4 @@
 /vendor/tee/00000000-0000-0000-0000-6b6e78677564 u:object_r:tee_file:s0
 /vendor/tee/00000000-0000-0000-0000-6d706f667376 u:object_r:tee_file:s0
 /vendor/tee/00000000-0000-0000-0000-6d73745f5441 u:object_r:tee_file:s0
-/vendor/tee/driver u:object_r:tee_file:s0
-/vendor/tee/driver/00000000-0000-0000-0000-494363447256 u:object_r:tee_file:s0
-/vendor/tee/driver/00000000-0000-0000-0000-4d53546d7374 u:object_r:tee_file:s0
-/vendor/tee/driver/00000000-0000-0000-0000-53626f786476 u:object_r:tee_file:s0
-/vendor/tee/driver/00000000-0000-0000-0000-564c544b4456 u:object_r:tee_file:s0
 /vendor/tee/ffffffff-0000-0000-0000-000000000030 u:object_r:tee_file:s0
-/vendor/tee/tui u:object_r:tee_file:s0
-/vendor/tee/tui/resolution_common u:object_r:tee_file:s0
-/vendor/tee/tui/resolution_common/ID00000100 u:object_r:tee_file:s0
