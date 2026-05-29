@@ -52,7 +52,7 @@ for f in "${TEEGRIS_ZIPS[@]}"; do
     LOG "- Downloading $FILE_NAME"
     DOWNLOAD_FILE "https://github.com/UN1CA/proprietary_vendor_samsung_a53x/releases/download/$f" "$TMP_DIR/$FILE_NAME"
 
-    MODEL="$(echo "$FILE_NAME" | cut -c1-5)"
+    MODEL="$(cut -c1-5 <<< "$FILE_NAME")"
     if [[ "$MODEL" != "SCG15" ]]; then
         MODEL="${MODEL//SC/SC-}"
         if [[ "$MODEL" != "SC-53C" ]]; then
@@ -60,7 +60,7 @@ for f in "${TEEGRIS_ZIPS[@]}"; do
         fi
     fi
 
-    TEE_DIR="$WORK_DIR/vendor/firmware/tee/$(echo "$FILE_NAME" | cut -c1-13)"
+    TEE_DIR="$WORK_DIR/vendor/firmware/tee/$(cut -c1-13 <<< "$FILE_NAME")"
 
     if [ -d "$TEE_DIR" ]; then
         EVAL "rm -rf \"$TEE_DIR\""
@@ -161,3 +161,5 @@ HEX_PATCH "$WORK_DIR/vendor/lib/soundfx/libswdap.so" "3046884707463068" "3046884
 #  nop
 # ]
 HEX_PATCH "$WORK_DIR/vendor/lib64/soundfx/libswdap.so" "e00315aa080940f900013fd6" "e00315aa200080521f2003d5"
+
+unset TEEGRIS_ZIPS
