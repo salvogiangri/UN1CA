@@ -93,5 +93,6 @@ LOG "- Downloading $DTBO_ARCHIVE"
 DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$DTBO_ARCHIVE" || return 1
 LOG "- Extracting $DTBO_ARCHIVE"
 EVAL "cd $TMP_DIR; tar -xf \"$TMP_DIR/$DTBO_ARCHIVE\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\"" || return 1
+EVAL "rm -f \"$TMP_DIR/$DTBO_ARCHIVE\"" || return 1
 
 unset REPOSITORY TARS DTBO_ARCHIVE_URL DTBO_ARCHIVE
