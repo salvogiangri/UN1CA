@@ -56,15 +56,7 @@ while IFS= read -r f; do
     FILE_NAME="$(basename "$f")"
     LOG "- Extracting $FILE_NAME"
 
-    MODEL="$(cut -c4-8 <<< "$FILE_NAME")"
-    if [[ "$MODEL" != "SCG15" ]]; then
-        MODEL="${MODEL//SC/SC-}"
-        if [[ "$MODEL" != "SC-53C" ]]; then
-            MODEL="SM-$MODEL"
-        fi
-    fi
-
-    FIRMWARE_DIR="$TMP_DIR/firmware/$(echo "$FILE_NAME" | cut -c4-16)"
+    FIRMWARE_DIR="$TMP_DIR/firmware/$(cut -d "_" -f 2 <<< "$FILE_NAME")"
 
     if [ ! -d "$TMP_DIR/firmware/$FIRMWARE_DIR" ]; then
         EVAL "mkdir -p \"$FIRMWARE_DIR\"" || return 1
@@ -78,7 +70,7 @@ while IFS= read -r f; do
         EVAL "rm -f \"$FIRMWARE_DIR/modem_debug.bin.lz4\"" || return 1
     fi
 
-    unset FILE_NAME LENGTH STORED_HASH CALCULATED_HASH MODEL FIRMWARE_DIR
+    unset FILE_NAME LENGTH STORED_HASH CALCULATED_HASH FIRMWARE_DIR
 done < <(find "$TMP_DIR" -type f -name "*.md5")
 
 while IFS= read -r f; do
@@ -100,6 +92,6 @@ DTBO_ARCHIVE="$(basename "$DTBO_ARCHIVE_URL")"
 LOG "- Downloading $DTBO_ARCHIVE"
 DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$DTBO_ARCHIVE" || return 1
 LOG "- Extracting $DTBO_ARCHIVE"
-EVAL "cd $TMP_DIR; tar -xf \"$TMP_DIR/$DTBO_ARCHIVE\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\""
+EVAL "cd $TMP_DIR; tar -xf \"$TMP_DIR/$DTBO_ARCHIVE\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\"" || return 1
 
 unset REPOSITORY TARS DTBO_ARCHIVE_URL DTBO_ARCHIVE
