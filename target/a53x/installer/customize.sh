@@ -56,7 +56,14 @@ while IFS= read -r f; do
     FILE_NAME="$(basename "$f")"
     LOG "- Extracting $FILE_NAME"
 
-    FIRMWARE_DIR="$TMP_DIR/firmware/$(cut -d "_" -f 2 <<< "$FILE_NAME")"
+    if [[ "$FILE_NAME" == "BL"* ]]; then
+        BL_FIRMWARE_VER="$(cut -d "_" -f 2 <<< "$FILE_NAME")"
+    elif [[ "$FILE_NAME" != "BL"* ]] && [ ! "$BL_FIRMWARE_VER" ]; then
+        LOGE "BL_FIRMWARE_VER is not set"
+        exit 1
+    fi
+
+    FIRMWARE_DIR="$TMP_DIR/firmware/$BL_FIRMWARE_VER"
 
     if [ ! -d "$TMP_DIR/firmware/$FIRMWARE_DIR" ]; then
         EVAL "mkdir -p \"$FIRMWARE_DIR\"" || return 1
@@ -95,4 +102,4 @@ LOG "- Extracting $DTBO_ARCHIVE"
 EVAL "cd $TMP_DIR; tar -xf \"$TMP_DIR/$DTBO_ARCHIVE\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\"" || return 1
 EVAL "rm -f \"$TMP_DIR/$DTBO_ARCHIVE\"" || return 1
 
-unset REPOSITORY TARS DTBO_ARCHIVE_URL DTBO_ARCHIVE
+unset REPOSITORY TARS BL_FIRMWARE_VER DTBO_ARCHIVE_URL DTBO_ARCHIVE
