@@ -101,6 +101,8 @@ LOG "- Downloading $DTBO_ARCHIVE"
 DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$DTBO_ARCHIVE" || return 1
 LOG "- Extracting $DTBO_ARCHIVE"
 EVAL "cd $TMP_DIR; tar -xf \"$TMP_DIR/$DTBO_ARCHIVE\" --transform=\"s|^dtbo.img.lz4$|dtbo_jpn.img.lz4|\"" || return 1
+LOG "- Decompressing dtbo_jpn.img.lz4"
+EVAL "lz4 -d --rm \"$TMP_DIR/dtbo_jpn.img.lz4\" \"$TMP_DIR/dtbo_jpn.img\"" || return 1
 EVAL "rm -f \"$TMP_DIR/$DTBO_ARCHIVE\"" || return 1
 
 unset REPOSITORY TARS BL_FIRMWARE_VER DTBO_ARCHIVE_URL DTBO_ARCHIVE
