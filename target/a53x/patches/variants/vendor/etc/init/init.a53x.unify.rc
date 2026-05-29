@@ -40,7 +40,7 @@ on early-init && property:ro.boot.bootloader=A536EXXSHFYI4
     # TEEgris - Firmware
     mount none /vendor/firmware/tee/A536EXXSHFYI4 /vendor/tee bind
 
-# SM-A536N - a53xksx - kor_open
+# SM-A536N - a53xksx - kor_singlex
 on early-init && property:ro.boot.em.model=A536NKSSCFYH1
     # TEEgris - Firmware
     mount none /vendor/firmware/tee/A536NKSSCFYH1 /vendor/tee bind
