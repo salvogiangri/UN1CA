@@ -168,7 +168,7 @@ GENERATE_OTA_METADATA()
     TARGET_INCREMENTAL="$(grep "^build_incremental" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
     TIMESTAMP="$(grep "^build_date" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
     SECURITY_PATCH_LEVEL="$(grep "^security_patch" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
-    SOURCE_FINGERPRINT="$(grep "^source_fingerprint" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
+    SOURCE_FINGERPRINT="$(grep "^source_fingerprint" <<< "$SOURCE_BUILD_INFO" | cut -d "=" -f 2 -s)"
     TARGET_FINGERPRINT="$(grep "^source_fingerprint" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
 
     mkdir -p "$TMP_DIR/META-INF/com/android"
