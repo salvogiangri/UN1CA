@@ -3,7 +3,7 @@
 # ...
 #
 
-# Debloat list for Galaxy Tab S7 (WIFI) (gts7wifi)
+# Debloat list for Galaxy Tab S7 (WIFI) (gts7lwifi)
 
 # Overlays
 SYSTEM_DEBLOAT+="
