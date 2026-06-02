@@ -3,7 +3,7 @@
 # ...
 #
 
-# SEC Floating Feature configuration file for Galaxy Tab S7 (WIFI) (gts7wifi)
+# SEC Floating Feature configuration file for Galaxy Tab S7 (WIFI) (gts7lwifi)
 
 # Disable unsupported features
 SEC_FLOATING_FEATURE_AUDIO_CONFIG_MIC_POSITION=
