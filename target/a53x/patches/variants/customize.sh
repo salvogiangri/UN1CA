@@ -23,7 +23,7 @@ done
 TEEGRIS_ZIPS=(
     # a53xzc (chn_open)
     "A5360ZCSHFYH1_CHC_CHC/A5360ZCSHFYH1_tee.zip"
-    # a53xzc (chn_hk)
+    # a53xzh (chn_hk)
     "A5360ZHSHFYI1_TGY_OZS/A5360ZHSHFYI1_tee.zip"
     # a53xnsxx (cis_open)
     "A536EXXSHFYI4_INS_ODM/A536EXXSHFYI4_tee.zip"

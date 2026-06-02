@@ -30,7 +30,7 @@ on early-init && property:ro.boot.bootloader=A5360ZCSHFYH1
     # TEEgris - Firmware
     mount none /vendor/firmware/tee/SM-A5360/A5360ZCSHFYH1 /vendor/tee bind
 
-# SM-A5360 - a53xzc - chn_hk
+# SM-A5360 - a53xzh - chn_hk
 on early-init && property:ro.boot.bootloader=A5360ZHSHFYI1
     # TEEgris - Firmware
     mount none /vendor/firmware/tee/SM-A5360/A5360ZHSHFYI1 /vendor/tee bind
