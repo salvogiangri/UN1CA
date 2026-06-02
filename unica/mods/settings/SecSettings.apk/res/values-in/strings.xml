@@ -5,7 +5,7 @@
     <string name="unica_asks_title">Non-aktifkan ASKS</string>
     <string name="unica_boot_sound_title">Aktifkan suara saat dihidupkan</string>
     <string name="unica_device_name_title">Nama Perangkat</string>
-    <string name="unica_dialog_reboot_msg">Untuk menerapkan perubahan, muat ulang diperlukan.</string>
+    <string name="unica_dialog_reboot_msg">Untuk menerapkan perubahan, diperlukan memulai ulang.</string>
     <string name="unica_dialog_reboot_negative">Tidak sekarang</string>
     <string name="unica_dialog_reboot_positive">Mulai ulang</string>
     <string name="unica_dialog_reboot_title">Mulai ulang diperlukan</string>
@@ -22,7 +22,7 @@
     <string name="unica_keybox_status_no_data">Tidak ada data Keybox</string>
     <string name="unica_keybox_status_revoked">Keybox dicabut</string>
     <string name="unica_keybox_status_valid">Keybox valid</string>
-    <string name="unica_keybox_title">Memalsukan atestasi perangkat keras</string>
+    <string name="unica_keybox_title">Palsukan atestasi perangkat keras</string>
     <string name="unica_keybox_toast_cleared">Data Keybox dikosongkan.</string>
     <string name="unica_keybox_toast_error">Terjadi kesalahan.</string>
     <string name="unica_keybox_toast_error_xml">Tidak dapat mengurai berkas XML.</string>
