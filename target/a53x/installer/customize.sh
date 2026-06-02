@@ -61,7 +61,7 @@ while IFS= read -r f; do
         BL_FIRMWARE_VER="$(cut -d "_" -f 2 <<< "$FILE_NAME")"
     elif [[ "$FILE_NAME" != "BL"* ]] && [ ! "$BL_FIRMWARE_VER" ]; then
         LOGE "BL_FIRMWARE_VER is not set"
-        exit 1
+        return 1
     fi
 
     FIRMWARE_DIR="$TMP_DIR/firmware/$BL_FIRMWARE_VER"
