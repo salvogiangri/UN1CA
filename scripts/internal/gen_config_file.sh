@@ -128,11 +128,6 @@ fi
 #     If set to true, AVB signing will be disabled.
 #     Defaults to false.
 #
-#   TARGET_INCLUDE_PATCHED_VBMETA (DEPRECATED)
-#     If set to true, a patched vbmeta image will be included in the compiled Odin tar package.
-#     Only applies when TARGET_INSTALL_METHOD is set to "odin".
-#     Defaults to false.
-#
 #   TARGET_KEEP_ORIGINAL_SIGN
 #     If set to true, the original AVB/Samsung signature footer is kept in the target device kernel images.
 #     Defaults to false.
