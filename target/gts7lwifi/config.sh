@@ -3,7 +3,7 @@
 
 # Device configuration file for Galaxy Tab S7 (WIFI) (gts7wifi)
 TARGET_NAME="Galaxy Tab S7 (WIFI)"
-TARGET_CODENAME="gts7wifi"
+TARGET_CODENAME="gts7lwifi"
 TARGET_ASSERT_MODEL=("SM-T870")
 TARGET_PLATFORM="SM8250"
 TARGET_FIRMWARE="SM-T870/XAC/R52N91CH6ZY"
