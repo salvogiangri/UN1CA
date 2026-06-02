@@ -2,6 +2,14 @@ name: Build
 
 on:
   workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - 'sixteen_tablet'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -10,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [o1sksx]
+        target: [a52sxq, a73xq, m52xq, o1s, p3s, r9s, t2s, gts7xlwifi, gts7wifi]
 
     steps:
       - name: Checkout repo
@@ -72,11 +80,4 @@ jobs:
       - name: Build ROM
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh
-
-      - name: Upload to GoFile
-        run: |
-          ZIP_FILE=$(find out -maxdepth 1 -type f -name "*.zip" | head -n 1)
-          RESPONSE=$(curl -s -F "file=@$ZIP_FILE" -F "token=${{ secrets.GOFILE_TOKEN }}" -F "folderId=${{ secrets.GOFILE_FOLDER_ID }}" "https://upload-eu-par.gofile.io/uploadFile")
-          echo "Uploaded successfully! Download link:"
-          echo "$RESPONSE" | jq -r '.data.downloadPage'          
+          ./scripts/make_rom.sh --no-rom-zip
