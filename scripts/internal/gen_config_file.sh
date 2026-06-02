@@ -48,7 +48,7 @@ else
     source "$SRC_DIR/target/$1/config.sh" || exit 1
     if [ -f "$SRC_DIR/platform/$TARGET_PLATFORM/config.sh" ]; then
         # HACK
-        source "$SRC_DIR/platform/$TARGET_PLATFORM/config.sh" || exit
+        source "$SRC_DIR/platform/$TARGET_PLATFORM/config.sh" || exit 1
         source "$SRC_DIR/target/$1/config.sh" || exit 1
     fi
 fi
