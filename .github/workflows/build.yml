@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [a52sxq, a73xq, m52xq, o1s, p3s, r9s, t2s, gts7xlwifi, gts7wifi]
+        target: [gts7xlwifi, gts7lwifi]
 
     steps:
       - name: Checkout repo
