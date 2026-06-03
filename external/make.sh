@@ -171,7 +171,7 @@ fi
 if $ANDROID_TOOLS; then
     ANDROID_TOOLS_CMDS=(
         "git submodule foreach --recursive \"git am --abort || true\""
-        "cmake -B \"build\" $(GET_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=$([ "$GITHUB_ACTIONS" ] && echo "ON" || echo "OFF") -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
+        "cmake -B \"build\" $(GET_CMAKE_FLAGS) -DANDROID_TOOLS_USE_BUNDLED_FMT=ON -DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON"
         "make -C \"build\" -j\"$(nproc)\""
         "find \"build/vendor\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR/bin\" \;"
         "cp -a \"vendor/avb/avbtool.py\" \"$TOOLS_DIR/bin/avbtool\""
@@ -212,6 +212,7 @@ if $EROFS_UTILS; then
 fi
 if $IMG2SDAT; then
     IMG2SDAT_CMDS=(
+        "test -f \"img2sdat\""
         "find \".\" -maxdepth 1 -type f -exec test -x {} \; -exec cp -a {} \"$TOOLS_DIR/bin\" \;"
     )
 
@@ -220,7 +221,9 @@ fi
 if $SAMLOADER; then
     SAMLOADER_CMDS=(
         "git reset --hard"
-        "git apply \"$SRC_DIR/external/patches/samloader/0001-Add-timeout-to-version.xml-request.patch\""
+        "git apply \"$SRC_DIR/external/patches/samloader/0001-Update-decryption-keys.patch\""
+        "git apply \"$SRC_DIR/external/patches/samloader/0002-Fix-client-request-params.patch\""
+        "git apply \"$SRC_DIR/external/patches/samloader/0003-Add-timeout-to-version.xml-request.patch\""
         "python3 -m venv \"$TOOLS_DIR/venv\""
         "source \"$TOOLS_DIR/venv/bin/activate\"; pip3 install ."
     )
