@@ -1,0 +1,46 @@
+# Copyright (c) 2026 Majaahh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Audio
+on boot
+    restart audioserver
+
+# Firmware
+on early-init
+    mount none /vendor/firmware/${ro.boot.em.model}/AP_AUDIO_SLSI.bin /vendor/firmware/AP_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/APDV_AUDIO_SLSI.bin /vendor/firmware/APDV_AUDIO_SLSI.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/mfc_fw.bin /vendor/firmware/mfc_fw.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/NPU.bin /vendor/firmware/NPU.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/os.checked.bin /vendor/firmware/os.checked.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/vts.bin /vendor/firmware/vts.bin bind
+    mount none /vendor/firmware/${ro.boot.em.model}/calliope_sram.bin /vendor/firmware/calliope_sram.bin bind
+
+# SC-53C - a53xdcm - jpn_dcm
+on early-init && property:ro.boot.bootloader=SC53COMU1DYF2
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/SC53COMU1DYF2 /vendor/tee bind
+
+# SCG15 - a53xkdi - jpn_kdi
+on early-init && property:ro.boot.bootloader=SCG15KDU1DYF1
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/SCG15KDU1DYF1 /vendor/tee bind
+
+# SM-A5360 - a53xzc - chn_open
+on early-init && property:ro.boot.bootloader=A5360ZCSHFYH1
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/SM-A5360/A5360ZCSHFYH1 /vendor/tee bind
+
+# SM-A5360 - a53xzh - chn_hk
+on early-init && property:ro.boot.bootloader=A5360ZHSHFYI1
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/SM-A5360/A5360ZHSHFYI1 /vendor/tee bind
+
+# SM-A536E - a53xnsxx - cis_open
+on early-init && property:ro.boot.bootloader=A536EXXSHFYI4
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/A536EXXSHFYI4 /vendor/tee bind
+
+# SM-A536N - a53xksx - kor_singlex
+on early-init && property:ro.boot.em.model=A536NKSSCFYH1
+    # TEEgris - Firmware
+    mount none /vendor/firmware/tee/A536NKSSCFYH1 /vendor/tee bind

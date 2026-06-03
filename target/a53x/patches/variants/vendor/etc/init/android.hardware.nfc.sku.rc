@@ -1,0 +1,40 @@
+# Copyright (c) 2026 Majaahh
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+service vendor.nfc_hal_service /vendor/bin/hw/nxp.android.hardware.nfc@1.2-service
+    interface android.hardware.nfc@1.0::INfc default
+    interface android.hardware.nfc@1.1::INfc default
+    interface android.hardware.nfc@1.2::INfc default
+    interface vendor.samsung.hardware.nfc@2.0::ISehNfc default
+    class hal
+    oneshot
+    disabled
+    user nfc
+    group nfc net_bt_admin
+
+service nfc_hal_service /vendor/bin/hw/sec.android.hardware.nfc@1.2-service
+    interface android.hardware.nfc@1.0::INfc default
+    interface android.hardware.nfc@1.1::INfc default
+    interface android.hardware.nfc@1.2::INfc default
+    interface vendor.samsung.hardware.nfc@2.0::ISehNfc default
+    class hal
+    oneshot
+    disabled
+    user nfc
+    group nfc net_bt_admin
+
+# NFC
+on property:ro.vendor.nfc.feature.chipname=NXP_SN100U
+    start vendor.nfc_hal_service
+
+on property:ro.vendor.nfc.feature.chipname=SLSI
+    start nfc_hal_service
+
+# NFC - eSE
+on early-init && property:ro.vendor.nfc.feature.chipname=NXP_SN100U
+    setprop ro.security.ese.cosname "JCOP5.1F"
+    setprop ro.security.ese.cosname.default "JCOP5.1F"
+
+on early-init && property:ro.vendor.nfc.feature.chipname=SLSI
+    setprop ro.security.ese.cosname "UT5.2"
+    setprop ro.security.ese.cosname.default "UT5.2"

@@ -1,0 +1,15 @@
+/vendor u:object_r:vendor_file:s0
+/vendor/bin u:object_r:vendor_file:s0
+/vendor/bin/hw u:object_r:vendor_file:s0
+/vendor/bin/hw/nxp\.android\.hardware\.nfc@1\.2-service u:object_r:hal_nfc_default_exec:s0
+/vendor/etc u:object_r:vendor_configs_file:s0
+/vendor/etc/nfc u:object_r:vendor_configs_file:s0
+/vendor/etc/nfc/libnfc-nxp_RF\.conf u:object_r:vendor_configs_file:s0
+/vendor/etc/libese-nxp\.conf u:object_r:vendor_configs_file:s0
+/vendor/etc/libnfc-nxp\.conf u:object_r:vendor_configs_file:s0
+/vendor/firmware u:object_r:vendor_fw_file:s0
+/vendor/firmware/nfc u:object_r:vendor_fw_file:s0
+/vendor/firmware/nfc/libsn100u_fw\.so u:object_r:vendor_fw_file:s0
+/vendor/lib64 u:object_r:vendor_file:s0
+/vendor/lib64/ese_spi_nxp\.so u:object_r:vendor_file:s0
+/vendor/lib64/nfc_nci_nxpsn\.so u:object_r:vendor_file:s0
