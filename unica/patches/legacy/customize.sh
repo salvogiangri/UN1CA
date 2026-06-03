@@ -105,7 +105,6 @@ EXTRACT_KERNEL_MODULES() {
 }
 # ]
 
-TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 PATCHED=false
 
 # Pre-API 34
@@ -196,6 +195,7 @@ fi
 
 # Ensure Knox Matrix support
 # - Check if target firmware runs on One UI 5.1.1 or above
+TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 if [ "$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/build.prop" "ro.build.version.oneui")" -lt "50101" ]; then
     PATCHED=true
     DELETE_FROM_WORK_DIR "system" "system/bin/fabric_crypto"
@@ -248,6 +248,7 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
 fi
 
 # Ensure sbauth support in target firmware
+TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 if [ -f "$WORK_DIR/system/system/bin/sbauth" ] && \
         [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/bin/sbauth" ]; then
     PATCHED=true
@@ -343,13 +344,14 @@ fi
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
         PATCHED=true
-        DELETE_FROM_WORK_DIR "vendor" "etc/singletake"
-        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-            "etc/singletake/ClarityScorer/ClarityScorer.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
-        if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/singletake/blur_detection" ]; then
-            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-                "etc/singletake/blur_detection" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        if [ -d "$WORK_DIR/vendor/etc/singletake/aifilter" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/aifilter"
         fi
+        if [ -d "$WORK_DIR/vendor/etc/singletake/bestmoment" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/bestmoment"
+        fi
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+            "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
     fi
 fi
 
@@ -361,5 +363,5 @@ if [ -d "$TMP_DIR" ]; then
     EVAL "rm -rf \"$TMP_DIR\""
 fi
 
-unset TARGET_FIRMWARE_PATH PATCHED
+unset PATCHED TARGET_FIRMWARE_PATH
 unset -f BACKPORT_SF_PROPS EXTRACT_KERNEL_IMAGE EXTRACT_KERNEL_MODULES
