@@ -187,13 +187,14 @@ GENERATE_OTA_METADATA()
         MESSAGE+=", timestamp: $TIMESTAMP"
         MESSAGE+=", sdk_level: \\\"$RELEASE\\\""
         MESSAGE+=", security_patch_level: \\\"$SECURITY_PATCH_LEVEL\\\"}"
+        MESSAGE+=", required_cache: $(CALCULATE_MIN_CACHE_SIZE false)"
 
         EVAL "protoc --encode=build.tools.releasetools.OtaMetadata --proto_path=\"$(dirname "$PROTO_FILE")\" \"$PROTO_FILE\" <<< \"$MESSAGE\" > \"$TMP_DIR/META-INF/com/android/metadata.pb\"" || exit 1
     fi
 
     # https://android.googlesource.com/platform/build/+/refs/tags/android-16.0.0_r4/tools/releasetools/ota_utils.py#313
     {
-        echo "ota-required-cache=0"
+        echo "ota-required-cache=$(CALCULATE_MIN_CACHE_SIZE true)"
         echo "ota-type=BLOCK"
         echo "post-build=$TARGET_FINGERPRINT"
         echo "post-build-incremental=$TARGET_INCREMENTAL"
@@ -281,7 +282,7 @@ GENERATE_UPDATER_SCRIPT()
         if [ "$(CALCULATE_MIN_CACHE_SIZE false)" -gt "0" ]; then
             # https://android.googlesource.com/platform/build/+/refs/tags/android-16.0.0_r4/tools/releasetools/edify_generator.py#212
             echo -n "apply_patch_space("
-            CALCULATE_MIN_CACHE_SIZE true
+            CALCULATE_MIN_CACHE_SIZE false
             echo -n ") || abort("
             echo    '"E3006: Not enough free space on /cache to apply patches.");'
         fi
