@@ -1,25 +1,26 @@
-From 3d7e45b46175118f6b70e41c35d3569030da0557 Mon Sep 17 00:00:00 2001
-From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Thu, 21 Aug 2025 22:01:23 +0200
-Subject: [PATCH] Add timeout to version.xml request
+From 22b6572bf5a9b6de6b1c2315655aab71d8071f8d Mon Sep 17 00:00:00 2001
+From: henr1kas <161259379+henr1kas@users.noreply.github.com>
+Date: Tue, 19 May 2026 11:43:05 +0200
+Subject: [PATCH] Update decryption keys
 
 ---
- samloader/versionfetch.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ samloader/auth.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/samloader/versionfetch.py b/samloader/versionfetch.py
-index 830f917..6a65701 100644
---- a/samloader/versionfetch.py
-+++ b/samloader/versionfetch.py
-@@ -18,7 +18,7 @@ def normalizevercode(vercode: str) -> str:
- def getlatestver(model: str, region: str) -> str:
-     """ Get the latest firmware version code for a model and region. """
-     req = requests.get("https://fota-cloud-dn.ospserver.net/firmware/" \
--        + region + "/" + model + "/version.xml" , headers={"User-Agent": "Kies2.0_FUS"})
-+        + region + "/" + model + "/version.xml" , headers={"User-Agent": "Kies2.0_FUS"}, timeout=3)
-     if req.status_code == 403:
-         print("Error 403 : Model or region not found (403) | Or TAC is not for " + model)
-         exit()
+diff --git a/samloader/auth.py b/samloader/auth.py
+index fc4d482..71177b0 100644
+--- a/samloader/auth.py
++++ b/samloader/auth.py
+@@ -7,8 +7,8 @@ import base64
+ from Cryptodome.Cipher import AES
+
+ # Constant key input values.
+-KEY_1 = "vicopx7dqu06emacgpnpy8j8zwhduwlh"
+-KEY_2 = "9u7qab84rpc16gvk"
++KEY_1 = "jqw2zntssasudk3zuwwx4tnqz5h3b6i4"
++KEY_2 = "ifzg4ovyl3cyl3a5"
+
+ # PKCS#7 padding functions.
+ pkcs_unpad = lambda d: d[:-d[-1]]
 -- 
-2.50.1
-
+2.54.0
