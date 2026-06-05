@@ -1,6 +1,4 @@
 # [
-_LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
-
 PARTITIONS_LIST="system vendor product system_ext odm vendor_dlkm odm_dlkm system_dlkm"
 
 PATCH_FSTAB()
@@ -11,19 +9,13 @@ PATCH_FSTAB()
         if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
             continue
         fi
-        if sed -E -i "/^(${PARTITIONS_LIST// /|})\s+/ s/(\s+\S+\s+)\S+/\1erofs/" "$f"; then
+        if sed -E -i "/^(${PARTITIONS_LIST// /|})\s+/ s/(\s+\S+\s+)\S+/\1$TARGET_OS_FILE_SYSTEM_TYPE/" "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
     done < <(find "$1" -type f -name "fstab.*")
 }
 # ]
-
-if [[ "$TARGET_OS_FILE_SYSTEM_TYPE" != "erofs" ]]; then
-    _LOG "TARGET_OS_FILE_SYSTEM_TYPE is not set to erofs"
-    unset -f _LOG
-    return 0
-fi
 
 BOOT_FILE="boot.img"
 if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
@@ -92,4 +84,4 @@ fi
 EVAL "rm -rf \"$TMP_DIR\""
 
 unset PARTITIONS_LIST BOOT_FILE MKBOOTIMG_ARGS RAMDISK_FILE RAMDISK_FORMAT
-unset -f _LOG PATCH_FSTAB
+unset -f PATCH_FSTAB
