@@ -1,0 +1,412 @@
+From a623e161f84214b14f1d0da6ec509cd24a264687 Mon Sep 17 00:00:00 2001
+From: Tjari <zadigsm@outlook.com>
+Date: Mon, 15 Jun 2026 10:52:25 +0700
+Subject: [PATCH] Disable SUPPORT_MDNIE_BLUE_FILTER support
+
+UN1CA: this patch is not complete! Please check unica/patches/product_feature/customize.sh for more info.
+---
+ .../statusbar/phone/CentralSurfacesImpl.smali | 131 ++++++++++++------
+ 1 file changed, 88 insertions(+), 43 deletions(-)
+
+diff --git a/smali_classes3/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali b/smali_classes3/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
+index b5ca11e0..499f6e30 100644
+--- a/smali_classes3/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
++++ b/smali_classes3/com/android/systemui/statusbar/phone/CentralSurfacesImpl.smali
+@@ -277,6 +277,8 @@
+ 
+ .field public mReportRejectedTouch:Landroid/view/View;
+ 
++.field public final mSBlueLightFilterTileSWLazy:Ldagger/Lazy;
++
+ .field public final mScreenLifecycle:Lcom/android/systemui/keyguard/ScreenLifecycle;
+ 
+ .field public final mScreenObserver:Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl$10;
+@@ -1621,6 +1623,10 @@
+     iput-object p1, p0, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mKeyguardFoldController:Lcom/android/systemui/keyguard/KeyguardFoldController;
+ 
+     :cond_5
++    move-object/from16 p1, p119
++
++    iput-object p1, p0, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mSBlueLightFilterTileSWLazy:Ldagger/Lazy;
++
+     sget-boolean p1, Lcom/android/systemui/BasicRune;->AI_AGENT_EFFECT:Z
+ 
+     if-eqz p1, :cond_6
+@@ -5796,13 +5802,52 @@
+ 
+     invoke-virtual {v11, v9, v4, v12, v10}, Lcom/android/systemui/broadcast/BroadcastDispatcher;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/util/concurrent/Executor;Landroid/os/UserHandle;)V
+ 
++    iget-object v4, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mSBlueLightFilterTileSWLazy:Ldagger/Lazy;
++
++    if-eqz v4, :cond_32
++
++    invoke-interface {v4}, Ldagger/Lazy;->get()Ljava/lang/Object;
++
++    move-result-object v9
++
++    check-cast v9, Lcom/android/systemui/statusbar/CommandQueue$Callbacks;
++
++    invoke-virtual {v5, v9}, Lcom/android/systemui/statusbar/CommandQueue;->removeCallback(Lcom/android/systemui/statusbar/CommandQueue$Callbacks;)V
++
++    invoke-interface {v4}, Ldagger/Lazy;->get()Ljava/lang/Object;
++
++    move-result-object v9
++
++    check-cast v9, Lcom/android/systemui/statusbar/CommandQueue$Callbacks;
++
++    invoke-virtual {v5, v9}, Lcom/android/systemui/statusbar/CommandQueue;->addCallback(Lcom/android/systemui/statusbar/CommandQueue$Callbacks;)V
++
++    const-string/jumbo v9, "persist.sys.is_in_maintenance_mode"
++
++    const/4 v13, 0x0
++
++    invoke-static {v9, v13}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v9
++
++    if-nez v9, :cond_32
++
++    invoke-interface {v4}, Ldagger/Lazy;->get()Ljava/lang/Object;
++
++    move-result-object v4
++
++    check-cast v4, Lcom/android/systemui/qp/qs/tiles/SBlueLightFilterSWTile;
++
++    invoke-virtual {v4}, Lcom/android/systemui/qp/qs/tiles/SBlueLightFilterSWTile;->setBlueLightFilterMode()V
++
++    :cond_32
+     iget-object v4, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mShadeWindowLayoutParams:Landroid/view/WindowManager$LayoutParams;
+ 
+     iput-object v4, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mLp:Landroid/view/WindowManager$LayoutParams;
+ 
+     sget-boolean v9, Lcom/android/systemui/LsRune;->SECURITY_FINGERPRINT_IN_DISPLAY_OPTICAL:Z
+ 
+-    if-eqz v9, :cond_32
++    if-eqz v9, :cond_33
+ 
+     iget v9, v4, Landroid/view/WindowManager$LayoutParams;->samsungFlags:I
+ 
+@@ -5812,18 +5857,18 @@
+ 
+     iput v9, v4, Landroid/view/WindowManager$LayoutParams;->samsungFlags:I
+ 
+-    :cond_32
++    :cond_33
+     iget-object v9, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mIndicatorCutoutUtil:Lcom/android/systemui/statusbar/phone/IndicatorCutoutUtil;
+ 
+     iget-boolean v9, v9, Lcom/android/systemui/statusbar/phone/IndicatorCutoutUtil;->isUDCModel:Z
+ 
+-    if-eqz v9, :cond_33
++    if-eqz v9, :cond_34
+ 
+     const/16 v9, 0x2000
+ 
+     invoke-virtual {v4, v9}, Landroid/view/WindowManager$LayoutParams;->semAddExtensionFlags(I)V
+ 
+-    :cond_33
++    :cond_34
+     iget-object v4, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mWindowManager:Landroid/view/WindowManager;
+ 
+     iget-object v9, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mWindowRootView:Lcom/android/systemui/scene/ui/view/WindowRootView;
+@@ -5838,7 +5883,7 @@
+ 
+     move-result-object v4
+ 
+-    if-eqz v4, :cond_34
++    if-eqz v4, :cond_35
+ 
+     iget-object v4, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mWindowRootView:Lcom/android/systemui/scene/ui/view/WindowRootView;
+ 
+@@ -5850,7 +5895,7 @@
+ 
+     invoke-interface {v4, v11}, Landroid/view/WindowInsetsController;->setSystemBarsBehavior(I)V
+ 
+-    :cond_34
++    :cond_35
+     iget-object v4, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mLpChanged:Landroid/view/WindowManager$LayoutParams;
+ 
+     iget-object v9, v0, Lcom/android/systemui/shade/NotificationShadeWindowControllerImpl;->mLp:Landroid/view/WindowManager$LayoutParams;
+@@ -5865,7 +5910,7 @@
+ 
+     move-result v4
+ 
+-    if-eqz v4, :cond_35
++    if-eqz v4, :cond_36
+ 
+     const/4 v4, 0x1
+ 
+@@ -5873,7 +5918,7 @@
+ 
+     goto :goto_c
+ 
+-    :cond_35
++    :cond_36
+     const/4 v4, 0x1
+ 
+     :goto_c
+@@ -5885,14 +5930,14 @@
+ 
+     iget-object v4, v0, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl;->pluginLockMediator:Lcom/android/systemui/pluginlock/PluginLockMediator;
+ 
+-    if-eqz v4, :cond_36
++    if-eqz v4, :cond_37
+ 
+     iget-object v10, v0, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl;->notificationShadeView:Lcom/android/systemui/scene/ui/view/WindowRootView;
+ 
+     invoke-interface {v4, v10}, Lcom/android/systemui/pluginlock/PluginLockMediator;->onRootViewAttached(Landroid/view/ViewGroup;)V
+ 
+-    :cond_36
+-    if-eqz v4, :cond_37
++    :cond_37
++    if-eqz v4, :cond_38
+ 
+     new-instance v10, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl$attach$1;
+ 
+@@ -5900,7 +5945,7 @@
+ 
+     invoke-interface {v4, v10}, Lcom/android/systemui/pluginlock/PluginLockMediator;->setNoSensorConsumer(Ljava/util/function/Consumer;)V
+ 
+-    :cond_37
++    :cond_38
+     new-instance v4, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl$attach$2;
+ 
+     invoke-direct {v4, v0}, Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl$attach$2;-><init>(Lcom/android/systemui/shade/SecNotificationShadeWindowControllerHelperImpl;)V
+@@ -5990,7 +6035,7 @@
+     :goto_d
+     const/4 v14, 0x3
+ 
+-    if-gt v9, v14, :cond_38
++    if-gt v9, v14, :cond_39
+ 
+     iget-object v10, v0, Landroid/view/WindowManager$LayoutParams;->paramsForRotation:[Landroid/view/WindowManager$LayoutParams;
+ 
+@@ -6006,7 +6051,7 @@
+ 
+     goto :goto_d
+ 
+-    :cond_38
++    :cond_39
+     iput-object v0, v4, Lcom/android/systemui/statusbar/window/StatusBarWindowControllerImpl;->mLp:Landroid/view/WindowManager$LayoutParams;
+ 
+     invoke-static {}, Landroid/os/Trace;->endSection()V
+@@ -6096,7 +6141,7 @@
+ 
+     iget-object v0, v9, Lcom/android/systemui/statusbar/NotificationRemoteInputManager;->mRemoteInputController:Lcom/android/systemui/statusbar/RemoteInputController;
+ 
+-    if-eqz v0, :cond_39
++    if-eqz v0, :cond_3a
+ 
+     invoke-static {v2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+@@ -6106,7 +6151,7 @@
+ 
+     goto :goto_f
+ 
+-    :cond_39
++    :cond_3a
+     iget-object v0, v9, Lcom/android/systemui/statusbar/NotificationRemoteInputManager;->mControllerCallbacks:Ljava/util/List;
+ 
+     check-cast v0, Ljava/util/ArrayList;
+@@ -6168,7 +6213,7 @@
+ 
+     sget-boolean v2, Lcom/android/systemui/NotiRune;->NOTI_SUBSCREEN_ALL:Z
+ 
+-    if-eqz v2, :cond_3a
++    if-eqz v2, :cond_3b
+ 
+     const-class v2, Lcom/android/systemui/statusbar/notification/SubscreenNotificationController;
+ 
+@@ -6190,11 +6235,11 @@
+ 
+     iget-object v2, v2, Lcom/android/systemui/statusbar/notification/SubscreenNotificationController;->mDeviceModel:Lcom/android/systemui/statusbar/notification/SubscreenDeviceModelParent;
+ 
+-    if-eqz v2, :cond_3a
++    if-eqz v2, :cond_3b
+ 
+     iput-object v0, v2, Lcom/android/systemui/statusbar/notification/SubscreenDeviceModelParent;->mNotificationActivityStarter:Lcom/android/systemui/statusbar/notification/NotificationActivityStarter;
+ 
+-    :cond_3a
++    :cond_3b
+     iget v0, v7, Lcom/android/internal/statusbar/RegisterStatusBarResult;->mTransientBarTypes:I
+ 
+     invoke-static {}, Landroid/view/WindowInsets$Type;->statusBars()I
+@@ -6203,7 +6248,7 @@
+ 
+     and-int/2addr v0, v2
+ 
+-    if-eqz v0, :cond_3c
++    if-eqz v0, :cond_3d
+ 
+     invoke-interface/range {v17 .. v17}, Lcom/android/systemui/display/data/repository/PerDisplayStore;->getDefaultDisplay()Ljava/lang/Object;
+ 
+@@ -6225,7 +6270,7 @@
+ 
+     check-cast v2, Lcom/android/systemui/statusbar/phone/CentralSurfaces;
+ 
+-    if-eqz v2, :cond_3b
++    if-eqz v2, :cond_3c
+ 
+     check-cast v2, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;
+ 
+@@ -6233,7 +6278,7 @@
+ 
+     iput-boolean v4, v2, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mNoAnimationOnNextBarModeChange:Z
+ 
+-    :cond_3b
++    :cond_3c
+     sget-object v2, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
+ 
+     iget-object v0, v0, Lcom/android/systemui/statusbar/data/repository/StatusBarModePerDisplayRepositoryImpl;->_isTransientShown:Lkotlinx/coroutines/flow/StateFlowImpl;
+@@ -6242,7 +6287,7 @@
+ 
+     invoke-virtual {v0, v12, v2}, Lkotlinx/coroutines/flow/StateFlowImpl;->updateState(Ljava/lang/Object;Ljava/lang/Object;)Z
+ 
+-    :cond_3c
++    :cond_3d
+     iget-object v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mCommandQueueCallbacks:Lcom/android/systemui/statusbar/phone/CentralSurfacesCommandQueueCallbacks;
+ 
+     invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+@@ -6260,7 +6305,7 @@
+     const/4 v2, 0x0
+ 
+     :goto_10
+-    if-ge v2, v0, :cond_3d
++    if-ge v2, v0, :cond_3e
+ 
+     iget-object v3, v7, Lcom/android/internal/statusbar/RegisterStatusBarResult;->mIcons:Landroid/util/ArrayMap;
+ 
+@@ -6286,10 +6331,10 @@
+ 
+     goto :goto_10
+ 
+-    :cond_3d
++    :cond_3e
+     iget-boolean v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mWallpaperSupported:Z
+ 
+-    if-eqz v0, :cond_3e
++    if-eqz v0, :cond_3f
+ 
+     const-string/jumbo v0, "wallpaper"
+ 
+@@ -6311,7 +6356,7 @@
+     .catch Landroid/os/RemoteException; {:try_start_2 .. :try_end_2} :catch_2
+ 
+     :catch_2
+-    :cond_3e
++    :cond_3f
+     iget-object v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mIconPolicy:Lcom/android/systemui/statusbar/phone/PhoneStatusBarPolicy;
+ 
+     invoke-virtual {v0}, Lcom/android/systemui/statusbar/phone/PhoneStatusBarPolicy;->init()V
+@@ -6417,16 +6462,16 @@
+ 
+     move-result v3
+ 
+-    if-nez v3, :cond_3f
++    if-nez v3, :cond_40
+ 
+     iget-object v3, v2, Lcom/android/systemui/statusbar/phone/BiometricUnlockController;->mUpdateMonitor:Lcom/android/keyguard/KeyguardUpdateMonitor;
+ 
+     invoke-interface {v3, v2}, Lcom/android/keyguard/KeyguardSecUpdateMonitor;->registerPreCallback(Lcom/android/keyguard/KeyguardUpdateMonitorCallback;)V
+ 
+-    :cond_3f
++    :cond_40
+     iget-object v2, v9, Lcom/android/systemui/statusbar/NotificationRemoteInputManager;->mRemoteInputController:Lcom/android/systemui/statusbar/RemoteInputController;
+ 
+-    if-eqz v2, :cond_40
++    if-eqz v2, :cond_41
+ 
+     invoke-static {v0}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+@@ -6436,7 +6481,7 @@
+ 
+     goto :goto_11
+ 
+-    :cond_40
++    :cond_41
+     iget-object v2, v9, Lcom/android/systemui/statusbar/NotificationRemoteInputManager;->mControllerCallbacks:Ljava/util/List;
+ 
+     check-cast v2, Ljava/util/ArrayList;
+@@ -6446,14 +6491,14 @@
+     :goto_11
+     sget-boolean v2, Lcom/android/systemui/LsRune;->SECURITY_DEFAULT_LANDSCAPE:Z
+ 
+-    if-eqz v2, :cond_41
++    if-eqz v2, :cond_42
+ 
+     invoke-static {}, Lcom/android/systemui/util/DeviceState;->setLandscapeDefaultRotation()V
+ 
+-    :cond_41
++    :cond_42
+     sget-boolean v2, Lcom/android/systemui/LsRune;->SECURITY_FINGERPRINT_IN_DISPLAY:Z
+ 
+-    if-eqz v2, :cond_42
++    if-eqz v2, :cond_43
+ 
+     iget-object v2, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mContext:Landroid/content/Context;
+ 
+@@ -6467,7 +6512,7 @@
+ 
+     invoke-static {v2}, Lcom/android/systemui/util/DeviceState;->setInDisplayFingerprintSensorPosition(Landroid/util/DisplayMetrics;)V
+ 
+-    :cond_42
++    :cond_43
+     invoke-static {}, Landroid/os/Trace;->endSection()V
+ 
+     iget-object v2, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mUpdateCallback:Lcom/android/keyguard/KeyguardUpdateMonitorCallback;
+@@ -6496,18 +6541,18 @@
+ 
+     iget-object v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mLightRevealScrim:Lcom/android/systemui/statusbar/LightRevealScrim;
+ 
+-    if-nez v0, :cond_43
++    if-nez v0, :cond_44
+ 
+     goto :goto_12
+ 
+-    :cond_43
++    :cond_44
+     sget-boolean v2, Lcom/android/systemui/LsRune;->AOD_LIGHT_REVEAL:Z
+ 
+-    if-nez v2, :cond_44
++    if-nez v2, :cond_45
+ 
+     invoke-virtual {v0, v8}, Lcom/android/systemui/statusbar/LightRevealScrim;->setVisibility(I)V
+ 
+-    :cond_44
++    :cond_45
+     :goto_12
+     iget-object v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mConfigurationListener:Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl$16;
+ 
+@@ -6547,7 +6592,7 @@
+ 
+     iget-boolean v2, v0, Lcom/android/systemui/InitController;->mTasksExecuted:Z
+ 
+-    if-nez v2, :cond_46
++    if-nez v2, :cond_47
+ 
+     iget-object v0, v0, Lcom/android/systemui/InitController;->mTasks:Ljava/util/ArrayList;
+ 
+@@ -6629,7 +6674,7 @@
+ 
+     sget-boolean v0, Lcom/android/systemui/LsRune;->AOD_LIGHT_REVEAL:Z
+ 
+-    if-eqz v0, :cond_45
++    if-eqz v0, :cond_46
+ 
+     iget-object v0, v1, Lcom/android/systemui/statusbar/phone/CentralSurfacesImpl;->mSecLightRevealScrimHelper:Lcom/android/systemui/statusbar/SecLightRevealScrimHelper;
+ 
+@@ -6701,10 +6746,10 @@
+ 
+     invoke-static/range {v5 .. v12}, Lcom/android/systemui/broadcast/BroadcastDispatcher;->registerReceiver$default(Lcom/android/systemui/broadcast/BroadcastDispatcher;Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/util/concurrent/Executor;Landroid/os/UserHandle;ILjava/lang/String;I)V
+ 
+-    :cond_45
++    :cond_46
+     return-void
+ 
+-    :cond_46
++    :cond_47
+     new-instance v0, Ljava/lang/IllegalStateException;
+ 
+     const-string/jumbo v1, "post init tasks have already been executed!"
+-- 
+2.43.0
+
