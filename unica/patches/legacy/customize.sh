@@ -563,16 +563,20 @@ fi
 
 # Upgrade Single Take models (pre-API 35)
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
-    if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
+    if [ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]; then
+        if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
+            PATCHED=true
+            if [ -d "$WORK_DIR/vendor/etc/singletake/aifilter" ]; then
+                DELETE_FROM_WORK_DIR "vendor" "etc/singletake/aifilter"
+            fi
+            if [ -d "$WORK_DIR/vendor/etc/singletake/bestmoment" ]; then
+                DELETE_FROM_WORK_DIR "vendor" "etc/singletake/bestmoment"
+            fi
+            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+                "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        fi
+    else
         PATCHED=true
-        if [ -d "$WORK_DIR/vendor/etc/singletake/aifilter" ]; then
-            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/aifilter"
-        fi
-        if [ -d "$WORK_DIR/vendor/etc/singletake/bestmoment" ]; then
-            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/bestmoment"
-        fi
-        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-            "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
     fi
 fi
 
