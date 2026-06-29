@@ -63,7 +63,7 @@ DECODE_APK()
 }
 
 # GET_GALAXY_STORE_DOWNLOAD_URL "<package name/id>"
-# Returns a URL to download the desidered app from Samsung servers.
+# Returns a URL to download the desired app from Samsung servers.
 GET_GALAXY_STORE_DOWNLOAD_URL()
 {
     _CHECK_NON_EMPTY_PARAM "PACKAGE" "$1" || return 1
@@ -154,7 +154,7 @@ GET_FLOATING_FEATURE_CONFIG()
 }
 
 # HEX_PATCH "<file>" "<old pattern>" "<new pattern>"
-# Applies the supplied hex patch to the desidered file.
+# Applies the supplied hex patch to the desired file.
 HEX_PATCH()
 {
     _CHECK_NON_EMPTY_PARAM "FILE" "$1" || return 1
@@ -194,7 +194,7 @@ HEX_PATCH()
 }
 
 # SET_FLOATING_FEATURE_CONFIG "<config>" "<value>"
-# Sets the supplied config to the desidered value.
+# Sets the supplied config to the desired value.
 # "-d" or "--delete" can be passed as value to delete the config.
 SET_FLOATING_FEATURE_CONFIG()
 {

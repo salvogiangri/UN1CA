@@ -228,7 +228,7 @@ STORE_KERNEL_IMAGE_METADATA()
     local FILE="$1"
 
     if [ ! -f "$FILE" ]; then
-        LOGE "File not found: ${TAR//$SRC_DIR\//}"
+        LOGE "File not found: ${FILE//$SRC_DIR\//}"
         exit 1
     fi
 
@@ -307,7 +307,7 @@ STORE_OS_PARTITION_METADATA()
     local FILE="$1"
 
     if [ ! -f "$FILE" ]; then
-        LOGE "File not found: ${TAR//$SRC_DIR\//}"
+        LOGE "File not found: ${FILE//$SRC_DIR\//}"
         exit 1
     fi
 

@@ -13,7 +13,7 @@ source "$SRC_DIR/scripts/utils/common_utils.sh"
 # - remove: Deletes the provided smali file entirely
 # - replace <method> <value> <replacement>: Replaces the occurence of the supplied string in the provided method
 # - replaceall <value> <replacement>: Replaces all the occurences of the supplied string in the whole smali file
-# - return <method> <value>: Patches the supplied method in order to return the desidered value
+# - return <method> <value>: Patches the supplied method in order to return the desired value
 # - strip <method>: Deletes the supplied method in the provided smali file
 SMALI_PATCH()
 {

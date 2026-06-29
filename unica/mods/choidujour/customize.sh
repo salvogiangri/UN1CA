@@ -56,4 +56,4 @@ while IFS= read -r f; do
     fi
 done < <(find "$MODPATH/SecSettings.apk" -type f)
 
-unset CERT_NAME PATCH_INST CONTENT
+unset PATCH_INST CONTENT

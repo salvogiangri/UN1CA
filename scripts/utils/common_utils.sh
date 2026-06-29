@@ -184,7 +184,7 @@ _HANDLE_SPECIAL_CHARS()
 # `source` argument can be:
 # - a full path
 # - a string in the following format: "MODEL/CSC" (the folder MUST exist under `out/fw`)
-# - a string with the product name of the desidered device's prebuilt blobs (the folder MUST exist under `prebuilts/samsung`)
+# - a string with the product name of the desired device's prebuilt blobs (the folder MUST exist under `prebuilts/samsung`)
 #
 # `user`/`group`/`mode`/`label`/ arguments can be omitted as long as the respective entry is present in `source`/fs_config and `source`/file_context.
 ADD_TO_WORK_DIR()
@@ -469,7 +469,7 @@ DELETE_FROM_WORK_DIR()
 }
 
 # DOWNLOAD_FILE "<url>" "<output path>"
-# Downloads the file from the provided URL and stores it in the desidered output path.
+# Downloads the file from the provided URL and stores it in the desired output path.
 DOWNLOAD_FILE()
 {
     _CHECK_NON_EMPTY_PARAM "URL" "$1" || return 1
@@ -557,7 +557,7 @@ IS_VALID_PARTITION_NAME()
 }
 
 # READ_BYTES_AT <file> <offset> <bytes>
-# Reads the desidered amount of bytes from the supplied file.
+# Reads the desired amount of bytes from the supplied file.
 READ_BYTES_AT()
 {
     _CHECK_NON_EMPTY_PARAM "FILE" "$1" || return 1
@@ -644,7 +644,7 @@ SET_METADATA()
 }
 
 # SET_PROP "<partition>" "<prop>" "<value>"
-# Sets the supplied prop to the desidered value, partition name CANNOT be omitted.
+# Sets the supplied prop to the desired value, partition name CANNOT be omitted.
 # "-d" or "--delete" can be passed as value to delete the prop.
 SET_PROP()
 {

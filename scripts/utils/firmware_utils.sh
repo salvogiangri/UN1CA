@@ -47,7 +47,7 @@ COMPARE_SEC_BUILD_VERSION()
 }
 
 # EXTRACT_FILE_FROM_TAR <tar> <file>
-# Extract the desidered file from the supplied tar archive.
+# Extract the desired file from the supplied tar archive.
 EXTRACT_FILE_FROM_TAR()
 {
     _CHECK_NON_EMPTY_PARAM "MODEL" "$MODEL" || return 1
@@ -85,7 +85,7 @@ EXTRACT_FILE_FROM_TAR()
 }
 
 # FILE_EXISTS_IN_TAR <tar> <file>
-# Returns whether or not the desidered file exists in the supplied tar archive.
+# Returns whether or not the desired file exists in the supplied tar archive.
 FILE_EXISTS_IN_TAR()
 {
     _CHECK_NON_EMPTY_PARAM "TAR" "$1" || return 1
