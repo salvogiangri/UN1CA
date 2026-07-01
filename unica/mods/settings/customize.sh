@@ -211,6 +211,21 @@ if [[ "$(GET_PROP "ro.hwui.use_vulkan")" != "true" ]]; then
     SET_PROP "system" "persist.sys.unica.vulkan" "false"
 fi
 
+LOG "- Enabling BSOH in deviceinfo"
+VALUE=${SOURCE_FIRMWARE:0:8}
+
+DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
+
+FTP="
+system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/BatteryRegulatoryPreferenceController.smali
+system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/deviceinfo/batteryinfo/SecBatteryInfoFragment.smali
+"
+
+for i in $FTP; do
+    sed -i "s/SM-A236B/$VALUE/g" "$APKTOOL_DIR/$i"
+done
+
+unset VALUE
 unset PATCH_INST CONTENT
 
 LOG_STEP_OUT
