@@ -1057,7 +1057,7 @@
 .end method
 
 .method private static verifyKeybox(Landroid/content/Context;)I
-    .locals 9
+    .locals 10
 
     const-string v0, "Exception: "
 
@@ -1165,6 +1165,94 @@
     move-result-object p0
 
     check-cast p0, Ljava/net/HttpURLConnection;
+
+    const-string v4, "GET"
+
+    invoke-virtual {p0, v4}, Ljava/net/HttpURLConnection;->setRequestMethod(Ljava/lang/String;)V
+
+    const/16 v4, 0xbb8
+
+    invoke-virtual {p0, v4}, Ljava/net/HttpURLConnection;->setConnectTimeout(I)V
+
+    invoke-virtual {p0, v4}, Ljava/net/HttpURLConnection;->setReadTimeout(I)V
+
+    const-string v4, "User-Agent"
+
+    const-string v6, "UN1CA Settings"
+
+    invoke-virtual {p0, v4, v6}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-static {}, Ljava/lang/Math;->random()D
+
+    move-result-wide v6
+
+    const-wide v8, 0x408f400000000000L    # 1000.0
+
+    mul-double/2addr v6, v8
+
+    invoke-static {v6, v7}, Ljava/lang/Math;->round(D)J
+
+    move-result-wide v6
+
+    long-to-double v6, v6
+
+    div-double/2addr v6, v8
+
+    const-string v4, "Cache-Control"
+
+    const-string v8, "no-cache, no-store, no-transform, max-age=0"
+
+    invoke-virtual {p0, v4, v8}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v4, "Accept"
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "application/json, */*;q="
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8, v6, v7}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-virtual {p0, v4, v8}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v4, "Accept-Encoding"
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "identity, *;q="
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v8
+
+    invoke-virtual {v8, v6, v7}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-virtual {p0, v4, v6}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v4, "Accept-Ranges"
+
+    const-string v6, "bytes"
+
+    invoke-virtual {p0, v4, v6}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
     :try_end_1
     .catch Ljava/io/IOException; {:try_start_1 .. :try_end_1} :catch_1
     .catch Lorg/json/JSONException; {:try_start_1 .. :try_end_1} :catch_1
