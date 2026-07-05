@@ -168,31 +168,31 @@ fi
 #
 #   TARGET_SYSTEM_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device system partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_VENDOR_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device vendor partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_PRODUCT_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device product partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_ODM_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device odm partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_VENDOR_DLKM_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device vendor_dlkm partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_ODM_DLKM_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device odm_dlkm partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_SYSTEM_DLKM_PARTITION_SIZE
 #     Integer containing the size in bytes of the target device system_dlkm partition size.
-#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to false.
+#     Unused if TARGET_USE_DYNAMIC_PARTITIONS is set to true.
 #
 #   TARGET_OS_SINGLE_SYSTEM_IMAGE
 #     String containing the target device SSI, it must match the `ro.build.product` prop.
