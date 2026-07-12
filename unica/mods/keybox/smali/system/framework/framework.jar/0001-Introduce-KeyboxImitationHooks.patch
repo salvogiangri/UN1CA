@@ -1,4 +1,4 @@
-From fad9a05c9f2a418bdb2c152298048a08b8a245b8 Mon Sep 17 00:00:00 2001
+From fe37a224849763375c7992e4f8df8249d3bada1d Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 6 Oct 2025 15:12:32 +0200
 Subject: [PATCH] Introduce KeyboxImitationHooks
@@ -18,14 +18,14 @@ Subject: [PATCH] Introduce KeyboxImitationHooks
  .../io/mesalabs/unica/KeyboxDbHelper.smali    | 1094 ++++++
  .../unica/KeyboxImitationHooks$1.smali        |   80 +
  .../mesalabs/unica/KeyboxImitationHooks.smali | 3379 +++++++++++++++++
- .../KeyboxOperationUtils$BaseOperation.smali  |  212 ++
- ...eyboxOperationUtils$DecryptOperation.smali |  374 ++
- ...OperationUtils$KeyAgreementOperation.smali |  207 +
- .../KeyboxOperationUtils$SignOperation.smali  |  291 ++
+ .../KeyboxOperationUtils$BaseOperation.smali  |  185 +
+ ...eyboxOperationUtils$DecryptOperation.smali |  352 ++
+ ...OperationUtils$KeyAgreementOperation.smali |  189 +
+ .../KeyboxOperationUtils$SignOperation.smali  |  271 ++
  .../mesalabs/unica/KeyboxOperationUtils.smali |  158 +
  ...eyboxUtils$$ExternalSyntheticLambda0.smali |   30 +
  .../io/mesalabs/unica/KeyboxUtils.smali       | 2372 ++++++++++++
- 21 files changed, 11551 insertions(+), 28 deletions(-)
+ 21 files changed, 11464 insertions(+), 28 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/IKeyboxProvider.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager-IA.smali
@@ -8331,10 +8331,10 @@ index 00000000..549c74de
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$BaseOperation.smali b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$BaseOperation.smali
 new file mode 100644
-index 00000000..a32b7e0e
+index 00000000..7cd6a253
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$BaseOperation.smali
-@@ -0,0 +1,212 @@
+@@ -0,0 +1,185 @@
 +.class Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;
 +.super Landroid/system/keystore2/IKeystoreOperation$Default;
 +.source "KeyboxOperationUtils.java"
@@ -8383,12 +8383,7 @@ index 00000000..a32b7e0e
 +.end method
 +
 +.method protected blacklist checkInputLength([B)V
-+    .locals 1
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 0
 +
 +    if-eqz p1, :cond_1
 +
@@ -8401,15 +8396,11 @@ index 00000000..a32b7e0e
 +    goto :goto_0
 +
 +    :cond_0
-+    new-instance p0, Landroid/os/RemoteException;
++    new-instance p0, Landroid/os/ServiceSpecificException;
 +
-+    new-instance p1, Landroid/os/ServiceSpecificException;
++    const/16 p1, 0x15
 +
-+    const/16 v0, 0x15
-+
-+    invoke-direct {p1, v0}, Landroid/os/ServiceSpecificException;-><init>(I)V
-+
-+    invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p0, p1}, Landroid/os/ServiceSpecificException;-><init>(I)V
 +
 +    throw p0
 +
@@ -8419,12 +8410,7 @@ index 00000000..a32b7e0e
 +.end method
 +
 +.method protected blacklist checkOperationLifecycle()V
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    iget-boolean p0, p0, Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;->pruned:Z
 +
@@ -8433,15 +8419,11 @@ index 00000000..a32b7e0e
 +    return-void
 +
 +    :cond_0
-+    new-instance p0, Landroid/os/RemoteException;
++    new-instance p0, Landroid/os/ServiceSpecificException;
 +
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    const/16 v0, -0x1c
 +
-+    const/16 v1, -0x1c
-+
-+    invoke-direct {v0, v1}, Landroid/os/ServiceSpecificException;-><init>(I)V
-+
-+    invoke-direct {p0, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p0, v0}, Landroid/os/ServiceSpecificException;-><init>(I)V
 +
 +    throw p0
 +.end method
@@ -8473,26 +8455,17 @@ index 00000000..a32b7e0e
 +.end method
 +
 +.method public blacklist updateAad([B)V
-+    .locals 1
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 0
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;->checkOperationLifecycle()V
 +
 +    invoke-virtual {p0, p1}, Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;->checkInputLength([B)V
 +
-+    new-instance p0, Landroid/os/RemoteException;
++    new-instance p0, Landroid/os/ServiceSpecificException;
 +
-+    new-instance p1, Landroid/os/ServiceSpecificException;
++    const/16 p1, -0x28
 +
-+    const/16 v0, -0x28
-+
-+    invoke-direct {p1, v0}, Landroid/os/ServiceSpecificException;-><init>(I)V
-+
-+    invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p0, p1}, Landroid/os/ServiceSpecificException;-><init>(I)V
 +
 +    throw p0
 +.end method
@@ -8549,10 +8522,10 @@ index 00000000..a32b7e0e
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$DecryptOperation.smali b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$DecryptOperation.smali
 new file mode 100644
-index 00000000..6eb4b794
+index 00000000..5a9c8a14
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$DecryptOperation.smali
-@@ -0,0 +1,374 @@
+@@ -0,0 +1,352 @@
 +.class final Lio/mesalabs/unica/KeyboxOperationUtils$DecryptOperation;
 +.super Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;
 +.source "KeyboxOperationUtils.java"
@@ -8791,12 +8764,7 @@ index 00000000..6eb4b794
 +
 +# virtual methods
 +.method public blacklist finish([B[B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$DecryptOperation;->checkOperationLifecycle()V
 +
@@ -8840,38 +8808,30 @@ index 00000000..6eb4b794
 +    move-exception p1
 +
 +    :try_start_1
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljavax/crypto/IllegalBlockSizeException;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x15
++    const/16 v0, -0x15
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +
 +    :catch_1
 +    move-exception p1
 +
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljavax/crypto/BadPaddingException;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x26
++    const/16 v0, -0x26
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +    :try_end_1
@@ -8886,12 +8846,7 @@ index 00000000..6eb4b794
 +.end method
 +
 +.method public blacklist update([B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$DecryptOperation;->checkOperationLifecycle()V
 +
@@ -8911,28 +8866,24 @@ index 00000000..6eb4b794
 +    :catch_0
 +    move-exception p0
 +
-+    new-instance p1, Landroid/os/RemoteException;
++    new-instance p1, Landroid/os/ServiceSpecificException;
 +
-+    new-instance v0, Landroid/os/ServiceSpecificException;
-+
-+    const/16 v1, -0x3e8
++    const/16 v0, -0x3e8
 +
 +    invoke-virtual {p0}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p0
 +
-+    invoke-direct {v0, v1, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p1, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p1, v0, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p1
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation.smali b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation.smali
 new file mode 100644
-index 00000000..d075d655
+index 00000000..01917f08
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation.smali
-@@ -0,0 +1,207 @@
+@@ -0,0 +1,189 @@
 +.class final Lio/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation;
 +.super Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;
 +.source "KeyboxOperationUtils.java"
@@ -9006,12 +8957,7 @@ index 00000000..d075d655
 +
 +# virtual methods
 +.method public blacklist finish([B[B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation;->checkOperationLifecycle()V
 +
@@ -9072,19 +9018,15 @@ index 00000000..d075d655
 +    move-exception p1
 +
 +    :try_start_1
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x3e8
++    const/16 v0, -0x3e8
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +    :try_end_1
@@ -9099,12 +9041,7 @@ index 00000000..d075d655
 +.end method
 +
 +.method public blacklist update([B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$KeyAgreementOperation;->checkOperationLifecycle()V
 +
@@ -9124,28 +9061,24 @@ index 00000000..d075d655
 +    :catch_0
 +    move-exception p0
 +
-+    new-instance p1, Landroid/os/RemoteException;
++    new-instance p1, Landroid/os/ServiceSpecificException;
 +
-+    new-instance v0, Landroid/os/ServiceSpecificException;
-+
-+    const/16 v1, -0x3e8
++    const/16 v0, -0x3e8
 +
 +    invoke-virtual {p0}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p0
 +
-+    invoke-direct {v0, v1, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p1, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p1, v0, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p1
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$SignOperation.smali b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$SignOperation.smali
 new file mode 100644
-index 00000000..3c80a62e
+index 00000000..1646c6c3
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxOperationUtils$SignOperation.smali
-@@ -0,0 +1,291 @@
+@@ -0,0 +1,271 @@
 +.class final Lio/mesalabs/unica/KeyboxOperationUtils$SignOperation;
 +.super Lio/mesalabs/unica/KeyboxOperationUtils$BaseOperation;
 +.source "KeyboxOperationUtils.java"
@@ -9236,24 +9169,25 @@ index 00000000..3c80a62e
 +    throw p1
 +
 +    :catch_1
-+    new-instance p0, Landroid/os/ServiceSpecificException;
++    move-exception p0
 +
-+    const/16 p1, -0xa
++    new-instance p1, Landroid/os/ServiceSpecificException;
 +
-+    invoke-direct {p0, p1}, Landroid/os/ServiceSpecificException;-><init>(I)V
++    const/16 p2, -0xa
 +
-+    throw p0
++    invoke-virtual {p0}, Ljavax/crypto/NoSuchPaddingException;->getMessage()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-direct {p1, p2, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
++
++    throw p1
 +.end method
 +
 +
 +# virtual methods
 +.method public blacklist finish([B[B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$SignOperation;->checkOperationLifecycle()V
 +
@@ -9318,57 +9252,45 @@ index 00000000..3c80a62e
 +    move-exception p1
 +
 +    :try_start_1
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x3e8
++    const/16 v0, -0x3e8
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +
 +    :catch_1
 +    move-exception p1
 +
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljavax/crypto/IllegalBlockSizeException;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x15
++    const/16 v0, -0x15
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +
 +    :catch_2
 +    move-exception p1
 +
-+    new-instance p2, Landroid/os/RemoteException;
-+
-+    new-instance v0, Landroid/os/ServiceSpecificException;
++    new-instance p2, Landroid/os/ServiceSpecificException;
 +
 +    invoke-virtual {p1}, Ljavax/crypto/BadPaddingException;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p1
 +
-+    const/16 v1, -0x26
++    const/16 v0, -0x26
 +
-+    invoke-direct {v0, v1, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p2, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p2, v0, p1}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p2
 +    :try_end_1
@@ -9383,12 +9305,7 @@ index 00000000..3c80a62e
 +.end method
 +
 +.method public blacklist update([B)[B
-+    .locals 2
-+    .annotation system Ldalvik/annotation/Throws;
-+        value = {
-+            Landroid/os/RemoteException;
-+        }
-+    .end annotation
++    .locals 1
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/KeyboxOperationUtils$SignOperation;->checkOperationLifecycle()V
 +
@@ -9421,19 +9338,15 @@ index 00000000..3c80a62e
 +    :catch_0
 +    move-exception p0
 +
-+    new-instance p1, Landroid/os/RemoteException;
++    new-instance p1, Landroid/os/ServiceSpecificException;
 +
-+    new-instance v0, Landroid/os/ServiceSpecificException;
-+
-+    const/16 v1, -0x3e8
++    const/16 v0, -0x3e8
 +
 +    invoke-virtual {p0}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
 +
 +    move-result-object p0
 +
-+    invoke-direct {v0, v1, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
-+
-+    invoke-direct {p1, v0}, Landroid/os/RemoteException;-><init>(Ljava/lang/Throwable;)V
++    invoke-direct {p1, v0, p0}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
 +
 +    throw p1
 +.end method
