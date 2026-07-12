@@ -1,0 +1,140 @@
+From 7880cc11f4ff2ff779b9111fcaefd2f2537a29cf Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Sun, 12 Jul 2026 22:31:40 +0200
+Subject: [PATCH] Disable MGF digest param omit
+
+---
+ .../security/keystore2/KeymasterUtils.smali   | 61 +++++++++++--------
+ 1 file changed, 36 insertions(+), 25 deletions(-)
+
+diff --git a/smali_classes3/android/security/keystore2/KeymasterUtils.smali b/smali_classes3/android/security/keystore2/KeymasterUtils.smali
+index 69788ff4..46fc8a68 100644
+--- a/smali_classes3/android/security/keystore2/KeymasterUtils.smali
++++ b/smali_classes3/android/security/keystore2/KeymasterUtils.smali
+@@ -432,25 +432,36 @@
+ .method public static blacklist isKeyMintDevice(I)Z
+     .locals 4
+ 
+-    const/16 v0, 0x64
++    const-string v0, "persist.sys.unica.keybox"
+ 
+     const/4 v1, 0x0
+ 
+-    const/4 v2, 0x2
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+ 
+-    const/4 v3, 0x1
++    move-result v0
+ 
+-    if-eq p0, v3, :cond_4
++    const/4 v2, 0x1
+ 
+-    if-eq p0, v2, :cond_0
++    if-eqz v0, :cond_0
+ 
+-    return v1
++    return v2
+ 
+     :cond_0
++    const/16 v0, 0x64
++
++    const/4 v3, 0x2
++
++    if-eq p0, v2, :cond_5
++
++    if-eq p0, v3, :cond_1
++
++    return v1
++
++    :cond_1
+     :try_start_0
+     sget p0, Landroid/security/keystore2/KeymasterUtils;->mIsStrongBoxKeyMintDevice:I
+ 
+-    if-nez p0, :cond_2
++    if-nez p0, :cond_3
+ 
+     const-string p0, "android.hardware.strongbox_keystore"
+ 
+@@ -458,32 +469,32 @@
+ 
+     move-result p0
+ 
+-    if-lt p0, v0, :cond_1
++    if-lt p0, v0, :cond_2
+ 
+-    move p0, v2
++    move p0, v3
+ 
+     goto :goto_0
+ 
+-    :cond_1
+-    move p0, v3
++    :cond_2
++    move p0, v2
+ 
+     :goto_0
+     sput p0, Landroid/security/keystore2/KeymasterUtils;->mIsStrongBoxKeyMintDevice:I
+ 
+-    :cond_2
++    :cond_3
+     sget p0, Landroid/security/keystore2/KeymasterUtils;->mIsStrongBoxKeyMintDevice:I
+ 
+-    if-ne p0, v2, :cond_3
++    if-ne p0, v3, :cond_4
+ 
+-    return v3
++    return v2
+ 
+-    :cond_3
++    :cond_4
+     return v1
+ 
+-    :cond_4
++    :cond_5
+     sget p0, Landroid/security/keystore2/KeymasterUtils;->mIsTEEKeyMintDevice:I
+ 
+-    if-nez p0, :cond_6
++    if-nez p0, :cond_7
+ 
+     const-string p0, "android.hardware.hardware_keystore"
+ 
+@@ -491,28 +502,28 @@
+ 
+     move-result p0
+ 
+-    if-lt p0, v0, :cond_5
++    if-lt p0, v0, :cond_6
+ 
+-    move p0, v2
++    move p0, v3
+ 
+     goto :goto_1
+ 
+-    :cond_5
+-    move p0, v3
++    :cond_6
++    move p0, v2
+ 
+     :goto_1
+     sput p0, Landroid/security/keystore2/KeymasterUtils;->mIsTEEKeyMintDevice:I
+ 
+-    :cond_6
++    :cond_7
+     sget p0, Landroid/security/keystore2/KeymasterUtils;->mIsTEEKeyMintDevice:I
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
+-    if-ne p0, v2, :cond_7
++    if-ne p0, v3, :cond_8
+ 
+-    return v3
++    return v2
+ 
+-    :cond_7
++    :cond_8
+     return v1
+ 
+     :catch_0
+-- 
+2.55.0
+
