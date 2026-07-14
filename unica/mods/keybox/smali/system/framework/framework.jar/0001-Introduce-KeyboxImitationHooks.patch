@@ -1,4 +1,4 @@
-From 454c37fb3ec2d6a0bc3580f096deff0683f7c5f2 Mon Sep 17 00:00:00 2001
+From 8c9af5cf2f9e184c433c2d4c2e0d4be8256205cc Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 6 Oct 2025 15:12:32 +0200
 Subject: [PATCH] Introduce KeyboxImitationHooks
@@ -13,19 +13,19 @@ Subject: [PATCH] Introduce KeyboxImitationHooks
  .../unica/KeyProviderManager-IA.smali         |    3 +
  .../mesalabs/unica/KeyProviderManager.smali   |   91 +
  .../unica/KeyboxChainGenerator$Digest.smali   |  141 +
- ...eyboxChainGenerator$KeyGenParameters.smali |  642 ++++
+ ...eyboxChainGenerator$KeyGenParameters.smali |  642 +++
  .../mesalabs/unica/KeyboxChainGenerator.smali | 1594 ++++++++
  .../io/mesalabs/unica/KeyboxDbHelper.smali    | 1094 ++++++
  .../unica/KeyboxImitationHooks$1.smali        |   80 +
- .../mesalabs/unica/KeyboxImitationHooks.smali | 3391 +++++++++++++++++
+ .../mesalabs/unica/KeyboxImitationHooks.smali | 3458 +++++++++++++++++
  .../KeyboxOperationUtils$BaseOperation.smali  |  185 +
  ...eyboxOperationUtils$DecryptOperation.smali |  352 ++
  ...OperationUtils$KeyAgreementOperation.smali |  189 +
  .../KeyboxOperationUtils$SignOperation.smali  |  271 ++
  .../mesalabs/unica/KeyboxOperationUtils.smali |  158 +
  ...eyboxUtils$$ExternalSyntheticLambda0.smali |   30 +
- .../io/mesalabs/unica/KeyboxUtils.smali       | 2372 ++++++++++++
- 21 files changed, 11476 insertions(+), 28 deletions(-)
+ .../io/mesalabs/unica/KeyboxUtils.smali       | 2372 +++++++++++
+ 21 files changed, 11543 insertions(+), 28 deletions(-)
  create mode 100644 smali_classes6/io/mesalabs/unica/IKeyboxProvider.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/KeyProviderManager-IA.smali
@@ -4946,10 +4946,10 @@ index 00000000..3dda8166
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
 new file mode 100644
-index 00000000..2ca70693
+index 00000000..77c39f21
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
-@@ -0,0 +1,3391 @@
+@@ -0,0 +1,3458 @@
 +.class public final Lio/mesalabs/unica/KeyboxImitationHooks;
 +.super Ljava/lang/Object;
 +.source "KeyboxImitationHooks.java"
@@ -8249,7 +8249,7 @@ index 00000000..2ca70693
 +.end method
 +
 +.method public static blacklist onUpdateSubcomponent(Landroid/system/keystore2/KeyDescriptor;[B[B)Z
-+    .locals 5
++    .locals 7
 +
 +    invoke-static {}, Lio/mesalabs/unica/KeyProviderManager;->isKeyboxAvailable()Z
 +
@@ -8262,35 +8262,103 @@ index 00000000..2ca70693
 +    return v1
 +
 +    :cond_0
-+    invoke-static {p0}, Lio/mesalabs/unica/KeyboxUtils;->fetchKeyData(Landroid/system/keystore2/KeyDescriptor;)Landroid/util/Pair;
++    invoke-static {}, Lio/mesalabs/unica/KeyboxDbHelper;->getInstance()Lio/mesalabs/unica/KeyboxDbHelper;
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_1
++    if-nez v0, :cond_1
 +
-+    iget-object v2, v0, Landroid/util/Pair;->second:Ljava/lang/Object;
++    return v1
 +
-+    check-cast v2, Landroid/system/keystore2/KeyMetadata;
++    :cond_1
++    invoke-static {p0}, Lio/mesalabs/unica/KeyboxUtils;->fetchKeyData(Landroid/system/keystore2/KeyDescriptor;)Landroid/util/Pair;
 +
-+    if-eqz v2, :cond_1
++    move-result-object v2
 +
-+    iput-object p1, v2, Landroid/system/keystore2/KeyMetadata;->certificate:[B
++    if-eqz v2, :cond_6
 +
-+    iput-object p2, v2, Landroid/system/keystore2/KeyMetadata;->certificateChain:[B
++    iget-object v3, v2, Landroid/util/Pair;->first:Ljava/lang/Object;
 +
-+    invoke-static {}, Lio/mesalabs/unica/KeyboxDbHelper;->getInstance()Lio/mesalabs/unica/KeyboxDbHelper;
++    if-eqz v3, :cond_6
++
++    iget-object v3, v2, Landroid/util/Pair;->second:Ljava/lang/Object;
++
++    if-nez v3, :cond_2
++
++    goto :goto_1
++
++    :cond_2
++    iget-object v3, v2, Landroid/util/Pair;->second:Ljava/lang/Object;
++
++    check-cast v3, Landroid/system/keystore2/KeyMetadata;
++
++    iput-object p1, v3, Landroid/system/keystore2/KeyMetadata;->certificate:[B
++
++    iput-object p2, v3, Landroid/system/keystore2/KeyMetadata;->certificateChain:[B
++
++    iget-wide p1, p0, Landroid/system/keystore2/KeyDescriptor;->nspace:J
++
++    invoke-static {p1, p2}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
 +
 +    move-result-object p1
 +
-+    if-eqz p1, :cond_1
++    iget p2, p0, Landroid/system/keystore2/KeyDescriptor;->domain:I
 +
-+    iget-wide v3, p0, Landroid/system/keystore2/KeyDescriptor;->nspace:J
++    const/4 v4, 0x1
 +
-+    iget-object p2, v0, Landroid/util/Pair;->first:Ljava/lang/Object;
++    if-ne p2, v4, :cond_5
 +
-+    check-cast p2, Ljava/security/KeyPair;
++    invoke-virtual {p1}, Ljava/lang/Long;->longValue()J
 +
-+    invoke-virtual {p1, v3, v4, p2, v2}, Lio/mesalabs/unica/KeyboxDbHelper;->updateKeyMaterial(JLjava/security/KeyPair;Landroid/system/keystore2/KeyMetadata;)V
++    move-result-wide p1
++
++    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
++
++    move-result v5
++
++    invoke-virtual {v0, p1, p2, v5}, Lio/mesalabs/unica/KeyboxDbHelper;->resolveGrantToKeyId(JI)Ljava/lang/Long;
++
++    move-result-object p1
++
++    if-nez p1, :cond_3
++
++    return v1
++
++    :cond_3
++    iget-wide v5, p0, Landroid/system/keystore2/KeyDescriptor;->nspace:J
++
++    invoke-virtual {v0, v5, v6}, Lio/mesalabs/unica/KeyboxDbHelper;->fetchKeyGrantAccessVector(J)I
++
++    move-result p2
++
++    and-int/lit16 p2, p2, 0x80
++
++    if-eqz p2, :cond_4
++
++    goto :goto_0
++
++    :cond_4
++    new-instance p0, Landroid/os/ServiceSpecificException;
++
++    const/4 p1, 0x6
++
++    const-string p2, "UPDATE permission not granted"
++
++    invoke-direct {p0, p1, p2}, Landroid/os/ServiceSpecificException;-><init>(ILjava/lang/String;)V
++
++    throw p0
++
++    :cond_5
++    :goto_0
++    invoke-virtual {p1}, Ljava/lang/Long;->longValue()J
++
++    move-result-wide p1
++
++    iget-object v1, v2, Landroid/util/Pair;->first:Ljava/lang/Object;
++
++    check-cast v1, Ljava/security/KeyPair;
++
++    invoke-virtual {v0, p1, p2, v1, v3}, Lio/mesalabs/unica/KeyboxDbHelper;->updateKeyMaterial(JLjava/security/KeyPair;Landroid/system/keystore2/KeyMetadata;)V
 +
 +    new-instance p1, Ljava/lang/StringBuilder;
 +
@@ -8324,11 +8392,10 @@ index 00000000..2ca70693
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/KeyboxImitationHooks;->dlog(Ljava/lang/String;)V
 +
-+    const/4 p0, 0x1
++    return v4
 +
-+    return p0
-+
-+    :cond_1
++    :cond_6
++    :goto_1
 +    return v1
 +.end method
 +
