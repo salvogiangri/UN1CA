@@ -122,7 +122,7 @@ SAMLOADER=true
 SIGNAPK=true
 
 ANDROID_TOOLS_EXEC=(
-    "adb" "append2simg" "avbtool" "e2fsdroid"
+    "adb" "append2simg" "avbtool" "bsdiff" "bspatch" "e2fsdroid"
     "ext2simg" "fastboot" "fec" "gki/generate_gki_certificate.py"
     "img2simg" "lpadd" "lpdump" "lpflash" "lpmake"
     "lpunpack" "make_f2fs" "mkbootfs" "mkbootimg" "mkdtboimg" "mke2fs"
