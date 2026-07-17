@@ -43,13 +43,6 @@
     <local name="BACK_MACRO_CAMERA_RESOLUTION_1BY1" value="1920x1920" />
     <local name="BACK_MACRO_CAMERA_RESOLUTION_FULL_RATIO" value="2576x1160" />
 
-    <!-- Capture resolution - BACK NIGHT -->
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_LARGE" value="4000x3000" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_4BY3_MEDIUM" value="4000x3000" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_16BY9_LARGE" value="4000x2252" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_1BY1_LARGE" value="2992x2992" />
-    <local name="BACK_NIGHT_SHOT_LOW_PERFORMANCE_CAMERA_RESOLUTION_FULL_RATIO" value="4000x1800" />
-
     <!-- Capture resolution - FRONT -->
     <local name="FRONT_CAMERA_PICTURE_DEFAULT_RESOLUTION" value="4000x3000" />
     <local name="FRONT_CAMERA_RESOLUTION_4BY3_LARGE" value="4000x3000" />
@@ -158,7 +151,6 @@
     <local name="SUPPORT_NIGHT_MODE_FRONT_ANGLE" value="true" />
     <local name="SUPPORT_NIGHT_MODE_REAR_LENS" value="true" />
     <local name="SUPPORT_NIGHT_MODE_ZOOM" value="true" />
-    <local name="LOW_PERFORMANCE_REAR_NIGHT_SHOT" value="true"/>	
 
     <!-- Super Slow Motion features -->
     <local name="SUPPORT_SUPER_SLOW_MOTION_AUTO_DETECTION" value="false"/>
@@ -195,7 +187,6 @@
     <local name="SUPPORT_HEIF_FORMAT" value="true"/>
     <local name="SUPPORT_AUTO_HDR_MENU" value="true"/>
     <local name="SUPPORT_TRUE_HDR" value="true"/>
-    <local name="SUPPORT_3HDR_RECORDING" value="true"/>
     <!-- Special Features - Capture -->
     <local name="CAMERA_PREVIEW_FPS_MIN" value="15" />
     <local name="FRONT_CAMERA_PREVIEW_FPS_MIN" value="8" />

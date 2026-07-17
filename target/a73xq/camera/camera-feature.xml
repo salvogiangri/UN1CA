@@ -94,11 +94,8 @@
     -->
 
     <!-- Capture resolution - BACK ULTRA_WIDE -->
-    <local name="BACK_WIDE_CAMERA_RESOLUTION_16BY9_MEDIUM"  value="4000x2250"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_16BY9_LARGE"   value="4000x2250"/>
-    <local name="BACK_WIDE_CAMERA_RESOLUTION_1BY1_MEDIUM"   value="2992x2992"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_1BY1_LARGE"    value="2992x2992"/>
-    <local name="BACK_WIDE_CAMERA_RESOLUTION_4BY3_MEDIUM"   value="4000x3000"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_4BY3_LARGE"    value="4000x3000"/>
     <local name="BACK_WIDE_CAMERA_RESOLUTION_FULL_RATIO"    value="4000x1800"/>
 
@@ -153,8 +150,6 @@
     <local name="BACK_CAMCORDER_RESOLUTION_FEATURE_MAP_640X480"             value="true"    hdr="true"  hdr10="false"   hlg="false"     snapshot-support="true"     snapshot-size="4000x3000"   vdis="true"     super-vdis="true"   effect="true"   object-tracking="true"  seamless-zoom-support="true"    physical-zoom-supported="false"     external-storage-support="true"/>
     <!-- 1:1 Ratio -->
     <local name="BACK_CAMCORDER_RESOLUTION_FEATURE_MAP_1440X1440"           value="true"    hdr="true"  hdr10="false"   hlg="false"     snapshot-support="true"     snapshot-size="2992x2992"   vdis="true"     super-vdis="true"   effect="true"   object-tracking="true"  seamless-zoom-support="true"    physical-zoom-supported="false"     external-storage-support="true"                         supported-mode="video,pro_video"/>
-    <!-- QCIF -->
-    <local name="BACK_CAMCORDER_RESOLUTION_FEATURE_MAP_176X144"             value="true"/>
 
     <!--
     21:9 Ratio
@@ -204,8 +199,6 @@
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_640X480"            value="true"    hdr="true"  hdr10="false"   hlg="false"     snapshot-support="true"     snapshot-size="4000x3000"   vdis="true"     super-vdis="true"   effect="true"   object-tracking="true"  external-storage-support="true"/>
     <!-- 1:1 Ratio -->
     <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_1440X1440"          value="true"    hdr="true"  hdr10="false"   hlg="false"     snapshot-support="true"     snapshot-size="2992x2992"   vdis="true"     super-vdis="true"   effect="true"   object-tracking="true"  external-storage-support="true"     supported-mode="video,pro_video"/>
-    <!-- QCIF -->
-    <local name="FRONT_CAMCORDER_RESOLUTION_FEATURE_MAP_176X144"            value="true"/>
 
     <!--
     21:9 Ratio
@@ -244,7 +237,6 @@
     <local name="SUPPORT_WIDE_LENS_CORRECTION"      value="true"/>
 
     <!--
-    <local name="FRONT_DYNAMIC_FOV_CAMERA_ID"       value="3"/>
     <local name="SUPPORT_BACK_SECOND_TELE_CAMERA"   value="true"/>
     <local name="SUPPORT_SEAMLESS_ZOOM"             value="true"/>
     -->
@@ -253,20 +245,14 @@
     <!-- ZOOM FEATURES -->
 
     <local name="DEFAULT_MAX_ZOOM_VALUE"        value="1000"/>
-    <local name="DIGITAL_ZOOM_SHORTCUT_LIST"    value="4.0, 10.0"/>
-    <local name="KEEP_CHANGED_EV_AFTER_ZOOM"    value="true"/>
     <local name="SUPPORT_DIGITAL_TELE_ZOOM"     value="true"/>
     <local name="SUPPORT_SENSOR_CROP"           value="true"/>
 
     <!--
     <local name="BACK_SECOND_TELE_CAMERA_ZOOM_LEVEL"    value="5.0"/>
     <local name="BACK_TELE_CAMERA_ZOOM_LEVEL"           value="3.0"/>
-    <local name="SUPPORT_FOOD_CROP_ZOOM_X2"             value="true"/>
     <local name="SUPPORT_FOOD_SEAMLESS_ZOOM"            value="true"/>
-    <local name="SUPPORT_HYPER_LAPSE_CROP_ZOOM_X2"      value="true"/>
-    <local name="SUPPORT_NIGHT_CROP_ZOOM_X2"            value="true"/>
     <local name="SUPPORT_PORTRAIT_SEAMLESS_ZOOM"        value="true"/>
-    <local name="SUPPORT_SUPER_STEADY_CROP_ZOOM_X2"     value="true"/>
     -->
 
 
@@ -289,20 +275,16 @@
     -->
 
     <local name="SUPPORT_BACK_DUAL_PORTRAIT"                        value="true"/>
-    <local name="SUPPORT_BOKEH_FOCUSED_REGION"                      value="true"/>
-    <local name="SUPPORT_CONTROL_VIDEO_BOKEH_EFFECT_IN_RECORDING"   value="true"/>
     <local name="SUPPORT_DUAL_BOKEH_EFFECT"                         value="false"/>
     <local name="SUPPORT_LIVE_FOCUS_HDR_CAPTURE"                    value="true"/>
     <local name="SUPPORT_LIVE_FOCUS_SCENE_DETECTION_MODE"           value="true"/>
     <local name="SUPPORT_LIVE_FOCUS_TORCH_FLASH"                    value="true"/>
     <local name="SUPPORT_LIVE_FOCUS_VIDEO_BEAUTY"                   value="true"/>
     <local name="SUPPORT_SINGLE_BOKEH_EFFECT"                       value="true"/>
-    <local name="SUPPORT_VIDEO_BOKEH_EFFECT"                        value="true"/>
 
     <!--
     <local name="SUPPORT_BACK_PORTRAIT_SECOND_TELE_DUAL"        value="true"/>
     <local name="SUPPORT_BACK_PORTRAIT_VIDEO_TELE_DUAL"         value="true"/>
-    <local name="SUPPORT_BACK_TOF_PORTRAIT"                     value="true"/>
     <local name="SUPPORT_BACK_WIDE_NORMAL_DUAL_PORTRAIT"        value="true"/>
     <local name="SUPPORT_BACK_WIDE_NORMAL_DUAL_PORTRAIT_VIDEO"  value="true"/>
     -->
@@ -321,9 +303,6 @@
 
     <!-- LIVE BEAUTY FEATURES -->
 
-    <local name="SUPPORT_BEAUTY_BRIGHTEN"               value="true"/>
-    <local name="SUPPORT_LIVE_BEAUTY_IN_AUTO_MODE"      value="true"/>
-    <local name="SUPPORT_LIVE_BEAUTY_MANUAL_RESHAPE"    value="true"/>
     <local name="SUPPORT_LIVE_BEAUTY_SHAPE_CORRECTION"  value="true"/>
     <local name="SUPPORT_SELFIE_TONE_MODE"              value="false"/>
 
@@ -363,21 +342,13 @@
 
     <!-- FILTER FEATURES -->
 
-    <local name="SUPPORT_FILTER_COMBINE"    value="true"/>
     <local name="SUPPORT_MY_FILTER"         value="true"/>
 
-    <!--
-    <local name="SUPPORT_50MP_PHOTO_FILTER"     value="true"/>
+
+    <!-- PICTURE FORMAT FEATURES -->
+    <!-- Setting PICTURE_FORMAT to "true" if your device doesn't support it could break all camera modes.
     -->
 
-
-    <!-- RAW AND PICTURE FORMAT FEATURES -->
-    <!-- RAW doesn't work on all devices, same as PICTURE_FORMAT.
-    Setting PICTURE_FORMAT to "true" if your device doesn't support it could break all camera modes.
-    With PICTURE_FORMAT disabled, RAW becomes inaccessible.
-    -->
-
-    <local name="SUPPORT_RAW_CAPTURE"               value="true"/>
     <local name="CAMERA_SUPPORT_PICTURE_FORMAT"     value="true"/>
 
 
@@ -386,7 +357,6 @@
     <local name="SUPPORT_BACK_WIDE_PRO"                         value="true"/>
     <local name="SUPPORT_HISTOGRAM"                             value="true"/>
     <local name="SUPPORT_PRO_AE_PRIORITY_MODE"                  value="true"/>
-    <local name="SUPPORT_PRO_RESET"                             value="true"/>
     <local name="SUPPORT_PRO_VIDEO_AUDIO_BLUETOOTH_MIX_MIC"     value="true"/>
     <local name="SUPPORT_PRO_VIDEO_AUDIO_INPUT_CONTROL"         value="true"/>
     <local name="SUPPORT_PRO_VIDEO_FOCUS_PEAKING"               value="true"/>
@@ -411,10 +381,6 @@
     <local name="SUPER_SLOW_MOTION_MAX_FRC_TIME"            value="800"/>
     <local name="SUPPORT_SUPER_SLOW_MOTION_AUTO_DETECTION"  value="false"/>
 
-    <!--
-    <local name="SUPPORT_SLOW_MOTION_MULTI_LENS"    value="true"/>
-    -->
-
 
     <!-- HDR RELATED FEATURES -->
     <!-- CAREFUL WITH THE FIRST THREE OPTIONS!
@@ -429,7 +395,6 @@
     <local name="SUPPORT_HLG"                   value="false"/>
     <local name="SUPPORT_LOG_VIDEO"             value="false"/>
     <!-- Not to worry much about -->
-    <local name="SUPPORT_3HDR_RECORDING"        value="true"/>
     <local name="SUPPORT_BACK_TRUE_HDR"         value="true"/>
     <local name="SUPPORT_TRUE_HDR"              value="true"/>
     <local name="SUPPORT_VIDEO_HDR"             value="true"/>
@@ -441,12 +406,10 @@
 
     <local name="SINGLE_TAKE_CAPTURE_INTERVAL"          value="300"/>
     <local name="SINGLE_TAKE_USING_CONTINUOUS_AF"       value="true"/>
-    <local name="SINGLE_TAKE_USING_SINGLE_LENS_ONLY"    value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_BURST_CAPTURE"     value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_COLLAGES"          value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_DYNAMIC_SLOW_MO"   value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_EXTENDED_CAPTURE"  value="true"/>
-    <local name="SUPPORT_SINGLE_TAKE_FILTERED_VIDEOS"   value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"  value="true"/>
     <local name="SUPPORT_SINGLE_TAKE_MULTI_CAMERA"      value="false"/>
     <local name="SUPPORT_VDIS_IN_SINGLE_TAKE"           value="true"/>
@@ -469,11 +432,7 @@
 
     <!-- INTELLIGENCE AND SCANNER FEATURES -->
 
-    <local name="SUPPORT_ADDITIONAL_EFFECTS_WITH_SCENE_DETECTION"   value="true"/>
-    <local name="SUPPORT_ADDITIONAL_SCENE_BRIGHT_NIGHT"             value="true"/>
     <local name="SUPPORT_ADDITIONAL_SCENE_DOCUMENT_SCAN"            value="true"/>
-    <local name="SUPPORT_CLOSE_UP_SUGGESTION"                       value="true"/>
-    <local name="SUPPORT_DOCUMENT_SCAN_NEW_CONCEPT"                 value="true"/>
     <local name="SUPPORT_INTELLIGENT_RECOGNITION_TIPS"              value="true"/>
     <local name="SUPPORT_SMART_SCAN_EXTRACT_TEXT"                   value="true"/>
     <local name="SUPPORT_SMART_SCAN_MANUAL_CROP"                    value="true"/>
@@ -483,7 +442,6 @@
 
     <local name="SUPPORT_DEFAULT_HEVC"                  value="true"/>
     <local name="SUPPORT_HEIF_FORMAT"                   value="true"/>
-    <local name="SUPPORT_UNLIMITED_VIDEO_FILE_SIZE"     value="true"/>
     <local name="SUPPORT_VIDEO_HIGH_BITRATE"            value="true"/>
 
 
@@ -497,14 +455,11 @@
     <local name="MOTION_PHOTO_RECORDING_FPS"                                        value="30"/>
     <local name="SHOW_PAUSED_PREVIEW_TO_RESUME_CAMERA"                              value="true"/>
     <local name="SUPPORT_ADVANCED_RECORDING_OPTIONS"                                value="true"/>
-    <local name="SUPPORT_ADVANCED_ZERO_SHUTTER_LAG"                                 value="true"/>
     <local name="SUPPORT_COMPOSITION_GUIDE"                                         value="true"/>
     <local name="SUPPORT_DISPLAY_FRAME_RATE_60HZ"                                   value="true"/>
     <local name="SUPPORT_EFFECT_VIDEO_SNAPSHOT"                                     value="true"/>
     <local name="SUPPORT_EXPAND_SHUTTER_SPEED"                                      value="true"/>
-    <local name="SUPPORT_FORCED_SHOT_INTERVAL_FOR_BACK_HIGH_RESOLUTION"             value="true"/>
     <local name="SUPPORT_HIGH_RESOLUTION_SHUTTER_VI"                                value="true"/>
-    <local name="SUPPORT_LENS_DIRTY_DETECTION"                                      value="true"/>
     <local name="SUPPORT_LIVE_BLUR"                                                 value="true"/>
     <local name="SUPPORT_MACRO_NUDGE"                                               value="true"/>
     <local name="SUPPORT_MOTION_PHOTO_BEFORE_AND_AFTER_AS_DEFAULT_CAPTURE_MODE"     value="true"/>
@@ -521,7 +476,6 @@
     <local name="SUPPORT_VIDEO_AUTO_FPS_OPTION"                                     value="true"/>
     <local name="SUPPORT_VIDEO_MODE_ZOOM_ROCKER"                                    value="true"/>
     <local name="SUPPORT_ZOOM_MAP_VIEW"                                             value="true"/>
-    <local name="SUPPORT_ZOOM_SHORTCUT_WITH_LENS_BUTTON"                            value="true"/>
 
     <!--
     <local name="MAX_SEAMLESS_ZOOM_RECORDING_TIME_LIMIT_IN_OVERHEAT_CONDITION"  value="300"/>
@@ -537,24 +491,16 @@
 
     <local name="SUPPORT_CAMERA_ASSISTANT"                              value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_ADAPTIVE_PIXEL"               value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_AUDIO_MONITORING"             value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_DIGITAL_ZOOM_UPSCALE"         value="true"/>
 
     <!--
-	<local name="SUPPORT_CAMERA_ASSISTANT_ADDITIONAL_MODE_SINGLE_TAKE"      value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS"              	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_ANAMORPHIC_LENS_HW_SCALER"    	value="true"/>
 	<local name="SUPPORT_CAMERA_ASSISTANT_AUTO_LENS_SWITCHING"          	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X2"                 	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_CROP_ZOOM_X10"                	value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_CUSTOMIZE_INDICATORS"             value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_DOF_ADAPTER"                  	value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_FOCUS_PEAKING"                    value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_OPTICAL_IMAGE_STABILIZATION"      value="true"/>
-	<local name="SUPPORT_CAMERA_ASSISTANT_PRO_MODE_PRESETS"             	value="true"/>
     <local name="SUPPORT_CAMERA_ASSISTANT_STEREO_CAPTURE"                   value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_TILTA_WIRELESS_LENS_CONTROLLER"   value="true"/>
-    <local name="SUPPORT_CAMERA_ASSISTANT_TOUCH_AF_AE_IN_PRO_VIDEO_MODE"    value="true"/>
 	<local name="SUPPORT_CAMERA_ASSISTANT_ZOOM_X100"                    	value="true"/>
     -->
 
