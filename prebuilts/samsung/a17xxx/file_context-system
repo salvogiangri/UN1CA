@@ -1,4 +1,7 @@
 /system u:object_r:system_file:s0
+/system/cameradata u:object_r:system_file:s0
+/system/cameradata/portrait_data u:object_r:system_file:s0
+/system/cameradata/portrait_data/SRIB_BanetLite_FP16_V400\.snf u:object_r:system_file:s0
 /system/lib u:object_r:system_lib_file:s0
 /system/lib/libnfc_vendor_extn_st\.so u:object_r:system_lib_file:s0
 /system/lib/libstnfc_nci_jni\.so u:object_r:system_lib_file:s0

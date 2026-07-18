@@ -340,6 +340,21 @@ if [ -f "$WORK_DIR/system/system/priv-app/LedCoverService/LedCoverService.apk" ]
     fi
 fi
 
+# Upgrade Segmentation models (pre-API 34)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
+    if grep -q "default_lowtier" "$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json" &&
+            [ -f "$WORK_DIR/system/system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf" ]; then
+        PATCHED=true
+        DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf"
+        ADD_TO_WORK_DIR "a17xxx" "system" \
+            "system/cameradata/portrait_data/SRIB_BanetLite_FP16_V400.snf" 0 0 644 "u:object_r:system_file:s0"
+        LOG "- Patching /system/system/cameradata/portrait_data/single_bokeh_feature.json"
+        EVAL "sed -i \"0,/HumanInsSeg_FP16_V008/s//BanetLite_FP16_V400/\" \"$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json\""
+        EVAL "sed -i \"0,/008/s//400/\" \"$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json\""
+        EVAL "sed -i \"0,/QASYMM8/s//FLOAT16/\" \"$WORK_DIR/system/system/cameradata/portrait_data/single_bokeh_feature.json\""
+    fi
+fi
+
 # Upgrade Single Take models (pre-API 35)
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
