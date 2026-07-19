@@ -16,6 +16,5 @@
 /vendor/etc/midas/SRIBMidas_aiUPSCALER_2X_LITE_V100_INT8\.tflite u:object_r:vendor_configs_file:s0
 /vendor/etc/midas/SRIBMidas_aiUPSCALER_3X_LITE_V100_INT8\.tflite u:object_r:vendor_configs_file:s0
 /vendor/etc/midas/SRIBMidas_aiUPSCALER_4X_LITE_V100_INT8\.tflite u:object_r:vendor_configs_file:s0
-/vendor/etc/midas/midas_config\.json u:object_r:vendor_configs_file:s0
 /vendor/lib64 u:object_r:vendor_file:s0
 /vendor/lib64/libsnaplite_native\.so u:object_r:same_process_hal_file:s0

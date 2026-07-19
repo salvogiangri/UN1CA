@@ -47,11 +47,3 @@ if [[ "$TARGET_CODENAME" == "p3s" ]]; then
     EVAL "echo \"libuwsuperresolution_wrapper_v1.camera.samsung.so\" >> \"$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt\""
 fi
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libveengine.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
-
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
-    # Upgrade midas blobs
-    ADD_TO_WORK_DIR "r9sxxx" "vendor" "etc/midas/midas_config.json" 0 0 644 "u:object_r:vendor_configs_file:s0"
-fi
-
-LOG "- Fixing MIDAS model detection"
-EVAL "sed -i \"s/$TARGET_CODENAME/r0s/g\" \"$WORK_DIR/vendor/etc/midas/midas_config.json\""

@@ -355,6 +355,25 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
     fi
 fi
 
+# Pre-API 35
+# - Upgrade MIDAS models
+#
+# Pre-API 36
+# - Update midas_config.json
+if ! grep -q "\"version\": \"4\." "$WORK_DIR/vendor/etc/midas/midas_config.json"; then
+    if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+        PATCHED=true
+        DELETE_FROM_WORK_DIR "vendor" "etc/midas"
+        ADD_TO_WORK_DIR "a73xqxx" "vendor" \
+            "etc/midas" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+    fi
+    if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+        PATCHED=true
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+            "etc/midas/midas_config.json" 0 0 644 "u:object_r:vendor_configs_file:s0"
+    fi
+fi
+
 # Upgrade Single Take models (pre-API 35)
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
