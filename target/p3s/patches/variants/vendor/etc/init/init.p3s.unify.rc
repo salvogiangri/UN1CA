@@ -28,5 +28,5 @@ on early-init && property:ro.boot.em.model=SM-G998B
     mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_ES32_semco_c0 /vendor/firmware/wifi/nvram.txt_ES32_semco_c0 bind
     mount none /vendor/firmware/SM-G998B/wifi/nvram.txt_ES40_semco_c1 /vendor/firmware/wifi/nvram.txt_ES40_semco_c1 bind
 
-on boot
+on property:sys.boot_completed=1
     restart audioserver
