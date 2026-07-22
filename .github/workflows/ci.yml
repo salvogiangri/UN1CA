@@ -121,7 +121,12 @@ jobs:
         run: ./scripts/build_dependencies.sh
 
       - name: Download stock firmwares
-        run: ./scripts/download_fw.sh
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_on: error
+          command: ./scripts/download_fw.sh
 
       - name: Extract stock firmwares
         run: ./scripts/extract_fw.sh
