@@ -1,0 +1,3 @@
+# Enable Vulkan renderer by default
+ro.hwui.use_vulkan=true
+debug.hwui.renderer=skiavk

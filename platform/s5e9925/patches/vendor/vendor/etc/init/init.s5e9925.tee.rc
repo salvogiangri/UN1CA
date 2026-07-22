@@ -1,0 +1,5 @@
+on early-init
+    exec - root radio -- /vendor/bin/tee.sh
+
+on fs && property:vendor.teegris.old=true
+    mount none /vendor/etc/tee_old /vendor/tee bind

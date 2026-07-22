@@ -23,6 +23,9 @@ prebuilts/*/*/*/** binary
 unica/mods/paradigm/system/** binary
 unica/mods/prophide/system/bin/rezetprop binary
 
+# Platform-specific prebuilt blobs
+platform/s5e9925/patches/vendor/** binary
+
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary
 target/a53x/patches/*/vendor/** binary
