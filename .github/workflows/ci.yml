@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   workflow_dispatch:
@@ -12,13 +12,51 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+
+      - name: Run shellcheck
+        run: |
+          CODE=0
+          while IFS= read -r f; do
+            shellcheck -e SC1090,SC1091 -s bash "$f" || CODE=1
+          done < <(find platform scripts target unica -name "*.sh" -not -name "*ssi.sh" -not -name "config.sh" -not -name "sff.sh")
+          exit $CODE
+
+  generate-matrix:
+    name: Generate matrix
+    needs: shellcheck
+    runs-on: ubuntu-24.04
+
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+
+      - name: Generate CI matrix
+        id: generate-matrix
+        run: |
+          matrix="$(find target -mindepth 1 -maxdepth 1 -type d -printf '%f\n' \
+            | sort | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+          echo "$matrix"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
   build:
+    name: Build
+    needs: [shellcheck, generate-matrix]
     runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
       matrix:
-        target: [a52sxq, a53x, a73xq, b0q, g0q, m52xq, o1s, p3s, r0q, r9s, t2s]
+        target: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout repo
@@ -62,22 +100,31 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Build dependencies
+      - name: Generate build config
         run: |
           source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/build_dependencies.sh
+          {
+            echo "DEBUG=$DEBUG"
+            echo "SRC_DIR=$SRC_DIR"
+            echo "OUT_DIR=$OUT_DIR"
+            echo "ODIN_DIR=$ODIN_DIR"
+            echo "FW_DIR=$FW_DIR"
+            echo "TOOLS_DIR=$TOOLS_DIR"
+            echo "APKTOOL_DIR=$APKTOOL_DIR"
+            echo "WORK_DIR=$WORK_DIR"
+            echo "TMP_DIR=$TMP_DIR"
+          } >> "$GITHUB_ENV"
+          sed "/Automatically/d" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
+          echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
+
+      - name: Build dependencies
+        run: ./scripts/build_dependencies.sh
 
       - name: Download stock firmwares
-        run: |
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/download_fw.sh
+        run: ./scripts/download_fw.sh
 
       - name: Extract stock firmwares
-        run: |
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/extract_fw.sh
+        run: ./scripts/extract_fw.sh
 
       - name: Build ROM
-        run: |
-          source ./buildenv.sh ${{ matrix.target }}
-          ./scripts/make_rom.sh
+        run: ./scripts/make_rom.sh
