@@ -9,7 +9,10 @@ PATCH_FSTAB()
         if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
             continue
         fi
-        if sed -E -i "/^(${PARTITIONS_LIST// /|})\s+/ s/(\s+\S+\s+)\S+/\1$TARGET_OS_FILE_SYSTEM_TYPE/" "$f"; then
+        if sed -E -i \
+            -e "/^(${PARTITIONS_LIST// /|})\s+/ s/(\s+\S+\s+)\S+/\1$TARGET_OS_FILE_SYSTEM_TYPE/" \
+            -e "/^(${PARTITIONS_LIST// /|})\s+/ s/^(\S+\s+\S+\s+\S+\s+)\S+/\1ro/" \
+            "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
