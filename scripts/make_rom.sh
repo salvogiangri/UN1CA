@@ -44,6 +44,7 @@ PREPARE_SCRIPT()
     done
 }
 
+# shellcheck disable=SC2317,SC2329
 PRINT_BUILD_OUTCOME()
 {
     local EXIT_CODE="$?"

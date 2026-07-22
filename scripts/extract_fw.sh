@@ -244,7 +244,7 @@ STORE_KERNEL_IMAGE_METADATA()
             EVAL "unpack_bootimg --boot_img \"$FW_DIR/${MODEL}_${CSC}/kernel/$f\" --out \"$TMP_DIR\""
             exit 1
         fi
-        rm -rf "$TMP_DIR/"*
+        rm -rf "${TMP_DIR:?}/"*
 
         while IFS= read -r l; do
             if [[ "$l" == *"command line args"* ]]; then

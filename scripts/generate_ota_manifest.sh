@@ -19,7 +19,7 @@ GENERATE_OTA_INFO()
 
     DATE="$(date +"%s")"
     ID="$(sha256sum "$FILE" | cut -d " " -f 1 -s)"
-    ID="$(echo "$ID $DATE")"
+    ID="$ID $DATE"
     ID="$(sha256sum <<< "$ID" | cut -d " " -f 1 -s)"
 
     {

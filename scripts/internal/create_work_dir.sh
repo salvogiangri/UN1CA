@@ -27,7 +27,7 @@ COPY_SOURCE_FIRMWARE()
                 LOG_STEP_OUT
             fi
         else
-            [ -d "$WORK_DIR/$f" ] && rm -rf "$WORK_DIR/$f"
+            [ -d "$WORK_DIR/$f" ] && rm -rf "${WORK_DIR:?}/$f"
             [ -f "$WORK_DIR/configs/file_context-$f" ] && rm -f "$WORK_DIR/configs/file_context-$f"
             [ -f "$WORK_DIR/configs/fs_config-$f" ] && rm -f "$WORK_DIR/configs/fs_config-$f"
         fi
@@ -128,7 +128,7 @@ COPY_TARGET_FIRMWARE()
                 LOG_STEP_OUT
             fi
         else
-            [ -d "$WORK_DIR/$f" ] && rm -rf "$WORK_DIR/$f"
+            [ -d "$WORK_DIR/$f" ] && rm -rf "${WORK_DIR:?}/$f"
             [ -f "$WORK_DIR/configs/file_context-$f" ] && rm -f "$WORK_DIR/configs/file_context-$f"
             [ -f "$WORK_DIR/configs/fs_config-$f" ] && rm -f "$WORK_DIR/configs/fs_config-$f"
         fi

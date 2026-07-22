@@ -2,8 +2,6 @@
 # Copyright (c) 2025 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# shellcheck disable=SC1007,SC2164,SC2181,SC2291
-
 # [
 BUILD()
 {
@@ -16,10 +14,11 @@ BUILD()
 
     LOG "- Building $NAME..."
 
-    cd "$DIR"
+    cd "$DIR" || return 1
     for CMD in "${CMDS[@]}"; do
         local OUT
         OUT="$(eval "$CMD" 2>&1)"
+        # shellcheck disable=SC2181,SC2291
         if [ $? -ne 0 ]; then
             echo -e    '\033[1;31m'"BUILD FAILED!"'\033[0m\n' >&2
             echo -e    '\033[0;31m'"$CMD"'\033[0m\n' >&2
@@ -29,7 +28,7 @@ BUILD()
             exit 1
         fi
     done
-    cd "$PDR"
+    cd "$PDR" || return 1
 
     return 0
 }
@@ -63,6 +62,7 @@ GET_CMAKE_FLAGS()
     echo "$FLAGS"
 }
 
+# shellcheck disable=SC1007,SC2164
 # https://android.googlesource.com/platform/build/+/refs/tags/android-15.0.0_r1/envsetup.sh#18
 GET_SRC_DIR()
 {
