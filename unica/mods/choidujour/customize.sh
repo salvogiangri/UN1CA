@@ -1,3 +1,4 @@
+# shellcheck disable=SC2034
 SKIPUNZIP=1
 
 if ! $ROM_IS_OFFICIAL; then

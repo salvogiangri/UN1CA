@@ -27,7 +27,7 @@ fi
 
 AVBINFO="$(avbtool info_image --image "$VBIMG")"
 AVBSIZE="$(awk '/Block:/ {sum+=$3} END {print sum}' <<< "$AVBINFO")"
-read PK_OFFSET PK_SIZE < <(PUB_KEY_ADDR_EXTRACT "$VBIMG")
+read -r PK_OFFSET PK_SIZE < <(PUB_KEY_ADDR_EXTRACT "$VBIMG")
 
 sed -i \
     -e "s|VB_SIZE|$AVBSIZE|g" \

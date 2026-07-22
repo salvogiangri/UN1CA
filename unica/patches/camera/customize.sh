@@ -86,7 +86,9 @@ if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWAR
 elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
         grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
     # TODO handle this condition
+    # shellcheck disable=SC2034
     SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
+    # shellcheck disable=SC2034
     TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
     LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
     unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS
@@ -103,7 +105,9 @@ if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata
         fi
     else
         # TODO handle this condition
+        # shellcheck disable=SC2034
         SOURCE_SUPPORT_SMART_CROP=false
+        # shellcheck disable=SC2034
         TARGET_SUPPORT_SMART_CROP=true
         LOG_MISSING_PATCHES "SOURCE_SUPPORT_SMART_CROP" "TARGET_SUPPORT_SMART_CROP"
         unset SOURCE_SUPPORT_SMART_CROP TARGET_SUPPORT_SMART_CROP
