@@ -210,6 +210,26 @@ if [ "$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/build.prop" "ro.bu
     DELETE_FROM_WORK_DIR "system" "system/priv-app/KmxService"
 fi
 
+# Ensure Heatmap support
+# - GKI: check for samsung,sec_auth_sle956681/samsung,sec_auth_ds28e30 kernel drivers
+# - Non-GKI: unsupported
+if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
+    EXTRACT_KERNEL_MODULES
+    if ! grep -q "samsung,sec_auth" "$TMP_DIR/out/vendor_ramdisk"*; then
+        PATCHED=true
+        DELETE_FROM_WORK_DIR "system" "system/bin/heatmap"
+        DELETE_FROM_WORK_DIR "system" "system/etc/init/init.sec-heatmap.rc"
+        DELETE_FROM_WORK_DIR "system" "system/lib64/libectcore.so"
+        DELETE_FROM_WORK_DIR "system" "system/lib64/libparam_A55_250328.so"
+    fi
+else
+    PATCHED=true
+    DELETE_FROM_WORK_DIR "system" "system/bin/heatmap"
+    DELETE_FROM_WORK_DIR "system" "system/etc/init/init.sec-heatmap.rc"
+    DELETE_FROM_WORK_DIR "system" "system/lib64/libectcore.so"
+    DELETE_FROM_WORK_DIR "system" "system/lib64/libparam_A55_250328.so"
+fi
+
 # Ensure KSMBD support in kernel
 # - 4.19.x and below: unsupported
 # - 5.4.x-5.10.x: backport (https://github.com/namjaejeon/ksmbd.git)
