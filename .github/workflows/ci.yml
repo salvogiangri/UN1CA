@@ -114,7 +114,7 @@ jobs:
             echo "WORK_DIR=$WORK_DIR"
             echo "TMP_DIR=$TMP_DIR"
           } >> "$GITHUB_ENV"
-          sed "/Automatically/d" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
+          sed -e "/Automatically/d" -e "s/\"//g" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
           echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
 
       - name: Build dependencies
