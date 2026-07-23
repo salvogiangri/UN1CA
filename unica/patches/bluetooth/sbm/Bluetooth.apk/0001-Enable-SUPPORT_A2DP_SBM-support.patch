@@ -1,0 +1,365 @@
+From 0102c3275ee5361d0c5dd7766ba7761ae5ad4e2c Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 23 Jul 2026 17:56:32 +0200
+Subject: [PATCH] Enable SUPPORT_A2DP_SBM support
+
+---
+ .../android/bluetooth/a2dp/A2dpService.smali  | 200 +++++++++---------
+ 1 file changed, 100 insertions(+), 100 deletions(-)
+
+diff --git a/smali/com/android/bluetooth/a2dp/A2dpService.smali b/smali/com/android/bluetooth/a2dp/A2dpService.smali
+index 855e311..c94b325 100644
+--- a/smali/com/android/bluetooth/a2dp/A2dpService.smali
++++ b/smali/com/android/bluetooth/a2dp/A2dpService.smali
+@@ -273,7 +273,7 @@
+ .end method
+ 
+ .method public constructor <init>(Lcom/android/bluetooth/btservice/AdapterService;Lcom/android/bluetooth/a2dp/A2dpNativeInterface;Landroid/os/Looper;)V
+-    .locals 5
++    .locals 4
+ 
+     invoke-static {p1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+@@ -305,37 +305,37 @@
+ 
+     iput-boolean v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mRegisterDevCallBack:Z
+ 
+-    const-string v1, ""
++    const-string v0, ""
+ 
+-    iput-object v1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpData:Ljava/lang/String;
++    iput-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpData:Ljava/lang/String;
+ 
+-    new-instance v1, Ljava/util/ArrayList;
++    new-instance v0, Ljava/util/ArrayList;
+ 
+-    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+ 
+-    iput-object v1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mPendingPlayKeyList:Ljava/util/ArrayList;
++    iput-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mPendingPlayKeyList:Ljava/util/ArrayList;
+ 
+-    new-instance v1, Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;
++    new-instance v0, Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;
+ 
+-    const/4 v2, 0x0
++    const/4 v1, 0x0
+ 
+-    invoke-direct {v1, p0, v2}, Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/a2dp/A2dpService-IA;)V
++    invoke-direct {v0, p0, v1}, Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/a2dp/A2dpService-IA;)V
+ 
+-    iput-object v1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManagerAudioDeviceCallback:Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;
++    iput-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManagerAudioDeviceCallback:Lcom/android/bluetooth/a2dp/A2dpService$AudioManagerAudioDeviceCallback;
+ 
+-    new-instance v1, Lcom/android/bluetooth/a2dp/A2dpService$1;
++    new-instance v0, Lcom/android/bluetooth/a2dp/A2dpService$1;
+ 
+-    invoke-direct {v1, p0}, Lcom/android/bluetooth/a2dp/A2dpService$1;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;)V
++    invoke-direct {v0, p0}, Lcom/android/bluetooth/a2dp/A2dpService$1;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;)V
+ 
+-    iput-object v1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mLdacConfigCallback:Lcom/android/bluetooth/a2dp/A2dpCodecConfig$CodecConfigCallback;
++    iput-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mLdacConfigCallback:Lcom/android/bluetooth/a2dp/A2dpCodecConfig$CodecConfigCallback;
+ 
+     iput-object p1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAdapterService:Lcom/android/bluetooth/btservice/AdapterService;
+ 
+-    new-instance v3, Lcom/android/bluetooth/a2dp/A2dpService$$ExternalSyntheticLambda3;
++    new-instance v2, Lcom/android/bluetooth/a2dp/A2dpService$$ExternalSyntheticLambda3;
+ 
+-    invoke-direct {v3, p0, p1}, Lcom/android/bluetooth/a2dp/A2dpService$$ExternalSyntheticLambda3;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/btservice/AdapterService;)V
++    invoke-direct {v2, p0, p1}, Lcom/android/bluetooth/a2dp/A2dpService$$ExternalSyntheticLambda3;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/btservice/AdapterService;)V
+ 
+-    invoke-static {p2, v3}, Ljava/util/Objects;->requireNonNullElseGet(Ljava/lang/Object;Ljava/util/function/Supplier;)Ljava/lang/Object;
++    invoke-static {p2, v2}, Ljava/util/Objects;->requireNonNullElseGet(Ljava/lang/Object;Ljava/util/function/Supplier;)Ljava/lang/Object;
+ 
+     move-result-object p2
+ 
+@@ -345,75 +345,75 @@
+ 
+     invoke-virtual {p1}, Lcom/android/bluetooth/btservice/AdapterService;->getDatabase()Lcom/android/bluetooth/btservice/storage/DatabaseManager;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    invoke-static {v3}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-static {v2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mDatabaseManager:Lcom/android/bluetooth/btservice/storage/DatabaseManager;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mDatabaseManager:Lcom/android/bluetooth/btservice/storage/DatabaseManager;
+ 
+     invoke-virtual {p1}, Lcom/android/bluetooth/btservice/AdapterService;->getSemDatabase()Lcom/samsung/bt/btservice/storage/SemDatabaseManager;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    invoke-static {v3}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-static {v2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mSemDatabaseManager:Lcom/samsung/bt/btservice/storage/SemDatabaseManager;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mSemDatabaseManager:Lcom/samsung/bt/btservice/storage/SemDatabaseManager;
+ 
+-    const-class v3, Landroid/media/AudioManager;
++    const-class v2, Landroid/media/AudioManager;
+ 
+-    invoke-virtual {p0, v3}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++    invoke-virtual {p0, v2}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    check-cast v3, Landroid/media/AudioManager;
++    check-cast v2, Landroid/media/AudioManager;
+ 
+-    invoke-static {v3}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-static {v2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    move-object v4, v3
++    move-object v3, v2
+ 
+-    check-cast v4, Landroid/media/AudioManager;
++    check-cast v3, Landroid/media/AudioManager;
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManager:Landroid/media/AudioManager;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManager:Landroid/media/AudioManager;
+ 
+-    const-class v3, Landroid/companion/CompanionDeviceManager;
++    const-class v2, Landroid/companion/CompanionDeviceManager;
+ 
+-    invoke-virtual {p0, v3}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++    invoke-virtual {p0, v2}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    check-cast v3, Landroid/companion/CompanionDeviceManager;
++    check-cast v2, Landroid/companion/CompanionDeviceManager;
+ 
+-    invoke-static {v3}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-static {v2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    move-object v4, v3
++    move-object v3, v2
+ 
+-    check-cast v4, Landroid/companion/CompanionDeviceManager;
++    check-cast v3, Landroid/companion/CompanionDeviceManager;
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mCompanionDeviceManager:Landroid/companion/CompanionDeviceManager;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mCompanionDeviceManager:Landroid/companion/CompanionDeviceManager;
+ 
+-    const-class v3, Landroid/view/inputmethod/InputMethodManager;
++    const-class v2, Landroid/view/inputmethod/InputMethodManager;
+ 
+-    invoke-virtual {p0, v3}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++    invoke-virtual {p0, v2}, Landroid/content/ContextWrapper;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    check-cast v3, Landroid/view/inputmethod/InputMethodManager;
++    check-cast v2, Landroid/view/inputmethod/InputMethodManager;
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mInputManager:Landroid/view/inputmethod/InputMethodManager;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mInputManager:Landroid/view/inputmethod/InputMethodManager;
+ 
+     invoke-static {p3}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    move-object v3, p3
++    move-object v2, p3
+ 
+-    check-cast v3, Landroid/os/Looper;
++    check-cast v2, Landroid/os/Looper;
+ 
+     iput-object p3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mLooper:Landroid/os/Looper;
+ 
+-    new-instance v3, Landroid/os/Handler;
++    new-instance v2, Landroid/os/Handler;
+ 
+-    invoke-direct {v3, p3}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
++    invoke-direct {v2, p3}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mHandler:Landroid/os/Handler;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mHandler:Landroid/os/Handler;
+ 
+     invoke-virtual {p1}, Lcom/android/bluetooth/btservice/AdapterService;->getMaxConnectedAudioDevices()I
+ 
+@@ -423,51 +423,51 @@
+ 
+     sget-object p3, Lcom/android/bluetooth/a2dp/A2dpService;->TAG:Ljava/lang/String;
+ 
+-    new-instance v3, Ljava/lang/StringBuilder;
++    new-instance v2, Ljava/lang/StringBuilder;
+ 
+-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    const-string v4, "Max connected audio devices set to "
++    const-string v3, "Max connected audio devices set to "
+ 
+-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    invoke-static {p3, v3}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {p3, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    new-instance v3, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;
++    new-instance v2, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;
+ 
+-    invoke-direct {v3, p0, p2}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;-><init>(Landroid/content/Context;Lcom/android/bluetooth/a2dp/A2dpNativeInterface;)V
++    invoke-direct {v2, p0, p2}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;-><init>(Landroid/content/Context;Lcom/android/bluetooth/a2dp/A2dpNativeInterface;)V
+ 
+-    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpCodecConfig:Lcom/android/bluetooth/a2dp/A2dpCodecConfig;
++    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpCodecConfig:Lcom/android/bluetooth/a2dp/A2dpCodecConfig;
+ 
+-    new-instance v4, Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;
++    new-instance v3, Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;
+ 
+-    invoke-direct {v4, p0, p0}, Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Landroid/content/Context;)V
++    invoke-direct {v3, p0, p0}, Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Landroid/content/Context;)V
+ 
+-    iput-object v4, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpBigDataInfo:Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;
++    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpBigDataInfo:Lcom/android/bluetooth/a2dp/A2dpBigDataInfo;
+ 
+-    new-instance v4, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;
++    new-instance v3, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;
+ 
+-    invoke-direct {v4, p0, p0, p2}, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Landroid/content/Context;Lcom/android/bluetooth/a2dp/A2dpNativeInterface;)V
++    invoke-direct {v3, p0, p0, p2}, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Landroid/content/Context;Lcom/android/bluetooth/a2dp/A2dpNativeInterface;)V
+ 
+-    iput-object v4, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpServiceHelper:Lcom/android/bluetooth/a2dp/A2dpServiceHelper;
++    iput-object v3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpServiceHelper:Lcom/android/bluetooth/a2dp/A2dpServiceHelper;
+ 
+-    invoke-virtual {v3, v1}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->setCodecConfigCallback(Lcom/android/bluetooth/a2dp/A2dpCodecConfig$CodecConfigCallback;)V
++    invoke-virtual {v2, v0}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->setCodecConfigCallback(Lcom/android/bluetooth/a2dp/A2dpCodecConfig$CodecConfigCallback;)V
+ 
+-    invoke-virtual {v3}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->codecConfigPriorities()[Landroid/bluetooth/BluetoothCodecConfig;
++    invoke-virtual {v2}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->codecConfigPriorities()[Landroid/bluetooth/BluetoothCodecConfig;
+ 
+-    move-result-object v1
++    move-result-object v0
+ 
+-    invoke-virtual {v3}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->codecConfigOffloading()[Landroid/bluetooth/BluetoothCodecConfig;
++    invoke-virtual {v2}, Lcom/android/bluetooth/a2dp/A2dpCodecConfig;->codecConfigOffloading()[Landroid/bluetooth/BluetoothCodecConfig;
+ 
+-    move-result-object v3
++    move-result-object v2
+ 
+-    invoke-virtual {p2, p1, v1, v3}, Lcom/android/bluetooth/a2dp/A2dpNativeInterface;->init(I[Landroid/bluetooth/BluetoothCodecConfig;[Landroid/bluetooth/BluetoothCodecConfig;)V
++    invoke-virtual {p2, p1, v0, v2}, Lcom/android/bluetooth/a2dp/A2dpNativeInterface;->init(I[Landroid/bluetooth/BluetoothCodecConfig;[Landroid/bluetooth/BluetoothCodecConfig;)V
+ 
+     const/4 p1, 0x1
+ 
+@@ -477,74 +477,74 @@
+ 
+     invoke-direct {p2}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    const-string v1, "A2DP offload flag set to "
++    const-string v0, "A2DP offload flag set to "
+ 
+-    invoke-virtual {p2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+     invoke-virtual {p2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+-    move-result-object p1
++    move-result-object p2
+ 
+-    invoke-static {p3, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {p3, p2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    new-instance p1, Landroid/content/IntentFilter;
++    new-instance p2, Landroid/content/IntentFilter;
+ 
+-    invoke-direct {p1}, Landroid/content/IntentFilter;-><init>()V
++    invoke-direct {p2}, Landroid/content/IntentFilter;-><init>()V
+ 
+-    const-string p2, "android.net.wifi.STATE_CHANGE"
++    const-string p3, "android.net.wifi.STATE_CHANGE"
+ 
+-    invoke-virtual {p1, p2}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
++    invoke-virtual {p2, p3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+ 
+-    const-string p2, "android.intent.action.MULTISOUND_STATE_CHANGE"
++    const-string p3, "android.intent.action.MULTISOUND_STATE_CHANGE"
+ 
+-    invoke-virtual {p1, p2}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
++    invoke-virtual {p2, p3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+ 
+-    const-string p2, "ResponseAxT9Info"
++    const-string p3, "ResponseAxT9Info"
+ 
+-    invoke-virtual {p1, p2}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
++    invoke-virtual {p2, p3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+ 
+-    const-string p2, "com.samsung.bluetooth.device.action.SMEP_CONNECTION_STATE_CHANGED"
++    const-string p3, "com.samsung.bluetooth.device.action.SMEP_CONNECTION_STATE_CHANGED"
+ 
+-    invoke-virtual {p1, p2}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
++    invoke-virtual {p2, p3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+ 
+-    new-instance p2, Lcom/android/bluetooth/a2dp/A2dpService$A2dpSamsungConceptReceiver;
++    new-instance p3, Lcom/android/bluetooth/a2dp/A2dpService$A2dpSamsungConceptReceiver;
+ 
+-    invoke-direct {p2, p0, v2}, Lcom/android/bluetooth/a2dp/A2dpService$A2dpSamsungConceptReceiver;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/a2dp/A2dpService-IA;)V
++    invoke-direct {p3, p0, v1}, Lcom/android/bluetooth/a2dp/A2dpService$A2dpSamsungConceptReceiver;-><init>(Lcom/android/bluetooth/a2dp/A2dpService;Lcom/android/bluetooth/a2dp/A2dpService-IA;)V
+ 
+-    iput-object p2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSamsungConceptReceiver:Landroid/content/BroadcastReceiver;
++    iput-object p3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSamsungConceptReceiver:Landroid/content/BroadcastReceiver;
+ 
+-    const/4 p3, 0x2
++    const/4 v0, 0x2
+ 
+     :try_start_0
+-    invoke-virtual {p0, p2, p1, p3}, Landroid/content/ContextWrapper;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;I)Landroid/content/Intent;
++    invoke-virtual {p0, p3, p2, v0}, Landroid/content/ContextWrapper;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;I)Landroid/content/Intent;
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+ 
+     goto :goto_0
+ 
+     :catch_0
+-    move-exception p1
++    move-exception p2
+ 
+-    sget-object p2, Lcom/android/bluetooth/a2dp/A2dpService;->TAG:Ljava/lang/String;
++    sget-object p3, Lcom/android/bluetooth/a2dp/A2dpService;->TAG:Ljava/lang/String;
+ 
+-    const-string p3, "Unable to register a2dp receiver"
++    const-string v0, "Unable to register a2dp receiver"
+ 
+-    invoke-static {p2, p3, p1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    invoke-static {p3, v0, p2}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+ 
+-    iput-object v2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSamsungConceptReceiver:Landroid/content/BroadcastReceiver;
++    iput-object v1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSamsungConceptReceiver:Landroid/content/BroadcastReceiver;
+ 
+     :goto_0
+-    new-instance p1, Lcom/android/bluetooth/a2dp/A2dpSbmManager;
++    new-instance p2, Lcom/android/bluetooth/a2dp/A2dpSbmManager;
+ 
+-    iget-object p2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManager:Landroid/media/AudioManager;
++    iget-object p3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManager:Landroid/media/AudioManager;
+ 
+-    iget-object p3, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAdapterService:Lcom/android/bluetooth/btservice/AdapterService;
++    iget-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAdapterService:Lcom/android/bluetooth/btservice/AdapterService;
+ 
+-    invoke-direct {p1, v0, p2, p3}, Lcom/android/bluetooth/a2dp/A2dpSbmManager;-><init>(ZLandroid/media/AudioManager;Lcom/android/bluetooth/btservice/AdapterService;)V
++    invoke-direct {p2, p1, p3, v0}, Lcom/android/bluetooth/a2dp/A2dpSbmManager;-><init>(ZLandroid/media/AudioManager;Lcom/android/bluetooth/btservice/AdapterService;)V
+ 
+-    iput-object p1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSbmManager:Lcom/android/bluetooth/a2dp/A2dpSbmManager;
++    iput-object p2, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpSbmManager:Lcom/android/bluetooth/a2dp/A2dpSbmManager;
+ 
+     iget-object p1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mAudioManager:Landroid/media/AudioManager;
+ 
+-- 
+2.55.0
+

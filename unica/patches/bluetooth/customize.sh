@@ -170,6 +170,22 @@ else
     fi
 fi
 
+# SEC_PRODUCT_FEATURE_BLUETOOTH_SUPPORT_A2DP_SBM
+if ! $SOURCE_BLUETOOTH_SUPPORT_A2DP_SBM; then
+    if $TARGET_BLUETOOTH_SUPPORT_A2DP_SBM; then
+        DECODE_APK_IN_APEX "$TMP_DIR/apex_payload/app/Bluetooth@BP2A.250605.031.A3/Bluetooth.apk"
+        LOG "- Applying \"Enable SUPPORT_A2DP_SBM support\" to apex_payload/app/Bluetooth@BP2A.250605.031.A3/Bluetooth.apk"
+        APPLY_PATCH "system" "system/app/Bluetooth@BP2A.250605.031.A3/Bluetooth.apk" \
+            "$MODPATH/sbm/Bluetooth.apk/0001-Enable-SUPPORT_A2DP_SBM-support.patch" \
+            > /dev/null
+    fi
+else
+    if ! $TARGET_BLUETOOTH_SUPPORT_A2DP_SBM; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_BLUETOOTH_SUPPORT_A2DP_SBM" "TARGET_BLUETOOTH_SUPPORT_A2DP_SBM"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_BLUETOOTH_SUPPORT_XLNA_CONTROL
 if $SOURCE_BLUETOOTH_SUPPORT_XLNA_CONTROL; then
     if ! $TARGET_BLUETOOTH_SUPPORT_XLNA_CONTROL; then
