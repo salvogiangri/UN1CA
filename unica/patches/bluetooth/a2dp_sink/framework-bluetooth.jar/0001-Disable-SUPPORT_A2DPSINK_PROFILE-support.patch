@@ -1,0 +1,30 @@
+From eeda72719f6a90ad559ead1816770f1e493e9f66 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 23 Jul 2026 16:41:12 +0200
+Subject: [PATCH] Disable SUPPORT_A2DPSINK_PROFILE support
+
+---
+ smali/android/bluetooth/BluetoothAdapter.smali | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/smali/android/bluetooth/BluetoothAdapter.smali b/smali/android/bluetooth/BluetoothAdapter.smali
+index 2333630..55e1c31 100644
+--- a/smali/android/bluetooth/BluetoothAdapter.smali
++++ b/smali/android/bluetooth/BluetoothAdapter.smali
+@@ -17473,11 +17473,11 @@
+ 
+     sget-object v0, Landroid/bluetooth/BluetoothAdapter;->TAG:Ljava/lang/String;
+ 
+-    const-string v1, "semIsSinkServiceSupported : true"
++    const-string v1, "semIsSinkServiceSupported : false"
+ 
+     invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     return v0
+ .end method
+-- 
+2.55.0
+

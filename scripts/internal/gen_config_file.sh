@@ -233,6 +233,9 @@ fi
 #       - `SEC_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND` in the `com.samsung.android.audio.Rune` class inside `framework.jar` is set to true
 #       - `SUPPORT_VIRTUAL_VIBRATION_SOUND` in the `com.samsung.android.vibrator.VibRune` class inside `framework.jar` is set to true
 #
+#   [SOURCE/TARGET]_BLUETOOTH_SUPPORT_A2DPSINK_PROFILE
+#     Boolean which describes whether the device supports Bluetooth A2DP Sink mode.
+#
 #   [SOURCE/TARGET]_CAMERA_SUPPORT_CAMERAX_EXTENSION
 #     Boolean which describes whether the device supports CameraX Extensions API.
 #     It can be checked in the following ways:
@@ -506,6 +509,8 @@ fi
     GET_BUILD_VAR "TARGET_AUDIO_SUPPORT_DUAL_SPEAKER"
     GET_BUILD_VAR "SOURCE_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND"
     GET_BUILD_VAR "TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND"
+    GET_BUILD_VAR "SOURCE_BLUETOOTH_SUPPORT_A2DPSINK_PROFILE"
+    GET_BUILD_VAR "TARGET_BLUETOOTH_SUPPORT_A2DPSINK_PROFILE"
     GET_BUILD_VAR "SOURCE_CAMERA_SUPPORT_CAMERAX_EXTENSION"
     GET_BUILD_VAR "TARGET_CAMERA_SUPPORT_CAMERAX_EXTENSION"
     GET_BUILD_VAR "SOURCE_CAMERA_SUPPORT_CUTOUT_PROTECTION"
