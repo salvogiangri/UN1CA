@@ -5,6 +5,9 @@
 on boot
     restart audioserver
 
+on property:sys.boot_completed=1
+    restart audioserver
+
 # Firmware
 on early-init
     mount none /vendor/firmware/${ro.boot.em.model}/AP_AUDIO_SLSI.bin /vendor/firmware/AP_AUDIO_SLSI.bin bind

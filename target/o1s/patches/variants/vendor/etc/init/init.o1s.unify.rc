@@ -21,5 +21,5 @@ on early-init
 on early-init && property:ro.boot.em.model=SM-G991N
     mount none /vendor/tee_SM-G991N /vendor/tee bind
 
-on boot
+on property:sys.boot_completed=1
     restart audioserver
