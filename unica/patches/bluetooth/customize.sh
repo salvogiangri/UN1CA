@@ -1,3 +1,12 @@
+SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
+
+if [[ "$(sha1sum "$WORK_DIR/system/system/apex/com.android.bt.apex" | cut -d " " -f 1)" != \
+        "$(sha1sum "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/apex/com.android.bt.apex" | cut -d " " -f 1)" ]]; then
+    LOG "\033[0;33m! Nothing to do\033[0m"
+    unset SOURCE_FIRMWARE_PATH
+    return 0
+fi
+
 # [
 BUILD_APK_IN_APEX()
 {
@@ -76,7 +85,9 @@ EXTRACT_PAYLOAD()
     EVAL "sudo mount -o ro \"$TMP_DIR/apex_payload.img\" \"$TMP_DIR/tmp_out\""
     EVAL "sudo cp -a -T \"$TMP_DIR/tmp_out\" \"$TMP_DIR/apex_payload\""
     sudo chown -hR "$(whoami):$(whoami)" "$TMP_DIR/apex_payload"
-    [ -d "$TMP_DIR/apex_payload/lost+found" ] && rm -rf "$TMP_DIR/apex_payload/lost+found"
+    if [ -d "$TMP_DIR/apex_payload/lost+found" ]; then
+        rm -rf "$TMP_DIR/apex_payload/lost+found"
+    fi
 
     LOG "- Generating fs_config/file_context for apex_payload.img"
 
@@ -222,8 +233,8 @@ else
 fi
 
 # Disable VaultKeeper support
-# Before: [tbnz w8, #0, #0xbd260]
-# After: [b #0xbd260]
+# Before: [tbnz w8, #0, #0xXXXXXX]
+# After: [b #0xXXXXXX]
 LOG "- Patching \"2897773948050037\" to \"289777392a000014\" in apex_payload/lib64/libbluetooth_jni.so"
 HEX_PATCH "$TMP_DIR/apex_payload/lib64/libbluetooth_jni.so" \
     "2897773948050037" "289777392a000014" > /dev/null
@@ -237,6 +248,7 @@ SIGN_APEX "$WORK_DIR/system/system/apex/com.android.bt.apex"
 
 rm -rf "$TMP_DIR"
 
+unset SOURCE_FIRMWARE_PATH
 unset -f BUILD_APK_IN_APEX BUILD_PAYLOAD DECODE_APK_IN_APEX \
     EXTRACT_PAYLOAD LOG_MISSING_PATCHES REPACK_PAYLOAD \
     SIGN_APEX SIGN_PAYLOAD
