@@ -470,6 +470,8 @@ DELETE_FROM_WORK_DIR()
 
 # DOWNLOAD_FILE "<url>" "<output path>"
 # Downloads the file from the provided URL and stores it in the desired output path.
+# Files are cached in $OUT_DIR/cache to avoid re-downloading. If the cache is
+# present and the remote size matches, the cached file is reused.
 DOWNLOAD_FILE()
 {
     _CHECK_NON_EMPTY_PARAM "URL" "$1" || return 1
@@ -478,9 +480,52 @@ DOWNLOAD_FILE()
     local URL="$1"
     local OUTPUT="$2"
 
+    if [[ "$URL" == *"samsungapps.com"* ]]; then
+        LOG "\033[0;33mGalaxy Store URL, downloading fresh\033[0m"
+        mkdir -p "$(dirname "$OUTPUT")"
+        curl -L -# -o "$OUTPUT" "$URL"
+        return $?
+    fi
+
+    local CACHE_DIR="$OUT_DIR/cache"
+    local CACHED_FILE
+    CACHED_FILE="$CACHE_DIR/$(echo -n "$OUTPUT" | md5sum | cut -d' ' -f1)"
+
+    mkdir -p "$CACHE_DIR"
+
+    if [ ! -f "$CACHED_FILE" ] && [ -f "$OUTPUT" ]; then
+        cp "$OUTPUT" "$CACHED_FILE"
+    fi
+
+    local NEED_DOWNLOAD=1
+    local LOCAL_SIZE
+    local REMOTE_SIZE
+
+    if [ -f "$CACHED_FILE" ]; then
+        LOCAL_SIZE=$(stat -c%s "$CACHED_FILE" 2>/dev/null)
+        REMOTE_SIZE=$(curl -sIL -o /dev/null -w '%{content_length}' "$URL" 2>/dev/null)
+
+        if [ -z "$REMOTE_SIZE" ] || [ "$REMOTE_SIZE" = "0" ]; then
+            REMOTE_SIZE=$(curl -sL -r 0-0 -D - -o /dev/null "$URL" 2>/dev/null | grep -i '^Content-Range:' | tail -1 | awk '{print $3}' | cut -d/ -f2 | tr -d '\r')
+        fi
+
+        if [ -z "$REMOTE_SIZE" ] || [ "$REMOTE_SIZE" = "$LOCAL_SIZE" ]; then
+            NEED_DOWNLOAD=0
+            LOG "\033[0;33mCached file found, using\033[0m"
+        fi
+    fi
+
+    if [ "$NEED_DOWNLOAD" -eq 1 ]; then
+        if [ -f "$CACHED_FILE" ]; then
+            LOG "\033[0;33mCached file doesn't match latest (local=$LOCAL_SIZE remote=$REMOTE_SIZE), downloading\033[0m"
+        else
+            LOG "\033[0;33mFile not downloaded previously, downloading\033[0m"
+        fi
+        curl -L -# -o "$CACHED_FILE" "$URL" || return $?
+    fi
+
     mkdir -p "$(dirname "$OUTPUT")"
-    curl -L -# -o "$OUTPUT" "$URL"
-    return $?
+    cp "$CACHED_FILE" "$OUTPUT" || return $?
 }
 
 # EVAL <cmd>
