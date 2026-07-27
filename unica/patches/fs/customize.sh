@@ -10,8 +10,8 @@ PATCH_FSTAB()
             continue
         fi
         if sed -E -i \
-            -e "/^\S+\s+\/(${PARTITIONS_LIST// /|})\s+/ s/(\s+\S+\s+)\S+/\1$TARGET_OS_FILE_SYSTEM_TYPE/" \
-            -e "/^\S+\s+\/(${PARTITIONS_LIST// /|})\s+/ s/^(\S+\s+\S+\s+\S+\s+)\S+/\1ro/" \
+            -e "/^[^[:space:]]+[[:space:]]+\/(${PARTITIONS_LIST// /|})[[:space:]]+/ s/^([^[:space:]]+[[:space:]]+[^[:space:]]+)[[:space:]]+[^[:space:]]+[[:space:]]+/\1\t$TARGET_OS_FILE_SYSTEM_TYPE\t/" \
+            -e "/^[^[:space:]]+[[:space:]]+\/(${PARTITIONS_LIST// /|})[[:space:]]+/ s/^([^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)[[:space:]]+[^[:space:]]+[[:space:]]+/\1\tro\t/" \
             "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
