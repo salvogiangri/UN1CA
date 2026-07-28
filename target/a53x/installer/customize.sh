@@ -97,6 +97,10 @@ DTBO_ARCHIVE_URL="$(curl -s --retry 3 "https://api.github.com/repos/UN1CA/kernel
     | head -n 1)"
 DTBO_ARCHIVE="$(basename "$DTBO_ARCHIVE_URL")"
 
+if [ ! "$DTBO_ARCHIVE_URL" ]; then
+    ABORT "Failed to fetch DTBO archive URL"
+fi
+
 LOG "- Downloading $DTBO_ARCHIVE"
 DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$DTBO_ARCHIVE" || return 1
 LOG "- Extracting $DTBO_ARCHIVE"
