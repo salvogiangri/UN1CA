@@ -12,6 +12,14 @@ GET_URL()
 KERNEL_ARCHIVE_URL="$(GET_URL "^UN1CA_Kernel-.*-a53x\.tar$")"
 DTBO_ARCHIVE_URL="$(GET_URL "^UN1CA_DTBO-.*-a53x\.tar$")"
 
+if [ ! "$KERNEL_ARCHIVE_URL" ]; then
+    ABORT "Failed to fetch kernel archive URL"
+fi
+
+if [ ! "$DTBO_ARCHIVE_URL" ]; then
+    ABORT "Failed to fetch DTBO archive URL"
+fi
+
 if [ -d "$TMP_DIR" ]; then
     EVAL "rm -rf \"$TMP_DIR\""
 fi
