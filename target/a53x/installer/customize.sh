@@ -92,7 +92,7 @@ while IFS= read -r f; do
     EVAL "printf \"\x03\" | dd of=\"$f\" bs=1 seek=123 count=1 conv=notrunc" || return 1
 done < <(find "$TMP_DIR" -type f -name "vbmeta.img")
 
-DTBO_ARCHIVE_URL="$(curl -s "https://api.github.com/repos/UN1CA/kernel_samsung_s5e8825/releases/latest" | \
+DTBO_ARCHIVE_URL="$(curl -s --retry 3 "https://api.github.com/repos/UN1CA/kernel_samsung_s5e8825/releases/latest" | \
     jq -r --arg i "^UN1CA_DTBO-.*-a53x_jpn\.tar$" '.assets[] | select(.name | test($i)) | .browser_download_url' \
     | head -n 1)"
 DTBO_ARCHIVE="$(basename "$DTBO_ARCHIVE_URL")"
