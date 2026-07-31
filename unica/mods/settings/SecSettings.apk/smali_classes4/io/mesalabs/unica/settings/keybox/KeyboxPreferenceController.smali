@@ -38,19 +38,15 @@
 .end method
 
 .method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
-    .locals 1
+    .locals 0
 
     invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 
     new-instance p1, Lio/mesalabs/unica/settings/keybox/KeyboxPreferenceController$1;
 
-    new-instance p2, Landroid/os/Handler;
+    invoke-static {}, Lcom/android/settingslib/utils/ThreadUtils;->getUiThreadHandler()Landroid/os/Handler;
 
-    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
-
-    move-result-object v0
-
-    invoke-direct {p2, v0}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+    move-result-object p2
 
     invoke-direct {p1, p0, p2}, Lio/mesalabs/unica/settings/keybox/KeyboxPreferenceController$1;-><init>(Lio/mesalabs/unica/settings/keybox/KeyboxPreferenceController;Landroid/os/Handler;)V
 
