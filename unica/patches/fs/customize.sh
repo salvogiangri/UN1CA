@@ -1,10 +1,5 @@
-if [ "$TARGET_PRODUCT_SHIPPING_API_LEVEL" -ge "33" ]; then
-    LOG "\033[0;33m! Nothing to do\033[0m"
-    return 0
-fi
-
 # [
-_LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
+PARTITIONS_LIST="system vendor product system_ext odm vendor_dlkm odm_dlkm system_dlkm"
 
 PATCH_FSTAB()
 {
@@ -15,19 +10,15 @@ PATCH_FSTAB()
             continue
         fi
         if sed -E -i \
-                '/^(system|vendor|product|system_ext|odm|vendor_dlkm|odm_dlkm|system_dlkm)\s+/ s/(\s+\S+\s+)\S+/\1erofs/' "$f"; then
+            -e "/^[^[:space:]]+[[:space:]]+\/(${PARTITIONS_LIST// /|})[[:space:]]+/ s/^([^[:space:]]+[[:space:]]+[^[:space:]]+)[[:space:]]+[^[:space:]]+[[:space:]]+/\1\t$TARGET_OS_FILE_SYSTEM_TYPE\t/" \
+            -e "/^[^[:space:]]+[[:space:]]+\/(${PARTITIONS_LIST// /|})[[:space:]]+/ s/^([^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)[[:space:]]+[^[:space:]]+[[:space:]]+/\1\tro\t/" \
+            "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
     done < <(find "$1" -type f -name "fstab.*")
 }
 # ]
-
-if [[ "$TARGET_OS_FILE_SYSTEM_TYPE" != "erofs" ]]; then
-    _LOG "TARGET_OS_FILE_SYSTEM_TYPE is not set to erofs"
-    unset -f _LOG
-    return 0
-fi
 
 BOOT_FILE="boot.img"
 if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
@@ -95,5 +86,5 @@ fi
 
 EVAL "rm -rf \"$TMP_DIR\""
 
-unset BOOT_FILE MKBOOTIMG_ARGS RAMDISK_FILE RAMDISK_FORMAT
-unset -f _LOG PATCH_FSTAB
+unset PARTITIONS_LIST BOOT_FILE MKBOOTIMG_ARGS RAMDISK_FILE RAMDISK_FORMAT
+unset -f PATCH_FSTAB
