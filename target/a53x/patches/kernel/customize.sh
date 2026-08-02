@@ -5,12 +5,20 @@ GET_URL()
 
     local KERNEL_URL="https://api.github.com/repos/UN1CA/kernel_samsung_s5e8825/releases/latest"
 
-    curl -s "$KERNEL_URL" | jq -r --arg i "$1" '.assets[] | select(.name | test($i)) | .browser_download_url' | head -n 1
+    curl -s --retry 3 "$KERNEL_URL" | jq -r --arg i "$1" '.assets[] | select(.name | test($i)) | .browser_download_url' | head -n 1
 }
 # ]
 
 KERNEL_ARCHIVE_URL="$(GET_URL "^UN1CA_Kernel-.*-a53x\.tar$")"
 DTBO_ARCHIVE_URL="$(GET_URL "^UN1CA_DTBO-.*-a53x\.tar$")"
+
+if [ ! "$KERNEL_ARCHIVE_URL" ]; then
+    ABORT "Failed to fetch kernel archive URL"
+fi
+
+if [ ! "$DTBO_ARCHIVE_URL" ]; then
+    ABORT "Failed to fetch DTBO archive URL"
+fi
 
 if [ -d "$TMP_DIR" ]; then
     EVAL "rm -rf \"$TMP_DIR\""
