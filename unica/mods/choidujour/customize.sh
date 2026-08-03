@@ -24,6 +24,9 @@ EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zi
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
+APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
+
 # Disable stock OTA references
 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
     "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
