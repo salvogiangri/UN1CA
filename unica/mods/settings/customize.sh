@@ -2,6 +2,13 @@ if [ ! "$(GET_PROP "system" "ro.unica.version")" ]; then
     SET_PROP "system" "ro.unica.version" "$ROM_VERSION"
 fi
 
+# Show battery regulatory info in Settings
+# Requires SEM_BATTERY_PROPERTY_IC_AUTHENTICATION_RESULT support
+if [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_BSOH_SETTINGS")" ]; then
+    SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_BSOH_SETTINGS" --delete
+fi
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SETTINGS_ENABLE_EU_BATTERY_REGULATORY" "TRUE"
+
 SMALI_PATCH "system" "system/framework/framework.jar" \
     "smali/android/app/Instrumentation.smali" "replace" \
     'newApplication(Ljava/lang/Class;Landroid/content/Context;)Landroid/app/Application;' \
