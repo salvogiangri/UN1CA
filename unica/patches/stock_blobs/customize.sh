@@ -26,17 +26,6 @@ TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" 
 
 MATCH_TARGET_FEATURES
 
-if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/saiv" ]; then
-    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
-        "system/etc/saiv/image_understanding/db/aic_classifier/aic_classifier_cnn.info" 0 0 644 "u:object_r:system_file:s0"
-    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
-        "system/etc/saiv/image_understanding/db/aic_detector/aic_detector_cnn.info" 0 0 644 "u:object_r:system_file:s0"
-else
-    if [ -d "$WORK_DIR/system/system/etc/saiv" ]; then
-        DELETE_FROM_WORK_DIR "system" "system/etc/saiv"
-    fi
-fi
-
 # TODO add APE/DSD extractor libs if required
 if [ -f "$WORK_DIR/system/system/lib64/extractors/libsapeextractor.so" ] && \
         [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_APE_FORMAT")" ]; then
