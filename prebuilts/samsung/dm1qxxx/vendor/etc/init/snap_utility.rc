@@ -1,0 +1,50 @@
+on post-fs-data
+# snap gpu kernel
+    mkdir /data/vendor/snap 0755 cameraserver cameraserver
+
+
+# Auto cache
+service snap_utility_64 /vendor/bin/snap_utility_64
+    class main
+    user cameraserver
+    group cameraserver
+    disabled
+    oneshot
+
+service snap_utility_32 /vendor/bin/snap_utility_32
+    class main
+    user cameraserver
+    group cameraserver
+    disabled
+    oneshot
+
+
+on property:sys.boot_completed=1
+    start snap_utility_64
+
+on property:sys.boot_completed=1 && property:ro.product.build.type=user && property:ro.boot.debug_level=0x4f4c
+    setprop log.tag.snap_api::snpe WARN
+    setprop log.tag.snap_api::V3 INFO
+	setprop log.tag.snap_api::V2 INFO
+    setprop log.tag.snap_compute::V3 WARN
+    setprop log.tag.snap_compute::V2 WARN
+    setprop log.tag.snaplite_lib WARN
+    setprop log.tag.snap_api::snap_eden::V3 WARN
+    setprop log.tag.snap_api::snap_ofi::V1 WARN
+    setprop log.tag.snap_hidl_v3 WARN
+    setprop log.tag.snap_service@1.2 WARN
+	
+on property:sys.boot_completed=1 && property:ro.product.build.type=userdebug && property:ro.boot.debug_level=0x4f4c
+    setprop log.tag.snap_api::snpe WARN
+    setprop log.tag.snap_api::V3 INFO
+	setprop log.tag.snap_api::V2 INFO
+    setprop log.tag.snap_compute::V3 WARN
+    setprop log.tag.snap_compute::V2 WARN
+    setprop log.tag.snaplite_lib WARN
+    setprop log.tag.snap_api::snap_eden::V3 WARN
+    setprop log.tag.snap_api::snap_ofi::V1 WARN
+    setprop log.tag.snap_hidl_v3 WARN
+    setprop log.tag.snap_service@1.2 WARN
+
+on property:sys.boot_completed=1
+    start snap_utility_32
