@@ -49,6 +49,9 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_
             DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/aig_classifier"
         fi
         ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/aig_classifier" 0 2000 755 "u:object_r:vendor_snap_file:s0"
+        if [ -d "$WORK_DIR/vendor/saiv/image_understanding/db/aig_detector" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/aig_detector"
+        fi
         if [ -d "$WORK_DIR/vendor/saiv/image_understanding/db/aig_document_classifier" ]; then
             DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/aig_document_classifier"
         fi
@@ -57,6 +60,9 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_IMAGE_
             DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/aig_document_detector"
         fi
         ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/aig_document_detector" 0 2000 755 "u:object_r:vendor_snap_file:s0"
+        if [ -d "$WORK_DIR/vendor/saiv/image_understanding/db/srr_interaction" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/srr_interaction"
+        fi
     fi
 fi
 
