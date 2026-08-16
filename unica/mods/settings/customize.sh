@@ -1,7 +1,3 @@
-if [ ! "$(GET_PROP "system" "ro.unica.version")" ]; then
-    SET_PROP "system" "ro.unica.version" "$ROM_VERSION"
-fi
-
 # Show battery regulatory info in Settings
 # Requires SEM_BATTERY_PROPERTY_IC_AUTHENTICATION_RESULT support
 if [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_BSOH_SETTINGS")" ]; then

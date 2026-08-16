@@ -1,0 +1,44 @@
+From 948b2678a396c171f1740ed8c39b6a99c5e06d13 Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Mon, 17 Aug 2026 00:13:01 +0200
+Subject: [PATCH] Add ro.unica.fingerprint in PackagePartitions.FINGERPRINT
+
+---
+ smali/android/content/pm/PackagePartitions.smali | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/smali/android/content/pm/PackagePartitions.smali b/smali/android/content/pm/PackagePartitions.smali
+index 44089290..533c9b70 100644
+--- a/smali/android/content/pm/PackagePartitions.smali
++++ b/smali/android/content/pm/PackagePartitions.smali
+@@ -281,7 +281,7 @@
+ 
+     move-result v0
+ 
+-    add-int/lit8 v0, v0, 0x1
++    add-int/lit8 v0, v0, 0x2
+ 
+     new-array v0, v0, [Ljava/lang/String;
+ 
+@@ -333,7 +333,17 @@
+ 
+     move-result v1
+ 
+-    const-string/jumbo v2, "ro.build.fingerprint"
++    const-string/jumbo v3, "ro.build.fingerprint"
++
++    aput-object v3, v0, v1
++
++    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
++
++    move-result v1
++
++    add-int/lit8 v1, v1, 0x1
++
++    const-string/jumbo v2, "ro.unica.fingerprint"
+ 
+     aput-object v2, v0, v1
+ 
+-- 
+2.55.0
+
