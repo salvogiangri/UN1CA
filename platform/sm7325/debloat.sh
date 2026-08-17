@@ -37,3 +37,8 @@ etc/permissions/privapp-permissions-com.qualcomm.location.xml
 framework/com.qti.location.sdk.jar
 priv-app/com.qualcomm.location
 "
+
+# vendor clean-up
+VENDOR_DEBLOAT+="
+etc/cgroups.json
+"
