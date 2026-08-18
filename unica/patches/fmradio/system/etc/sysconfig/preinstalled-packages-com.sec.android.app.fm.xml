@@ -1,0 +1,5 @@
+<config>
+    <install-in-user-type package="com.sec.android.app.fm">
+        <install-in user-type="SYSTEM" />
+    </install-in-user-type>
+</config>

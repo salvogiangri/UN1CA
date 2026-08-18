@@ -1,0 +1,7 @@
+/system u:object_r:system_file:s0
+/system/etc u:object_r:system_file:s0
+/system/etc/permissions u:object_r:system_file:s0
+/system/etc/permissions/privapp-permissions-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0
+/system/etc/permissions/signature-permissions-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0
+/system/etc/sysconfig u:object_r:system_file:s0
+/system/etc/sysconfig/preinstalled-packages-com\.sec\.android\.app\.fm\.xml u:object_r:system_file:s0
