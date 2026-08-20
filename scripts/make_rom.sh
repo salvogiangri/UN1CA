@@ -56,8 +56,13 @@ BUILD_APKS()
 
 GET_WORK_DIR_HASH()
 {
-    find "$SRC_DIR/unica" "$SRC_DIR/target/$TARGET_CODENAME" -type f -print0 | \
-        sort -z | xargs -0 sha1sum | sha1sum | cut -d " " -f 1
+    if [ "${TARGET_PLATFORM//none/}" ] && [ -d "$SRC_DIR/platform/$TARGET_PLATFORM" ]; then
+        find "$SRC_DIR/unica" "$SRC_DIR/platform/$TARGET_PLATFORM" "$SRC_DIR/target/$TARGET_CODENAME" -type f -print0 | \
+            sort -z | xargs -0 sha1sum | sha1sum | cut -d " " -f 1
+    else
+        find "$SRC_DIR/unica" "$SRC_DIR/target/$TARGET_CODENAME" -type f -print0 | \
+            sort -z | xargs -0 sha1sum | sha1sum | cut -d " " -f 1
+    fi
 }
 
 PREPARE_SCRIPT()
