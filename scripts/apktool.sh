@@ -9,18 +9,14 @@ FRAMEWORK_DIR="$TOOLS_DIR/apktool/framework"
 FRAMEWORK_TAG="$(GET_PROP "system" "ro.build.version.incremental")"
 
 FORCE=false
+JOBS="1"
 PARTITION=""
 FILE=""
 
+HEAP_SIZE=""
+THREAD_COUNT=""
 INPUT_FILE=""
 OUTPUT_PATH=""
-
-THREAD_COUNT=$(awk -v max="$(nproc)" '/MemTotal/ {
-  tc = int(($2 + 1048575) / 2097152);
-  print (tc < 1 ? 1 : (tc > max ? max : tc));
-}' /proc/meminfo)
-
-[ -n "$GITHUB_ACTIONS" ] && THREAD_COUNT=1
 
 BUILD()
 {
@@ -36,7 +32,7 @@ BUILD()
     cp -a "$OUTPUT_PATH/original/META-INF" "$OUTPUT_PATH/build/apk/META-INF"
 
     # Build APK with --shorten-resource-paths (https://developer.android.com/tools/aapt2#optimize_options)
-    EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
+    EVAL "apktool -JXmx${HEAP_SIZE}m b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
 
     local FILE_NAME
     FILE_NAME="$(basename "$INPUT_FILE")"
@@ -95,11 +91,14 @@ DECODE()
     # - Disabled debug info
     # - Use .locals directive instead of the .registers one
     # - Use a sequential numbering scheme for labels
-    EVAL "apktool d --no-debug-info -j \"$THREAD_COUNT\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" \"$INPUT_FILE\"" || exit 1
+    EVAL "apktool -JXmx${HEAP_SIZE}m d --no-debug-info -j \"$THREAD_COUNT\" -o \"$OUTPUT_PATH\" -p \"$FRAMEWORK_DIR\" -t \"$FRAMEWORK_TAG\" \"$INPUT_FILE\"" || exit 1
 }
 
 PREPARE_SCRIPT()
 {
+    local MEM_TOTAL_MB
+    local MAX_THREADS
+
     if [[ "$#" == 0 ]]; then
         PRINT_USAGE
         exit 1
@@ -114,9 +113,49 @@ PREPARE_SCRIPT()
 
     shift
 
-    if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
-        FORCE=true
+    while [[ "$1" == "-"* ]]; do
+        if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+            FORCE=true
+        elif [[ "$1" == "--jobs" ]] || [[ "$1" == "-j" ]]; then
+            shift; JOBS="$1"
+            if ! [[ "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
+                LOGE "Jobs number not valid: $JOBS"
+                exit 1
+            fi
+        else
+            LOGE "Unknown option: $1"
+            exit 1
+        fi
+
         shift
+    done
+
+    MEM_TOTAL_MB="$(awk '/MemTotal/ { print int($2 / 1024) }' /proc/meminfo)"
+
+    if [ "$JOBS" -gt "1" ]; then
+        # Split 3/4 of total system memory between the requested instances
+        HEAP_SIZE="$(bc -l <<< "scale=0; (($MEM_TOTAL_MB * 3) / 4) / $JOBS")"
+        [ "$HEAP_SIZE" -lt "1024" ] && HEAP_SIZE="1024"
+
+        MAX_THREADS="$(bc -l <<< "scale=0; $(nproc) / $JOBS")"
+        [ "$MAX_THREADS" -lt "1" ] && MAX_THREADS="1"
+        [ -n "$GITHUB_ACTIONS" ] && MAX_THREADS="1"
+
+        # Do not use more threads than half the heap in GB
+        THREAD_COUNT="$(bc -l <<< "scale=0; $HEAP_SIZE / (1024 * 2)")"
+        [ "$THREAD_COUNT" -gt "$MAX_THREADS" ] && THREAD_COUNT="$MAX_THREADS"
+        [ "$THREAD_COUNT" -lt "1" ] && THREAD_COUNT="1"
+    else
+        # https://github.com/iBotPeaches/Apktool/blob/main/scripts/linux/apktool#L61
+        HEAP_SIZE="1024"
+
+        MAX_THREADS="$(nproc)"
+        [ -n "$GITHUB_ACTIONS" ] && MAX_THREADS="1"
+
+        # Do not use more threads than half the total system memory in GB
+        THREAD_COUNT="$(bc -l <<< "scale=0; $MEM_TOTAL_MB / (1024 * 2)")"
+        [ "$THREAD_COUNT" -gt "$MAX_THREADS" ] && THREAD_COUNT="$MAX_THREADS"
+        [ "$THREAD_COUNT" -lt "1" ] && THREAD_COUNT="1"
     fi
 
     PARTITION="$1"
@@ -163,6 +202,7 @@ PRINT_USAGE()
 {
     echo "Usage: apktool d[ecode]/b[uild] [options] <partition> <file>" >&2
     echo " -f, --force : Force delete output directory" >&2
+    echo " -j, --jobs : Specify the number of concurrent instances" >&2
 }
 # ]
 
