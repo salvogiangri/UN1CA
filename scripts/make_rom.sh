@@ -15,6 +15,45 @@ START_TIME="$(date +%s)"
 SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 
+BUILD_APKS()
+{
+    local MAX_JOBS
+    local PARTITION
+    local RUNS="0"
+    local CODE="0"
+
+    MAX_JOBS="$(nproc)"
+    [ "$MAX_JOBS" -gt "8" ] && MAX_JOBS="8"
+
+    if [ -d "$APKTOOL_DIR" ]; then
+        LOG_STEP_IN true "Building APKs/JARs"
+
+        while IFS= read -r f; do
+            if [ "$RUNS" -ge "$MAX_JOBS" ]; then
+                wait -n || CODE="1"
+                RUNS="$((RUNS - 1))"
+            fi
+
+            f="${f/$APKTOOL_DIR\//}"
+            PARTITION="$(cut -d "/" -f 1 -s <<< "$f")"
+            if [[ "$PARTITION" == "system" ]]; then
+                "$SRC_DIR/scripts/apktool.sh" b -j "$MAX_JOBS" "system" "$f" &
+            else
+                "$SRC_DIR/scripts/apktool.sh" b -j "$MAX_JOBS" "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" &
+            fi
+            RUNS="$((RUNS + 1))"
+        done < <(find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \))
+
+        while [ "$RUNS" -gt "0" ]; do
+            wait -n || CODE="1"
+            RUNS="$((RUNS - 1))"
+        done
+        [[ "$CODE" != "0" ]] && exit 1
+
+        LOG_STEP_OUT
+    fi
+}
+
 GET_WORK_DIR_HASH()
 {
     find "$SRC_DIR/unica" "$SRC_DIR/target/$TARGET_CODENAME" -type f -print0 | \
@@ -23,7 +62,7 @@ GET_WORK_DIR_HASH()
 
 PREPARE_SCRIPT()
 {
-    while [ "$#" != 0 ]; do
+    while [[ "$#" != 0 ]]; do
         if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
             FORCE=true
         elif [[ "$1" == "--no-target-files" ]] || [[ "$1" == "-x" ]]; then
@@ -54,7 +93,7 @@ PRINT_BUILD_OUTCOME()
     END_TIME="$(date +%s)"
     ESTIMATED="$((END_TIME - START_TIME))"
 
-    if [ "$EXIT_CODE" != "0" ]; then
+    if [[ "$EXIT_CODE" != "0" ]]; then
         echo -n -e '\n\033[1;31m'"Build failed "
     else
         echo -n -e '\n\033[1;32m'"Build completed "
@@ -133,24 +172,7 @@ if $BUILD_ROM; then
         LOG_STEP_OUT
     fi
 
-    if [ -d "$APKTOOL_DIR" ]; then
-        LOG_STEP_IN true "Building APKs/JARs"
-
-        while IFS= read -r f; do
-            f="${f/$APKTOOL_DIR\//}"
-            PARTITION="$(cut -d "/" -f 1 -s <<< "$f")"
-            if [[ "$PARTITION" == "system" ]]; then
-                "$SRC_DIR/scripts/apktool.sh" b "system" "$f" &
-            else
-                "$SRC_DIR/scripts/apktool.sh" b "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" &
-            fi
-        done < <(find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \))
-
-        # shellcheck disable=SC2046
-        wait $(jobs -p) || exit 1
-
-        LOG_STEP_OUT
-    fi
+    BUILD_APKS
 
     echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"
 fi
