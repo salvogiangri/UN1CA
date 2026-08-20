@@ -1,0 +1,10 @@
+<permissions>
+    <privapp-permissions package="com.samsung.adaptivebrightnessgo">
+        <permission name="android.permission.CAMERA"/>
+        <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
+        <permission name="android.permission.MANAGE_USERS"/>
+        <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+        <permission name="android.permission.START_ACTIVITIES_FROM_BACKGROUND"/>
+        <permission name="android.permission.START_ANY_ACTIVITY"/>
+    </privapp-permissions>
+</permissions>

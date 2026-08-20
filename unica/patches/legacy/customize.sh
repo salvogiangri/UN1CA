@@ -1,3 +1,6 @@
+# shellcheck disable=SC2034
+SKIPUNZIP=1
+
 # [
 BACKPORT_SF_PROPS()
 {
@@ -228,6 +231,28 @@ else
     DELETE_FROM_WORK_DIR "system" "system/etc/init/init.sec-heatmap.rc"
     DELETE_FROM_WORK_DIR "system" "system/lib64/libectcore.so"
     DELETE_FROM_WORK_DIR "system" "system/lib64/libparam_A55_250328.so"
+fi
+
+# Support camera light sensor
+TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/CameraLightSensor/CameraLightSensor.apk" ]; then
+    PATCHED=true
+    ADD_TO_WORK_DIR "$MODPATH" "system" \
+        "system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml" 0 0 644 "u:object_r:system_file:s0"
+    if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/ev_lux_map_config.xml" ]; then
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" \
+            "system/etc/ev_lux_map_config.xml" 0 0 644 "u:object_r:system_file:s0"
+    elif [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/ev_lux_map_config.xml" ]; then
+        DECODE_APK "system" "system/framework/motionrecognitionservice.jar"
+        LOG "- Replacing Build.MODEL with \"$(GET_PROP "vendor" "ro.product.vendor.model")\" in /system/system/framework/motionrecognitionservice.jar/smali/com/samsung/android/gesture/ExposureToLuxMapping.smali"
+        SMALI_PATCH "system" "system/framework/motionrecognitionservice.jar" \
+            "smali/com/samsung/android/gesture/ExposureToLuxMapping.smali" "replaceall" \
+            "sget-object v0, Landroid/os/Build;->MODEL:Ljava/lang/String;" \
+            "const-string v0, \\\"$(GET_PROP "vendor" "ro.product.vendor.model")\\\"" \
+            > /dev/null
+    fi
+    ADD_TO_WORK_DIR "$MODPATH" "system" \
+        "system/priv-app/CameraLightSensor/CameraLightSensor.apk" 0 0 644 "u:object_r:system_file:s0"
 fi
 
 # Ensure KSMBD support in kernel
