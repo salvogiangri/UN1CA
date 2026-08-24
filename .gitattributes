@@ -20,6 +20,7 @@
 # ROM-specific prebuilt blobs
 prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
+unica/mods/paradigm/system/** binary
 unica/mods/prophide/system/bin/rezetprop binary
 
 # Device-specific prebuilt blobs
