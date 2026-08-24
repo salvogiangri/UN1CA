@@ -18,37 +18,20 @@ TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" 
 BUILD_APKS()
 {
     local MAX_JOBS
-    local PARTITION
-    local RUNS="0"
-    local CODE="0"
-
     MAX_JOBS="$(nproc)"
     [ "$MAX_JOBS" -gt "8" ] && MAX_JOBS="8"
 
     if [ -d "$APKTOOL_DIR" ]; then
         LOG_STEP_IN true "Building APKs/JARs"
 
-        while IFS= read -r f; do
-            if [ "$RUNS" -ge "$MAX_JOBS" ]; then
-                wait -n || CODE="1"
-                RUNS="$((RUNS - 1))"
-            fi
-
-            f="${f/$APKTOOL_DIR\//}"
-            PARTITION="$(cut -d "/" -f 1 -s <<< "$f")"
-            if [[ "$PARTITION" == "system" ]]; then
-                "$SRC_DIR/scripts/apktool.sh" b -j "$MAX_JOBS" "system" "$f" &
-            else
-                "$SRC_DIR/scripts/apktool.sh" b -j "$MAX_JOBS" "$PARTITION" "$(cut -d "/" -f 2- -s <<< "$f")" &
-            fi
-            RUNS="$((RUNS + 1))"
-        done < <(find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \))
-
-        while [ "$RUNS" -gt "0" ]; do
-            wait -n || CODE="1"
-            RUNS="$((RUNS - 1))"
-        done
-        [[ "$CODE" != "0" ]] && exit 1
+        # shellcheck disable=SC2016
+        find "$APKTOOL_DIR" -type d \( -name "*.apk" -o -name "*.jar" \) -print0 | xargs -0 -I "{}" -P "$MAX_JOBS" \
+            bash -c '
+                FILE="${1/$APKTOOL_DIR\//}"
+                PARTITION="$(cut -d "/" -f 1 -s <<< "$FILE")"
+                [[ "$PARTITION" != "system" ]] && FILE="$(cut -d "/" -f 2- -s <<< "$FILE")"
+                "$SRC_DIR/scripts/apktool.sh" b -j "$2" "$PARTITION" "$FILE"
+            ' "bash" "{}" "$MAX_JOBS" || exit 1
 
         LOG_STEP_OUT
     fi
