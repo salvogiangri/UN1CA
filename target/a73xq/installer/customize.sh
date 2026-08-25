@@ -1,11 +1,13 @@
-LOG "- Downloading BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
-DOWNLOAD_FILE \
-    "https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download/A736BXXSAFYH2_SEK_OXE/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
-    "$TMP_DIR/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" || return 1
-LOG "- Downloading CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
-DOWNLOAD_FILE \
-    "https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download/A736BXXSAFYH2_SEK_OXE/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" \
-    "$TMP_DIR/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5" || return 1
+REPOSITORY="https://github.com/UN1CA/proprietary_vendor_samsung_sm7325/releases/download"
+TARS=(
+    "A736BXXSAFYH2_SEK_OXE/BL_A736BXXSAFYH2_A736BXXSAFYH2_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
+    "A736BXXSAFYH2_SEK_OXE/CP_A736BXXSAFYH2_CP31288254_MQB99735572_REV00_user_low_ship_MULTI_CERT.tar.md5"
+)
+
+for i in "${TARS[@]}"; do
+    LOG "- Downloading $(basename "$i")"
+    DOWNLOAD_FILE "$REPOSITORY/$i" "$TMP_DIR/$(basename "$i")" || return 1
+done
 
 while IFS= read -r f; do
     FILE_NAME="$(basename "$f")"
@@ -55,4 +57,4 @@ LOG "- Patching vbmeta.img"
 # https://android.googlesource.com/platform/system/core/+/refs/tags/android-15.0.0_r1/fastboot/fastboot.cpp#1129
 EVAL "printf \"\x03\" | dd of=\"$TMP_DIR/vbmeta.img\" bs=1 seek=123 count=1 conv=notrunc" || return 1
 
-unset FILE_NAME LENGTH STORED_HASH CALCULATED_HASH
+unset REPOSITORY TARS FILE_NAME LENGTH STORED_HASH CALCULATED_HASH
