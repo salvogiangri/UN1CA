@@ -20,6 +20,7 @@ for f in "AP_AUDIO_SLSI.bin" "APDV_AUDIO_SLSI.bin" \
 done
 
 # TEEgris - Firmware
+REPOSITORY="https://github.com/UN1CA/proprietary_vendor_samsung_a53x/releases/download"
 TEEGRIS_ZIPS=(
     # a53xzc (chn_open)
     "A5360ZCSHFYH1_CHC_CHC/A5360ZCSHFYH1_tee.zip"
@@ -50,7 +51,7 @@ for f in "${TEEGRIS_ZIPS[@]}"; do
     FILE_NAME="$(basename "$f")"
 
     LOG "- Downloading $FILE_NAME"
-    DOWNLOAD_FILE "https://github.com/UN1CA/proprietary_vendor_samsung_a53x/releases/download/$f" "$TMP_DIR/$FILE_NAME"
+    DOWNLOAD_FILE "$REPOSITORY/$f" "$TMP_DIR/$FILE_NAME" || return 1
 
     MODEL="$(cut -c1-5 <<< "$FILE_NAME")"
     if [[ "$MODEL" != "SCG15" ]]; then
@@ -162,4 +163,4 @@ HEX_PATCH "$WORK_DIR/vendor/lib/soundfx/libswdap.so" "3046884707463068" "3046884
 # ]
 HEX_PATCH "$WORK_DIR/vendor/lib64/soundfx/libswdap.so" "e00315aa080940f900013fd6" "e00315aa200080521f2003d5"
 
-unset TEEGRIS_ZIPS
+unset REPOSITORY TEEGRIS_ZIPS
