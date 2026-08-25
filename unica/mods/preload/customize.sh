@@ -2,7 +2,7 @@
 # https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser
 LOG "- Downloading Samsung Internet app"
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.sec.android.app.sbrowser")" \
-    "$WORK_DIR/system/system/preload/SBrowser/SBrowser.apk"
+    "$WORK_DIR/system/system/preload/SBrowser/SBrowser.apk" || return 1
 
 while IFS= read -r i; do
     i="${i//$WORK_DIR\/system\//}"
