@@ -25,8 +25,8 @@ if [ -d "$TMP_DIR" ]; then
 fi
 EVAL "mkdir -p \"$TMP_DIR\""
 
-DOWNLOAD_FILE "$KERNEL_ARCHIVE_URL" "$TMP_DIR/$(basename "$KERNEL_ARCHIVE_URL")"
-DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$(basename "$DTBO_ARCHIVE_URL")"
+DOWNLOAD_FILE "$KERNEL_ARCHIVE_URL" "$TMP_DIR/$(basename "$KERNEL_ARCHIVE_URL")" || return 1
+DOWNLOAD_FILE "$DTBO_ARCHIVE_URL" "$TMP_DIR/$(basename "$DTBO_ARCHIVE_URL")" || return 1
 
 while IFS= read -r f; do
     TAR="$(basename "$f")"
