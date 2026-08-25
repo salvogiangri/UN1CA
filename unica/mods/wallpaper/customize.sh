@@ -82,7 +82,7 @@ for f in "$APKTOOL_DIR/system/priv-app/wallpaper-res/wallpaper-res.apk/res/raw/v
 done
 LOG "- Downloading latest Samsung Wallpaper app"
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "000008552712")" \
-    "$WORK_DIR/system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk"
+    "$WORK_DIR/system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" || return 1
 APPLY_PATCH "system" "system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
     "$MODPATH/SpriteWallpaper.apk/0001-Force-Paradigm-wallpapers-motion-animator.patch"
 APPLY_PATCH "system" "system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
