@@ -21,7 +21,7 @@ KERNEL_ARCHIVE="$(
     | tail -n 1
 )"
 
-DOWNLOAD_FILE "$KERNEL_DL_BASE/$KERNEL_ARCHIVE" "$TMP_DIR/$KERNEL_ARCHIVE"
+DOWNLOAD_FILE "$KERNEL_DL_BASE/$KERNEL_ARCHIVE" "$TMP_DIR/$KERNEL_ARCHIVE" || return 1
 
 for i in "boot" "dtbo" "vendor_boot"; do
     LOG "- Replacing $i.img"
