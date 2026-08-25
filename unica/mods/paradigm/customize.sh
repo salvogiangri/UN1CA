@@ -173,7 +173,7 @@ LOG_STEP_OUT
 # Game Booster
 LOG "- Downloading latest Game Booster app"
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.game.gametools")" \
-    "$WORK_DIR/system/system/priv-app/GameTools_Dream/GameTools_Dream.apk"
+    "$WORK_DIR/system/system/priv-app/GameTools_Dream/GameTools_Dream.apk" || return 1
 
 # Pet Detector in Galaxy AI
 LOG_STEP_IN "- Adding Pet Detector support in Galaxy AI features"
