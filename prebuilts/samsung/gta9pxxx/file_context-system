@@ -2,6 +2,8 @@
 /system/priv-app u:object_r:system_file:s0
 /system/priv-app/BlueLightFilter u:object_r:system_file:s0
 /system/priv-app/BlueLightFilter/BlueLightFilter\.apk u:object_r:system_file:s0
+/system/priv-app/GameOptimizingService u:object_r:system_file:s0
+/system/priv-app/GameOptimizingService/GameOptimizingService\.apk u:object_r:system_file:s0
 /system/priv-app/YourPhone_Stub u:object_r:system_file:s0
 /system/priv-app/YourPhone_Stub/YourPhone_Stub\.apk u:object_r:system_file:s0
 /system/system_ext u:object_r:system_file:s0
