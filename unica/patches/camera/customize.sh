@@ -102,9 +102,20 @@ else
     fi
 fi
 
-# AR Emoji
-if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ] && \
-        [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/AREmoji/AREmoji.apk" ]; then
+# AR Emoji "phone-lite-bit64-release" app flavor
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ] && \
+        [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/AREmoji/AREmoji.apk" ]; then
+    if ! $SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        if $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+            ADD_TO_WORK_DIR "a17xxx" "system" "system/priv-app/AREmoji/AREmoji.apk" 0 0 644 "u:object_r:system_file:s0"
+        fi
+    else
+        if ! $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+            # TODO handle this condition
+            LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR" "TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR"
+        fi
+    fi
+else
     DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.samsung.feature.aremoji_v2.xml"
     DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aremoji.xml"
     DELETE_FROM_WORK_DIR "system" "system/priv-app/AREmoji"

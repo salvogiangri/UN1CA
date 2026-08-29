@@ -8,3 +8,6 @@ system/lib/libstnfc_nci_jni.so 0 0 644 capabilities=0x0
 system/lib64 0 0 755 capabilities=0x0
 system/lib64/libnfc_vendor_extn_st.so 0 0 644 capabilities=0x0
 system/lib64/libstnfc_nci_jni.so 0 0 644 capabilities=0x0
+system/priv-app 0 0 755 capabilities=0x0
+system/priv-app/AREmoji 0 0 755 capabilities=0x0
+system/priv-app/AREmoji/AREmoji.apk 0 0 644 capabilities=0x0
