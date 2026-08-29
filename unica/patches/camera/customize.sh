@@ -79,6 +79,18 @@ else
     fi
 fi
 
+# AR Emoji "phone-lite-bit64-release" app flavor
+if ! $SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+    if $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        ADD_TO_WORK_DIR "a17xxx" "system" "system/priv-app/AREmoji/AREmoji.apk" 0 0 644 "u:object_r:system_file:s0"
+    fi
+else
+    if ! $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR" "TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR"
+    fi
+fi
+
 # Single take "stp1-release" app flavor
 if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
         ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
