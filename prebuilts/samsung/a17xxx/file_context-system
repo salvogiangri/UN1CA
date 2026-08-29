@@ -13,5 +13,7 @@
 /system/lib64/libnfc_vendor_extn_st\.so u:object_r:system_lib_file:s0
 /system/lib64/libstnfc_nci_jni\.so u:object_r:system_lib_file:s0
 /system/priv-app u:object_r:system_file:s0
+/system/priv-app/AREmoji u:object_r:system_file:s0
+/system/priv-app/AREmoji/AREmoji\.apk u:object_r:system_file:s0
 /system/priv-app/ClockPack_v80 u:object_r:system_file:s0
 /system/priv-app/ClockPack_v80/ClockPack_v80\.apk u:object_r:system_file:s0

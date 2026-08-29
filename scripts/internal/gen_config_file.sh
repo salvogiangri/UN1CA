@@ -248,6 +248,9 @@ fi
 #   [SOURCE/TARGET]_BLUETOOTH_SUPPORT_XLNA_CONTROL
 #     Boolean which describes whether the device supports controlling the Bluetooth LNA via the accelerometer sensor.
 #
+#   [SOURCE/TARGET]_CAMERA_SUPPORT_AREMOJI_LITE
+#     Boolean which describes whether the device ships the lite AR Emoji app flavor.
+#
 #   [SOURCE/TARGET]_CAMERA_SUPPORT_CAMERAX_EXTENSION
 #     Boolean which describes whether the device supports CameraX Extensions API.
 #     It can be checked in the following ways:
@@ -531,6 +534,8 @@ fi
     GET_BUILD_VAR "TARGET_BLUETOOTH_SUPPORT_HEAD_SAR_BACKOFF"
     GET_BUILD_VAR "SOURCE_BLUETOOTH_SUPPORT_XLNA_CONTROL"
     GET_BUILD_VAR "TARGET_BLUETOOTH_SUPPORT_XLNA_CONTROL"
+    GET_BUILD_VAR "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE"
+    GET_BUILD_VAR "TARGET_CAMERA_SUPPORT_AREMOJI_LITE"
     GET_BUILD_VAR "SOURCE_CAMERA_SUPPORT_CAMERAX_EXTENSION"
     GET_BUILD_VAR "TARGET_CAMERA_SUPPORT_CAMERAX_EXTENSION"
     GET_BUILD_VAR "SOURCE_CAMERA_SUPPORT_CUTOUT_PROTECTION"
