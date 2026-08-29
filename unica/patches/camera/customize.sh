@@ -28,7 +28,7 @@ fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/aremoji-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml\" \"$WORK_DIR/system/system/cameradata/aremoji-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/aremoji-feature.xml" 0 0 644 "u:object_r:system_file:s0"
 fi
@@ -95,6 +95,18 @@ if [ -f "$WORK_DIR/system/system/app/FunModeSDK/FunModeSDK.apk" ]; then
 else
     if grep -q "SHOOTING_MODE_FUN" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/app/FunModeSDK" 0 0 755 "u:object_r:system_file:s0"
+    fi
+fi
+
+# AR Emoji "phone-lite-bit64-release" app flavor
+if ! $SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+    if $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        ADD_TO_WORK_DIR "a17xxx" "system" "system/priv-app/AREmoji/AREmoji.apk" 0 0 644 "u:object_r:system_file:s0"
+    fi
+else
+    if ! $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR" "TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR"
     fi
 fi
 
