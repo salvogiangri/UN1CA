@@ -292,6 +292,17 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Ensure IQtiComposer support (pre-API 36)
+# - Disable "ro.product.first_api_level" < 34 check
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+    if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && \
+            ! grep -q -r "IQtiComposer" "$WORK_DIR/vendor/etc/vintf"; then
+        PATCHED=true
+        # [b.lt #0x729be8] -> [nop]
+        HEX_PATCH "$WORK_DIR/system/system/bin/surfaceflinger" "9f8a00712b03005400068052" "9f8a00711f2003d500068052"
+    fi
+fi
+
 # Support schedtune cgroup controller (pre-API 36)
 # - Check for TARGET_PLATFORM_SDK_VERSION < 36 as 4.19 kernel support has been deprecated in Android B
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then

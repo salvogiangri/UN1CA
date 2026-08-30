@@ -167,6 +167,15 @@ if ! $SOURCE_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
             "system" "system/bin/bootanimation" 0 2000 755 "u:object_r:bootanim_exec:s0"
         ADD_TO_WORK_DIR "$([[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && echo "b0qxxx" || echo "b0sxxx")" \
             "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
+        # Ensure IQtiComposer support (pre-API 36)
+        # Check unica/patches/legacy/customize.sh for more info.
+        if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+            if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && \
+                    ! grep -q -r "IQtiComposer" "$WORK_DIR/vendor/etc/vintf"; then
+                # [b.lt #0x72b2b0] -> [nop]
+                HEX_PATCH "$WORK_DIR/system/system/bin/surfaceflinger" "9f8a00712b03005400068052" "9f8a00711f2003d500068052"
+            fi
+        fi
         ADD_TO_WORK_DIR "b0qxxx" "system" "system/media/battery_error.spi" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" "system/media/battery_low.spi" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "b0qxxx" "system" "system/media/battery_protection.spi" 0 0 644 "u:object_r:system_file:s0"
@@ -294,6 +303,14 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
 
                 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
                     ADD_TO_WORK_DIR "r9qxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
+                    # Ensure IQtiComposer support (pre-API 36)
+                    # Check unica/patches/legacy/customize.sh for more info.
+                    if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+                        if ! grep -q -r "IQtiComposer" "$WORK_DIR/vendor/etc/vintf"; then
+                            # [b.lt #0x72914c] -> [nop]
+                            HEX_PATCH "$WORK_DIR/system/system/bin/surfaceflinger" "9f8a00712b03005400068052" "9f8a00711f2003d500068052"
+                        fi
+                    fi
                     ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
                     ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib/libui.so" 0 0 644 "u:object_r:system_lib_file:s0"
                     ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
