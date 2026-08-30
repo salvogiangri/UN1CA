@@ -1,0 +1,99 @@
+From 1980a2262382866ca13a9fc8b3eedbe41e567913 Mon Sep 17 00:00:00 2001
+From: Fede2782 <78815152+Fede2782@users.noreply.github.com>
+Date: Sun, 30 Aug 2026 04:31:32 +0000
+Subject: [PATCH] Disable SUPPORT_A2DP_OFFLOAD support
+
+---
+ .../com/android/bluetooth/a2dp/A2dpService.smali | 16 +++++++---------
+ .../bluetooth/a2dp/A2dpServiceHelper.smali       | 14 ++++++++------
+ .../bluetooth/btservice/AdapterProperties.smali  |  2 +-
+ 3 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/smali/com/android/bluetooth/a2dp/A2dpService.smali b/smali/com/android/bluetooth/a2dp/A2dpService.smali
+index 855e311..0f14938 100644
+--- a/smali/com/android/bluetooth/a2dp/A2dpService.smali
++++ b/smali/com/android/bluetooth/a2dp/A2dpService.smali
+@@ -469,21 +469,19 @@
+ 
+     invoke-virtual {p2, p1, v1, v3}, Lcom/android/bluetooth/a2dp/A2dpNativeInterface;->init(I[Landroid/bluetooth/BluetoothCodecConfig;[Landroid/bluetooth/BluetoothCodecConfig;)V
+ 
+-    const/4 p1, 0x1
+-
+-    iput-boolean p1, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpOffloadEnabled:Z
++    iput-boolean v0, p0, Lcom/android/bluetooth/a2dp/A2dpService;->mA2dpOffloadEnabled:Z
+ 
+-    new-instance p2, Ljava/lang/StringBuilder;
++    new-instance p1, Ljava/lang/StringBuilder;
+ 
+-    invoke-direct {p2}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    const-string v1, "A2DP offload flag set to "
++    const-string p2, "A2DP offload flag set to "
+ 
+-    invoke-virtual {p2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++    invoke-virtual {p1, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+ 
+-    invoke-virtual {p2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+ 
+     move-result-object p1
+ 
+diff --git a/smali/com/android/bluetooth/a2dp/A2dpServiceHelper.smali b/smali/com/android/bluetooth/a2dp/A2dpServiceHelper.smali
+index 6f36da9..e35033c 100644
+--- a/smali/com/android/bluetooth/a2dp/A2dpServiceHelper.smali
++++ b/smali/com/android/bluetooth/a2dp/A2dpServiceHelper.smali
+@@ -73,7 +73,7 @@
+ 
+ .field public static final SUPPORT_A2DP_A2DP_AUDIO_HAL:Z = true
+ 
+-.field public static final SUPPORT_A2DP_OFFLOAD:Z = true
++.field public static final SUPPORT_A2DP_OFFLOAD:Z = false
+ 
+ .field public static final SUPPORT_DUAL_PLAY:Z = true
+ 
+@@ -412,6 +412,12 @@
+ 
+     iput-object v0, p0, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;->mSemSoundAssistantManager:Lcom/samsung/android/media/SemSoundAssistantManager;
+ 
++    const-string v0, "persist.bluetooth.a2dp_offload.disabled"
++
++    const-string v2, "true"
++
++    invoke-static {v0, v2}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
++
+     invoke-virtual {p0}, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;->setInitialA2dpOffloadMode()V
+ 
+     new-instance v0, Lcom/android/bluetooth/a2dp/A2dpServiceHelper$IntentBroadcastHandler;
+@@ -4224,11 +4230,7 @@
+ 
+     iput-object p1, p0, Lcom/android/bluetooth/a2dp/A2dpServiceHelper;->mOffloadStreamingDevice:Landroid/bluetooth/BluetoothDevice;
+ 
+-    const-string v6, "persist.bluetooth.a2dp_offload.disabled"
+-
+-    invoke-static {v6, v3}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    move-result v6
++    const/4 v6, 0x1
+ 
+     invoke-static {}, Lcom/android/bluetooth/hfp/HeadsetService;->getHeadsetService()Lcom/android/bluetooth/hfp/HeadsetService;
+ 
+diff --git a/smali/com/android/bluetooth/btservice/AdapterProperties.smali b/smali/com/android/bluetooth/btservice/AdapterProperties.smali
+index f549be0..93c22cb 100644
+--- a/smali/com/android/bluetooth/btservice/AdapterProperties.smali
++++ b/smali/com/android/bluetooth/btservice/AdapterProperties.smali
+@@ -3356,7 +3356,7 @@
+ 
+     invoke-static {v2, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     iput-boolean v0, p0, Lcom/android/bluetooth/btservice/AdapterProperties;->mA2dpOffloadEnabled:Z
+ 
+-- 
+2.43.0
+
