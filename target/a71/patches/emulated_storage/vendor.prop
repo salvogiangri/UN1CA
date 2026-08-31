@@ -1,0 +1,7 @@
+# https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/emulated_storage.mk
+external_storage.projid.enabled=1
+external_storage.casefold.enabled=1
+external_storage.sdcardfs.enabled=0
+
+# https://source.android.com/docs/core/storage/fuse-passthrough
+persist.sys.fuse.passthrough.enable=true
