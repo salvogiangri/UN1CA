@@ -1,2 +1,3 @@
+is_substring("afaneh92", getprop("ro.twrp.version")) && abort("E3000: This package does not support afaneh92's recovery.");
 is_substring("A715FXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A715FXXU8DVK1") && abort("E3003: This package requires Android 13 firmware.");
 is_substring("A715FZH", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "A715FZHU8DVK1") && abort("E3003: This package requires Android 13 firmware.");
