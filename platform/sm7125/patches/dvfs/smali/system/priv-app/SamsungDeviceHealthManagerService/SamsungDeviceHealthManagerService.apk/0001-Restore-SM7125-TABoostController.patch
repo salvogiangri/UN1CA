@@ -1,0 +1,75 @@
+From b4f45110bec5813031165644d4a5c19e8c9aeee0 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Wed, 2 Sep 2026 14:40:46 +0200
+Subject: [PATCH] Restore SM7125 TABoostController
+
+---
+ smali/Q1/n1.smali |  4 ----
+ smali/U1/w.smali  |  2 +-
+ smali/y1/p.smali  | 15 +--------------
+ 3 files changed, 2 insertions(+), 19 deletions(-)
+
+diff --git a/smali/Q1/n1.smali b/smali/Q1/n1.smali
+index e95fb1d..af94995 100644
+--- a/smali/Q1/n1.smali
++++ b/smali/Q1/n1.smali
+@@ -732,10 +732,6 @@
+ 
+     if-nez p0, :cond_4
+ 
+-    sget-boolean p0, LU1/w;->n:Z
+-
+-    if-nez p0, :cond_4
+-
+     sget-boolean p0, LU1/w;->l:Z
+ 
+     if-eqz p0, :cond_5
+diff --git a/smali/U1/w.smali b/smali/U1/w.smali
+index b91e14e..27f9da5 100644
+--- a/smali/U1/w.smali
++++ b/smali/U1/w.smali
+@@ -1003,7 +1003,7 @@
+ 
+     sput-boolean v6, LU1/w;->m:Z
+ 
+-    const-string v6, "SM7325"
++    const-string v6, "SM7125"
+ 
+     invoke-virtual {v6, v3}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+ 
+diff --git a/smali/y1/p.smali b/smali/y1/p.smali
+index ed7f9d9..16cdf19 100644
+--- a/smali/y1/p.smali
++++ b/smali/y1/p.smali
+@@ -305,7 +305,7 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_3
++    if-eqz v0, :cond_2
+ 
+     invoke-virtual {p0, v3, v8}, Ly1/p;->f(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ 
+@@ -334,19 +334,6 @@
+     iput-object p1, p0, Ly1/p;->s:Ljava/lang/String;
+ 
+     :cond_2
+-    sget-boolean p1, LU1/w;->n:Z
+-
+-    if-eqz p1, :cond_3
+-
+-    invoke-virtual {p0, v5, v8}, Ly1/p;->f(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    iput-object p1, p0, Ly1/p;->r:Ljava/lang/String;
+-
+-    iput-object v6, p0, Ly1/p;->s:Ljava/lang/String;
+-
+-    :cond_3
+     return-void
+ .end method
+ 
+-- 
+2.55.0
+
