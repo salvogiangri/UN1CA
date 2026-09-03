@@ -184,6 +184,9 @@ if [ "$SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER" ]; then
             DELETE_FROM_WORK_DIR "vendor" "etc/singletake/dynamic_viewing"
         fi
         ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/dynamic_viewing" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        if [ ! -d "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/singletake" ]; then
+            SET_METADATA "vendor" "etc/singletake" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        fi
     else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libVideoClassifier.camera.samsung.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libtensorflowLite2_11_0_dynamic_camera.so"
