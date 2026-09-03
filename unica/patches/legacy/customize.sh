@@ -119,6 +119,14 @@ PATCHED=false
 # - Add ro.surface_flinger.game_default_frame_rate_override if missing
 BACKPORT_SF_PROPS
 
+# Support legacy Camera HAL (pre-API 34)
+# - Some legacy devices (e.g. r8q) expect GPS tags to be non-null
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
+    PATCHED=true
+    APPLY_PATCH "system" "system/framework/framework.jar" \
+        "$MODPATH/camera/framework.jar/0001-Backport-legacy-CameraMetadataNative-code.patch"
+fi
+
 # Support legacy Face HAL (pre-API 34)
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
     if [ ! -f "$WORK_DIR/vendor/bin/hw/vendor.samsung.hardware.biometrics.face@3.0-service" ]; then

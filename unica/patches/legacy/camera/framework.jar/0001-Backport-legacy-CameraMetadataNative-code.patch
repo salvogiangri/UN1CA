@@ -1,0 +1,150 @@
+From 8b1301bd14f30aa3522271182a341c7c227f2c57 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 3 Sep 2026 09:57:22 +0200
+Subject: [PATCH] Backport legacy CameraMetadataNative code
+
+---
+ .../camera2/impl/CameraMetadataNative.smali   | 71 +++++++++++--------
+ 1 file changed, 42 insertions(+), 29 deletions(-)
+
+diff --git a/smali_classes2/android/hardware/camera2/impl/CameraMetadataNative.smali b/smali_classes2/android/hardware/camera2/impl/CameraMetadataNative.smali
+index 5ead5656..a38af0a3 100644
+--- a/smali_classes2/android/hardware/camera2/impl/CameraMetadataNative.smali
++++ b/smali_classes2/android/hardware/camera2/impl/CameraMetadataNative.smali
+@@ -5247,80 +5247,84 @@
+ 
+     const/4 v0, 0x0
+ 
++    const/4 v1, 0x3
++
+     if-nez p1, :cond_0
+ 
+-    sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_TIMESTAMP:Landroid/hardware/camera2/CaptureRequest$Key;
++    new-array p1, v1, [D
+ 
+-    const/4 v1, 0x0
++    fill-array-data p1, :array_0
+ 
+-    invoke-direct {p0, p1, v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->setBase(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    sget-object v1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_TIMESTAMP:Landroid/hardware/camera2/CaptureRequest$Key;
+ 
+-    sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_COORDINATES:Landroid/hardware/camera2/CaptureRequest$Key;
++    const-wide/16 v2, 0x0
+ 
+-    invoke-direct {p0, p1, v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->setBase(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    invoke-static {v2, v3}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
+ 
+-    sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_PROCESSING_METHOD:Landroid/hardware/camera2/CaptureRequest$Key;
++    move-result-object v2
+ 
+-    invoke-direct {p0, p1, v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->setBase(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    invoke-virtual {p0, v1, v2}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++
++    sget-object v1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_COORDINATES:Landroid/hardware/camera2/CaptureRequest$Key;
++
++    invoke-virtual {p0, v1, p1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
+     return v0
+ 
+     :cond_0
+     invoke-virtual {p1}, Landroid/location/Location;->getLatitude()D
+ 
+-    move-result-wide v1
++    move-result-wide v2
+ 
+     invoke-virtual {p1}, Landroid/location/Location;->getLongitude()D
+ 
+-    move-result-wide v3
++    move-result-wide v4
+ 
+     invoke-virtual {p1}, Landroid/location/Location;->getAltitude()D
+ 
+-    move-result-wide v5
+-
+-    const/4 v7, 0x3
++    move-result-wide v6
+ 
+-    new-array v7, v7, [D
++    new-array v1, v1, [D
+ 
+-    aput-wide v1, v7, v0
++    aput-wide v2, v1, v0
+ 
+     const/4 v0, 0x1
+ 
+-    aput-wide v3, v7, v0
++    aput-wide v4, v1, v0
+ 
+-    const/4 v1, 0x2
++    const/4 v2, 0x2
+ 
+-    aput-wide v5, v7, v1
++    aput-wide v6, v1, v2
+ 
+     invoke-virtual {p1}, Landroid/location/Location;->getProvider()Ljava/lang/String;
+ 
+-    move-result-object v1
++    move-result-object v2
+ 
+-    invoke-static {v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->translateLocationProviderToProcess(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v2}, Landroid/hardware/camera2/impl/CameraMetadataNative;->translateLocationProviderToProcess(Ljava/lang/String;)Ljava/lang/String;
+ 
+-    move-result-object v1
++    move-result-object v2
+ 
+     invoke-virtual {p1}, Landroid/location/Location;->getTime()J
+ 
+-    move-result-wide v2
++    move-result-wide v3
+ 
+-    const-wide/16 v4, 0x3e8
++    const-wide/16 v5, 0x3e8
+ 
+-    div-long/2addr v2, v4
++    div-long/2addr v3, v5
+ 
+     sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_TIMESTAMP:Landroid/hardware/camera2/CaptureRequest$Key;
+ 
+-    invoke-static {v2, v3}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
++    invoke-static {v3, v4}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
+ 
+-    move-result-object v2
++    move-result-object v3
+ 
+-    invoke-virtual {p0, p1, v2}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    invoke-virtual {p0, p1, v3}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
+     sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_COORDINATES:Landroid/hardware/camera2/CaptureRequest$Key;
+ 
+-    invoke-virtual {p0, p1, v7}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    invoke-virtual {p0, p1, v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->set(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
+-    if-nez v1, :cond_1
++    if-nez v2, :cond_1
+ 
+     const-string p0, "CameraMetadataJV"
+ 
+@@ -5333,10 +5337,19 @@
+     :cond_1
+     sget-object p1, Landroid/hardware/camera2/CaptureRequest;->JPEG_GPS_PROCESSING_METHOD:Landroid/hardware/camera2/CaptureRequest$Key;
+ 
+-    invoke-direct {p0, p1, v1}, Landroid/hardware/camera2/impl/CameraMetadataNative;->setBase(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++    invoke-direct {p0, p1, v2}, Landroid/hardware/camera2/impl/CameraMetadataNative;->setBase(Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+ 
+     :goto_0
+     return v0
++
++    nop
++
++    :array_0
++    .array-data 8
++        0x0
++        0x0
++        0x0
++    .end array-data
+ .end method
+ 
+ .method private blacklist setLensIntrinsicsSamples([Landroid/hardware/camera2/params/LensIntrinsicsSample;)Z
+-- 
+2.55.0
+
