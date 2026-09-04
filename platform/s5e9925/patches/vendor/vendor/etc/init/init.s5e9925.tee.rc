@@ -1,0 +1,5 @@
+on early-init
+    exec - root root -- /vendor/bin/tee.sh
+
+on fs && property:dev.teegris.model=old
+    mount none /vendor/etc/tee_old /vendor/tee bind

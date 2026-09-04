@@ -1,0 +1,12 @@
+ 0 0 755 capabilities=0x0
+vendor/bin 0 2000 755 capabilities=0x0
+vendor/bin/tee.sh 0 2000 755 capabilities=0x0
+vendor/etc 0 2000 755 capabilities=0x0
+vendor/etc/init 0 2000 755 capabilities=0x0
+vendor/etc/init/init.s5e9925.tee.rc 0 0 644 capabilities=0x0
+vendor/lib64/ 0 2000 755 capabilities=0x0
+vendor/lib64/libril_sem.so 0 0 644 capabilities=0x0
+vendor/lib64/libsec-ril.so 0 0 644 capabilities=0x0
+vendor/lib64/libsecril-client.so 0 0 644 capabilities=0x0
+vendor/lib64/libVendorSemDataProps.so 0 0 644 capabilities=0x0
+vendor/lib64/libVendorSemTelephonyProps.so 0 0 644 capabilities=0x0
