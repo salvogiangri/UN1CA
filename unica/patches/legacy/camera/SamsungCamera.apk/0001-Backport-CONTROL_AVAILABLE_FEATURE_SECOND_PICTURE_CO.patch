@@ -1,0 +1,346 @@
+From d46afebcf5ce94adff0b73137207183d2e8934e5 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Fri, 4 Sep 2026 18:25:45 +0200
+Subject: [PATCH] Backport CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CONFIG code
+
+---
+ .../android/camera/core2/CamCapability.smali  | 23 +++++++++++
+ .../local/capability/FeatureCapability.smali  |  4 ++
+ .../camera/core2/maker/MakerBase.smali        | 25 +++++++----
+ .../camera/engine/core/CapabilityImpl.smali   | 16 ++++++++
+ .../core/request/PrepareMakerRequest.smali    | 41 ++++++++++++++++---
+ .../request/PrepareVideoMakerRequest.smali    | 39 ++++++++++++++++++
+ .../camera/engine/interfaces/Capability.smali |  3 ++
+ 7 files changed, 138 insertions(+), 13 deletions(-)
+
+diff --git a/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali b/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali
+index 4f393cc2..a3868b27 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali
+@@ -3900,6 +3900,29 @@
+     return-object p0
+ .end method
+ 
++.method public final t0()Ljava/lang/Boolean;
++    .locals 1
++
++    iget-object p0, p0, Lcom/samsung/android/camera/core2/CamCapability;->e:Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;
++
++    iget-object v0, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->z0:Ljava/lang/Boolean;
++
++    if-nez v0, :cond_0
++
++    const/16 v0, 0x14
++
++    invoke-static {p0, v0}, Lb/a;->d(Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;I)Ljava/lang/Boolean;
++
++    move-result-object v0
++
++    iput-object v0, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->z0:Ljava/lang/Boolean;
++
++    :cond_0
++    iget-object p0, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->z0:Ljava/lang/Boolean;
++
++    return-object p0
++.end method
++
+ .method public final u()Ljava/lang/Boolean;
+     .locals 1
+ 
+diff --git a/smali_classes3/com/samsung/android/camera/core2/local/capability/FeatureCapability.smali b/smali_classes3/com/samsung/android/camera/core2/local/capability/FeatureCapability.smali
+index b8d15d9c..4ea7820b 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/local/capability/FeatureCapability.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/local/capability/FeatureCapability.smali
+@@ -158,6 +158,8 @@
+ 
+ .field public z:Ljava/lang/Boolean;
+ 
++.field public z0:Ljava/lang/Boolean;
++
+ 
+ # direct methods
+ .method public constructor <init>(Lcom/samsung/android/camera/core2/CamCapability$CameraCharacteristicsSupplier;)V
+@@ -319,6 +321,8 @@
+ 
+     iput-object v0, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->y0:Ljava/lang/Boolean;
+ 
++    iput-object v0, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->z0:Ljava/lang/Boolean;
++
+     iput-object p1, p0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->a:Lcom/samsung/android/camera/core2/CamCapability$CameraCharacteristicsSupplier;
+ 
+     return-void
+diff --git a/smali_classes3/com/samsung/android/camera/core2/maker/MakerBase.smali b/smali_classes3/com/samsung/android/camera/core2/maker/MakerBase.smali
+index f6924e42..87f0322d 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/maker/MakerBase.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/maker/MakerBase.smali
+@@ -5049,6 +5049,16 @@
+ .method public setRunningPhysicalId(Lcom/samsung/android/camera/core2/CamCapability;Landroid/hardware/camera2/CaptureResult;)V
+     .locals 4
+ 
++    invoke-virtual {p1}, Lcom/samsung/android/camera/core2/CamCapability;->t0()Ljava/lang/Boolean;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result v0
++
++    if-nez v0, :cond_0
++
+     invoke-virtual {p1}, Lcom/samsung/android/camera/core2/CamCapability;->y()Ljava/lang/Boolean;
+ 
+     move-result-object v0
+@@ -5057,8 +5067,9 @@
+ 
+     move-result v0
+ 
+-    if-eqz v0, :cond_1
++    if-eqz v0, :cond_2
+ 
++    :cond_0
+     sget-object v0, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->E0:Landroid/hardware/camera2/CaptureResult$Key;
+ 
+     invoke-static {p2, v0}, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->a(Landroid/hardware/camera2/CaptureResult;Landroid/hardware/camera2/CaptureResult$Key;)Ljava/lang/Object;
+@@ -5073,7 +5084,7 @@
+ 
+     move-result v1
+ 
+-    if-nez v1, :cond_0
++    if-nez v1, :cond_1
+ 
+     iput-object v0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mRunningPhysicalId:Ljava/lang/String;
+ 
+@@ -5105,7 +5116,7 @@
+ 
+     iget-boolean v0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mEnablePppLogging:Z
+ 
+-    if-eqz v0, :cond_0
++    if-eqz v0, :cond_1
+ 
+     const/4 v0, 0x2
+ 
+@@ -5115,7 +5126,7 @@
+ 
+     invoke-static {v0, v2, v2, v1}, Lcom/samsung/android/camera/core2/processor/PostProcessThread;->sendLoggingMessage(IIILjava/lang/Object;)V
+ 
+-    :cond_0
++    :cond_1
+     invoke-virtual {p1}, Lcom/samsung/android/camera/core2/CamCapability;->J()Ljava/lang/Boolean;
+ 
+     move-result-object p1
+@@ -5124,7 +5135,7 @@
+ 
+     move-result p1
+ 
+-    if-eqz p1, :cond_1
++    if-eqz p1, :cond_2
+ 
+     sget-object p1, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->F0:Landroid/hardware/camera2/CaptureResult$Key;
+ 
+@@ -5140,7 +5151,7 @@
+ 
+     move-result p2
+ 
+-    if-nez p2, :cond_1
++    if-nez p2, :cond_2
+ 
+     iput-object p1, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mRunningSubPhysicalId:Ljava/lang/String;
+ 
+@@ -5156,7 +5167,7 @@
+ 
+     invoke-static {p0, p2, p1}, Lcom/samsung/android/camera/core2/util/CLog;->i(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+ 
+-    :cond_1
++    :cond_2
+     return-void
+ .end method
+ 
+diff --git a/smali_classes3/com/sec/android/app/camera/engine/core/CapabilityImpl.smali b/smali_classes3/com/sec/android/app/camera/engine/core/CapabilityImpl.smali
+index ed78f1d4..9a2edf73 100644
+--- a/smali_classes3/com/sec/android/app/camera/engine/core/CapabilityImpl.smali
++++ b/smali_classes3/com/sec/android/app/camera/engine/core/CapabilityImpl.smali
+@@ -4164,6 +4164,22 @@
+     return p0
+ .end method
+ 
++.method public isSecondPictureConfigSupported()Z
++    .locals 0
++
++    iget-object p0, p0, Lcom/sec/android/app/camera/engine/core/CapabilityImpl;->mCamCapability:Lcom/samsung/android/camera/core2/CamCapability;
++
++    invoke-virtual {p0}, Lcom/samsung/android/camera/core2/CamCapability;->t0()Ljava/lang/Boolean;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result p0
++
++    return p0
++.end method
++
+ .method public isSelfieToneModeSupported()Z
+     .locals 0
+ 
+diff --git a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
+index 5d1064f4..07557ae8 100644
+--- a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
++++ b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
+@@ -582,17 +582,46 @@
+ 
+     move-result-object v0
+ 
++    invoke-interface {p2}, Lcom/sec/android/app/camera/engine/interfaces/Capability;->isSecondPictureConfigSupported()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    iget-object v1, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->mCameraSettings:Lcom/sec/android/app/camera/interfaces/CameraSettings;
++
++    invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getWideAngleResolution(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Lcom/sec/android/app/camera/interfaces/Resolution;->getSize()Landroid/util/Size;
++
++    move-result-object v1
++
++    sget-object v2, Lx1/h;->BACK_WIDE_CAMERA_ID:Lx1/h;
++
++    invoke-static {v2}, Ll4/f;->d(Lx1/h;)I
++
++    move-result v2
++
++    invoke-static {v2}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {p1, v1, v2}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->setExtraPictureSize(Landroid/util/Size;Ljava/lang/String;)V
++
++    :cond_0
+     invoke-direct {p0, p2, p3}, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->isExtraPictureSupported(Lcom/sec/android/app/camera/engine/interfaces/Capability;Lcom/sec/android/app/camera/interfaces/Resolution;)Z
+ 
+     move-result p2
+ 
+-    if-eqz p2, :cond_2
++    if-eqz p2, :cond_3
+ 
+     invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->isMediumResolution(Lcom/sec/android/app/camera/interfaces/Resolution;)Z
+ 
+     move-result p2
+ 
+-    if-eqz p2, :cond_0
++    if-eqz p2, :cond_1
+ 
+     iget-object p0, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->mCameraSettings:Lcom/sec/android/app/camera/interfaces/CameraSettings;
+ 
+@@ -618,14 +647,14 @@
+ 
+     goto :goto_0
+ 
+-    :cond_0
++    :cond_1
+     iget-object p0, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->mCameraContext:Lcom/sec/android/app/camera/interfaces/CameraContext;
+ 
+     invoke-interface {p0}, Lcom/sec/android/app/camera/interfaces/CameraContext;->isSensorCropEnabled()Z
+ 
+     move-result p0
+ 
+-    if-eqz p0, :cond_1
++    if-eqz p0, :cond_2
+ 
+     invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getNormalAngleResolutionBySensorCropAngle(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
+ 
+@@ -641,7 +670,7 @@
+ 
+     goto :goto_0
+ 
+-    :cond_1
++    :cond_2
+     invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getSensorCropResolution(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
+ 
+     move-result-object p0
+@@ -657,7 +686,7 @@
+ 
+     invoke-virtual {p1, p0, p2}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->setExtraPictureSize(Landroid/util/Size;Ljava/lang/String;)V
+ 
+-    :cond_2
++    :cond_3
+     return-void
+ .end method
+ 
+diff --git a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest.smali b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest.smali
+index 1fe5dcf8..775ec323 100644
+--- a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest.smali
++++ b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest.smali
+@@ -586,6 +586,8 @@
+ 
+     invoke-virtual {v0, v4}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->setPictureSize(Landroid/util/Size;)V
+ 
++    invoke-direct {p0, v0, v2, v3}, Lcom/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest;->setExtraPictureSizeIfNecessary(Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;Lcom/sec/android/app/camera/engine/interfaces/Capability;Lcom/sec/android/app/camera/interfaces/Resolution;)V
++
+     iget-object v4, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareVideoMakerRequest;->mCameraSettings:Lcom/sec/android/app/camera/interfaces/CameraSettings;
+ 
+     sget-object v5, Lcom/sec/android/app/camera/interfaces/CameraSettings$Key;->AUTO_LENS_SWITCHING:Lcom/sec/android/app/camera/interfaces/CameraSettings$Key;
+@@ -1000,6 +1002,43 @@
+     return p0
+ .end method
+ 
++.method private setExtraPictureSizeIfNecessary(Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;Lcom/sec/android/app/camera/engine/interfaces/Capability;Lcom/sec/android/app/camera/interfaces/Resolution;)V
++    .locals 0
++
++    invoke-interface {p2}, Lcom/sec/android/app/camera/engine/interfaces/Capability;->isSecondPictureConfigSupported()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_0
++
++    invoke-virtual {p3}, Lcom/sec/android/app/camera/interfaces/Resolution;->getAspectRatio()Lcom/sec/android/app/camera/interfaces/AspectRatio;
++
++    move-result-object p0
++
++    invoke-static {p0}, Lcom/sec/android/app/camera/util/CameraResolution;->getWideAngleResolution(Lcom/sec/android/app/camera/interfaces/AspectRatio;)Lcom/sec/android/app/camera/interfaces/Resolution;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Lcom/sec/android/app/camera/interfaces/Resolution;->getSize()Landroid/util/Size;
++
++    move-result-object p0
++
++    sget-object p2, Lx1/h;->BACK_WIDE_CAMERA_ID:Lx1/h;
++
++    invoke-static {p2}, Ll4/f;->d(Lx1/h;)I
++
++    move-result p2
++
++    invoke-static {p2}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
++
++    move-result-object p2
++
++    invoke-virtual {p1, p0, p2}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->setExtraPictureSize(Landroid/util/Size;Ljava/lang/String;)V
++
++    :cond_0
++    return-void
++.end method
++
+ .method private setRecorderSurfaces(Lcom/sec/android/app/camera/interfaces/CameraId;Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;Lcom/sec/android/app/camera/interfaces/Resolution;Lcom/sec/android/app/camera/engine/interfaces/Capability;)V
+     .locals 2
+ 
+diff --git a/smali_classes3/com/sec/android/app/camera/engine/interfaces/Capability.smali b/smali_classes3/com/sec/android/app/camera/engine/interfaces/Capability.smali
+index f2a440a3..e081cfa2 100644
+--- a/smali_classes3/com/sec/android/app/camera/engine/interfaces/Capability.smali
++++ b/smali_classes3/com/sec/android/app/camera/engine/interfaces/Capability.smali
+@@ -359,6 +359,9 @@
+ .method public abstract isSceneOptimizerSupported()Z
+ .end method
+ 
++.method public abstract isSecondPictureConfigSupported()Z
++.end method
++
+ .method public abstract isSelfieToneModeSupported()Z
+ .end method
+ 
+-- 
+2.55.0
+

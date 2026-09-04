@@ -414,6 +414,18 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Support SECOND_PICTURE_CONFIG camera feature (pre-API 35)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    PATCHED=true
+    if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera_mass/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
+    else
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
+    fi
+fi
+
 # Support OMX hardware video codecs (pre-API 35)
 # https://android.googlesource.com/platform/frameworks/av/+/android-16.0.0_r2/media/libstagefright/omx/OMXNodeInstance.cpp#1687
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
