@@ -16,21 +16,27 @@ LOG_MISSING_PATCHES()
 SOURCE_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$SOURCE_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$SOURCE_FIRMWARE")"
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
 
-DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/cameradata/portrait_data" 0 0 755 "u:object_r:system_file:s0"
+if [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/portrait_data" ]; then
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/portrait_data"
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/cameradata/portrait_data" 0 0 755 "u:object_r:system_file:s0"
+fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/singletake/service-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/singletake/service-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/singletake/service-feature.xml\" \"$WORK_DIR/system/system/cameradata/singletake/service-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/singletake/service-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/singletake/service-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+else
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/singletake"
 fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/aremoji-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml\" \"$WORK_DIR/system/system/cameradata/aremoji-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/aremoji-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+else
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/aremoji-feature.xml"
 fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/camera-feature.xml"
@@ -38,6 +44,8 @@ if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml" ]; then
 elif [[ "$SOURCE_PLATFORM_SDK_VERSION" == "$TARGET_PLATFORM_SDK_VERSION" ]]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/camera-feature.xml" 0 0 644 "u:object_r:system_file:s0"
+elif [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
+    DELETE_FROM_WORK_DIR "system" "system/cameradata/camera-feature.xml"
 else
     _LOG "File not found: $SRC_DIR/target/$TARGET_CODENAME/camera/camera-feature.xml"
 fi
@@ -68,6 +76,23 @@ else
     fi
 fi
 
+# Samsung Camera JDM app flavor
+SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR="$(test -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/priv-app/SamSungCamera" && echo "true" || echo "false")"
+TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR="$(test -d "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/SamSungCamera" && echo "true" || echo "false")"
+if ! $SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+    if $TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+        DELETE_FROM_WORK_DIR "system" "system/priv-app/SamsungCamera"
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/priv-app/SamSungCamera" 0 0 755 "u:object_r:system_file:s0"
+    fi
+else
+    if $TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR; then
+        ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/priv-app/SamSungCamera" 0 0 755 "u:object_r:system_file:s0"
+    else
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR" "TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR"
+    fi
+fi
+
 # Add/delete Snapchat CameraKit Plugin if SHOOTING_MODE_FUN is (not) available
 if [ -f "$WORK_DIR/system/system/app/FunModeSDK/FunModeSDK.apk" ]; then
     if ! grep -q "SHOOTING_MODE_FUN" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
@@ -80,37 +105,69 @@ else
 fi
 
 # Single take "stp1-release" app flavor
-if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
-        ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
-    ADD_TO_WORK_DIR "a73xqxx" "system" "system/priv-app/SingleTakeService/SingleTakeService.apk" 0 0 644 "u:object_r:system_file:s0"
-elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
-        grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
-    # TODO handle this condition
-    # shellcheck disable=SC2034
-    SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
-    # shellcheck disable=SC2034
-    TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
-    LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
-    unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/singletake/service-feature.xml" ] && \
+        [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/SingleTakeService/SingleTakeService.apk" ]; then
+    if grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
+            ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
+        ADD_TO_WORK_DIR "a73xqxx" "system" "system/priv-app/SingleTakeService/SingleTakeService.apk" 0 0 644 "u:object_r:system_file:s0"
+    elif ! grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/cameradata/camera-feature.xml" 2> /dev/null && \
+            grep -q "SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS.*true" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
+        # TODO handle this condition
+        # shellcheck disable=SC2034
+        SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=false
+        # shellcheck disable=SC2034
+        TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS=true
+        LOG_MISSING_PATCHES "SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS" "TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS"
+        unset SOURCE_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS TARGET_SUPPORT_SINGLE_TAKE_HIGHLIGHT_VIDEOS
+    fi
+else
+    DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.samsung.android.singletake.service.xml"
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.singletake.service.xml"
+    DELETE_FROM_WORK_DIR "system" "system/priv-app/SingleTakeService"
+fi
+
+# AR Emoji "phone-lite-bit64-release" app flavor
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ] && \
+        [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/priv-app/AREmoji/AREmoji.apk" ]; then
+    if ! $SOURCE_CAMERA_SUPPORT_AREMOJI_LITE; then
+        if $TARGET_CAMERA_SUPPORT_AREMOJI_LITE; then
+            ADD_TO_WORK_DIR "a17xxx" "system" "system/priv-app/AREmoji/AREmoji.apk" 0 0 644 "u:object_r:system_file:s0"
+        fi
+    else
+        if ! $TARGET_CAMERA_SUPPORT_AREMOJI_LITE; then
+            # TODO handle this condition
+            LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE" "TARGET_CAMERA_SUPPORT_AREMOJI_LITE"
+        fi
+    fi
+else
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/com.samsung.feature.aremoji_v2.xml"
+    DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aremoji.xml"
+    DELETE_FROM_WORK_DIR "system" "system/priv-app/AREmoji"
 fi
 
 # SEC_PRODUCT_FEATURE_CAMERA_SINGLETAKE_SOLUTIONS
-if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null && \
-        ! grep -q "SUPPORT_SMART_CROP.*false" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
-    if [ -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/singletake/SmartCrop" ]; then
-        if [ ! -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ] || \
-                [ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]; then
-            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-                "etc/singletake/SmartCrop/SmartCrop.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+if [ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]; then
+    if ! grep -q "ENABLE_SINGLE_TAKE_LITE.*true" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null && \
+            ! grep -q "SUPPORT_SMART_CROP.*false" "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" 2>/dev/null; then
+        if [ -d "$FW_DIR/$SOURCE_FIRMWARE_PATH/vendor/etc/singletake/SmartCrop" ]; then
+            if [ ! -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ] || \
+                    [ "$TARGET_PLATFORM_SDK_VERSION" -lt "$SOURCE_PLATFORM_SDK_VERSION" ]; then
+                ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+                    "etc/singletake/SmartCrop/SmartCrop.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+            fi
+        else
+            # TODO handle this condition
+            # shellcheck disable=SC2034
+            SOURCE_SUPPORT_SMART_CROP=false
+            # shellcheck disable=SC2034
+            TARGET_SUPPORT_SMART_CROP=true
+            LOG_MISSING_PATCHES "SOURCE_SUPPORT_SMART_CROP" "TARGET_SUPPORT_SMART_CROP"
+            unset SOURCE_SUPPORT_SMART_CROP TARGET_SUPPORT_SMART_CROP
         fi
     else
-        # TODO handle this condition
-        # shellcheck disable=SC2034
-        SOURCE_SUPPORT_SMART_CROP=false
-        # shellcheck disable=SC2034
-        TARGET_SUPPORT_SMART_CROP=true
-        LOG_MISSING_PATCHES "SOURCE_SUPPORT_SMART_CROP" "TARGET_SUPPORT_SMART_CROP"
-        unset SOURCE_SUPPORT_SMART_CROP TARGET_SUPPORT_SMART_CROP
+        if [ -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ]; then
+            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/SmartCrop"
+        fi
     fi
 else
     if [ -d "$WORK_DIR/vendor/etc/singletake/SmartCrop" ]; then
@@ -127,6 +184,9 @@ if [ "$SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER" ]; then
             DELETE_FROM_WORK_DIR "vendor" "etc/singletake/dynamic_viewing"
         fi
         ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/singletake/dynamic_viewing" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        if [ ! -d "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/etc/singletake" ]; then
+            SET_METADATA "vendor" "etc/singletake" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        fi
     else
         DELETE_FROM_WORK_DIR "system" "system/lib64/libVideoClassifier.camera.samsung.so"
         DELETE_FROM_WORK_DIR "system" "system/lib64/libtensorflowLite2_11_0_dynamic_camera.so"
@@ -414,6 +474,7 @@ if [ ! "$(find "$WORK_DIR/product/overlay" -maxdepth 1 -type f -name "SystemUI*"
 fi
 
 unset SOURCE_FIRMWARE_PATH TARGET_FIRMWARE_PATH \
+    SOURCE_CAMERA_SUPPORT_JDM_APP_FLAVOR TARGET_CAMERA_SUPPORT_JDM_APP_FLAVOR \
     SOURCE_CAMERA_CONFIG_ACTION_CLASSIFIER TARGET_CAMERA_CONFIG_ACTION_CLASSIFIER \
     SOURCE_CAMERA_CONFIG_GPPM_SOLUTIONS TARGET_CAMERA_CONFIG_GPPM_SOLUTIONS \
     SOURCE_GALLERY_CONFIG_PET_CLUSTER_VERSION TARGET_GALLERY_CONFIG_PET_CLUSTER_VERSION \

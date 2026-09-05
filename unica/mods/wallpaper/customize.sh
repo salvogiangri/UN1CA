@@ -49,6 +49,8 @@ ENCODE_MP4()
 
     if $TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
         RES="1440:-1"
+    elif [[ "$TARGET_CODENAME" == "a05s" ]]; then
+        RES="-1:1920"
     fi
 
     LOG "- Encoding $FILE_NAME"

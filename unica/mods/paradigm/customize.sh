@@ -45,35 +45,39 @@ APPLY_PATCH "system" "system/priv-app/SecSoundPicker/SecSoundPicker.apk" \
 LOG_STEP_OUT
 
 # Adaptive colour tone
-LOG_STEP_IN "- Adding Adaptive colour tone feature"
-ADD_TO_WORK_DIR "pa2qxxx" "system" \
-    "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "pa2qxxx" "system" \
-    "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
-if $TARGET_LCD_SUPPORT_MDNIE_HW; then
-    APPLY_PATCH "system" "system/framework/services.jar" \
-        "$MODPATH/ead/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
-else
-    APPLY_PATCH "system" "system/framework/services.jar" \
-        "$MODPATH/ead_mdnie/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
-fi
-if $TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
-    if [ "$TARGET_PLATFORM_SDK_VERSION" -ge "36" ]; then
-        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-            "$MODPATH/ead_resolution/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+if [ "$TARGET_COMMON_CONFIG_MDNIE_MODE" -ne "0" ]; then
+    LOG_STEP_IN "- Adding Adaptive colour tone feature"
+    ADD_TO_WORK_DIR "pa2qxxx" "system" \
+        "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "pa2qxxx" "system" \
+        "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
+    if $TARGET_LCD_SUPPORT_MDNIE_HW; then
+        APPLY_PATCH "system" "system/framework/services.jar" \
+            "$MODPATH/ead/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
+    else
+        APPLY_PATCH "system" "system/framework/services.jar" \
+            "$MODPATH/ead_mdnie/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
+    fi
+    APPLY_PATCH "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" \
+        "$MODPATH/ead/EnvironmentAdaptiveDisplay.apk/0001-Fix-resource-IDs-mismatch.patch"
+    if $TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL; then
+        if [ "$TARGET_PLATFORM_SDK_VERSION" -ge "36" ]; then
+            APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+                "$MODPATH/ead_resolution/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+        else
+            APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+                "$MODPATH/ead_resolution_legacy/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+        fi
     else
         APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-            "$MODPATH/ead_resolution_legacy/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+            "$MODPATH/ead/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
     fi
-else
-    APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-        "$MODPATH/ead/SecSettings.apk/0001-Add-Adaptive-color-tone-feature.patch"
+    APPLY_PATCH "system" "system/priv-app/SettingsProvider/SettingsProvider.apk" \
+        "$MODPATH/ead/SettingsProvider.apk/0001-Add-Adaptive-color-tone-feature.patch"
+    APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+        "$MODPATH/ead/SystemUI.apk/0001-Add-Adaptive-color-tone-toggle.patch"
+    LOG_STEP_OUT
 fi
-APPLY_PATCH "system" "system/priv-app/SettingsProvider/SettingsProvider.apk" \
-    "$MODPATH/ead/SettingsProvider.apk/0001-Add-Adaptive-color-tone-feature.patch"
-APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-    "$MODPATH/ead/SystemUI.apk/0001-Add-Adaptive-color-tone-toggle.patch"
-LOG_STEP_OUT
 
 # Set AI Version to 20253 (latest)
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "20253"

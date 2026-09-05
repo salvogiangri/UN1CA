@@ -206,8 +206,10 @@ fi
 
 # Ensure Knox Matrix support
 # - Check if target firmware runs on One UI 5.1.1 or above
+# - Otherwise check for fkeymaster support in target firmware
 TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")"
-if [ "$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/build.prop" "ro.build.version.oneui")" -lt "50101" ]; then
+if [ "$(GET_PROP "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/build.prop" "ro.build.version.oneui")" -lt "50101" ] || \
+        [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/bin/vendor.samsung.hardware.security.fkeymaster-service" ]; then
     PATCHED=true
     DELETE_FROM_WORK_DIR "system" "system/bin/fabric_crypto"
     DELETE_FROM_WORK_DIR "system" "system/etc/init/fabric_crypto.rc"
@@ -404,8 +406,9 @@ if [ -f "$WORK_DIR/system/system/bin/sbauth" ] && \
     DELETE_FROM_WORK_DIR "system" "system/etc/init/sbauth.rc"
 fi
 
-# Ensure PASS support (pre-API 35)
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+# Ensure PASS support (pre-API 35/JDM)
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] || \
+        [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
     if ! grep -q "sec_pass_data_file" "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"; then
         PATCHED=true
         SMALI_PATCH "system" "system/framework/services.jar" \
@@ -560,16 +563,20 @@ fi
 
 # Upgrade Single Take models (pre-API 35)
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
-    if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
+    if [ -f "$WORK_DIR/system/system/cameradata/singletake/service-feature.xml" ]; then
+        if [ ! -d "$WORK_DIR/vendor/etc/singletake/ClarityScorer" ]; then
+            PATCHED=true
+            if [ -d "$WORK_DIR/vendor/etc/singletake/aifilter" ]; then
+                DELETE_FROM_WORK_DIR "vendor" "etc/singletake/aifilter"
+            fi
+            if [ -d "$WORK_DIR/vendor/etc/singletake/bestmoment" ]; then
+                DELETE_FROM_WORK_DIR "vendor" "etc/singletake/bestmoment"
+            fi
+            ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
+                "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+        fi
+    else
         PATCHED=true
-        if [ -d "$WORK_DIR/vendor/etc/singletake/aifilter" ]; then
-            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/aifilter"
-        fi
-        if [ -d "$WORK_DIR/vendor/etc/singletake/bestmoment" ]; then
-            DELETE_FROM_WORK_DIR "vendor" "etc/singletake/bestmoment"
-        fi
-        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" \
-            "etc/singletake/ClarityScorer" 0 2000 755 "u:object_r:vendor_configs_file:s0"
     fi
 fi
 
