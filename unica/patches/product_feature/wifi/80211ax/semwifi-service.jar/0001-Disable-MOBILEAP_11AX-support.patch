@@ -1,7 +1,7 @@
-From 14985011d0ee326d81e4622e35dd607d6770758e Mon Sep 17 00:00:00 2001
+From 30205c8268d0a82c499b129037be1741a21f95d8 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 1 Nov 2025 21:32:44 +0100
-Subject: [PATCH] Disable 80211AX support
+Subject: [PATCH] Disable MOBILEAP_11AX support
 
 ---
  .../wifi/ap/SemSoftApConfiguration.smali      | 38 ++++++++++++++++++-
@@ -158,5 +158,5 @@ index 4e9fa28..bc63390 100644
  
  .method public supportWifiSharing()Z
 -- 
-2.51.1
+2.55.0
 

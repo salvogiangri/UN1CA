@@ -821,8 +821,6 @@ if $SOURCE_WLAN_SUPPORT_80211AX; then
             ABORT "TARGET_WLAN_SUPPORT_80211AX is required by TARGET_WLAN_SUPPORT_80211AX_6GHZ"
         fi
         if ! $SOURCE_WLAN_SUPPORT_80211AX_6GHZ; then
-            APPLY_PATCH "system" "system/framework/semwifi-service.jar" \
-                "$MODPATH/wifi/80211ax/semwifi-service.jar/0001-Disable-80211AX-support.patch"
             APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
                 "$MODPATH/wifi/80211ax/SecSettings.apk/0001-Disable-80211AX-support.patch"
             APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
@@ -941,6 +939,19 @@ elif $SOURCE_WLAN_SUPPORT_MIMO && ! $TARGET_WLAN_SUPPORT_MIMO; then
         "smali/com/samsung/android/server/wifi/SemWifiServiceImpl.smali" "return" \
         "getNumOfWifiAnt()I" \
         "1"
+fi
+
+# SEC_PRODUCT_FEATURE_WLAN_SUPPORT_MOBILEAP_11AX
+if $SOURCE_WLAN_SUPPORT_MOBILEAP_11AX; then
+    if ! $TARGET_WLAN_SUPPORT_MOBILEAP_11AX; then
+        APPLY_PATCH "system" "system/framework/semwifi-service.jar" \
+            "$MODPATH/wifi/80211ax/semwifi-service.jar/0001-Disable-MOBILEAP_11AX-support.patch"
+    fi
+else
+    if $TARGET_WLAN_SUPPORT_MOBILEAP_11AX; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_WLAN_SUPPORT_MOBILEAP_11AX" "TARGET_WLAN_SUPPORT_MOBILEAP_11AX"
+    fi
 fi
 
 # SEC_PRODUCT_FEATURE_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY

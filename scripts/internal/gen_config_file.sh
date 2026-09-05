@@ -421,6 +421,9 @@ fi
 #   [SOURCE/TARGET]_WLAN_SUPPORT_MIMO
 #     Boolean which describes whether the device supports the MIMO standard.
 #
+#   [SOURCE/TARGET]_WLAN_SUPPORT_MOBILEAP_11AX
+#     Boolean which describes whether the device supports Wi-Fi 6 Mobile Hotspot.
+#
 #   [SOURCE/TARGET]_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY
 #     Boolean which describes whether the device should enable the 5Ghz Mobile Hotspot band depending the country code.
 #
@@ -600,6 +603,8 @@ fi
     GET_BUILD_VAR "TARGET_WLAN_SUPPORT_MBO"
     GET_BUILD_VAR "SOURCE_WLAN_SUPPORT_MIMO"
     GET_BUILD_VAR "TARGET_WLAN_SUPPORT_MIMO"
+    GET_BUILD_VAR "SOURCE_WLAN_SUPPORT_MOBILEAP_11AX"
+    GET_BUILD_VAR "TARGET_WLAN_SUPPORT_MOBILEAP_11AX"
     GET_BUILD_VAR "SOURCE_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY"
     GET_BUILD_VAR "TARGET_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY"
     GET_BUILD_VAR "SOURCE_WLAN_SUPPORT_MOBILEAP_6G"
