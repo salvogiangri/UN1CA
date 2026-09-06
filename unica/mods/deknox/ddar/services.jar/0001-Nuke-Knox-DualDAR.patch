@@ -1,4 +1,4 @@
-From 1fc6def2ee2be7eb6c55ccced3891f715b67b919 Mon Sep 17 00:00:00 2001
+From e637a59d155367b97f0ffe3f22a74fd8c527a367 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Sat, 30 Aug 2025 13:18:53 +0200
 Subject: [PATCH] Nuke Knox DualDAR
@@ -158,10 +158,10 @@ UN1CA: this patch is not complete! Please check unica/mods/deknox/customize.sh f
  delete mode 100644 smali_classes2/vendor/samsung/hardware/tlc/ddar/ISehDdar.smali
 
 diff --git a/smali/com/android/server/am/ActivityManagerService.smali b/smali/com/android/server/am/ActivityManagerService.smali
-index 6ab57942f..554f77a5e 100644
+index 61bbb8097..ebd5254c6 100644
 --- a/smali/com/android/server/am/ActivityManagerService.smali
 +++ b/smali/com/android/server/am/ActivityManagerService.smali
-@@ -32957,88 +32957,88 @@
+@@ -33007,88 +33007,88 @@
  .end method
  
  .method public final finishBooting()V
@@ -282,7 +282,7 @@ index 6ab57942f..554f77a5e 100644
  
      monitor-exit p0
      :try_end_1
-@@ -33051,11 +33051,11 @@
+@@ -33101,11 +33101,11 @@
      :catchall_1
      move-exception v0
  
@@ -296,7 +296,7 @@ index 6ab57942f..554f77a5e 100644
  
      monitor-exit p0
      :try_end_2
-@@ -33063,110 +33063,110 @@
+@@ -33113,110 +33113,110 @@
  
      invoke-static {}, Lcom/android/server/am/ActivityManagerService;->resetPriorityAfterLockedSection()V
  
@@ -453,7 +453,7 @@ index 6ab57942f..554f77a5e 100644
  
      move-result-wide v15
  
-@@ -33178,44 +33178,44 @@
+@@ -33228,44 +33228,44 @@
      const-wide/16 v13, 0x0
  
      :goto_2
@@ -511,7 +511,7 @@ index 6ab57942f..554f77a5e 100644
  
      const-string/jumbo v13, "Y29tLnNlYy5hbmRyb2lkLmFwcC5jYW1lcmE="
  
-@@ -33223,570 +33223,438 @@
+@@ -33273,570 +33273,438 @@
  
      move-result-object v13
  
@@ -1297,7 +1297,7 @@ index 6ab57942f..554f77a5e 100644
  
      iget-object v12, v1, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
  
-@@ -33802,57 +33670,59 @@
+@@ -33852,57 +33720,59 @@
  
      sget-object v14, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
  
@@ -1380,7 +1380,7 @@ index 6ab57942f..554f77a5e 100644
  
      iget-object v12, v1, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
  
-@@ -33870,561 +33740,581 @@
+@@ -33920,561 +33790,581 @@
  
      invoke-direct {v13, v14, v15}, Landroid/app/Notification$Builder;-><init>(Landroid/content/Context;Ljava/lang/String;)V
  
@@ -2239,7 +2239,7 @@ index 6ab57942f..554f77a5e 100644
      sput-object v0, Lcom/android/server/am/Pageboost;->mContext:Landroid/content/Context;
  
      sput-object v1, Lcom/android/server/am/Pageboost;->mActivityManagerService:Lcom/android/server/am/ActivityManagerService;
-@@ -34433,58 +34323,58 @@
+@@ -34483,58 +34373,58 @@
  
      move-result v0
  
@@ -2322,7 +2322,7 @@ index 6ab57942f..554f77a5e 100644
  
      :catch_2
      const-string/jumbo v0, "Pageboost"
-@@ -34493,67 +34383,67 @@
+@@ -34543,67 +34433,67 @@
  
      invoke-static {v0, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
  
@@ -2410,7 +2410,7 @@ index 6ab57942f..554f77a5e 100644
  
      move-result-object v1
  
-@@ -34561,28 +34451,28 @@
+@@ -34611,28 +34501,28 @@
  
      iget-object v0, v0, Lcom/android/server/am/KillPolicyManager;->policyBroadcastReceiver:Lcom/android/server/am/KillPolicyManager$1;
  
@@ -2447,7 +2447,7 @@ index 6ab57942f..554f77a5e 100644
  
      iput-object v2, v1, Lcom/android/server/am/pmm/PersonalizedMemoryManager$OnDeviceAIChangeObserver;->mContext:Landroid/content/Context;
  
-@@ -34590,9 +34480,11 @@
+@@ -34640,9 +34530,11 @@
  
      move-result-object v2
  
@@ -2461,7 +2461,7 @@ index 6ab57942f..554f77a5e 100644
  
      iget-object v2, v0, Lcom/android/server/am/pmm/PersonalizedMemoryManager;->mDmaBufLeakDetector:Lcom/android/server/am/pmm/DmaBufLeakDetector;
  
-@@ -34614,56 +34506,56 @@
+@@ -34664,56 +34556,56 @@
  
      iget-object v0, v0, Lcom/android/server/am/pmm/PersonalizedMemoryManager;->mChangeObserver:Lcom/android/server/am/pmm/PersonalizedMemoryManager$OnDeviceAIChangeObserver;
  
@@ -5187,7 +5187,7 @@ index 174dffdb7..0d679da87 100644
  
      :goto_8
 diff --git a/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali b/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
-index b1dde7dc7..94df90951 100644
+index 6a2e36f0e..f8241e756 100644
 --- a/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
 +++ b/smali/com/android/server/devicepolicy/DevicePolicyManagerService.smali
 @@ -4902,20 +4902,16 @@
@@ -5215,7 +5215,7 @@ index b1dde7dc7..94df90951 100644
      invoke-direct {v0, v2}, Lcom/android/server/devicepolicy/UCMProvisioningHelper;-><init>(Landroid/content/Context;)V
  
      iput-object v0, v1, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mUCMProvisioningHelper:Lcom/android/server/devicepolicy/UCMProvisioningHelper;
-@@ -13337,48 +13333,8 @@
+@@ -13390,48 +13386,8 @@
  
      iget-object p0, p0, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mDualDarProvisioningHelper:Lcom/android/server/devicepolicy/DualDarProvisioningHelper;
  
@@ -5265,7 +5265,7 @@ index b1dde7dc7..94df90951 100644
      invoke-interface {v0}, Ljava/util/Set;->size()I
  
      move-result p0
-@@ -13395,6 +13351,8 @@
+@@ -13448,6 +13404,8 @@
  
      const-string/jumbo v6, "android.os.usertype.profile.MANAGED"
  
@@ -5274,7 +5274,7 @@ index b1dde7dc7..94df90951 100644
      move v8, p2
  
      invoke-virtual/range {v4 .. v9}, Landroid/os/UserManager;->createProfileForUserEvenWhenDisallowed(Ljava/lang/String;Ljava/lang/String;II[Ljava/lang/String;)Landroid/content/pm/UserInfo;
-@@ -16489,572 +16447,333 @@
+@@ -16510,572 +16468,333 @@
  .end method
  
  .method public final finalizeCreateManagedProfileInternal(Landroid/app/admin/ManagedProfileProvisioningParams;Landroid/os/UserHandle;)V
@@ -6008,7 +6008,7 @@ index b1dde7dc7..94df90951 100644
  
      return-void
  .end method
-@@ -46205,524 +45924,312 @@
+@@ -46226,524 +45945,312 @@
  .end method
  
  .method public final onCreateAndProvisionManagedProfileStarted(Landroid/app/admin/ManagedProfileProvisioningParams;)V
@@ -6693,7 +6693,7 @@ index b1dde7dc7..94df90951 100644
  .end method
  
  .method public final onLockSettingsReady()V
-@@ -47131,540 +46638,35 @@
+@@ -47152,540 +46659,35 @@
      throw p0
  .end method
  
@@ -7244,7 +7244,7 @@ index b1dde7dc7..94df90951 100644
  .end method
  
  .method public final onShellCommand(Ljava/io/FileDescriptor;Ljava/io/FileDescriptor;Ljava/io/FileDescriptor;[Ljava/lang/String;Landroid/os/ShellCallback;Landroid/os/ResultReceiver;)V
-@@ -48241,7 +47243,9 @@
+@@ -48262,7 +47264,9 @@
  
      invoke-virtual {p0, v5, v1}, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->setDemoDeviceStateUnchecked(IZ)V
  
@@ -7255,7 +7255,7 @@ index b1dde7dc7..94df90951 100644
  
      invoke-virtual {p1}, Landroid/app/admin/FullyManagedDeviceProvisioningParams;->isLeaveAllSystemAppsEnabled()Z
  
-@@ -49684,7 +48688,7 @@
+@@ -49705,7 +48709,7 @@
  .end method
  
  .method public final removeNonRequiredAppsForManagedDevice(ILandroid/content/ComponentName;Z)Z
@@ -7264,7 +7264,7 @@ index b1dde7dc7..94df90951 100644
  
      if-eqz p3, :cond_0
  
-@@ -49766,43 +48770,8 @@
+@@ -49787,43 +48791,8 @@
      :cond_3
      iget-object p3, p0, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mInjector:Lcom/android/server/devicepolicy/DevicePolicyManagerService$Injector;
  
@@ -7308,7 +7308,7 @@ index b1dde7dc7..94df90951 100644
      :try_start_0
      iget-object p3, p0, Lcom/android/server/devicepolicy/DevicePolicyManagerService;->mInjector:Lcom/android/server/devicepolicy/DevicePolicyManagerService$Injector;
  
-@@ -49841,7 +48810,7 @@
+@@ -49862,7 +48831,7 @@
  
      move-result v2
  
@@ -7317,7 +7317,7 @@ index b1dde7dc7..94df90951 100644
  
      invoke-interface {p2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
  
-@@ -49881,7 +48850,7 @@
+@@ -49902,7 +48871,7 @@
  
      goto :goto_3
  
@@ -7326,7 +7326,7 @@ index b1dde7dc7..94df90951 100644
      const-string/jumbo p0, "Waiting for non required apps to be deleted"
  
      invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -49899,11 +48868,11 @@
+@@ -49920,11 +48889,11 @@
  
      move-result p1
  
@@ -7340,7 +7340,7 @@ index b1dde7dc7..94df90951 100644
  
      const-string p1, "All non-required system apps with launcher icon, and all disallowed apps have been uninstalled."
  
-@@ -49916,7 +48885,7 @@
+@@ -49937,7 +48906,7 @@
  
      goto :goto_5
  
@@ -7349,7 +7349,7 @@ index b1dde7dc7..94df90951 100644
      :goto_4
      iget-boolean p0, p3, Lcom/android/server/devicepolicy/NonRequiredPackageDeleteObserver;->mFailed:Z
  
-@@ -49924,7 +48893,7 @@
+@@ -49945,7 +48914,7 @@
  
      goto :goto_6
  
@@ -7358,7 +7358,7 @@ index b1dde7dc7..94df90951 100644
      const-string/jumbo p1, "Waiting time elapsed before all package deletion finished"
  
      invoke-static {v1, p1}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
-@@ -52357,30 +51326,6 @@
+@@ -52378,30 +51347,6 @@
  
      invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
  
@@ -11163,7 +11163,7 @@ index ab110a9ef..8121d5906 100644
      return-void
  .end method
 diff --git a/smali/com/android/server/knox/dar/DarManagerService.smali b/smali/com/android/server/knox/dar/DarManagerService.smali
-index a33441302..b2cb8b638 100644
+index c53fd8bb7..59493852a 100644
 --- a/smali/com/android/server/knox/dar/DarManagerService.smali
 +++ b/smali/com/android/server/knox/dar/DarManagerService.smali
 @@ -14,11 +14,9 @@
@@ -11286,14 +11286,16 @@ index a33441302..b2cb8b638 100644
      return-void
  .end method
  
-@@ -577,115 +509,76 @@
+@@ -577,7 +509,7 @@
  .end method
  
  .method public final clearResetPasswordToken(I)Z
 -    .locals 6
 +    .locals 4
  
-     invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->isVirtualLockSupported()Z
+     invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->checkSystemPermission()V
+ 
+@@ -585,109 +517,70 @@
  
      move-result v0
  
@@ -11430,7 +11432,7 @@ index a33441302..b2cb8b638 100644
  .end method
  
  .method public final createEncPkgDir(ILjava/lang/String;)I
-@@ -761,47 +654,26 @@
+@@ -763,47 +656,26 @@
  .method public final dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V
      .locals 3
  
@@ -11485,7 +11487,7 @@ index a33441302..b2cb8b638 100644
  
      invoke-static {p3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
  
-@@ -813,7 +685,7 @@
+@@ -815,7 +687,7 @@
  
      move-result p0
  
@@ -11494,7 +11496,7 @@ index a33441302..b2cb8b638 100644
  
      invoke-static {p3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
  
-@@ -825,9 +697,9 @@
+@@ -827,9 +699,9 @@
  
      move-result p0
  
@@ -11506,7 +11508,7 @@ index a33441302..b2cb8b638 100644
      const-string/jumbo p0, "sdplog_dump"
  
      invoke-virtual {p2, p0}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
-@@ -850,7 +722,7 @@
+@@ -852,7 +724,7 @@
  
      const-string/jumbo p3, "SDPLogFile"
  
@@ -11515,7 +11517,7 @@ index a33441302..b2cb8b638 100644
  
      const-string p0, "Failed to dump: Maybe target file is already being used..."
  
-@@ -862,7 +734,7 @@
+@@ -864,7 +736,7 @@
  
      goto :goto_6
  
@@ -11524,7 +11526,7 @@ index a33441302..b2cb8b638 100644
      const/4 p1, 0x0
  
      :try_start_0
-@@ -894,13 +766,13 @@
+@@ -896,13 +768,13 @@
  
      move-result-object p3
  
@@ -11540,7 +11542,7 @@ index a33441302..b2cb8b638 100644
  
      const-string p1, "Dump line count reached to the limit: 6000"
  
-@@ -911,7 +783,7 @@
+@@ -913,7 +785,7 @@
  
      goto :goto_2
  
@@ -11549,7 +11551,7 @@ index a33441302..b2cb8b638 100644
      invoke-virtual {p2, p3}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
      :try_end_2
      .catchall {:try_start_2 .. :try_end_2} :catchall_0
-@@ -920,7 +792,7 @@
+@@ -922,7 +794,7 @@
  
      goto :goto_0
  
@@ -11558,7 +11560,7 @@ index a33441302..b2cb8b638 100644
      :goto_1
      :try_start_3
      invoke-virtual {v0}, Ljava/io/RandomAccessFile;->close()V
-@@ -952,11 +824,11 @@
+@@ -954,11 +826,11 @@
  
      move-result-object p1
  
@@ -11572,7 +11574,7 @@ index a33441302..b2cb8b638 100644
      new-instance p0, Ljava/io/IOException;
  
      invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
-@@ -994,11 +866,11 @@
+@@ -996,11 +868,11 @@
  
      invoke-virtual {p0}, Ljava/util/concurrent/locks/ReentrantLock;->unlock()V
  
@@ -11586,7 +11588,7 @@ index a33441302..b2cb8b638 100644
      invoke-virtual {p2}, Ljava/io/PrintWriter;->println()V
  
      :goto_6
-@@ -1006,7 +878,7 @@
+@@ -1008,7 +880,7 @@
  
      invoke-virtual {p2, p0}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
  
@@ -11595,7 +11597,7 @@ index a33441302..b2cb8b638 100644
      :goto_7
      return-void
  .end method
-@@ -1096,72 +968,8 @@
+@@ -1098,72 +970,8 @@
  .end method
  
  .method public final getBlockedClearablePackages(I)Ljava/util/List;
@@ -11669,7 +11671,7 @@ index a33441302..b2cb8b638 100644
      const/4 p0, 0x0
  
      return-object p0
-@@ -1178,139 +986,32 @@
+@@ -1180,139 +988,32 @@
  .end method
  
  .method public final getInnerAuthUserId(I)I
@@ -11814,7 +11816,7 @@ index a33441302..b2cb8b638 100644
      const/4 p0, 0x0
  
      return p0
-@@ -1821,23 +1522,6 @@
+@@ -1823,23 +1524,6 @@
      throw v0
  .end method
  
@@ -11838,7 +11840,7 @@ index a33441302..b2cb8b638 100644
  .method public final isEmTokenAllowed()Z
      .locals 2
  
-@@ -1879,84 +1563,11 @@
+@@ -1881,84 +1565,11 @@
  .end method
  
  .method public final isInnerAuthRequired(I)Z
@@ -11925,7 +11927,7 @@ index a33441302..b2cb8b638 100644
  .end method
  
  .method public final isKnoxKeyInstallable()Z
-@@ -2831,119 +2442,22 @@
+@@ -2837,119 +2448,22 @@
  .end method
  
  .method public final setDualDarInfo(II)Z
@@ -12048,16 +12050,16 @@ index a33441302..b2cb8b638 100644
      return-void
  .end method
  
-@@ -2958,7 +2472,7 @@
+@@ -2964,7 +2478,7 @@
  .end method
  
  .method public final setResetPasswordToken([BI)Z
 -    .locals 10
 +    .locals 7
  
-     invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->isVirtualLockSupported()Z
+     invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->checkSystemPermission()V
  
-@@ -2966,144 +2480,97 @@
+@@ -2974,144 +2488,97 @@
  
      const/4 v1, 0x0
  
@@ -12241,7 +12243,7 @@ index a33441302..b2cb8b638 100644
      new-instance p0, Ljava/lang/IllegalArgumentException;
  
      const-string/jumbo p1, "token must be at least 32-byte long"
-@@ -3112,7 +2579,8 @@
+@@ -3120,7 +2587,8 @@
  
      throw p0
  
@@ -23072,10 +23074,10 @@ index 3faf6274c..274a64a06 100644
      return-void
  
 diff --git a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService$4.smali b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService$4.smali
-index 99b60b670..375ebd5cc 100644
+index a070bd145..249e84410 100644
 --- a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService$4.smali
 +++ b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService$4.smali
-@@ -58,11 +58,7 @@
+@@ -62,11 +62,7 @@
  
      invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
  
@@ -23089,7 +23091,7 @@ index 99b60b670..375ebd5cc 100644
      move-result-object v0
  
 diff --git a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
-index 12e48bee9..e54149313 100644
+index 89d88b9f4..61a3c84e7 100644
 --- a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
 +++ b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
 @@ -13,14 +13,10 @@
@@ -23154,13 +23156,13 @@ index 12e48bee9..e54149313 100644
      iput-object p1, p0, Lcom/android/server/knox/dar/ddar/proxy/DualDARComnService;->mContext:Landroid/content/Context;
  
 -    new-instance v1, Lcom/android/internal/widget/LockPatternUtils;
--
--    invoke-direct {v1, p1}, Lcom/android/internal/widget/LockPatternUtils;-><init>(Landroid/content/Context;)V
 +    new-instance v0, Lcom/android/internal/widget/LockPatternUtils;
  
--    iput-object v1, p0, Lcom/android/server/knox/dar/ddar/proxy/DualDARComnService;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
+-    invoke-direct {v1, p1}, Lcom/android/internal/widget/LockPatternUtils;-><init>(Landroid/content/Context;)V
 +    invoke-direct {v0, p1}, Lcom/android/internal/widget/LockPatternUtils;-><init>(Landroid/content/Context;)V
  
+-    iput-object v1, p0, Lcom/android/server/knox/dar/ddar/proxy/DualDARComnService;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
+-
 -    iput-object v0, p0, Lcom/android/server/knox/dar/ddar/proxy/DualDARComnService;->mDualDARPolicyService:Lcom/samsung/android/knox/ddar/IDualDARPolicy;
 +    iput-object v0, p0, Lcom/android/server/knox/dar/ddar/proxy/DualDARComnService;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
  
@@ -23244,7 +23246,7 @@ index 12e48bee9..e54149313 100644
  
      move-result-object p0
  
-@@ -1719,418 +1703,18 @@
+@@ -1762,418 +1746,18 @@
      return-object p0
  .end method
  
@@ -41057,7 +41059,7 @@ index bac355cf9..99f37bc16 100644
      .locals 7
  
 diff --git a/smali_classes2/com/android/server/pm/ComputerEngine.smali b/smali_classes2/com/android/server/pm/ComputerEngine.smali
-index dffa32888..ae9d1855d 100644
+index f4632badd..37124e8b0 100644
 --- a/smali_classes2/com/android/server/pm/ComputerEngine.smali
 +++ b/smali_classes2/com/android/server/pm/ComputerEngine.smali
 @@ -17090,13 +17090,13 @@
@@ -42902,7 +42904,7 @@ index dc198ae8e..01a829d7e 100644
      .locals 1
  
 diff --git a/smali_classes2/com/android/server/pm/UserManagerService.smali b/smali_classes2/com/android/server/pm/UserManagerService.smali
-index 7362c5d9a..ffb261519 100644
+index 999613d9f..0a269d195 100644
 --- a/smali_classes2/com/android/server/pm/UserManagerService.smali
 +++ b/smali_classes2/com/android/server/pm/UserManagerService.smali
 @@ -2911,45 +2911,6 @@
@@ -47706,5 +47708,5 @@ index 0c4e82415..000000000
 -    return-void
 -.end method
 -- 
-2.52.0
+2.55.0
 
