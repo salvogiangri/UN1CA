@@ -119,12 +119,26 @@ PATCHED=false
 # - Add ro.surface_flinger.game_default_frame_rate_override if missing
 BACKPORT_SF_PROPS
 
-# Support legacy Camera HAL (pre-API 34)
-# - Some legacy devices (e.g. r8q) expect GPS tags to be non-null
+# Pre-API 34
+# - Revert commit b0551be: "Camera: Remove GPS_LOCATION if set is called with null"
+#   (https://android.googlesource.com/platform/frameworks/base/+/b0551beb8dab6e399179fcc6525407237fc8ee56%5E%21/#F0)
+#
+# Pre-API 35
+# - Add back SECOND_PICTURE_CONFIG camera feature support
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
     PATCHED=true
     APPLY_PATCH "system" "system/framework/framework.jar" \
         "$MODPATH/camera/framework.jar/0001-Backport-legacy-CameraMetadataNative-code.patch"
+fi
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    PATCHED=true
+    if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera_mass/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
+    else
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
+    fi
 fi
 
 # Support legacy Face HAL (pre-API 34)
@@ -411,18 +425,6 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
         SMALI_PATCH "system" "system/framework/services.jar" \
             "smali/com/android/server/StorageManagerService.smali" "return" \
             'isPassSupport()Z' 'false'
-    fi
-fi
-
-# Support SECOND_PICTURE_CONFIG camera feature (pre-API 35)
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
-    PATCHED=true
-    if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
-        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
-            "$MODPATH/camera_mass/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
-    else
-        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
-            "$MODPATH/camera/SamsungCamera.apk/0001-Backport-CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CO.patch"
     fi
 fi
 
