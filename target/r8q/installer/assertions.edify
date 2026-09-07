@@ -1,0 +1,5 @@
+is_substring("G780GXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G780GXXU3DVK5") && abort("E3003: This package requires Android 13 firmware.");
+is_substring("G7810ZC", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G7810ZCU3GVK7") && abort("E3003: This package requires Android 13 firmware.");
+is_substring("G7810ZH", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G7810ZHU3GVK6") && abort("E3003: This package requires Android 13 firmware.");
+is_substring("G781BXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G781BXXU4GVK6") && abort("E3003: This package requires Android 13 firmware.");
+is_substring("G781NKS", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G781NKSU3FVK6") && abort("E3003: This package requires Android 13 firmware.");
