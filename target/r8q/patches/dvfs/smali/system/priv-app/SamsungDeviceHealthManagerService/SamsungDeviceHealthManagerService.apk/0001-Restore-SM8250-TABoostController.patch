@@ -1,0 +1,55 @@
+From a22fb857b2839799fd8123803a49131cd0f20788 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 8 Sep 2026 00:54:24 +0200
+Subject: [PATCH] Restore SM8250 TABoostController
+
+---
+ smali/R1/p.smali | 4 ----
+ smali/U1/w.smali | 2 +-
+ smali/t1/O.smali | 2 +-
+ 3 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/smali/R1/p.smali b/smali/R1/p.smali
+index 82a82b8..3b20b7e 100644
+--- a/smali/R1/p.smali
++++ b/smali/R1/p.smali
+@@ -412,10 +412,6 @@
+     goto :goto_2
+ 
+     :cond_a
+-    sget-boolean p0, LU1/w;->p:Z
+-
+-    if-nez p0, :cond_c
+-
+     sget-boolean p0, LU1/w;->w:Z
+ 
+     if-nez p0, :cond_c
+diff --git a/smali/U1/w.smali b/smali/U1/w.smali
+index b91e14e..4f1c96a 100644
+--- a/smali/U1/w.smali
++++ b/smali/U1/w.smali
+@@ -1019,7 +1019,7 @@
+ 
+     sput-boolean v6, LU1/w;->o:Z
+ 
+-    const-string v6, "SM8350"
++    const-string v6, "SM8250"
+ 
+     invoke-virtual {v6, v3}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
+ 
+diff --git a/smali/t1/O.smali b/smali/t1/O.smali
+index dabc8d2..e446772 100644
+--- a/smali/t1/O.smali
++++ b/smali/t1/O.smali
+@@ -673,7 +673,7 @@
+ 
+     iget-object v0, p0, Lt1/O;->a:Landroid/content/Context;
+ 
+-    const-string v1, "TABoostControllerSM8350_SYSFS"
++    const-string v1, "TABoostControllerSM8250_SYSFS"
+ 
+     invoke-static {v0, v1}, Lcom/samsung/android/os/SemDvfsManager;->createInstance(Landroid/content/Context;Ljava/lang/String;)Lcom/samsung/android/os/SemDvfsManager;
+ 
+-- 
+2.55.0
+
