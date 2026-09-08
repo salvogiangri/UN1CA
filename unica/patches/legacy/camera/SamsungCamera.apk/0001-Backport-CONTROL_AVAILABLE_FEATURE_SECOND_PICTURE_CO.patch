@@ -1,4 +1,4 @@
-From d46afebcf5ce94adff0b73137207183d2e8934e5 Mon Sep 17 00:00:00 2001
+From f7c051624ce10c9eb6c89d0ba317ad43a5cfba52 Mon Sep 17 00:00:00 2001
 From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Fri, 4 Sep 2026 18:25:45 +0200
 Subject: [PATCH] Backport CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CONFIG code
@@ -8,10 +8,10 @@ Subject: [PATCH] Backport CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CONFIG code
  .../local/capability/FeatureCapability.smali  |  4 ++
  .../camera/core2/maker/MakerBase.smali        | 25 +++++++----
  .../camera/engine/core/CapabilityImpl.smali   | 16 ++++++++
- .../core/request/PrepareMakerRequest.smali    | 41 ++++++++++++++++---
+ .../core/request/PrepareMakerRequest.smali    | 41 +++++++++++++++----
  .../request/PrepareVideoMakerRequest.smali    | 39 ++++++++++++++++++
  .../camera/engine/interfaces/Capability.smali |  3 ++
- 7 files changed, 138 insertions(+), 13 deletions(-)
+ 7 files changed, 137 insertions(+), 14 deletions(-)
 
 diff --git a/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali b/smali_classes3/com/samsung/android/camera/core2/CamCapability.smali
 index 4f393cc2..a3868b27 100644
@@ -183,10 +183,17 @@ index ed78f1d4..9a2edf73 100644
      .locals 0
  
 diff --git a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
-index 5d1064f4..07557ae8 100644
+index 5d1064f4..2c6e1a0a 100644
 --- a/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
 +++ b/smali_classes3/com/sec/android/app/camera/engine/core/request/PrepareMakerRequest.smali
-@@ -582,17 +582,46 @@
+@@ -576,23 +576,50 @@
+ .end method
+ 
+ .method private setExtraPictureSizeIfNecessary(Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;Lcom/sec/android/app/camera/engine/interfaces/Capability;Lcom/sec/android/app/camera/interfaces/Resolution;)V
+-    .locals 1
++    .locals 3
+ 
+     invoke-virtual {p1}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->getPictureSize()Landroid/util/Size;
  
      move-result-object v0
  
@@ -195,8 +202,6 @@ index 5d1064f4..07557ae8 100644
 +    move-result v1
 +
 +    if-eqz v1, :cond_0
-+
-+    iget-object v1, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->mCameraSettings:Lcom/sec/android/app/camera/interfaces/CameraSettings;
 +
 +    invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getWideAngleResolution(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
 +
@@ -235,7 +240,7 @@ index 5d1064f4..07557ae8 100644
  
      iget-object p0, p0, Lcom/sec/android/app/camera/engine/core/request/PrepareMakerRequest;->mCameraSettings:Lcom/sec/android/app/camera/interfaces/CameraSettings;
  
-@@ -618,14 +647,14 @@
+@@ -618,14 +645,14 @@
  
      goto :goto_0
  
@@ -252,7 +257,7 @@ index 5d1064f4..07557ae8 100644
  
      invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getNormalAngleResolutionBySensorCropAngle(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
  
-@@ -641,7 +670,7 @@
+@@ -641,7 +668,7 @@
  
      goto :goto_0
  
@@ -261,7 +266,7 @@ index 5d1064f4..07557ae8 100644
      invoke-static {p3}, Lcom/sec/android/app/camera/util/CameraResolution;->getSensorCropResolution(Lcom/sec/android/app/camera/interfaces/Resolution;)Lcom/sec/android/app/camera/interfaces/Resolution;
  
      move-result-object p0
-@@ -657,7 +686,7 @@
+@@ -657,7 +684,7 @@
  
      invoke-virtual {p1, p0, p2}, Lcom/sec/android/app/camera/engine/core/request/MakerConnectionInfo;->setExtraPictureSize(Landroid/util/Size;Ljava/lang/String;)V
  
