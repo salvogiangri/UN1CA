@@ -431,7 +431,7 @@ fi
 # Support OMX hardware video codecs (pre-API 35)
 # - Replace COLOR_FormatYUV420Flexible with COLOR_FormatSurface/OMX_COLOR_FormatAndroidOpaque
 #   (https://android.googlesource.com/platform/frameworks/av/+/android-16.0.0_r2/media/libstagefright/omx/OMXNodeInstance.cpp#1687)
-# - Replace RECORDING_MODE_HDR10_PLUS/RECORDING_MODE_PRO_HDR10_PLUS with RECORDING_MODE_HDR10
+# - Disable ACodec HEVC limitation for RECORDING_MODE_HDR10_PLUS/RECORDING_MODE_PRO_HDR10_PLUS
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     if ! find "$WORK_DIR/vendor/etc" -maxdepth 1 -type f -name "media_codecs*.xml" ! -name "*performance*" -exec cat {} + | \
             grep -q -P -z '<MediaCodec\s[^>]*name="c2\.(?!android\.|sec\.)[^"]*"(?:(?!</?MediaCodec[\s>])[\s\S])*?="video/'; then
@@ -446,6 +446,24 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
             'configCodec(Lcom/samsung/android/sum/core/message/Message;)V' \
             'const v4, 0x7f420888' \
             'const v4, 0x7f000789'
+        if xxd -p -c 0 "$WORK_DIR/system/system/lib/libstagefright.so" | grep -q "ceec002848d1724c0620"; then
+            HEX_PATCH "$WORK_DIR/system/system/lib/libstagefright.so" \
+                "ceec002848d1724c0620" "ceec002848e0724c0620"
+        elif xxd -p -c 0 "$WORK_DIR/system/system/lib/libstagefright.so" | grep -q "aaea002879d1264c0620"; then
+            HEX_PATCH "$WORK_DIR/system/system/lib/libstagefright.so" \
+                "aaea002879d1264c0620" "aaea002879e0264c0620"
+        else
+            ABORT "No known patch available for the supplied libstagefright.so"
+        fi
+        if xxd -p -c 0 "$WORK_DIR/system/system/lib64/libstagefright.so" | grep -q "70690594205100347a9a40f9"; then
+            HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
+                "70690594205100347a9a40f9" "706905941f2003d57a9a40f9"
+        elif xxd -p -c 0 "$WORK_DIR/system/system/lib64/libstagefright.so" | grep -q "864d0594604d00347a9a40f9"; then
+            HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
+                "864d0594604d00347a9a40f9" "864d05941f2003d57a9a40f9"
+        else
+            ABORT "No known patch available for the supplied libstagefright.so"
+        fi
         if [ -f "$WORK_DIR/system/system/priv-app/GlobalPostProcMgr/GlobalPostProcMgr.apk" ]; then
             SMALI_PATCH "system" "system/priv-app/GlobalPostProcMgr/GlobalPostProcMgr.apk" \
                 "smali/com/samsung/android/sum/core/filter/EncoderFilter.smali" "replace" \
@@ -458,17 +476,6 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
             'configCodec(Lcom/samsung/android/sum/core/message/Message;)V' \
             'const v4, 0x7f420888' \
             'const v4, 0x7f000789'
-        SMALI_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
-            "smali_classes3/com/sec/android/app/camera/engine/recording/session/MediaRecorderProfile.smali" "replace" \
-            'getRecordingMode()I' \
-            'const/16 p0, 0xa' \
-            'const/16 p0, 0xb'
-        # shellcheck disable=SC2016
-        SMALI_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
-            "smali_classes3/com/sec/android/app/camera/engine/recording/session/MediaRecorderProfile.smali" "replace" \
-            'updateProfileForProVideo(ILcom/sec/android/app/camera/engine/recording/session/MediaRecorderProfile$Profile;)V' \
-            'const/16 p0, 0x19' \
-            'const/16 p0, 0xb'
         SMALI_PATCH "system" "system/priv-app/vexfwk_service/vexfwk_service.apk" \
             "smali/com/samsung/android/sum/core/filter/EncoderFilter.smali" "replace" \
             'configCodec(Lcom/samsung/android/sum/core/message/Message;)V' \
