@@ -165,7 +165,6 @@
         <scenario name="CameraLiveFocusPreview!Camera_preview_LiveFocusVideo" tempType="LRP">
             <limiter name="CPUFreqMax" step="0" temp="350:380:450:470" value="-1:1747200:1747200:1305600" />
             <limiter name="GPUFreqMax" step="0" temp="350:380:450:470" value="-1:441:441:305" />
-            <limiter name="NpuFreqLevel" temp="380:400:450" value="0:2:3" />
         </scenario>
 
         <scenario name="ARemoji:com.samsung.android.aremoji" tempType="LRP" >
