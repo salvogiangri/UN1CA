@@ -1,0 +1,27 @@
+From f7ef39da6cd41cb80ee5d25fa3d931abc4fedaac Mon Sep 17 00:00:00 2001
+From: nhglong <its.nhglong@gmail.com>
+Date: Sat, 12 Sep 2026 15:18:01 +0200
+Subject: [PATCH] Fix ArcSsHdrNodeBase NPE
+
+---
+ .../camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase.smali    | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/smali_classes3/com/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase.smali b/smali_classes3/com/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase.smali
+index 5c896c65..c503bc69 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase.smali
+@@ -472,6 +472,10 @@
+     .locals 4
+ 
+     :try_start_0
++    iput-object p2, p0, Lcom/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase;->mLastBundle:Lcom/samsung/android/camera/core2/container/ExtraBundle;
++
++    iput-object p1, p0, Lcom/samsung/android/camera/core2/node/sshdr/arcsoft/ArcSsHdrNodeBase;->mLastPictureImageInfo:Lcom/samsung/android/camera/core2/util/ImageInfo;
++
+     invoke-virtual {p0}, Lcom/samsung/android/camera/core2/node/Node;->getNodeTag()Ljava/lang/String;
+ 
+     move-result-object v0
+-- 
+2.55.0
+
