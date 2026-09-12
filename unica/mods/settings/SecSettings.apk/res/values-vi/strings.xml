@@ -15,14 +15,14 @@
     <string name="unica_hma_summary">Ngăn ứng dụng phát hiện các ứng dụng khác đã cài đặt.</string>
     <string name="unica_hma_title">Ẩn các ứng dụng đã cài đặt</string>
     <string name="unica_hide_dev_title">Ẩn trạng thái nhà phát triển</string>
-    <string name="unica_keybox_clear_title">Xoá dữ liệu keybox</string>
-    <string name="unica_keybox_load_title">Trích xuất hộp khoá XML</string>
+    <string name="unica_keybox_clear_title">Xóa dữ liệu keybox</string>
+    <string name="unica_keybox_load_title">Nhập tệp XML keybox</string>
     <string name="unica_keybox_status_checking">Đang kiểm tra tính hợp lệ…</string>
     <string name="unica_keybox_status_loaded">Đã tải keybox</string>
     <string name="unica_keybox_status_no_data">Không có dữ liệu keybox</string>
     <string name="unica_keybox_status_revoked">Keybox bị thu hồi</string>
     <string name="unica_keybox_status_valid">Keybox hợp lệ</string>
-    <string name="unica_keybox_title">Giả mạo sự chứng thực về phần cứng</string>
+    <string name="unica_keybox_title">Giả mạo chứng thực phần cứng</string>
     <string name="unica_keybox_toast_cleared">Đã xóa dữ liệu keybox.</string>
     <string name="unica_keybox_toast_error">Đã xảy ra lỗi.</string>
     <string name="unica_keybox_toast_error_xml">Không thể phân tích cú pháp tệp XML.</string>
@@ -55,5 +55,5 @@
     <string name="unica_ui_settings_title">Cài đặt giao diện người dùng</string>
     <string name="unica_updates_title">Cập nhật UN1CA</string>
     <string name="unica_vulkan_summary">Không ổn định và có thể gây ra vấn đề!</string>
-    <string name="unica_vulkan_title">Bật trình hiển thị Vulkan</string>
+    <string name="unica_vulkan_title">Bật trình kết xuất Vulkan</string>
 </resources>

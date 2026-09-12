@@ -14,13 +14,13 @@
     <string name="unica_gphotos_title">Nielimitowana pamięć w Zdjęciach Google</string>
     <string name="unica_hma_summary">Uniemożliwia aplikacjom wykrywanie innych zainstalowanych aplikacji.</string>
     <string name="unica_hma_title">Ukryj zainstalowane aplikacje</string>
-    <string name="unica_hide_dev_title">Ukryj status programisty</string>
+    <string name="unica_hide_dev_title">Ukryj status dewelopera</string>
     <string name="unica_keybox_clear_title">Usuń dane keybox</string>
     <string name="unica_keybox_load_title">Importuj plik XML keybox</string>
     <string name="unica_keybox_status_checking">Sprawdzanie ważności…</string>
     <string name="unica_keybox_status_loaded">Keybox jest załadowany</string>
     <string name="unica_keybox_status_no_data">Brak danych keybox</string>
-    <string name="unica_keybox_status_revoked">Keybox jest nieważny</string>
+    <string name="unica_keybox_status_revoked">Keybox został unieważniony</string>
     <string name="unica_keybox_status_valid">Keybox jest ważny</string>
     <string name="unica_keybox_title">Spoofuj sprzętową weryfikację integralności</string>
     <string name="unica_keybox_toast_cleared">Dane keybox zostały wyczyszczone.</string>
@@ -30,7 +30,7 @@
     <string name="unica_keybox_toast_not_gak">Keybox nie jest podpisany przez Google.</string>
     <string name="unica_keybox_toast_not_valid">Plik keybox jest niepoprawny.</string>
     <string name="unica_launcher_anim_type_title">Typ animacji ekranu głównego</string>
-    <string name="unica_max_refresh_rate_title">Wymuś maksymalną płynność ruchu</string>
+    <string name="unica_max_refresh_rate_title">Wymuś maksymalną częstotliwość odświeżania</string>
     <string name="unica_menu_item_reboot_download_title">Uruchom ponownie do trybu Download</string>
     <string name="unica_menu_item_reboot_fastboot_title">Uruchom ponownie do trybu Fastboot</string>
     <string name="unica_menu_item_reboot_recovery_title">Uruchom ponownie do trybu Recovery</string>
@@ -47,8 +47,8 @@
     <string name="unica_pif_toast_up_to_date">"Korzystasz z najnowszej wersji."</string>
     <string name="unica_pif_toast_updated">Aktualizacja zakończona pomyślnie.</string>
     <string name="unica_pif_update_title">Zaktualizuj Play Integrity Fix</string>
-    <string name="unica_rom_version_title">Wersja ROMu</string>
-    <string name="unica_secure_ss_title">Zezwól na poufne zrzuty ekranu</string>
+    <string name="unica_rom_version_title">Wersja ROM-u</string>
+    <string name="unica_secure_ss_title">Zezwól na zrzuty ekranu w chronionych oknach</string>
     <string name="unica_settings_title">Ustawienia UN1CA</string>
     <string name="unica_ss_detection_title">Wyłącz wykrywanie przechwytywania ekranu</string>
     <string name="unica_spoof_settings_title">Ustawienia spoofingu</string>

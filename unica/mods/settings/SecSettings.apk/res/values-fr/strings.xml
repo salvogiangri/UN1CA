@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unica_allow_downgrade_title">"Autoriser la rétrogradation d'application"</string>
-    <string name="unica_allow_sdkbypass_title">Désactiver le blocage des SDK à cible basse</string>
+    <string name="unica_allow_sdkbypass_title">Désactiver le blocage des applis ciblant un SDK trop ancien</string>
     <string name="unica_asks_title">Désactiver ASKS</string>
     <string name="unica_boot_sound_title">"Jouer l'effet sonore au démarrage"</string>
     <string name="unica_device_name_title">"Nom de l'appareil"</string>
     <string name="unica_dialog_reboot_msg">"Pour appliquer les modifications, un redémarrage de l'appareil est requis."</string>
     <string name="unica_dialog_reboot_negative">Pas maintenant</string>
-    <string name="unica_dialog_reboot_positive">Redémarrage</string>
+    <string name="unica_dialog_reboot_positive">Redémarrer</string>
     <string name="unica_dialog_reboot_title">Redémarrage requis</string>
     <string name="unica_extra_settings_title">Paramètres supplémentaires</string>
-    <string name="unica_games_spoof_title">Débloquez des FPS plus élevés dans les jeux</string>
+    <string name="unica_games_spoof_title">Débloquer des FPS plus élevés dans les jeux</string>
     <string name="unica_gphotos_title">Stockage illimité sur Google Photos</string>
     <string name="unica_hma_summary">"Empêcher les applications de détecter d'autres applications installées."</string>
     <string name="unica_hma_title">Masquer les applications installées</string>
@@ -22,7 +22,7 @@
     <string name="unica_keybox_status_no_data">Aucune donnée de keybox</string>
     <string name="unica_keybox_status_revoked">Keybox révoqué</string>
     <string name="unica_keybox_status_valid">Keybox valide</string>
-    <string name="unica_keybox_title">"Masquer l'attestation matérielle"</string>
+    <string name="unica_keybox_title">"Usurper l'attestation matérielle"</string>
     <string name="unica_keybox_toast_cleared">Données du keybox effacées.</string>
     <string name="unica_keybox_toast_error">"Une erreur s'est produite."</string>
     <string name="unica_keybox_toast_error_xml">"Impossible d'analyser le fichier XML."</string>
@@ -38,7 +38,7 @@
     <string name="unica_menu_reboot_title">Options de redémarrage</string>
     <string name="unica_native_blur_title">"Activer l'effet de flou en direct"</string>
     <string name="unica_pif_custom_title">Importer des propriétés PIF personnalisées depuis un fichier</string>
-    <string name="unica_pif_summary">"Usurper votre appareil pour réussir l'attestation Google Play."</string>
+    <string name="unica_pif_summary">"Usurper l'identité de votre appareil pour réussir l'attestation Google Play."</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Vérification des mises à jour…</string>
     <string name="unica_pif_toast_custom">Propriétés personnalisées chargées.</string>

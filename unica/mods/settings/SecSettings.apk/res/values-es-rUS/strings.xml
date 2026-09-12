@@ -12,7 +12,7 @@
     <string name="unica_extra_settings_title">Ajustes adicionales</string>
     <string name="unica_games_spoof_title">Desbloquear ajustes de FPS adicionales en juegos</string>
     <string name="unica_gphotos_title">Almacenamiento ilimitado en Google Fotos</string>
-    <string name="unica_hma_summary">Prevenir apps de detectar otras apps instaladas.</string>
+    <string name="unica_hma_summary">Impedir que las apps detecten otras apps instaladas.</string>
     <string name="unica_hma_title">Ocultar apps instaladas</string>
     <string name="unica_hide_dev_title">Ocultar estado de desarrollador</string>
     <string name="unica_keybox_clear_title">Borrar datos de keybox</string>
@@ -22,7 +22,7 @@
     <string name="unica_keybox_status_no_data">Sin datos de keybox</string>
     <string name="unica_keybox_status_revoked">Keybox revocada</string>
     <string name="unica_keybox_status_valid">Keybox válida</string>
-    <string name="unica_keybox_title">Suplantar verificaciones de hardware</string>
+    <string name="unica_keybox_title">Suplantar atestación de hardware</string>
     <string name="unica_keybox_toast_cleared">Datos de keybox borrados.</string>
     <string name="unica_keybox_toast_error">Se produjo un error.</string>
     <string name="unica_keybox_toast_error_xml">No se pudo procesar el archivo XML.</string>
@@ -31,9 +31,9 @@
     <string name="unica_keybox_toast_not_valid">Keybox no válida.</string>
     <string name="unica_launcher_anim_type_title">Tipo de animación del launcher</string>
     <string name="unica_max_refresh_rate_title">Forzar frecuencia máxima de actualización de pantalla</string>
-    <string name="unica_menu_item_reboot_download_title">Reiniciar a modo de descarga</string>
-    <string name="unica_menu_item_reboot_fastboot_title">Reiniciar a fastboot</string>
-    <string name="unica_menu_item_reboot_recovery_title">Reiniciar a modo de recuperación</string>
+    <string name="unica_menu_item_reboot_download_title">Reiniciar en modo Download</string>
+    <string name="unica_menu_item_reboot_fastboot_title">Reiniciar en modo Fastboot</string>
+    <string name="unica_menu_item_reboot_recovery_title">Reiniciar en modo Recovery</string>
     <string name="unica_menu_item_reboot_title">Reiniciar</string>
     <string name="unica_menu_reboot_title">Opciones de reinicio</string>
     <string name="unica_native_blur_title">Habilitar efecto de desenfoque en tiempo real</string>
@@ -41,7 +41,7 @@
     <string name="unica_pif_summary">Suplantar tu dispositivo para pasar la certificación de Google Play.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Comprobando actualizaciones…</string>
-    <string name="unica_pif_toast_custom">Cargados propiedades custom.</string>
+    <string name="unica_pif_toast_custom">Propiedades personalizadas cargadas.</string>
     <string name="unica_pif_toast_error">Se produjo un error.</string>
     <string name="unica_pif_toast_error_custom">Archivo inválido.</string>
     <string name="unica_pif_toast_up_to_date">"La versión más reciente ya está instalada."</string>
@@ -55,5 +55,5 @@
     <string name="unica_ui_settings_title">Ajustes de la interfaz de usuario</string>
     <string name="unica_updates_title">Actualizaciones de UN1CA</string>
     <string name="unica_vulkan_summary">¡Esto es inestable y puede causar errores!</string>
-    <string name="unica_vulkan_title">Activar renderizado de Vulkan</string>
+    <string name="unica_vulkan_title">Activar renderizador Vulkan</string>
 </resources>

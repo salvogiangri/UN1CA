@@ -15,14 +15,14 @@
     <string name="unica_hma_summary">Предотвратете откриването на други инсталирани приложения от приложения.</string>
     <string name="unica_hma_title">Скриване на инсталирани приложения</string>
     <string name="unica_hide_dev_title">Скриване на статуса на разработчика</string>
-    <string name="unica_keybox_clear_title">Изтриване keybox данните</string>
+    <string name="unica_keybox_clear_title">Изтриване на keybox данните</string>
     <string name="unica_keybox_load_title">Импортиране на XML keybox файл</string>
     <string name="unica_keybox_status_checking">Проверка на валидността…</string>
     <string name="unica_keybox_status_loaded">Keybox-ът е зареден</string>
     <string name="unica_keybox_status_no_data">Няма keybox данни</string>
-    <string name="unica_keybox_status_revoked">Отказан keybox</string>
+    <string name="unica_keybox_status_revoked">Анулиран keybox</string>
     <string name="unica_keybox_status_valid">Валиден keybox</string>
-    <string name="unica_keybox_title">Атестация на фалшив хардуер</string>
+    <string name="unica_keybox_title">Подправяне на хардуерната атестация</string>
     <string name="unica_keybox_toast_cleared">Keybox данните са изчистени.</string>
     <string name="unica_keybox_toast_error">Настъпи грешка.</string>
     <string name="unica_keybox_toast_error_xml">XML файлът не може да се анализира.</string>
@@ -30,7 +30,7 @@
     <string name="unica_keybox_toast_not_gak">Keybox-ът не е подписан от Google.</string>
     <string name="unica_keybox_toast_not_valid">Keybox файлът не е валиден.</string>
     <string name="unica_launcher_anim_type_title">Тип анимация на лаунчера</string>
-    <string name="unica_max_refresh_rate_title">Заключване на най-високата честота на опресняване</string>
+    <string name="unica_max_refresh_rate_title">Принудително използване на най-високата честота на опресняване</string>
     <string name="unica_menu_item_reboot_download_title">Рестартиране в режим Download</string>
     <string name="unica_menu_item_reboot_fastboot_title">Рестартиране в режим Fastboot</string>
     <string name="unica_menu_item_reboot_recovery_title">Рестартиране в режим Recovery</string>
@@ -38,7 +38,7 @@
     <string name="unica_menu_reboot_title">Опции за рестартиране</string>
     <string name="unica_native_blur_title">Включване на blur ефект</string>
     <string name="unica_pif_custom_title">Импортиране на персонализирани PIF свойства от файл</string>
-    <string name="unica_pif_summary">\"Прикрийте\" устройството си, за да преминете атестацията в Google Play.</string>
+    <string name="unica_pif_summary">Прикрийте устройството си, за да преминете атестацията на Google Play.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Проверка за актуализации…</string>
     <string name="unica_pif_toast_custom">Заредени са персонализираните свойства.</string>

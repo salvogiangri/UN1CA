@@ -22,7 +22,7 @@
     <string name="unica_keybox_status_no_data">Keybox məlumatı yoxdur</string>
     <string name="unica_keybox_status_revoked">Ləğv edilmiş keybox</string>
     <string name="unica_keybox_status_valid">Etibarlı keybox</string>
-    <string name="unica_keybox_title">Hardware attestiyasını spoof et</string>
+    <string name="unica_keybox_title">Aparat attestasiyasını saxtalaşdır</string>
     <string name="unica_keybox_toast_cleared">Keybox məlumatları silindi.</string>
     <string name="unica_keybox_toast_error">Xəta baş verdi.</string>
     <string name="unica_keybox_toast_error_xml">XML faylı oxuna bilmədi.</string>
@@ -31,14 +31,14 @@
     <string name="unica_keybox_toast_not_valid">Keybox faylı etibarlı deyil.</string>
     <string name="unica_launcher_anim_type_title">Launcher animasiyasının tipi</string>
     <string name="unica_max_refresh_rate_title">Ən yüksək yeniləmə tezliyinə məcbur et</string>
-    <string name="unica_menu_item_reboot_download_title">Yükləmə rejimində yenidən başladın</string>
+    <string name="unica_menu_item_reboot_download_title">Download rejimində yenidən başladın</string>
     <string name="unica_menu_item_reboot_fastboot_title">Fastboot rejimində yenidən başladın</string>
     <string name="unica_menu_item_reboot_recovery_title">Bərpa rejimində yenidən başladın</string>
     <string name="unica_menu_item_reboot_title">Yenidən başlat</string>
     <string name="unica_menu_reboot_title">Yenidən başlatma seçimləri</string>
     <string name="unica_native_blur_title">Canlı blur effektini aktivləşdir</string>
     <string name="unica_pif_custom_title">Fayldan xüsusi PIF xassələrini idxal et</string>
-    <string name="unica_pif_summary">Cihazını Google Play attestiyasından keçmək üçün saxtalaşdır.</string>
+    <string name="unica_pif_summary">Cihazınızı Google Play attestasiyasından keçmək üçün saxtalaşdırın.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Yeniləmələr yoxlanılır…</string>
     <string name="unica_pif_toast_custom">Xüsusi konfiqurasiya yükləndi.</string>
@@ -51,7 +51,7 @@
     <string name="unica_secure_ss_title">Təhlükəsiz ekran görüntüsünə icazə ver</string>
     <string name="unica_settings_title">UN1CA Parametrləri</string>
     <string name="unica_ss_detection_title">Ekran görüntüsü aşkarlanmasını deaktiv et</string>
-    <string name="unica_spoof_settings_title">Saxtakarlıq parametrləri</string>
+    <string name="unica_spoof_settings_title">Saxtalaşdırma parametrləri</string>
     <string name="unica_ui_settings_title">İstifadəçi interfeysi parametrləri</string>
     <string name="unica_updates_title">UN1CA Yeniləmələri</string>
     <string name="unica_vulkan_summary">Bu stabil deyil və problemlərə səbəb ola bilər!</string>

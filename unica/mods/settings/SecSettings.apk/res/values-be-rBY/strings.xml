@@ -11,9 +11,9 @@
     <string name="unica_dialog_reboot_title">Патрабуецца перазагрузка</string>
     <string name="unica_extra_settings_title">Дадатковыя налады</string>
     <string name="unica_games_spoof_title">Разблакаваць настройку высокага FPS у гульнях</string>
-    <string name="unica_gphotos_title">Неабмежаваную сховішча ў Google Фота</string>
+    <string name="unica_gphotos_title">Неабмежаванае сховішча ў Google Фота</string>
     <string name="unica_hma_summary">Забараніце прыкладанням выяўляць іншыя ўсталяваныя прыкладанні.</string>
-    <string name="unica_hma_title">Схаваць устаноўленыя прыкладання</string>
+    <string name="unica_hma_title">Схаваць устаноўленыя прыкладанні</string>
     <string name="unica_hide_dev_title">Схаваць статус распрацоўніка</string>
     <string name="unica_keybox_clear_title">Выдаліць дадзеныя keybox</string>
     <string name="unica_keybox_load_title">Імпарт XML файла keybox</string>
@@ -30,7 +30,7 @@
     <string name="unica_keybox_toast_not_gak">Keybox не падпісаны Google.</string>
     <string name="unica_keybox_toast_not_valid">Keybox файл не дзейнічае.</string>
     <string name="unica_launcher_anim_type_title">Тып анімацыі лаўнчера</string>
-    <string name="unica_max_refresh_rate_title">Пікавая частата абнаўлення экрана</string>
+    <string name="unica_max_refresh_rate_title">Прымусова выкарыстоўваць пікавую частату абнаўлення</string>
     <string name="unica_menu_item_reboot_download_title">Перазагрузка ў Download</string>
     <string name="unica_menu_item_reboot_fastboot_title">Перазагрузка ў Fastboot</string>
     <string name="unica_menu_item_reboot_recovery_title">Перазагрузка ў Recovery</string>
@@ -38,13 +38,13 @@
     <string name="unica_menu_reboot_title">Опцыі перазагрузкі</string>
     <string name="unica_native_blur_title">Уключыць эфект жывога блюру</string>
     <string name="unica_pif_custom_title">Імпартаваць прыстасаваныя ўласцівасці PIF з файла</string>
-    <string name="unica_pif_summary">Падмяніць ваша прылада для праходжання атэстацыі Google Play.</string>
+    <string name="unica_pif_summary">Падмяніць вашу прыладу для праходжання атэстацыі Google Play.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Праверка абнаўленняў…</string>
     <string name="unica_pif_toast_custom">Прыстасаваныя ўласцівасці загружаны.</string>
     <string name="unica_pif_toast_error">Адбылася памылка.</string>
     <string name="unica_pif_toast_error_custom">Недапушчальны файл.</string>
-    <string name="unica_pif_toast_up_to_date">"Вы карыстаецеся апошнюю версію."</string>
+    <string name="unica_pif_toast_up_to_date">"Вы карыстаецеся апошняй версіяй."</string>
     <string name="unica_pif_toast_updated">Абнаўленне паспяхова завершана.</string>
     <string name="unica_pif_update_title">Абнавіць Play Integrity Fix</string>
     <string name="unica_rom_version_title">Версія прашыўкі</string>
@@ -55,5 +55,5 @@
     <string name="unica_ui_settings_title">Налады інтэрфейсу карыстальніка</string>
     <string name="unica_updates_title">Абнаўлення UN1CA</string>
     <string name="unica_vulkan_summary">Гэта нестабільнае і можа выклікаць праблемы!</string>
-    <string name="unica_vulkan_title">Апрацоўка праз Vulkan</string>
+    <string name="unica_vulkan_title">Уключыць рэндэрар Vulkan</string>
 </resources>

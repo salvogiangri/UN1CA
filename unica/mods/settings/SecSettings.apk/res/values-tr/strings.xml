@@ -4,14 +4,14 @@
     <string name="unica_allow_sdkbypass_title">Uygulamalarda SDK sürüm kısıtlamasını devre dışı bırak</string>
     <string name="unica_asks_title">"ASKS'yi devre dışı bırak"</string>
     <string name="unica_boot_sound_title">Cihaz açılış sesini etkinleştir</string>
-    <string name="unica_device_name_title">Cihaz İsmi</string>
+    <string name="unica_device_name_title">Cihaz adı</string>
     <string name="unica_dialog_reboot_msg">Değişikliklerin uygulanabilmesi için cihazın yeniden başlatılması gerekiyor.</string>
     <string name="unica_dialog_reboot_negative">Şimdi değil</string>
     <string name="unica_dialog_reboot_positive">Yeniden başlat</string>
     <string name="unica_dialog_reboot_title">Yeniden başlatma gerekli</string>
-    <string name="unica_extra_settings_title">Ekstra Ayarlar</string>
+    <string name="unica_extra_settings_title">Ekstra ayarlar</string>
     <string name="unica_games_spoof_title">Oyunlardaki kilitli grafik ayarlarını aç</string>
-    <string name="unica_gphotos_title">Google Fotoğraflarda sınırsız depolama</string>
+    <string name="unica_gphotos_title">"Google Fotoğraflar'da sınırsız depolama"</string>
     <string name="unica_hma_summary">Uygulamaların diğer yüklü uygulamaları tespit etmesini engelle.</string>
     <string name="unica_hma_title">Yüklü uygulamaları gizle</string>
     <string name="unica_hide_dev_title">Geliştirici seçeneklerini gizle</string>
@@ -20,7 +20,7 @@
     <string name="unica_keybox_status_checking">Geçerlilik durumu kontrol ediliyor…</string>
     <string name="unica_keybox_status_loaded">Keybox yüklendi</string>
     <string name="unica_keybox_status_no_data">Keybox verisi yok</string>
-    <string name="unica_keybox_status_revoked">Engellenmiş keybox</string>
+    <string name="unica_keybox_status_revoked">İptal edilmiş keybox</string>
     <string name="unica_keybox_status_valid">Geçerli keybox</string>
     <string name="unica_keybox_title">Donanım doğrulamasını aldat</string>
     <string name="unica_keybox_toast_cleared">Keybox verisi temizlendi.</string>
@@ -38,7 +38,7 @@
     <string name="unica_menu_reboot_title">Yeniden başlatma seçenekleri</string>
     <string name="unica_native_blur_title">Gerçek zamanlı bulanıklık efektini etkinleştir</string>
     <string name="unica_pif_custom_title">PIF parametrelerini dosyadan içe aktar</string>
-    <string name="unica_pif_summary">"Google Play kontrollerini geçmek için cihazınızı spoof'layın."</string>
+    <string name="unica_pif_summary">Google Play kontrollerini geçmek için cihazınızı taklit edin.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Güncellemeler kontrol ediliyor…</string>
     <string name="unica_pif_toast_custom">Özel konfigürasyon yüklendi.</string>
@@ -52,7 +52,7 @@
     <string name="unica_settings_title">UN1CA Ayarları</string>
     <string name="unica_ss_detection_title">Ekran yakalama tespitini devre dışı bırak</string>
     <string name="unica_spoof_settings_title">Sistem aldatma ayarları</string>
-    <string name="unica_ui_settings_title">Arayüz Ayarları</string>
+    <string name="unica_ui_settings_title">Arayüz ayarları</string>
     <string name="unica_updates_title">UN1CA Güncellemeleri</string>
     <string name="unica_vulkan_summary">Stabil değildir ve sorunlara sebep olabilir!</string>
     <string name="unica_vulkan_title">Vulkan işleyicisini etkinleştir</string>

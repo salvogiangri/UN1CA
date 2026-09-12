@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="unica_allow_downgrade_title">Επιτρέπεται η υποβάθμιση εφαρμογών</string>
+    <string name="unica_allow_downgrade_title">Να επιτρέπεται η υποβάθμιση εφαρμογών</string>
     <string name="unica_allow_sdkbypass_title">Απενεργοποίηση αποκλεισμού χαμηλού Target SDK</string>
     <string name="unica_asks_title">Απενεργοποίηση ASKS</string>
     <string name="unica_boot_sound_title">Αναπαραγωγή ήχου εκκίνησης</string>
@@ -48,7 +48,7 @@
     <string name="unica_pif_toast_updated">Η ενημέρωση ολοκληρώθηκε με επιτυχία.</string>
     <string name="unica_pif_update_title">Ενημέρωση Play Integrity Fix</string>
     <string name="unica_rom_version_title">Έκδοση ROM</string>
-    <string name="unica_secure_ss_title">Επιτρέπεται το ασφαλές στιγμιότυπο οθόνης</string>
+    <string name="unica_secure_ss_title">Να επιτρέπονται τα στιγμιότυπα σε ασφαλείς εφαρμογές</string>
     <string name="unica_settings_title">Ρυθμίσεις UN1CA</string>
     <string name="unica_ss_detection_title">Απενεργοποίηση ανίχνευσης στιγμιότυπου οθόνης</string>
     <string name="unica_spoof_settings_title">Ρυθμίσεις πλαστογράφησης</string>

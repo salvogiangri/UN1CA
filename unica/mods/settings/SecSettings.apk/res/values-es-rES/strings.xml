@@ -24,7 +24,7 @@
     <string name="unica_keybox_status_valid">Keybox válida</string>
     <string name="unica_keybox_title">Simular atestación de hardware</string>
     <string name="unica_keybox_toast_cleared">Datos de keybox eliminados.</string>
-    <string name="unica_keybox_toast_error">Ocurrió un error.</string>
+    <string name="unica_keybox_toast_error">Se ha producido un error.</string>
     <string name="unica_keybox_toast_error_xml">No se pudo procesar el archivo XML.</string>
     <string name="unica_keybox_toast_loaded">Archivo de keybox cargado.</string>
     <string name="unica_keybox_toast_not_gak">La keybox no está firmada por Google.</string>
@@ -38,11 +38,11 @@
     <string name="unica_menu_reboot_title">Opciones de reinicio</string>
     <string name="unica_native_blur_title">Activar efecto de desenfoque en tiempo real</string>
     <string name="unica_pif_custom_title">Importar props personalizadas de PIF desde archivo</string>
-    <string name="unica_pif_summary">Suplantar tu dispositivo para pasar la certificación de Google Play.</string>
+    <string name="unica_pif_summary">Suplantar tu dispositivo para pasar la atestación de Google Play.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Comprobando actualizaciones…</string>
     <string name="unica_pif_toast_custom">Props personalizadas cargadas.</string>
-    <string name="unica_pif_toast_error">Ocurrió un error.</string>
+    <string name="unica_pif_toast_error">Se ha producido un error.</string>
     <string name="unica_pif_toast_error_custom">Archivo inválido.</string>
     <string name="unica_pif_toast_up_to_date">"Estás usando la versión más reciente."</string>
     <string name="unica_pif_toast_updated">La actualización se instaló correctamente.</string>

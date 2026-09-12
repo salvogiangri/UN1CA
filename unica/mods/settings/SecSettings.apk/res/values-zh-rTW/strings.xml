@@ -15,12 +15,12 @@
     <string name="unica_hma_summary">阻止應用程式偵測到其他已安裝的應用程式。</string>
     <string name="unica_hma_title">隱藏已安裝的應用程式</string>
     <string name="unica_hide_dev_title">隱藏開發者狀態</string>
-    <string name="unica_keybox_clear_title">刪除 keybox</string>
+    <string name="unica_keybox_clear_title">刪除 keybox 資料</string>
     <string name="unica_keybox_load_title">匯入 keybox XML 檔案</string>
     <string name="unica_keybox_status_checking">檢查有效性…</string>
     <string name="unica_keybox_status_loaded">已載入 keybox</string>
     <string name="unica_keybox_status_no_data">無 keybox 資料</string>
-    <string name="unica_keybox_status_revoked">失效 keybox</string>
+    <string name="unica_keybox_status_revoked">已撤銷的 keybox</string>
     <string name="unica_keybox_status_valid">有效 keybox</string>
     <string name="unica_keybox_title">欺騙硬體認證</string>
     <string name="unica_keybox_toast_cleared">已清除 keybox 資料。</string>
@@ -36,7 +36,7 @@
     <string name="unica_menu_item_reboot_recovery_title">重新啟動到 Recovery</string>
     <string name="unica_menu_item_reboot_title">重新啟動</string>
     <string name="unica_menu_reboot_title">重新啟動選項</string>
-    <string name="unica_native_blur_title">啟用即使模糊</string>
+    <string name="unica_native_blur_title">啟用即時模糊效果</string>
     <string name="unica_pif_custom_title">從檔案匯入自訂 PIF 屬性</string>
     <string name="unica_pif_summary">透過偽造裝置資訊以通過 Google Play 認證。</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
@@ -55,5 +55,5 @@
     <string name="unica_ui_settings_title">UI 設定</string>
     <string name="unica_updates_title">UN1CA 更新</string>
     <string name="unica_vulkan_summary">這不穩定，可能會出現問題！</string>
-    <string name="unica_vulkan_title">啟用 Vulkan 著色器</string>
+    <string name="unica_vulkan_title">啟用 Vulkan 算繪器</string>
 </resources>

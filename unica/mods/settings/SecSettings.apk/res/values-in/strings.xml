@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unica_allow_downgrade_title">Izinkan penurunan versi aplikasi</string>
-    <string name="unica_allow_sdkbypass_title">Non-aktifkan low target SDK block</string>
-    <string name="unica_asks_title">Non-aktifkan ASKS</string>
+    <string name="unica_allow_sdkbypass_title">Nonaktifkan blokir SDK target rendah</string>
+    <string name="unica_asks_title">Nonaktifkan ASKS</string>
     <string name="unica_boot_sound_title">Aktifkan suara saat dihidupkan</string>
-    <string name="unica_device_name_title">Nama Perangkat</string>
+    <string name="unica_device_name_title">Nama perangkat</string>
     <string name="unica_dialog_reboot_msg">Untuk menerapkan perubahan, diperlukan memulai ulang.</string>
     <string name="unica_dialog_reboot_negative">Tidak sekarang</string>
     <string name="unica_dialog_reboot_positive">Mulai ulang</string>
@@ -30,7 +30,7 @@
     <string name="unica_keybox_toast_not_gak">Keybox tidak ditandatangani oleh Google.</string>
     <string name="unica_keybox_toast_not_valid">Berkas Keybox tidak valid.</string>
     <string name="unica_launcher_anim_type_title">Jenis animasi peluncur</string>
-    <string name="unica_max_refresh_rate_title">Paksa penyegaran layar tinggi</string>
+    <string name="unica_max_refresh_rate_title">Paksa laju penyegaran tertinggi</string>
     <string name="unica_menu_item_reboot_download_title">Mulai ulang ke Download</string>
     <string name="unica_menu_item_reboot_fastboot_title">Mulai ulang ke Fastboot</string>
     <string name="unica_menu_item_reboot_recovery_title">Mulai ulang ke Recovery</string>
@@ -43,7 +43,7 @@
     <string name="unica_pif_toast_checking">Mengecek pembaruan…</string>
     <string name="unica_pif_toast_custom">Properti kustom dimuat.</string>
     <string name="unica_pif_toast_error">Terjadi kesalahan.</string>
-    <string name="unica_pif_toast_error_custom">Berkas tidak sesuai.</string>
+    <string name="unica_pif_toast_error_custom">Berkas tidak valid.</string>
     <string name="unica_pif_toast_up_to_date">"Anda menjalankan versi terbaru."</string>
     <string name="unica_pif_toast_updated">Pembaruan berhasil.</string>
     <string name="unica_pif_update_title">Perbarui Play Integrity Fix</string>

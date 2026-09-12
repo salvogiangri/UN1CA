@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unica_allow_downgrade_title">Dozvoli vraćanje aplikacija na stariju verziju</string>
-    <string name="unica_allow_sdkbypass_title">Onemogući nisko ciljni SDK blok</string>
+    <string name="unica_allow_sdkbypass_title">Onemogući blokiranje aplikacija sa starim ciljnim SDK-om</string>
     <string name="unica_asks_title">Onemogući ASKS</string>
     <string name="unica_boot_sound_title">Pusti zvuk tokom pokretanja uređaja</string>
     <string name="unica_device_name_title">Ime uređaja</string>
@@ -20,7 +20,7 @@
     <string name="unica_keybox_status_checking">Proveravanje validnosti…</string>
     <string name="unica_keybox_status_loaded">Keybox učitan</string>
     <string name="unica_keybox_status_no_data">Nema podataka za keybox</string>
-    <string name="unica_keybox_status_revoked">Keybox sprečen</string>
+    <string name="unica_keybox_status_revoked">Keybox je opozvan</string>
     <string name="unica_keybox_status_valid">Validan keybox</string>
     <string name="unica_keybox_title">Lažiranje hardverske atestacije</string>
     <string name="unica_keybox_toast_cleared">Podaci za keybox očišćeni.</string>
@@ -28,7 +28,7 @@
     <string name="unica_keybox_toast_error_xml">Raščlanivanje XML dokumenta nije uspešno.</string>
     <string name="unica_keybox_toast_loaded">Keybox datoteka učitana.</string>
     <string name="unica_keybox_toast_not_gak">Keybox nije potpisan od strane Google-a.</string>
-    <string name="unica_keybox_toast_not_valid">Keybox datoteka nije validan.</string>
+    <string name="unica_keybox_toast_not_valid">Keybox datoteka nije validna.</string>
     <string name="unica_launcher_anim_type_title">Tip animacije pokretača</string>
     <string name="unica_max_refresh_rate_title">Forsiraj najvišu brzinu osvežavanja</string>
     <string name="unica_menu_item_reboot_download_title">Ponovo pokreni u Download</string>
@@ -37,11 +37,11 @@
     <string name="unica_menu_item_reboot_title">Ponovo pokreni</string>
     <string name="unica_menu_reboot_title">Opcije za ponovno pokretanje</string>
     <string name="unica_native_blur_title">Omogućite efekat zamućenja uživo</string>
-    <string name="unica_pif_custom_title">Uvezi prilagođene PIF rekvizite iz datoteke</string>
-    <string name="unica_pif_summary">Lažno prevarite svoj uređaj da biste prošli Google Play atestaciju.</string>
+    <string name="unica_pif_custom_title">Uvezi prilagođena PIF svojstva iz datoteke</string>
+    <string name="unica_pif_summary">Lažirajte svoj uređaj da biste prošli Google Play atestaciju.</string>
     <string name="unica_pif_title">Play Integrity Fix</string>
     <string name="unica_pif_toast_checking">Provera ažuriranja…</string>
-    <string name="unica_pif_toast_custom">Prilagođeni rekviziti učitani.</string>
+    <string name="unica_pif_toast_custom">Prilagođena svojstva učitana.</string>
     <string name="unica_pif_toast_error">Došlo je do greške.</string>
     <string name="unica_pif_toast_error_custom">Nevažeća datoteka.</string>
     <string name="unica_pif_toast_up_to_date">"Koristite najnoviju verziju."</string>
@@ -51,9 +51,9 @@
     <string name="unica_secure_ss_title">Dozvoli siguran snimak ekrana</string>
     <string name="unica_settings_title">UN1CA Podešavanja</string>
     <string name="unica_ss_detection_title">Onemogući otkrivanje snimanja ekrana</string>
-    <string name="unica_spoof_settings_title">Korisna podešavanja</string>
+    <string name="unica_spoof_settings_title">Podešavanja lažiranja</string>
     <string name="unica_ui_settings_title">UI podešavanja</string>
     <string name="unica_updates_title">UN1CA Ažuriranje</string>
-    <string name="unica_vulkan_summary">Ovo je nestabilni i može da izazove probleme!</string>
+    <string name="unica_vulkan_summary">Ovo je nestabilno i može da izazove probleme!</string>
     <string name="unica_vulkan_title">Omogući Vulkan renderer</string>
 </resources>

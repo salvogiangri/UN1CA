@@ -10,24 +10,24 @@
     <string name="unica_dialog_reboot_positive">إعادة تشغيل</string>
     <string name="unica_dialog_reboot_title">مطلوب إعادة تشغيل الهاتف</string>
     <string name="unica_extra_settings_title">إعدادات إضافية</string>
-    <string name="unica_games_spoof_title">فتح معدل تحديث أعلى في الألعاب</string>
+    <string name="unica_games_spoof_title">فتح معدل إطارات أعلى في الألعاب</string>
     <string name="unica_gphotos_title">مساحة تخزين غير محدودة على صور Google</string>
     <string name="unica_hma_summary">منع التطبيقات من اكتشاف التطبيقات المثبتة الأخرى.</string>
     <string name="unica_hma_title">إخفاء التطبيقات المثبتة</string>
     <string name="unica_hide_dev_title">إخفاء حالة المطور</string>
-    <string name="unica_keybox_clear_title">حذف بيانات ال Keybox</string>
+    <string name="unica_keybox_clear_title">حذف بيانات الـ Keybox</string>
     <string name="unica_keybox_load_title">استيراد مِلَفّ Keybox XML</string>
-    <string name="unica_keybox_status_checking">التحقق من الصَّلاحِيَّة...</string>
+    <string name="unica_keybox_status_checking">التحقق من الصَّلاحِيَّة…</string>
     <string name="unica_keybox_status_loaded">تم تحميل مِلَف Keybox</string>
     <string name="unica_keybox_status_no_data">لا توجد بيانات لمِلَف Keybox</string>
     <string name="unica_keybox_status_revoked">Keybox مُلغى</string>
     <string name="unica_keybox_status_valid">Keybox صالح</string>
-    <string name="unica_keybox_title">تزييف مصادقة الجهاز</string>
+    <string name="unica_keybox_title">تزييف مصادقة العتاد</string>
     <string name="unica_keybox_toast_cleared">تم مسح بيانات الـ Keybox.</string>
     <string name="unica_keybox_toast_error">حدث خطأ ما.</string>
     <string name="unica_keybox_toast_error_xml">تعذَّر تحليل مِلَف XML.</string>
     <string name="unica_keybox_toast_loaded">تم تحميل مِلَف الـ Keybox.</string>
-    <string name="unica_keybox_toast_not_gak">مِلَف الـ Keybox غير مُوقَّع من جوجل.</string>
+    <string name="unica_keybox_toast_not_gak">مِلَف الـ Keybox غير مُوقَّع من Google.</string>
     <string name="unica_keybox_toast_not_valid">مِلَف Keybox غير صالح.</string>
     <string name="unica_launcher_anim_type_title">نوع الرسوم المتحركة للمشغل</string>
     <string name="unica_max_refresh_rate_title">فرض الحد الأقصى لمعدل تحديث الشاشة</string>
@@ -55,5 +55,5 @@
     <string name="unica_ui_settings_title">إعدادات واجهة المستخدم</string>
     <string name="unica_updates_title">تحديثات UN1CA</string>
     <string name="unica_vulkan_summary">هذا غير مستقر وقد يسبب مشاكل!</string>
-    <string name="unica_vulkan_title">تمكين عرض Vulkan</string>
+    <string name="unica_vulkan_title">تمكين مُصيِّر Vulkan</string>
 </resources>
