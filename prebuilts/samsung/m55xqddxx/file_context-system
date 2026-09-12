@@ -1,0 +1,5 @@
+/system u:object_r:system_file:s0
+/system/lib u:object_r:system_lib_file:s0
+/system/lib/libnfc_sec_jni\.so u:object_r:system_lib_file:s0
+/system/lib64 u:object_r:system_lib_file:s0
+/system/lib64/libnfc_sec_jni\.so u:object_r:system_lib_file:s0

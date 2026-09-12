@@ -30,6 +30,13 @@ SMALI_PATCH "system" "system/framework/samsungkeystoreutils.jar" \
 APPLY_PATCH "system" "system/framework/services.jar" \
     "$MODPATH/services.jar/0001-Bypass-ICD-verification.patch"
 
+# Bypass Knox attestation on GAK-only devices
+if [[ "$(GET_PROP "vendor" "ro.security.keystore.keytype")" != *"sak"* ]]; then
+    SMALI_PATCH "system" "system/framework/services.jar" \
+        "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
+        'isKnoxKeyInstallable()Z' 'true'
+fi
+
 # Disable SAK in DarManagerService
 SMALI_PATCH "system" "system/framework/services.jar" \
     "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
