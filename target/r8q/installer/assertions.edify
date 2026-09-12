@@ -1,3 +1,4 @@
+run_program("/system/bin/grep", "-q", "v2", "/etc/recovery.fstab") == "0" || abort("E3000: This package does not support your currently installed recovery.");
 is_substring("G780GXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G780GXXU3DVK5") && abort("E3003: This package requires Android 13 firmware.");
 is_substring("G7810ZC", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G7810ZCU3GVK7") && abort("E3003: This package requires Android 13 firmware.");
 is_substring("G7810ZH", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "G7810ZHU3GVK6") && abort("E3003: This package requires Android 13 firmware.");
