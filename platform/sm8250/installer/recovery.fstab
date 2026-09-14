@@ -1,0 +1,76 @@
+# Copyright (c) 2018-2019 The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted (subject to the limitations in the
+# disclaimer below) provided that the following conditions are met:
+#
+#    * Redistributions of source code must retain the above copyright
+#      notice, this list of conditions and the following disclaimer.
+#
+#    * Redistributions in binary form must reproduce the above
+#      copyright notice, this list of conditions and the following
+#      disclaimer in the documentation and/or other materials provided
+#      with the distribution.
+#
+#    * Neither the name of The Linux Foundation nor the names of its
+#      contributors may be used to endorse or promote products derived
+#      from this software without specific prior written permission.
+#
+# NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+# GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+# HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#<src>                                    <mnt_point>    <type>    <mnt_flags and options>    <fs_mgr_flags>
+system	/system	ext4	ro	wait,avb=vbmeta,logical,first_stage_mount
+system	/system	f2fs	ro	wait,avb=vbmeta,logical,first_stage_mount
+system	/system	erofs	ro	wait,avb=vbmeta,logical,first_stage_mount
+vendor	/vendor	ext4	ro	wait,avb,logical,first_stage_mount
+/dev/block/bootdevice/by-name/boot        /boot           emmc        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/recovery    /recovery       emmc        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/metadata    /metadata       ext4        defaults                  wait,first_stage_mount
+/dev/block/bootdevice/by-name/userdata	/data	f2fs	noatime,nosuid,nodev,discard,usrquota,grpquota,fsync_mode=nobarrier,reserve_root=32768,resgid=5678	wait,encryptable=footer,length=-16384
+/dev/block/bootdevice/by-name/cache       /cache          ext4        defaults                  recoveryonly
+/dev/block/mmcblk0p1                      /sdcard         sdfat       defaults                  recoveryonly
+/dev/block/bootdevice/by-name/sec_efs     /efs            ext4        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/sec_efs     /sec_efs        ext4        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/carrier     /carrier        ext4        defaults                  recoveryonly
+
+# FOTA
+/dev/block/bootdevice/by-name/apnhlos     /modem          emmc        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/modem       /mdm            emmc        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/dsp         /dsp            emmc        defaults                  recoveryonly
+product	/product	ext4	ro	wait,avb,logical,first_stage_mount
+
+# Add misc for GOTA
+/dev/block/bootdevice/by-name/misc        /misc           emmc        defaults                  recoveryonly
+
+# Samsung ODE
+/dev/block/bootdevice/by-name/keydata     /keydata        ext4        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/keyrefuge   /keyrefuge      ext4        defaults                  recoveryonly
+
+#Auto-generated code by FOTA Portal
+/dev/block/bootdevice/by-name/dtbo        /dtbo           emmc        default                   recoveryonly
+/dev/block/bootdevice/by-name/prism       /prism          ext4        defaults                  recoveryonly
+/dev/block/bootdevice/by-name/optics      /optics         ext4        defaults                  recoveryonly
+odm	/odm	ext4	ro	wait,avb,logical,first_stage_mount
+/dev/block/bootdevice/by-name/vbmeta_samsung	/vbmeta_samsung	emmc	default	recoveryonly
+/dev/block/bootdevice/by-name/vbmeta_system	/vbmeta_system	emmc	default	recoveryonly
+
+
+
+
+

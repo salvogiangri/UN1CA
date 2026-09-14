@@ -1,0 +1,57 @@
+From bc42bac5299343b77f592009367dad881f5912a1 Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Thu, 30 Oct 2025 15:34:13 +0800
+Subject: [PATCH] Disable screen lock backup support
+
+Signed-off-by: Samuel Pascua <pascua.samuel.14@gmail.com>
+---
+ .../locksettings/LockSettingsService.smali    | 29 +------------------
+ 1 file changed, 1 insertion(+), 28 deletions(-)
+
+diff --git a/smali/com/android/server/locksettings/LockSettingsService.smali b/smali/com/android/server/locksettings/LockSettingsService.smali
+index fa354672..bc561b27 100644
+--- a/smali/com/android/server/locksettings/LockSettingsService.smali
++++ b/smali/com/android/server/locksettings/LockSettingsService.smali
+@@ -1281,38 +1281,11 @@
+ .end method
+ 
+ .method public static isEnablePrevCredential()Z
+-    .locals 2
+-
+-    const-string/jumbo v0, "ro.organization_owned"
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    if-eqz v0, :cond_1
+-
+-    const-string/jumbo v1, "true"
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    goto :goto_0
++    .locals 1
+ 
+-    :cond_0
+     const/4 v0, 0x0
+ 
+     return v0
+-
+-    :cond_1
+-    :goto_0
+-    const/4 v0, 0x1
+-
+-    return v0
+ .end method
+ 
+ .method public static timestampToString(J)Ljava/lang/String;
+-- 
+2.50.1
+

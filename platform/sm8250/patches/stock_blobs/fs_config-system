@@ -1,0 +1,4 @@
+system 0 0 755 capabilities=0x0
+system/etc 0 0 755 capabilities=0x0
+system/etc/vintf 0 0 755 capabilities=0x0
+system/etc/vintf/compatibility_matrix.device.xml 0 0 644 capabilities=0x0

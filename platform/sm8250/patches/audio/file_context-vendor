@@ -1,0 +1,8 @@
+/vendor u:object_r:vendor_file:s0
+/vendor/lib64 u:object_r:vendor_file:s0
+/vendor/lib64/android\.hardware\.audio\.common@6\.0-util\.so u:object_r:vendor_file:s0
+/vendor/lib64/hw/android\.hardware\.audio@6\.0-impl\.so u:object_r:vendor_file:s0
+/vendor/lib64/hw/android\.hardware\.audio\.effect@6\.0-impl\.so u:object_r:vendor_file:s0
+/vendor/lib/android\.hardware\.audio\.common@6\.0-util\.so u:object_r:vendor_file:s0
+/vendor/lib/hw/android\.hardware\.audio@6\.0-impl\.so u:object_r:vendor_file:s0
+/vendor/lib/hw/android\.hardware\.audio\.effect@6\.0-impl\.so u:object_r:vendor_file:s0
