@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="config_AFC_type">5</integer>
+    <integer name="config_AFPC_height">772</integer>
+    <integer name="config_AFPC_model">200202</integer>
+    <integer name="config_AFPC_size">834880</integer>
+    <integer name="config_AFPC_width">360</integer>
+    <integer name="config_acl_version">4</integer>
+    <integer name="config_autoBrightnessHbmAmbientLux">3000</integer>
+    <integer name="config_lowLimitAtHighestAutoBrightnessLevel">255</integer>
+    <integer name="config_minimumBrightnessStepValue">1</integer>
+    <integer name="config_screenBrightnessDim">41</integer>
+    <integer name="config_screenBrightnessExtendedMaximum">510</integer>
+    <integer name="config_screenBrightnessForClearView">193</integer>
+    <integer name="config_screenBrightnessSettingDefault">128</integer>
+    <integer name="config_screenBrightnessSettingMaximum">255</integer>
+    <integer name="config_screenBrightnessSettingMinimum">0</integer>
+</resources>
