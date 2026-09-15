@@ -1,0 +1,4 @@
+id=bootprofile
+name=Boot image profile
+author=clangsdorff
+description=Restores /system/etc/boot-image.prof (and .bprof) that _debloat removes, using a profile captured on a device running this ROM.
