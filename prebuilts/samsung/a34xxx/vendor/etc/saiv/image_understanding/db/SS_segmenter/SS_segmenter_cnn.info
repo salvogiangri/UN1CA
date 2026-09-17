@@ -1,9 +1,0 @@
-{
-	"version_id": "v1",
-	"tag" : "1.12",
-	"compiler": "snaplite",
-	"model_type" : "cpu",
-	"precision" : "float16",
-	"model_path" : "/vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn.tflite"
-}
-

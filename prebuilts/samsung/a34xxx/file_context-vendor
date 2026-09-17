@@ -1,8 +1,0 @@
-/vendor u:object_r:vendor_file:s0
-/vendor/etc u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv/image_understanding u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv/image_understanding/db u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv/image_understanding/db/SS_segmenter u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn\.info u:object_r:vendor_configs_file:s0
-/vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn\.tflite u:object_r:vendor_configs_file:s0
