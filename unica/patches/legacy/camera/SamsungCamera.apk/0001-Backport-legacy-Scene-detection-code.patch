@@ -1,0 +1,191 @@
+From 917579d38efc5e745106e5ccd0de689b7f9a2624 Mon Sep 17 00:00:00 2001
+From: HackMeGG <58815983+HackMeGG@users.noreply.github.com>
+Date: Sat, 19 Sep 2026 11:36:01 +0200
+Subject: [PATCH] Backport legacy Scene detection code
+
+---
+ .../TextDetectionInfoCallbackForwarder.smali  | 91 +++++++++++++++++--
+ .../core2/maker/AutoBeautyPhotoMaker$5.smali  |  2 +
+ .../android/camera/core2/maker/I.smali        |  2 +
+ .../core2/maker/SuperNightPhotoMaker$2.smali  |  2 +
+ 4 files changed, 91 insertions(+), 6 deletions(-)
+
+diff --git a/smali_classes3/com/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder.smali b/smali_classes3/com/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder.smali
+index 1bdd51cd..b56c4522 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder.smali
+@@ -17,6 +17,10 @@
+ .end annotation
+ 
+ 
++# static fields
++.field public static volatile sceneDetectionEvent:I
++
++
+ # instance fields
+ .field public e:Ljava/lang/Integer;
+ 
+@@ -32,6 +36,10 @@
+     return-object p0
+ 
+     :cond_0
++    const/4 v0, -0x1
++
++    sput v0, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->sceneDetectionEvent:I
++
+     new-instance v0, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;
+ 
+     invoke-direct {v0, p0, p1, p2}, Lcom/samsung/android/camera/core2/callback/forwarder/CallbackForwarder;-><init>(Ljava/lang/String;Ljava/lang/Object;Landroid/os/Handler;)V
+@@ -42,17 +50,88 @@
+ 
+ # virtual methods
+ .method public final o(Lcom/samsung/android/camera/core2/CamDevice;Ljava/lang/Long;Landroid/hardware/camera2/CaptureResult;)V
+-    .locals 1
++    .locals 3
++
++    if-eqz p1, :cond_5
++
++    invoke-virtual {p1}, Lcom/samsung/android/camera/core2/CamDevice;->k()Lcom/samsung/android/camera/core2/CamCapability;
++
++    move-result-object v0
++
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/CamCapability;->e:Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;
++
++    iget-object v1, v0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->V:Ljava/lang/Boolean;
++
++    if-nez v1, :cond_0
++
++    const/16 v1, 0x18
++
++    invoke-static {v0, v1}, Lb/a;->d(Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;I)Ljava/lang/Boolean;
++
++    move-result-object v1
++
++    iput-object v1, v0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->V:Ljava/lang/Boolean;
++
++    :cond_0
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/local/capability/FeatureCapability;->V:Ljava/lang/Boolean;
++
++    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
++
++    move-result v0
++
++    const/4 v1, -0x1
+ 
+-    if-eqz p1, :cond_0
++    if-eqz v0, :cond_1
+ 
+-    sget-object v0, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->U0:Landroid/hardware/camera2/CaptureResult$Key;
++    sget-object v0, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->G0:Landroid/hardware/camera2/CaptureResult$Key;
+ 
+     invoke-static {p3, v0}, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureResult;->a(Landroid/hardware/camera2/CaptureResult;Landroid/hardware/camera2/CaptureResult$Key;)Ljava/lang/Object;
+ 
+     move-result-object p3
+ 
+-    check-cast p3, Ljava/lang/Integer;
++    check-cast p3, [J
++
++    if-eqz p3, :cond_2
++
++    array-length v0, p3
++
++    const/4 v2, 0x2
++
++    if-lt v0, v2, :cond_2
++
++    const/4 v0, 0x1
++
++    aget-wide v0, p3, v0
++
++    long-to-int v1, v0
++
++    goto :goto_0
++
++    :cond_1
++    sget v1, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->sceneDetectionEvent:I
++
++    :cond_2
++    :goto_0
++    const/4 v0, 0x2
++
++    if-eq v1, v0, :cond_3
++
++    const/16 v0, 0x27
++
++    if-ne v1, v0, :cond_4
++
++    :cond_3
++    const/4 v0, 0x1
++
++    goto :goto_1
++
++    :cond_4
++    const/4 v0, 0x0
++
++    :goto_1
++    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object p3
+ 
+     iget-object v0, p0, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->e:Ljava/lang/Integer;
+ 
+@@ -60,7 +139,7 @@
+ 
+     move-result v0
+ 
+-    if-nez v0, :cond_0
++    if-nez v0, :cond_5
+ 
+     iput-object p3, p0, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->e:Ljava/lang/Integer;
+ 
+@@ -76,7 +155,7 @@
+ 
+     invoke-static {p0, p2, p1}, Lcom/samsung/android/camera/core2/util/CLog;->i(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+ 
+-    :cond_0
++    :cond_5
+     return-void
+ .end method
+ 
+diff --git a/smali_classes3/com/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker$5.smali b/smali_classes3/com/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker$5.smali
+index be686c6c..da4f10c0 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker$5.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker$5.smali
+@@ -57,6 +57,8 @@
+ .method public onDetectScene(I[J)V
+     .locals 3
+ 
++    sput p1, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->sceneDetectionEvent:I
++
+     iget-object v0, p0, Lcom/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker$5;->this$0:Lcom/samsung/android/camera/core2/maker/AutoBeautyPhotoMaker;
+ 
+     iget-object v0, v0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mMakerCallbackManager:Lcom/samsung/android/camera/core2/maker/MakerCallbackManager;
+diff --git a/smali_classes3/com/samsung/android/camera/core2/maker/I.smali b/smali_classes3/com/samsung/android/camera/core2/maker/I.smali
+index 36e4e2bc..df7826fb 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/maker/I.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/maker/I.smali
+@@ -30,6 +30,8 @@
+ .method public final onDetectScene(I[J)V
+     .locals 1
+ 
++    sput p1, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->sceneDetectionEvent:I
++
+     iget v0, p0, Lcom/samsung/android/camera/core2/maker/I;->a:I
+ 
+     iget-object p0, p0, Lcom/samsung/android/camera/core2/maker/I;->b:Lcom/samsung/android/camera/core2/maker/ProcessingPhotoMakerBase;
+diff --git a/smali_classes3/com/samsung/android/camera/core2/maker/SuperNightPhotoMaker$2.smali b/smali_classes3/com/samsung/android/camera/core2/maker/SuperNightPhotoMaker$2.smali
+index 24ed6c7b..96deb63d 100644
+--- a/smali_classes3/com/samsung/android/camera/core2/maker/SuperNightPhotoMaker$2.smali
++++ b/smali_classes3/com/samsung/android/camera/core2/maker/SuperNightPhotoMaker$2.smali
+@@ -57,6 +57,8 @@
+ .method public onDetectScene(I[J)V
+     .locals 3
+ 
++    sput p1, Lcom/samsung/android/camera/core2/callback/forwarder/TextDetectionInfoCallbackForwarder;->sceneDetectionEvent:I
++
+     iget-object v0, p0, Lcom/samsung/android/camera/core2/maker/SuperNightPhotoMaker$2;->this$0:Lcom/samsung/android/camera/core2/maker/SuperNightPhotoMaker;
+ 
+     iget-object v0, v0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mMakerCallbackManager:Lcom/samsung/android/camera/core2/maker/MakerCallbackManager;
+-- 
+2.55.0
+
