@@ -87,14 +87,28 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Build dependencies
+      - name: Generate build config
         run: |
           source ./buildenv.sh a52sxq
-          ./scripts/build_dependencies.sh
+          {
+            echo "DEBUG=$DEBUG"
+            echo "SRC_DIR=$SRC_DIR"
+            echo "OUT_DIR=$OUT_DIR"
+            echo "ODIN_DIR=$ODIN_DIR"
+            echo "FW_DIR=$FW_DIR"
+            echo "TOOLS_DIR=$TOOLS_DIR"
+            echo "APKTOOL_DIR=$APKTOOL_DIR"
+            echo "WORK_DIR=$WORK_DIR"
+            echo "TMP_DIR=$TMP_DIR"
+          } >> "$GITHUB_ENV"
+          sed -e "/Automatically/d" -e "s/\"//g" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
+          echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
+
+      - name: Build dependencies
+        run: ./scripts/build_dependencies.sh
 
       - name: Update prebuilt blobs
         run: |
-          source ./buildenv.sh a52sxq
           ./scripts/internal/update_prebuilt_blobs.sh "${{ matrix.device }}" "${{ matrix.firmware }}"
           echo "PDA_BUILD=$(cat "./prebuilts/samsung/${{ matrix.device }}/.current" | cut -d "/" -f "1")" >> "$GITHUB_ENV"
 
