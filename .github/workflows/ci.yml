@@ -73,7 +73,7 @@ jobs:
       - name: Free disk space (2/3)
         uses: jlumbroso/free-disk-space@main
         with:
-          tool-cache: true
+          preinstalled-runtimes: true
 
       - name: Free disk space (3/3)
         uses: rokibhasansagar/slimhub_actions@main
