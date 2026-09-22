@@ -1,0 +1,2 @@
+# https://source.android.com/docs/core/storage/fuse-passthrough
+persist.sys.fuse.passthrough.enable=true

@@ -24,6 +24,7 @@ system/lib/vendor.samsung.hardware.biometrics.face@2.0.so 0 0 644 capabilities=0
 system/lib/vendor.samsung.hardware.biometrics.face@3.0.so 0 0 644 capabilities=0x0
 system/lib/wfd_log.so 0 0 644 capabilities=0x0
 system/lib64 0 0 755 capabilities=0x0
+system/lib64/libSceneDetector_v1.camera.samsung.so 0 0 644 capabilities=0x0
 system/lib64/lib_nativeJni.dk.samsung.so 0 0 644 capabilities=0x0
 system/lib64/libdk_native_keymaster.so 0 0 644 capabilities=0x0
 system/lib64/libgui.so 0 0 644 capabilities=0x0

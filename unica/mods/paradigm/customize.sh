@@ -184,7 +184,7 @@ LOG_STEP_IN "- Adding Pet Detector support in Galaxy AI features"
 if [ -d "$WORK_DIR/vendor/etc/petdetector/studio_pd" ]; then
     DELETE_FROM_WORK_DIR "vendor" "etc/petdetector/studio_pd"
 fi
-ADD_TO_WORK_DIR "gts11xx" "vendor" "etc/petdetector/studio_pd/config_thresholds.json" 0 0 644 "u:object_r:vendor_configs_file:s0"
-ADD_TO_WORK_DIR "gts11xx" "vendor" "etc/petdetector/studio_pd/studio_pd_cnn.info" 0 0 644 "u:object_r:vendor_configs_file:s0"
-ADD_TO_WORK_DIR "gts11xx" "vendor" "etc/petdetector/studio_pd/studio_pd_cnn.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "vendor" "etc/petdetector/studio_pd/config_thresholds.json" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "vendor" "etc/petdetector/studio_pd/studio_pd_cnn.info" 0 0 644 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "vendor" "etc/petdetector/studio_pd/studio_pd_cnn.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
 LOG_STEP_OUT

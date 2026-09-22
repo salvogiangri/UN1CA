@@ -1,9 +1,0 @@
- 0 2000 755 capabilities=0x0
-vendor/etc 0 2000 755 capabilities=0x0
-vendor/etc/saiv 0 2000 755 capabilities=0x0
-vendor/etc/saiv/image_understanding 0 2000 755 capabilities=0x0
-vendor/etc/saiv/image_understanding/db 0 2000 755 capabilities=0x0
-vendor/etc/saiv/image_understanding/db/SS_segmenter 0 2000 755 capabilities=0x0
-vendor/etc/saiv/image_understanding/db/SS_segmenter 0 2000 755 capabilities=0x0
-vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn.info 0 0 644 capabilities=0x0
-vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn.tflite 0 0 644 capabilities=0x0

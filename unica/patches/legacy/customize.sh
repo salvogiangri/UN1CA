@@ -122,6 +122,7 @@ BACKPORT_SF_PROPS
 # Pre-API 34
 # - Revert commit b0551be: "Camera: Remove GPS_LOCATION if set is called with null"
 #   (https://android.googlesource.com/platform/frameworks/base/+/b0551beb8dab6e399179fcc6525407237fc8ee56%5E%21/#F0)
+# - Support legacy Scene detection camera feature
 #
 # Pre-API 35
 # - Add back SECOND_PICTURE_CONFIG camera feature support
@@ -129,6 +130,13 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
     PATCHED=true
     APPLY_PATCH "system" "system/framework/framework.jar" \
         "$MODPATH/camera/framework.jar/0001-Backport-legacy-CameraMetadataNative-code.patch"
+    if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera_mass/SamsungCamera.apk/0001-Backport-legacy-Scene-detection-code.patch"
+    else
+        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
+            "$MODPATH/camera/SamsungCamera.apk/0001-Backport-legacy-Scene-detection-code.patch"
+    fi
 fi
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     PATCHED=true
