@@ -5,7 +5,7 @@ GITHUB_API="https://api.github.com/repos/clangsdorff/langsdorffkernel/releases/l
 RELEASE_JSON=$(curl -sf "$GITHUB_API") || { LOG "ERROR: Failed to fetch GitHub API"; exit 1; }
 
 TAG=$(echo "$RELEASE_JSON" | grep -o '"tag_name": *"[^"]*"' | head -1 | cut -d'"' -f4)
-ASSET_URL=$(echo "$RELEASE_JSON" | grep -o '"browser_download_url": *"[^"]*e_a14\.tar"' | head -1 | cut -d'"' -f4)
+ASSET_URL=$(echo "$RELEASE_JSON" | grep -o '"browser_download_url": *"[^"]*en_a14\.tar"' | head -1 | cut -d'"' -f4)
 
 [ -z "$TAG" ]       && { LOG "ERROR: Failed to get release tag";        exit 1; }
 [ -z "$ASSET_URL" ] && { LOG "ERROR: Could not find e_a14.tar asset";   exit 1; }
