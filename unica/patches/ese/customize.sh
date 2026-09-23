@@ -98,6 +98,13 @@ elif [[ "$SOURCE_SECURITY_CONFIG_ESE_CHIP_VENDOR" != "none" ]] && [[ "$SOURCE_SE
             "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" \
             "${TARGET_SECURITY_CONFIG_ESE_COS_NAME//none/}"
     fi
+    if [[ "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" != "$TARGET_SECURITY_CONFIG_ESE_COS_NAME" ]]; then
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali/com/android/server/SystemConfig.smali" "replace" \
+            "readAllPermissions()V" \
+            "eSE_COS: $SOURCE_SECURITY_CONFIG_ESE_COS_NAME" \
+            "eSE_COS: ${TARGET_SECURITY_CONFIG_ESE_COS_NAME//none/}"
+    fi
     if [[ "$SOURCE_SECURITY_CONFIG_ESE_CHIP_VENDOR" != "$TARGET_SECURITY_CONFIG_ESE_CHIP_VENDOR" ]]; then
         SMALI_PATCH "system" "system/framework/services.jar" \
             "smali_classes2/com/samsung/ucm/ucmservice/CredentialManagerService.smali" "replaceall" \
