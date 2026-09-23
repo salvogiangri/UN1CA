@@ -492,6 +492,39 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
+# Ensure EU eco recharge support (pre-API 34)
+# - Check for 'batt_soc_rechg' to determine if newer battery drivers are in place
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
+    VBOOT_MISSING=true
+    KERNEL_MISSING=true
+
+    if [ -f "$WORK_DIR/kernel/vendor_boot.img" ]; then
+        # Check for GKI devices
+        EXTRACT_KERNEL_MODULES
+        if grep -q "batt_soc_rechg" "$TMP_DIR/out/vendor_ramdisk"*; then
+            VBOOT_MISSING=false
+        fi
+    fi
+
+    # Check for legacy devices
+    EXTRACT_KERNEL_IMAGE
+    if grep -q "batt_soc_rechg" "$TMP_DIR/out/kernel"; then
+        KERNEL_MISSING=false
+    fi
+
+    if $VBOOT_MISSING && $KERNEL_MISSING; then
+        PATCHED=true
+        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY" "TRUE"
+        SMALI_PATCH "system" "system/framework/services.jar" \
+            "smali/com/android/server/battery/BattFeatures.smali" "replace" \
+            "<clinit>()V" \
+            "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY_FEATURE" \
+            "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY"
+    fi
+
+    unset VBOOT_MISSING KERNEL_MISSING
+fi
+
 # Support legacy usb_notify kernel drivers (pre-API 36)
 # https://github.com/salvogiangri/UN1CA/discussions/519
 # - Check for 'SKY_DEFAULT' to determine if newer usb_notify drivers are in place
