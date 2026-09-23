@@ -47,6 +47,22 @@ if [[ "$SOURCE_SECURITY_CONFIG_ESE_CHIP_VENDOR" == "NXP" ]] && [[ "$SOURCE_SECUR
     DELETE_FROM_WORK_DIR "system" "system/priv-app/SamsungSeAgent"
 elif [[ "$SOURCE_SECURITY_CONFIG_ESE_CHIP_VENDOR" != "none" ]] && [[ "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" != "none" ]]; then
     if [[ "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" != "$TARGET_SECURITY_CONFIG_ESE_COS_NAME" ]]; then
+        if [[ "$TARGET_SECURITY_CONFIG_ESE_CHIP_VENDOR" == "MULTI" ]]; then
+            GEMALTO_COS_NAME="${TARGET_SECURITY_CONFIG_ESE_COS_NAME%%_*}"
+            NXP_COS_NAME="${TARGET_SECURITY_CONFIG_ESE_COS_NAME#*_}"
+
+            if [[ "$GEMALTO_COS_NAME" != "U"* ]] || [[ "$NXP_COS_NAME" != "J"* ]]; then
+                ABORT "Malformed string set in TARGET_SECURITY_CONFIG_ESE_COS_NAME: \"$TARGET_SECURITY_CONFIG_ESE_COS_NAME\""
+            fi
+
+            SET_PROP "system" "ro.security.ese.cosname.default" "UT${GEMALTO_COS_NAME#U}|JCOP${NXP_COS_NAME#J}"
+
+            unset GEMALTO_COS_NAME NXP_COS_NAME
+        else
+            SET_PROP "system" "ro.security.ese.cosname.default" "$TARGET_SECURITY_CONFIG_ESE_COS_NAME"
+        fi
+    fi
+    if [[ "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" != "$TARGET_SECURITY_CONFIG_ESE_COS_NAME" ]]; then
         SMALI_PATCH "system" "system/app/SecureElement/SecureElement.apk" \
             "smali/com/android/se/internal/UtilExtension.smali" "replace" \
             "<clinit>()V" \
