@@ -385,6 +385,11 @@ fi
 #       - `cosName` value in the `com.samsung.android.service.SemService.SemServiceManager` class inside `framework.jar`
 #       - `mEseCosName` value in the `com.android.se.internal.UtilExtension` class inside `SecureElement.apk`
 #
+#   [SOURCE/TARGET]_SECURITY_SUPPORT_ESEK
+#     Boolean which describes whether the device supports eSE Key (eSEK).
+#     It can be checked in the following ways:
+#       - `supportEsek` in the `com.android.server.SemService` class inside `framework.jar` is set to true
+#
 #   [SOURCE/TARGET]_WLAN_CONFIG_CONNECTION_PERSONALIZATION
 #     Integer containing the device Connection Personalizer feature flag.
 #
@@ -579,6 +584,8 @@ fi
     GET_BUILD_VAR "TARGET_SECURITY_CONFIG_ESE_CHIP_VENDOR" "none"
     GET_BUILD_VAR "SOURCE_SECURITY_CONFIG_ESE_COS_NAME" "none"
     GET_BUILD_VAR "TARGET_SECURITY_CONFIG_ESE_COS_NAME" "none"
+    GET_BUILD_VAR "SOURCE_SECURITY_SUPPORT_ESEK" "$(test "$SOURCE_SECURITY_CONFIG_ESE_COS_NAME" && echo "" || echo "false")"
+    GET_BUILD_VAR "TARGET_SECURITY_SUPPORT_ESEK" "$(test "$TARGET_SECURITY_CONFIG_ESE_COS_NAME" && echo "" || echo "false")"
     GET_BUILD_VAR "SOURCE_WLAN_CONFIG_CONNECTION_PERSONALIZATION"
     GET_BUILD_VAR "TARGET_WLAN_CONFIG_CONNECTION_PERSONALIZATION"
     GET_BUILD_VAR "SOURCE_WLAN_CONFIG_CPU_CSTATE_DISABLE_THRESHOLD"
