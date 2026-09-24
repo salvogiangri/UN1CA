@@ -9,6 +9,7 @@
     <local name="SHOOTING_MODE_FOOD" back="FOOD" enable="true" more="true" order="6" info="4"/>
     <local name="SHOOTING_MODE_PANORAMA" back="PANORAMA" enable="true" more="true" order="5" preview-size="1280x720" capture-size="2576x1932"/>
     <local name="SHOOTING_MODE_MACRO" back="MACRO" enable="true" more="true" order="7" info="3"/>
+    <local name="SHOOTING_MODE_SINGLE_TAKE_VIDEO" back="SINGLE_TAKE_VIDEO" front="SINGLE_TAKE_VIDEO" enable="true" more="true" order="8" preview-size="1440x1080" capture-size="2576x1932" front-capture-size="4128x3096"/>
     <local name="SHOOTING_MODE_QR" back="QR" enable="true" more="false" order="100" preview-size="2400x1080"/>
 
     <!-- Capture resolution - BACK -->
@@ -173,7 +174,23 @@
     <local name="SUPPORT_IPP_IN_HIGH_RESOLUTION" value="true"/>
     <local name="MAX_POST_PROCESSING_COUNT_FOR_CAPTURE" value="3" />
     <local name="SUPPORT_SWITCH_FACING_WHILE_RECORDING" value="true" />
-	
+
+    <!-- SingleTake - Features (from a71) -->
+    <local name="SUPPORT_SINGLE_TAKE_COLLAGES" value="false" />
+    <local name="SINGLE_TAKE_CAPTURE_INTERVAL" value="1000" />
+    <local name="REAR_SINGLE_TAKE_CAPTURE_INTERVAL" value="1200" />
+    <local name="SINGLE_TAKE_FRONT_CAMERA_DYNAMIC_FOV" value="false" />
+    <local name="SINGLE_TAKE_PHOTO_LOW_PERFORMANCE" value="true" />
+    <local name="SINGLE_TAKE_RECORDING_DURATION" value="10" />
+    <local name="SINGLE_TAKE_USING_BEAUTY" value="false" />
+    <local name="SINGLE_TAKE_USING_CONTINUOUS_AF" value="true" />
+    <local name="SINGLE_TAKE_USING_SCENE_OPTIMIZER" value="false" />
+    <local name="REAR_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MAX" value="24" />
+    <local name="REAR_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MIN" value="15" />
+    <local name="FRONT_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MAX" value="24" />
+    <local name="FRONT_SINGLE_TAKE_PHOTO_PREVIEW_FPS_MIN" value="8" />
+    <local name="SUPPORT_SINGLE_TAKE_MULTI_CAMERA" value="false" />
+
 	<!-- Preview guide line feature-->
     <local name="BOTTOM_GUIDE_LINE" value="0.679"/>
 	
