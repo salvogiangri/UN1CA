@@ -1,2 +1,5 @@
 # Disable WAV 32-bit PCM support
 media.extractor.sec.pcm-32bit=
+
+# Set eSE COS name at boot
+ro.security.ese.cosname=JCOP4.0_0050534A
