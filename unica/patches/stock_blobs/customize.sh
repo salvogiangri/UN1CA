@@ -37,6 +37,14 @@ else
     fi
 fi
 
+if [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/etc/COSPatchScript" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/COSPatchScript" 0 0 644 "u:object_r:system_file:s0"
+else
+    if [ -f "$WORK_DIR/system/system/etc/COSPatchScript" ]; then
+        DELETE_FROM_WORK_DIR "system" "system/etc/COSPatchScript"
+    fi
+fi
+
 # TODO add APE/DSD extractor libs if required
 if [ -f "$WORK_DIR/system/system/lib64/extractors/libsapeextractor.so" ] && \
         [ ! "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_APE_FORMAT")" ]; then
