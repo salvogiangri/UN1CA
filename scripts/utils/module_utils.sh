@@ -213,7 +213,7 @@ SET_FLOATING_FEATURE_CONFIG()
         return 1
     fi
 
-    if grep -q "$CONFIG" "$FILE"; then
+    if grep -q "<$CONFIG>" "$FILE"; then
         if [[ "$VALUE" == "-d" ]] || [[ "$VALUE" == "--delete" ]]; then
             LOG "- Deleting \"$CONFIG\" config in /system/system/etc/floating_feature.xml"
             sed -i "/<$CONFIG>/d" "$FILE"
