@@ -385,6 +385,29 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
     chmod 0664 /dev/stune/rt/cgroup.procs\" \"$WORK_DIR/system/system/etc/init/hw/init.rc\""
         fi
 
+        if ! grep -q "/dev/stune/audio-app" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
+            LOG "- Adding audio-app stune group to /system/system/etc/init/hw/init.rc"
+            EVAL "sed -i \"/chmod 0664 \/dev\/stune\/rt\/cgroup.procs/a\\\\
+\\\\
+    mkdir /dev/stune/audio-app\\\\
+    chown system system /dev/stune/audio-app\\\\
+    chown system system /dev/stune/audio-app/tasks\\\\
+    chmod 0664 /dev/stune/audio-app/tasks\" \"$WORK_DIR/system/system/etc/init/hw/init.rc\""
+        fi
+
+        if ! grep -q "/dev/stune/camera-daemon" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
+            LOG "- Adding camera-daemon stune group to /system/system/etc/init/hw/init.rc"
+            EVAL "sed -i \"/chmod 0664 \/dev\/cpuctl\/camera-daemon\/cpu.shares/a\\\\
+\\\\
+    # Create an stune group for camera-specific processes\\\\
+    mkdir /dev/stune/camera-daemon\\\\
+    chown system system /dev/stune/camera-daemon\\\\
+    chown system system /dev/stune/camera-daemon/tasks\\\\
+    chown system system /dev/stune/camera-daemon/cgroup.procs\\\\
+    chmod 0664 /dev/stune/camera-daemon/tasks\\\\
+    chmod 0664 /dev/stune/camera-daemon/cgroup.procs\" \"$WORK_DIR/system/system/etc/init/hw/init.rc\""
+        fi
+
         if ! grep -q "/dev/stune/nnapi-hal" "$WORK_DIR/system/system/etc/init/hw/init.rc"; then
             LOG "- Adding nnapi-hal stune group to /system/system/etc/init/hw/init.rc"
             EVAL "sed -i \"/chmod 0664 \/dev\/stune\/camera-daemon\/cgroup.procs/a\\\\
