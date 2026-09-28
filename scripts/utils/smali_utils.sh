@@ -60,7 +60,6 @@ SMALI_PATCH()
     fi
 
     if [[ "$OPERATION" == "return" ]]; then
-        _CHECK_NON_EMPTY_PARAM "VALUE" "$6" || return 1
         local VALUE="$6"
     fi
 
@@ -241,6 +240,8 @@ SMALI_PATCH()
             VALUE="\"$VALUE\""
             RET="return-object $REG"
         elif [[ "$RET" =~ ^\[*[ZBCSIJFD]$ ]]; then
+            _CHECK_NON_EMPTY_PARAM "VALUE" "$VALUE" || return 1
+
             # Boolean type
             if [[ "$RET" == "Z" ]]; then
                 if [[ "$VALUE" == "true" ]]; then
@@ -272,6 +273,8 @@ SMALI_PATCH()
                 RET="return $REG"
             fi
         else
+            _CHECK_NON_EMPTY_PARAM "VALUE" "$VALUE" || return 1
+
             if [[ "$VALUE" == "null" ]]; then
                 VALUE="0x0"
             fi
