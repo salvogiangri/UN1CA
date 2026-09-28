@@ -34,3 +34,12 @@ HEX_PATCH "$WORK_DIR/vendor/lib/unihal_main@2.1.so" "01280dd1" "01280de0"
 # Before: [b.ne 0x5099f4]
 # After: [b 0x5099f4]
 HEX_PATCH "$WORK_DIR/vendor/lib64/unihal_main@2.1.so" "a101005468e640b9" "0d00001468e640b9"
+
+# Force disable Snaplite in Shot suggestions
+# Before: [blt #0x1f890]
+# After: [b #0x1f890]
+HEX_PATCH "$WORK_DIR/vendor/lib/libshotsuggestion_engines.so" "0ddb" "0de0"
+
+# Before: [b.lt 0x40dedc]
+# After: [b 0x40dedc]
+HEX_PATCH "$WORK_DIR/vendor/lib64/libshotsuggestion_engines.so" "eb010054" "0f000014"
