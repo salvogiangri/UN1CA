@@ -797,6 +797,22 @@ if [[ "$SOURCE_WLAN_CONFIG_CUSTOM_BACKOFF" != "$TARGET_WLAN_CONFIG_CUSTOM_BACKOF
     fi
 fi
 
+# SEC_PRODUCT_FEATURE_WLAN_CONFIG_SEPARATE_ANT_BACKOFF
+if [[ "$SOURCE_WLAN_CONFIG_SEPARATE_ANT_BACKOFF" != "$TARGET_WLAN_CONFIG_SEPARATE_ANT_BACKOFF" ]]; then
+    SMALI_PATCH "system" "system/framework/semwifi-service.jar" \
+        "smali/com/samsung/android/server/wifi/backoff/BackOffFeatureUtil.smali" "return" \
+        "getSeparateAntennaType()Ljava/lang/String;" \
+        "${TARGET_WLAN_CONFIG_SEPARATE_ANT_BACKOFF//none/}"
+fi
+
+# SEC_PRODUCT_FEATURE_WLAN_CONFIG_SINGLE_ANT_BACKOFF
+if [[ "$SOURCE_WLAN_CONFIG_SINGLE_ANT_BACKOFF" != "$TARGET_WLAN_CONFIG_SINGLE_ANT_BACKOFF" ]]; then
+    SMALI_PATCH "system" "system/framework/semwifi-service.jar" \
+        "smali/com/samsung/android/server/wifi/backoff/BackOffFeatureUtil.smali" "return" \
+        "getSingleAntennaType()Ljava/lang/String;" \
+        "${TARGET_WLAN_CONFIG_SINGLE_ANT_BACKOFF//none/}"
+fi
+
 # SEC_PRODUCT_FEATURE_WLAN_SUPPORT_80211AX
 # SEC_PRODUCT_FEATURE_WLAN_SUPPORT_80211AX_6GHZ
 if $SOURCE_WLAN_SUPPORT_80211AX; then
