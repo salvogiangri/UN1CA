@@ -1,0 +1,4 @@
+id=selinux
+name=Vendor SELinux policy
+author=furbanoramos21
+description=Modify SEPolicy CIL files on vendor partition to avoid conflicts with One UI 8.0 requirements.

@@ -433,6 +433,35 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
     fi
 fi
 
+# SEC_PRODUCT_FEATURE_COMMON_SUPPORT_MDNIE_BLUE_FILTER
+if [ "$SOURCE_COMMON_CONFIG_MDNIE_MODE" -ne "0" ]; then
+    if [ "$TARGET_COMMON_CONFIG_MDNIE_MODE" -eq "0" ]; then
+        ADD_TO_WORK_DIR "gta9pxxx" "system" "system/priv-app/BlueLightFilter/BlueLightFilter.apk" 0 0 644 "u:object_r:system_file:s0"
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+             "$MODPATH/mdnie/blf/SecSettings.apk/0001-Disable-SUPPORT_MDNIE_BLUE_FILTER-support.patch"
+        APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+            "$MODPATH/mdnie/blf/SystemUI.apk/0001-Disable-SUPPORT_MDNIE_BLUE_FILTER-support.patch"
+        if [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "optical" ]]; then
+            APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                "$MODPATH/mdnie/blf_optical_fod/SystemUI.apk/0001-Disable-SUPPORT_MDNIE_BLUE_FILTER-support.patch"
+        elif [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "side" ]]; then
+            APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                "$MODPATH/mdnie/blf_side_fp/SystemUI.apk/0001-Disable-SUPPORT_MDNIE_BLUE_FILTER-support.patch"
+        elif [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "ultrasonic" ]]; then
+            ABORT "TARGET_COMMON_SUPPORT_MDNIE_BLUE_FILTER is not supported on targets with an ultrasonic fingerprint sensor"
+        fi
+    fi
+else
+    if [ "$TARGET_COMMON_CONFIG_MDNIE_MODE" -ne "0" ]; then
+        # TODO handle this condition
+        # shellcheck disable=SC2034
+        SOURCE_COMMON_SUPPORT_MDNIE_BLUE_FILTER=false
+        # shellcheck disable=SC2034
+        TARGET_COMMON_SUPPORT_MDNIE_BLUE_FILTER=true
+        LOG_MISSING_PATCHES "SOURCE_COMMON_SUPPORT_MDNIE_BLUE_FILTER" "TARGET_COMMON_SUPPORT_MDNIE_BLUE_FILTER"
+    fi
+fi
+
 # SEC_PRODUCT_FEATURE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS
 if [[ "$SOURCE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS" != "$TARGET_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS" ]]; then
     SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS" "$TARGET_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS"

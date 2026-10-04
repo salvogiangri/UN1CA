@@ -103,17 +103,22 @@ fi
 
 # SEC_PRODUCT_FEATURE_NFC_CHIP_NAME:=SLSI
 # - Same lib name as before, check for TARGET_PLATFORM_SDK_VERSION instead
+# - JDM devices need JDM-specific SLSI blobs
 if [ -f "$WORK_DIR/system/system/lib/libnfc_sec_jni.so" ]; then
     if [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_sec_jni.so" ] && \
             [ ! -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ] && \
             [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_sec.so" ] && \
-            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_sec.so" ]; then
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_sec.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib/nfc_nci_sec-jdm.so" ] && \
+            [ ! -f "$WORK_DIR/vendor/lib64/nfc_nci_sec-jdm.so" ]; then
         DELETE_FROM_WORK_DIR "system" "system/lib/libnfc_sec_jni.so"
     fi
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib/libnfc_sec_jni.so" ] || \
         [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ]; then
     if [ "$TARGET_PLATFORM_SDK_VERSION" -ge "36" ]; then
         ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
+    elif [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
+        ADD_TO_WORK_DIR "m55xqddxx" "system" "system/lib/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
     else
         ADD_TO_WORK_DIR "r11sxxx" "system" "system/lib/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
     fi
@@ -126,6 +131,8 @@ if [ -f "$WORK_DIR/system/system/lib64/libnfc_sec_jni.so" ]; then
 elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/lib64/libnfc_sec_jni.so" ]; then
     if [ "$TARGET_PLATFORM_SDK_VERSION" -ge "36" ]; then
         ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
+    elif [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DEVICE_MANUFACTURING_TYPE")" == "jdm" ]]; then
+        ADD_TO_WORK_DIR "m55xqddxx" "system" "system/lib64/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
     else
         ADD_TO_WORK_DIR "r11sxxx" "system" "system/lib64/libnfc_sec_jni.so" 0 0 644 "u:object_r:system_lib_file:s0"
     fi
