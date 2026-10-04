@@ -28,7 +28,7 @@ fi
 if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml" ]; then
     LOG "- Adding /system/system/cameradata/aremoji-feature.xml"
     EVAL "cp -a \"$SRC_DIR/target/$TARGET_CODENAME/camera/aremoji-feature.xml\" \"$WORK_DIR/system/system/cameradata/aremoji-feature.xml\""
-else
+elif [ -f "$FW_DIR/$TARGET_FIRMWARE_PATH/system/system/cameradata/aremoji-feature.xml" ]; then
     ADD_TO_WORK_DIR "$TARGET_FIRMWARE" \
         "system" "system/cameradata/aremoji-feature.xml" 0 0 644 "u:object_r:system_file:s0"
 fi
@@ -76,6 +76,18 @@ if [ -f "$WORK_DIR/system/system/app/FunModeSDK/FunModeSDK.apk" ]; then
 else
     if grep -q "SHOOTING_MODE_FUN" "$WORK_DIR/system/system/cameradata/camera-feature.xml" 2> /dev/null; then
         ADD_TO_WORK_DIR "a73xqxx" "system" "system/app/FunModeSDK" 0 0 755 "u:object_r:system_file:s0"
+    fi
+fi
+
+# AR Emoji "phone-lite-bit64-release" app flavor
+if ! $SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+    if $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        ADD_TO_WORK_DIR "a17xxx" "system" "system/priv-app/AREmoji/AREmoji.apk" 0 0 644 "u:object_r:system_file:s0"
+    fi
+else
+    if ! $TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR; then
+        # TODO handle this condition
+        LOG_MISSING_PATCHES "SOURCE_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR" "TARGET_CAMERA_SUPPORT_AREMOJI_LITE_FLAVOR"
     fi
 fi
 
@@ -356,7 +368,10 @@ HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
 
 # Fix object capture
 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
-    if {
+    if [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" == "a14" ]]; then
+        HEX_PATCH "$WORK_DIR/system/system/lib64/libobjectcapture_jni.arcsoft.so" \
+            "e503162a47020094e022009121008052e203162a" "0500805247020094e02200912100805202008052"
+    elif {
         [[ "$(GET_PROP "system" "ro.product.device")" =~ r0|g0|b0 ]] && \
             ! [[ "$(GET_PROP "vendor" "ro.product.vendor.device")" =~ r0|g0|b0 ]]
     } || {
