@@ -47,3 +47,12 @@
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.settings.ui.UISettingsFragment"/>
             <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_top_settings"/>
         </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:label="@string/unica_pm_options_title" android:name="com.android.settings.Settings$UnicaPowerMenuOptionsActivity" android:parentActivityName="com.android.settings.Settings$UnicaExtraSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.settings.powermenu.PowerMenuOptionsFragment"/>
+            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_top_settings"/>
+        </activity>
+        <activity android:excludeFromRecents="true" android:exported="true" android:name="io.mesalabs.unica.UnicaRebootActivity" android:noHistory="true" android:taskAffinity="" android:theme="@android:style/Theme.NoDisplay"/>

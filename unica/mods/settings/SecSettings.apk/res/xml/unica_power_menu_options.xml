@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="@string/unica_pm_options_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.extra.ExtraSettingsFragment" settings:topLevelPreferenceKey="unica_extra_settings"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
+    <SecSwitchPreference android:title="@string/unica_pm_opt_poweroff_title" android:key="unica_pm_poweroff" android:summary="@string/unica_pm_opt_poweroff_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuPowerOffPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_opt_restart_title" android:key="unica_pm_restart" android:summary="@string/unica_pm_opt_restart_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuRestartPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_opt_recovery_title" android:key="unica_pm_recovery" android:summary="@string/unica_pm_opt_recovery_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuRecoveryPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_opt_download_title" android:key="unica_pm_download" android:summary="@string/unica_pm_opt_download_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuDownloadPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_opt_restartui_title" android:key="unica_pm_restartui" android:summary="@string/unica_pm_opt_restartui_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuRestartUiPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_opt_emergency_title" android:key="unica_pm_emergency" android:summary="@string/unica_pm_opt_emergency_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuEmergencyPreferenceController" />
+</PreferenceScreen>

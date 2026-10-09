@@ -1,0 +1,99 @@
+.class public final Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaIconHook;
+.super Ljava/lang/Object;
+
+.method public static applyIcon(Ljava/lang/Object;Landroid/view/View;)V
+    .locals 4
+
+    :try_start_0
+    const-class v0, @ITEM_CLS@
+
+    const-string v1, "mViewModel"
+
+    invoke-static {v0, p0, v1}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->field(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    const-string v1, "model="
+
+    invoke-static {v1, v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->logObj(Ljava/lang/String;Ljava/lang/Object;)V
+
+    instance-of v1, v0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;
+
+    if-eqz v1, :done
+
+    check-cast v0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;
+
+    invoke-virtual {v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->unicaIcon()Landroid/graphics/drawable/BitmapDrawable;
+
+    move-result-object v1
+
+    const-string v2, "icon="
+
+    invoke-static {v2, v1}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->logObj(Ljava/lang/String;Ljava/lang/Object;)V
+
+    if-eqz v1, :done
+
+    const-class v2, @ITEM_CLS@
+
+    const-string v3, "mResourceFactory"
+
+    invoke-static {v2, p0, v3}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->field(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, @RF_TYPE@
+
+    sget-object v3, @RT_CLS@->ID_ICON:@RT_CLS@
+
+    @OP_RFGET@ {v2, v3}, @REF_RFGET@
+
+    move-result v2
+
+    invoke-virtual {p1, v2}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v2
+
+    const-string v3, "iconView="
+
+    invoke-static {v3, v2}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->logObj(Ljava/lang/String;Ljava/lang/Object;)V
+
+    instance-of v3, v2, Landroid/widget/ImageView;
+
+    if-eqz v3, :done
+
+    check-cast v2, Landroid/widget/ImageView;
+
+    invoke-virtual {v1}, Landroid/graphics/drawable/BitmapDrawable;->getBitmap()Landroid/graphics/Bitmap;
+
+    move-result-object v3
+
+    invoke-virtual {v2}, Landroid/view/View;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    new-instance v1, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-direct {v1, v0, v3}, Landroid/graphics/drawable/BitmapDrawable;-><init>(Landroid/content/res/Resources;Landroid/graphics/Bitmap;)V
+
+    invoke-virtual {v2, v1}, Landroid/widget/ImageView;->setImageDrawable(Landroid/graphics/drawable/Drawable;)V
+
+    :done
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catch_0
+
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    if-eqz p1, :out
+
+    invoke-virtual {p1}, Landroid/view/View;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-static {v1, v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->fail(Landroid/content/Context;Ljava/lang/Throwable;)V
+
+    :out
+    return-void
+.end method

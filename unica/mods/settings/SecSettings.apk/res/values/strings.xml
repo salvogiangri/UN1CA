@@ -58,4 +58,26 @@
     <string name="unica_updates_title">UN1CA Updates</string>
     <string name="unica_vulkan_summary">This is unstable and might cause issues!</string>
     <string name="unica_vulkan_title">Enable Vulkan renderer</string>
+    <string name="unica_pm_title">Advanced power menu</string>
+    <string name="unica_pm_summary">Adds additional options to power menu</string>
+    <string name="unica_pm_options_title">Power menu options</string>
+    <string name="unica_pm_options_summary">Select power menu options</string>
+    <string name="unica_pm_no_confirm_title">Disable restart confirmation</string>
+    <string name="unica_pm_no_confirm_summary">Disable restart confirmation</string>
+    <string name="unica_pm_no_lockscreen_title">Disable power menu on lockscreen</string>
+    <string name="unica_pm_no_lockscreen_summary">Disable display of power menu when device is secure locked</string>
+    <string name="unica_pm_unlock_first_title">Unlock keyguard before actions</string>
+    <string name="unica_pm_unlock_first_summary">Perform restart or power off actions after unlocking secure keyguard</string>
+    <string name="unica_pm_opt_poweroff_title">Power off</string>
+    <string name="unica_pm_opt_poweroff_summary">Enable Power off in power menu</string>
+    <string name="unica_pm_opt_restart_title">Restart</string>
+    <string name="unica_pm_opt_restart_summary">Enable Restart in power menu</string>
+    <string name="unica_pm_opt_recovery_title">Recovery mode</string>
+    <string name="unica_pm_opt_recovery_summary">Enable Restart to Recovery mode in power menu</string>
+    <string name="unica_pm_opt_download_title">Download mode</string>
+    <string name="unica_pm_opt_download_summary">Enable Restart to Download mode in power menu</string>
+    <string name="unica_pm_opt_restartui_title">Restart One UI</string>
+    <string name="unica_pm_opt_restartui_summary">Enable Restart One UI (System UI) in power menu</string>
+    <string name="unica_pm_opt_emergency_title">Emergency mode</string>
+    <string name="unica_pm_opt_emergency_summary">Enable Emergency mode in power menu</string>
 </resources>

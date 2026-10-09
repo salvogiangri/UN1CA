@@ -1,0 +1,444 @@
+.class public Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;
+.super Ljava/lang/Object;
+.implements Lcom/samsung/android/globalactions/presentation/viewmodel/ActionViewModel;
+.implements Ljava/lang/Runnable;
+
+.field private mContext:Landroid/content/Context;
+.field private mIcon:Landroid/graphics/drawable/BitmapDrawable;
+.field private mInfo:Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+.field private mKind:I
+.field private mPresenter:Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;
+.field private mReason:Ljava/lang/String;
+
+.field private static sTorch:Z
+
+.method public constructor <init>(Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;Landroid/content/Context;I)V
+    .locals 6
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mPresenter:Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;
+
+    iput-object p2, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    iput p3, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mKind:I
+
+    new-instance v0, Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+
+    invoke-direct {v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;-><init>()V
+
+    sget-object v1, Lcom/samsung/android/globalactions/presentation/viewmodel/ViewType;->CENTER_ICON_3P_VIEW:Lcom/samsung/android/globalactions/presentation/viewmodel/ViewType;
+
+    @OP_SETVIEWTYPE@ {v0, v1}, @REF_SETVIEWTYPE@
+
+    if-nez p3, :n1
+
+    const-string v1, "recovery"
+
+    const-string v2, "recovery"
+
+    const-string v3, "Recovery"
+
+    const-string v4, "Restart to Recovery mode?"
+
+    goto :fill
+
+    :n1
+    const/4 v5, 0x1
+
+    if-ne p3, v5, :n2
+
+    const-string v1, "download"
+
+    const-string v2, "download"
+
+    const-string v3, "Download"
+
+    const-string v4, "Restart to Download mode?"
+
+    goto :fill
+
+    :n2
+    const/4 v5, 0x2
+
+    if-ne p3, v5, :n3
+
+    const-string v1, "restart_ui"
+
+    const/4 v2, 0x0
+
+    const-string v3, "Restart One UI"
+
+    const-string v4, "Restart One UI (System UI)?"
+
+    goto :fill
+
+    :n3
+    const/4 v5, 0x3
+
+    if-ne p3, v5, :n4
+
+    const-string v1, "screenshot"
+
+    const/4 v2, 0x0
+
+    const-string v3, "Screenshot"
+
+    const-string v4, "Screenshot"
+
+    goto :fill
+
+    :n4
+    const/4 v5, 0x4
+
+    if-ne p3, v5, :n5
+
+    const-string v1, "screen_record"
+
+    const/4 v2, 0x0
+
+    const-string v3, "Screen record"
+
+    const-string v4, "Screen record"
+
+    goto :fill
+
+    :n5
+    const-string v1, "flashlight"
+
+    const/4 v2, 0x0
+
+    const-string v3, "Flashlight"
+
+    const-string v4, "Flashlight"
+
+    :fill
+    @OP_SETNAME@ {v0, v1}, @REF_SETNAME@
+
+    @OP_SETLABEL@ {v0, v3}, @REF_SETLABEL@
+
+    @OP_SETDESC@ {v0, v4}, @REF_SETDESC@
+
+    iput-object v2, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mReason:Ljava/lang/String;
+
+    iput-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mInfo:Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+
+    return-void
+.end method
+
+.method private reboot(Ljava/lang/String;)V
+    .locals 3
+
+    :try_start_0
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    const-string v1, "power"
+
+    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/os/PowerManager;
+
+    invoke-virtual {v0, p1}, Landroid/os/PowerManager;->reboot(Ljava/lang/String;)V
+
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catch_0
+
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    invoke-static {v1, p1}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->viaSettings(Landroid/content/Context;Ljava/lang/String;)V
+
+    return-void
+.end method
+
+.method private perform()V
+    .locals 15
+
+    :try_start_0
+    iget v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mKind:I
+
+    const/4 v1, 0x2
+
+    if-le v0, v1, :basic
+
+    const/4 v1, 0x3
+
+    if-ne v0, v1, :not_shot
+
+    invoke-static {}, Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager;
+
+    move-result-object v14
+
+    const/4 v13, 0x0
+
+    :shot_loop
+    const/4 v0, 0x2
+
+    if-ge v13, v0, :shot_done
+
+    new-instance v0, Landroid/view/KeyEvent;
+
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
+
+    move-result-wide v1
+
+    move-wide v3, v1
+
+    move v5, v13
+
+    const/16 v6, 0x78
+
+    const/4 v7, 0x0
+
+    const/4 v8, 0x0
+
+    const/4 v9, -0x1
+
+    const/4 v10, 0x0
+
+    const v11, 0x10000008
+
+    const/16 v12, 0x101
+
+    invoke-direct/range {v0 .. v12}, Landroid/view/KeyEvent;-><init>(JJIIIIIIII)V
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v14, v0, v1}, Landroid/hardware/input/InputManager;->injectInputEvent(Landroid/view/InputEvent;I)Z
+
+    add-int/lit8 v13, v13, 0x1
+
+    goto :shot_loop
+
+    :shot_done
+    return-void
+
+    :not_shot
+    const/4 v1, 0x4
+
+    if-ne v0, v1, :torch
+
+    new-instance v0, Landroid/content/Intent;
+
+    invoke-direct {v0}, Landroid/content/Intent;-><init>()V
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.app.smartcapture"
+
+    const-string v3, "com.samsung.android.app.screenrecorder.ScreenRecorderService"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
+
+    const-string v1, "com.samsung.android.app.screenrecorder.ACTION_START"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->setAction(Ljava/lang/String;)Landroid/content/Intent;
+
+    iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    invoke-virtual {v1, v0}, Landroid/content/Context;->startService(Landroid/content/Intent;)Landroid/content/ComponentName;
+
+    return-void
+
+    :torch
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    const-string v1, "camera"
+
+    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/hardware/camera2/CameraManager;
+
+    invoke-virtual {v0}, Landroid/hardware/camera2/CameraManager;->getCameraIdList()[Ljava/lang/String;
+
+    move-result-object v1
+
+    const/4 v2, 0x0
+
+    aget-object v1, v1, v2
+
+    sget-boolean v2, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->sTorch:Z
+
+    xor-int/lit8 v2, v2, 0x1
+
+    invoke-virtual {v0, v1, v2}, Landroid/hardware/camera2/CameraManager;->setTorchMode(Ljava/lang/String;Z)V
+
+    sput-boolean v2, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->sTorch:Z
+
+    return-void
+
+    :basic
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mReason:Ljava/lang/String;
+
+    if-nez v0, :reboot
+
+    invoke-static {}, Landroid/os/Process;->myPid()I
+
+    move-result v1
+
+    invoke-static {v1}, Landroid/os/Process;->killProcess(I)V
+
+    return-void
+
+    :reboot
+    invoke-direct {p0, v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->reboot(Ljava/lang/String;)V
+
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catch_0
+
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mContext:Landroid/content/Context;
+
+    invoke-static {v1, v0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->fail(Landroid/content/Context;Ljava/lang/Throwable;)V
+
+    return-void
+.end method
+
+.method private execute()V
+    .locals 4
+
+    invoke-static {}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerMenu;->secureConfirm()Z
+
+    move-result v0
+
+    if-eqz v0, :unlocked
+
+    return-void
+
+    :unlocked
+    iget v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mKind:I
+
+    const/4 v1, 0x2
+
+    if-lt v0, v1, :now
+
+    iget-object v1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mPresenter:Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;
+
+    const/4 v2, 0x0
+
+    @OP_DISMISS@ {v1, v2}, @REF_DISMISS@
+
+    new-instance v1, Landroid/os/Handler;
+
+    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
+
+    move-result-object v2
+
+    invoke-direct {v1, v2}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+
+    const-wide/16 v2, 0x190
+
+    invoke-virtual {v1, p0, v2, v3}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    return-void
+
+    :now
+    invoke-direct {p0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->perform()V
+
+    return-void
+.end method
+
+.method public getActionInfo()Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+    .locals 1
+
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mInfo:Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+
+    return-object v0
+.end method
+
+.method public getIcon()@ICON_RET@
+    .locals 1
+
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mIcon:Landroid/graphics/drawable/BitmapDrawable;
+
+    return-object v0
+.end method
+
+.method public onPress()V
+    .locals 3
+
+    iget v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mKind:I
+
+    const/4 v1, 0x3
+
+    if-ge v0, v1, :execute
+
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mPresenter:Lcom/samsung/android/globalactions/presentation/SamsungGlobalActionsPresenter;
+
+    @OP_ISCONF@ {v0}, @REF_ISCONF@
+
+    move-result v1
+
+    if-nez v1, :execute
+
+    @OP_CONFIRM@ {v0, p0}, @REF_CONFIRM@
+
+    return-void
+
+    :execute
+    invoke-direct {p0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->execute()V
+
+    return-void
+.end method
+
+.method public onPressSecureConfirm()V
+    .locals 0
+
+    invoke-direct {p0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->execute()V
+
+    return-void
+.end method
+
+.method public run()V
+    .locals 0
+
+    invoke-direct {p0}, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->perform()V
+
+    return-void
+.end method
+
+.method public setActionInfo(Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mInfo:Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+
+    return-void
+.end method
+
+.method public setUnicaIcon(Landroid/graphics/drawable/BitmapDrawable;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mIcon:Landroid/graphics/drawable/BitmapDrawable;
+
+    return-void
+.end method
+
+.method public showBeforeProvisioning()Z
+    .locals 1
+
+    const/4 v0, 0x1
+
+    return v0
+.end method
+
+.method public unicaIcon()Landroid/graphics/drawable/BitmapDrawable;
+    .locals 1
+
+    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/UnicaPowerAction;->mIcon:Landroid/graphics/drawable/BitmapDrawable;
+
+    return-object v0
+.end method

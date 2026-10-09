@@ -56,4 +56,26 @@
     <string name="unica_updates_title">Pembaruan UN1CA</string>
     <string name="unica_vulkan_summary">Ini tidak stabil dan mungkin menyebabkan masalah!</string>
     <string name="unica_vulkan_title">Aktifkan perender Vulkan</string>
+    <string name="unica_pm_title">Menu power lanjutan</string>
+    <string name="unica_pm_summary">Menambahkan opsi tambahan ke menu power</string>
+    <string name="unica_pm_options_title">Opsi menu power</string>
+    <string name="unica_pm_options_summary">Pilih opsi menu power</string>
+    <string name="unica_pm_no_confirm_title">Nonaktifkan konfirmasi restart</string>
+    <string name="unica_pm_no_confirm_summary">Nonaktifkan konfirmasi saat restart</string>
+    <string name="unica_pm_no_lockscreen_title">Nonaktifkan menu power di layar kunci</string>
+    <string name="unica_pm_no_lockscreen_summary">Jangan tampilkan menu power saat perangkat terkunci aman</string>
+    <string name="unica_pm_unlock_first_title">Buka kunci sebelum tindakan</string>
+    <string name="unica_pm_unlock_first_summary">Jalankan restart atau matikan setelah membuka kunci layar</string>
+    <string name="unica_pm_opt_poweroff_title">Matikan</string>
+    <string name="unica_pm_opt_poweroff_summary">Aktifkan Matikan di menu power</string>
+    <string name="unica_pm_opt_restart_title">Mulai ulang</string>
+    <string name="unica_pm_opt_restart_summary">Aktifkan Mulai ulang di menu power</string>
+    <string name="unica_pm_opt_recovery_title">Mode Recovery</string>
+    <string name="unica_pm_opt_recovery_summary">Aktifkan Restart ke mode Recovery di menu power</string>
+    <string name="unica_pm_opt_download_title">Mode Download</string>
+    <string name="unica_pm_opt_download_summary">Aktifkan Restart ke mode Download di menu power</string>
+    <string name="unica_pm_opt_restartui_title">Restart One UI</string>
+    <string name="unica_pm_opt_restartui_summary">Aktifkan Restart One UI (System UI) di menu power</string>
+    <string name="unica_pm_opt_emergency_title">Mode darurat</string>
+    <string name="unica_pm_opt_emergency_summary">Aktifkan Mode darurat di menu power</string>
 </resources>

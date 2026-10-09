@@ -10,4 +10,10 @@
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
     <SecSwitchPreference android:title="@string/unica_gphotos_title" android:key="unica_gphotos" settings:controller="io.mesalabs.unica.settings.extra.GooglePhotosPreferenceController" />
     <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.extra.GamesPropsPreferenceController" />
+    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecSwitchPreference android:title="@string/unica_pm_title" android:key="unica_pm_enabled" android:summary="@string/unica_pm_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuEnabledPreferenceController" />
+    <SecPreference android:title="@string/unica_pm_options_title" android:key="unica_pm_options" android:summary="@string/unica_pm_options_summary" android:fragment="io.mesalabs.unica.settings.powermenu.PowerMenuOptionsFragment" />
+    <SecSwitchPreference android:title="@string/unica_pm_no_confirm_title" android:key="unica_pm_no_confirm" android:summary="@string/unica_pm_no_confirm_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuNoConfirmPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_no_lockscreen_title" android:key="unica_pm_no_lockscreen" android:summary="@string/unica_pm_no_lockscreen_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuNoLockscreenPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_pm_unlock_first_title" android:key="unica_pm_unlock_first" android:summary="@string/unica_pm_unlock_first_summary" settings:controller="io.mesalabs.unica.settings.powermenu.PowerMenuUnlockFirstPreferenceController" />
 </PreferenceScreen>
