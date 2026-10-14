@@ -24,8 +24,8 @@ GET_BUILD_VAR()
 
 IS_UNICA_CERT_AVAILABLE()
 {
-    local PLATFORM_KEY_SHA1="5b0eb951718acc596370dabab83f546e779b21dc"
-    local OTA_KEY_SHA1="681aa9d28fe5fc60be8c25dc5f26a73ec3d6fb46"
+    local PLATFORM_KEY_SHA1="b49e26b649cee4c5ec831bb421a9722f614184f4"
+    local OTA_KEY_SHA1="70f7f7436d190e0ca6fbc4108552227bd72ac9ef"
 
     local USES_UNICA_CERT="false"
     if [[ "$(sha1sum "$SRC_DIR/security/unica_platform.pk8" 2> /dev/null | cut -d " " -f 1)" == "$PLATFORM_KEY_SHA1" ]] && \
