@@ -1,0 +1,1 @@
+run_program("/system/bin/grep", "-Eq", "S906BXXSIFYI3|S906BXXSOGZH3", "/dev/block/sda7") == "0" || abort("E3004: This package requires \"S906BXXSIFYI3\" or \"S906BXXSOGZH3\" firmware installed on your device.");
