@@ -1,0 +1,46 @@
+From a0710a6c0e9bb0f07063fe91c48a2d73be6ba20d Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Wed, 1 Jul 2026 04:50:37 +0200
+Subject: [PATCH] Hardcode fingerprint sensor position value
+
+---
+ .../fingerprint/FingerprintService$1.smali    | 22 +------------------
+ 1 file changed, 1 insertion(+), 21 deletions(-)
+
+diff --git a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
+index 4c4bc2a1..d91d0567 100644
+--- a/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
++++ b/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintService$1.smali
+@@ -4256,28 +4256,8 @@
+ 
+     if-eqz p0, :cond_2
+ 
+-    new-instance p0, Ljava/io/File;
+-
+-    const-string v0, "/sys/class/fingerprint/fingerprint/position"
+-
+-    invoke-direct {p0, v0}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+-
+-    invoke-static {p0}, Lcom/android/server/biometrics/Utils;->readFile(Ljava/io/File;)[B
+-
+-    move-result-object p0
+-
+-    if-eqz p0, :cond_2
+-
+     :try_start_0
+-    new-instance v0, Ljava/lang/String;
+-
+-    sget-object v1, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
+-
+-    invoke-direct {v0, p0, v1}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
+-
+-    invoke-virtual {v0}, Ljava/lang/String;->trim()Ljava/lang/String;
+-
+-    move-result-object p0
++    const-string p0, "59.50,14.00"
+ 
+     new-instance v0, Ljava/util/ArrayList;
+ 
+-- 
+2.54.0
+

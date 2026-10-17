@@ -1,0 +1,7 @@
+service snapsecaidl /vendor/bin/hw/vendor.samsung.hardware.securesnap-service
+    interface aidl vendor.samsung.hardware.snap.ISehSnap/secsnap
+    class hal
+    user system
+    group system
+    oneshot
+    disabled
