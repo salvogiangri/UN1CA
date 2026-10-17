@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE DvfsHintList [
+<!ELEMENT DvfsHintList (Hint?,TspHint+)>
+<!ELEMENT Hint EMPTY>
+<!ELEMENT TspHint EMPTY>
+<!ATTLIST TspHint
+          scenario_name CDATA #REQUIRED
+          level CDATA #REQUIRED
+          head CDATA #IMPLIED
+          tail CDATA #IMPLIED>
+]>
+
+<DvfsHintList>
+    <Resolution resoltype="Default">
+        <TspHint scenario_name="Default"            level="2" head="130 1742000 1014000 0" tail="500 1586000 1014000 0" />
+        <TspHint scenario_name="SipDefault"         level="1" head="200 1586000 0 0" tail="0 0 0 0" />
+        <TspHint scenario_name="Hovering"           level="0" head="0 0 0 0"  tail="0 0 0 0" />
+    </Resolution>
+
+    <Resolution resoltype="WQHD">
+    </Resolution>
+
+    <Resolution resoltype="FHD">
+    </Resolution>
+
+    <Resolution resoltype="HD">
+    </Resolution>
+</DvfsHintList>
