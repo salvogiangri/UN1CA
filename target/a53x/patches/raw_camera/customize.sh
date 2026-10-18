@@ -20,7 +20,7 @@ HEX_PATCH "$WORK_DIR/vendor/lib/libexynoscamera3.so" \
 #  mov x6,sp
 #  mov w0,#0x4
 #  mov w5,w19
-#  bl 0x0040acc0
+#  bl 0x0040ad40
 # ]
 # After: [
 #  ldr w0,[x20, #0xa20]
@@ -29,7 +29,7 @@ HEX_PATCH "$WORK_DIR/vendor/lib/libexynoscamera3.so" \
 #  nop
 # ]
 HEX_PATCH "$WORK_DIR/vendor/lib64/libexynoscamera3.so" \
-    "e603009180008052e503132aa7d20794" \
+    "e603009180008052e503132ac7d20794" \
     "80224ab900001c3280220ab91f2003d5"
 
 LOG_STEP_IN "- Creating required permissions"
