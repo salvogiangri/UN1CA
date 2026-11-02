@@ -45,3 +45,8 @@ HEX_PATCH "$WORK_DIR/vendor/lib/libshotsuggestion_engines.so" "0ddb" "0de0"
 # Before: [b.lt 0x40dedc]
 # After: [b 0x40dedc]
 HEX_PATCH "$WORK_DIR/vendor/lib64/libshotsuggestion_engines.so" "eb010054" "0f000014"
+
+# Route CameraX front camera night captures to SingleShot processing.
+# Before: [cmp w1, #1; b.eq 0x23244c]
+# After: [ldr w0, [x25, #0x6f4]; cbnz w0, 0x2327c0]
+HEX_PATCH "$WORK_DIR/vendor/lib64/hw/com.qti.chi.override.so" "3f04007180000054" "20f746b9201c0035"
