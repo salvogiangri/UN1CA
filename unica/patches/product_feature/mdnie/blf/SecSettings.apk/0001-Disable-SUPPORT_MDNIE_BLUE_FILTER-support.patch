@@ -1,0 +1,111 @@
+From d2f8b86eee3e601fdba47e2c1383b21dff7e63cf Mon Sep 17 00:00:00 2001
+From: Tjari <zadigsm@outlook.com>
+Date: Sat, 30 May 2026 17:00:57 +0700
+Subject: [PATCH] Disable SUPPORT_MDNIE_BLUE_FILTER support
+
+---
+ .../EyeComfortSeekBarPreference.smali         | 51 ++++++++++++++-----
+ 1 file changed, 39 insertions(+), 12 deletions(-)
+
+diff --git a/smali_classes4/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali b/smali_classes4/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
+index 23c40d04..6500f0b6 100644
+--- a/smali_classes4/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
++++ b/smali_classes4/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
+@@ -250,19 +250,31 @@
+ 
+     if-eqz p3, :cond_2
+ 
+-    iget-object p3, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mContext:Landroid/content/Context;
++    :try_start_0
++    const-string/jumbo p3, "statusbar"
+ 
+-    const-string v0, "mDNIe"
++    invoke-static {p3}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;
++
++    move-result-object p3
+ 
+-    invoke-virtual {p3, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-static {p3}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;
+ 
+     move-result-object p3
+ 
+-    check-cast p3, Lcom/samsung/android/hardware/display/SemMdnieManager;
++    if-eqz p3, :cond_3
+ 
+     const/4 v0, 0x1
+ 
+-    invoke-virtual {p3, v0, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z
++    invoke-interface {p3, v0, p2}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V
++    :try_end_0
++    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_1
++
++    :catch_0
++    move-exception p2
++
++    invoke-virtual {p2}, Landroid/os/RemoteException;->printStackTrace()V
+ 
+     goto :goto_1
+ 
+@@ -277,6 +289,7 @@
+ 
+     invoke-static {p3, v0, p2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+ 
++    :cond_3
+     :goto_1
+     new-instance p2, Ljava/lang/StringBuilder;
+ 
+@@ -472,20 +485,34 @@
+ 
+     iget-boolean p1, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mEnableControlInSetting:Z
+ 
+-    if-eqz p1, :cond_0
++    if-eqz p1, :cond_1
+ 
+-    iget-object p1, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mContext:Landroid/content/Context;
++    :try_start_0
++    const-string/jumbo p1, "statusbar"
+ 
+-    const-string v1, "mDNIe"
++    invoke-static {p1}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;
+ 
+-    invoke-virtual {p1, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    move-result-object p1
++
++    invoke-static {p1}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;
+ 
+     move-result-object p1
+ 
+-    check-cast p1, Lcom/samsung/android/hardware/display/SemMdnieManager;
++    if-eqz p1, :cond_0
++
++    invoke-interface {p1, v0, v0}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V
++    :try_end_0
++    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception p1
+ 
+-    invoke-virtual {p1, v0, v0}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z
++    invoke-virtual {p1}, Landroid/os/RemoteException;->printStackTrace()V
+ 
++    :cond_0
++    :goto_0
+     iput-boolean v0, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mEnableControlInSetting:Z
+ 
+     const-string p0, "EyeComfortSeekBarPreference"
+@@ -494,7 +521,7 @@
+ 
+     invoke-static {p0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+ 
+-    :cond_0
++    :cond_1
+     return-void
+ .end method
+ 
+-- 
+2.43.0
+

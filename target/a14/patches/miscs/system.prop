@@ -1,0 +1,5 @@
+# Disable native blur by default
+persist.sys.unica.nativeblur=false
+
+# Compile SystemUI with the speed filter
+dalvik.vm.systemuicompilerfilter=speed
