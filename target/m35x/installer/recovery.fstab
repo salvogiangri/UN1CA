@@ -1,0 +1,39 @@
+# Android fstab file.
+#<src>                  <mnt_point>         <type>    <mnt_flags and options>                               <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+system	/system	erofs	ro	wait,logical,first_stage_mount,avb=vbmeta_system,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey
+system	/system	f2fs	ro	wait,logical,first_stage_mount,avb=vbmeta_system,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey
+system	/system	ext4	ro	wait,logical,first_stage_mount,avb=vbmeta_system,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey
+vendor	/vendor	erofs	ro	wait,logical,first_stage_mount,avb=vbmeta_system,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey
+system_dlkm	/system_dlkm	erofs	ro	wait,avb,logical,first_stage_mount
+system_dlkm	/system_dlkm	f2fs	ro	wait,avb,logical,first_stage_mount
+system_dlkm	/system_dlkm	ext4	ro	wait,avb,logical,first_stage_mount
+vendor_dlkm	/vendor_dlkm	erofs	ro	wait,avb,logical,first_stage_mount
+product	/product	erofs	ro	wait,avb,logical,first_stage_mount
+odm	/odm	erofs	ro	wait,avb,logical,first_stage_mount
+
+/dev/block/by-name/boot		/boot               emmc      defaults                                              first_stage_mount,formattable,avb=boot
+/dev/block/by-name/init_boot /init_boot          emmc      defaults                                              first_stage_mount,formattable,avb=init_boot
+/dev/block/by-name/vendor_boot	/vendor_boot      emmc      defaults                                              first_stage_mount,formattable,avb=vendor_boot
+/dev/block/by-name/dtbo		/dtbo               emmc      defaults                                              first_stage_mount,formattable,avb=dtbo
+/dev/block/by-name/vbmeta	/vbmeta               emmc      defaults					       first_stage_mount,formattable,avb=vbmeta
+/dev/block/by-name/vbmeta_system	/vbmeta_system      emmc      defaults                                     first_stage_mount,formattable,avb=vbmeta_system
+/dev/block/by-name/metadata	/metadata	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic,sync	wait,formattable,first_stage_mount,check
+/dev/block/by-name/userdata	/data	f2fs	noatime,nosuid,nodev,discard,usrquota,grpquota,fsync_mode=nobarrier,reserve_root=32768,resgid=5678,inlinecrypt	latemount,wait,check,quota,reservedsize=128M,checkpoint=fs,,fscompress,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption
+/dev/block/by-name/efs	/mnt/vendor/efs	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic	wait,formattable,check
+/dev/block/by-name/cpefs	/mnt/vendor/cpefs	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic	wait,check,nofail
+#/dev/block/by-name/persist   /mnt/vendor/persist ext4      noatime,nosuid,nodev,barrier=1,data=ordered,nodelalloc,nomblk_io_submit,errors=panic wait,notrim,formattable
+/dev/block/by-name/misc	/misc	emmc	defaults	defaults,first_stage_mount
+/dev/block/by-name/recovery	/recovery           emmc      defaults                                              first_stage_mount
+/dev/block/by-name/cache	/cache	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic	wait,formattable,check
+/dev/block/by-name/keystorage /keystorage        emmc      defaults                                              first_stage_mount
+/dev/block/by-name/harx      /harx               emmc      defaults                                              first_stage_mount
+
+#CSC
+/dev/block/by-name/prism	/prism	ext4	ro	nofail,avb,first_stage_mount
+/dev/block/by-name/optics	/optics	ext4	ro	nofail,avb,first_stage_mount
+
+# VOLD
+/devices/platform/13200000.usb*                auto    vfat    default    voldmanaged=usb:auto
+/devices/platform/100e0000.dwmmc2/mmc_host*    auto    auto    default    voldmanaged=sdcard:auto
